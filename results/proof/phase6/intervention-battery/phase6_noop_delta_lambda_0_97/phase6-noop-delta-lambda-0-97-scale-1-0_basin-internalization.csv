@@ -1,0 +1,6 @@
+policyLabel,channel,n,mean_off_old_basin_distance_T,mean_old_basin_distance_T,mean_new_basin_distance_T,mean_old_basin_preference
+Phase6-noop_delta-lambda-0.97-scale-1.0,reward,64,0.9174551,0.9174551,6.28482993,5.36737483
+Phase6-noop_delta-lambda-0.97-scale-1.0,observation,64,0.9174551,3.05689815,9.66635843,6.60946028
+Phase6-noop_delta-lambda-0.97-scale-1.0,signature-sensor,64,0.9174551,0.82960264,6.37214464,5.542542
+Phase6-noop_delta-lambda-0.97-scale-1.0,geometry,64,0.9174551,0.83212505,6.36451073,5.53238568
+Phase6-noop_delta-lambda-0.97-scale-1.0,basin-position,64,0.9174551,0.9174551,6.28482993,5.36737483

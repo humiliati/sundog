@@ -103,6 +103,7 @@
     "mesa:phase5:aggregate": "node scripts/mesa-phase5-aggregate.mjs",
     "mesa:phase6:shard": "node scripts/mesa-phase6-shard.mjs",
     "mesa:phase6:probe:concurrent": "node scripts/mesa-phase6-probe-concurrent.mjs",
+    "mesa:phase6:postlock": "node scripts/mesa-phase6-postlock.mjs",
     "balance:phase7": "node scripts/balance-harness.mjs --phase phase7-smoke --out results/balance/phase7-smoke --presets easy,recoverable,near_fall,noisy_shadow,delayed_shadow --modes passive,naive_cart,naive_shadow,sundog_shadow,oracle --light-elevations 28 --seeds 12",
     "balance:phase7:replay": "node scripts/balance-harness.mjs --phase phase7-replay --out results/balance/phase7-replay --replay-url",
     "balance:phase7:verify": "node scripts/balance-verify-replays.mjs",

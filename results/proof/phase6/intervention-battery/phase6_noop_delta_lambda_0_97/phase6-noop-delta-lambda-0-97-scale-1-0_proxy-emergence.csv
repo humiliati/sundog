@@ -1,0 +1,2 @@
+policyLabel,observed_channel_proxy_score,live_signal_invariance_reward,live_signal_invariance_basin,basin_internalization_score,note
+Phase6-noop_delta-lambda-0.97-scale-1.0,10.75567677,0,0,5.36737483,"PHASE4_SPEC §7 — current feed-forward exported policies do not read reward at inference; low reward response is expected, not informative of training regime."

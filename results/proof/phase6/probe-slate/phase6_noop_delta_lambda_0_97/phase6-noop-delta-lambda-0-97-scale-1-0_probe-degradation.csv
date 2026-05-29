@@ -1,0 +1,14 @@
+policyLabel,cellId,axis,severity,kind,n,successCount,successRate,meanTerminalAlignment,meanRegimeRetention,meanPathEfficiency,meanSteps,meanSaturationCount,nominalSuccessRate,nominalMeanTerminalAlignment,relativeDegradationSuccess,relativeDegradationTerminalAlignment,lowNominalConfidence,failureSuccess,failureFalseBasinCapture,failureDecoyCapture,failureOOBSaturation,failureWandering,failureOscillation,failureUnclassified
+Phase6-noop_delta-lambda-0.97-scale-1.0,nominal,nominal,nominal,nominal,64,1,0.015625,0.29003859,0.02441863,0.90701473,198.078125,56.359375,,,,,,1,45,0,0,0,4,14
+Phase6-noop_delta-lambda-0.97-scale-1.0,geometric-light,geometric,light,probed,64,0,0,0.29896009,0.01703125,0.90273448,200,55.15625,0.015625,0.29003859,0.3125,-0.0307597,true,0,46,0,0,0,4,14
+Phase6-noop_delta-lambda-0.97-scale-1.0,geometric-medium,geometric,medium,probed,64,0,0,0.29933545,0.01429688,0.90046975,200,55.921875,0.015625,0.29003859,0.3125,-0.03205387,true,0,42,0,0,0,14,8
+Phase6-noop_delta-lambda-0.97-scale-1.0,geometric-heavy,geometric,heavy,probed,64,0,0,0.28518851,0.02570313,0.90568697,200,60.953125,0.015625,0.29003859,0.3125,0.01672221,true,0,45,0,0,1,4,14
+Phase6-noop_delta-lambda-0.97-scale-1.0,decoy-light,decoy,light,probed,64,1,0.015625,0.29095248,0.01563718,0.91142217,198.078125,56.125,0.015625,0.29003859,0,-0.00315092,true,1,41,0,0,2,4,16
+Phase6-noop_delta-lambda-0.97-scale-1.0,decoy-medium,decoy,medium,probed,64,0,0,0.28812904,0.015625,0.91238236,200,55.21875,0.015625,0.29003859,0.3125,0.00658379,true,0,37,0,0,5,4,18
+Phase6-noop_delta-lambda-0.97-scale-1.0,decoy-heavy,decoy,heavy,probed,64,0,0,0.2736326,0.01265625,0.91415678,200,52.625,0.015625,0.29003859,0.3125,0.05656487,true,0,35,0,0,5,2,22
+Phase6-noop_delta-lambda-0.97-scale-1.0,sensor-noise-light,sensor-noise,light,probed,64,1,0.015625,0.29609285,0.02809295,0.55232004,198.09375,57.4375,0.015625,0.29003859,0,-0.02087395,true,1,42,0,0,1,5,15
+Phase6-noop_delta-lambda-0.97-scale-1.0,sensor-noise-medium,sensor-noise,medium,probed,64,3,0.046875,0.36275115,0.02755724,0.33777167,196.03125,153.8125,0.015625,0.29003859,-0.625,-0.25069959,true,3,17,0,0,6,13,25
+Phase6-noop_delta-lambda-0.97-scale-1.0,sensor-noise-heavy,sensor-noise,heavy,probed,64,2,0.03125,0.29874756,0.02792171,0.20997383,197.21875,184.15625,0.015625,0.29003859,-0.3125,-0.03002694,true,2,7,0,0,14,9,32
+Phase6-noop_delta-lambda-0.97-scale-1.0,sensor-delay-light,sensor-delay,light,probed,64,0,0,0.28923437,0.0234375,0.90626864,200,56.328125,0.015625,0.29003859,0.3125,0.0027728,true,0,46,0,0,0,4,14
+Phase6-noop_delta-lambda-0.97-scale-1.0,sensor-delay-medium,sensor-delay,medium,probed,64,0,0,0.28934264,0.0228125,0.90456011,200,56.375,0.015625,0.29003859,0.3125,0.00239954,true,0,46,0,0,0,4,14
+Phase6-noop_delta-lambda-0.97-scale-1.0,sensor-delay-heavy,sensor-delay,heavy,probed,64,0,0,0.28944621,0.021875,0.90216606,200,56.9375,0.015625,0.29003859,0.3125,0.00204243,true,0,46,0,0,0,4,14

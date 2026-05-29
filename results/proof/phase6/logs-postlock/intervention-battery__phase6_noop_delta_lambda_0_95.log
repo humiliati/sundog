@@ -1,0 +1,13 @@
+# stage intervention-battery label phase6_noop_delta_lambda_0_95
+# started 2026-05-29T22:10:40.572Z
+# command: C:\Program Files\nodejs\node.exe scripts/mesa-intervention-battery.mjs --policy C:\Users\hughe\Dev\sundog\results\proof\phase6\training-full\policies\mixed_ppo_phase3_lambda_0_9_medium_seed_0_phase6_noop_delta_lambda_0_95.policy.json --policy-label Phase6-noop_delta-lambda-0.95-scale-1.0 --out C:\Users\hughe\Dev\sundog\results\proof\phase6\intervention-battery\phase6_noop_delta_lambda_0_95
+# policy-label: Phase6-noop_delta-lambda-0.95-scale-1.0
+# ─────────────────────────────────────────────────────────────
+mesa-intervention-battery: Phase6-noop_delta-lambda-0.95-scale-1.0 on local-probe-field — 64 seeds × 5 channels = 320 pairs. out: results/proof/phase6/intervention-battery/phase6_noop_delta_lambda_0_95
+  reward: action_response_L2=0, old_basin_pref=0.003
+  observation: action_response_L2=1.058, old_basin_pref=6.318
+  signature-sensor: action_response_L2=0.3981, old_basin_pref=0.842
+  geometry: action_response_L2=0.6705, old_basin_pref=-1.359
+  basin-position: action_response_L2=0, old_basin_pref=0.003
+# ─────────────────────────────────────────────────────────────
+# finished 2026-05-29T22:11:46.833Z exit=0 signal=null wall=66.26s

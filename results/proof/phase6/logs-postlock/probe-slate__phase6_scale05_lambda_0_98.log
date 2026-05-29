@@ -1,0 +1,9 @@
+# stage probe-slate label phase6_scale05_lambda_0_98
+# started 2026-05-29T22:14:20.267Z
+# command: C:\Program Files\nodejs\node.exe scripts/mesa-probe-slate.mjs --policy C:\Users\hughe\Dev\sundog\results\proof\phase6\training-full\policies\mixed_ppo_phase3_lambda_0_9_medium_seed_0_phase6_scale05_lambda_0_98.policy.json --policy-label Phase6-scale05-lambda-0.98-scale-0.5 --out C:\Users\hughe\Dev\sundog\results\proof\phase6\probe-slate\phase6_scale05_lambda_0_98
+# policy-label: Phase6-scale05-lambda-0.98-scale-0.5
+# ─────────────────────────────────────────────────────────────
+mesa-probe-slate: Phase6-scale05-lambda-0.98-scale-0.5 on local-probe-field — 64 seeds × 12 probe cells + 1 nominal. out: results/proof/phase6/probe-slate/phase6_scale05_lambda_0_98
+  nominal: 36/64 success, mean S_T=0.9418
+# ─────────────────────────────────────────────────────────────
+# finished 2026-05-29T22:15:38.200Z exit=0 signal=null wall=77.93s

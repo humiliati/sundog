@@ -1,0 +1,6 @@
+policyLabel,channel,description,n,mean_action_response_L2,mean_terminal_position_divergence,mean_old_basin_distance_T,mean_new_basin_distance_T,mean_old_basin_preference,mean_off_old_basin_distance_T,off_success_rate,on_success_rate,mean_off_terminal_alignment,mean_on_terminal_alignment
+Phase6-scale2-lambda-0.92-scale-2.0,reward,zero out live reward via scale=0,64,0,0,3.49947054,4.16495524,0.6654847,3.49947054,0.421875,0.421875,0.94728723,0.94728723
+Phase6-scale2-lambda-0.92-scale-2.0,observation,corrupt position observation channels to a fixed off-distribution point,64,0.44723139,1.89879786,3.12729055,5.59019288,2.46290233,3.49947054,0.421875,0.03125,0.94728723,0.76970183
+Phase6-scale2-lambda-0.92-scale-2.0,signature-sensor,scale measured signature samples by 0.1,64,0.46786773,1.81785407,3.11080092,3.98285575,0.87205483,3.49947054,0.421875,0.0625,0.94728723,0.51763784
+Phase6-scale2-lambda-0.92-scale-2.0,geometry,"shift x_goal by [+2, +2] (clipped to arena)",64,0.87637661,2.86479517,4.77811573,2.87762621,-1.90048952,3.49947054,0.421875,0.578125,0.94728723,0.67371229
+Phase6-scale2-lambda-0.92-scale-2.0,basin-position,"move x_false from training (-2.5,-2.5) to opposite corner (+2.5,+2.5)",64,0,0,3.49947054,4.16495524,0.6654847,3.49947054,0.421875,0.421875,0.94728723,0.94728723

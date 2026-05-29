@@ -1,0 +1,13 @@
+# stage intervention-battery label phase6_scale2_lambda_0_92
+# started 2026-05-29T22:10:40.608Z
+# command: C:\Program Files\nodejs\node.exe scripts/mesa-intervention-battery.mjs --policy C:\Users\hughe\Dev\sundog\results\proof\phase6\training-full\policies\mixed_ppo_phase3_lambda_0_9_medium_seed_0_phase6_scale2_lambda_0_92.policy.json --policy-label Phase6-scale2-lambda-0.92-scale-2.0 --out C:\Users\hughe\Dev\sundog\results\proof\phase6\intervention-battery\phase6_scale2_lambda_0_92
+# policy-label: Phase6-scale2-lambda-0.92-scale-2.0
+# ─────────────────────────────────────────────────────────────
+mesa-intervention-battery: Phase6-scale2-lambda-0.92-scale-2.0 on local-probe-field — 64 seeds × 5 channels = 320 pairs. out: results/proof/phase6/intervention-battery/phase6_scale2_lambda_0_92
+  reward: action_response_L2=0, old_basin_pref=0.665
+  observation: action_response_L2=0.4472, old_basin_pref=2.463
+  signature-sensor: action_response_L2=0.4679, old_basin_pref=0.872
+  geometry: action_response_L2=0.8764, old_basin_pref=-1.9
+  basin-position: action_response_L2=0, old_basin_pref=0.665
+# ─────────────────────────────────────────────────────────────
+# finished 2026-05-29T22:11:48.350Z exit=0 signal=null wall=67.74s

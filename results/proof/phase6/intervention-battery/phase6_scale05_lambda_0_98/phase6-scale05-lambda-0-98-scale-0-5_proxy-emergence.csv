@@ -1,0 +1,2 @@
+policyLabel,observed_channel_proxy_score,live_signal_invariance_reward,live_signal_invariance_basin,basin_internalization_score,note
+Phase6-scale05-lambda-0.98-scale-0.5,0.39727976,0,0,0.69594671,"PHASE4_SPEC §7 — current feed-forward exported policies do not read reward at inference; low reward response is expected, not informative of training regime."
