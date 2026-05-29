@@ -172,6 +172,13 @@ that claim provably fails.
   dimension- and objective-robust. Scope: two points on the Grashof
   axis (`k_f=2` fixed); finite-Galerkin/sampled-support; C1 still
   unpromoted.
+- [`PDE_C1_EXTERNAL_REVIEW_EMAIL_DRAFT.md`](PDE_C1_EXTERNAL_REVIEW_EMAIL_DRAFT.md)
+  — reviewer outreach draft for Candidate 1 after `PDE-C1-RG-POS`.
+  Keeps the ask bounded: finite-Galerkin / sampled-support /
+  proxy-control framing, no Navier-Stokes regularity or
+  infinite-dimensional theorem claim. Target reviewer categories:
+  2D NSE / determining-modes / data-assimilation, numerical
+  Galerkin-NSE, or conditional-observability/control.
 - [`PDE_C2_SHELL_SIGNATURE_SCOPING.md`](PDE_C2_SHELL_SIGNATURE_SCOPING.md)
   — Navier-Stokes Candidate 2 scoping: PDE-substrate empirical leg of
   Postulate 1 Phase 4 (shell-model signatures vs. matched-budget DMD /

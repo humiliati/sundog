@@ -10,10 +10,13 @@ Short version:
 > discipline: if the field itself is too much, can the right invariant shadow
 > still certify bounded structure?
 
-Status: **Phase 0 roadmap draft**, filed 2026-05-29. Lit-pass filed at
-[`YANG_MILLS_LITPASS_MEMO.md`](YANG_MILLS_LITPASS_MEMO.md). No domain lock,
-runner, receipt, or result-bearing claim exists. This document is a staging
-ledger for a possible future finite-lattice Yang-Mills certificate lane.
+Status: **Phase 0 domain lock filed 2026-05-29**. Roadmap draft at this file;
+lit-pass at [`YANG_MILLS_LITPASS_MEMO.md`](YANG_MILLS_LITPASS_MEMO.md); P0 lock
+at [`prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md`](prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md);
+receipt template at [`yang-mills/RECEIPT_TEMPLATE.md`](yang-mills/RECEIPT_TEMPLATE.md).
+No runner code, receipt, or result-bearing claim exists yet. Next artifact is a
+Phase 1 runner manifest under `docs/prereg/yang-mills/` that fills the lock's
+Admission Requirements before any code is admitted.
 
 This is not a claim to progress on the Clay Yang-Mills existence and mass gap
 problem. It is a plan for a bounded receipt program that asks whether Sundog's
@@ -441,27 +444,59 @@ Candidate data shape:
 
 Next agent should:
 
-1. Promote `docs/prereg/yang-mills/README.md` into a frozen Phase 0 domain
-   lock only after the exact finite-lattice cell is chosen.
+1. ~~Promote `docs/prereg/yang-mills/README.md` into a frozen Phase 0 domain
+   lock only after the exact finite-lattice cell is chosen.~~
+   **Done 2026-05-29** — see [`prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md`](prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md).
 2. Use [`YANG_MILLS_LITPASS_MEMO.md`](YANG_MILLS_LITPASS_MEMO.md) as the
    citation spine; re-audit it before any public-facing claim or after six
    months.
-3. Choose the first finite-lattice domain and source library.
-4. Freeze the observable labels and controls before code.
+3. ~~Choose the first finite-lattice domain and source library.~~
+   **Done 2026-05-29** — U(1) 2D → SU(2) 2D → SU(2) 3D ladder, in-repo
+   Creutz / Kennedy-Pendleton / Brown-Woch generator; see P0 lock.
+4. ~~Freeze the observable labels and controls before code.~~
+   **Done 2026-05-29** — held-out larger-Wilson-loop area-law proxy class
+   (γ_held tertile bin); seven-entry leakage controls battery; see P0 lock.
 5. Stage, not run, any compute expected to exceed the repo's ten-minute rule.
 6. Keep every output under `results/yang-mills/<phase>/` and every durable
    conclusion as a dated receipt under `docs/yang-mills/receipts/`.
+   **Stood up 2026-05-29** — see [`yang-mills/receipts/README.md`](yang-mills/receipts/README.md).
 7. Add Yang-Mills to the generality gallery only as a draft-handoff card until
-   Phase 0 is filed.
+   Phase 0 is filed. **Phase 0 now filed**; gallery card admission is the next
+   adjacent decision (no public surface yet).
+8. **New next artifact (2026-05-29):** file a Phase 1 runner manifest at
+   `docs/prereg/yang-mills/PHASE1_<cell>_<short-label>.md` filling every
+   Admission Requirement in the P0 lock. Recommended first:
+   `PHASE1_U1_2D_gauge_invariance_smoke.md`.
 
 ## 11. Open Decisions
 
-1. Start with SU(2) only, or include an abelian toy control first?
-2. Which library/generator is acceptable for finite-lattice ensembles?
-3. Which observable label is least likely to be a metadata shortcut?
-4. Should Phase 2 use fixed loop sets only, or include smearing/blocking levels?
-5. Who is the right external reviewer category: lattice gauge theorist,
-   mathematical physicist, or numerical field theorist?
+All five originally-open decisions were closed by the P0 lock filed
+2026-05-29. See [`prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md`](prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md)
+§ "Open Decisions Closed By This Lock" for the resolution table.
+
+Resolutions, restated here for navigation:
+
+1. ~~Start with SU(2) only, or include an abelian toy control first?~~ →
+   Staged ladder: `U1_2D` instrumentation, `SU2_2D` harness, `SU2_3D`
+   primary; 4D deferred.
+2. ~~Which library/generator is acceptable for finite-lattice ensembles?~~ →
+   In-repo Creutz heatbath + Kennedy-Pendleton + Brown-Woch overrelaxation
+   for SU(2); staple-based Metropolis for U(1).
+3. ~~Which observable label is least likely to be a metadata shortcut?~~ →
+   Larger-Wilson-loop area-law proxy class, γ_held tertile bin; signature
+   vocabulary strictly disjoint from target vocabulary.
+4. ~~Should Phase 2 use fixed loop sets only, or include smearing/blocking
+   levels?~~ → Fixed loop set only at P0; smearing/blocking deferred to a
+   later P0 amendment.
+5. ~~Who is the right external reviewer category~~ → Lattice gauge theorist.
+
+Decisions still open (not §11 originals; surfaced by the P0 lock):
+
+- exact Phase 1 first-manifest cell (recommended: `U1_2D` gauge-invariance
+  smoke, cheapest leakage-control read);
+- whether the in-repo generator lives under `scripts/`, a new
+  `yang-mills/` subtree, or alongside the existing Navier-Stokes harness;
+- gallery-card admission timing — currently still blocked per §10 item 7.
 
 ## 12. Ratified Public Boundary
 

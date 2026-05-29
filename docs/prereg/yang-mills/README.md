@@ -5,35 +5,44 @@ Lit-pass: [`YANG_MILLS_LITPASS_MEMO.md`](../../YANG_MILLS_LITPASS_MEMO.md)
 
 Filed: **2026-05-29 (PT)**
 
-Status: **Phase 0 open - no domain lock filed**. This directory exists so the
-first Yang-Mills pre-registration has a stable home. It is not itself a frozen
-experiment spec and admits no runner code.
+Status: **Phase 0 domain lock filed 2026-05-29**. See
+[`P0_DOMAIN_AND_RECEIPT_LOCK.md`](P0_DOMAIN_AND_RECEIPT_LOCK.md). This
+directory remains the home for any future Yang-Mills pre-registrations
+(Phase 1 runner manifests, Phase 2/3/4 phase specs, and any P0 amendments).
+It still admits no runner code by itself.
+
+## Filed Artifacts
+
+- [`P0_DOMAIN_AND_RECEIPT_LOCK.md`](P0_DOMAIN_AND_RECEIPT_LOCK.md) —
+  cell ladder, lattice slate, action, β slate, generator algorithms,
+  burn-in / thinning / autocorrelation rules, signature vocabulary v1,
+  held-out target vocabulary v1, seven-entry leakage controls battery,
+  admission requirements, outcome-branch table, anti-scope-creep rule,
+  public-language boundary, and external-reviewer category. Closes the
+  five §11 open decisions in
+  [`../../SUNDOG_V_YANG_MILLS.md`](../../SUNDOG_V_YANG_MILLS.md).
 
 ## Required Next Artifact
 
-The next file should be:
-
-```text
-P0_DOMAIN_AND_RECEIPT_LOCK.md
-```
-
-It must freeze, before any run:
-
-- gauge group and dimension;
-- lattice sizes and boundary condition;
-- action and coupling slate;
-- ensemble source or generator algorithm;
-- burn-in, thinning, and autocorrelation handling if generated locally;
-- primary gauge-invariant signature vocabulary;
-- held-out observable/regime labels;
-- metadata, raw-link, gauge-fixed, random, coupling-stratified, permutation,
-  and gauge-randomized controls;
-- output paths and receipt template;
-- compute cap and staged commands under the repository ten-minute rule;
-- positive, metadata-only, negative, and inconclusive branches.
+The next file should be a Phase 1 runner manifest at
+`docs/prereg/yang-mills/PHASE1_<cell>_<short-label>.md` that fills every
+field in the P0 lock's "Admission Requirements" before any runner code
+is admitted. Recommended first manifest: `PHASE1_U1_2D_gauge_invariance_smoke.md`
+(the cheapest Abelian instrumentation cell, lowest-risk first read).
 
 ## Guardrail
 
-No Yang-Mills code run is admitted until `P0_DOMAIN_AND_RECEIPT_LOCK.md` exists
-and explicitly says it is frozen. Exploratory notebooks or scratch checks, if
+No Yang-Mills code run is admitted unless a phase manifest under this
+directory exists, cites the P0 lock version, and fills every Admission
+Requirement listed there. Exploratory notebooks or scratch checks, if
 ever needed, must be labelled exploratory and cannot be cited as receipts.
+
+## Current State
+
+- 2026-05-29: holding pen opened.
+- 2026-05-29: [`P0_DOMAIN_AND_RECEIPT_LOCK.md`](P0_DOMAIN_AND_RECEIPT_LOCK.md)
+  filed. Receipt template at
+  [`../../yang-mills/RECEIPT_TEMPLATE.md`](../../yang-mills/RECEIPT_TEMPLATE.md)
+  and receipts dir at
+  [`../../yang-mills/receipts/`](../../yang-mills/receipts/) stood up.
+  No runner code yet.
