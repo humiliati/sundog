@@ -10,6 +10,35 @@ a new explicit formula, and does **not** test RH. Its job is to make the
 functional-equation reading rejectable before any numerical residual is
 interpreted.
 
+## Internal Audit Addendum - Linearity Verdict
+
+Post-filing desk audit sharpened the status of this cell set: it is soundly
+constructed, but it appears to operationalize the vacuity rather than escape it.
+
+The reason is structural. The explicit formula is linear in the test function.
+Therefore:
+
+- `C1-O` is forced-vacuous on the zero side under the symmetric `+-gamma`
+  window: an odd test function summed over a symmetric multiset is zero before
+  any arithmetic data is loaded.
+- `C1-E` is a classical explicit-formula consistency check. A clean pass would
+  verify the normalization, data, truncation floor, and implementation; it
+  would not by itself be a Sundog Front-A edge.
+- `C1-M` is determined by linearity: `h_M = h_E + epsilon * h_O`, so the mixed
+  row is an implementation linearity check, not an independent receipt.
+
+This addendum does not delete the cell set. It records the likely disposition:
+without reviewer rescue, the cell files `R-C1-NEG-A` (Front-A vacuity) or
+`R-C1-NEG-D` (competitor / standard-treatment dominance), with `R-C1-NEG-B`
+kept as the useful hygiene guard against identity-zero laundering.
+
+Secondary scale note: with `A = 10`, only the first handful of zeros and very
+small primes carry meaningful numerical mass under the Gaussian. The stated
+`N_zero = 5000` and prime cutoff `p <= 1,000,000` are conservative inert
+ceilings for this smoke-scale cell, not evidence that the full window is
+actively tested. Any future executable version must either right-size the
+cutoffs to `A` or explicitly label the run as a small-term pipeline smoke.
+
 ## 1. Regime And Formula Contract
 
 The cell set works with a standard smoothed explicit formula for the completed
@@ -110,9 +139,9 @@ positive ordinates for an odd-sector verdict.
 
 | Row | Test function | Expected parity read | Can support a bounded positive? |
 | --- | --- | --- | --- |
-| `C1-E` | `h_E` | even sector, residual-bearing | yes, if residual clears independent floor |
+| `C1-E` | `h_E` | even sector, residual-bearing | pipeline consistency only unless reviewer finds non-vacuous audit edge |
 | `C1-O` | `h_O` | odd sector, identity-zero negative control | no |
-| `C1-M` | `h_M` | even residual plus labeled odd cancellation | only through its `h_E` component |
+| `C1-M` | `h_M` | even residual plus labeled odd cancellation | no independent row; linearity check only |
 
 Per Probe 01 v1, an identity-zero row is a null / guardrail receipt. It is not a
 discovery.
@@ -152,7 +181,7 @@ If any component cannot be bounded before looking at the residual, file
 
 | Branch | Trigger | Disposition |
 | --- | --- | --- |
-| `R-C1-A` | `C1-E` residual <= `tau_floor`, `C1-O` labeled identity-zero, `C1-M` decomposes cleanly | bounded operational receipt |
+| `R-C1-A` | `C1-E` residual <= `tau_floor`, `C1-O` labeled identity-zero, `C1-M` decomposes cleanly, and reviewer accepts the forced-cancellation / residual split as a non-vacuous audit distinction | bounded operational receipt |
 | `R-C1-NEG-A` | reviewer says the cell is only standard even-test-function bookkeeping | Front-A vacuity |
 | `R-C1-NEG-B` | `C1-O` or the odd part of `C1-M` is presented as empirical evidence | identity-zero laundering |
 | `R-C1-NEG-C` | formula normalization, cutoffs, or floor components cannot be fixed pre-run | floor / normalization failure |
@@ -164,7 +193,8 @@ normalization, or floor components after output inspection.
 
 ## 8. What Would Count As Non-Vacuous
 
-The cell is non-vacuous only if all three are true:
+After the linearity audit, the cell is presumed vacuity-boundary unless all
+three are true:
 
 1. the reviewer accepts that the forced-cancellation / residual split is a real
    audit distinction, not just decorative language for standard parity;
@@ -193,6 +223,9 @@ Ask the external reviewer:
 ## 10. Status
 
 - Drafted: 2026-05-28.
+- Internal audit: linearity verdict added 2026-05-28; expected disposition is
+  `R-C1-NEG-A` / `R-C1-NEG-D` unless a reviewer treats the labeling-hygiene
+  distinction as a real audit contribution.
 - Execution: none.
 - Review: none.
 - Formula normalization: not yet equation-number-pinned.

@@ -31,6 +31,11 @@ Cell sets:
 - [`RIEMANN_C1_CELLSET_V0.md`](RIEMANN_C1_CELLSET_V0.md)
   - v0 explicit-formula parity scaffold; unreviewed and unrun.
 
+Scoping notes:
+
+- [`NONLINEAR_PAIR_CORRELATION_LANE.md`](NONLINEAR_PAIR_CORRELATION_LANE.md)
+  - nonlinear zero-statistics lane opened by the C1 linearity audit.
+
 Probe specs:
 
 - [`PROBE_01_ISOTROPY_ZERO_PAIRS_SPEC.md`](PROBE_01_ISOTROPY_ZERO_PAIRS_SPEC.md)
@@ -61,5 +66,6 @@ Current state:
 - Probe 01 v1 Path (i) receipt filed: 2026-05-28.
 - Front-A functional-equation reading note drafted: 2026-05-28.
 - Riemann C1 cell-set v0 filed: 2026-05-28.
+- Nonlinear pair-correlation lane scoped: 2026-05-28.
 - Front A is design-admitted under reduced apparatus (Z₂-descent).
 - Front B is horizon only.

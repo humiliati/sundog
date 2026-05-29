@@ -32,6 +32,13 @@ Cell-set status: v0 filed at
 row, an odd negative-control row, and a mixed laundering-guard row, but it is
 unreviewed and unrun.
 
+Internal audit update: the v0 cell set appears to operationalize the vacuity
+rather than escape it, because the explicit formula is linear in the test
+function. Without reviewer rescue, expected disposition is `R-C1-NEG-A` or
+`R-C1-NEG-D`; the useful survivor is the `R-C1-NEG-B` hygiene guard against
+identity-zero laundering. A nonlinear pair-correlation lane is scoped at
+[`NONLINEAR_PAIR_CORRELATION_LANE.md`](NONLINEAR_PAIR_CORRELATION_LANE.md).
+
 ## Claim Boundary
 
 This note does **not** claim:
@@ -223,6 +230,9 @@ If this note fails review:
   audit clarification.
 - Cell set: [`RIEMANN_C1_CELLSET_V0.md`](RIEMANN_C1_CELLSET_V0.md), drafted
   2026-05-28.
+- Internal audit: linearity-vacuity finding recorded in the cell set; nonlinear
+  pair-correlation lane opened at
+  [`NONLINEAR_PAIR_CORRELATION_LANE.md`](NONLINEAR_PAIR_CORRELATION_LANE.md).
 - Execution: none.
 - Review: none.
 - Promotion: blocked on external sanity check and a pinned explicit-formula
