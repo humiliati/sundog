@@ -1,127 +1,139 @@
 # PDE C1 External Review Email Draft
 
+> Reviewer-facing sanity-check request for the C1 result. Goal: a
+> bounded, honest framing check from a PDE / data-assimilation analyst —
+> not a referee report, not an endorsement. The whole virtue of this ask
+> is brevity; keep it that way. Placeholders in `[brackets]`.
+
 ## Short Version
 
-**Subject:** Quick PDE sanity check: finite-Galerkin signature/control witness
+**Subject:** Bounded sanity check — finite-Galerkin signature/control-sufficiency framing
 
 Hi [Name],
 
-Could I ask for a bounded sanity check on a small Navier-Stokes /
-data-assimilation-adjacent note?
+Could I ask for a bounded framing check on a small finite-Galerkin
+Navier-Stokes note? It is **not** a regularity or existence claim and
+**not** a theorem about the infinite-dimensional attractor. The question
+is whether we are stating a numerical signature/control-sufficiency
+result honestly.
 
-This is **not** a Navier-Stokes regularity claim, not an existence claim,
-and not a theorem about the infinite-dimensional attractor. It is a
-finite-Galerkin numerical/proof-track question about whether we are
-framing a signature/control-sufficiency result honestly.
+In determining-modes terms, the claim is a *separation*:
 
-The claim I want checked is:
+> In a 2D Kolmogorov-flow Galerkin model (`k_f = 2`), a low-Fourier
+> observation `Phi_K` is **state-insufficient** (a twin-state search
+> finds signature-near pairs with well-separated high modes on the
+> sampled SRB-like support) yet appears **sufficient for a registered
+> low-band-energy control action** — the local action-mixing vanishes as
+> the signature tolerance → 0, consistent with control-sufficiency up to
+> a measure-zero decision surface. The pattern holds at two Grashof
+> values (`G = 200` and `G = 300`) under a held-out-quantile objective
+> that stays discriminative across both, and the control half is also
+> stable to halving the signature dimension and to swapping the
+> objective construction.
 
-> In a 2D Kolmogorov-flow Galerkin model at `k_f = 2`, a low Fourier
-> signature `Phi_K` is state-insufficient on sampled SRB-like support
-> but still sufficient for a registered safety/proxy control action,
-> up to a measure-zero decision surface. This complete regime-2 witness
-> now appears at two Grashof values, `G = 200` and `G = 300`, under a
-> portable held-out-quantile objective. It remains finite-Galerkin,
-> sampled-support, numerical, and proxy-based.
+It stays finite-Galerkin, sampled-support, numerical, and proxy-based,
+and it is a **two-point Grashof-axis result only** — `k_f` is fixed and
+the objective family is single, so we are not claiming generality across
+forcing or objective.
 
-What I most need is not an endorsement, but a quick answer to:
+What I need is not endorsement but a quick read on framing:
 
-1. Is the support-level language reasonable, given the twin-state
-   certificate is sampled-SRB / finite-Galerkin rather than an exact
-   attractor theorem?
-2. Is the kNN/disintegration reading of "control-sufficient on
-   `Phi_K`-fibers up to a decision surface" mathematically fair, or
-   should it be weakened?
-3. Does the portable held-out-quantile objective look like a legitimate
-   way to avoid the G=300 vacuity found under the original burn-in
-   percentile rule?
-4. Would you treat this as a real Postulate-1 / determining-modes-style
-   witness, or as ordinary data-assimilation/numerical-observer language
-   that should not be made load-bearing?
+1. Given the twin-state certificate is sampled-SRB / finite-Galerkin
+   (not an exact attractor theorem), is the **"state-insufficient on the
+   support"** language reasonable, or should it be weakened?
+2. Is the kNN/disintegration reading of **"control-sufficient on
+   `Phi_K`-fibers up to a measure-zero decision surface"** mathematically
+   fair, or overstated?
+3. Does a **held-out look-ahead-max quantile** look like a legitimate way
+   to define a regime-portable objective (it replaced a burn-in-percentile
+   trigger that went vacuous at `G = 300`)?
+4. Would you read this as a genuine *"a sub-determining mode set can be
+   control-sufficient without being state-reconstructive"* separation, or
+   as ordinary data-assimilation / observer language that should not be
+   made load-bearing?
 
 Minimal packet:
 
-- `docs/proof/PDE_C1_REGIME_GENERALITY_v1.md` - current result and scope.
-- `docs/proof/PDE_C1_KNN_CONVERGENCE_CHECK.md` - control-sufficiency
-  adjudicator.
-- `docs/proof/PDE_C1_TWIN_STATE_CERTIFICATE.md` - sampled-support
+- `PDE_C1_REGIME_GENERALITY_v1.md` — current result, scope, and gates.
+- `PDE_C1_KNN_CONVERGENCE_CHECK.md` — the control-sufficiency adjudicator.
+- `PDE_C1_TWIN_STATE_CERTIFICATE.md` — the sampled-support
   state-insufficiency bridge.
-- `docs/SUNDOG_V_NAVIERSTOKES.md` - ledger / claim boundary.
+- `SUNDOG_V_NAVIERSTOKES.md` — ledger and claim boundary.
 
-The most useful response would be one paragraph: "framing seems
-conservative," "weaken X," "this is standard / cite Y," or "do not call
-this support-level / fiber-sufficient because Z."
+A one-paragraph reply is plenty: "framing seems conservative," "weaken
+X," "this is standard, cite Y," or "don't call this support-level /
+fiber-sufficient because Z." A negative answer is the most valuable
+outcome — the goal is to prevent overclaiming.
 
 Thanks,
 [Your name]
 
 ## Slightly Warmer Version
 
-**Subject:** Small Navier-Stokes/control-sufficiency sanity check
+**Subject:** Small 2D NSE / control-sufficiency sanity check
 
 Hi [Name],
 
-I have a bounded PDE sanity-check request if you have the bandwidth.
-We have been testing a Sundog/Postulate-1 reading against a finite
-Galerkin 2D Kolmogorov-flow model. The result is not a Clay-problem
-claim and not a new PDE theorem; the point is much narrower.
+A bounded PDE sanity-check request if you have the bandwidth. We have
+been testing a coarse-graining reading against a finite-Galerkin 2D
+Kolmogorov-flow model. It is not a Clay-problem claim and not a new PDE
+theorem; the point is narrow and I mostly want to know if we are
+overstating it.
 
-The observed pattern is:
+The observed pattern, in determining-modes language:
 
-- low Fourier signature `Phi_K` cannot reconstruct the full sampled
-  state: a twin-state certificate finds signature-near pairs with
-  separated high modes on the sampled SRB-like support;
-- the same `Phi_K` nevertheless appears sufficient for a registered
-  low-band-energy proxy action: kNN/disintegration checks show local
-  action mixing decays to zero as the signature radius goes to zero;
-- this complete state-insufficient / control-sufficient pattern holds
-  at `G = 200` and `G = 300` for `k_f = 2`, after replacing a
-  non-portable burn-in-percentile trigger with a held-out quantile
-  objective that stays discriminative across regimes.
+- a low-Fourier observation `Phi_K` does **not** reconstruct the full
+  sampled state — a twin-state certificate finds signature-near pairs
+  with separated high modes on the sampled SRB-like support;
+- the same `Phi_K` nevertheless looks **sufficient for a registered
+  low-band-energy control action** — kNN/disintegration checks show the
+  local action-mixing decaying to zero as the signature radius → 0;
+- this state-insufficient / control-sufficient pattern holds at both
+  `G = 200` and `G = 300` (for `k_f = 2`), after we replaced a
+  non-portable burn-in-percentile trigger with a held-out-quantile
+  objective. The control half is also stable across a halving of the
+  signature dimension and across the two objective constructions.
 
 The internal conclusion is deliberately scoped:
 
-> two-regime, finite-Galerkin, sampled-support, numerical evidence for a
-> signature that is not state-reconstructive but is control-sufficient
-> for the registered proxy action. Proxy faithfulness and PDE review are
-> still open; no infinite-dimensional NSE claim is made.
+> two-regime (Grashof-axis only), finite-Galerkin, sampled-support,
+> numerical evidence for an observation that is not state-reconstructive
+> but is control-sufficient for the registered proxy action. Proxy
+> faithfulness and PDE review are open; no infinite-dimensional NSE claim
+> is made.
 
-Could you sanity-check whether that is a mathematically honest framing?
-In particular, I would value your judgment on whether the kNN
-fiber/disintegration language and sampled-support twin-state language
-are acceptable, or whether they should be downgraded before any public
-or paper-facing use.
+Could you sanity-check whether that is a mathematically honest framing —
+in particular whether the kNN-fiber/disintegration language and the
+sampled-support twin-state language are acceptable, or should be
+downgraded before any paper-facing use? A short reply is enough, and a
+negative one is useful.
 
 Packet: [link or attachment]
-
-A short reply is enough. A negative answer is useful here; the goal is
-to prevent overclaiming.
 
 Thanks,
 [Your name]
 
 ## Follow-Up If They Say Yes
 
-Thank you. The shortest review path is:
+Thank you. The shortest path:
 
-1. Read `PDE_C1_REGIME_GENERALITY_v1.md` sections 1, 3, 6, 8, and 12.
-2. Skim the branch summaries in `PDE_C1_KNN_CONVERGENCE_CHECK.md` and
+1. `PDE_C1_REGIME_GENERALITY_v1.md` — §1 (the fix), §3 (objective), §6
+   (portability gate), §8 (interpretation), §12 (result).
+2. Skim the branch/verdict summaries in
+   `PDE_C1_KNN_CONVERGENCE_CHECK.md` and
    `PDE_C1_TWIN_STATE_CERTIFICATE.md`.
-3. Reply with any of:
-   - "framing seems conservative";
-   - "weaken / rename this";
-   - "support-level language is too strong";
-   - "fiber-sufficiency language is too strong";
-   - "this is standard data-assimilation language; cite X";
-   - "I only checked the kNN / twin-state / objective piece."
+3. Reply with any of: "framing seems conservative" / "weaken or rename
+   this" / "support-level language too strong" / "fiber-sufficiency
+   language too strong" / "this is standard data-assimilation, cite X" /
+   "I only checked the kNN / twin-state / objective piece."
 
-I am not asking for a referee report.
+Not asking for a referee report — a paragraph is ideal.
 
 ## Follow-Up If They Decline
 
-No worries at all, and thank you for considering it. If someone else is
-a better fit for a quick 2D NSE / determining-modes / data-assimilation
-sanity check, I would be grateful for a pointer.
+No worries at all, and thanks for considering it. If someone else is a
+better fit for a quick 2D NSE / determining-modes / data-assimilation
+framing check, a pointer would be appreciated.
 
 ## Reviewer Fit
 
@@ -129,12 +141,30 @@ Best fit:
 
 - PDE analyst familiar with 2D NSE, determining modes, or data
   assimilation / observer theory;
-- numerical analyst with experience in Galerkin Navier-Stokes and
-  invariant-measure sampling;
-- control/data-assimilation researcher comfortable with conditional
-  observability and finite-dimensional observer diagnostics.
+- numerical analyst with Galerkin-NSE and invariant-measure-sampling
+  experience.
 
-Less ideal but still useful:
+Also useful:
 
+- control / data-assimilation researcher comfortable with conditional
+  observability and finite-dimensional observer diagnostics;
 - turbulence / shell-model person for the empirical/objective side;
-- mathematical statistics person for the kNN/disintegration language.
+- mathematical-statistics person for the kNN/disintegration language.
+
+## Notes For The Sender (not part of the email)
+
+- The strongest honest selling points, if asked "why should I trust the
+  numbers": the control verdict is robust to signature dimension
+  (`d_K = 18` vs `32`), to sample budget (50k vs 200k), and to the
+  objective construction (burn-in-percentile vs held-out-quantile both
+  POSITIVE at `G = 200`); and the adjudicator overturned its **own** first
+  mechanical reading on a pre-registered convergence check, so the
+  pipeline is not tuned to a desired answer.
+- Do **not** soften the scope clauses to make the result sound bigger.
+  The two-point / `k_f`-fixed / single-objective-family / finite-Galerkin
+  caveats are load-bearing and a reviewer flagging them as missing would
+  be a worse outcome than a reviewer confirming a conservative framing.
+- If the reviewer asks "is `pi_hat` the optimal selector?": the honest
+  answer is no — it is a registered proxy (the burn-in/held-out overshoot
+  trigger), not a derived `J`-optimal selector; that is exactly the open
+  proxy-faithfulness item.

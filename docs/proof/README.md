@@ -183,8 +183,21 @@ that claim provably fails.
   — Navier-Stokes Candidate 2 scoping: PDE-substrate empirical leg of
   Postulate 1 Phase 4 (shell-model signatures vs. matched-budget DMD /
   CSD / lacunarity / Rényi baselines on a pre-registered Sabra primary +
-  GOY cross-check). Drafted scoping; cell-set v0 deferred to a
-  follow-up artifact; named negatives `PDE-C2-NEG-A` and `PDE-C2-NEG-B`.
+  GOY cross-check). Drafted scoping; named negatives `PDE-C2-NEG-A`
+  and `PDE-C2-NEG-B`. Cell-set v0 now drafted (below).
+- [`PDE_C2_CELLSET_SABRA_v0.md`](PDE_C2_CELLSET_SABRA_v0.md)
+  — **C2 cell-set v0 pre-registration / design for sign-off**
+  (2026-05-29). Pins the Sabra numerics (N=22, λ=2, ν=1e-7, RK4+
+  integrating-factor), the channel tiers + log-signature (level 2)
+  representation, the matched-budget baselines, the cells (headline /
+  tier ablations / held-out-`ν` / GOY / envelope), and leakage-safe
+  contiguous splits. **Imports the C1 lesson:** `E_burst` is a held-out
+  quantile (`q_burst=0.98`) not a fixed level, plus a **base-rate gate**
+  (`PDE-C2-DEFERRED-BASERATE`) that defers a degenerate-burst-rate cell
+  rather than mis-reading it — the explicit guard against the C1-v6
+  intermittent-threshold vacuity. **Proposed, not built, not run** —
+  §10 lists sign-off decisions (Sabra params, signature library,
+  base-rate band, compute budget, build trigger).
 - [`PDE_C1_FIBER_PROTOCOL.md`](PDE_C1_FIBER_PROTOCOL.md) —
   Navier-Stokes Candidate 1 fiber protocol: tolerance + binning
   methodology that closes the continuous-fiber gate (cell-set v0

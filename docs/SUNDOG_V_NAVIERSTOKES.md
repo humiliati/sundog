@@ -327,8 +327,21 @@ pins the research object, the Sabra-primary + GOY-cross-check model commitment,
 the tiered channel taxonomy (Tier 0 headline; Tiers 1–2 ablations), the
 matched-budget baseline rule, the burst-prediction task, and the two-sided
 negative as `PDE-C2-NEG-A` (Pareto vacuity) and `PDE-C2-NEG-B` (overfit /
-cell-set drift). Cell-set v0 with concrete numerics is deferred to a
-follow-up artifact, mirroring the C1 staging.
+cell-set drift). **Cell-set v0 drafted for sign-off 2026-05-29** at
+[`proof/PDE_C2_CELLSET_SABRA_v0.md`](proof/PDE_C2_CELLSET_SABRA_v0.md):
+pins the Sabra numerics (N=22, λ=2, ν=1e-7, RK4+integrating-factor),
+channel tiers + log-signature (level 2), matched-budget baselines, the
+cell set (headline / tier ablations / held-out-`ν` / GOY / envelope),
+and leakage-safe contiguous splits. **Imports the C1 lesson directly:**
+`E_burst` is a held-out quantile (`q_burst=0.98`), not a fixed level,
+plus a **base-rate gate** (`PDE-C2-DEFERRED-BASERATE`) that defers a
+degenerate-burst-rate cell rather than mis-reading it — the explicit
+guard against the C1-v6 intermittent-threshold vacuity that motivated
+the pivot here. Proposed, not built, not run; §10 lists sign-off
+decisions (Sabra params, signature library, base-rate band, compute
+budget, build trigger). The C1 reviewer-outreach draft is staged at
+[`proof/PDE_C1_EXTERNAL_REVIEW_EMAIL_DRAFT.md`](proof/PDE_C1_EXTERNAL_REVIEW_EMAIL_DRAFT.md)
+(criterion-(c) prep).
 
 ## Claim Boundary
 
