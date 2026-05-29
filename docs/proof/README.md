@@ -87,7 +87,18 @@ that claim provably fails.
   coverage tension is the core obstruction. Forks: (A) pivot to
   kNN/kernel fiber-locality adjudication; (B) report Finding A as a
   partial C1 read; (C) bank C1 lessons and pivot to C2. Explicitly
-  rules out another binning-parameter cell.
+  rules out another binning-parameter cell. **Fork A selected
+  2026-05-28.**
+- [`PDE_C1_KNN_ADJUDICATION_DESIGN.md`](PDE_C1_KNN_ADJUDICATION_DESIGN.md)
+  — **design proposal for sign-off** (Fork A). kNN / kernel
+  fiber-locality adjudicator as the nonparametric realization of the
+  protocol's deferred disintegration branch: per-sample `k`-neighbour
+  minority fraction `m_i`, neighbourhood radius `r_k` as a per-sample
+  fidelity measure, fidelity-coverage gate replacing bin-coverage, new
+  `DEFERRED_FIDELITY_COVERAGE` receipt. Targets the v0–v5
+  tolerance-fidelity vs. coverage obstruction directly. **Proposed,
+  not built, not run** — §7 lists open choices needing owner sign-off
+  before harness work.
 - [`PDE_C2_SHELL_SIGNATURE_SCOPING.md`](PDE_C2_SHELL_SIGNATURE_SCOPING.md)
   — Navier-Stokes Candidate 2 scoping: PDE-substrate empirical leg of
   Postulate 1 Phase 4 (shell-model signatures vs. matched-budget DMD /

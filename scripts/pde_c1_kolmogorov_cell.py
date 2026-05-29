@@ -29,6 +29,21 @@ import numpy as np
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_OUT = ROOT / "results" / "proof" / "c1-kolmogorov-v0-smoke"
 
+VERDICT_BEARING_PRESETS = {
+    "lock",
+    "fallback",
+    "lock_v1",
+    "fallback_v1",
+    "lock_v2",
+    "fallback_v2",
+    "lock_v3",
+    "fallback_v3",
+    "lock_v4",
+    "fallback_v4",
+    "lock_v5",
+    "fallback_v5",
+}
+
 
 @dataclass(frozen=True)
 class RunConfig:
@@ -54,6 +69,9 @@ class RunConfig:
     integrator: str
     signature_dimension: int
     action_tiebreak: str
+    adjudicator: str
+    k_neighbors: int
+    delta_incompat: float
 
 
 def parse_args() -> argparse.Namespace:
@@ -76,6 +94,12 @@ def parse_args() -> argparse.Namespace:
             "fallback_v5",
         ],
         default="smoke",
+    )
+    parser.add_argument(
+        "--adjudicator",
+        choices=["bin", "knn"],
+        default="bin",
+        help="Fiber-locality adjudicator: hard binning (default) or kNN/disintegration.",
     )
     parser.add_argument("--out", type=Path, default=DEFAULT_OUT)
     parser.add_argument("--write-samples", action="store_true", help="Write per-sample rows even for large runs.")
@@ -110,6 +134,10 @@ def build_config(args: argparse.Namespace) -> RunConfig:
     # E_max windowing: cells v0..v3 use full burn-in (1.0). v4+ may pin smaller
     # fractions to exclude transient contamination of the 95th percentile.
     e_max_burnin_fraction = 1.0
+    # kNN adjudication (adopted 2026-05-28, Fork A): k neighbours including self;
+    # delta_incompat is the positive-mass threshold for filing PDE-C1-NEG-A.
+    k_neighbors = 30
+    delta_incompat = 0.01
     random_seed = 20260528
 
     if args.preset == "lock":
@@ -250,6 +278,9 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         integrator="pseudo_spectral_vorticity_semi_implicit_euler",
         signature_dimension=2 * k_signature * k_signature,
         action_tiebreak="no_op",
+        adjudicator=args.adjudicator,
+        k_neighbors=k_neighbors,
+        delta_incompat=delta_incompat,
     )
 
 
@@ -400,10 +431,18 @@ def run_cell(cfg: RunConfig) -> dict:
     epsilon_k = 0.05 * math.sqrt(max(0.0, 2.0 * e_max))
     h_k = epsilon_k / math.sqrt(cfg.signature_dimension) if epsilon_k > 0 else 1.0
     actions = label_samples(energy_by_step, cfg, e_max)
-    bin_rows, sample_rows = aggregate_bins(sample_signatures, sample_energy, actions, sig_min, h_k, cfg)
-    result = summarize(bin_rows, cfg)
+    if cfg.adjudicator == "knn":
+        result, bin_rows, sample_rows, knn_histogram = aggregate_knn(
+            sample_signatures, actions, epsilon_k, cfg
+        )
+    else:
+        bin_rows, sample_rows = aggregate_bins(sample_signatures, sample_energy, actions, sig_min, h_k, cfg)
+        result = summarize(bin_rows, cfg)
+        knn_histogram = []
     result.update(
         {
+            "adjudicator": cfg.adjudicator,
+            "knn_histogram": knn_histogram,
             "e_max": e_max,
             "epsilon_k": epsilon_k,
             "h_k": h_k,
@@ -507,20 +546,7 @@ def summarize(bin_rows: list[dict], cfg: RunConfig) -> dict:
     no_op = sum(int(row["no_op_count"]) for row in bin_rows)
     damp = sum(int(row["damp_low_band_count"]) for row in bin_rows)
 
-    verdict_bearing_presets = {
-        "lock",
-        "fallback",
-        "lock_v1",
-        "fallback_v1",
-        "lock_v2",
-        "fallback_v2",
-        "lock_v3",
-        "fallback_v3",
-        "lock_v4",
-        "fallback_v4",
-        "lock_v5",
-        "fallback_v5",
-    }
+    verdict_bearing_presets = VERDICT_BEARING_PRESETS
     damp_fraction = damp / max(1, no_op + damp)
     proxy_constant = (
         damp_fraction < cfg.delta_proxy_min
@@ -575,6 +601,163 @@ def summarize(bin_rows: list[dict], cfg: RunConfig) -> dict:
     }
 
 
+def aggregate_knn(
+    signatures: np.ndarray,
+    actions: np.ndarray,
+    epsilon_k: float,
+    cfg: RunConfig,
+) -> tuple[dict, list, list, list]:
+    """kNN / disintegration adjudication (Fork A, adopted 2026-05-28).
+
+    For each sample, examine its k nearest signature-space neighbours
+    (including self). The neighbourhood radius r_k is a per-sample fidelity
+    measure; the local minority fraction estimates conditional proxy
+    non-constancy (a nonparametric estimate of the disintegration of mu
+    over Phi_K). Spec: docs/proof/PDE_C1_KNN_ADJUDICATION_DESIGN.md.
+    """
+    from sklearn.neighbors import BallTree
+
+    n = int(signatures.shape[0])
+    k = min(cfg.k_neighbors, n)
+    tree = BallTree(signatures, metric="euclidean")
+    dist, idx = tree.query(signatures, k=k)  # self included at distance 0
+    r_k = dist[:, -1]
+    neighbour_actions = actions[idx]  # (n, k) of 0/1
+    damp_count = neighbour_actions.sum(axis=1)
+    no_op_count = k - damp_count
+    majority_is_damp = damp_count > no_op_count  # strict; tie -> no_op
+    majority_count = np.where(majority_is_damp, damp_count, no_op_count)
+    minority = 1.0 - majority_count / float(k)
+
+    fidelity_pass = r_k <= epsilon_k
+    f_count = int(fidelity_pass.sum())
+    fidelity_coverage = f_count / n if n else 0.0
+    incompat_mask = fidelity_pass & (minority > cfg.delta_action)
+    incompat_count = int(incompat_mask.sum())
+    incompat_fraction = incompat_count / f_count if f_count else 0.0
+
+    damp = int(actions.sum())
+    no_op = int(n - damp)
+
+    r_max = float(r_k.max()) if n else 0.0
+    nbins = 20
+    edges = np.linspace(0.0, max(r_max, epsilon_k * 2.0, 1e-12), nbins + 1)
+    counts, _ = np.histogram(r_k, bins=edges)
+    histogram = [
+        {
+            "r_lo": float(edges[j]),
+            "r_hi": float(edges[j + 1]),
+            "count": int(counts[j]),
+            "within_epsilon": bool(edges[j + 1] <= epsilon_k),
+        }
+        for j in range(nbins)
+    ]
+
+    result = summarize_knn(
+        n=n,
+        k=k,
+        f_count=f_count,
+        fidelity_coverage=fidelity_coverage,
+        incompat_count=incompat_count,
+        incompat_fraction=incompat_fraction,
+        no_op=no_op,
+        damp=damp,
+        r_k=r_k,
+        minority=minority,
+        fidelity_pass=fidelity_pass,
+        epsilon_k=epsilon_k,
+        cfg=cfg,
+    )
+    return result, [], [], histogram
+
+
+def summarize_knn(
+    *,
+    n: int,
+    k: int,
+    f_count: int,
+    fidelity_coverage: float,
+    incompat_count: int,
+    incompat_fraction: float,
+    no_op: int,
+    damp: int,
+    r_k: np.ndarray,
+    minority: np.ndarray,
+    fidelity_pass: np.ndarray,
+    epsilon_k: float,
+    cfg: RunConfig,
+) -> dict:
+    damp_fraction = damp / max(1, n)
+    proxy_structural_constant = damp == 0 or no_op == 0
+    proxy_constant = (
+        damp_fraction < cfg.delta_proxy_min or damp_fraction > 1.0 - cfg.delta_proxy_min
+    )
+
+    if cfg.preset not in VERDICT_BEARING_PRESETS:
+        verdict, verdict_label, interpretable = "SMOKE_ONLY", "", False
+    elif proxy_structural_constant:
+        verdict, verdict_label, interpretable = (
+            "DEFERRED_VACUITY",
+            "proxy_selector_structurally_constant",
+            False,
+        )
+    elif proxy_constant:
+        verdict, verdict_label, interpretable = (
+            "DEFERRED_VACUITY",
+            "proxy_selector_near_constant_on_sampled_support",
+            False,
+        )
+    elif fidelity_coverage < cfg.s_pos:
+        verdict, verdict_label, interpretable = (
+            "DEFERRED_FIDELITY_COVERAGE",
+            "insufficient_fidelity_passing_fraction",
+            False,
+        )
+    elif incompat_fraction > cfg.delta_incompat:
+        verdict, verdict_label, interpretable = (
+            "PDE-C1-NEG-A",
+            "fiber_incompatibility_knn",
+            True,
+        )
+    else:
+        verdict, verdict_label, interpretable = (
+            "STRICTNESS_WITNESS_POSITIVE",
+            "proxy_fiber_constancy_knn",
+            True,
+        )
+
+    def pct(a: np.ndarray, q: float) -> float:
+        return float(np.percentile(a, q)) if a.size else 0.0
+
+    r_pass = r_k[fidelity_pass]
+    m_pass = minority[fidelity_pass]
+    return {
+        "verdict": verdict,
+        "verdict_label": verdict_label,
+        "interpretable": interpretable,
+        "n_samples": n,
+        "k_neighbors_effective": k,
+        "fidelity_passing_count": f_count,
+        "fidelity_coverage": fidelity_coverage,
+        "s_pos": cfg.s_pos,
+        "incompat_count": incompat_count,
+        "incompat_fraction": incompat_fraction,
+        "delta_incompat": cfg.delta_incompat,
+        "delta_action": cfg.delta_action,
+        "no_op_count": no_op,
+        "damp_low_band_count": damp,
+        "damp_fraction": damp_fraction,
+        "epsilon_k_radius_threshold": epsilon_k,
+        "r_k_median": pct(r_k, 50),
+        "r_k_p95": pct(r_k, 95),
+        "r_k_min": float(r_k.min()) if n else 0.0,
+        "r_k_max": float(r_k.max()) if n else 0.0,
+        "r_k_median_passing": pct(r_pass, 50),
+        "max_minority_fraction": float(minority.max()) if n else 0.0,
+        "max_passing_minority_fraction": float(m_pass.max()) if m_pass.size else 0.0,
+    }
+
+
 def bin_key(idx: Iterable[int]) -> str:
     return ";".join(str(int(x)) for x in idx)
 
@@ -593,23 +776,34 @@ def write_outputs(out_dir: Path, cfg: RunConfig, result: dict, write_samples: bo
             "platform": sys.platform,
             "cwd": str(ROOT),
         },
-        "result": {k: v for k, v in result.items() if k not in ("bin_rows", "sample_rows")},
+        "result": {
+            k: v
+            for k, v in result.items()
+            if k not in ("bin_rows", "sample_rows", "knn_histogram")
+        },
     }
     (out_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
-    write_csv(out_dir / "bin-summary.csv", result["bin_rows"])
-    if write_samples or result["sample_rows"]:
-        write_csv(out_dir / "sample-actions.csv", result["sample_rows"])
+    if cfg.adjudicator == "knn":
+        write_csv(out_dir / "knn-radius-histogram.csv", result.get("knn_histogram", []))
+    else:
+        write_csv(out_dir / "bin-summary.csv", result["bin_rows"])
+        if write_samples or result["sample_rows"]:
+            write_csv(out_dir / "sample-actions.csv", result["sample_rows"])
     write_receipt(out_dir / "PDE_C1_KOLMOGOROV_RESULTS.md", manifest)
 
 
 def write_receipt(path: Path, manifest: dict) -> None:
     r = manifest["result"]
     c = manifest["config"]
+    if c.get("adjudicator") == "knn":
+        write_receipt_knn(path, manifest)
+        return
     lines = [
         "# PDE C1 Kolmogorov v0 Receipt",
         "",
         f"**Status:** {r['verdict']}",
         f"**Preset:** `{c['preset']}`",
+        f"**Adjudicator:** `bin`",
         f"**Interpretable verdict:** `{r['interpretable']}`",
         "",
         "## Readout",
@@ -648,6 +842,69 @@ def write_receipt(path: Path, manifest: dict) -> None:
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def write_receipt_knn(path: Path, manifest: dict) -> None:
+    r = manifest["result"]
+    c = manifest["config"]
+    lines = [
+        "# PDE C1 Kolmogorov kNN Receipt",
+        "",
+        f"**Status:** {r['verdict']}",
+        f"**Preset:** `{c['preset']}`",
+        f"**Adjudicator:** `knn`",
+        f"**Interpretable verdict:** `{r['interpretable']}`",
+        "",
+        "## Readout",
+        "",
+        f"- samples: `{r['n_samples']}`, k (effective): `{r['k_neighbors_effective']}`",
+        f"- `epsilon_K` (radius threshold): `{r['epsilon_k_radius_threshold']:.6g}`",
+        f"- fidelity coverage: `{r['fidelity_coverage']:.6g}` vs `S_pos = {r['s_pos']}` "
+        f"(`{r['fidelity_passing_count']}` of `{r['n_samples']}` within `epsilon_K`)",
+        f"- `r_k` median / p95 / max: `{r['r_k_median']:.6g}` / `{r['r_k_p95']:.6g}` / `{r['r_k_max']:.6g}`",
+        f"- `r_k` median among fidelity-passing: `{r['r_k_median_passing']:.6g}`",
+        f"- damp fraction (global): `{r['damp_fraction']:.6g}`",
+        f"- incompatible fraction (of passing): `{r['incompat_fraction']:.6g}` "
+        f"vs `delta_incompat = {r['delta_incompat']}` (`{r['incompat_count']}` samples)",
+        f"- max passing minority fraction: `{r['max_passing_minority_fraction']:.6g}` "
+        f"vs `delta_action = {r['delta_action']}`",
+        f"- elapsed seconds: `{r['elapsed_seconds']:.3f}`",
+        "",
+        "## Branch",
+        "",
+    ]
+    if r["verdict"] == "SMOKE_ONLY":
+        lines.append("Smoke-only run; no C1 negative or positive may be filed from this receipt.")
+    elif r["verdict"] == "DEFERRED_VACUITY":
+        lines.append(
+            "Proxy selector is essentially constant on the sampled support; the "
+            "strictness predicate has no discriminative content. No verdict filed."
+        )
+    elif r["verdict"] == "DEFERRED_FIDELITY_COVERAGE":
+        lines.append(
+            "Fewer than `S_pos` of samples have `k` neighbours within `epsilon_K`; the "
+            "attractor is too sparse at the tolerance scale for a faithful local fiber "
+            "test at this `k` and `N`. The `r_k` histogram (knn-radius-histogram.csv) "
+            "maps how far from fidelity the attractor sits. Admissible responses: larger "
+            "`N_sample`, a pre-registered larger `epsilon_K` (with the same fidelity "
+            "caveat as binning), or reconsidering the continuous-fiber object for this "
+            "attractor. Not a fall-back-by-default."
+        )
+    elif r["verdict"] == "PDE-C1-NEG-A":
+        lines.append(
+            "A positive-mass fraction of fidelity-passing samples have local minority "
+            "fraction above `delta_action`; file `PDE-C1-NEG-A` (fiber incompatibility "
+            "under the kNN/disintegration adjudicator)."
+        )
+    else:
+        lines.append(
+            "Across the fidelity-passing coverage, the proxy is locally constant on "
+            "fibers (incompat fraction below `delta_incompat`) and non-trivially "
+            "discriminative (vacuity gate passed); file strictness-witness positive "
+            "under the kNN/disintegration adjudicator."
+        )
+    lines.extend(["", "## Files", "", "- `manifest.json`", "- `knn-radius-histogram.csv`"])
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def write_csv(path: Path, rows: list[dict]) -> None:
     if not rows:
         path.write_text("", encoding="utf-8")
@@ -662,6 +919,7 @@ def write_csv(path: Path, rows: list[dict]) -> None:
 def self_test() -> None:
     args = argparse.Namespace(
         preset="smoke",
+        adjudicator="bin",
         out=DEFAULT_OUT,
         write_samples=False,
         self_test=True,

@@ -1,9 +1,15 @@
 # Phase 1 v4 Cost-Gate Slate
 
-Status: queued after the v3 named quarantine. No v4 implementation receipt has
-been filed.
+Status: frozen after first execution receipt. v4 resolved the denominator and
+cache-accounting artifacts but remained a named quarantine on raw cost; v5
+carries the short-circuit instrumentation and median-of-3 cost repair.
 
 Date opened: 2026-05-28
+
+Implementation note 2026-05-28: `npm run pvnp:phase1:v4` writes the v4
+artifact set under `results/pvnp/phase1-toy-verifier-v4/`, including cost
+denominator and cache-efficiency reports. The reviewed receipt is filed at
+[`receipts/2026-05-28_phase1_toy_verifier_v4.md`](receipts/2026-05-28_phase1_toy_verifier_v4.md).
 
 This slate inherits the Phase 1 toy-verifier object, v1 source binding, v2
 safety repairs, and v3 sensor/acceptance dispositions. It is not a domain
