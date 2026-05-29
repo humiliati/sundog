@@ -126,16 +126,34 @@ preserves v0–v3 backwards compatibility.
 [`proof/PDE_C1_CELLSET_KOLMOGOROV_v4.md`](proof/PDE_C1_CELLSET_KOLMOGOROV_v4.md)
 is the first **methodology sibling** (not regime sibling) in the C1
 chain. Holds v3's regime constant (`k_f = 2`, `G = 200`) and pins
-`e_max_burnin_fraction = 0.25` (last 25% of burn-in). Projected E_max
-drops from 1.07 to ~0.78 (close to steady-state 95th percentile),
-projected `damp_fraction ≈ 0.05`. Harness exposes `--preset lock_v4`.
-Criterion (b) is closed at the *procedure-and-execution* level (v0–v3
-lock cycles all ran cleanly; methodology survived four distinct
-vacuity / coverage diagnoses, two protocol amendments without any
-`PDE-C1-NEG-B`); a *substantive* C1 read still requires a non-vacuous,
-non-deferred v4+ execution. Criteria (a) Front-A vacuity rebuttal and
-(c) external PDE reviewer remain open. Final (d) close is coupled to
-(c).
+`e_max_burnin_fraction = 0.25` (last 25% of burn-in). **Lock_v4 and
+fallback_v4 both executed 2026-05-28** (~19 min + ~88 min; receipts at
+`results/proof/c1-kolmogorov-v4-lock/` and `.../v4-fallback/`). Both
+returned `DEFERRED_COVERAGE`, but with a clean two-sided diagnosis:
+**Methodology win** — E_max amendment unlocked proxy discrimination
+(`damp_fraction = 0.30014` lock / `0.300125` fall-back, stable to 4
+dp across 50k and 200k samples; structural-vacuity precedence did not
+fire; the cell IS substantively discriminative). **Methodology limit**
+— 4× samples produced 3.04× bins (45,827 → 139,361) with
+`evaluated_bin_count = 0` in both runs; uniform binning at `K = 4`
+empirically infeasible on this attractor regardless of `N_sample`.
+**Methodology amendment 4 (added 2026-05-28)** to fiber protocol §2:
+**`K` (signature mode count) becomes a cell-set parameter**, with
+explicit documentation of `bin_count ∝ (R/h_K)^{d_K}` where
+`d_K = 2K^2`. Lowering K reduces dimensional cost exponentially.
+**Cell-set v5** at
+[`proof/PDE_C1_CELLSET_KOLMOGOROV_v5.md`](proof/PDE_C1_CELLSET_KOLMOGOROV_v5.md)
+holds the v4 regime and E_max windowing constant and pins `K = 3`
+(signature dim 18 vs v4's 32). Forced mode `(0, 2)` retained. Bin
+count expected to drop by orders of magnitude. Harness exposes
+`--preset lock_v5`.
+Criterion (b) is closed at the *procedure-and-execution* level (v0–v4
+lock cycles all ran cleanly; v4 fall-back also executed; methodology
+survived five vacuity / coverage diagnoses and four protocol
+amendments without any `PDE-C1-NEG-B`); a *substantive* C1 read still
+requires a non-vacuous, non-deferred v5+ execution. Criteria (a)
+Front-A vacuity rebuttal and (c) external PDE reviewer remain open.
+Final (d) close is coupled to (c).
 
 Candidate 2 has also been commissioned at the scoping level:
 [`proof/PDE_C2_SHELL_SIGNATURE_SCOPING.md`](proof/PDE_C2_SHELL_SIGNATURE_SCOPING.md)

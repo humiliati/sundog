@@ -66,7 +66,7 @@ It claims only a runnable predicate structure:
 
 | Symbol | Definition |
 | --- | --- |
-| `Phi_K` | Signature map from `X` to `R^{d_K}` (cell-set v0 § 2). |
+| `Phi_K` | Signature map from `X` to `R^{d_K}` (cell-set v0 § 2). The signature mode count `K` is a **cell-set parameter** (added 2026-05-28): cells may pin different `K` values to trade signature richness against bin-coverage cost in `R^{d_K}` (signature dim `d_K = 2K^2` for 2D Fourier signatures). The forced-mode inclusion constraint must be checked when changing `K`. |
 | `epsilon_K` | Tolerance radius on signature space `R^{d_K}`. |
 | `B_K` | Pre-registered bin partition of `R^{d_K}` (lattice spacing, alignment, bounding box). |
 | `b` | A bin in `B_K`. |
@@ -121,6 +121,20 @@ bin containing `Phi_K(u)` is an `O(epsilon_K)`-tolerance neighbourhood
 of `Phi_K(u)` in signature space. Approximation faithfulness is itself
 review-checkable: a reviewer who prefers exact tolerance balls can
 replace `B_K` with a ball-cover at the cost of slower adjudication.
+
+**Coverage vs. discrimination tradeoff (added 2026-05-28).** Bin
+count scales as `(R_attractor / h_K)^{d_K}` where `R_attractor` is
+the attractor extent in signature space and `d_K = 2K^2` for 2D
+Fourier signatures. Uniform binning at fixed `h_K` becomes
+infeasible — bin count exceeds `N_sample` — when the attractor is
+high-dimensional in `R^{d_K}`. The C1 v2 / v4 lock and v4 fall-back
+executions surfaced this empirically: at `(k_f = 2, G ≥ 200, K = 4)`,
+the attractor occupied ~45k–139k bins depending on sample count,
+with `N_sample / bin_count ≈ 1.1–1.4` regardless of how `N_sample`
+was scaled. The pre-registered binning was empirically too fine.
+Cells facing this regime may pin a smaller `K` (per the Local Symbols
+amendment above) to reduce `d_K`, at the cost of a less rich
+signature.
 
 ## 3. Proxy Selector
 
