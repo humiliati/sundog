@@ -6,7 +6,7 @@ Roadmaps:
 
 Filed: **2026-05-28 (PT)**
 
-Status: **Phase 3D EDIT-COLOR-RULE VARIANT BINDING RECEIPT FILED -- BOTTLENECK SHIFTED, FLOOR HOLDS**.
+Status: **Phase 3D MASK-TARGETED VARIANT SPEC FILED -- EXECUTION HOLD**.
 Phase 0 admitted; Phase 1 synthetic gate strengthened and passed; Phase 2
 projection-measurement plus baseline-comparison passed; Phase 3 filed
 three deterministic-low-capacity binding receipts (`nn_output_transfer_v1`,
@@ -112,11 +112,10 @@ residual). The structured-edit framing additionally decomposed the
 failure mode into its components (shape picker, canvas picker, edit-mask
 learner, edit-color learner) for the first time, isolating the bottleneck
 to the edit-color-rule stage. All four PHASE3_5_REFLECTION branches plus
-Branch D are now characterised; remaining admissible Phase 3 reopens
-require either a new pre-registered Branch D variant (wider baseline
-family, cross-task edit-color MLP, richer mask learner) or a new
-Branch E spec (e.g., generative program search, test-time LM prompting)
-with its own arena gate and verdict-amendment discipline.
+Branch D are now characterised. The first Branch D variant receipt later
+shifted the bottleneck to the mask stage, and a second Branch D variant is now
+pre-registered to target that mask stage. Any executed reopen still requires
+its own arena gate and verdict-amendment discipline.
 
 The first bottleneck-targeted Branch D variant is filed at
 [`PHASE3D_EDIT_COLOR_RULE_VARIANT_SPEC.md`](PHASE3D_EDIT_COLOR_RULE_VARIANT_SPEC.md).
@@ -154,10 +153,10 @@ Phase 3A, Phase 3D base, and Phase 3D variant -- now agree on the
 held-out exact-grid floor across two task distributions, two learner
 families (transformer + per-task MLP), two output framings (whole-grid
 + structured edit residual), and two color-prediction approaches
-(learned MLP + deterministic rule bank). Remaining admissible Phase 3
-reopens require either another Branch D variant targeting the mask
-or selector explicitly, or a Branch E spec (e.g., generative program
-search, test-time LM prompting).
+(learned MLP + deterministic rule bank). The next Branch D reopen is now
+pre-registered as a mask-targeted variant; after that filed spec, remaining
+admissible directions are selector refinement, rule-bank extension, or a
+Branch E spec (e.g., generative program search, test-time LM prompting).
 
 ## Official Anchors
 
@@ -311,6 +310,16 @@ Checked **2026-05-28** against:
   `row_col_periodic_color` 2.0%. Per-arm: signature_palette slightly higher
   on pixel + color_rule_accuracy than raw_grid, but identical
   shape/palette_exact (baseline-picker-dominated, arm-invariant).
+- [`PHASE3D_MASK_TARGET_VARIANT_SPEC.md`](PHASE3D_MASK_TARGET_VARIANT_SPEC.md)
+  -- second Branch D bottleneck variant. It freezes
+  `structured_edit_mask_target_v3` / `edit_mask_candidate_bank_v1`, keeps the
+  baseline picker and deterministic edit-color rule bank inherited from
+  `structured_edit_color_rule_v2`, and replaces only the edit-mask predictor
+  with a deterministic conditioning-derived mask-candidate bank. The variant
+  targets the largest remaining bottleneck from the edit-color-rule receipt:
+  41% `edit_mask_failure`. **No binding receipt exists yet. Execution remains
+  held** until runner tooling, npm wiring, result ignore path, leak-check
+  coverage, and a freeze-marker amendment are committed together.
 - [`PHASE3_5_REFLECTION.md`](PHASE3_5_REFLECTION.md) -- reflection doc
   naming the three-receipt convergence under the
   deterministic-low-capacity-learner family as a methodological finding,
@@ -393,12 +402,16 @@ sufficiency support adjudication is on file. Public copy may say:
   two output framings (whole-grid + structured edit residual), and
   two color-prediction approaches (learned MLP + deterministic rule
   bank). All four PHASE3_5_REFLECTION branches plus Branch D + its
-  variant are now characterised; remaining admissible Phase 3 reopens
-  require either another Branch D variant targeting the mask
-  explicitly (the dominant blocker per the variant decomposition) or
-  the selector explicitly (the largest locked-accuracy slice), or a
-  new Branch E spec (e.g., generative program search, test-time LM
-  prompting) with its own arena gate and verdict-amendment discipline.
+  first variant are now characterised. A second Branch D variant is
+  now pre-registered but not run:
+  `structured_edit_mask_target_v3` targets the dominant remaining
+  blocker by replacing only the edit-mask predictor with a deterministic
+  mask-candidate bank. No mask-targeted receipt exists yet, and no
+  sufficiency comparison is admitted from that filed spec. Remaining
+  admissible Phase 3 reopens after that spec require either a
+  selection-refinement variant, rule-bank-extension variant, or a new
+  Branch E spec (e.g., generative program search, test-time LM prompting)
+  with its own arena gate and verdict-amendment discipline.
 
 Avoid:
 
@@ -410,6 +423,9 @@ Avoid:
 - any Branch A, Branch B, or Branch D support claim from any of
   the six filed binding receipts (V1, V2, compact-7, Phase 3A,
   Phase 3D base, Phase 3D variant);
+- any claim that the filed mask-targeted Branch D variant has run, improved
+  Phase 3, opened the arena, or favours a signature arm before a binding
+  receipt exists;
 - any "variant flipped the bottleneck -> mask is the new limit"
   claim that omits the still-floor verdict -- the variant achieved
   a diagnostic improvement (palette doubled, decomposition gained)
@@ -417,7 +433,7 @@ Avoid:
   licensed;
 - describing any Phase 3 binding receipt as a signature-specific
   falsification independent of decoder capacity;
-- describing the five filed Phase 3 receipts as a sufficiency-failure
+- describing the six filed Phase 3 receipts as a sufficiency-failure
   conclusion -- per the reflection, they characterise the
   deterministic-low-capacity, per-task-scratch, and structured-edit
   framing families on the registered task class, not the
@@ -439,11 +455,11 @@ Avoid:
   pixel / minority recall in the documentation-only per-arm table
   is unlicensed-for-adjudication data, not a support signal;
 - claiming any single Phase 3 receipt closes the sufficiency
-  question -- the five floors together close PHASE3_5_REFLECTION
+  question -- the six floors together close PHASE3_5_REFLECTION
   Branches A, B, C, and D in the filed learner families and
-  framings, but the sufficiency question remains open under a
-  Branch D variant (wider baseline / cross-task color / richer
-  mask) or a Branch E (different framing entirely);
+  framings, but the sufficiency question remains open under the
+  filed mask-targeted Branch D variant, a later selector/rule-bank
+  variant, or Branch E (different framing entirely);
 - any spatial_transform or local_completion claim from the compact-7
   receipt -- those priors are not represented in the compact-signal
   slice;

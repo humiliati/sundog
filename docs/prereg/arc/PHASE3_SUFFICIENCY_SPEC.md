@@ -6257,3 +6257,62 @@ output framings, and two color-prediction approaches (learned MLP
 + deterministic rule bank). Remaining admissible reopens narrow to
 mask-targeted variants, selection-refinement variants, or
 fundamentally different framings (Branch E)."
+
+### 2026-05-28 (PT) -- Jeffery Hughes Jr. -- Branch D Mask-Targeted Variant Spec Filed
+
+Branch D mask-targeted variant spec:
+
+- [`PHASE3D_MASK_TARGET_VARIANT_SPEC.md`](PHASE3D_MASK_TARGET_VARIANT_SPEC.md)
+
+Justification: the `structured_edit_color_rule_v2` binding receipt shifted the
+dominant bottleneck to `edit_mask_failure` (41% of failures), with smaller
+diagnostic slices for `color_rule_selection_failure` (16%) and
+`color_rule_bank_coverage_failure` (9%). This amendment starts the highest
+leverage Branch D variant named by that receipt: keep the baseline picker and
+the deterministic color-rule bank frozen, and change only the edit-mask
+predictor.
+
+Verdict impact: **no execution admission and no Branch D mask-targeted verdict**.
+The new spec freezes `structured_edit_mask_target_v3` and learner label
+`edit_mask_candidate_bank_v1`, but the run remains held until runner tooling,
+npm wiring, result ignore path, leak-check coverage, and a freeze-marker
+amendment are committed together.
+
+The variant replaces the inherited scratch mask MLP as the sole mask predictor
+with a deterministic mask-candidate bank selected from conditioning residuals.
+The legacy mask MLP is admitted only as one thresholded candidate family, not as
+a learned cross-task selector. Frozen candidate families include normalized
+conditioning mask transfer, bounding-box fill/outline, row/column periodic
+masks, source-color masks, object-role masks, nearest residual patch masks,
+delta-overlay masks, and morphological variants.
+
+The pre-registered arena and branch rules are:
+
+1. only `raw_grid_edit_mask_v3` can open the arena;
+2. if raw grid floors, the verdict is `branch_d_mask_target_full_grid_floor`
+   and no signature comparison is licensed;
+3. if raw grid opens, compare `signature_palette_edit_mask_v3` to
+   `raw_grid_edit_mask_v3` for `branch_d_mask_target_support`,
+   `branch_d_mask_target_bounded_failure`, or diagnostic
+   `branch_d_mask_target_named_quarantine`;
+4. oracle mask diagnostics such as `mask_oracle_candidate_f1` and
+   `mask_oracle_exact_nonbaseline` are diagnostics only and cannot support a
+   branch decision.
+
+Reserved implementation names:
+
+- Python runner: `docs/prereg/arc/phase3d_mask_target_v3.py`;
+- Node wrapper: `scripts/arc-phase3d-mask-target-v3.mjs`;
+- npm script: `arc:phase3d:mask-target-v3`;
+- shard npm script: `arc:phase3d:mask-target-v3:shard`;
+- merge npm script: `arc:phase3d:mask-target-v3:merge`;
+- binding receipt path: `results/arc/phase3d-mask-target-v3/`.
+
+Permitted public language before a binding receipt:
+
+> "Phase 3D has filed a mask-targeted structured-edit variant spec targeting
+> the leading bottleneck isolated by the edit-color-rule receipt. No
+> mask-targeted receipt exists yet, and no sufficiency claim is admitted."
+
+Forbidden: claiming the mask-targeted variant improves Phase 3, opens the arena,
+or favours `signature_palette_edit_mask_v3` before a binding receipt exists.

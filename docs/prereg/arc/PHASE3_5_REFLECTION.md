@@ -471,3 +471,17 @@ Further Phase 3 work requires a new pre-registered reopen spec. The admissible
 next moves are now narrowed to a mask-targeted Branch D variant,
 selection-refinement Branch D variant, rule-bank extension Branch D variant, or
 Branch E spec. This addendum admits no execution.
+
+## Mask-Targeted Branch D Variant Addendum
+
+Filed: **2026-05-28 (PT)**.
+
+The next Branch D variant is now filed in
+`PHASE3D_MASK_TARGET_VARIANT_SPEC.md`. It targets the largest bottleneck slice
+named by the edit-color-rule receipt: `edit_mask_failure` at 41% of failures.
+The variant keeps the structured-edit baseline picker and deterministic
+edit-color rule bank fixed, and replaces only the edit-mask predictor with a
+conditioning-derived mask-candidate bank.
+
+This addendum does not admit execution. The mask-targeted variant remains in
+execution hold until runner tooling and a freeze-marker amendment are filed.

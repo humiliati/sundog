@@ -420,7 +420,11 @@ variant did, however, shift the bottleneck into measured slices: 41%
 edit-mask failure, 16% color-rule-selection failure, and 9% rule-bank-coverage
 failure. Future Phase 3 reopens now require a new pre-registered
 mask-targeted Branch D variant, selection-refinement Branch D variant,
-rule-bank extension Branch D variant, or Branch E spec.
+rule-bank extension Branch D variant, or Branch E spec. The mask-targeted
+variant is now filed as `structured_edit_mask_target_v3`: keep the baseline
+picker and deterministic edit-color rule bank fixed, and replace only the
+edit-mask predictor with a conditioning-derived mask-candidate bank. No
+mask-targeted receipt exists yet, and no sufficiency claim is admitted.
 
 ### Phase 4 — 5D / Low-Dimensional Collapse Check
 
