@@ -6948,3 +6948,70 @@ Allowed public language before receipt:
 
 > "Phase 3E has filed a framing-agnostic program-sketch oracle v2 spec. It is a
 > labeler for certificate adjudication, not a solver. No v2 receipt exists yet."
+
+### 2026-05-29 (PT) — Jeffery Hughes Jr. — Phase 3E Program-Sketch Oracle v2 Tooling Freeze-Marker (execution unblocked; oracle clears all three gates in smoke)
+
+The v2 oracle spec held execution until "runner tooling, npm wiring,
+result ignore path, leak-check coverage, and a freeze-marker amendment
+are committed together." This amendment files that commit:
+
+- `docs/prereg/arc/phase3e_program_sketch_oracle_v2.py` (runner) —
+  standalone. The arc-p3-feature-v1 grid encoders + the frozen Phase 3E
+  context identity / distance / k=3 fiber-locality machinery are
+  inherited verbatim from the signature-fiber certificate runner. The
+  prior-blind `program_sketch_v1` (Branch D edit-composition banks) is
+  removed and replaced by `program_sketch_v2`: nine deterministic
+  transformation-relation facets (shape / palette / object /
+  cardinality / completion / spatial_transform / symmetry /
+  correspondence / rule_scope) computed from RAW registered grids only
+  — never `signature_palette`, arm distances, or decoder outputs —
+  plus the three gate tests, the v2 incompatibility rule, and the
+  7-branch precedence adjudication. The inherited Branch D bank
+  functions remain in the module but are INERT (never called by the v2
+  oracle); they are retained only to keep the shared frozen geometry
+  helpers byte-faithful to the 3E runner.
+- `scripts/arc-phase3e-program-sketch-oracle-v2.mjs` (Node wrapper).
+- `package.json`: adds `arc:phase3e:program-sketch-oracle-v2`.
+- `.gitignore`: adds `results/arc/phase3e-program-sketch-oracle-v2/`.
+- Pre-commit + CI ARC leak-check passes (now scans 20 ARC scripts).
+
+**Geometry frozen**: `epsilon_primary=0.05`, `epsilon_strict=0.025`,
+`epsilon_loose=0.10`, `k=3`, and the `signature_palette_context`
+identity + distance are UNCHANGED from the v1 certificate; the runner
+does not retune them.
+
+**Two-stage target barrier** honoured: the runner writes
+`context_fingerprints_no_targets.jsonl` + `.sha256` before any target
+output is read for the v2 facet labels.
+
+**Smoke fingerprint** (full universe, `--allow-dirty`, all 36
+registered tasks): U_all 49 / U_primary 25, 16 receipt files, **8 s
+wall** (no torch training — the facets are pure-Python raw-grid tests),
+deterministic. **All three gates pass cleanly**:
+
+| gate | result | margin |
+| --- | --- | --- |
+| anti-vacuity | **PASS** | overall vacuous fraction **0.00** (v1 oracle was 0.68); every prior 0/4 vacuous; both lanes non-vacuous for every prior |
+| anti-prior-laundering | **PASS** | 0% of non-vacuous contexts violate the two-extra-facet rule; minimum extra-facets-outside-prior = 5 |
+| anti-solver-leakage | **PASS** | no syntactic leakage; `unique_core_sketch_fraction = 0.36` (≤ 0.60); `core_sketch_exact_lookup_fraction = 0.04` (≤ 0.20) |
+
+Facet richness: 6–7 of 9 facets populated per primary context (8
+contexts at 6, 17 at 7) — the v1 prior-blindness is repaired across all
+six priors, including the four (`counting`, `local_completion`,
+`spatial_transform`, `symmetry`) that were 100% vacuous under v1.
+
+**Smoke branch**: `phase3e_v2_deferred_sparse_fibers`. With the oracle
+gates cleared, the frozen fiber geometry is unchanged from v1 —
+`min_cross_task_distance = 0.207` (byte-identical), 0 cross-task pairs
+within `epsilon_primary`, 0% fidelity-passing neighborhoods — so the
+certificate defers on **sparsity** alone now, no longer on label
+vacuity. The authoritative clean-tree binding receipt is filed in the
+next amendment.
+
+**Verdict impact**: no prior verdict changes. Phase 3E v2 status moves
+from "SPEC FILED; EXECUTION HOLD" to "EXECUTION ADMITTED; oracle clears
+all three gates; certificate runs in ~8 s (well under the ten-minute
+rule)."
+
+**Public-language constraint**: unchanged from the v2 spec
+§"Public Language" until the binding receipt lands.
