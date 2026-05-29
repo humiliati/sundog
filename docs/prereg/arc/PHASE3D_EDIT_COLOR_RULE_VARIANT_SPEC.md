@@ -357,6 +357,8 @@ The measured order of leverage for later Phase 3 reopens is:
 3. rule-bank extension Branch D variant;
 4. Branch E spec such as generative program search or test-time prompting.
 
-The first item is now filed in `PHASE3D_MASK_TARGET_VARIANT_SPEC.md` as
-`structured_edit_mask_target_v3`. That filing admits no execution and no
-signature comparison before a binding receipt exists.
+The first item is now filed and run in `PHASE3D_MASK_TARGET_VARIANT_SPEC.md` as
+`structured_edit_mask_target_v3`. Its binding receipt returned
+`branch_d_mask_target_full_grid_floor`, so the next filed artifact is the Phase
+3E signature-fiber certificate spec:
+`PHASE3E_SIGNATURE_FIBER_CERTIFICATE_SPEC.md`.

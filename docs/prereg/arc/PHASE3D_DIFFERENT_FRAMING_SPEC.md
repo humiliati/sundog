@@ -407,3 +407,6 @@ bank. Its later binding receipt returned `branch_d_color_rule_full_grid_floor`;
 the receipt shifted the bottleneck to `edit_mask_failure`, and the next
 mask-targeted variant is filed in
 [`PHASE3D_MASK_TARGET_VARIANT_SPEC.md`](PHASE3D_MASK_TARGET_VARIANT_SPEC.md).
+That later variant also floored (`branch_d_mask_target_full_grid_floor`),
+leaving Phase 3E's signature-fiber certificate spec as the next filed
+different-framing artifact.

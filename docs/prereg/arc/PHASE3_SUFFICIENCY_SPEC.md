@@ -6634,3 +6634,66 @@ both named bottlenecks (color + mask) with deterministic banks and
 floored at both; Branch E (different framing) is the live frontier,
 with a selection-targeted within-framing variant as the smaller
 alternative."
+
+### 2026-05-28 (PT) -- Jeffery Hughes Jr. -- Phase 3E Signature-Fiber Certificate Spec Filed
+
+Phase 3E certificate spec:
+
+- [`PHASE3E_SIGNATURE_FIBER_CERTIFICATE_SPEC.md`](PHASE3E_SIGNATURE_FIBER_CERTIFICATE_SPEC.md)
+
+Justification: after seven full-grid-control floors, including two
+deterministic-bank repairs inside the structured-edit framing, the next
+highest-value question is not another decoder. The next question is whether the
+frozen `signature_palette` representation itself creates exact or near context
+fibers with incompatible required behavior on the registered task class.
+
+Verdict impact: **no execution admission and no Phase 3E verdict**. The spec
+freezes a certificate lane, not a solver lane. Execution remains held until
+runner tooling, npm wiring, result ignore path, leak-check coverage, and a
+freeze-marker amendment are committed together.
+
+The primary context universe is:
+
+- `test_lodo`;
+- `pttest`.
+
+The full diagnostic context universe additionally includes:
+
+- `validation_lodo`;
+- `validation_pttest`.
+
+The certificate search has two levels:
+
+1. exact `signature_palette_context` fiber collisions, where two registered
+   contexts have byte-identical signature context identities but incompatible
+   target output labels;
+2. near-fiber locality at `epsilon_primary = 0.05`, using cross-task kNN
+   neighborhoods and a deterministic `program_sketch_v1` built from frozen
+   Branch D shape/canvas/mask/color candidate families.
+
+Pre-registered branches:
+
+| branch | meaning |
+| --- | --- |
+| `phase3e_exact_fiber_collision` | exact registered signature-fiber collision found; finite-context insufficiency certificate |
+| `phase3e_near_fiber_incompatibility` | no exact collision, but near-signature contexts have incompatible program sketches |
+| `phase3e_fiber_locality_positive` | no collision found and cross-task neighborhoods are locally consistent enough to license a later Branch E selector |
+| `phase3e_deferred_sparse_fibers` | no collision found, but the registered set is too sparse at the frozen radius |
+| `phase3e_deferred_label_vacuity` | program sketches are too often vacuous to adjudicate near-fiber incompatibility |
+
+Reserved implementation names:
+
+- Python runner: `docs/prereg/arc/phase3e_signature_fiber_certificate.py`;
+- Node wrapper: `scripts/arc-phase3e-signature-fiber-certificate.mjs`;
+- npm script: `arc:phase3e:signature-fiber-certificate`;
+- binding receipt path: `results/arc/phase3e-signature-fiber-certificate/`.
+
+Permitted public language before a binding receipt:
+
+> "Phase 3E has filed a signature-fiber certificate spec. It will test whether
+> registered ARC contexts contain exact or near `signature_palette` collisions
+> with incompatible required behavior. No Phase 3E receipt exists yet."
+
+Forbidden: claiming a collision, locality positive, Branch E solver result, or
+signature sufficiency/insufficiency conclusion before a binding Phase 3E receipt
+exists.

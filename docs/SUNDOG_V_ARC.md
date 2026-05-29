@@ -423,8 +423,17 @@ mask-targeted Branch D variant, selection-refinement Branch D variant,
 rule-bank extension Branch D variant, or Branch E spec. The mask-targeted
 variant is now filed as `structured_edit_mask_target_v3`: keep the baseline
 picker and deterministic edit-color rule bank fixed, and replace only the
-edit-mask predictor with a conditioning-derived mask-candidate bank. No
-mask-targeted receipt exists yet, and no sufficiency claim is admitted.
+edit-mask predictor with a conditioning-derived mask-candidate bank. Its
+binding receipt returned **`branch_d_mask_target_full_grid_floor`**: the mask
+repair did not lift the floor, mask-stage labels still dominated, and the
+legacy learned mask candidate still won a non-trivial share of selections.
+Seven Phase 3 full-grid controls now agree on the floor. With both named
+structured-edit bottlenecks probed by deterministic banks and both floored,
+Branch E is the live frontier. The first Phase 3E spec is now filed as
+`PHASE3E_SIGNATURE_FIBER_CERTIFICATE_SPEC.md`: before training another solver,
+test whether registered ARC contexts contain exact or near
+`signature_palette` context-fiber collisions with incompatible required
+behavior. No Phase 3E receipt exists yet.
 
 ### Phase 4 — 5D / Low-Dimensional Collapse Check
 

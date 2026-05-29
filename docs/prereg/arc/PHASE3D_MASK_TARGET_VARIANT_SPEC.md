@@ -10,12 +10,13 @@ Prior Branch D variant:
 
 Filed: **2026-05-28 (PT)**
 
-Status: **SPEC FILED; EXECUTION HOLD**. This file starts the second Branch D
-variant after `structured_edit_residual_v1`. It targets the dominant bottleneck
+Status: **BINDING RECEIPT FILED --
+`branch_d_mask_target_full_grid_floor`**. This file defines the second Branch D
+variant after `structured_edit_residual_v1`. It targeted the dominant bottleneck
 identified by the `structured_edit_color_rule_v2` binding receipt:
-`edit_mask_failure` at 41% of failures. It admits no run until runner tooling,
-npm wiring, result ignore path, leak-check coverage, and a freeze-marker
-amendment are committed together.
+`edit_mask_failure` at 41% of failures. The binding receipt did not open the
+raw-grid mask-targeted arena, so no signature-vs-full-grid sufficiency
+comparison is licensed in this variant.
 
 ## Purpose
 
@@ -368,3 +369,40 @@ Forbidden:
   the non-baseline arena;
 - extra seeds or task narrowing after an arena-floor receipt without a new
   append-only amendment.
+
+## Binding Receipt Addendum
+
+Filed: **2026-05-28 (PT)**.
+
+Binding receipt path:
+
+`results/arc/phase3d-mask-target-v3/`
+
+The binding receipt is summarized in `PHASE3_SUFFICIENCY_SPEC.md` under
+"Mask-Target Variant 20-Shard Binding Receipt:
+`branch_d_mask_target_full_grid_floor`". The verdict is
+**`branch_d_mask_target_full_grid_floor`**: `raw_grid_edit_mask_v3` scored zero
+non-baseline exact tasks on both held-out lanes, so the arena did not open and
+no `signature_palette_edit_mask_v3` vs. `raw_grid_edit_mask_v3` sufficiency
+comparison is licensed.
+
+This is the seventh Phase 3 full-grid floor. The central finding is a clean
+within-framing negative: replacing the learned edit-mask MLP with a
+deterministic 13-family mask-candidate bank did not lift the mask bottleneck.
+Mask-stage labels still dominated the selected-seed decomposition:
+
+- `mask_selection_failure`: **56** labels;
+- `mask_overedit_failure`: **50** labels;
+- `mask_candidate_coverage_failure`: **24** labels;
+- `mask_underdetection_failure`: **7** labels.
+
+The inherited `legacy_mlp_threshold_mask` candidate family still won
+`135 / 980 = 13.8%` of selections, and `test_lodo` mask F1 fell relative to the
+color-rule variant. With both the mask and color stages now replaced by
+deterministic conditioning-derived banks and the floor holding at both, the
+structured-edit framing has been probed at both named bottlenecks.
+
+The next filed Phase 3E artifact is
+`PHASE3E_SIGNATURE_FIBER_CERTIFICATE_SPEC.md`, which asks whether the frozen
+`signature_palette` context fibers themselves contain registered collisions
+before any further solver lane is admitted.
