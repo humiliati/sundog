@@ -27,6 +27,7 @@ const DROP_FIELDS_BY_VERSION = Object.freeze({
   v2: ["margin_lower_bound", "geometry_promise_signal_v2", "sensor_health_v1", "invariance_checks_v2"],
   v3: ["margin_lower_bound", "geometry_promise_signal_v2", "invariance_checks_v2"],
   v4: ["margin_lower_bound", "geometry_promise_signal_v2", "invariance_checks_v2"],
+  v5: ["margin_lower_bound", "geometry_promise_signal_v2", "invariance_checks_v2"],
 });
 
 function parseArgs(argv) {
@@ -69,8 +70,8 @@ async function main() {
   const outDir = path.resolve(REPO_ROOT, args.runDir);
   const slate = getPhase1RunConfig(args.runDir);
   const version = slate.schema_suffix;
-  const sourceBound = version === "v1" || version === "v2" || version === "v3" || version === "v4";
-  const usesCache = version === "v3" || version === "v4";
+  const sourceBound = version === "v1" || version === "v2" || version === "v3" || version === "v4" || version === "v5";
+  const usesCache = version === "v3" || version === "v4" || version === "v5";
   const dropFields = DROP_FIELDS_BY_VERSION[version] ?? DROP_FIELDS_BY_VERSION.v0;
   await mkdir(outDir, { recursive: true });
 

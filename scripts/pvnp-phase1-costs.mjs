@@ -127,10 +127,10 @@ async function main() {
   // promotion comparator. For v3 and v4 the comparator is full-state.
   const slate = getPhase1RunConfig(args.runDir);
   const version = slate.schema_suffix;
-  if (version === "v4") {
+  if (version === "v4" || version === "v5") {
     const rolloutStable = cRollout >= ROLLOUT_DENOMINATOR_STABILITY_FLOOR_MS;
     const audit = {
-      schema: "pvnp-phase1-cost-denominator-audit-v4",
+      schema: `pvnp-phase1-cost-denominator-audit-${version}`,
       rollout: {
         wall_ms: cRollout,
         ops: cRolloutOps,

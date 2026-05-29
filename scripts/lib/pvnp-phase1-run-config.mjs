@@ -112,10 +112,39 @@ export const RUN_CONFIGS = Object.freeze({
     ],
     ...COMMON,
   }),
+  v5: Object.freeze({
+    run_id: "phase1-toy-verifier-v5",
+    schema_suffix: "v5",
+    spec_path: "docs/pvnp/PHASE1_TOY_VERIFIER_SPEC.md",
+    slate_path: "docs/pvnp/PHASE1_V5_SLATE.md",
+    receipt_path: "docs/pvnp/receipts/2026-05-28_phase1_toy_verifier_v5.md",
+    splits: [
+      { split: "calibration", count: 64, seedPrefix: "pvnp-v5-cal", inPromise: true },
+      { split: "train", count: 256, seedPrefix: "pvnp-v5-train", inPromise: true },
+      { split: "verification", count: 256, seedPrefix: "pvnp-v5-verify", inPromise: true },
+      { split: "falsifier", count: 256, seedPrefix: "pvnp-v5-fals", inPromise: false },
+    ],
+    ...COMMON,
+  }),
+  v5: Object.freeze({
+    run_id: "phase1-toy-verifier-v5",
+    schema_suffix: "v5",
+    spec_path: "docs/pvnp/PHASE1_TOY_VERIFIER_SPEC.md",
+    slate_path: "docs/pvnp/PHASE1_V5_SLATE.md",
+    receipt_path: null,
+    splits: [
+      { split: "calibration", count: 64, seedPrefix: "pvnp-v5-cal", inPromise: true },
+      { split: "train", count: 256, seedPrefix: "pvnp-v5-train", inPromise: true },
+      { split: "verification", count: 256, seedPrefix: "pvnp-v5-verify", inPromise: true },
+      { split: "falsifier", count: 256, seedPrefix: "pvnp-v5-fals", inPromise: false },
+    ],
+    ...COMMON,
+  }),
 });
 
 export function inferPhase1VersionFromPath(runDir) {
   const s = String(runDir);
+  if (s.includes("v5")) return "v5";
   if (s.includes("v4")) return "v4";
   if (s.includes("v3")) return "v3";
   if (s.includes("v2")) return "v2";
@@ -124,7 +153,7 @@ export function inferPhase1VersionFromPath(runDir) {
 }
 
 export function getPhase1RunConfig(runDirOrVersion) {
-  const version = ["v0", "v1", "v2", "v3", "v4"].includes(runDirOrVersion)
+  const version = ["v0", "v1", "v2", "v3", "v4", "v5"].includes(runDirOrVersion)
     ? runDirOrVersion
     : inferPhase1VersionFromPath(runDirOrVersion);
   return RUN_CONFIGS[version];

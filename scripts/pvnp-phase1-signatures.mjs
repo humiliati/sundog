@@ -44,7 +44,7 @@ async function main() {
   const outDir = path.resolve(REPO_ROOT, args.runDir);
   const slate = getPhase1RunConfig(args.runDir);
   const version = slate.schema_suffix;
-  const sourceBound = version === "v1" || version === "v2" || version === "v3" || version === "v4";
+  const sourceBound = version === "v1" || version === "v2" || version === "v3" || version === "v4" || version === "v5";
   await mkdir(outDir, { recursive: true });
 
   const traces = await readJsonl(path.join(outDir, "traces.jsonl"));

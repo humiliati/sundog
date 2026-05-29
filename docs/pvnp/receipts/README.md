@@ -82,6 +82,28 @@ Filed receipts:
   short-circuit counter and/or measure cost as median over N runs.
   Privilege audit green (6 files).
 
+- [`2026-05-28_phase1_toy_verifier_v5.md`](2026-05-28_phase1_toy_verifier_v5.md):
+  v5 cost-closure-slate first execution; verdict = **named quarantine** (7 of 8
+  cost clauses pass; only the full-state wall-time ratio gates it).
+  `capacity_threshold = not_estimated`. **Hot-path closure removed** (audited:
+  no `noteShortCircuit` closure; 6 direct `recordPreIntegrityShortCircuit`
+  call sites) and **median-of-3 cost protocol** implemented. Median
+  `C_total_signature` dropped to **889.7 ms** (v4 ~1130 ms) with **2.41 %
+  spread** across 3 passes — proving the v4 quarantine was single-sample noise
+  + closure overhead, now resolved. Absolute (≤1010 ms), max (≤1250 ms),
+  spread (≤25 %), op-ratio (0.9473), cache-reuse (100 %), rollout-diagnostic,
+  and short-circuit-audit clauses all PASS. Only the full-state ratio fails:
+  **108.21 × median vs ≤105 ×** (3.1 % miss). The sharpened finding: with
+  closure overhead gone and a 2.41 % spread, the verifier sits at a STABLE
+  ~108–112 × the wall-cost of the privileged O(T) full-state scan; the ≤105 ×
+  target was set from v3's single favorable 95.92 × sample (a noise-derived
+  threshold). Safety green 4th consecutive run (0 false accepts; 0/497 each
+  spoof; 5/5 integrity; 0/768 OOP; privilege audit green). FS-integrity note:
+  v4/v5 results dirs were hardlinked mid-implementation and resolved by full
+  rm-rf + fresh run; v5 verified inode-independent and manifest-hash-consistent.
+  v6 should either re-baseline the full-state target from the v5 median-of-3
+  distribution or algorithmically reduce verifier wall-cost.
+
 Receipt filenames should use:
 
 `YYYY-MM-DD_phase-or-probe_short-slug.md`
