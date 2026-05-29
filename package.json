@@ -217,7 +217,8 @@
     "pvnp:phase1:attackers": "node scripts/pvnp-phase1-attackers.mjs",
     "pvnp:phase1:costs": "node scripts/pvnp-phase1-costs.mjs",
     "pvnp:phase1:audit": "node scripts/pvnp-phase1-privilege-audit.mjs",
-    "pvnp:phase1:falsifier": "node scripts/pvnp-phase1-falsifier-summary.mjs"
+    "pvnp:phase1:falsifier": "node scripts/pvnp-phase1-falsifier-summary.mjs",
+    "yang-mills:phase1:u1-2d-smoke": "node scripts/yang-mills-phase1-gauge-smoke.mjs --cell U1_2D --lattice-size 16x16 --beta 1.0 --boundary periodic --action Wilson --generator u1_staple_metropolis_v1 --proposal-half-width 0.75 --seed 202605290101 --burn-in 2000 --pilot-sweeps 512 --thinning 32 --measurements 32 --gauge-transforms 8 --signature-vocab v1 --heldout-vocab v1 --out results/yang-mills/phase1/U1_2D/2026-05-29_u1_2d_gauge_invariance_smoke_v0"
   },
   "devDependencies": {
     "vite": "^8.0.10",
