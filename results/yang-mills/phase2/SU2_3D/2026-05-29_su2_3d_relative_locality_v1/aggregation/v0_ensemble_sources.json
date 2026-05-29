@@ -1,0 +1,32 @@
+[
+  {
+    "beta": 2,
+    "betaKey": "2.0",
+    "resultDir": "C:/Users/hughe/Dev/sundog/results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_beta2.0_ensemble_v0",
+    "manifestCodeCommit": "f37ee57b70fd92dcc88bd5ecb8bceca8af02c37c",
+    "manifestGitDirty": true,
+    "summaryBranch": "P1-A ensemble_health_pass",
+    "configsSha256": "61f79ece31ad323f53bf34b8a173087da4bf3c02f0c73765ddb9c76c1b382f8d",
+    "hashesJsonConfigsSha256": "61f79ece31ad323f53bf34b8a173087da4bf3c02f0c73765ddb9c76c1b382f8d"
+  },
+  {
+    "beta": 2.4,
+    "betaKey": "2.4",
+    "resultDir": "C:/Users/hughe/Dev/sundog/results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_beta2.4_ensemble_v0",
+    "manifestCodeCommit": "509222c450496e51495d47f90b569a4d5e330250",
+    "manifestGitDirty": true,
+    "summaryBranch": "P1-A ensemble_health_pass",
+    "configsSha256": "b94174654c93ef1ee793e455b3ffd0386e9d2054e98644d9ea14b818c2a39e3d",
+    "hashesJsonConfigsSha256": "b94174654c93ef1ee793e455b3ffd0386e9d2054e98644d9ea14b818c2a39e3d"
+  },
+  {
+    "beta": 2.8,
+    "betaKey": "2.8",
+    "resultDir": "C:/Users/hughe/Dev/sundog/results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_beta2.8_ensemble_v0",
+    "manifestCodeCommit": "7844025aa1bf0aa6f7d783ca60521916ccfef937",
+    "manifestGitDirty": true,
+    "summaryBranch": "P1-A ensemble_health_pass",
+    "configsSha256": "d0a76960dae0d726280f972df1bc50c8c5c4402cd899f3689373a5b84573fd19",
+    "hashesJsonConfigsSha256": "d0a76960dae0d726280f972df1bc50c8c5c4402cd899f3689373a5b84573fd19"
+  }
+]

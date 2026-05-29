@@ -1,0 +1,23 @@
+{
+  "across_beta_nn_graph.json": "91e4f538804daf3b1d5f7f1c97a7d2dab0b65e616233a37b6c1ce57ecb4796f9",
+  "bare_signature_integrity.csv": "11391a6866eb6d05288fc7925dbc96a088553991054516a4cf9348ef1589fc84",
+  "branch_inputs.json": "53c4416f918fbe3e0dbff36890e098a7f8296ad4f45249f60ace8abc60c67166",
+  "control_nn_graphs/CTRL_GAUGE_RAND.json": "d50a2829ebdf18d093d902d0b5368b2730566b8f63bfce16a0fd2c17106919e0",
+  "control_nn_graphs/CTRL_META.json": "ccc2af8c401064c0f9cff1890ea5652159a6b0ae7916786b425ddc3f50890d9d",
+  "control_nn_graphs/CTRL_PERM.json": "71fdb138ab06a0d601ab6e69c0514434c4d3ef82e7811172e5a64b09feb5c5d5",
+  "control_nn_graphs/CTRL_RAND.json": "181d71537484ce9b0b213c4e68c54c9d796b231d42985ec4c02732330e6f8f91",
+  "control_nn_graphs/CTRL_RAND_STRAT.json": "82415f3e33b870cde6ca097b27edf5c70ae9c1700d591918de9544017582cde9",
+  "control_nn_graphs/CTRL_RAW.json": "911493a14fe8fd8b56b9a575623c329a295c2cb32b21ad31461532e877836167",
+  "global_bin_edges.json": "008fa9a958bb7e2da204806ca9275239604ef5d4c7218e4fc61ac7e7ecd3c077",
+  "kendall_tau.csv": "152accb6f1bec1daa8073930843776052d56852623ab7deb639d99cadeac504c",
+  "manifest.json": "465a830de4e166a39480cc5e30078d68f5d1e9db9d2cc35c8e3684f2932ac3bb",
+  "per_beta_bin_edges.json": "22006c2a3d8ec198111a7bdebdf77b8cbda34fb6ae9deb7ce7699d4348442350",
+  "rank_locality_scores.csv": "2ae580d242edab83293e81c9572a60e7b24aaabbdedcafc177cb1929aa39a8a5",
+  "signature_normalization.json": "35fffc5157c72c6acdfa72e2b35ab769a1a54fb59ae8efb102acbf12221e35d1",
+  "smeared_signature_vectors.csv": "db62abddd0fe5662b44d96b49c544f84de500a8c50cc277dae97e4b1e85adffa",
+  "smearing_health.csv": "97bed545e6047a878380b668bacd4f6ac1f2f5c370615c37f8fde55956e396fb",
+  "summary.json": "03d83f6fbf92c68b3157b0e5a517c4683cac76143ba7c92f1ec40201005d214a",
+  "v0_ensemble_sources.json": "153f8e50b053aca97fc0c552dafbc292c04750093d27a95076d78f64ad8be2c5",
+  "v0_vs_v1_comparison.json": "2729b2512ad18a45c29a498403f1424ea87280e6a1b93b85a25ebc70dce6e4ea",
+  "within_beta_nn_graphs.json": "a76c3c1b21c73cb90ff65e9c18c545959b0250c2d1fcdee5cb812da7179807e9"
+}

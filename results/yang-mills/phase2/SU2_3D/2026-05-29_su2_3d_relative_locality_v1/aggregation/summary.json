@@ -1,0 +1,60 @@
+{
+  "branch": "YM-P2-NEG-A no_rank_local_structure",
+  "reason": "primary=0.29374999999999984, primary-CTRL_RAND=-0.0020833333333331594",
+  "phaseVersion": "v1",
+  "signatureVocabularyVersion": "v4",
+  "smearing": {
+    "algorithm": "APE",
+    "alpha": 0.5,
+    "iterations": 10,
+    "maxDetDrift": 6.661338147750939e-16,
+    "maxUnitarityResidual": 9.420554752102651e-16,
+    "perOrientationSpreadMax": 0.00030956955364345453
+  },
+  "primary": {
+    "withinBetaMeanBinPurity5": 0.29374999999999984,
+    "acrossBetaMeanBinPurity5": 0.35833333333333317,
+    "discriminationRatioWithin5": 0.8812499999999995,
+    "discriminationRatioAcross5": 1.0749999999999995
+  },
+  "controls": {
+    "withinBeta": {
+      "CTRL_META": 0.31458333333333316,
+      "CTRL_RAW": 0.29791666666666644,
+      "CTRL_RAND": 0.295833333333333,
+      "CTRL_PERM": 0.3130020833333311,
+      "CTRL_GAUGE_RAND": 0.29374999999999984
+    },
+    "acrossBeta": {
+      "CTRL_RAND_STRAT": 0.37708333333333316,
+      "CTRL_GAUGE_RAND": 0.35833333333333317
+    },
+    "CTRL_FINITE_SIZE": {
+      "notScored": "phase4_reserved",
+      "branch": "YM-P4-DEFERRED_FINITE_SIZE"
+    }
+  },
+  "margins": {
+    "withinPrimaryMinusRand5": -0.0020833333333331594,
+    "withinPrimaryMinusMeta5": -0.020833333333333315,
+    "withinPrimaryMinusRaw5": -0.004166666666666596,
+    "acrossPrimaryMinusRandStrat5": -0.01874999999999999,
+    "gaugeRandPurityDiff": 0
+  },
+  "integrity": {
+    "bareSignatureIntegrityMaxAbsResidual": 4.999889391399392e-13,
+    "perBetaBinEdgeMaxAbsDiff": 0,
+    "globalBinEdgeMaxAbsDiff": 0,
+    "gaugeSignatureResidualMax": 1.4432899320127035e-15
+  },
+  "diagnostic": {
+    "bareVsSmearedMaxAbsDelta": 0.7810538851649217,
+    "bareVsSmearedMeanAbsDelta": 0.4125827352061768
+  },
+  "gammaHeld": {
+    "perBetaBinEdgesPath": "aggregation/per_beta_bin_edges.json",
+    "globalBinEdgesPath": "aggregation/global_bin_edges.json",
+    "binDegenerateBetas": []
+  },
+  "wallClockSeconds": 25.777605799999996
+}
