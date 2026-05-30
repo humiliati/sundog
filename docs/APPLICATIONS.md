@@ -217,6 +217,13 @@ The promoted load-bearing statement is verbatim across nine surfaces:
 Compact form: **"20/21 structural zeros plus one quarantined O_617
 defective-D3 bridge — not a closed 21/21 theorem-facing result."**
 
+The wider v0.3-v0.11 isotrophy program now has a separate, bounded stability
+claim on the supplementary-B piano-trio catalog: Floquet velocity-fraction
+stratifies stability **within fixed `m3` strata** (`AUC_cond = 0.6783`, exact
+`p = 2.046e-7` on the locked 229-row primary domain), while the
+mass-marginal held-out predictor fails (`AUC = 0.4125`). This is a conditional
+catalog signal, not a theorem-facing upgrade to the v0.3h K_facet verdict.
+
 ### Evidence Shape
 
 **Evidence tier:** Theorem-adjacent audit-chain receipt

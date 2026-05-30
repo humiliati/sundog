@@ -33,6 +33,11 @@ Mesa and Geometry both converged on field-shaped structure:
   audit is deflationary: at matched duty, radius-gated inward thrust reproduces
   guarded TRACK without tidal sensing or gradient steering, while lower-velocity
   and equal-mass boundaries still expose harms.
+- Isotrophy: a two-layer audit-chain result. K_facet v0.3h remains a structural
+  null / named-quarantine result on the strict G.2 catalog, while v0.11 registers
+  a separate conditional catalog signal: Floquet velocity-fraction ranks
+  stability within fixed `m3` strata but fails as a mass-marginal held-out
+  predictor.
 
 The shared theorem posture is:
 
@@ -141,6 +146,16 @@ Suggested checks:
 
 ### Sidecar - 3D Catalog Isotrophy / Symmetry Descent
 
+Historical note: the sidecar no longer stops at the original v0.3 symmetry-
+descent workbench. The current claim profile is two-layered. First, K_facet v0.3h
+resolved 20 strict G.2 rows as structural zeros and quarantined O_617 rather
+than converting it into a false 21/21. Second, the v0.10/v0.11 reopening found a
+conditional stability signal in the supplementary-B piano-trio catalog:
+velocity-fraction ranks stable above unstable rows within fixed `m3` strata
+(`AUC_cond = 0.6783`, exact `p = 2.046e-7`) while the mass-marginal held-out
+predictor fails (`AUC = 0.4125`). This is a conditional catalog signal, not a
+promotion of K_facet and not a controller result.
+
 Question: can Sundog make a non-tautological first-principles prediction over
 an external three-body catalog, before writing another controller sweep?
 
@@ -163,6 +178,7 @@ Workbench:
 
 - [`../sundog_v_isotrophy.md`](../sundog_v_isotrophy.md)
 - [`../isotrophy/files.math`](../isotrophy/files.math)
+- [`../isotrophy/kfacet/kfacet_v11_m3_conditional_vf_rank_form.md`](../isotrophy/kfacet/kfacet_v11_m3_conditional_vf_rank_form.md)
 
 ## 5. Documentation Shape
 
@@ -233,7 +249,7 @@ discarded.
 | Mesa controller | controller hidden state | entangled `5D net.7` subspace |
 | Geometry / HaloSim | full atmospheric optics | small set of halo generators / canonical implied circles |
 | Threebody | 18-dim full state | radius-gated inward reflex in the mapped near-escape pocket |
-| Isotrophy | `S3` symmetry orbit of a 3-body choreography | residual `Z2` generators surviving `S3 -> Z2` mass perturbation |
+| Isotrophy | `S3` symmetry orbit of a 3-body choreography; supplementary-B stability catalog | residual `Z2` generators surviving `S3 -> Z2` mass perturbation; Floquet velocity-fraction conditioned on `m3` |
 
 The columns are the same operator. The substrate-specificity in row
 3-5 is what bounds the operating envelope; the cross-substrate
@@ -308,7 +324,7 @@ operator and noting the cap-set / unit-distance cousins for
 audiences with the math background to follow. Layperson framings
 keep *shadow* / *field*.
 
-### 7.2 Isotrophy Red Team (end-of-v0.3)
+### 7.2 Isotrophy Red Team (v0.3-v0.11)
 
 The S3 → Z2 mass-perturbation symmetry-descent **is a projection in
 the precise mathematical sense.** The v0.3a-h ratchet is, in
@@ -339,10 +355,22 @@ faster the next time it is needed. It also positions isotrophy
 results to feed back into the §6.3 bridging table as fresh data
 points rather than as a niche threebody-adjacent sidecar.
 
-If v0.4 does not happen and isotrophy retires at end-of-v0.3, the
-projection framing is still worth recording in the K_facet
-post-mortem so the next attempt (here or elsewhere) inherits the
-vocabulary instead of rediscovering it.
+Post-v0.11 update: isotrophy now contributes a second projection lesson, separate
+from K_facet. The body is the per-row monodromy/Floquet geometry of the
+supplementary-B piano-trio catalog; the shadow is a signed velocity-fraction
+zone. v0.10a showed the ordered shadow is real in-sample. v0.10b showed it is
+not globally calibrated across mass bins. v0.11 showed the projection becomes
+rigid again after conditioning on `m3`: within fixed mass-ratio strata, the
+frozen velocity-fraction zone order ranks stable rows above unstable rows.
+
+That is almost the cleanest possible cross-substrate boundary result: the
+projection works exactly after naming the substrate coordinate that must be held
+fixed. It does not become a mass-marginal predictor, and it does not revise the
+v0.3h K_facet structural null. For future isotrophy work, the next meaningful
+step is therefore not another same-table statistic; it is either an external
+catalog transfer, a freshly registered mass-conditional predictor, or a new
+mechanism that explains why the velocity-fraction shadow is conditional on
+`m3`.
 
 ### 7.3 Threebody
 

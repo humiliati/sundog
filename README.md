@@ -335,11 +335,12 @@ Present it carefully:
   structural-failure boundary map (Cut 2 separability held; Cut 3
   open), the mesa-optimization operating envelope (sharp cliff at
   λ ≈ 0.953 localized to a 5D basin at `net.7`), the Isotrophy K_facet
-  v0.3h verdict (20 of 21 strict G.2 single-curve choreographies
-  returned structural-zero receipts; O_617 held back as a named
-  quarantine for a bridge direction outside the valid D₃
-  representation — audit chain intact, theorem-facing result not
-  closed), and the coarse-graining proof trunk (Phases 0–3 closed
+  v0.3h verdict plus v0.11 conditional-rank profile (20 of 21 strict
+  G.2 single-curve choreographies returned structural-zero receipts;
+  O_617 held back as a named quarantine; velocity-fraction stratifies
+  piano-trio stability within fixed `m3` strata but fails as a
+  mass-marginal held-out predictor), and the coarse-graining proof trunk
+  (Phases 0–3 closed
   positive, Phase 4 open at the Bayesian-floor gate, Phase 6 staged).
 - **Trace-conditioned chat experiment** at
   [sundog.cc/chat](https://sundog.cc/chat) — 0 unsafe-accepts across

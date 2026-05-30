@@ -281,7 +281,8 @@ zone-only score is not comparable across `m_3` bins because the mass-bin base ra
 within-bin monotone trend is real but does **not** yield a globally-calibrated
 held-out risk score. Per the locked verdict tree the goalposts stay where locked
 (pooled AUC primary); the encouraging per-fold AUCs are diagnostic, not a rescue. A
-within-`m_3` or `m_3`-conditional predictor would be a **fresh** chapter. The
+within-`m_3` or `m_3`-conditional predictor would be a **fresh** chapter; that
+fresh chapter is now v0.11, recorded above as the conditional-rank close. The
 exact-`m_3`=0.4 risk noted below materialized as predicted (its fold AUC 0.671 is
 strong but does not transfer pooled). Hard-label sidecar (non-gating) confirms the
 base-rate trap: accuracy delta vs always-U = −0.167, McNemar one-sided p = 0.99999.

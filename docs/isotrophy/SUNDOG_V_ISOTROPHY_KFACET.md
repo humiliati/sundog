@@ -88,7 +88,11 @@ discipline that makes the result interesting.
   supplementary-B mirror parses as 273 piano-trio rows. The mechanism is a
   structural null against that catalog.
 - **Not the wider isotrophy program.** The broader Z3-to-Z2 piano-trio descent
-  program remains live in [`sundog_v_isotrophy.md`](sundog_v_isotrophy.md).
+  program now runs through the v0.10/v0.11 conditional-rank frontier in
+  [`sundog_v_isotrophy.md`](sundog_v_isotrophy.md): velocity-fraction stratifies
+  stability within fixed `m3` strata, while failing as a mass-marginal held-out
+  predictor. That is a separate conditional catalog signal, not an upgrade to
+  the v0.3h K_facet structural-null.
 - **Not an interactive workbench.** The K_facet test is a one-shot audit on a
   fixed catalog; the public surface is the static narrative at `/isotrophy`.
 
