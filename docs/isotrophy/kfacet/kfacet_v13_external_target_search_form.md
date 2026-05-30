@@ -1,11 +1,11 @@
 # v0.13 External Target Search Form Draft
 
-Status: **OPERATOR LOCK 2026-05-30.** No v0.13 runner has been written, no candidate
-inventory has been computed, no external file has been downloaded for this chapter,
-and no D5 velocity-fraction value has been scored. This document locks the
-target-search procedure, eligibility gates, feasibility probes, selection rule,
-verdict tree, and claim boundary for finding a clean external transfer target after
-v0.12 blocked on attrition.
+Status: **OPERATOR LOCK 2026-05-30.** At lock time no v0.13 runner had been
+written, no candidate inventory had been computed, no external file had been
+downloaded for this chapter, and no D5 velocity-fraction value had been scored.
+This document locks the target-search procedure, eligibility gates, feasibility
+probes, selection rule, verdict tree, and claim boundary for finding a clean
+external transfer target after v0.12 blocked on attrition.
 
 Reviewed for self-consistency, non-circularity, and integrity:
 
@@ -41,6 +41,15 @@ Operational note: the inventory/discovery stage is an operator/agent-curated lit
 and data-store search (it is not algorithmic); the pre-registration firewall binds that
 search to be signal-blind per adjustment 1, and binds selection to be feature-blind per
 the Target Selection Rule.
+
+Implementation receipt (post-lock, 2026-05-30): additive harness
+`scripts/v13_external_target_search.py` plus npm aliases `isotrophy:v13:inventory`,
+`isotrophy:v13:profile`, `isotrophy:v13:probe`, and `isotrophy:v13:select` were
+added. This is harness work only: no candidate inventory/profile/probe/select
+command has been run as a v0.13 receipt, no external target has been locked, and no
+D5 velocity-fraction value has been emitted. The probe path sanitizes
+`per_row_pipeline` output to omit `velocity_fraction`, `zone_index`, and stability
+labels from per-row feasibility receipts.
 
 ## Frame
 
