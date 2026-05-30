@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sundog Navier-Stokes C1: the Reading-2 regime-2 witness now replicates at a second Grashof regime, dimension-robust and objective-robust. This is a witness, not a Navier-Stokes existence or smoothness claim.">
+    <meta name="keywords" content="Navier-Stokes, Kolmogorov flow, regime generality, Reading-2 witness, determining modes, Postulate 1, coarse-graining, Sundog, claim hygiene, review-gated">
+    <meta name="theme-color" content="#1A3A52">
+    <meta name="author" content="Sundog Research Lab">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://sundog.cc/navierstokes">
+    <title>Navier-Stokes C1 Witness - Sundog</title>
+
+    <!-- OG-BLOCK-START (managed by public/og/_patch_meta.py) -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Sundog">
+    <meta property="og:title" content="Navier-Stokes C1 - Reading-2 Witness at Two Grashof Regimes">
+    <meta property="og:description" content="A regime-2 witness that is state-insufficient AND control-sufficient, now replicating at G=200 and G=300 under a portable objective. 942,834 witness pairs. Review-gated; not a Clay claim, not a Navier-Stokes smoothness claim.">
+    <meta property="og:image" content="https://sundog.cc/og/navierstokes.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Navier-Stokes C1 card: the regime-generality witness gallery card with G=200 and G=300 stats.">
+    <meta property="og:url" content="https://sundog.cc/navierstokes">
+    <meta property="article:published_time" content="2026-05-30T00:00:00Z">
+    <meta property="article:modified_time" content="2026-05-30T00:00:00Z">
+    <meta property="article:section" content="Research">
+    <meta property="article:tag" content="Navier-Stokes">
+    <meta property="article:tag" content="Kolmogorov flow">
+    <meta property="article:tag" content="regime generality">
+    <meta property="article:tag" content="Reading-2 witness">
+    <meta property="article:tag" content="claim hygiene">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Navier-Stokes C1 - Reading-2 Witness at Two Grashof Regimes">
+    <meta name="twitter:description" content="A regime-2 witness that is state-insufficient AND control-sufficient, now replicating at G=200 and G=300 under a portable objective. Review-gated.">
+    <meta name="twitter:image" content="https://sundog.cc/og/navierstokes.png">
+    <meta name="twitter:image:alt" content="Navier-Stokes C1 card: the regime-generality witness gallery card.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Navier-Stokes C1 - Reading-2 Witness at Two Grashof Regimes",
+      "description": "The complete Reading-2 regime-2 witness for a Kolmogorov-flow C1 cell now replicates at a second Grashof regime (G=200 and G=300) under a portable objective, dimension-robust and composed at matching epsilon_K. 942,834 unique witness pairs at G=300. Review-gated; not a Clay-problem-adjacent claim, not a Navier-Stokes existence or smoothness claim.",
+      "image": "https://sundog.cc/og/navierstokes.png",
+      "datePublished": "2026-05-30",
+      "dateModified": "2026-05-30",
+      "inLanguage": "en",
+      "isAccessibleForFree": true,
+      "author": {
+        "@type": "Organization",
+        "name": "Sundog Research Lab",
+        "url": "https://sundog.cc"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Stellar Aqua LLC",
+        "url": "https://sundog.cc"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://sundog.cc/navierstokes"
+      },
+      "about": [
+        { "@type": "Thing", "name": "Navier-Stokes equations" },
+        { "@type": "Thing", "name": "Kolmogorov flow" },
+        { "@type": "Thing", "name": "Reading-2 witness" },
+        { "@type": "Thing", "name": "Coarse-graining Postulate 1" },
+        { "@type": "Thing", "name": "Claim hygiene" }
+      ],
+      "keywords": "Navier-Stokes, Kolmogorov flow, regime generality, Reading-2 witness, determining modes, Sundog, claim hygiene"
+    }
+    </script>
+    <!-- OG-BLOCK-END -->
+
+    <link rel="stylesheet" href="/css/sundog-theme.css">
+    <link rel="stylesheet" href="/css/sundog-defs.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        main {
+            background:
+                radial-gradient(circle at 16% 8%, rgba(184, 131, 30, 0.10), transparent 22rem),
+                linear-gradient(180deg, #F8FBFC 0%, #FFFFFF 36rem);
+        }
+
+        .nse-hero {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 7rem 2rem 2rem;
+        }
+
+        .nse-hero .eyebrow,
+        .nse-section .eyebrow {
+            color: var(--primary-mid);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .nse-hero h1 {
+            max-width: 920px;
+            margin: 1rem 0 1.25rem;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: clamp(2.1rem, 6.5vw, 4.4rem);
+            line-height: 1.04;
+            overflow-wrap: anywhere;
+        }
+
+        .nse-hero .lede {
+            max-width: 780px;
+            color: #40505C;
+            font-size: 1.15rem;
+            line-height: 1.75;
+            overflow-wrap: break-word;
+        }
+
+        .status-ribbon {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 1.75rem;
+        }
+
+        .status-ribbon span {
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            padding: 0.45rem 0.75rem;
+            background: #FFFFFF;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.74rem;
+            font-weight: 700;
+        }
+
+        .status-ribbon .review {
+            border-color: rgba(184, 131, 30, 0.55);
+            background: rgba(255, 244, 214, 0.6);
+            color: #684811;
+        }
+        .status-ribbon .pass {
+            border-color: rgba(46, 125, 90, 0.45);
+            background: rgba(46, 125, 90, 0.06);
+            color: #2E7D5A;
+        }
+        .status-ribbon .open {
+            border-color: rgba(181, 58, 44, 0.45);
+            background: rgba(181, 58, 44, 0.06);
+            color: #B53A2C;
+        }
+
+        .nse-section {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 1.25rem 2rem 2rem;
+        }
+
+        .nse-card {
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #FFFFFF;
+            padding: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .nse-card h2 {
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: 1.4rem;
+            margin: 0 0 0.75rem;
+        }
+
+        .nse-card p {
+            color: #40505C;
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 0.85rem;
+        }
+
+        .nse-card p:last-child { margin-bottom: 0; }
+
+        .nse-card code {
+            background: rgba(184, 131, 30, 0.10);
+            color: var(--primary-dark);
+            padding: 0.1rem 0.35rem;
+            border-radius: 3px;
+            font-family: var(--sd-font-data);
+            font-size: 0.95em;
+        }
+
+        .load-bearing-quote {
+            border-left: 4px solid #B8831E;
+            padding: 0.85rem 1.25rem;
+            margin: 1rem 0;
+            background: rgba(255, 244, 214, 0.5);
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: 1.1rem;
+            line-height: 1.55;
+        }
+
+        .nse-hero-figure {
+            margin: 0 0 2rem;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #FFFFFF;
+            overflow: hidden;
+            max-width: 1120px;
+        }
+
+        .nse-hero-figure img,
+        .nse-hero-figure object,
+        .nse-hero-figure svg {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .nse-hero-figure figcaption {
+            padding: 0.65rem 1rem;
+            font-family: var(--sd-font-data);
+            font-size: 0.78rem;
+            color: #6A7680;
+            border-top: 1px solid var(--line);
+            background: #F8FBFC;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin: 1.25rem 0 0;
+        }
+
+        .stat-card {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(255, 244, 214, 0.4);
+            padding: 0.95rem 1.1rem;
+        }
+
+        .stat-card .num {
+            font-family: var(--sd-font-data);
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            line-height: 1.1;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-card .lab {
+            color: #6A7680;
+            font-family: var(--sd-font-data);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .not-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .not-card {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            padding: 1.1rem;
+        }
+
+        .not-card h3 {
+            color: var(--primary-dark);
+            font-size: 0.95rem;
+            margin: 0 0 0.5rem;
+        }
+
+        .not-card h3::before {
+            content: "✗ ";
+            color: #B53A2C;
+            font-weight: 800;
+        }
+
+        .not-card p {
+            color: #40505C;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .modes-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .mode-card {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 1rem 1.1rem;
+        }
+
+        .mode-card h3 {
+            color: var(--primary-dark);
+            font-size: 1rem;
+            margin: 0 0 0.45rem;
+        }
+
+        .mode-card .num {
+            display: inline-block;
+            background: #B8831E;
+            color: #FFFFFF;
+            font-family: var(--sd-font-data);
+            font-size: 0.72rem;
+            font-weight: 800;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+
+        .mode-card p {
+            color: #40505C;
+            font-size: 0.92rem;
+            line-height: 1.55;
+            margin: 0;
+        }
+
+        .source-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .source-list a {
+            display: block;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            padding: 1rem;
+            color: var(--primary-mid);
+            text-decoration: none;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .source-list a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .nse-crossref {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            max-width: 1120px;
+            margin: 1.5rem 0 0;
+            padding: 0.9rem 1.15rem;
+            border: 1px solid var(--line);
+            border-left: 4px solid #B8831E;
+            border-radius: 0 8px 8px 0;
+            background: rgba(255, 244, 214, 0.4);
+            color: #40505C;
+        }
+        .nse-crossref-arrow {
+            font-family: var(--sd-font-data);
+            font-size: 1.4rem;
+            color: #B8831E;
+            line-height: 1;
+            padding-top: 0.1rem;
+        }
+        .nse-crossref-kicker {
+            margin: 0 0 0.25rem;
+            font-family: var(--sd-font-data);
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            color: var(--primary-dark);
+            text-transform: uppercase;
+        }
+        .nse-crossref-body {
+            margin: 0;
+            font-size: 0.96rem;
+            line-height: 1.6;
+            color: #40505C;
+        }
+        .nse-crossref-body a:not(.sd-def) {
+            color: var(--primary-mid);
+            font-weight: 700;
+        }
+
+        @media (max-width: 760px) {
+            .nse-hero { padding: 5.5rem 1.25rem 1.5rem; }
+            .nse-section { padding: 1rem 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="/" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="/about">About</a>
+                <a href="/sundog">Atlas</a>
+                <a href="/applications-gallery">Applications</a>
+                <a href="/alignment">Align</a>
+                <a href="/chat">Chat</a>
+                <a href="docs/">Docs</a>
+                <a href="https://github.com/humiliati/sundog">GitHub</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="nse-hero">
+            <p class="eyebrow">High-Stakes Generality · Navier-Stokes C1 · 2026-05-30</p>
+            <h1>A regime-2 witness now holds at two Grashof points.</h1>
+            <p class="lede">
+                The Coarse-Graining Postulate 1 reading of a Kolmogorov-flow C1
+                cell produces a <a class="sd-def" href="/legend#kfacet-audit-chain" data-def="A pre-registered receipt-first pipeline. Constants and outcome categories are registered in code and spec before any row is interpreted.">Reading-2 regime-2 witness</a>
+                — state-insufficient AND control-sufficient — that now
+                replicates at a second Grashof regime under a portable
+                objective. It holds at <code>(k_f = 2, G = 200)</code> and
+                <code>(k_f = 2, G = 300)</code>; the control half is
+                dimension-robust (d = 32 and d = 18) and objective-robust
+                (fixed-percentile and portable-quantile), composed at matching
+                <code>ε_K = 0.0664</code>. This is a <strong>witness</strong>,
+                not a Navier-Stokes existence or smoothness claim, and not a
+                Clay-problem-adjacent claim.
+            </p>
+            <div class="status-ribbon" aria-label="Navier-Stokes C1 verdict status">
+                <span>Regime-Generality v1 · 2026-05-30</span>
+                <span class="pass">PDE-C1-RG-POS at G=200 and G=300</span>
+                <span class="pass">Twin-state certified, 942,834 pairs</span>
+                <span class="review">review-gated: external PDE reviewer open</span>
+                <span class="open">C1 unpromoted</span>
+            </div>
+        </section>
+
+        <section class="nse-section" aria-label="Card visual">
+            <figure class="nse-hero-figure">
+                <img src="/media/generality-navier-stokes-c1.svg" width="900" height="660" alt="Navier-Stokes C1 generality card: review-gated proof-track 'Kolmogorov-flow C1 regime-generality lane'; complete Reading-2 witness now holds at G=200 and G=300 under a portable objective. Next gate: surface reviewer candidates or firm up proxy faithfulness with a derived objective selector. Stats: 2 regimes, 0.269 G300 damp fraction, 942,834 G300 witness pairs.">
+                <figcaption>Generality gallery card · review-gated · <a href="/generality">see all high-stakes lanes &rarr;</a></figcaption>
+            </figure>
+        </section>
+
+        <section class="nse-section" aria-label="Load-bearing statement">
+            <div class="nse-card">
+                <p class="eyebrow">The Load-Bearing Statement</p>
+                <h2>Two-regime, dimension- and objective-robust, end-to-end Reading-2 witness.</h2>
+                <p>
+                    The phrasing matters. This is <strong>not</strong> a Navier-Stokes
+                    existence/smoothness claim, not a Clay-problem-adjacent claim, and
+                    not a claim that Sundog has produced original PDE mathematics.
+                    Any public copy that elevates this witness into a theorem-facing
+                    posture silently retires the discipline that makes the result
+                    interesting.
+                </p>
+                <div class="load-bearing-quote">
+                    The complete Reading-2 regime-2 witness — state-insufficient AND
+                    control-sufficient — now replicates at a second Grashof regime.
+                    It holds at <code>(k_f = 2, G = 200)</code> and
+                    <code>(k_f = 2, G = 300)</code>; the control half is
+                    dimension-robust (d = 32 and d = 18) and objective-robust
+                    (fixed-percentile and portable-quantile), composed at matching
+                    <code>ε_K</code>. The Postulate-1 reading is non-vacuous on a
+                    real substrate. C1 remains UNPROMOTED.
+                </div>
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <div class="num">2</div>
+                        <div class="lab">Grashof regimes (G = 200, 300)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="num">942,834</div>
+                        <div class="lab">G=300 witness pairs (unique)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="num">0.2688</div>
+                        <div class="lab">G=300 damp fraction (adj.)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="num">10-22×</div>
+                        <div class="lab">below random-label floor (G=300)</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="nse-section" aria-label="Mechanism">
+            <div class="nse-card">
+                <p class="eyebrow">What The Witness Is</p>
+                <h2>Reading 2 = state-insufficient AND control-sufficient at a matched signature radius.</h2>
+                <p>
+                    Reading 2 is the regime where the standard determining-modes signal
+                    fails to reconstruct full state, but a smaller Postulate-1 signature
+                    nevertheless suffices for the control objective. The witness is
+                    constructive: pairs of trajectories that agree on the signature to
+                    within <code>ε_K = 0.0664</code> also agree on the proxy-action
+                    objective, at a level that no random-label control reaches.
+                </p>
+                <p>
+                    The G=200 read used the fixed-percentile objective at
+                    <code>d = 32</code>, with witness slope <code>0.736</code> and
+                    <code>a_mm = -0.00079</code>. The G=300 read used the portable
+                    quantile objective at <code>d = 18</code>, with
+                    <code>a_mm = +0.00058</code> through the origin and a damp fraction
+                    of <code>0.2688</code> — well above the <code>v6</code>
+                    <code>0.004</code> vacuity that motivated the regime-generality
+                    pivot. The portable objective is a <em>new</em> objective, so the
+                    v5 witness had to be re-established under it before the G=300 test
+                    could be admitted; that re-establishment held, with G=200 numbers
+                    near-identical to the v5 old-objective read.
+                </p>
+                <p>
+                    The G=300 twin-state lock is certified: <code>TWIN_STATE_CERTIFIED</code>,
+                    100% witness coverage, 942,834 unique pairs, with <code>δ_H = 0.0111</code>
+                    against a real median <code>‖Q_K‖ = 0.222</code>. The cell-set spec,
+                    integrator energy-conservation self-test, and pre-registered
+                    verdict-rule completeness all closed cleanly before the verdict
+                    was interpreted.
+                </p>
+            </div>
+        </section>
+
+        <section class="nse-section" aria-label="Falsification surface">
+            <div class="nse-card">
+                <p class="eyebrow">Falsification Surface</p>
+                <h2>Five named failure modes — what would falsify the coupling claim.</h2>
+                <p>
+                    The coupling between Sundog's Postulate-1 discipline and the open
+                    Navier-Stokes front is staged on two fronts (a defensible reading
+                    leg and a horizon empirical leg) and can fail in five named modes.
+                    Each candidate work item declares which modes it attacks.
+                </p>
+                <div class="modes-list">
+                    <div class="mode-card">
+                        <h3><span class="num">1</span> Front-A vacuity</h3>
+                        <p>The Postulate-1 reading of determining modes, once written, reduces to what any careful PDE analyst would already say. The instrument has no edge over a good review.</p>
+                    </div>
+                    <div class="mode-card">
+                        <h3><span class="num">2</span> Front-A miscalibration</h3>
+                        <p>The Postulate-1 / Blackwell-sufficiency distinction lands on confidently wrong readings — claims a control-sufficient signature where determining-modes literature already pins state-reconstruction sufficiency at a smaller mode count that suffices for control too.</p>
+                    </div>
+                    <div class="mode-card">
+                        <h3><span class="num">3</span> Front-B vacuity</h3>
+                        <p>On shell models, a matched-budget DMD / critical-slowing-down / lacunarity / Rényi baseline detects intermittent bursts at least as well as a signature-based detector. Signatures add no signal.</p>
+                    </div>
+                    <div class="mode-card">
+                        <h3><span class="num">4</span> Front-B reach</h3>
+                        <p>Even a clean shell-model positive silently smuggles in finite-dimensional truncation structure that does not survive the move to full 2D-perturbed or 3D small-data NSE. Cross-substrate sameness fails at the substrate boundary.</p>
+                    </div>
+                    <div class="mode-card">
+                        <h3><span class="num">5</span> Coupling overreach</h3>
+                        <p>The ledger is published alongside a public workbench, reading, or claim that elevates a Front-A reading or Front-B shell-model result into a Clay-problem-adjacent posture. Detected by the <a href="docs/presentation/claims-and-scope.md">Claims &amp; Scope</a> audit on any deploy that touches NSE vocabulary.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="nse-section" aria-label="Next gate">
+            <div class="nse-card">
+                <p class="eyebrow">Next Gate</p>
+                <h2>External PDE reviewer + derived objective selector.</h2>
+                <p>
+                    Promotion criteria for the Navier-Stokes ledger require all four of:
+                    (a) Front-A vacuity rebutted; (b) runnable Phase-0 deliverable with
+                    pre-registered cell set and matched-seed baselines; (c)
+                    external-mathematician sanity-check path named; (d) pre-registered
+                    failure boundary fixed before numerical reads are interpreted.
+                </p>
+                <p>
+                    The current witness <strong>materially advances (a)</strong> — a
+                    concrete regime-2 witness shows the Postulate-1 reading is
+                    non-vacuous on a real substrate — and <strong>closes (b)</strong>
+                    at the procedure-and-execution level. (d) is closed by construction
+                    (the cell set, integrator self-test, and verdict-rule completeness
+                    are all locked before interpretation). <strong>(c) is open and
+                    review-gated</strong>: an external PDE reviewer pass on Front-A
+                    is the next promotion step. Final (d) close is coupled to (c). The
+                    full twin-state lock receipt and proxy-faithfulness items remain
+                    open as part of (c).
+                </p>
+                <p>
+                    Until (c) closes, this page carries the <strong>review-gated</strong>
+                    badge prominently and does not collapse the witness into a positive
+                    theorem-facing claim.
+                </p>
+            </div>
+        </section>
+
+        <section class="nse-section" aria-label="Claim boundary">
+            <p class="eyebrow">Claim Boundary</p>
+            <div class="not-grid">
+                <div class="not-card">
+                    <h3>Sundog has not solved Navier-Stokes.</h3>
+                    <p>This page describes a witness on a Kolmogorov-flow cell at two Grashof points. It is finite-Galerkin, sampled-support, numerical. It is not an infinite-dim NSE theorem.</p>
+                </div>
+                <div class="not-card">
+                    <h3>Signatures do not replace energy methods.</h3>
+                    <p>The Postulate-1 reading is a reading and instrument complement to existing determining-modes machinery, not a replacement for energy-side analysis.</p>
+                </div>
+                <div class="not-card">
+                    <h3>Coarse-graining does not prove regularity.</h3>
+                    <p>The coarse-graining proof trunk (Phases 0-3 closed positive; Phase 4 open at the Bayesian-floor gate) is a separate theorem-facing program. It does not, on its own, prove NSE regularity. The witness here couples to it; it does not extend it to NSE smoothness.</p>
+                </div>
+                <div class="not-card">
+                    <h3>Determining modes are not Sundog's idea.</h3>
+                    <p>Foias-Temam-Constantin determining modes / nodes / volumes are the prior-art spine. The Sundog contribution is a Blackwell-sufficiency reading of the same object, not a new PDE result.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="nse-section" aria-label="Sibling lanes">
+            <aside class="nse-crossref">
+                <span class="nse-crossref-arrow" aria-hidden="true">&rarr;</span>
+                <div>
+                    <p class="nse-crossref-kicker">See it in context</p>
+                    <p class="nse-crossref-body">
+                        Navier-Stokes C1 is the strongest current lane on the
+                        <a href="/generality">High-Stakes Generality umbrella</a>, where
+                        it sits alongside the Riemann bounded-null synthesis, the
+                        Yang-Mills Phase 2 bounded-null, the P-vs-NP safety green /
+                        cost-hold, ARC-AGI, and Three-Body Phase 15C. The umbrella
+                        keeps the asymmetry honest: bounded-null and review-gated
+                        results are receipts, not failures, and not theorem claims.
+                    </p>
+                </div>
+            </aside>
+        </section>
+
+        <section class="nse-section">
+            <p class="eyebrow">Inspection Trail</p>
+            <div class="source-list">
+                <a href="docs/SUNDOG_V_NAVIERSTOKES.md">Sundog · Navier-Stokes Ledger</a>
+                <a href="docs/NAVIERSTOKES_LITPASS_MEMO.md">NSE Lit-Pass Memo (prior-art spine)</a>
+                <a href="docs/proof/PDE_C1_REGIME_GENERALITY_v1.md">PDE C1 Regime-Generality v1 (sign-off disposition)</a>
+                <a href="docs/proof/PDE_DETERMINING_MODES_POSTULATE1.md">Postulate-1 Reading of Determining Modes</a>
+                <a href="docs/proof/PDE_C1_CELLSET_KOLMOGOROV.md">C1 Cell-Set: Kolmogorov flow</a>
+                <a href="docs/COARSE_GRAINING_PROOF_ROADMAP.md">Coarse-Graining Proof Trunk</a>
+                <a href="/generality">High-Stakes Generality umbrella</a>
+                <a href="/legend#kfacet">Legend — vocabulary (audit-chain, structural-zero, etc.)</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>
+            The Sundog Project - <a href="docs/presentation/message-house.md">Alignment Without Sight</a>
+        </p>
+        <p class="footer-links">
+            <a href="https://github.com/humiliati/sundog">GitHub</a> |
+            <a href="/origin">Origin</a> |
+            <a href="/applications-gallery">Applications Gallery</a> |
+            <a href="docs/README.md">Documentation</a> |
+            <a href="docs/SCIENTIFIC_CRITERIA.md">Scientific Criteria</a> |
+            <a href="docs/presentation/claims-and-scope.md">Claims Policy</a> |
+            <a href="docs/SUNDOG_V_NAVIERSTOKES.md">NSE Ledger</a> |
+            <a href="/generality">Generality umbrella</a>
+        </p>
+        <p class="footer-copyright">
+            &copy; 2026 Stellar Aqua LLC. Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC.
+        </p>
+    </footer>
+
+    <script type="module" src="/js/sundog-chat-widget.mjs"></script>
+</body>
+</html>
