@@ -1,5 +1,10 @@
 # PDE C2 Cell Set v1 — Stationarity-Gated Sabra Burst Cell
 
+> **Cross-substrate failure-map entry:** NUMERICAL WALL (fixed-dt RK4 blows up
+> integrating the intermittent bursts the task is about) — see
+> [`../threebody/CROSS_SUBSTRATE_NOTES.md`](../threebody/CROSS_SUBSTRATE_NOTES.md)
+> "Cross-Substrate Generality Failure Map".
+
 > **Design proposal for sign-off**, filed 2026-05-29. Re-pose of
 > [`PDE_C2_CELLSET_SABRA_v0.md`](PDE_C2_CELLSET_SABRA_v0.md), whose
 > headline run returned `PDE-C2-DEFERRED-BASERATE` with a *block-dependent*

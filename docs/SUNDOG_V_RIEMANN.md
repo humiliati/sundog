@@ -1,5 +1,10 @@
 # Sundog v Riemann Ledger
 
+> **Cross-substrate failure-map entry:** VACUOUS (Path i — the `Z2`-descent
+> rigidity check is trivially satisfied on gap-only features) — see
+> [`threebody/CROSS_SUBSTRATE_NOTES.md`](threebody/CROSS_SUBSTRATE_NOTES.md)
+> "Cross-Substrate Generality Failure Map".
+
 Working hook:
 
 > A shadow might have less information than the body, but sometimes it is more

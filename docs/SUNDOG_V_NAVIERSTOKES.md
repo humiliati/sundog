@@ -1,5 +1,10 @@
 # Sundog Navier–Stokes Ledger
 
+> **Cross-substrate failure-map entries:** C1 = MARGINAL (near-invertible
+> projection — the body barely resists the shadow), C2 = NUMERICAL WALL —
+> see [`threebody/CROSS_SUBSTRATE_NOTES.md`](threebody/CROSS_SUBSTRATE_NOTES.md)
+> "Cross-Substrate Generality Failure Map".
+
 Working hook:
 
 > We do not solve Navier–Stokes. We ask whether the shadow of a flow is
