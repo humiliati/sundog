@@ -195,6 +195,22 @@ that claim provably fails.
   twin-state certificate **bit-for-bit** (no-regression). Composes
   state-insufficiency + control-sufficiency on the *same* pairs in both
   Grashof regimes; C1 still unpromoted.
+- [`PDE_C1_PROPOSITION.md`](PDE_C1_PROPOSITION.md)
+  — **the top-level theorem-shaped C1 statement** (2026-05-29). The crisp
+  reviewer-facing artifact: a definitions block (observation map /
+  state-insufficient / control-sufficient / sampled support / decision
+  surface), a **certified-empirical Proposition** with three clauses
+  (state-insufficient (i), control-sufficient up to a measure-`δ≈0.037`
+  boundary set (ii), coupling-slaving mechanism `R²≥0.99` (iii)), a
+  does-/doesn't-claim paragraph, a **two-regime stability table** with the
+  objective-dependence split ((i),(iii) objective-free; (ii) the
+  objective-dependent bridge), a **decision-surface** section disposing of
+  the boundary set as *genuine geometry, not artifact*, a **glossary** to
+  accepted PDE/control terms, and a **tagged claim ledger** (PROVED lemma
+  `T_LLL≡0` + Reading-1; CERTIFIED-EMPIRICAL clauses; HYPOTHESIZED ∞-dim
+  analogue; OPEN refinement). Sits *above* the separation statement (its
+  detailed-argument backing). Honest ceiling: theorem-*shaped*
+  certified-empirical, not a deductive PDE theorem.
 - [`PDE_C1_SEPARATION_STATEMENT.md`](PDE_C1_SEPARATION_STATEMENT.md)
   — **desk-first hardening, part (b): reviewer-facing statement**
   (2026-05-29). Consolidates the Postulate-1 reading note into one

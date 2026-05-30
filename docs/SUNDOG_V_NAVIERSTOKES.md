@@ -485,6 +485,24 @@ it explains why the measured control-sufficiency holds; C1 status
 unchanged. The `c1-mz-budget-*` dirs stand as the `T_LLL≡0`
 conservation-finding record.
 
+**C1 theorem-shaped consolidation 2026-05-29**
+([`proof/PDE_C1_PROPOSITION.md`](proof/PDE_C1_PROPOSITION.md)). The crisp
+top-level reviewer artifact: definitions block + a **certified-empirical
+Proposition** (clauses (i) state-insufficient, (ii) control-sufficient up
+to a measure-`δ≈0.037` boundary set, (iii) coupling-slaving `R²≥0.99`) +
+does/doesn't-claim + two-regime stability table (with the objective-
+dependence split: (i),(iii) objective-free, (ii) the objective-dependent
+bridge) + a decision-surface section disposing of the boundary set as
+**genuine geometry, not artifact** (`D_witness≈D_candidate`) + a glossary to
+accepted PDE/control terms + a **tagged claim ledger** (PROVED: Lemma
+`T_LLL≡0`, Reading-1; CERTIFIED-EMPIRICAL: the three clauses; HYPOTHESIZED:
+∞-dim NSE analogue; OPEN: refinement-invariance). Honest ceiling stated:
+theorem-*shaped* certified-empirical, **not** a deductive PDE theorem. Sits
+above the separation statement (its detailed backing). Remaining toward
+fuller theorem-shape: the **robustness wave** (item 6 — N-refinement /
+enstrophy objective / K-window; the one OPEN tag) and an optional
+separation diagram.
+
 ## Claim Boundary
 
 This document does **not** claim that Sundog has produced original
