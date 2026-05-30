@@ -1,0 +1,5381 @@
+{
+  "kStored": 10,
+  "graph": [
+    {
+      "query": 0,
+      "queryId": "beta2.0_config0",
+      "neighbors": [
+        {
+          "index": 29,
+          "id": "beta2.0_config29",
+          "distanceSq": 6.2201200487514035
+        },
+        {
+          "index": 27,
+          "id": "beta2.0_config27",
+          "distanceSq": 13.283332277269992
+        },
+        {
+          "index": 24,
+          "id": "beta2.0_config24",
+          "distanceSq": 14.854009290568198
+        },
+        {
+          "index": 25,
+          "id": "beta2.0_config25",
+          "distanceSq": 18.421035497640304
+        },
+        {
+          "index": 17,
+          "id": "beta2.0_config17",
+          "distanceSq": 20.646893967980542
+        },
+        {
+          "index": 9,
+          "id": "beta2.0_config9",
+          "distanceSq": 21.090094107535798
+        },
+        {
+          "index": 6,
+          "id": "beta2.0_config6",
+          "distanceSq": 21.11392978507746
+        },
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 21.671020946746147
+        },
+        {
+          "index": 28,
+          "id": "beta2.0_config28",
+          "distanceSq": 22.94961555861054
+        },
+        {
+          "index": 11,
+          "id": "beta2.0_config11",
+          "distanceSq": 23.450443736546287
+        }
+      ]
+    },
+    {
+      "query": 1,
+      "queryId": "beta2.0_config1",
+      "neighbors": [
+        {
+          "index": 12,
+          "id": "beta2.0_config12",
+          "distanceSq": 5.980812566696438
+        },
+        {
+          "index": 23,
+          "id": "beta2.0_config23",
+          "distanceSq": 6.750679019135925
+        },
+        {
+          "index": 7,
+          "id": "beta2.0_config7",
+          "distanceSq": 6.971333120952305
+        },
+        {
+          "index": 18,
+          "id": "beta2.0_config18",
+          "distanceSq": 7.091150731767371
+        },
+        {
+          "index": 4,
+          "id": "beta2.0_config4",
+          "distanceSq": 8.039950814243722
+        },
+        {
+          "index": 8,
+          "id": "beta2.0_config8",
+          "distanceSq": 10.997866935723845
+        },
+        {
+          "index": 15,
+          "id": "beta2.0_config15",
+          "distanceSq": 11.73017245637202
+        },
+        {
+          "index": 3,
+          "id": "beta2.0_config3",
+          "distanceSq": 11.747478685638008
+        },
+        {
+          "index": 16,
+          "id": "beta2.0_config16",
+          "distanceSq": 12.075515846924992
+        },
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 12.397937548536845
+        }
+      ]
+    },
+    {
+      "query": 2,
+      "queryId": "beta2.0_config2",
+      "neighbors": [
+        {
+          "index": 20,
+          "id": "beta2.0_config20",
+          "distanceSq": 11.312650135946626
+        },
+        {
+          "index": 6,
+          "id": "beta2.0_config6",
+          "distanceSq": 13.204497329068948
+        },
+        {
+          "index": 8,
+          "id": "beta2.0_config8",
+          "distanceSq": 15.322264961167503
+        },
+        {
+          "index": 13,
+          "id": "beta2.0_config13",
+          "distanceSq": 17.30813018553114
+        },
+        {
+          "index": 17,
+          "id": "beta2.0_config17",
+          "distanceSq": 17.408170956094796
+        },
+        {
+          "index": 31,
+          "id": "beta2.0_config31",
+          "distanceSq": 17.503335455024814
+        },
+        {
+          "index": 4,
+          "id": "beta2.0_config4",
+          "distanceSq": 18.243976194702334
+        },
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 18.519000553200303
+        },
+        {
+          "index": 26,
+          "id": "beta2.0_config26",
+          "distanceSq": 18.669168072695282
+        },
+        {
+          "index": 14,
+          "id": "beta2.0_config14",
+          "distanceSq": 19.29318929076399
+        }
+      ]
+    },
+    {
+      "query": 3,
+      "queryId": "beta2.0_config3",
+      "neighbors": [
+        {
+          "index": 12,
+          "id": "beta2.0_config12",
+          "distanceSq": 2.7553990709792435
+        },
+        {
+          "index": 23,
+          "id": "beta2.0_config23",
+          "distanceSq": 2.9177891303937074
+        },
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 3.364994301891291
+        },
+        {
+          "index": 7,
+          "id": "beta2.0_config7",
+          "distanceSq": 5.22231955338911
+        },
+        {
+          "index": 8,
+          "id": "beta2.0_config8",
+          "distanceSq": 5.467215795187963
+        },
+        {
+          "index": 24,
+          "id": "beta2.0_config24",
+          "distanceSq": 7.425078785951911
+        },
+        {
+          "index": 15,
+          "id": "beta2.0_config15",
+          "distanceSq": 7.589558044212787
+        },
+        {
+          "index": 19,
+          "id": "beta2.0_config19",
+          "distanceSq": 8.120768921955602
+        },
+        {
+          "index": 4,
+          "id": "beta2.0_config4",
+          "distanceSq": 8.547583657431163
+        },
+        {
+          "index": 27,
+          "id": "beta2.0_config27",
+          "distanceSq": 8.963654220505777
+        }
+      ]
+    },
+    {
+      "query": 4,
+      "queryId": "beta2.0_config4",
+      "neighbors": [
+        {
+          "index": 8,
+          "id": "beta2.0_config8",
+          "distanceSq": 1.4171557071874243
+        },
+        {
+          "index": 31,
+          "id": "beta2.0_config31",
+          "distanceSq": 2.533688588365433
+        },
+        {
+          "index": 12,
+          "id": "beta2.0_config12",
+          "distanceSq": 3.07552207822852
+        },
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 3.597166841239073
+        },
+        {
+          "index": 7,
+          "id": "beta2.0_config7",
+          "distanceSq": 4.192793147998921
+        },
+        {
+          "index": 26,
+          "id": "beta2.0_config26",
+          "distanceSq": 4.2739594316635054
+        },
+        {
+          "index": 19,
+          "id": "beta2.0_config19",
+          "distanceSq": 4.290267158978066
+        },
+        {
+          "index": 15,
+          "id": "beta2.0_config15",
+          "distanceSq": 4.612246667031856
+        },
+        {
+          "index": 23,
+          "id": "beta2.0_config23",
+          "distanceSq": 5.486091578953556
+        },
+        {
+          "index": 5,
+          "id": "beta2.0_config5",
+          "distanceSq": 5.704774269438968
+        }
+      ]
+    },
+    {
+      "query": 5,
+      "queryId": "beta2.0_config5",
+      "neighbors": [
+        {
+          "index": 26,
+          "id": "beta2.0_config26",
+          "distanceSq": 2.30540618952317
+        },
+        {
+          "index": 31,
+          "id": "beta2.0_config31",
+          "distanceSq": 4.875041553877528
+        },
+        {
+          "index": 19,
+          "id": "beta2.0_config19",
+          "distanceSq": 5.291901640191957
+        },
+        {
+          "index": 15,
+          "id": "beta2.0_config15",
+          "distanceSq": 5.596608993691827
+        },
+        {
+          "index": 4,
+          "id": "beta2.0_config4",
+          "distanceSq": 5.704774269438968
+        },
+        {
+          "index": 16,
+          "id": "beta2.0_config16",
+          "distanceSq": 5.7384016972814385
+        },
+        {
+          "index": 22,
+          "id": "beta2.0_config22",
+          "distanceSq": 5.97654416217364
+        },
+        {
+          "index": 14,
+          "id": "beta2.0_config14",
+          "distanceSq": 7.101585499043408
+        },
+        {
+          "index": 8,
+          "id": "beta2.0_config8",
+          "distanceSq": 7.619261511646597
+        },
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 7.749736947437025
+        }
+      ]
+    },
+    {
+      "query": 6,
+      "queryId": "beta2.0_config6",
+      "neighbors": [
+        {
+          "index": 20,
+          "id": "beta2.0_config20",
+          "distanceSq": 2.1992101285097143
+        },
+        {
+          "index": 13,
+          "id": "beta2.0_config13",
+          "distanceSq": 2.514913406457536
+        },
+        {
+          "index": 21,
+          "id": "beta2.0_config21",
+          "distanceSq": 2.792346678646761
+        },
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 4.3970363652855315
+        },
+        {
+          "index": 17,
+          "id": "beta2.0_config17",
+          "distanceSq": 4.4193204350866315
+        },
+        {
+          "index": 12,
+          "id": "beta2.0_config12",
+          "distanceSq": 6.76706762915625
+        },
+        {
+          "index": 8,
+          "id": "beta2.0_config8",
+          "distanceSq": 6.873389535852048
+        },
+        {
+          "index": 4,
+          "id": "beta2.0_config4",
+          "distanceSq": 6.898150797895724
+        },
+        {
+          "index": 26,
+          "id": "beta2.0_config26",
+          "distanceSq": 7.029371992291247
+        },
+        {
+          "index": 10,
+          "id": "beta2.0_config10",
+          "distanceSq": 7.03344176325865
+        }
+      ]
+    },
+    {
+      "query": 7,
+      "queryId": "beta2.0_config7",
+      "neighbors": [
+        {
+          "index": 4,
+          "id": "beta2.0_config4",
+          "distanceSq": 4.192793147998921
+        },
+        {
+          "index": 23,
+          "id": "beta2.0_config23",
+          "distanceSq": 4.210457190062808
+        },
+        {
+          "index": 12,
+          "id": "beta2.0_config12",
+          "distanceSq": 4.300090226052167
+        },
+        {
+          "index": 8,
+          "id": "beta2.0_config8",
+          "distanceSq": 4.910916908255499
+        },
+        {
+          "index": 3,
+          "id": "beta2.0_config3",
+          "distanceSq": 5.22231955338911
+        },
+        {
+          "index": 15,
+          "id": "beta2.0_config15",
+          "distanceSq": 5.681059716716165
+        },
+        {
+          "index": 19,
+          "id": "beta2.0_config19",
+          "distanceSq": 5.688886051561306
+        },
+        {
+          "index": 31,
+          "id": "beta2.0_config31",
+          "distanceSq": 5.775133456498504
+        },
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 6.437048004888502
+        },
+        {
+          "index": 1,
+          "id": "beta2.0_config1",
+          "distanceSq": 6.971333120952305
+        }
+      ]
+    },
+    {
+      "query": 8,
+      "queryId": "beta2.0_config8",
+      "neighbors": [
+        {
+          "index": 4,
+          "id": "beta2.0_config4",
+          "distanceSq": 1.4171557071874243
+        },
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 1.9501403187186437
+        },
+        {
+          "index": 12,
+          "id": "beta2.0_config12",
+          "distanceSq": 2.2472748313774185
+        },
+        {
+          "index": 31,
+          "id": "beta2.0_config31",
+          "distanceSq": 2.6821797367428806
+        },
+        {
+          "index": 26,
+          "id": "beta2.0_config26",
+          "distanceSq": 3.5292339567782802
+        },
+        {
+          "index": 19,
+          "id": "beta2.0_config19",
+          "distanceSq": 4.071436303489054
+        },
+        {
+          "index": 20,
+          "id": "beta2.0_config20",
+          "distanceSq": 4.2572628506117765
+        },
+        {
+          "index": 7,
+          "id": "beta2.0_config7",
+          "distanceSq": 4.910916908255499
+        },
+        {
+          "index": 3,
+          "id": "beta2.0_config3",
+          "distanceSq": 5.467215795187963
+        },
+        {
+          "index": 14,
+          "id": "beta2.0_config14",
+          "distanceSq": 5.58680027286039
+        }
+      ]
+    },
+    {
+      "query": 9,
+      "queryId": "beta2.0_config9",
+      "neighbors": [
+        {
+          "index": 27,
+          "id": "beta2.0_config27",
+          "distanceSq": 4.250460385485118
+        },
+        {
+          "index": 28,
+          "id": "beta2.0_config28",
+          "distanceSq": 7.797083523611243
+        },
+        {
+          "index": 24,
+          "id": "beta2.0_config24",
+          "distanceSq": 8.021678781012712
+        },
+        {
+          "index": 23,
+          "id": "beta2.0_config23",
+          "distanceSq": 9.603302699177233
+        },
+        {
+          "index": 29,
+          "id": "beta2.0_config29",
+          "distanceSq": 12.536677940622516
+        },
+        {
+          "index": 1,
+          "id": "beta2.0_config1",
+          "distanceSq": 13.459191620243292
+        },
+        {
+          "index": 12,
+          "id": "beta2.0_config12",
+          "distanceSq": 16.310407053117757
+        },
+        {
+          "index": 11,
+          "id": "beta2.0_config11",
+          "distanceSq": 16.71764229519127
+        },
+        {
+          "index": 3,
+          "id": "beta2.0_config3",
+          "distanceSq": 16.923607341214304
+        },
+        {
+          "index": 25,
+          "id": "beta2.0_config25",
+          "distanceSq": 17.53804253707809
+        }
+      ]
+    },
+    {
+      "query": 10,
+      "queryId": "beta2.0_config10",
+      "neighbors": [
+        {
+          "index": 21,
+          "id": "beta2.0_config21",
+          "distanceSq": 5.02506982261814
+        },
+        {
+          "index": 6,
+          "id": "beta2.0_config6",
+          "distanceSq": 7.03344176325865
+        },
+        {
+          "index": 15,
+          "id": "beta2.0_config15",
+          "distanceSq": 8.373622256029023
+        },
+        {
+          "index": 24,
+          "id": "beta2.0_config24",
+          "distanceSq": 8.46303471417934
+        },
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 8.493076790181124
+        },
+        {
+          "index": 12,
+          "id": "beta2.0_config12",
+          "distanceSq": 8.71969270648907
+        },
+        {
+          "index": 16,
+          "id": "beta2.0_config16",
+          "distanceSq": 8.787076829120968
+        },
+        {
+          "index": 23,
+          "id": "beta2.0_config23",
+          "distanceSq": 9.017395722072164
+        },
+        {
+          "index": 26,
+          "id": "beta2.0_config26",
+          "distanceSq": 9.365025431704035
+        },
+        {
+          "index": 20,
+          "id": "beta2.0_config20",
+          "distanceSq": 10.651535070598424
+        }
+      ]
+    },
+    {
+      "query": 11,
+      "queryId": "beta2.0_config11",
+      "neighbors": [
+        {
+          "index": 27,
+          "id": "beta2.0_config27",
+          "distanceSq": 8.185642408052004
+        },
+        {
+          "index": 18,
+          "id": "beta2.0_config18",
+          "distanceSq": 10.622438320992936
+        },
+        {
+          "index": 23,
+          "id": "beta2.0_config23",
+          "distanceSq": 10.791984800083814
+        },
+        {
+          "index": 12,
+          "id": "beta2.0_config12",
+          "distanceSq": 11.439717998199397
+        },
+        {
+          "index": 17,
+          "id": "beta2.0_config17",
+          "distanceSq": 11.911303268313002
+        },
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 12.274051068563562
+        },
+        {
+          "index": 3,
+          "id": "beta2.0_config3",
+          "distanceSq": 12.68287577312955
+        },
+        {
+          "index": 8,
+          "id": "beta2.0_config8",
+          "distanceSq": 13.252740627919891
+        },
+        {
+          "index": 1,
+          "id": "beta2.0_config1",
+          "distanceSq": 15.179267976996483
+        },
+        {
+          "index": 29,
+          "id": "beta2.0_config29",
+          "distanceSq": 15.69404866112717
+        }
+      ]
+    },
+    {
+      "query": 12,
+      "queryId": "beta2.0_config12",
+      "neighbors": [
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 1.673123709732202
+        },
+        {
+          "index": 23,
+          "id": "beta2.0_config23",
+          "distanceSq": 2.233411427285664
+        },
+        {
+          "index": 8,
+          "id": "beta2.0_config8",
+          "distanceSq": 2.2472748313774185
+        },
+        {
+          "index": 3,
+          "id": "beta2.0_config3",
+          "distanceSq": 2.7553990709792435
+        },
+        {
+          "index": 4,
+          "id": "beta2.0_config4",
+          "distanceSq": 3.07552207822852
+        },
+        {
+          "index": 15,
+          "id": "beta2.0_config15",
+          "distanceSq": 4.051677307977126
+        },
+        {
+          "index": 7,
+          "id": "beta2.0_config7",
+          "distanceSq": 4.300090226052167
+        },
+        {
+          "index": 26,
+          "id": "beta2.0_config26",
+          "distanceSq": 5.000723019991371
+        },
+        {
+          "index": 19,
+          "id": "beta2.0_config19",
+          "distanceSq": 5.136257296092425
+        },
+        {
+          "index": 31,
+          "id": "beta2.0_config31",
+          "distanceSq": 5.488730916245261
+        }
+      ]
+    },
+    {
+      "query": 13,
+      "queryId": "beta2.0_config13",
+      "neighbors": [
+        {
+          "index": 20,
+          "id": "beta2.0_config20",
+          "distanceSq": 1.4855972936542152
+        },
+        {
+          "index": 6,
+          "id": "beta2.0_config6",
+          "distanceSq": 2.514913406457536
+        },
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 3.1032926808455694
+        },
+        {
+          "index": 19,
+          "id": "beta2.0_config19",
+          "distanceSq": 3.7885194859125013
+        },
+        {
+          "index": 17,
+          "id": "beta2.0_config17",
+          "distanceSq": 4.795499815910437
+        },
+        {
+          "index": 22,
+          "id": "beta2.0_config22",
+          "distanceSq": 5.357892009223484
+        },
+        {
+          "index": 21,
+          "id": "beta2.0_config21",
+          "distanceSq": 5.46248306643724
+        },
+        {
+          "index": 31,
+          "id": "beta2.0_config31",
+          "distanceSq": 5.531109707137627
+        },
+        {
+          "index": 26,
+          "id": "beta2.0_config26",
+          "distanceSq": 5.722665253911443
+        },
+        {
+          "index": 12,
+          "id": "beta2.0_config12",
+          "distanceSq": 5.746923779275991
+        }
+      ]
+    },
+    {
+      "query": 14,
+      "queryId": "beta2.0_config14",
+      "neighbors": [
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 3.7322823711719244
+        },
+        {
+          "index": 26,
+          "id": "beta2.0_config26",
+          "distanceSq": 3.8545458239154797
+        },
+        {
+          "index": 19,
+          "id": "beta2.0_config19",
+          "distanceSq": 5.573457422051186
+        },
+        {
+          "index": 8,
+          "id": "beta2.0_config8",
+          "distanceSq": 5.58680027286039
+        },
+        {
+          "index": 31,
+          "id": "beta2.0_config31",
+          "distanceSq": 5.708003995625218
+        },
+        {
+          "index": 12,
+          "id": "beta2.0_config12",
+          "distanceSq": 6.342379607207396
+        },
+        {
+          "index": 4,
+          "id": "beta2.0_config4",
+          "distanceSq": 6.887302473779282
+        },
+        {
+          "index": 5,
+          "id": "beta2.0_config5",
+          "distanceSq": 7.101585499043408
+        },
+        {
+          "index": 18,
+          "id": "beta2.0_config18",
+          "distanceSq": 7.432916821194631
+        },
+        {
+          "index": 13,
+          "id": "beta2.0_config13",
+          "distanceSq": 7.517895508200596
+        }
+      ]
+    },
+    {
+      "query": 15,
+      "queryId": "beta2.0_config15",
+      "neighbors": [
+        {
+          "index": 19,
+          "id": "beta2.0_config19",
+          "distanceSq": 3.6850129946697048
+        },
+        {
+          "index": 12,
+          "id": "beta2.0_config12",
+          "distanceSq": 4.051677307977126
+        },
+        {
+          "index": 26,
+          "id": "beta2.0_config26",
+          "distanceSq": 4.369499325606879
+        },
+        {
+          "index": 22,
+          "id": "beta2.0_config22",
+          "distanceSq": 4.536810656878066
+        },
+        {
+          "index": 31,
+          "id": "beta2.0_config31",
+          "distanceSq": 4.595485843935598
+        },
+        {
+          "index": 4,
+          "id": "beta2.0_config4",
+          "distanceSq": 4.612246667031856
+        },
+        {
+          "index": 23,
+          "id": "beta2.0_config23",
+          "distanceSq": 5.134146420704891
+        },
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 5.593788737108875
+        },
+        {
+          "index": 5,
+          "id": "beta2.0_config5",
+          "distanceSq": 5.596608993691827
+        },
+        {
+          "index": 7,
+          "id": "beta2.0_config7",
+          "distanceSq": 5.681059716716165
+        }
+      ]
+    },
+    {
+      "query": 16,
+      "queryId": "beta2.0_config16",
+      "neighbors": [
+        {
+          "index": 5,
+          "id": "beta2.0_config5",
+          "distanceSq": 5.7384016972814385
+        },
+        {
+          "index": 4,
+          "id": "beta2.0_config4",
+          "distanceSq": 7.3705899755717175
+        },
+        {
+          "index": 26,
+          "id": "beta2.0_config26",
+          "distanceSq": 7.738057768487239
+        },
+        {
+          "index": 15,
+          "id": "beta2.0_config15",
+          "distanceSq": 7.929009907264852
+        },
+        {
+          "index": 12,
+          "id": "beta2.0_config12",
+          "distanceSq": 8.782665469410599
+        },
+        {
+          "index": 10,
+          "id": "beta2.0_config10",
+          "distanceSq": 8.787076829120968
+        },
+        {
+          "index": 14,
+          "id": "beta2.0_config14",
+          "distanceSq": 9.996947635419245
+        },
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 10.420676759383886
+        },
+        {
+          "index": 7,
+          "id": "beta2.0_config7",
+          "distanceSq": 11.143090528834536
+        },
+        {
+          "index": 8,
+          "id": "beta2.0_config8",
+          "distanceSq": 11.395637249672708
+        }
+      ]
+    },
+    {
+      "query": 17,
+      "queryId": "beta2.0_config17",
+      "neighbors": [
+        {
+          "index": 6,
+          "id": "beta2.0_config6",
+          "distanceSq": 4.4193204350866315
+        },
+        {
+          "index": 21,
+          "id": "beta2.0_config21",
+          "distanceSq": 4.4860805697885
+        },
+        {
+          "index": 20,
+          "id": "beta2.0_config20",
+          "distanceSq": 4.752623232267197
+        },
+        {
+          "index": 13,
+          "id": "beta2.0_config13",
+          "distanceSq": 4.795499815910437
+        },
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 5.2829529760145855
+        },
+        {
+          "index": 12,
+          "id": "beta2.0_config12",
+          "distanceSq": 7.5155348858693145
+        },
+        {
+          "index": 8,
+          "id": "beta2.0_config8",
+          "distanceSq": 9.368852768600096
+        },
+        {
+          "index": 3,
+          "id": "beta2.0_config3",
+          "distanceSq": 10.606251157363285
+        },
+        {
+          "index": 23,
+          "id": "beta2.0_config23",
+          "distanceSq": 11.181818081533013
+        },
+        {
+          "index": 14,
+          "id": "beta2.0_config14",
+          "distanceSq": 11.44405801838628
+        }
+      ]
+    },
+    {
+      "query": 18,
+      "queryId": "beta2.0_config18",
+      "neighbors": [
+        {
+          "index": 12,
+          "id": "beta2.0_config12",
+          "distanceSq": 5.8477818815729385
+        },
+        {
+          "index": 4,
+          "id": "beta2.0_config4",
+          "distanceSq": 6.844657947283942
+        },
+        {
+          "index": 1,
+          "id": "beta2.0_config1",
+          "distanceSq": 7.091150731767371
+        },
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 7.401724355884884
+        },
+        {
+          "index": 14,
+          "id": "beta2.0_config14",
+          "distanceSq": 7.432916821194631
+        },
+        {
+          "index": 8,
+          "id": "beta2.0_config8",
+          "distanceSq": 7.783220167018554
+        },
+        {
+          "index": 31,
+          "id": "beta2.0_config31",
+          "distanceSq": 8.35455662201646
+        },
+        {
+          "index": 23,
+          "id": "beta2.0_config23",
+          "distanceSq": 9.080741317984145
+        },
+        {
+          "index": 19,
+          "id": "beta2.0_config19",
+          "distanceSq": 9.16346384301273
+        },
+        {
+          "index": 13,
+          "id": "beta2.0_config13",
+          "distanceSq": 9.937142808860038
+        }
+      ]
+    },
+    {
+      "query": 19,
+      "queryId": "beta2.0_config19",
+      "neighbors": [
+        {
+          "index": 31,
+          "id": "beta2.0_config31",
+          "distanceSq": 1.0526807312706805
+        },
+        {
+          "index": 26,
+          "id": "beta2.0_config26",
+          "distanceSq": 3.401731443052096
+        },
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 3.6449424558415924
+        },
+        {
+          "index": 15,
+          "id": "beta2.0_config15",
+          "distanceSq": 3.6850129946697048
+        },
+        {
+          "index": 13,
+          "id": "beta2.0_config13",
+          "distanceSq": 3.7885194859125013
+        },
+        {
+          "index": 8,
+          "id": "beta2.0_config8",
+          "distanceSq": 4.071436303489054
+        },
+        {
+          "index": 4,
+          "id": "beta2.0_config4",
+          "distanceSq": 4.290267158978066
+        },
+        {
+          "index": 20,
+          "id": "beta2.0_config20",
+          "distanceSq": 4.865012702158836
+        },
+        {
+          "index": 12,
+          "id": "beta2.0_config12",
+          "distanceSq": 5.136257296092425
+        },
+        {
+          "index": 5,
+          "id": "beta2.0_config5",
+          "distanceSq": 5.291901640191957
+        }
+      ]
+    },
+    {
+      "query": 20,
+      "queryId": "beta2.0_config20",
+      "neighbors": [
+        {
+          "index": 13,
+          "id": "beta2.0_config13",
+          "distanceSq": 1.4855972936542152
+        },
+        {
+          "index": 6,
+          "id": "beta2.0_config6",
+          "distanceSq": 2.1992101285097143
+        },
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 3.441576068494842
+        },
+        {
+          "index": 8,
+          "id": "beta2.0_config8",
+          "distanceSq": 4.2572628506117765
+        },
+        {
+          "index": 17,
+          "id": "beta2.0_config17",
+          "distanceSq": 4.752623232267197
+        },
+        {
+          "index": 19,
+          "id": "beta2.0_config19",
+          "distanceSq": 4.865012702158836
+        },
+        {
+          "index": 26,
+          "id": "beta2.0_config26",
+          "distanceSq": 5.076304420147535
+        },
+        {
+          "index": 31,
+          "id": "beta2.0_config31",
+          "distanceSq": 5.301706556461521
+        },
+        {
+          "index": 21,
+          "id": "beta2.0_config21",
+          "distanceSq": 5.392144433546404
+        },
+        {
+          "index": 4,
+          "id": "beta2.0_config4",
+          "distanceSq": 6.214388613953818
+        }
+      ]
+    },
+    {
+      "query": 21,
+      "queryId": "beta2.0_config21",
+      "neighbors": [
+        {
+          "index": 6,
+          "id": "beta2.0_config6",
+          "distanceSq": 2.792346678646761
+        },
+        {
+          "index": 17,
+          "id": "beta2.0_config17",
+          "distanceSq": 4.4860805697885
+        },
+        {
+          "index": 10,
+          "id": "beta2.0_config10",
+          "distanceSq": 5.02506982261814
+        },
+        {
+          "index": 20,
+          "id": "beta2.0_config20",
+          "distanceSq": 5.392144433546404
+        },
+        {
+          "index": 13,
+          "id": "beta2.0_config13",
+          "distanceSq": 5.46248306643724
+        },
+        {
+          "index": 12,
+          "id": "beta2.0_config12",
+          "distanceSq": 6.138118832700382
+        },
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 6.503949447409068
+        },
+        {
+          "index": 15,
+          "id": "beta2.0_config15",
+          "distanceSq": 8.981293181454394
+        },
+        {
+          "index": 23,
+          "id": "beta2.0_config23",
+          "distanceSq": 9.18513718653876
+        },
+        {
+          "index": 8,
+          "id": "beta2.0_config8",
+          "distanceSq": 9.343678842017578
+        }
+      ]
+    },
+    {
+      "query": 22,
+      "queryId": "beta2.0_config22",
+      "neighbors": [
+        {
+          "index": 26,
+          "id": "beta2.0_config26",
+          "distanceSq": 3.6821193608981435
+        },
+        {
+          "index": 15,
+          "id": "beta2.0_config15",
+          "distanceSq": 4.536810656878066
+        },
+        {
+          "index": 13,
+          "id": "beta2.0_config13",
+          "distanceSq": 5.357892009223484
+        },
+        {
+          "index": 19,
+          "id": "beta2.0_config19",
+          "distanceSq": 5.874529839392823
+        },
+        {
+          "index": 5,
+          "id": "beta2.0_config5",
+          "distanceSq": 5.97654416217364
+        },
+        {
+          "index": 20,
+          "id": "beta2.0_config20",
+          "distanceSq": 6.283066057129895
+        },
+        {
+          "index": 31,
+          "id": "beta2.0_config31",
+          "distanceSq": 7.438719707885252
+        },
+        {
+          "index": 6,
+          "id": "beta2.0_config6",
+          "distanceSq": 7.986715330638992
+        },
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 8.763918746519831
+        },
+        {
+          "index": 12,
+          "id": "beta2.0_config12",
+          "distanceSq": 10.005742448543462
+        }
+      ]
+    },
+    {
+      "query": 23,
+      "queryId": "beta2.0_config23",
+      "neighbors": [
+        {
+          "index": 12,
+          "id": "beta2.0_config12",
+          "distanceSq": 2.233411427285664
+        },
+        {
+          "index": 3,
+          "id": "beta2.0_config3",
+          "distanceSq": 2.9177891303937074
+        },
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 3.4354307453694486
+        },
+        {
+          "index": 7,
+          "id": "beta2.0_config7",
+          "distanceSq": 4.210457190062808
+        },
+        {
+          "index": 24,
+          "id": "beta2.0_config24",
+          "distanceSq": 4.416519836324163
+        },
+        {
+          "index": 15,
+          "id": "beta2.0_config15",
+          "distanceSq": 5.134146420704891
+        },
+        {
+          "index": 27,
+          "id": "beta2.0_config27",
+          "distanceSq": 5.164404479473482
+        },
+        {
+          "index": 4,
+          "id": "beta2.0_config4",
+          "distanceSq": 5.486091578953556
+        },
+        {
+          "index": 8,
+          "id": "beta2.0_config8",
+          "distanceSq": 5.877181086289912
+        },
+        {
+          "index": 1,
+          "id": "beta2.0_config1",
+          "distanceSq": 6.750679019135925
+        }
+      ]
+    },
+    {
+      "query": 24,
+      "queryId": "beta2.0_config24",
+      "neighbors": [
+        {
+          "index": 23,
+          "id": "beta2.0_config23",
+          "distanceSq": 4.416519836324163
+        },
+        {
+          "index": 27,
+          "id": "beta2.0_config27",
+          "distanceSq": 4.498865631979542
+        },
+        {
+          "index": 28,
+          "id": "beta2.0_config28",
+          "distanceSq": 6.214894537765739
+        },
+        {
+          "index": 3,
+          "id": "beta2.0_config3",
+          "distanceSq": 7.425078785951911
+        },
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 7.921571799516412
+        },
+        {
+          "index": 9,
+          "id": "beta2.0_config9",
+          "distanceSq": 8.021678781012712
+        },
+        {
+          "index": 10,
+          "id": "beta2.0_config10",
+          "distanceSq": 8.46303471417934
+        },
+        {
+          "index": 12,
+          "id": "beta2.0_config12",
+          "distanceSq": 10.04874251523447
+        },
+        {
+          "index": 7,
+          "id": "beta2.0_config7",
+          "distanceSq": 12.916388743255709
+        },
+        {
+          "index": 15,
+          "id": "beta2.0_config15",
+          "distanceSq": 13.157681301124867
+        }
+      ]
+    },
+    {
+      "query": 25,
+      "queryId": "beta2.0_config25",
+      "neighbors": [
+        {
+          "index": 27,
+          "id": "beta2.0_config27",
+          "distanceSq": 10.189452199834397
+        },
+        {
+          "index": 9,
+          "id": "beta2.0_config9",
+          "distanceSq": 17.53804253707809
+        },
+        {
+          "index": 28,
+          "id": "beta2.0_config28",
+          "distanceSq": 17.655742866519834
+        },
+        {
+          "index": 0,
+          "id": "beta2.0_config0",
+          "distanceSq": 18.421035497640304
+        },
+        {
+          "index": 11,
+          "id": "beta2.0_config11",
+          "distanceSq": 20.13399874859425
+        },
+        {
+          "index": 29,
+          "id": "beta2.0_config29",
+          "distanceSq": 20.14194071083543
+        },
+        {
+          "index": 24,
+          "id": "beta2.0_config24",
+          "distanceSq": 20.31512860764581
+        },
+        {
+          "index": 23,
+          "id": "beta2.0_config23",
+          "distanceSq": 27.588280616432957
+        },
+        {
+          "index": 3,
+          "id": "beta2.0_config3",
+          "distanceSq": 29.673128990074485
+        },
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 34.38803495443932
+        }
+      ]
+    },
+    {
+      "query": 26,
+      "queryId": "beta2.0_config26",
+      "neighbors": [
+        {
+          "index": 5,
+          "id": "beta2.0_config5",
+          "distanceSq": 2.30540618952317
+        },
+        {
+          "index": 31,
+          "id": "beta2.0_config31",
+          "distanceSq": 3.3402637908821173
+        },
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 3.378286363957712
+        },
+        {
+          "index": 19,
+          "id": "beta2.0_config19",
+          "distanceSq": 3.401731443052096
+        },
+        {
+          "index": 8,
+          "id": "beta2.0_config8",
+          "distanceSq": 3.5292339567782802
+        },
+        {
+          "index": 22,
+          "id": "beta2.0_config22",
+          "distanceSq": 3.6821193608981435
+        },
+        {
+          "index": 14,
+          "id": "beta2.0_config14",
+          "distanceSq": 3.8545458239154797
+        },
+        {
+          "index": 4,
+          "id": "beta2.0_config4",
+          "distanceSq": 4.2739594316635054
+        },
+        {
+          "index": 15,
+          "id": "beta2.0_config15",
+          "distanceSq": 4.369499325606879
+        },
+        {
+          "index": 12,
+          "id": "beta2.0_config12",
+          "distanceSq": 5.000723019991371
+        }
+      ]
+    },
+    {
+      "query": 27,
+      "queryId": "beta2.0_config27",
+      "neighbors": [
+        {
+          "index": 9,
+          "id": "beta2.0_config9",
+          "distanceSq": 4.250460385485118
+        },
+        {
+          "index": 24,
+          "id": "beta2.0_config24",
+          "distanceSq": 4.498865631979542
+        },
+        {
+          "index": 28,
+          "id": "beta2.0_config28",
+          "distanceSq": 4.785797809223088
+        },
+        {
+          "index": 23,
+          "id": "beta2.0_config23",
+          "distanceSq": 5.164404479473482
+        },
+        {
+          "index": 11,
+          "id": "beta2.0_config11",
+          "distanceSq": 8.185642408052004
+        },
+        {
+          "index": 29,
+          "id": "beta2.0_config29",
+          "distanceSq": 8.754869821401545
+        },
+        {
+          "index": 3,
+          "id": "beta2.0_config3",
+          "distanceSq": 8.963654220505777
+        },
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 9.520828764445813
+        },
+        {
+          "index": 25,
+          "id": "beta2.0_config25",
+          "distanceSq": 10.189452199834397
+        },
+        {
+          "index": 12,
+          "id": "beta2.0_config12",
+          "distanceSq": 10.562743942416935
+        }
+      ]
+    },
+    {
+      "query": 28,
+      "queryId": "beta2.0_config28",
+      "neighbors": [
+        {
+          "index": 27,
+          "id": "beta2.0_config27",
+          "distanceSq": 4.785797809223088
+        },
+        {
+          "index": 24,
+          "id": "beta2.0_config24",
+          "distanceSq": 6.214894537765739
+        },
+        {
+          "index": 9,
+          "id": "beta2.0_config9",
+          "distanceSq": 7.797083523611243
+        },
+        {
+          "index": 23,
+          "id": "beta2.0_config23",
+          "distanceSq": 9.646574506512938
+        },
+        {
+          "index": 7,
+          "id": "beta2.0_config7",
+          "distanceSq": 12.05497197762143
+        },
+        {
+          "index": 3,
+          "id": "beta2.0_config3",
+          "distanceSq": 13.137858085448638
+        },
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 14.811532007795517
+        },
+        {
+          "index": 4,
+          "id": "beta2.0_config4",
+          "distanceSq": 15.374504654386337
+        },
+        {
+          "index": 12,
+          "id": "beta2.0_config12",
+          "distanceSq": 15.748443894040923
+        },
+        {
+          "index": 29,
+          "id": "beta2.0_config29",
+          "distanceSq": 16.233523430262473
+        }
+      ]
+    },
+    {
+      "query": 29,
+      "queryId": "beta2.0_config29",
+      "neighbors": [
+        {
+          "index": 0,
+          "id": "beta2.0_config0",
+          "distanceSq": 6.2201200487514035
+        },
+        {
+          "index": 27,
+          "id": "beta2.0_config27",
+          "distanceSq": 8.754869821401545
+        },
+        {
+          "index": 9,
+          "id": "beta2.0_config9",
+          "distanceSq": 12.536677940622516
+        },
+        {
+          "index": 24,
+          "id": "beta2.0_config24",
+          "distanceSq": 14.796795210599443
+        },
+        {
+          "index": 11,
+          "id": "beta2.0_config11",
+          "distanceSq": 15.69404866112717
+        },
+        {
+          "index": 6,
+          "id": "beta2.0_config6",
+          "distanceSq": 15.77743814183938
+        },
+        {
+          "index": 28,
+          "id": "beta2.0_config28",
+          "distanceSq": 16.233523430262473
+        },
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 17.949121071791115
+        },
+        {
+          "index": 17,
+          "id": "beta2.0_config17",
+          "distanceSq": 18.03512621834104
+        },
+        {
+          "index": 23,
+          "id": "beta2.0_config23",
+          "distanceSq": 18.15994528468342
+        }
+      ]
+    },
+    {
+      "query": 30,
+      "queryId": "beta2.0_config30",
+      "neighbors": [
+        {
+          "index": 12,
+          "id": "beta2.0_config12",
+          "distanceSq": 1.673123709732202
+        },
+        {
+          "index": 8,
+          "id": "beta2.0_config8",
+          "distanceSq": 1.9501403187186437
+        },
+        {
+          "index": 13,
+          "id": "beta2.0_config13",
+          "distanceSq": 3.1032926808455694
+        },
+        {
+          "index": 3,
+          "id": "beta2.0_config3",
+          "distanceSq": 3.364994301891291
+        },
+        {
+          "index": 26,
+          "id": "beta2.0_config26",
+          "distanceSq": 3.378286363957712
+        },
+        {
+          "index": 23,
+          "id": "beta2.0_config23",
+          "distanceSq": 3.4354307453694486
+        },
+        {
+          "index": 20,
+          "id": "beta2.0_config20",
+          "distanceSq": 3.441576068494842
+        },
+        {
+          "index": 4,
+          "id": "beta2.0_config4",
+          "distanceSq": 3.597166841239073
+        },
+        {
+          "index": 19,
+          "id": "beta2.0_config19",
+          "distanceSq": 3.6449424558415924
+        },
+        {
+          "index": 14,
+          "id": "beta2.0_config14",
+          "distanceSq": 3.7322823711719244
+        }
+      ]
+    },
+    {
+      "query": 31,
+      "queryId": "beta2.0_config31",
+      "neighbors": [
+        {
+          "index": 19,
+          "id": "beta2.0_config19",
+          "distanceSq": 1.0526807312706805
+        },
+        {
+          "index": 4,
+          "id": "beta2.0_config4",
+          "distanceSq": 2.533688588365433
+        },
+        {
+          "index": 8,
+          "id": "beta2.0_config8",
+          "distanceSq": 2.6821797367428806
+        },
+        {
+          "index": 26,
+          "id": "beta2.0_config26",
+          "distanceSq": 3.3402637908821173
+        },
+        {
+          "index": 15,
+          "id": "beta2.0_config15",
+          "distanceSq": 4.595485843935598
+        },
+        {
+          "index": 30,
+          "id": "beta2.0_config30",
+          "distanceSq": 4.713488947129561
+        },
+        {
+          "index": 5,
+          "id": "beta2.0_config5",
+          "distanceSq": 4.875041553877528
+        },
+        {
+          "index": 20,
+          "id": "beta2.0_config20",
+          "distanceSq": 5.301706556461521
+        },
+        {
+          "index": 12,
+          "id": "beta2.0_config12",
+          "distanceSq": 5.488730916245261
+        },
+        {
+          "index": 13,
+          "id": "beta2.0_config13",
+          "distanceSq": 5.531109707137627
+        }
+      ]
+    },
+    {
+      "query": 32,
+      "queryId": "beta2.4_config0",
+      "neighbors": [
+        {
+          "index": 41,
+          "id": "beta2.4_config9",
+          "distanceSq": 3.398914154357122
+        },
+        {
+          "index": 37,
+          "id": "beta2.4_config5",
+          "distanceSq": 4.266536993441926
+        },
+        {
+          "index": 40,
+          "id": "beta2.4_config8",
+          "distanceSq": 4.319975017130955
+        },
+        {
+          "index": 49,
+          "id": "beta2.4_config17",
+          "distanceSq": 4.7516960995679955
+        },
+        {
+          "index": 33,
+          "id": "beta2.4_config1",
+          "distanceSq": 4.872770821553581
+        },
+        {
+          "index": 56,
+          "id": "beta2.4_config24",
+          "distanceSq": 5.6113833866390435
+        },
+        {
+          "index": 36,
+          "id": "beta2.4_config4",
+          "distanceSq": 6.594878387763214
+        },
+        {
+          "index": 47,
+          "id": "beta2.4_config15",
+          "distanceSq": 7.69518048960938
+        },
+        {
+          "index": 50,
+          "id": "beta2.4_config18",
+          "distanceSq": 9.342006460401844
+        },
+        {
+          "index": 63,
+          "id": "beta2.4_config31",
+          "distanceSq": 10.64176401925272
+        }
+      ]
+    },
+    {
+      "query": 33,
+      "queryId": "beta2.4_config1",
+      "neighbors": [
+        {
+          "index": 56,
+          "id": "beta2.4_config24",
+          "distanceSq": 1.8916268274159593
+        },
+        {
+          "index": 61,
+          "id": "beta2.4_config29",
+          "distanceSq": 2.867488920071119
+        },
+        {
+          "index": 55,
+          "id": "beta2.4_config23",
+          "distanceSq": 3.2942059153363035
+        },
+        {
+          "index": 36,
+          "id": "beta2.4_config4",
+          "distanceSq": 3.6467318943307236
+        },
+        {
+          "index": 49,
+          "id": "beta2.4_config17",
+          "distanceSq": 3.8700968826221596
+        },
+        {
+          "index": 47,
+          "id": "beta2.4_config15",
+          "distanceSq": 3.918860886259419
+        },
+        {
+          "index": 32,
+          "id": "beta2.4_config0",
+          "distanceSq": 4.872770821553581
+        },
+        {
+          "index": 63,
+          "id": "beta2.4_config31",
+          "distanceSq": 4.958589985754532
+        },
+        {
+          "index": 41,
+          "id": "beta2.4_config9",
+          "distanceSq": 5.198962419194871
+        },
+        {
+          "index": 60,
+          "id": "beta2.4_config28",
+          "distanceSq": 5.583889640199766
+        }
+      ]
+    },
+    {
+      "query": 34,
+      "queryId": "beta2.4_config2",
+      "neighbors": [
+        {
+          "index": 63,
+          "id": "beta2.4_config31",
+          "distanceSq": 1.8179703892396535
+        },
+        {
+          "index": 61,
+          "id": "beta2.4_config29",
+          "distanceSq": 6.206878870372476
+        },
+        {
+          "index": 35,
+          "id": "beta2.4_config3",
+          "distanceSq": 6.688723969613881
+        },
+        {
+          "index": 59,
+          "id": "beta2.4_config27",
+          "distanceSq": 7.870261028793468
+        },
+        {
+          "index": 48,
+          "id": "beta2.4_config16",
+          "distanceSq": 8.962113843001449
+        },
+        {
+          "index": 33,
+          "id": "beta2.4_config1",
+          "distanceSq": 9.15387650568397
+        },
+        {
+          "index": 56,
+          "id": "beta2.4_config24",
+          "distanceSq": 9.759126946926562
+        },
+        {
+          "index": 43,
+          "id": "beta2.4_config11",
+          "distanceSq": 9.860738515109015
+        },
+        {
+          "index": 60,
+          "id": "beta2.4_config28",
+          "distanceSq": 9.867569282099788
+        },
+        {
+          "index": 36,
+          "id": "beta2.4_config4",
+          "distanceSq": 10.091139855061575
+        }
+      ]
+    },
+    {
+      "query": 35,
+      "queryId": "beta2.4_config3",
+      "neighbors": [
+        {
+          "index": 62,
+          "id": "beta2.4_config30",
+          "distanceSq": 3.1432102582616204
+        },
+        {
+          "index": 59,
+          "id": "beta2.4_config27",
+          "distanceSq": 5.2301530600443575
+        },
+        {
+          "index": 55,
+          "id": "beta2.4_config23",
+          "distanceSq": 5.343134208981413
+        },
+        {
+          "index": 60,
+          "id": "beta2.4_config28",
+          "distanceSq": 5.346578654752927
+        },
+        {
+          "index": 61,
+          "id": "beta2.4_config29",
+          "distanceSq": 6.02326054650883
+        },
+        {
+          "index": 51,
+          "id": "beta2.4_config19",
+          "distanceSq": 6.614878203368174
+        },
+        {
+          "index": 63,
+          "id": "beta2.4_config31",
+          "distanceSq": 6.6474184584017175
+        },
+        {
+          "index": 34,
+          "id": "beta2.4_config2",
+          "distanceSq": 6.688723969613881
+        },
+        {
+          "index": 46,
+          "id": "beta2.4_config14",
+          "distanceSq": 7.014085413691685
+        },
+        {
+          "index": 42,
+          "id": "beta2.4_config10",
+          "distanceSq": 7.429909604762513
+        }
+      ]
+    },
+    {
+      "query": 36,
+      "queryId": "beta2.4_config4",
+      "neighbors": [
+        {
+          "index": 55,
+          "id": "beta2.4_config23",
+          "distanceSq": 2.5265364311269725
+        },
+        {
+          "index": 33,
+          "id": "beta2.4_config1",
+          "distanceSq": 3.6467318943307236
+        },
+        {
+          "index": 61,
+          "id": "beta2.4_config29",
+          "distanceSq": 4.078508156614993
+        },
+        {
+          "index": 49,
+          "id": "beta2.4_config17",
+          "distanceSq": 5.140163881112174
+        },
+        {
+          "index": 41,
+          "id": "beta2.4_config9",
+          "distanceSq": 5.626296757623622
+        },
+        {
+          "index": 56,
+          "id": "beta2.4_config24",
+          "distanceSq": 5.727566548639644
+        },
+        {
+          "index": 47,
+          "id": "beta2.4_config15",
+          "distanceSq": 6.219469483801596
+        },
+        {
+          "index": 63,
+          "id": "beta2.4_config31",
+          "distanceSq": 6.512792538209099
+        },
+        {
+          "index": 32,
+          "id": "beta2.4_config0",
+          "distanceSq": 6.594878387763214
+        },
+        {
+          "index": 60,
+          "id": "beta2.4_config28",
+          "distanceSq": 6.791357301191818
+        }
+      ]
+    },
+    {
+      "query": 37,
+      "queryId": "beta2.4_config5",
+      "neighbors": [
+        {
+          "index": 40,
+          "id": "beta2.4_config8",
+          "distanceSq": 3.4176534059945984
+        },
+        {
+          "index": 32,
+          "id": "beta2.4_config0",
+          "distanceSq": 4.266536993441926
+        },
+        {
+          "index": 49,
+          "id": "beta2.4_config17",
+          "distanceSq": 5.074639671551446
+        },
+        {
+          "index": 50,
+          "id": "beta2.4_config18",
+          "distanceSq": 5.090535910047168
+        },
+        {
+          "index": 56,
+          "id": "beta2.4_config24",
+          "distanceSq": 5.31338895868946
+        },
+        {
+          "index": 41,
+          "id": "beta2.4_config9",
+          "distanceSq": 6.063489195567641
+        },
+        {
+          "index": 33,
+          "id": "beta2.4_config1",
+          "distanceSq": 6.7321444607189065
+        },
+        {
+          "index": 47,
+          "id": "beta2.4_config15",
+          "distanceSq": 6.940750947943672
+        },
+        {
+          "index": 39,
+          "id": "beta2.4_config7",
+          "distanceSq": 7.058093875820346
+        },
+        {
+          "index": 60,
+          "id": "beta2.4_config28",
+          "distanceSq": 11.17999862411808
+        }
+      ]
+    },
+    {
+      "query": 38,
+      "queryId": "beta2.4_config6",
+      "neighbors": [
+        {
+          "index": 42,
+          "id": "beta2.4_config10",
+          "distanceSq": 7.215108195991619
+        },
+        {
+          "index": 35,
+          "id": "beta2.4_config3",
+          "distanceSq": 12.471055069140384
+        },
+        {
+          "index": 59,
+          "id": "beta2.4_config27",
+          "distanceSq": 13.276928040170441
+        },
+        {
+          "index": 52,
+          "id": "beta2.4_config20",
+          "distanceSq": 16.318890401341694
+        },
+        {
+          "index": 60,
+          "id": "beta2.4_config28",
+          "distanceSq": 16.44333724277263
+        },
+        {
+          "index": 34,
+          "id": "beta2.4_config2",
+          "distanceSq": 18.661579331321892
+        },
+        {
+          "index": 46,
+          "id": "beta2.4_config14",
+          "distanceSq": 18.78440874364487
+        },
+        {
+          "index": 62,
+          "id": "beta2.4_config30",
+          "distanceSq": 19.463006866265122
+        },
+        {
+          "index": 43,
+          "id": "beta2.4_config11",
+          "distanceSq": 19.53295228238759
+        },
+        {
+          "index": 61,
+          "id": "beta2.4_config29",
+          "distanceSq": 19.645098416007947
+        }
+      ]
+    },
+    {
+      "query": 39,
+      "queryId": "beta2.4_config7",
+      "neighbors": [
+        {
+          "index": 47,
+          "id": "beta2.4_config15",
+          "distanceSq": 5.0477096548246925
+        },
+        {
+          "index": 56,
+          "id": "beta2.4_config24",
+          "distanceSq": 5.253440964996455
+        },
+        {
+          "index": 50,
+          "id": "beta2.4_config18",
+          "distanceSq": 5.518443355886806
+        },
+        {
+          "index": 49,
+          "id": "beta2.4_config17",
+          "distanceSq": 6.234363909663694
+        },
+        {
+          "index": 33,
+          "id": "beta2.4_config1",
+          "distanceSq": 6.340088910764137
+        },
+        {
+          "index": 58,
+          "id": "beta2.4_config26",
+          "distanceSq": 6.608992367483053
+        },
+        {
+          "index": 60,
+          "id": "beta2.4_config28",
+          "distanceSq": 7.0031103383026325
+        },
+        {
+          "index": 37,
+          "id": "beta2.4_config5",
+          "distanceSq": 7.058093875820346
+        },
+        {
+          "index": 61,
+          "id": "beta2.4_config29",
+          "distanceSq": 7.774960439804553
+        },
+        {
+          "index": 52,
+          "id": "beta2.4_config20",
+          "distanceSq": 8.340131173412567
+        }
+      ]
+    },
+    {
+      "query": 40,
+      "queryId": "beta2.4_config8",
+      "neighbors": [
+        {
+          "index": 37,
+          "id": "beta2.4_config5",
+          "distanceSq": 3.4176534059945984
+        },
+        {
+          "index": 56,
+          "id": "beta2.4_config24",
+          "distanceSq": 4.013313193879107
+        },
+        {
+          "index": 32,
+          "id": "beta2.4_config0",
+          "distanceSq": 4.319975017130955
+        },
+        {
+          "index": 33,
+          "id": "beta2.4_config1",
+          "distanceSq": 7.419726928066668
+        },
+        {
+          "index": 41,
+          "id": "beta2.4_config9",
+          "distanceSq": 8.679535994781684
+        },
+        {
+          "index": 49,
+          "id": "beta2.4_config17",
+          "distanceSq": 9.0407198203146
+        },
+        {
+          "index": 47,
+          "id": "beta2.4_config15",
+          "distanceSq": 9.904716262716581
+        },
+        {
+          "index": 39,
+          "id": "beta2.4_config7",
+          "distanceSq": 10.803154939289538
+        },
+        {
+          "index": 50,
+          "id": "beta2.4_config18",
+          "distanceSq": 11.261986019387608
+        },
+        {
+          "index": 55,
+          "id": "beta2.4_config23",
+          "distanceSq": 12.524810718460929
+        }
+      ]
+    },
+    {
+      "query": 41,
+      "queryId": "beta2.4_config9",
+      "neighbors": [
+        {
+          "index": 49,
+          "id": "beta2.4_config17",
+          "distanceSq": 1.8281939448511508
+        },
+        {
+          "index": 47,
+          "id": "beta2.4_config15",
+          "distanceSq": 2.6596481570940624
+        },
+        {
+          "index": 32,
+          "id": "beta2.4_config0",
+          "distanceSq": 3.398914154357122
+        },
+        {
+          "index": 50,
+          "id": "beta2.4_config18",
+          "distanceSq": 4.492235770049049
+        },
+        {
+          "index": 33,
+          "id": "beta2.4_config1",
+          "distanceSq": 5.198962419194871
+        },
+        {
+          "index": 36,
+          "id": "beta2.4_config4",
+          "distanceSq": 5.626296757623622
+        },
+        {
+          "index": 56,
+          "id": "beta2.4_config24",
+          "distanceSq": 5.940691253205821
+        },
+        {
+          "index": 37,
+          "id": "beta2.4_config5",
+          "distanceSq": 6.063489195567641
+        },
+        {
+          "index": 61,
+          "id": "beta2.4_config29",
+          "distanceSq": 8.125829519453964
+        },
+        {
+          "index": 40,
+          "id": "beta2.4_config8",
+          "distanceSq": 8.679535994781684
+        }
+      ]
+    },
+    {
+      "query": 42,
+      "queryId": "beta2.4_config10",
+      "neighbors": [
+        {
+          "index": 38,
+          "id": "beta2.4_config6",
+          "distanceSq": 7.215108195991619
+        },
+        {
+          "index": 35,
+          "id": "beta2.4_config3",
+          "distanceSq": 7.429909604762513
+        },
+        {
+          "index": 62,
+          "id": "beta2.4_config30",
+          "distanceSq": 11.252156152543629
+        },
+        {
+          "index": 46,
+          "id": "beta2.4_config14",
+          "distanceSq": 12.671963613698335
+        },
+        {
+          "index": 60,
+          "id": "beta2.4_config28",
+          "distanceSq": 13.735497479599688
+        },
+        {
+          "index": 61,
+          "id": "beta2.4_config29",
+          "distanceSq": 14.054105676396912
+        },
+        {
+          "index": 59,
+          "id": "beta2.4_config27",
+          "distanceSq": 14.926785612121087
+        },
+        {
+          "index": 55,
+          "id": "beta2.4_config23",
+          "distanceSq": 15.7552238429329
+        },
+        {
+          "index": 43,
+          "id": "beta2.4_config11",
+          "distanceSq": 15.7750661896483
+        },
+        {
+          "index": 51,
+          "id": "beta2.4_config19",
+          "distanceSq": 16.57682859193995
+        }
+      ]
+    },
+    {
+      "query": 43,
+      "queryId": "beta2.4_config11",
+      "neighbors": [
+        {
+          "index": 60,
+          "id": "beta2.4_config28",
+          "distanceSq": 6.600920239242547
+        },
+        {
+          "index": 35,
+          "id": "beta2.4_config3",
+          "distanceSq": 8.131703425695356
+        },
+        {
+          "index": 34,
+          "id": "beta2.4_config2",
+          "distanceSq": 9.860738515109015
+        },
+        {
+          "index": 51,
+          "id": "beta2.4_config19",
+          "distanceSq": 9.996265444631343
+        },
+        {
+          "index": 63,
+          "id": "beta2.4_config31",
+          "distanceSq": 9.998119470731893
+        },
+        {
+          "index": 46,
+          "id": "beta2.4_config14",
+          "distanceSq": 11.210864641427374
+        },
+        {
+          "index": 52,
+          "id": "beta2.4_config20",
+          "distanceSq": 11.246539252249637
+        },
+        {
+          "index": 45,
+          "id": "beta2.4_config13",
+          "distanceSq": 11.49048547042979
+        },
+        {
+          "index": 62,
+          "id": "beta2.4_config30",
+          "distanceSq": 11.600565704215148
+        },
+        {
+          "index": 61,
+          "id": "beta2.4_config29",
+          "distanceSq": 12.519607603490018
+        }
+      ]
+    },
+    {
+      "query": 44,
+      "queryId": "beta2.4_config12",
+      "neighbors": [
+        {
+          "index": 50,
+          "id": "beta2.4_config18",
+          "distanceSq": 7.775264646862612
+        },
+        {
+          "index": 41,
+          "id": "beta2.4_config9",
+          "distanceSq": 8.751751646182562
+        },
+        {
+          "index": 49,
+          "id": "beta2.4_config17",
+          "distanceSq": 10.516512523711881
+        },
+        {
+          "index": 39,
+          "id": "beta2.4_config7",
+          "distanceSq": 12.159192433905071
+        },
+        {
+          "index": 47,
+          "id": "beta2.4_config15",
+          "distanceSq": 12.192096776521382
+        },
+        {
+          "index": 54,
+          "id": "beta2.4_config22",
+          "distanceSq": 12.236924310571467
+        },
+        {
+          "index": 37,
+          "id": "beta2.4_config5",
+          "distanceSq": 13.783129149424997
+        },
+        {
+          "index": 53,
+          "id": "beta2.4_config21",
+          "distanceSq": 14.715904205539335
+        },
+        {
+          "index": 56,
+          "id": "beta2.4_config24",
+          "distanceSq": 16.205394976289476
+        },
+        {
+          "index": 32,
+          "id": "beta2.4_config0",
+          "distanceSq": 17.31359631607062
+        }
+      ]
+    },
+    {
+      "query": 45,
+      "queryId": "beta2.4_config13",
+      "neighbors": [
+        {
+          "index": 53,
+          "id": "beta2.4_config21",
+          "distanceSq": 2.6584758134208037
+        },
+        {
+          "index": 51,
+          "id": "beta2.4_config19",
+          "distanceSq": 5.314521038981737
+        },
+        {
+          "index": 48,
+          "id": "beta2.4_config16",
+          "distanceSq": 6.008743605215158
+        },
+        {
+          "index": 63,
+          "id": "beta2.4_config31",
+          "distanceSq": 9.028858018520538
+        },
+        {
+          "index": 59,
+          "id": "beta2.4_config27",
+          "distanceSq": 9.04709009733839
+        },
+        {
+          "index": 43,
+          "id": "beta2.4_config11",
+          "distanceSq": 11.49048547042979
+        },
+        {
+          "index": 61,
+          "id": "beta2.4_config29",
+          "distanceSq": 11.671400433304678
+        },
+        {
+          "index": 60,
+          "id": "beta2.4_config28",
+          "distanceSq": 11.707641458799163
+        },
+        {
+          "index": 34,
+          "id": "beta2.4_config2",
+          "distanceSq": 12.72185962949538
+        },
+        {
+          "index": 52,
+          "id": "beta2.4_config20",
+          "distanceSq": 13.923166997019202
+        }
+      ]
+    },
+    {
+      "query": 46,
+      "queryId": "beta2.4_config14",
+      "neighbors": [
+        {
+          "index": 62,
+          "id": "beta2.4_config30",
+          "distanceSq": 6.422782653174073
+        },
+        {
+          "index": 35,
+          "id": "beta2.4_config3",
+          "distanceSq": 7.014085413691685
+        },
+        {
+          "index": 51,
+          "id": "beta2.4_config19",
+          "distanceSq": 7.053718904108825
+        },
+        {
+          "index": 60,
+          "id": "beta2.4_config28",
+          "distanceSq": 7.318039492271595
+        },
+        {
+          "index": 55,
+          "id": "beta2.4_config23",
+          "distanceSq": 8.261623323577432
+        },
+        {
+          "index": 59,
+          "id": "beta2.4_config27",
+          "distanceSq": 10.618418519691371
+        },
+        {
+          "index": 61,
+          "id": "beta2.4_config29",
+          "distanceSq": 11.145119122128428
+        },
+        {
+          "index": 43,
+          "id": "beta2.4_config11",
+          "distanceSq": 11.210864641427374
+        },
+        {
+          "index": 36,
+          "id": "beta2.4_config4",
+          "distanceSq": 11.58895773486398
+        },
+        {
+          "index": 42,
+          "id": "beta2.4_config10",
+          "distanceSq": 12.671963613698335
+        }
+      ]
+    },
+    {
+      "query": 47,
+      "queryId": "beta2.4_config15",
+      "neighbors": [
+        {
+          "index": 49,
+          "id": "beta2.4_config17",
+          "distanceSq": 1.6174737027229877
+        },
+        {
+          "index": 41,
+          "id": "beta2.4_config9",
+          "distanceSq": 2.6596481570940624
+        },
+        {
+          "index": 61,
+          "id": "beta2.4_config29",
+          "distanceSq": 3.737384345099129
+        },
+        {
+          "index": 56,
+          "id": "beta2.4_config24",
+          "distanceSq": 3.74326973635853
+        },
+        {
+          "index": 33,
+          "id": "beta2.4_config1",
+          "distanceSq": 3.918860886259419
+        },
+        {
+          "index": 58,
+          "id": "beta2.4_config26",
+          "distanceSq": 4.292899275438085
+        },
+        {
+          "index": 50,
+          "id": "beta2.4_config18",
+          "distanceSq": 4.332383842688527
+        },
+        {
+          "index": 39,
+          "id": "beta2.4_config7",
+          "distanceSq": 5.0477096548246925
+        },
+        {
+          "index": 60,
+          "id": "beta2.4_config28",
+          "distanceSq": 5.502296954244609
+        },
+        {
+          "index": 57,
+          "id": "beta2.4_config25",
+          "distanceSq": 5.89050301792469
+        }
+      ]
+    },
+    {
+      "query": 48,
+      "queryId": "beta2.4_config16",
+      "neighbors": [
+        {
+          "index": 51,
+          "id": "beta2.4_config19",
+          "distanceSq": 2.6143334199133137
+        },
+        {
+          "index": 53,
+          "id": "beta2.4_config21",
+          "distanceSq": 4.562429371741651
+        },
+        {
+          "index": 63,
+          "id": "beta2.4_config31",
+          "distanceSq": 4.626351744138342
+        },
+        {
+          "index": 45,
+          "id": "beta2.4_config13",
+          "distanceSq": 6.008743605215158
+        },
+        {
+          "index": 61,
+          "id": "beta2.4_config29",
+          "distanceSq": 6.331022776603471
+        },
+        {
+          "index": 56,
+          "id": "beta2.4_config24",
+          "distanceSq": 8.768947121590864
+        },
+        {
+          "index": 34,
+          "id": "beta2.4_config2",
+          "distanceSq": 8.962113843001449
+        },
+        {
+          "index": 35,
+          "id": "beta2.4_config3",
+          "distanceSq": 9.254767781790814
+        },
+        {
+          "index": 62,
+          "id": "beta2.4_config30",
+          "distanceSq": 9.329520788258984
+        },
+        {
+          "index": 59,
+          "id": "beta2.4_config27",
+          "distanceSq": 9.70661964431607
+        }
+      ]
+    },
+    {
+      "query": 49,
+      "queryId": "beta2.4_config17",
+      "neighbors": [
+        {
+          "index": 47,
+          "id": "beta2.4_config15",
+          "distanceSq": 1.6174737027229877
+        },
+        {
+          "index": 41,
+          "id": "beta2.4_config9",
+          "distanceSq": 1.8281939448511508
+        },
+        {
+          "index": 33,
+          "id": "beta2.4_config1",
+          "distanceSq": 3.8700968826221596
+        },
+        {
+          "index": 56,
+          "id": "beta2.4_config24",
+          "distanceSq": 3.9848699093101447
+        },
+        {
+          "index": 50,
+          "id": "beta2.4_config18",
+          "distanceSq": 4.106987054668094
+        },
+        {
+          "index": 32,
+          "id": "beta2.4_config0",
+          "distanceSq": 4.7516960995679955
+        },
+        {
+          "index": 37,
+          "id": "beta2.4_config5",
+          "distanceSq": 5.074639671551446
+        },
+        {
+          "index": 36,
+          "id": "beta2.4_config4",
+          "distanceSq": 5.140163881112174
+        },
+        {
+          "index": 61,
+          "id": "beta2.4_config29",
+          "distanceSq": 5.511657441886625
+        },
+        {
+          "index": 60,
+          "id": "beta2.4_config28",
+          "distanceSq": 5.930132742925341
+        }
+      ]
+    },
+    {
+      "query": 50,
+      "queryId": "beta2.4_config18",
+      "neighbors": [
+        {
+          "index": 49,
+          "id": "beta2.4_config17",
+          "distanceSq": 4.106987054668094
+        },
+        {
+          "index": 47,
+          "id": "beta2.4_config15",
+          "distanceSq": 4.332383842688527
+        },
+        {
+          "index": 41,
+          "id": "beta2.4_config9",
+          "distanceSq": 4.492235770049049
+        },
+        {
+          "index": 37,
+          "id": "beta2.4_config5",
+          "distanceSq": 5.090535910047168
+        },
+        {
+          "index": 39,
+          "id": "beta2.4_config7",
+          "distanceSq": 5.518443355886806
+        },
+        {
+          "index": 44,
+          "id": "beta2.4_config12",
+          "distanceSq": 7.775264646862612
+        },
+        {
+          "index": 56,
+          "id": "beta2.4_config24",
+          "distanceSq": 8.127618583102361
+        },
+        {
+          "index": 33,
+          "id": "beta2.4_config1",
+          "distanceSq": 8.22563057008882
+        },
+        {
+          "index": 32,
+          "id": "beta2.4_config0",
+          "distanceSq": 9.342006460401844
+        },
+        {
+          "index": 58,
+          "id": "beta2.4_config26",
+          "distanceSq": 9.596450114708606
+        }
+      ]
+    },
+    {
+      "query": 51,
+      "queryId": "beta2.4_config19",
+      "neighbors": [
+        {
+          "index": 48,
+          "id": "beta2.4_config16",
+          "distanceSq": 2.6143334199133137
+        },
+        {
+          "index": 62,
+          "id": "beta2.4_config30",
+          "distanceSq": 4.799469952783597
+        },
+        {
+          "index": 45,
+          "id": "beta2.4_config13",
+          "distanceSq": 5.314521038981737
+        },
+        {
+          "index": 53,
+          "id": "beta2.4_config21",
+          "distanceSq": 5.364974805034736
+        },
+        {
+          "index": 59,
+          "id": "beta2.4_config27",
+          "distanceSq": 5.979402814012437
+        },
+        {
+          "index": 35,
+          "id": "beta2.4_config3",
+          "distanceSq": 6.614878203368174
+        },
+        {
+          "index": 46,
+          "id": "beta2.4_config14",
+          "distanceSq": 7.053718904108825
+        },
+        {
+          "index": 61,
+          "id": "beta2.4_config29",
+          "distanceSq": 7.355411004080194
+        },
+        {
+          "index": 63,
+          "id": "beta2.4_config31",
+          "distanceSq": 7.951459951428518
+        },
+        {
+          "index": 60,
+          "id": "beta2.4_config28",
+          "distanceSq": 8.382861333399703
+        }
+      ]
+    },
+    {
+      "query": 52,
+      "queryId": "beta2.4_config20",
+      "neighbors": [
+        {
+          "index": 60,
+          "id": "beta2.4_config28",
+          "distanceSq": 4.372417042360136
+        },
+        {
+          "index": 58,
+          "id": "beta2.4_config26",
+          "distanceSq": 6.109778807355994
+        },
+        {
+          "index": 61,
+          "id": "beta2.4_config29",
+          "distanceSq": 7.292057517178223
+        },
+        {
+          "index": 39,
+          "id": "beta2.4_config7",
+          "distanceSq": 8.340131173412567
+        },
+        {
+          "index": 63,
+          "id": "beta2.4_config31",
+          "distanceSq": 9.030291706345087
+        },
+        {
+          "index": 33,
+          "id": "beta2.4_config1",
+          "distanceSq": 9.112833410750337
+        },
+        {
+          "index": 47,
+          "id": "beta2.4_config15",
+          "distanceSq": 10.028351943141008
+        },
+        {
+          "index": 56,
+          "id": "beta2.4_config24",
+          "distanceSq": 10.132835660674267
+        },
+        {
+          "index": 49,
+          "id": "beta2.4_config17",
+          "distanceSq": 10.38502805605509
+        },
+        {
+          "index": 55,
+          "id": "beta2.4_config23",
+          "distanceSq": 10.822228807043194
+        }
+      ]
+    },
+    {
+      "query": 53,
+      "queryId": "beta2.4_config21",
+      "neighbors": [
+        {
+          "index": 45,
+          "id": "beta2.4_config13",
+          "distanceSq": 2.6584758134208037
+        },
+        {
+          "index": 48,
+          "id": "beta2.4_config16",
+          "distanceSq": 4.562429371741651
+        },
+        {
+          "index": 51,
+          "id": "beta2.4_config19",
+          "distanceSq": 5.364974805034736
+        },
+        {
+          "index": 63,
+          "id": "beta2.4_config31",
+          "distanceSq": 9.572011303115445
+        },
+        {
+          "index": 61,
+          "id": "beta2.4_config29",
+          "distanceSq": 11.547289320410748
+        },
+        {
+          "index": 47,
+          "id": "beta2.4_config15",
+          "distanceSq": 12.287556797933112
+        },
+        {
+          "index": 60,
+          "id": "beta2.4_config28",
+          "distanceSq": 13.511870754379514
+        },
+        {
+          "index": 49,
+          "id": "beta2.4_config17",
+          "distanceSq": 13.631336153167345
+        },
+        {
+          "index": 59,
+          "id": "beta2.4_config27",
+          "distanceSq": 14.14754683046594
+        },
+        {
+          "index": 56,
+          "id": "beta2.4_config24",
+          "distanceSq": 14.14959722884799
+        }
+      ]
+    },
+    {
+      "query": 54,
+      "queryId": "beta2.4_config22",
+      "neighbors": [
+        {
+          "index": 50,
+          "id": "beta2.4_config18",
+          "distanceSq": 9.785306398903959
+        },
+        {
+          "index": 39,
+          "id": "beta2.4_config7",
+          "distanceSq": 11.038972063607796
+        },
+        {
+          "index": 44,
+          "id": "beta2.4_config12",
+          "distanceSq": 12.236924310571467
+        },
+        {
+          "index": 40,
+          "id": "beta2.4_config8",
+          "distanceSq": 14.576451626633744
+        },
+        {
+          "index": 56,
+          "id": "beta2.4_config24",
+          "distanceSq": 15.280060321116759
+        },
+        {
+          "index": 47,
+          "id": "beta2.4_config15",
+          "distanceSq": 15.83382874609945
+        },
+        {
+          "index": 37,
+          "id": "beta2.4_config5",
+          "distanceSq": 15.932613829241433
+        },
+        {
+          "index": 41,
+          "id": "beta2.4_config9",
+          "distanceSq": 17.09249414555319
+        },
+        {
+          "index": 49,
+          "id": "beta2.4_config17",
+          "distanceSq": 18.80646298670595
+        },
+        {
+          "index": 33,
+          "id": "beta2.4_config1",
+          "distanceSq": 20.33690625547067
+        }
+      ]
+    },
+    {
+      "query": 55,
+      "queryId": "beta2.4_config23",
+      "neighbors": [
+        {
+          "index": 36,
+          "id": "beta2.4_config4",
+          "distanceSq": 2.5265364311269725
+        },
+        {
+          "index": 61,
+          "id": "beta2.4_config29",
+          "distanceSq": 2.7441013458064547
+        },
+        {
+          "index": 60,
+          "id": "beta2.4_config28",
+          "distanceSq": 2.8179103785144335
+        },
+        {
+          "index": 33,
+          "id": "beta2.4_config1",
+          "distanceSq": 3.2942059153363035
+        },
+        {
+          "index": 56,
+          "id": "beta2.4_config24",
+          "distanceSq": 3.8673910843627635
+        },
+        {
+          "index": 35,
+          "id": "beta2.4_config3",
+          "distanceSq": 5.343134208981413
+        },
+        {
+          "index": 47,
+          "id": "beta2.4_config15",
+          "distanceSq": 6.123875270373528
+        },
+        {
+          "index": 49,
+          "id": "beta2.4_config17",
+          "distanceSq": 6.780327522945095
+        },
+        {
+          "index": 63,
+          "id": "beta2.4_config31",
+          "distanceSq": 7.411616762541154
+        },
+        {
+          "index": 46,
+          "id": "beta2.4_config14",
+          "distanceSq": 8.261623323577432
+        }
+      ]
+    },
+    {
+      "query": 56,
+      "queryId": "beta2.4_config24",
+      "neighbors": [
+        {
+          "index": 33,
+          "id": "beta2.4_config1",
+          "distanceSq": 1.8916268274159593
+        },
+        {
+          "index": 61,
+          "id": "beta2.4_config29",
+          "distanceSq": 3.668179365610212
+        },
+        {
+          "index": 47,
+          "id": "beta2.4_config15",
+          "distanceSq": 3.74326973635853
+        },
+        {
+          "index": 55,
+          "id": "beta2.4_config23",
+          "distanceSq": 3.8673910843627635
+        },
+        {
+          "index": 49,
+          "id": "beta2.4_config17",
+          "distanceSq": 3.9848699093101447
+        },
+        {
+          "index": 40,
+          "id": "beta2.4_config8",
+          "distanceSq": 4.013313193879107
+        },
+        {
+          "index": 60,
+          "id": "beta2.4_config28",
+          "distanceSq": 4.3915725977532665
+        },
+        {
+          "index": 63,
+          "id": "beta2.4_config31",
+          "distanceSq": 4.425017544839887
+        },
+        {
+          "index": 39,
+          "id": "beta2.4_config7",
+          "distanceSq": 5.253440964996455
+        },
+        {
+          "index": 37,
+          "id": "beta2.4_config5",
+          "distanceSq": 5.31338895868946
+        }
+      ]
+    },
+    {
+      "query": 57,
+      "queryId": "beta2.4_config25",
+      "neighbors": [
+        {
+          "index": 58,
+          "id": "beta2.4_config26",
+          "distanceSq": 2.6720200265745655
+        },
+        {
+          "index": 47,
+          "id": "beta2.4_config15",
+          "distanceSq": 5.89050301792469
+        },
+        {
+          "index": 61,
+          "id": "beta2.4_config29",
+          "distanceSq": 7.280419527209039
+        },
+        {
+          "index": 33,
+          "id": "beta2.4_config1",
+          "distanceSq": 7.938072222942269
+        },
+        {
+          "index": 56,
+          "id": "beta2.4_config24",
+          "distanceSq": 8.725841569270816
+        },
+        {
+          "index": 39,
+          "id": "beta2.4_config7",
+          "distanceSq": 8.789785222904586
+        },
+        {
+          "index": 60,
+          "id": "beta2.4_config28",
+          "distanceSq": 9.802884576798158
+        },
+        {
+          "index": 55,
+          "id": "beta2.4_config23",
+          "distanceSq": 10.22643589308613
+        },
+        {
+          "index": 52,
+          "id": "beta2.4_config20",
+          "distanceSq": 11.84184903423072
+        },
+        {
+          "index": 49,
+          "id": "beta2.4_config17",
+          "distanceSq": 12.131341194505769
+        }
+      ]
+    },
+    {
+      "query": 58,
+      "queryId": "beta2.4_config26",
+      "neighbors": [
+        {
+          "index": 57,
+          "id": "beta2.4_config25",
+          "distanceSq": 2.6720200265745655
+        },
+        {
+          "index": 47,
+          "id": "beta2.4_config15",
+          "distanceSq": 4.292899275438085
+        },
+        {
+          "index": 60,
+          "id": "beta2.4_config28",
+          "distanceSq": 5.811297771175114
+        },
+        {
+          "index": 52,
+          "id": "beta2.4_config20",
+          "distanceSq": 6.109778807355994
+        },
+        {
+          "index": 39,
+          "id": "beta2.4_config7",
+          "distanceSq": 6.608992367483053
+        },
+        {
+          "index": 61,
+          "id": "beta2.4_config29",
+          "distanceSq": 6.9916363009318125
+        },
+        {
+          "index": 49,
+          "id": "beta2.4_config17",
+          "distanceSq": 8.343619393274384
+        },
+        {
+          "index": 33,
+          "id": "beta2.4_config1",
+          "distanceSq": 8.921590419488574
+        },
+        {
+          "index": 56,
+          "id": "beta2.4_config24",
+          "distanceSq": 9.017930343851694
+        },
+        {
+          "index": 50,
+          "id": "beta2.4_config18",
+          "distanceSq": 9.596450114708606
+        }
+      ]
+    },
+    {
+      "query": 59,
+      "queryId": "beta2.4_config27",
+      "neighbors": [
+        {
+          "index": 35,
+          "id": "beta2.4_config3",
+          "distanceSq": 5.2301530600443575
+        },
+        {
+          "index": 51,
+          "id": "beta2.4_config19",
+          "distanceSq": 5.979402814012437
+        },
+        {
+          "index": 62,
+          "id": "beta2.4_config30",
+          "distanceSq": 7.092484458776669
+        },
+        {
+          "index": 34,
+          "id": "beta2.4_config2",
+          "distanceSq": 7.870261028793468
+        },
+        {
+          "index": 63,
+          "id": "beta2.4_config31",
+          "distanceSq": 8.279747787425428
+        },
+        {
+          "index": 45,
+          "id": "beta2.4_config13",
+          "distanceSq": 9.04709009733839
+        },
+        {
+          "index": 48,
+          "id": "beta2.4_config16",
+          "distanceSq": 9.70661964431607
+        },
+        {
+          "index": 36,
+          "id": "beta2.4_config4",
+          "distanceSq": 10.043523889175145
+        },
+        {
+          "index": 46,
+          "id": "beta2.4_config14",
+          "distanceSq": 10.618418519691371
+        },
+        {
+          "index": 61,
+          "id": "beta2.4_config29",
+          "distanceSq": 10.832851307692726
+        }
+      ]
+    },
+    {
+      "query": 60,
+      "queryId": "beta2.4_config28",
+      "neighbors": [
+        {
+          "index": 55,
+          "id": "beta2.4_config23",
+          "distanceSq": 2.8179103785144335
+        },
+        {
+          "index": 61,
+          "id": "beta2.4_config29",
+          "distanceSq": 3.2514115440339166
+        },
+        {
+          "index": 52,
+          "id": "beta2.4_config20",
+          "distanceSq": 4.372417042360136
+        },
+        {
+          "index": 56,
+          "id": "beta2.4_config24",
+          "distanceSq": 4.3915725977532665
+        },
+        {
+          "index": 35,
+          "id": "beta2.4_config3",
+          "distanceSq": 5.346578654752927
+        },
+        {
+          "index": 47,
+          "id": "beta2.4_config15",
+          "distanceSq": 5.502296954244609
+        },
+        {
+          "index": 33,
+          "id": "beta2.4_config1",
+          "distanceSq": 5.583889640199766
+        },
+        {
+          "index": 58,
+          "id": "beta2.4_config26",
+          "distanceSq": 5.811297771175114
+        },
+        {
+          "index": 63,
+          "id": "beta2.4_config31",
+          "distanceSq": 5.924267430472973
+        },
+        {
+          "index": 49,
+          "id": "beta2.4_config17",
+          "distanceSq": 5.930132742925341
+        }
+      ]
+    },
+    {
+      "query": 61,
+      "queryId": "beta2.4_config29",
+      "neighbors": [
+        {
+          "index": 55,
+          "id": "beta2.4_config23",
+          "distanceSq": 2.7441013458064547
+        },
+        {
+          "index": 33,
+          "id": "beta2.4_config1",
+          "distanceSq": 2.867488920071119
+        },
+        {
+          "index": 63,
+          "id": "beta2.4_config31",
+          "distanceSq": 2.9382687091205524
+        },
+        {
+          "index": 60,
+          "id": "beta2.4_config28",
+          "distanceSq": 3.2514115440339166
+        },
+        {
+          "index": 56,
+          "id": "beta2.4_config24",
+          "distanceSq": 3.668179365610212
+        },
+        {
+          "index": 47,
+          "id": "beta2.4_config15",
+          "distanceSq": 3.737384345099129
+        },
+        {
+          "index": 36,
+          "id": "beta2.4_config4",
+          "distanceSq": 4.078508156614993
+        },
+        {
+          "index": 49,
+          "id": "beta2.4_config17",
+          "distanceSq": 5.511657441886625
+        },
+        {
+          "index": 35,
+          "id": "beta2.4_config3",
+          "distanceSq": 6.02326054650883
+        },
+        {
+          "index": 34,
+          "id": "beta2.4_config2",
+          "distanceSq": 6.206878870372476
+        }
+      ]
+    },
+    {
+      "query": 62,
+      "queryId": "beta2.4_config30",
+      "neighbors": [
+        {
+          "index": 35,
+          "id": "beta2.4_config3",
+          "distanceSq": 3.1432102582616204
+        },
+        {
+          "index": 51,
+          "id": "beta2.4_config19",
+          "distanceSq": 4.799469952783597
+        },
+        {
+          "index": 46,
+          "id": "beta2.4_config14",
+          "distanceSq": 6.422782653174073
+        },
+        {
+          "index": 59,
+          "id": "beta2.4_config27",
+          "distanceSq": 7.092484458776669
+        },
+        {
+          "index": 48,
+          "id": "beta2.4_config16",
+          "distanceSq": 9.329520788258984
+        },
+        {
+          "index": 60,
+          "id": "beta2.4_config28",
+          "distanceSq": 10.14367650249683
+        },
+        {
+          "index": 55,
+          "id": "beta2.4_config23",
+          "distanceSq": 10.7128150654994
+        },
+        {
+          "index": 42,
+          "id": "beta2.4_config10",
+          "distanceSq": 11.252156152543629
+        },
+        {
+          "index": 43,
+          "id": "beta2.4_config11",
+          "distanceSq": 11.600565704215148
+        },
+        {
+          "index": 61,
+          "id": "beta2.4_config29",
+          "distanceSq": 12.404029072432081
+        }
+      ]
+    },
+    {
+      "query": 63,
+      "queryId": "beta2.4_config31",
+      "neighbors": [
+        {
+          "index": 34,
+          "id": "beta2.4_config2",
+          "distanceSq": 1.8179703892396535
+        },
+        {
+          "index": 61,
+          "id": "beta2.4_config29",
+          "distanceSq": 2.9382687091205524
+        },
+        {
+          "index": 56,
+          "id": "beta2.4_config24",
+          "distanceSq": 4.425017544839887
+        },
+        {
+          "index": 48,
+          "id": "beta2.4_config16",
+          "distanceSq": 4.626351744138342
+        },
+        {
+          "index": 33,
+          "id": "beta2.4_config1",
+          "distanceSq": 4.958589985754532
+        },
+        {
+          "index": 60,
+          "id": "beta2.4_config28",
+          "distanceSq": 5.924267430472973
+        },
+        {
+          "index": 36,
+          "id": "beta2.4_config4",
+          "distanceSq": 6.512792538209099
+        },
+        {
+          "index": 35,
+          "id": "beta2.4_config3",
+          "distanceSq": 6.6474184584017175
+        },
+        {
+          "index": 49,
+          "id": "beta2.4_config17",
+          "distanceSq": 6.89042217442212
+        },
+        {
+          "index": 55,
+          "id": "beta2.4_config23",
+          "distanceSq": 7.411616762541154
+        }
+      ]
+    },
+    {
+      "query": 64,
+      "queryId": "beta2.8_config0",
+      "neighbors": [
+        {
+          "index": 71,
+          "id": "beta2.8_config7",
+          "distanceSq": 0.8423654335017305
+        },
+        {
+          "index": 74,
+          "id": "beta2.8_config10",
+          "distanceSq": 1.5049870056836343
+        },
+        {
+          "index": 95,
+          "id": "beta2.8_config31",
+          "distanceSq": 2.5515595151973005
+        },
+        {
+          "index": 93,
+          "id": "beta2.8_config29",
+          "distanceSq": 3.4292143426847934
+        },
+        {
+          "index": 84,
+          "id": "beta2.8_config20",
+          "distanceSq": 4.10875147949676
+        },
+        {
+          "index": 77,
+          "id": "beta2.8_config13",
+          "distanceSq": 4.124795892178742
+        },
+        {
+          "index": 94,
+          "id": "beta2.8_config30",
+          "distanceSq": 5.064378707963916
+        },
+        {
+          "index": 83,
+          "id": "beta2.8_config19",
+          "distanceSq": 5.105656924634955
+        },
+        {
+          "index": 88,
+          "id": "beta2.8_config24",
+          "distanceSq": 5.469236991394714
+        },
+        {
+          "index": 85,
+          "id": "beta2.8_config21",
+          "distanceSq": 6.12128913766164
+        }
+      ]
+    },
+    {
+      "query": 65,
+      "queryId": "beta2.8_config1",
+      "neighbors": [
+        {
+          "index": 68,
+          "id": "beta2.8_config4",
+          "distanceSq": 1.2496939730405001
+        },
+        {
+          "index": 79,
+          "id": "beta2.8_config15",
+          "distanceSq": 4.423201368716517
+        },
+        {
+          "index": 92,
+          "id": "beta2.8_config28",
+          "distanceSq": 5.571572419815657
+        },
+        {
+          "index": 69,
+          "id": "beta2.8_config5",
+          "distanceSq": 5.797385119314743
+        },
+        {
+          "index": 89,
+          "id": "beta2.8_config25",
+          "distanceSq": 6.7987563090116065
+        },
+        {
+          "index": 82,
+          "id": "beta2.8_config18",
+          "distanceSq": 6.806412111051
+        },
+        {
+          "index": 80,
+          "id": "beta2.8_config16",
+          "distanceSq": 7.219745549314173
+        },
+        {
+          "index": 70,
+          "id": "beta2.8_config6",
+          "distanceSq": 8.61658406372731
+        },
+        {
+          "index": 73,
+          "id": "beta2.8_config9",
+          "distanceSq": 9.570931127205705
+        },
+        {
+          "index": 72,
+          "id": "beta2.8_config8",
+          "distanceSq": 9.8410875002278
+        }
+      ]
+    },
+    {
+      "query": 66,
+      "queryId": "beta2.8_config2",
+      "neighbors": [
+        {
+          "index": 68,
+          "id": "beta2.8_config4",
+          "distanceSq": 5.306255197294228
+        },
+        {
+          "index": 69,
+          "id": "beta2.8_config5",
+          "distanceSq": 8.727118472327827
+        },
+        {
+          "index": 65,
+          "id": "beta2.8_config1",
+          "distanceSq": 10.344797731060975
+        },
+        {
+          "index": 82,
+          "id": "beta2.8_config18",
+          "distanceSq": 14.642021220839418
+        },
+        {
+          "index": 92,
+          "id": "beta2.8_config28",
+          "distanceSq": 15.441878149697303
+        },
+        {
+          "index": 79,
+          "id": "beta2.8_config15",
+          "distanceSq": 15.650865338078336
+        },
+        {
+          "index": 80,
+          "id": "beta2.8_config16",
+          "distanceSq": 19.80541883465608
+        },
+        {
+          "index": 72,
+          "id": "beta2.8_config8",
+          "distanceSq": 21.69457538075449
+        },
+        {
+          "index": 89,
+          "id": "beta2.8_config25",
+          "distanceSq": 23.64844319941721
+        },
+        {
+          "index": 90,
+          "id": "beta2.8_config26",
+          "distanceSq": 25.75459684591708
+        }
+      ]
+    },
+    {
+      "query": 67,
+      "queryId": "beta2.8_config3",
+      "neighbors": [
+        {
+          "index": 81,
+          "id": "beta2.8_config17",
+          "distanceSq": 2.434022349920864
+        },
+        {
+          "index": 86,
+          "id": "beta2.8_config22",
+          "distanceSq": 3.121655177089764
+        },
+        {
+          "index": 91,
+          "id": "beta2.8_config27",
+          "distanceSq": 3.70237408738106
+        },
+        {
+          "index": 75,
+          "id": "beta2.8_config11",
+          "distanceSq": 3.702702685034114
+        },
+        {
+          "index": 77,
+          "id": "beta2.8_config13",
+          "distanceSq": 3.8288099833449167
+        },
+        {
+          "index": 87,
+          "id": "beta2.8_config23",
+          "distanceSq": 4.726921717419302
+        },
+        {
+          "index": 85,
+          "id": "beta2.8_config21",
+          "distanceSq": 6.221323030416565
+        },
+        {
+          "index": 93,
+          "id": "beta2.8_config29",
+          "distanceSq": 6.302472876611992
+        },
+        {
+          "index": 78,
+          "id": "beta2.8_config14",
+          "distanceSq": 6.570006862463833
+        },
+        {
+          "index": 83,
+          "id": "beta2.8_config19",
+          "distanceSq": 7.134306050172783
+        }
+      ]
+    },
+    {
+      "query": 68,
+      "queryId": "beta2.8_config4",
+      "neighbors": [
+        {
+          "index": 65,
+          "id": "beta2.8_config1",
+          "distanceSq": 1.2496939730405001
+        },
+        {
+          "index": 69,
+          "id": "beta2.8_config5",
+          "distanceSq": 4.610211935078333
+        },
+        {
+          "index": 79,
+          "id": "beta2.8_config15",
+          "distanceSq": 4.887906438174144
+        },
+        {
+          "index": 82,
+          "id": "beta2.8_config18",
+          "distanceSq": 4.9700617070219
+        },
+        {
+          "index": 66,
+          "id": "beta2.8_config2",
+          "distanceSq": 5.306255197294228
+        },
+        {
+          "index": 92,
+          "id": "beta2.8_config28",
+          "distanceSq": 6.099541346111552
+        },
+        {
+          "index": 80,
+          "id": "beta2.8_config16",
+          "distanceSq": 8.541637547106449
+        },
+        {
+          "index": 89,
+          "id": "beta2.8_config25",
+          "distanceSq": 9.521952704350223
+        },
+        {
+          "index": 70,
+          "id": "beta2.8_config6",
+          "distanceSq": 10.234741862983324
+        },
+        {
+          "index": 72,
+          "id": "beta2.8_config8",
+          "distanceSq": 10.289968788706313
+        }
+      ]
+    },
+    {
+      "query": 69,
+      "queryId": "beta2.8_config5",
+      "neighbors": [
+        {
+          "index": 68,
+          "id": "beta2.8_config4",
+          "distanceSq": 4.610211935078333
+        },
+        {
+          "index": 65,
+          "id": "beta2.8_config1",
+          "distanceSq": 5.797385119314743
+        },
+        {
+          "index": 92,
+          "id": "beta2.8_config28",
+          "distanceSq": 6.157849121767543
+        },
+        {
+          "index": 79,
+          "id": "beta2.8_config15",
+          "distanceSq": 7.253846251551691
+        },
+        {
+          "index": 66,
+          "id": "beta2.8_config2",
+          "distanceSq": 8.727118472327827
+        },
+        {
+          "index": 82,
+          "id": "beta2.8_config18",
+          "distanceSq": 10.12590928671886
+        },
+        {
+          "index": 80,
+          "id": "beta2.8_config16",
+          "distanceSq": 11.494445090381028
+        },
+        {
+          "index": 73,
+          "id": "beta2.8_config9",
+          "distanceSq": 11.501570410741058
+        },
+        {
+          "index": 89,
+          "id": "beta2.8_config25",
+          "distanceSq": 12.535174662201182
+        },
+        {
+          "index": 72,
+          "id": "beta2.8_config8",
+          "distanceSq": 13.504507230265139
+        }
+      ]
+    },
+    {
+      "query": 70,
+      "queryId": "beta2.8_config6",
+      "neighbors": [
+        {
+          "index": 90,
+          "id": "beta2.8_config26",
+          "distanceSq": 2.081747319994223
+        },
+        {
+          "index": 73,
+          "id": "beta2.8_config9",
+          "distanceSq": 3.95632931913179
+        },
+        {
+          "index": 79,
+          "id": "beta2.8_config15",
+          "distanceSq": 4.146281882772583
+        },
+        {
+          "index": 72,
+          "id": "beta2.8_config8",
+          "distanceSq": 4.215517265045126
+        },
+        {
+          "index": 89,
+          "id": "beta2.8_config25",
+          "distanceSq": 4.294330508315737
+        },
+        {
+          "index": 76,
+          "id": "beta2.8_config12",
+          "distanceSq": 5.103004228628697
+        },
+        {
+          "index": 82,
+          "id": "beta2.8_config18",
+          "distanceSq": 5.769551206099253
+        },
+        {
+          "index": 75,
+          "id": "beta2.8_config11",
+          "distanceSq": 5.830483141998499
+        },
+        {
+          "index": 77,
+          "id": "beta2.8_config13",
+          "distanceSq": 7.0135065540848744
+        },
+        {
+          "index": 74,
+          "id": "beta2.8_config10",
+          "distanceSq": 7.370340866767441
+        }
+      ]
+    },
+    {
+      "query": 71,
+      "queryId": "beta2.8_config7",
+      "neighbors": [
+        {
+          "index": 64,
+          "id": "beta2.8_config0",
+          "distanceSq": 0.8423654335017305
+        },
+        {
+          "index": 95,
+          "id": "beta2.8_config31",
+          "distanceSq": 2.0318338503828604
+        },
+        {
+          "index": 74,
+          "id": "beta2.8_config10",
+          "distanceSq": 2.227339642235012
+        },
+        {
+          "index": 84,
+          "id": "beta2.8_config20",
+          "distanceSq": 2.504135529123478
+        },
+        {
+          "index": 77,
+          "id": "beta2.8_config13",
+          "distanceSq": 2.591512081338739
+        },
+        {
+          "index": 93,
+          "id": "beta2.8_config29",
+          "distanceSq": 2.794377296279354
+        },
+        {
+          "index": 94,
+          "id": "beta2.8_config30",
+          "distanceSq": 4.158316434581878
+        },
+        {
+          "index": 86,
+          "id": "beta2.8_config22",
+          "distanceSq": 5.399694722177218
+        },
+        {
+          "index": 75,
+          "id": "beta2.8_config11",
+          "distanceSq": 5.57783759566329
+        },
+        {
+          "index": 81,
+          "id": "beta2.8_config17",
+          "distanceSq": 5.884240958669823
+        }
+      ]
+    },
+    {
+      "query": 72,
+      "queryId": "beta2.8_config8",
+      "neighbors": [
+        {
+          "index": 75,
+          "id": "beta2.8_config11",
+          "distanceSq": 2.5598894900915776
+        },
+        {
+          "index": 90,
+          "id": "beta2.8_config26",
+          "distanceSq": 2.838339821108268
+        },
+        {
+          "index": 70,
+          "id": "beta2.8_config6",
+          "distanceSq": 4.215517265045126
+        },
+        {
+          "index": 74,
+          "id": "beta2.8_config10",
+          "distanceSq": 4.5318449886654015
+        },
+        {
+          "index": 77,
+          "id": "beta2.8_config13",
+          "distanceSq": 5.358682080074838
+        },
+        {
+          "index": 89,
+          "id": "beta2.8_config25",
+          "distanceSq": 5.462889492087909
+        },
+        {
+          "index": 73,
+          "id": "beta2.8_config9",
+          "distanceSq": 6.023320279993837
+        },
+        {
+          "index": 83,
+          "id": "beta2.8_config19",
+          "distanceSq": 6.108531668234183
+        },
+        {
+          "index": 86,
+          "id": "beta2.8_config22",
+          "distanceSq": 6.795643492553705
+        },
+        {
+          "index": 76,
+          "id": "beta2.8_config12",
+          "distanceSq": 7.113653820946998
+        }
+      ]
+    },
+    {
+      "query": 73,
+      "queryId": "beta2.8_config9",
+      "neighbors": [
+        {
+          "index": 70,
+          "id": "beta2.8_config6",
+          "distanceSq": 3.95632931913179
+        },
+        {
+          "index": 89,
+          "id": "beta2.8_config25",
+          "distanceSq": 5.7872062137923095
+        },
+        {
+          "index": 72,
+          "id": "beta2.8_config8",
+          "distanceSq": 6.023320279993837
+        },
+        {
+          "index": 90,
+          "id": "beta2.8_config26",
+          "distanceSq": 6.06316243304234
+        },
+        {
+          "index": 76,
+          "id": "beta2.8_config12",
+          "distanceSq": 6.106799683054433
+        },
+        {
+          "index": 79,
+          "id": "beta2.8_config15",
+          "distanceSq": 6.232792429762994
+        },
+        {
+          "index": 92,
+          "id": "beta2.8_config28",
+          "distanceSq": 8.007691669980174
+        },
+        {
+          "index": 65,
+          "id": "beta2.8_config1",
+          "distanceSq": 9.570931127205705
+        },
+        {
+          "index": 69,
+          "id": "beta2.8_config5",
+          "distanceSq": 11.501570410741058
+        },
+        {
+          "index": 82,
+          "id": "beta2.8_config18",
+          "distanceSq": 12.334474712252545
+        }
+      ]
+    },
+    {
+      "query": 74,
+      "queryId": "beta2.8_config10",
+      "neighbors": [
+        {
+          "index": 64,
+          "id": "beta2.8_config0",
+          "distanceSq": 1.5049870056836343
+        },
+        {
+          "index": 71,
+          "id": "beta2.8_config7",
+          "distanceSq": 2.227339642235012
+        },
+        {
+          "index": 77,
+          "id": "beta2.8_config13",
+          "distanceSq": 2.6338360270463212
+        },
+        {
+          "index": 75,
+          "id": "beta2.8_config11",
+          "distanceSq": 2.7014079045662553
+        },
+        {
+          "index": 83,
+          "id": "beta2.8_config19",
+          "distanceSq": 2.939924106407426
+        },
+        {
+          "index": 88,
+          "id": "beta2.8_config24",
+          "distanceSq": 3.585805094554463
+        },
+        {
+          "index": 95,
+          "id": "beta2.8_config31",
+          "distanceSq": 4.1523261026231735
+        },
+        {
+          "index": 85,
+          "id": "beta2.8_config21",
+          "distanceSq": 4.3604794225511565
+        },
+        {
+          "index": 90,
+          "id": "beta2.8_config26",
+          "distanceSq": 4.378013280053093
+        },
+        {
+          "index": 72,
+          "id": "beta2.8_config8",
+          "distanceSq": 4.5318449886654015
+        }
+      ]
+    },
+    {
+      "query": 75,
+      "queryId": "beta2.8_config11",
+      "neighbors": [
+        {
+          "index": 77,
+          "id": "beta2.8_config13",
+          "distanceSq": 1.7626531995350199
+        },
+        {
+          "index": 86,
+          "id": "beta2.8_config22",
+          "distanceSq": 2.2947619624213025
+        },
+        {
+          "index": 72,
+          "id": "beta2.8_config8",
+          "distanceSq": 2.5598894900915776
+        },
+        {
+          "index": 74,
+          "id": "beta2.8_config10",
+          "distanceSq": 2.7014079045662553
+        },
+        {
+          "index": 81,
+          "id": "beta2.8_config17",
+          "distanceSq": 2.9438181264523013
+        },
+        {
+          "index": 67,
+          "id": "beta2.8_config3",
+          "distanceSq": 3.702702685034114
+        },
+        {
+          "index": 83,
+          "id": "beta2.8_config19",
+          "distanceSq": 4.396936921353829
+        },
+        {
+          "index": 85,
+          "id": "beta2.8_config21",
+          "distanceSq": 4.6714313297352295
+        },
+        {
+          "index": 88,
+          "id": "beta2.8_config24",
+          "distanceSq": 4.776685012217952
+        },
+        {
+          "index": 90,
+          "id": "beta2.8_config26",
+          "distanceSq": 4.928211533273004
+        }
+      ]
+    },
+    {
+      "query": 76,
+      "queryId": "beta2.8_config12",
+      "neighbors": [
+        {
+          "index": 70,
+          "id": "beta2.8_config6",
+          "distanceSq": 5.103004228628697
+        },
+        {
+          "index": 90,
+          "id": "beta2.8_config26",
+          "distanceSq": 5.687000261686882
+        },
+        {
+          "index": 73,
+          "id": "beta2.8_config9",
+          "distanceSq": 6.106799683054433
+        },
+        {
+          "index": 72,
+          "id": "beta2.8_config8",
+          "distanceSq": 7.113653820946998
+        },
+        {
+          "index": 74,
+          "id": "beta2.8_config10",
+          "distanceSq": 7.344949731751525
+        },
+        {
+          "index": 83,
+          "id": "beta2.8_config19",
+          "distanceSq": 7.837341323525385
+        },
+        {
+          "index": 79,
+          "id": "beta2.8_config15",
+          "distanceSq": 9.20721450661172
+        },
+        {
+          "index": 64,
+          "id": "beta2.8_config0",
+          "distanceSq": 10.049354832930371
+        },
+        {
+          "index": 89,
+          "id": "beta2.8_config25",
+          "distanceSq": 10.547815231692011
+        },
+        {
+          "index": 75,
+          "id": "beta2.8_config11",
+          "distanceSq": 10.562849567671673
+        }
+      ]
+    },
+    {
+      "query": 77,
+      "queryId": "beta2.8_config13",
+      "neighbors": [
+        {
+          "index": 86,
+          "id": "beta2.8_config22",
+          "distanceSq": 1.0750969031652682
+        },
+        {
+          "index": 75,
+          "id": "beta2.8_config11",
+          "distanceSq": 1.7626531995350199
+        },
+        {
+          "index": 71,
+          "id": "beta2.8_config7",
+          "distanceSq": 2.591512081338739
+        },
+        {
+          "index": 74,
+          "id": "beta2.8_config10",
+          "distanceSq": 2.6338360270463212
+        },
+        {
+          "index": 87,
+          "id": "beta2.8_config23",
+          "distanceSq": 3.2166721556571685
+        },
+        {
+          "index": 93,
+          "id": "beta2.8_config29",
+          "distanceSq": 3.2722053367544794
+        },
+        {
+          "index": 94,
+          "id": "beta2.8_config30",
+          "distanceSq": 3.7450809029571968
+        },
+        {
+          "index": 81,
+          "id": "beta2.8_config17",
+          "distanceSq": 3.77385120187058
+        },
+        {
+          "index": 95,
+          "id": "beta2.8_config31",
+          "distanceSq": 3.80697167223701
+        },
+        {
+          "index": 67,
+          "id": "beta2.8_config3",
+          "distanceSq": 3.8288099833449167
+        }
+      ]
+    },
+    {
+      "query": 78,
+      "queryId": "beta2.8_config14",
+      "neighbors": [
+        {
+          "index": 81,
+          "id": "beta2.8_config17",
+          "distanceSq": 2.8537969725325896
+        },
+        {
+          "index": 83,
+          "id": "beta2.8_config19",
+          "distanceSq": 4.69005354976765
+        },
+        {
+          "index": 85,
+          "id": "beta2.8_config21",
+          "distanceSq": 4.734066466450719
+        },
+        {
+          "index": 93,
+          "id": "beta2.8_config29",
+          "distanceSq": 5.10844415928009
+        },
+        {
+          "index": 95,
+          "id": "beta2.8_config31",
+          "distanceSq": 5.3698871436619005
+        },
+        {
+          "index": 88,
+          "id": "beta2.8_config24",
+          "distanceSq": 6.367213441667375
+        },
+        {
+          "index": 67,
+          "id": "beta2.8_config3",
+          "distanceSq": 6.570006862463833
+        },
+        {
+          "index": 87,
+          "id": "beta2.8_config23",
+          "distanceSq": 8.265973708907705
+        },
+        {
+          "index": 64,
+          "id": "beta2.8_config0",
+          "distanceSq": 8.731745865190856
+        },
+        {
+          "index": 74,
+          "id": "beta2.8_config10",
+          "distanceSq": 8.906275830750928
+        }
+      ]
+    },
+    {
+      "query": 79,
+      "queryId": "beta2.8_config15",
+      "neighbors": [
+        {
+          "index": 70,
+          "id": "beta2.8_config6",
+          "distanceSq": 4.146281882772583
+        },
+        {
+          "index": 90,
+          "id": "beta2.8_config26",
+          "distanceSq": 4.218890292607234
+        },
+        {
+          "index": 65,
+          "id": "beta2.8_config1",
+          "distanceSq": 4.423201368716517
+        },
+        {
+          "index": 68,
+          "id": "beta2.8_config4",
+          "distanceSq": 4.887906438174144
+        },
+        {
+          "index": 73,
+          "id": "beta2.8_config9",
+          "distanceSq": 6.232792429762994
+        },
+        {
+          "index": 82,
+          "id": "beta2.8_config18",
+          "distanceSq": 6.962917903352043
+        },
+        {
+          "index": 69,
+          "id": "beta2.8_config5",
+          "distanceSq": 7.253846251551691
+        },
+        {
+          "index": 92,
+          "id": "beta2.8_config28",
+          "distanceSq": 7.547947298025399
+        },
+        {
+          "index": 72,
+          "id": "beta2.8_config8",
+          "distanceSq": 7.602238951739108
+        },
+        {
+          "index": 89,
+          "id": "beta2.8_config25",
+          "distanceSq": 9.028915149613338
+        }
+      ]
+    },
+    {
+      "query": 80,
+      "queryId": "beta2.8_config16",
+      "neighbors": [
+        {
+          "index": 92,
+          "id": "beta2.8_config28",
+          "distanceSq": 5.708084173259352
+        },
+        {
+          "index": 65,
+          "id": "beta2.8_config1",
+          "distanceSq": 7.219745549314173
+        },
+        {
+          "index": 68,
+          "id": "beta2.8_config4",
+          "distanceSq": 8.541637547106449
+        },
+        {
+          "index": 79,
+          "id": "beta2.8_config15",
+          "distanceSq": 11.247747068947781
+        },
+        {
+          "index": 69,
+          "id": "beta2.8_config5",
+          "distanceSq": 11.494445090381028
+        },
+        {
+          "index": 82,
+          "id": "beta2.8_config18",
+          "distanceSq": 13.162910778051126
+        },
+        {
+          "index": 70,
+          "id": "beta2.8_config6",
+          "distanceSq": 16.69714985994909
+        },
+        {
+          "index": 73,
+          "id": "beta2.8_config9",
+          "distanceSq": 17.316976741090386
+        },
+        {
+          "index": 89,
+          "id": "beta2.8_config25",
+          "distanceSq": 18.943546600581897
+        },
+        {
+          "index": 66,
+          "id": "beta2.8_config2",
+          "distanceSq": 19.80541883465608
+        }
+      ]
+    },
+    {
+      "query": 81,
+      "queryId": "beta2.8_config17",
+      "neighbors": [
+        {
+          "index": 67,
+          "id": "beta2.8_config3",
+          "distanceSq": 2.434022349920864
+        },
+        {
+          "index": 85,
+          "id": "beta2.8_config21",
+          "distanceSq": 2.8368137552766974
+        },
+        {
+          "index": 78,
+          "id": "beta2.8_config14",
+          "distanceSq": 2.8537969725325896
+        },
+        {
+          "index": 75,
+          "id": "beta2.8_config11",
+          "distanceSq": 2.9438181264523013
+        },
+        {
+          "index": 95,
+          "id": "beta2.8_config31",
+          "distanceSq": 3.4932682752449775
+        },
+        {
+          "index": 77,
+          "id": "beta2.8_config13",
+          "distanceSq": 3.77385120187058
+        },
+        {
+          "index": 93,
+          "id": "beta2.8_config29",
+          "distanceSq": 3.9922733015411733
+        },
+        {
+          "index": 86,
+          "id": "beta2.8_config22",
+          "distanceSq": 4.9646201861237795
+        },
+        {
+          "index": 83,
+          "id": "beta2.8_config19",
+          "distanceSq": 4.995961002692718
+        },
+        {
+          "index": 74,
+          "id": "beta2.8_config10",
+          "distanceSq": 5.338577898037153
+        }
+      ]
+    },
+    {
+      "query": 82,
+      "queryId": "beta2.8_config18",
+      "neighbors": [
+        {
+          "index": 68,
+          "id": "beta2.8_config4",
+          "distanceSq": 4.9700617070219
+        },
+        {
+          "index": 70,
+          "id": "beta2.8_config6",
+          "distanceSq": 5.769551206099253
+        },
+        {
+          "index": 65,
+          "id": "beta2.8_config1",
+          "distanceSq": 6.806412111051
+        },
+        {
+          "index": 79,
+          "id": "beta2.8_config15",
+          "distanceSq": 6.962917903352043
+        },
+        {
+          "index": 92,
+          "id": "beta2.8_config28",
+          "distanceSq": 7.758238453043698
+        },
+        {
+          "index": 89,
+          "id": "beta2.8_config25",
+          "distanceSq": 7.829076122879341
+        },
+        {
+          "index": 90,
+          "id": "beta2.8_config26",
+          "distanceSq": 8.11371041622473
+        },
+        {
+          "index": 72,
+          "id": "beta2.8_config8",
+          "distanceSq": 8.35573362224938
+        },
+        {
+          "index": 75,
+          "id": "beta2.8_config11",
+          "distanceSq": 9.137777508070023
+        },
+        {
+          "index": 69,
+          "id": "beta2.8_config5",
+          "distanceSq": 10.12590928671886
+        }
+      ]
+    },
+    {
+      "query": 83,
+      "queryId": "beta2.8_config19",
+      "neighbors": [
+        {
+          "index": 74,
+          "id": "beta2.8_config10",
+          "distanceSq": 2.939924106407426
+        },
+        {
+          "index": 88,
+          "id": "beta2.8_config24",
+          "distanceSq": 3.052470056417035
+        },
+        {
+          "index": 75,
+          "id": "beta2.8_config11",
+          "distanceSq": 4.396936921353829
+        },
+        {
+          "index": 85,
+          "id": "beta2.8_config21",
+          "distanceSq": 4.405551569450864
+        },
+        {
+          "index": 78,
+          "id": "beta2.8_config14",
+          "distanceSq": 4.69005354976765
+        },
+        {
+          "index": 77,
+          "id": "beta2.8_config13",
+          "distanceSq": 4.735755743186379
+        },
+        {
+          "index": 81,
+          "id": "beta2.8_config17",
+          "distanceSq": 4.995961002692718
+        },
+        {
+          "index": 64,
+          "id": "beta2.8_config0",
+          "distanceSq": 5.105656924634955
+        },
+        {
+          "index": 86,
+          "id": "beta2.8_config22",
+          "distanceSq": 6.07466851889795
+        },
+        {
+          "index": 72,
+          "id": "beta2.8_config8",
+          "distanceSq": 6.108531668234183
+        }
+      ]
+    },
+    {
+      "query": 84,
+      "queryId": "beta2.8_config20",
+      "neighbors": [
+        {
+          "index": 71,
+          "id": "beta2.8_config7",
+          "distanceSq": 2.504135529123478
+        },
+        {
+          "index": 93,
+          "id": "beta2.8_config29",
+          "distanceSq": 2.9156258599323253
+        },
+        {
+          "index": 95,
+          "id": "beta2.8_config31",
+          "distanceSq": 3.0031738507112964
+        },
+        {
+          "index": 64,
+          "id": "beta2.8_config0",
+          "distanceSq": 4.10875147949676
+        },
+        {
+          "index": 87,
+          "id": "beta2.8_config23",
+          "distanceSq": 6.337114567566406
+        },
+        {
+          "index": 77,
+          "id": "beta2.8_config13",
+          "distanceSq": 6.628295438606539
+        },
+        {
+          "index": 81,
+          "id": "beta2.8_config17",
+          "distanceSq": 7.241904163384799
+        },
+        {
+          "index": 94,
+          "id": "beta2.8_config30",
+          "distanceSq": 7.296357134655259
+        },
+        {
+          "index": 85,
+          "id": "beta2.8_config21",
+          "distanceSq": 7.823083542554849
+        },
+        {
+          "index": 74,
+          "id": "beta2.8_config10",
+          "distanceSq": 7.884501907618508
+        }
+      ]
+    },
+    {
+      "query": 85,
+      "queryId": "beta2.8_config21",
+      "neighbors": [
+        {
+          "index": 88,
+          "id": "beta2.8_config24",
+          "distanceSq": 2.0001008088532717
+        },
+        {
+          "index": 81,
+          "id": "beta2.8_config17",
+          "distanceSq": 2.8368137552766974
+        },
+        {
+          "index": 74,
+          "id": "beta2.8_config10",
+          "distanceSq": 4.3604794225511565
+        },
+        {
+          "index": 83,
+          "id": "beta2.8_config19",
+          "distanceSq": 4.405551569450864
+        },
+        {
+          "index": 75,
+          "id": "beta2.8_config11",
+          "distanceSq": 4.6714313297352295
+        },
+        {
+          "index": 78,
+          "id": "beta2.8_config14",
+          "distanceSq": 4.734066466450719
+        },
+        {
+          "index": 95,
+          "id": "beta2.8_config31",
+          "distanceSq": 4.904717615582285
+        },
+        {
+          "index": 77,
+          "id": "beta2.8_config13",
+          "distanceSq": 5.895574137330726
+        },
+        {
+          "index": 71,
+          "id": "beta2.8_config7",
+          "distanceSq": 5.945746505325204
+        },
+        {
+          "index": 64,
+          "id": "beta2.8_config0",
+          "distanceSq": 6.12128913766164
+        }
+      ]
+    },
+    {
+      "query": 86,
+      "queryId": "beta2.8_config22",
+      "neighbors": [
+        {
+          "index": 77,
+          "id": "beta2.8_config13",
+          "distanceSq": 1.0750969031652682
+        },
+        {
+          "index": 75,
+          "id": "beta2.8_config11",
+          "distanceSq": 2.2947619624213025
+        },
+        {
+          "index": 87,
+          "id": "beta2.8_config23",
+          "distanceSq": 3.0363070670469776
+        },
+        {
+          "index": 67,
+          "id": "beta2.8_config3",
+          "distanceSq": 3.121655177089764
+        },
+        {
+          "index": 81,
+          "id": "beta2.8_config17",
+          "distanceSq": 4.9646201861237795
+        },
+        {
+          "index": 74,
+          "id": "beta2.8_config10",
+          "distanceSq": 5.1448597020196685
+        },
+        {
+          "index": 91,
+          "id": "beta2.8_config27",
+          "distanceSq": 5.24156869027546
+        },
+        {
+          "index": 71,
+          "id": "beta2.8_config7",
+          "distanceSq": 5.399694722177218
+        },
+        {
+          "index": 93,
+          "id": "beta2.8_config29",
+          "distanceSq": 5.5315111185161
+        },
+        {
+          "index": 94,
+          "id": "beta2.8_config30",
+          "distanceSq": 5.771257126924082
+        }
+      ]
+    },
+    {
+      "query": 87,
+      "queryId": "beta2.8_config23",
+      "neighbors": [
+        {
+          "index": 93,
+          "id": "beta2.8_config29",
+          "distanceSq": 2.3907971855924406
+        },
+        {
+          "index": 86,
+          "id": "beta2.8_config22",
+          "distanceSq": 3.0363070670469776
+        },
+        {
+          "index": 77,
+          "id": "beta2.8_config13",
+          "distanceSq": 3.2166721556571685
+        },
+        {
+          "index": 95,
+          "id": "beta2.8_config31",
+          "distanceSq": 4.513558310231028
+        },
+        {
+          "index": 67,
+          "id": "beta2.8_config3",
+          "distanceSq": 4.726921717419302
+        },
+        {
+          "index": 94,
+          "id": "beta2.8_config30",
+          "distanceSq": 5.6228235965105595
+        },
+        {
+          "index": 71,
+          "id": "beta2.8_config7",
+          "distanceSq": 6.002476585790215
+        },
+        {
+          "index": 81,
+          "id": "beta2.8_config17",
+          "distanceSq": 6.3013426859689705
+        },
+        {
+          "index": 84,
+          "id": "beta2.8_config20",
+          "distanceSq": 6.337114567566406
+        },
+        {
+          "index": 91,
+          "id": "beta2.8_config27",
+          "distanceSq": 6.700799070885715
+        }
+      ]
+    },
+    {
+      "query": 88,
+      "queryId": "beta2.8_config24",
+      "neighbors": [
+        {
+          "index": 85,
+          "id": "beta2.8_config21",
+          "distanceSq": 2.0001008088532717
+        },
+        {
+          "index": 83,
+          "id": "beta2.8_config19",
+          "distanceSq": 3.052470056417035
+        },
+        {
+          "index": 74,
+          "id": "beta2.8_config10",
+          "distanceSq": 3.585805094554463
+        },
+        {
+          "index": 95,
+          "id": "beta2.8_config31",
+          "distanceSq": 4.494539952998598
+        },
+        {
+          "index": 75,
+          "id": "beta2.8_config11",
+          "distanceSq": 4.776685012217952
+        },
+        {
+          "index": 81,
+          "id": "beta2.8_config17",
+          "distanceSq": 5.377137207690973
+        },
+        {
+          "index": 64,
+          "id": "beta2.8_config0",
+          "distanceSq": 5.469236991394714
+        },
+        {
+          "index": 77,
+          "id": "beta2.8_config13",
+          "distanceSq": 6.3361144303119215
+        },
+        {
+          "index": 78,
+          "id": "beta2.8_config14",
+          "distanceSq": 6.367213441667375
+        },
+        {
+          "index": 86,
+          "id": "beta2.8_config22",
+          "distanceSq": 6.431172632801102
+        }
+      ]
+    },
+    {
+      "query": 89,
+      "queryId": "beta2.8_config25",
+      "neighbors": [
+        {
+          "index": 70,
+          "id": "beta2.8_config6",
+          "distanceSq": 4.294330508315737
+        },
+        {
+          "index": 91,
+          "id": "beta2.8_config27",
+          "distanceSq": 5.215941138980788
+        },
+        {
+          "index": 72,
+          "id": "beta2.8_config8",
+          "distanceSq": 5.462889492087909
+        },
+        {
+          "index": 73,
+          "id": "beta2.8_config9",
+          "distanceSq": 5.7872062137923095
+        },
+        {
+          "index": 65,
+          "id": "beta2.8_config1",
+          "distanceSq": 6.7987563090116065
+        },
+        {
+          "index": 75,
+          "id": "beta2.8_config11",
+          "distanceSq": 7.18140089119291
+        },
+        {
+          "index": 86,
+          "id": "beta2.8_config22",
+          "distanceSq": 7.620201894446728
+        },
+        {
+          "index": 82,
+          "id": "beta2.8_config18",
+          "distanceSq": 7.829076122879341
+        },
+        {
+          "index": 77,
+          "id": "beta2.8_config13",
+          "distanceSq": 8.490482043503953
+        },
+        {
+          "index": 83,
+          "id": "beta2.8_config19",
+          "distanceSq": 8.945501909947133
+        }
+      ]
+    },
+    {
+      "query": 90,
+      "queryId": "beta2.8_config26",
+      "neighbors": [
+        {
+          "index": 70,
+          "id": "beta2.8_config6",
+          "distanceSq": 2.081747319994223
+        },
+        {
+          "index": 72,
+          "id": "beta2.8_config8",
+          "distanceSq": 2.838339821108268
+        },
+        {
+          "index": 79,
+          "id": "beta2.8_config15",
+          "distanceSq": 4.218890292607234
+        },
+        {
+          "index": 74,
+          "id": "beta2.8_config10",
+          "distanceSq": 4.378013280053093
+        },
+        {
+          "index": 75,
+          "id": "beta2.8_config11",
+          "distanceSq": 4.928211533273004
+        },
+        {
+          "index": 76,
+          "id": "beta2.8_config12",
+          "distanceSq": 5.687000261686882
+        },
+        {
+          "index": 73,
+          "id": "beta2.8_config9",
+          "distanceSq": 6.06316243304234
+        },
+        {
+          "index": 77,
+          "id": "beta2.8_config13",
+          "distanceSq": 6.9702748135431705
+        },
+        {
+          "index": 83,
+          "id": "beta2.8_config19",
+          "distanceSq": 7.722127217045722
+        },
+        {
+          "index": 94,
+          "id": "beta2.8_config30",
+          "distanceSq": 7.819801164012558
+        }
+      ]
+    },
+    {
+      "query": 91,
+      "queryId": "beta2.8_config27",
+      "neighbors": [
+        {
+          "index": 67,
+          "id": "beta2.8_config3",
+          "distanceSq": 3.70237408738106
+        },
+        {
+          "index": 89,
+          "id": "beta2.8_config25",
+          "distanceSq": 5.215941138980788
+        },
+        {
+          "index": 86,
+          "id": "beta2.8_config22",
+          "distanceSq": 5.24156869027546
+        },
+        {
+          "index": 87,
+          "id": "beta2.8_config23",
+          "distanceSq": 6.700799070885715
+        },
+        {
+          "index": 83,
+          "id": "beta2.8_config19",
+          "distanceSq": 7.471317206851517
+        },
+        {
+          "index": 75,
+          "id": "beta2.8_config11",
+          "distanceSq": 7.7277511709739235
+        },
+        {
+          "index": 77,
+          "id": "beta2.8_config13",
+          "distanceSq": 8.078974628320367
+        },
+        {
+          "index": 81,
+          "id": "beta2.8_config17",
+          "distanceSq": 8.384526030624123
+        },
+        {
+          "index": 78,
+          "id": "beta2.8_config14",
+          "distanceSq": 9.701339337994614
+        },
+        {
+          "index": 72,
+          "id": "beta2.8_config8",
+          "distanceSq": 10.342332997984599
+        }
+      ]
+    },
+    {
+      "query": 92,
+      "queryId": "beta2.8_config28",
+      "neighbors": [
+        {
+          "index": 65,
+          "id": "beta2.8_config1",
+          "distanceSq": 5.571572419815657
+        },
+        {
+          "index": 80,
+          "id": "beta2.8_config16",
+          "distanceSq": 5.708084173259352
+        },
+        {
+          "index": 68,
+          "id": "beta2.8_config4",
+          "distanceSq": 6.099541346111552
+        },
+        {
+          "index": 69,
+          "id": "beta2.8_config5",
+          "distanceSq": 6.157849121767543
+        },
+        {
+          "index": 79,
+          "id": "beta2.8_config15",
+          "distanceSq": 7.547947298025399
+        },
+        {
+          "index": 82,
+          "id": "beta2.8_config18",
+          "distanceSq": 7.758238453043698
+        },
+        {
+          "index": 73,
+          "id": "beta2.8_config9",
+          "distanceSq": 8.007691669980174
+        },
+        {
+          "index": 70,
+          "id": "beta2.8_config6",
+          "distanceSq": 8.095941411661123
+        },
+        {
+          "index": 89,
+          "id": "beta2.8_config25",
+          "distanceSq": 9.003367607787117
+        },
+        {
+          "index": 76,
+          "id": "beta2.8_config12",
+          "distanceSq": 10.8009721314324
+        }
+      ]
+    },
+    {
+      "query": 93,
+      "queryId": "beta2.8_config29",
+      "neighbors": [
+        {
+          "index": 95,
+          "id": "beta2.8_config31",
+          "distanceSq": 1.1031105236053222
+        },
+        {
+          "index": 87,
+          "id": "beta2.8_config23",
+          "distanceSq": 2.3907971855924406
+        },
+        {
+          "index": 71,
+          "id": "beta2.8_config7",
+          "distanceSq": 2.794377296279354
+        },
+        {
+          "index": 84,
+          "id": "beta2.8_config20",
+          "distanceSq": 2.9156258599323253
+        },
+        {
+          "index": 77,
+          "id": "beta2.8_config13",
+          "distanceSq": 3.2722053367544794
+        },
+        {
+          "index": 64,
+          "id": "beta2.8_config0",
+          "distanceSq": 3.4292143426847934
+        },
+        {
+          "index": 81,
+          "id": "beta2.8_config17",
+          "distanceSq": 3.9922733015411733
+        },
+        {
+          "index": 78,
+          "id": "beta2.8_config14",
+          "distanceSq": 5.10844415928009
+        },
+        {
+          "index": 74,
+          "id": "beta2.8_config10",
+          "distanceSq": 5.215374145332862
+        },
+        {
+          "index": 86,
+          "id": "beta2.8_config22",
+          "distanceSq": 5.5315111185161
+        }
+      ]
+    },
+    {
+      "query": 94,
+      "queryId": "beta2.8_config30",
+      "neighbors": [
+        {
+          "index": 77,
+          "id": "beta2.8_config13",
+          "distanceSq": 3.7450809029571968
+        },
+        {
+          "index": 71,
+          "id": "beta2.8_config7",
+          "distanceSq": 4.158316434581878
+        },
+        {
+          "index": 74,
+          "id": "beta2.8_config10",
+          "distanceSq": 4.886018928578576
+        },
+        {
+          "index": 64,
+          "id": "beta2.8_config0",
+          "distanceSq": 5.064378707963916
+        },
+        {
+          "index": 87,
+          "id": "beta2.8_config23",
+          "distanceSq": 5.6228235965105595
+        },
+        {
+          "index": 86,
+          "id": "beta2.8_config22",
+          "distanceSq": 5.771257126924082
+        },
+        {
+          "index": 93,
+          "id": "beta2.8_config29",
+          "distanceSq": 5.9469455653097585
+        },
+        {
+          "index": 95,
+          "id": "beta2.8_config31",
+          "distanceSq": 6.418748450216335
+        },
+        {
+          "index": 75,
+          "id": "beta2.8_config11",
+          "distanceSq": 6.986738603485502
+        },
+        {
+          "index": 84,
+          "id": "beta2.8_config20",
+          "distanceSq": 7.296357134655259
+        }
+      ]
+    },
+    {
+      "query": 95,
+      "queryId": "beta2.8_config31",
+      "neighbors": [
+        {
+          "index": 93,
+          "id": "beta2.8_config29",
+          "distanceSq": 1.1031105236053222
+        },
+        {
+          "index": 71,
+          "id": "beta2.8_config7",
+          "distanceSq": 2.0318338503828604
+        },
+        {
+          "index": 64,
+          "id": "beta2.8_config0",
+          "distanceSq": 2.5515595151973005
+        },
+        {
+          "index": 84,
+          "id": "beta2.8_config20",
+          "distanceSq": 3.0031738507112964
+        },
+        {
+          "index": 81,
+          "id": "beta2.8_config17",
+          "distanceSq": 3.4932682752449775
+        },
+        {
+          "index": 77,
+          "id": "beta2.8_config13",
+          "distanceSq": 3.80697167223701
+        },
+        {
+          "index": 74,
+          "id": "beta2.8_config10",
+          "distanceSq": 4.1523261026231735
+        },
+        {
+          "index": 88,
+          "id": "beta2.8_config24",
+          "distanceSq": 4.494539952998598
+        },
+        {
+          "index": 87,
+          "id": "beta2.8_config23",
+          "distanceSq": 4.513558310231028
+        },
+        {
+          "index": 85,
+          "id": "beta2.8_config21",
+          "distanceSq": 4.904717615582285
+        }
+      ]
+    }
+  ]
+}

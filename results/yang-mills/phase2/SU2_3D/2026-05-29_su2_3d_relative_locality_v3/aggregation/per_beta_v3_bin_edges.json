@@ -1,0 +1,604 @@
+{
+  "frozenAt": "2026-05-30T00:50:21.482Z",
+  "convention": "per_beta_tertile_linear",
+  "target": "sigma2_W33",
+  "betas": {
+    "2.0": {
+      "lowEdge": 0.24846746773269646,
+      "highEdge": 0.2522540383830085,
+      "spread": 0.021425584515379265,
+      "assignments": [
+        {
+          "id": "beta2.0_config0",
+          "configIdx": 0,
+          "sigma2W33": 0.25212130696034113,
+          "bin": 2
+        },
+        {
+          "id": "beta2.0_config1",
+          "configIdx": 1,
+          "sigma2W33": 0.2526673475269393,
+          "bin": 3
+        },
+        {
+          "id": "beta2.0_config2",
+          "configIdx": 2,
+          "sigma2W33": 0.24861033233533,
+          "bin": 2
+        },
+        {
+          "id": "beta2.0_config3",
+          "configIdx": 3,
+          "sigma2W33": 0.2486412173453505,
+          "bin": 2
+        },
+        {
+          "id": "beta2.0_config4",
+          "configIdx": 4,
+          "sigma2W33": 0.2542442240273644,
+          "bin": 3
+        },
+        {
+          "id": "beta2.0_config5",
+          "configIdx": 5,
+          "sigma2W33": 0.2469526701642443,
+          "bin": 1
+        },
+        {
+          "id": "beta2.0_config6",
+          "configIdx": 6,
+          "sigma2W33": 0.2511018039246678,
+          "bin": 2
+        },
+        {
+          "id": "beta2.0_config7",
+          "configIdx": 7,
+          "sigma2W33": 0.24644179498676347,
+          "bin": 1
+        },
+        {
+          "id": "beta2.0_config8",
+          "configIdx": 8,
+          "sigma2W33": 0.25550523287090776,
+          "bin": 3
+        },
+        {
+          "id": "beta2.0_config9",
+          "configIdx": 9,
+          "sigma2W33": 0.2446755802009831,
+          "bin": 1
+        },
+        {
+          "id": "beta2.0_config10",
+          "configIdx": 10,
+          "sigma2W33": 0.24838467338585626,
+          "bin": 1
+        },
+        {
+          "id": "beta2.0_config11",
+          "configIdx": 11,
+          "sigma2W33": 0.24925299311781604,
+          "bin": 2
+        },
+        {
+          "id": "beta2.0_config12",
+          "configIdx": 12,
+          "sigma2W33": 0.2508639681941449,
+          "bin": 2
+        },
+        {
+          "id": "beta2.0_config13",
+          "configIdx": 13,
+          "sigma2W33": 0.2471278260462301,
+          "bin": 1
+        },
+        {
+          "id": "beta2.0_config14",
+          "configIdx": 14,
+          "sigma2W33": 0.2547016496164793,
+          "bin": 3
+        },
+        {
+          "id": "beta2.0_config15",
+          "configIdx": 15,
+          "sigma2W33": 0.25232040409434225,
+          "bin": 3
+        },
+        {
+          "id": "beta2.0_config16",
+          "configIdx": 16,
+          "sigma2W33": 0.2453510844192564,
+          "bin": 1
+        },
+        {
+          "id": "beta2.0_config17",
+          "configIdx": 17,
+          "sigma2W33": 0.25494332855956237,
+          "bin": 3
+        },
+        {
+          "id": "beta2.0_config18",
+          "configIdx": 18,
+          "sigma2W33": 0.2517015506637554,
+          "bin": 2
+        },
+        {
+          "id": "beta2.0_config19",
+          "configIdx": 19,
+          "sigma2W33": 0.24852704654091234,
+          "bin": 2
+        },
+        {
+          "id": "beta2.0_config20",
+          "configIdx": 20,
+          "sigma2W33": 0.2649221239493189,
+          "bin": 3
+        },
+        {
+          "id": "beta2.0_config21",
+          "configIdx": 21,
+          "sigma2W33": 0.2484376783285885,
+          "bin": 1
+        },
+        {
+          "id": "beta2.0_config22",
+          "configIdx": 22,
+          "sigma2W33": 0.25256690841548574,
+          "bin": 3
+        },
+        {
+          "id": "beta2.0_config23",
+          "configIdx": 23,
+          "sigma2W33": 0.24349653943393965,
+          "bin": 1
+        },
+        {
+          "id": "beta2.0_config24",
+          "configIdx": 24,
+          "sigma2W33": 0.25538215374773926,
+          "bin": 3
+        },
+        {
+          "id": "beta2.0_config25",
+          "configIdx": 25,
+          "sigma2W33": 0.25090103445620193,
+          "bin": 2
+        },
+        {
+          "id": "beta2.0_config26",
+          "configIdx": 26,
+          "sigma2W33": 0.2488556379335188,
+          "bin": 2
+        },
+        {
+          "id": "beta2.0_config27",
+          "configIdx": 27,
+          "sigma2W33": 0.25680339548467684,
+          "bin": 3
+        },
+        {
+          "id": "beta2.0_config28",
+          "configIdx": 28,
+          "sigma2W33": 0.24651029305398442,
+          "bin": 1
+        },
+        {
+          "id": "beta2.0_config29",
+          "configIdx": 29,
+          "sigma2W33": 0.2464928022313164,
+          "bin": 1
+        },
+        {
+          "id": "beta2.0_config30",
+          "configIdx": 30,
+          "sigma2W33": 0.2481090355625285,
+          "bin": 1
+        },
+        {
+          "id": "beta2.0_config31",
+          "configIdx": 31,
+          "sigma2W33": 0.25696137366228927,
+          "bin": 3
+        }
+      ]
+    },
+    "2.4": {
+      "lowEdge": 0.2489730964951687,
+      "highEdge": 0.2522756034009831,
+      "spread": 0.009101986347165053,
+      "assignments": [
+        {
+          "id": "beta2.4_config0",
+          "configIdx": 0,
+          "sigma2W33": 0.24889546041957422,
+          "bin": 1
+        },
+        {
+          "id": "beta2.4_config1",
+          "configIdx": 1,
+          "sigma2W33": 0.25326195198530277,
+          "bin": 3
+        },
+        {
+          "id": "beta2.4_config2",
+          "configIdx": 2,
+          "sigma2W33": 0.2522804927121555,
+          "bin": 3
+        },
+        {
+          "id": "beta2.4_config3",
+          "configIdx": 3,
+          "sigma2W33": 0.24673848439060928,
+          "bin": 1
+        },
+        {
+          "id": "beta2.4_config4",
+          "configIdx": 4,
+          "sigma2W33": 0.25226582477863824,
+          "bin": 2
+        },
+        {
+          "id": "beta2.4_config5",
+          "configIdx": 5,
+          "sigma2W33": 0.2532096046006527,
+          "bin": 3
+        },
+        {
+          "id": "beta2.4_config6",
+          "configIdx": 6,
+          "sigma2W33": 0.25252639031586294,
+          "bin": 3
+        },
+        {
+          "id": "beta2.4_config7",
+          "configIdx": 7,
+          "sigma2W33": 0.24867088247852032,
+          "bin": 1
+        },
+        {
+          "id": "beta2.4_config8",
+          "configIdx": 8,
+          "sigma2W33": 0.2516985854915356,
+          "bin": 2
+        },
+        {
+          "id": "beta2.4_config9",
+          "configIdx": 9,
+          "sigma2W33": 0.24770494592882428,
+          "bin": 1
+        },
+        {
+          "id": "beta2.4_config10",
+          "configIdx": 10,
+          "sigma2W33": 0.2525432659467035,
+          "bin": 3
+        },
+        {
+          "id": "beta2.4_config11",
+          "configIdx": 11,
+          "sigma2W33": 0.2520550026142697,
+          "bin": 2
+        },
+        {
+          "id": "beta2.4_config12",
+          "configIdx": 12,
+          "sigma2W33": 0.2520913187505914,
+          "bin": 2
+        },
+        {
+          "id": "beta2.4_config13",
+          "configIdx": 13,
+          "sigma2W33": 0.249392574235879,
+          "bin": 2
+        },
+        {
+          "id": "beta2.4_config14",
+          "configIdx": 14,
+          "sigma2W33": 0.2550606055809536,
+          "bin": 3
+        },
+        {
+          "id": "beta2.4_config15",
+          "configIdx": 15,
+          "sigma2W33": 0.25238497162405255,
+          "bin": 3
+        },
+        {
+          "id": "beta2.4_config16",
+          "configIdx": 16,
+          "sigma2W33": 0.2472818195466133,
+          "bin": 1
+        },
+        {
+          "id": "beta2.4_config17",
+          "configIdx": 17,
+          "sigma2W33": 0.24850186947843664,
+          "bin": 1
+        },
+        {
+          "id": "beta2.4_config18",
+          "configIdx": 18,
+          "sigma2W33": 0.24880431618150095,
+          "bin": 1
+        },
+        {
+          "id": "beta2.4_config19",
+          "configIdx": 19,
+          "sigma2W33": 0.24829231898725984,
+          "bin": 1
+        },
+        {
+          "id": "beta2.4_config20",
+          "configIdx": 20,
+          "sigma2W33": 0.2500541561869136,
+          "bin": 2
+        },
+        {
+          "id": "beta2.4_config21",
+          "configIdx": 21,
+          "sigma2W33": 0.25181488632265703,
+          "bin": 2
+        },
+        {
+          "id": "beta2.4_config22",
+          "configIdx": 22,
+          "sigma2W33": 0.255726318255272,
+          "bin": 3
+        },
+        {
+          "id": "beta2.4_config23",
+          "configIdx": 23,
+          "sigma2W33": 0.24912836864635765,
+          "bin": 2
+        },
+        {
+          "id": "beta2.4_config24",
+          "configIdx": 24,
+          "sigma2W33": 0.24710720610773568,
+          "bin": 1
+        },
+        {
+          "id": "beta2.4_config25",
+          "configIdx": 25,
+          "sigma2W33": 0.25444868962957956,
+          "bin": 3
+        },
+        {
+          "id": "beta2.4_config26",
+          "configIdx": 26,
+          "sigma2W33": 0.2512859193113049,
+          "bin": 2
+        },
+        {
+          "id": "beta2.4_config27",
+          "configIdx": 27,
+          "sigma2W33": 0.24662433190810693,
+          "bin": 1
+        },
+        {
+          "id": "beta2.4_config28",
+          "configIdx": 28,
+          "sigma2W33": 0.2512557200412416,
+          "bin": 2
+        },
+        {
+          "id": "beta2.4_config29",
+          "configIdx": 29,
+          "sigma2W33": 0.25419358699887135,
+          "bin": 3
+        },
+        {
+          "id": "beta2.4_config30",
+          "configIdx": 30,
+          "sigma2W33": 0.24663339384041424,
+          "bin": 1
+        },
+        {
+          "id": "beta2.4_config31",
+          "configIdx": 31,
+          "sigma2W33": 0.25297408144436473,
+          "bin": 3
+        }
+      ]
+    },
+    "2.8": {
+      "lowEdge": 0.24843299810382843,
+      "highEdge": 0.25118509431987,
+      "spread": 0.012553822565597672,
+      "assignments": [
+        {
+          "id": "beta2.8_config0",
+          "configIdx": 0,
+          "sigma2W33": 0.25130848163983044,
+          "bin": 3
+        },
+        {
+          "id": "beta2.8_config1",
+          "configIdx": 1,
+          "sigma2W33": 0.2514644662996525,
+          "bin": 3
+        },
+        {
+          "id": "beta2.8_config2",
+          "configIdx": 2,
+          "sigma2W33": 0.24928184151302624,
+          "bin": 2
+        },
+        {
+          "id": "beta2.8_config3",
+          "configIdx": 3,
+          "sigma2W33": 0.24718448646063157,
+          "bin": 1
+        },
+        {
+          "id": "beta2.8_config4",
+          "configIdx": 4,
+          "sigma2W33": 0.25114379358279554,
+          "bin": 2
+        },
+        {
+          "id": "beta2.8_config5",
+          "configIdx": 5,
+          "sigma2W33": 0.2523306589821623,
+          "bin": 3
+        },
+        {
+          "id": "beta2.8_config6",
+          "configIdx": 6,
+          "sigma2W33": 0.25363115629999844,
+          "bin": 3
+        },
+        {
+          "id": "beta2.8_config7",
+          "configIdx": 7,
+          "sigma2W33": 0.2441409580587423,
+          "bin": 1
+        },
+        {
+          "id": "beta2.8_config8",
+          "configIdx": 8,
+          "sigma2W33": 0.2437897803483089,
+          "bin": 1
+        },
+        {
+          "id": "beta2.8_config9",
+          "configIdx": 9,
+          "sigma2W33": 0.25120574468840723,
+          "bin": 3
+        },
+        {
+          "id": "beta2.8_config10",
+          "configIdx": 10,
+          "sigma2W33": 0.2557297461764233,
+          "bin": 3
+        },
+        {
+          "id": "beta2.8_config11",
+          "configIdx": 11,
+          "sigma2W33": 0.2487922706221869,
+          "bin": 2
+        },
+        {
+          "id": "beta2.8_config12",
+          "configIdx": 12,
+          "sigma2W33": 0.2490066388586254,
+          "bin": 2
+        },
+        {
+          "id": "beta2.8_config13",
+          "configIdx": 13,
+          "sigma2W33": 0.24911061789575298,
+          "bin": 2
+        },
+        {
+          "id": "beta2.8_config14",
+          "configIdx": 14,
+          "sigma2W33": 0.2488243611006868,
+          "bin": 2
+        },
+        {
+          "id": "beta2.8_config15",
+          "configIdx": 15,
+          "sigma2W33": 0.25011008879837865,
+          "bin": 2
+        },
+        {
+          "id": "beta2.8_config16",
+          "configIdx": 16,
+          "sigma2W33": 0.24874791286614117,
+          "bin": 2
+        },
+        {
+          "id": "beta2.8_config17",
+          "configIdx": 17,
+          "sigma2W33": 0.24827554072267208,
+          "bin": 1
+        },
+        {
+          "id": "beta2.8_config18",
+          "configIdx": 18,
+          "sigma2W33": 0.2558879493905569,
+          "bin": 3
+        },
+        {
+          "id": "beta2.8_config19",
+          "configIdx": 19,
+          "sigma2W33": 0.2452957021128717,
+          "bin": 1
+        },
+        {
+          "id": "beta2.8_config20",
+          "configIdx": 20,
+          "sigma2W33": 0.2560922248010549,
+          "bin": 3
+        },
+        {
+          "id": "beta2.8_config21",
+          "configIdx": 21,
+          "sigma2W33": 0.24904572922321985,
+          "bin": 2
+        },
+        {
+          "id": "beta2.8_config22",
+          "configIdx": 22,
+          "sigma2W33": 0.24353840223545725,
+          "bin": 1
+        },
+        {
+          "id": "beta2.8_config23",
+          "configIdx": 23,
+          "sigma2W33": 0.2521458079073588,
+          "bin": 3
+        },
+        {
+          "id": "beta2.8_config24",
+          "configIdx": 24,
+          "sigma2W33": 0.24382493106650022,
+          "bin": 1
+        },
+        {
+          "id": "beta2.8_config25",
+          "configIdx": 25,
+          "sigma2W33": 0.2520947682250763,
+          "bin": 3
+        },
+        {
+          "id": "beta2.8_config26",
+          "configIdx": 26,
+          "sigma2W33": 0.24887290085207356,
+          "bin": 2
+        },
+        {
+          "id": "beta2.8_config27",
+          "configIdx": 27,
+          "sigma2W33": 0.2469435160900911,
+          "bin": 1
+        },
+        {
+          "id": "beta2.8_config28",
+          "configIdx": 28,
+          "sigma2W33": 0.2542152947484024,
+          "bin": 3
+        },
+        {
+          "id": "beta2.8_config29",
+          "configIdx": 29,
+          "sigma2W33": 0.24602208815313406,
+          "bin": 1
+        },
+        {
+          "id": "beta2.8_config30",
+          "configIdx": 30,
+          "sigma2W33": 0.24588283373950634,
+          "bin": 1
+        },
+        {
+          "id": "beta2.8_config31",
+          "configIdx": 31,
+          "sigma2W33": 0.2476578572924221,
+          "bin": 1
+        }
+      ]
+    }
+  }
+}
