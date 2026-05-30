@@ -62,5 +62,10 @@ favorable-pocket fallback); escape-vs-close subtype diagnostic. -->
 
 ### Hard-void gates (pre-lock)
 
-<!-- phase13 → 3,456 / 88·324 / 1154·2030·272; phase14 → 6,048 / 130·648 / 1269·4616·163 -->
+Re-run 2026-05-29 after the core touch — **both byte-identical**:
+
+- phase13 → 3,456 trials / 88·324 candidate rows / bounded·escape·close 1154·2030·272 ✓
+- phase14 → 6,048 trials / 130·648 candidate rows / 1269·4616·163 ✓
+
+The `--hazard-counterfactual-audit` path is additive and non-perturbing.
 
