@@ -44,6 +44,7 @@ VERDICT_BEARING_PRESETS = {
     "fallback_v4",
     "lock_v5",
     "fallback_v5",
+    "lock_v5_n48",
     "lock_v6",
     "lock_v7_g200",
     "lock_v7_g300",
@@ -106,6 +107,7 @@ def parse_args() -> argparse.Namespace:
             "fallback_v4",
             "lock_v5",
             "fallback_v5",
+            "lock_v5_n48",
             "lock_v6",
             "lock_v7_g200",
             "lock_v7_g300",
@@ -256,6 +258,22 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         grashof = 200.0
         e_max_burnin_fraction = 0.25
         k_signature = 3
+    elif args.preset == "lock_v5_n48":
+        # Robustness wave, N-refinement: identical to lock_v5 (k_f=2, G=200,
+        # K=3, overshoot-burnin objective + E_max last-25% amendment, same nu,
+        # dt, sampling) EXCEPT the Galerkin resolution is refined grid 32 -> 48
+        # (dealias cutoff ~10 -> ~16 modes; n_modes 16 -> 24). nu is unchanged
+        # (G fixed by grashof), the K=3 signature is the same 9 modes. Tests
+        # refinement-invariance of the regime-2 separation. Spec:
+        # docs/proof/PDE_C1_ROBUSTNESS_WAVE.md.
+        burnin_steps = 100_000
+        sample_count = 50_000
+        kf = 2
+        grashof = 200.0
+        e_max_burnin_fraction = 0.25
+        k_signature = 3
+        grid_size = 48
+        n_modes = 24
     elif args.preset == "fallback_v5":
         burnin_steps = 100_000
         sample_count = 200_000
