@@ -347,3 +347,64 @@ Forbidden:
 - using `signature_palette` geometry as a selector;
 - tuning ranker features, branch gates, model size, seed slate, or candidate
   budget after reading `U_primary` labels.
+
+---
+
+## Amendment A — Tooling Freeze Marker (BUILT; binding run PAUSED, 2026-05-29 PT)
+
+Append-only. This admits + tracks the E3 tooling (per the §"Ten-Minute Rule"
+freeze-marker requirement) and records that the binding run is **paused by
+operator decision** — the measured cost is too high to launch now. No binding
+receipt exists; no branch is adjudicated.
+
+### Tooling added
+
+- Python runner `docs/prereg/arc/phase3_branch_e3_learned_ranker.py`. It imports
+  the frozen Branch E v2 generator and replicates only its enumeration **driver**
+  (`enumerate_admitted`), calling v2's frozen family functions
+  (`structural_programs`, `color_edit_programs_v2`, `combinator_programs`,
+  `_consistent`, `_transform_pairs`, `_compose`) to return the FULL admitted
+  candidate list. The selector is the new learned MLP ranker. v2 is unmodified.
+- Wrapper `scripts/arc-phase3-branch-e3-learned-ranker.mjs`; npm
+  `arc:phase3:branch-e3-learned-ranker[:shard|:merge]`; `.gitignore`
+  `results/arc/phase3-branch-e3-learned-ranker/`.
+- Two modes: `--shard-aux --shard-index i --shard-count N` (deterministic chunk of
+  the sorted aux pool → candidate fingerprints + labels) and `--merge` (canonical
+  shard merge → train + validate + score `U_primary` under five controls →
+  adjudicate). The merge canonically sorts merged aux records by
+  `(task_id, instance_id)` so the result is byte-equivalent regardless of shard
+  count.
+- Frozen knobs mirrored: `INPUT_DIM = 591` target-free features
+  (`arc-p3-branch-e3-ranker-feature-v1`, `program_hash_dim = 512`); RankerMLP
+  `591→192→96→1` weighted-BCE (`pos_weight` clipped `[1,100]`, batch 2048, 40
+  epochs, patience 6); 5-seed slate; controls `v2_deterministic_selector`,
+  `learned_ranker`, `metadata_only_ranker`, `label_shuffle_ranker`,
+  `oracle_candidate_ceiling`; three split barriers (aux/validation/U_primary).
+
+### Verification (smoke)
+
+- `py_compile` clean; `npm run arc:phase0:leak-check` 0 fail / 0 warn (25 ARC
+  scripts; the wrapper carries no held-split literal).
+- Dry-run emits the artifact stub set.
+- **Byte-faithfulness**: on all nine `be94b721` + `f25fbde4` instances
+  (`test_lodo` + `pttest`), `enumerate_admitted` produces the identical
+  `n_admitted` as `v2.solve_instance` (706 / 236 / 116…), and the
+  `v2_deterministic_selector` control reproduces every v2 gated solve →
+  generation is byte-for-byte v2.
+
+### Measured cost + ten-minute-rule decision
+
+A single-shard timing probe (12 aux tasks → 49 held-out instances) took
+**38m45s = ~47.5 s/instance** — the intrinsic frozen-v2 enumeration cost over
+uncurated auxiliary grids (most instances admit 0 train-consistent candidates yet
+still pay the full enumeration). Mean ~60 candidates/instance; 1086 positive
+labels from 12 tasks. The full ~892-task auxiliary pool (~3.6k instances)
+extrapolates to **~48 h** of candidate generation. Memory is fine: ~220k training
+rows, ~0.5 GB.
+
+Per §"Ten-Minute Rule" this exceeds inline execution by orders of magnitude, and
+**the operator chose to pause** rather than commit ~48 h now. The lane is
+recorded in `docs/TODO.md` (ARC Branch E3, `compute-blocked`, paused) with the
+two resume paths: (a) stage + run the full sharded slate, or (b) first amend the
+spec to bound the aux pool / aux budget for a ~3-4× faster turnaround. No binding
+run, no verdict, no public-language claim beyond the pre-receipt statement.
