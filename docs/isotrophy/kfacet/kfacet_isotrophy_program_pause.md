@@ -1,13 +1,14 @@
 # K_facet Isotrophy Program Pause (2026-05-24)
 
 Status: **PAUSED 2026-05-24** at end-of-v0.9, then **ADVANCED off-pause
-2026-05-29/30** with the two-chapter v0.10 frontier pair (v0.10a + v0.10b).
+2026-05-29/30** with the v0.10 frontier pair (v0.10a + v0.10b) and the
+v0.11 conditional-rank close.
 The chain ran from v0.3 (December 2025 / January 2026, pre-anniversary)
 through v0.9 (May 2026) as seven sequential pre-registered chapters with
 seven distinct chapter-close types and one load-bearing in-sample positive
 (v0.7a' chi^2 = 16.43 on signed velocity-fraction quartiles, 250 analyzable
 rows), then the frontier-advance matured that positive into a **publishable
-conditional-positive pair**:
+conditional-positive sequence**:
 
 - **v0.10a (the positive):** the in-sample monotone velocity-fraction ->
   stability trend, registered by the phenomenon-aligned J-T one-sided trend
@@ -18,6 +19,10 @@ conditional-positive pair**:
   DOES rank within each held-out mass bin (per-fold AUC mean ~0.65; the
   observed pooled AUC still beats the within-m_3-shuffled null of 0.265 at
   p = 1e-4). The signal lives at the (m_3, zone) JOINT level.
+- **v0.11 (the conditional close):** the explicit within-m_3 rank test passes on
+  the locked 229-row primary domain (`AUC_cond = 0.6783`, exact stratified
+  `p = 2.046e-7`; permutation sanity consistent). This registers the
+  conditional rank signal while preserving v0.10b's global held-out null.
 
 The mature, falsifiable claim is **"yes, but only after conditioning"**:
 velocity-fraction stratifies three-body stability, but as a function of the
@@ -25,10 +30,10 @@ mass ratio, not marginally over it. That is a stronger and more honest
 statement than either a bare in-sample positive or a bare held-out null —
 the held-out chapter localized the signal rather than killing it.
 
-The program remains **paused at the lab-bandwidth level**, not retired;
-**v0.11 is in draft** (the within-m_3 / m_3-conditional predictor this pair
-motivates). Reopening avenues are recorded below for lab initiates with
-bandwidth to spare.
+The program remains **paused at the lab-bandwidth level**, not retired. The
+within-m_3 conditional rung that v0.10b motivated has now been executed as v0.11;
+future reopening should be external-catalog, mass-conditional predictor, or
+new-mechanism work rather than another rephrasing of the same table.
 
 Audience: paper-side writers, future coding agents, isotrophy-
 program lab initiates, anyone who wants to know what's left.
@@ -118,13 +123,21 @@ v0.10b: leave-one-m_3-bin-out held-out predictor (zone-only
         cannot use the mass base rate that dominates marginal ranking.
         Pairs with v0.10a as the publishable "yes, but only after
         conditioning" result.
+
+v0.11:  within-m_3 conditional vf rank test on the locked 229-row
+        both-class primary domain.
+        Outcome: conditional-rank positive. AUC_cond = 0.6783,
+        exact stratified p = 2.046e-7, exact probability mass = 1.0,
+        and the within-stratum permutation sanity sidecar is consistent.
+        This registers the conditional signal explicitly, while leaving
+        v0.10b's mass-marginal held-out null intact.
 ```
 
 ## The Load-Bearing Findings
 
-After seven chapters plus the v0.10 frontier-advance, three findings
+After seven chapters plus the v0.10/v0.11 frontier-advance, three findings
 carry the program's substantive output (the second is now a publishable
-pair):
+conditional profile):
 
 1. **The v0.7a' chi^2 = 16.43 positive**. On the 250-row analyzable
    supp-B subset (post v0.7a integration-attrition), the velocity-
@@ -134,7 +147,7 @@ pair):
    positive in the chain and remains uncontradicted by v0.8 and
    v0.9 (both of which contextualized it without invalidating it).
 
-2. **The v0.10a + v0.10b publishable pair — "yes, but only after
+2. **The v0.10a + v0.10b + v0.11 conditional profile -- "yes, but only after
    conditioning."** The v0.9a monotone-increasing meta-finding
    (S_fraction 11% / 34% / 44% across positional / mixed / velocity-
    heavy zones under physical cutpoints {0.25, 0.50}) was matured into
@@ -158,15 +171,20 @@ pair):
      within-bin signal failure: the vf -> stability relationship lives
      at the (m_3, zone) JOINT level, and the mass base rate — which a
      zone-only score cannot use — dominates any marginal ranking.
+   - **v0.11 (the conditional close).** The explicit within-m_3
+     conditional rank test PASSES on the frozen 229-row primary domain:
+     `AUC_cond = 0.6783`, exact stratified `p = 2.046e-7`, exact-null
+     mass = 1.0, permutation sanity consistent. This is still in-sample
+     and conditional, not an external-catalog predictor and not a v0.10b
+     rescue.
 
-   Together these are a **publishable pair** with a mature, falsifiable
+   Together these are a **publishable conditional profile** with a mature, falsifiable
    shape: **velocity-fraction stratifies three-body stability, but only
    after conditioning on the mass ratio — it is a conditional predictor,
    not a marginal one.** This is a stronger and more honest statement
    than either a bare in-sample positive or a bare held-out null; the
-   held-out chapter LOCALIZED the signal rather than killing it. The
-   natural v0.11 rung is the explicit within-m_3 / m_3-conditional
-   predictor this pair pre-registers and motivates.
+   held-out chapter LOCALIZED the signal rather than killing it, and v0.11
+   registered that localization under the exact conditional rank gate.
 
 3. **The methodology surface**. The chain produced and locked
    a comprehensive set of pre-registration discipline tools that
@@ -467,13 +485,18 @@ sequential audits on the v0.7a' analyzable subset.
 - `kfacet_v08_writeup.md` -- v0.8 chapter close.
 - `kfacet_v09_writeup.md` -- v0.9 chapter close (this chapter's
   companion).
+- `kfacet_v10a_jt_trend_form.md` -- v0.10a ordered-trend positive.
+- `kfacet_v10b_monotone_vf_heldout_predictor_form.md` -- v0.10b
+  mass-marginal held-out null / conditional diagnostic.
+- `kfacet_v11_m3_conditional_vf_rank_form.md` -- v0.11 within-m3
+  conditional rank pass.
 - `docs/threebody/CROSS_SUBSTRATE_NOTES.md` -- cross-substrate
   framing (avenue 6).
 - `docs/isotrophy/sundog_v_isotrophy.md` -- full chapter-by-chapter dated log.
 
 ---
 
-Isotrophy program paused at end-of-v0.9. Seven chapters, seven
-close types, one load-bearing positive, one comprehensive
-methodology surface, eight concrete reopening avenues for lab
-initiates. Reopening is invited; mechanism-laundering is not.
+Isotrophy program paused at end-of-v0.9, then reopened through the v0.10/v0.11
+conditional-rank frontier. The live result is now sharper: velocity-fraction is a
+real in-sample, within-m3 stability rank signal, but not a mass-marginal held-out
+predictor. Reopening is invited; mechanism-laundering is not.

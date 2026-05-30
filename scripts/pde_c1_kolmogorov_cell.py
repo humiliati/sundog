@@ -50,6 +50,8 @@ VERDICT_BEARING_PRESETS = {
     "lock_v5_k5",
     "lock_v5_k6",
     "lock_v5_enstrophy",
+    "lock_hidim_g1000",
+    "lock_hidim_g1000_n96",
     "lock_v6",
     "lock_v7_g200",
     "lock_v7_g300",
@@ -119,6 +121,8 @@ def parse_args() -> argparse.Namespace:
             "lock_v5_k5",
             "lock_v5_k6",
             "lock_v5_enstrophy",
+            "lock_hidim_g1000",
+            "lock_hidim_g1000_n96",
             "lock_v6",
             "lock_v7_g200",
             "lock_v7_g300",
@@ -302,6 +306,21 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         grashof = 200.0
         e_max_burnin_fraction = 0.25
         k_signature = int(args.preset.split("_k")[-1])
+    elif args.preset in ("lock_hidim_g1000", "lock_hidim_g1000_n96"):
+        # Non-marginal-regime probe: a higher Grashof gives a higher-dimensional
+        # attractor, so the fixed K=3 signature sits FAR below the determining
+        # count -> genuine (non-marginal) state-insufficiency, IF control still
+        # holds. Resolution scaled with G; the n96 variant is the grid-converge
+        # check that the state-recon FVE is not grid-truncated. Longer burn-in
+        # for the bigger attractor. Spec: docs/proof/PDE_C1_NONMARGINAL_PROBE.md.
+        burnin_steps = 200_000
+        sample_count = 50_000
+        kf = 2
+        grashof = 1000.0
+        e_max_burnin_fraction = 0.25
+        k_signature = 3
+        grid_size = 96 if args.preset.endswith("n96") else 64
+        n_modes = 48 if args.preset.endswith("n96") else 32
     elif args.preset == "lock_v5_enstrophy":
         # Robustness wave, objective axis: identical to lock_v5 except the
         # safety trigger watches low-band ENSTROPHY (Sum_low |omega|^2) instead
@@ -729,8 +748,12 @@ def run_cell(cfg: RunConfig) -> dict:
             sample_signatures, sample_mz, actions, epsilon_k, cfg
         )
     elif cfg.adjudicator == "state-recon":
+        comp_k = np.array(
+            [math.sqrt(float(stepper.k2[ix, iy])) for ix, iy in stepper.high_indices for _ in range(2)],
+            dtype=np.float64,
+        )
         result, bin_rows, sample_rows, _ = aggregate_state_recon(
-            sample_signatures, sample_high_modes, cfg
+            sample_signatures, sample_high_modes, comp_k, cfg
         )
     else:
         bin_rows, sample_rows = aggregate_bins(sample_signatures, sample_energy, actions, sig_min, h_k, cfg)
@@ -1679,7 +1702,10 @@ def aggregate_mz_budget(
 
 
 def aggregate_state_recon(
-    sample_signatures: np.ndarray, sample_high_modes: np.ndarray | None, cfg: RunConfig
+    sample_signatures: np.ndarray,
+    sample_high_modes: np.ndarray | None,
+    comp_k: np.ndarray | None,
+    cfg: RunConfig,
 ) -> tuple[dict, list, list, list]:
     """State-reconstruction / m_det upper bracket (coverage-free).
 
@@ -1749,14 +1775,30 @@ def aggregate_state_recon(
     fve_top = fve_varweighted  # primary, energy-weighted (matches twin-state)
     fve_median_energy = float(np.median(per_r2)) if per_r2 else float("nan")
 
+    # Uniform sample across ALL high modes (spans the |k| spectrum). From the
+    # same fits, compute FVE in three norms: energy-weighted (component
+    # variance), enstrophy-weighted (|k|^2 -> emphasizes small scales), and
+    # equal-weight (median per-component R^2). The energy norm makes the
+    # separation look marginal because energy sits at large scales; the
+    # enstrophy / equal-weight norms expose the genuine small-scale
+    # under-determination. Spec: PDE_C1_NONMARGINAL_PROBE.md.
     rng2 = np.random.default_rng(cfg.random_seed + 7)
-    uni = rng2.choice(q.shape[1], size=min(48, q.shape[1]), replace=False)
+    uni = rng2.choice(q.shape[1], size=min(64, q.shape[1]), replace=False)
     uni_r2: list[float] = []
+    e_res = e_tot = z_res = z_tot = 0.0
     for j in uni:
         rr = fit_ss(int(j))
-        if rr is not None:
-            uni_r2.append(1.0 - rr[0] / (rr[1] + 1e-300))
+        if rr is None:
+            continue
+        uni_r2.append(1.0 - rr[0] / (rr[1] + 1e-300))
+        e_res += rr[0]
+        e_tot += rr[1]
+        wz = float(comp_k[int(j)]) ** 2 if comp_k is not None else 1.0
+        z_res += wz * rr[0]
+        z_tot += wz * rr[1]
     r2_median_uniform = float(np.median(uni_r2)) if uni_r2 else float("nan")
+    fve_uniform_energy = float(1.0 - e_res / (e_tot + 1e-300)) if e_tot > 0 else float("nan")
+    fve_uniform_enstrophy = float(1.0 - z_res / (z_tot + 1e-300)) if z_tot > 0 else float("nan")
 
     interpretable = cfg.preset in VERDICT_BEARING_PRESETS
     estimator_ok = abs(r2_e_high_perm) < 0.10
@@ -1782,7 +1824,10 @@ def aggregate_state_recon(
         "fve_components_covered": n_cover,
         "fve_median_energy_modes": fve_median_energy,
         "r2_median_uniform_components": r2_median_uniform,
+        "fve_uniform_energy_norm": fve_uniform_energy,
+        "fve_uniform_enstrophy_norm": fve_uniform_enstrophy,
         "state_residual_varweighted": float(1.0 - fve_varweighted) if fve_varweighted == fve_varweighted else float("nan"),
+        "state_residual_enstrophy_norm": float(1.0 - fve_uniform_enstrophy) if fve_uniform_enstrophy == fve_uniform_enstrophy else float("nan"),
         "train_count": ntr,
         "test_count": n - ntr,
     }
