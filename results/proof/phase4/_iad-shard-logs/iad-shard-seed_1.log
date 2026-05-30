@@ -4,3 +4,8 @@
 # ─────────────────────────────────────────────────────────────
 [iad-shard seed=1] particles=512 out=results\proof\phase4\_bf4b-accessibility-shard-seed_1
 [iad-shard seed=1] starting at 2026-05-30T02:04:18.017Z
+[threebody-bayes-floor] wrote 1 trials to results\proof\phase4\_bf4b-accessibility-shard-seed_1
+[threebody-bayes-floor] wrote manifest.json, signature-observations.jsonl, belief-diagnostics.csv, bayes-actions.csv, bayes-trial-outcomes.csv
+[iad-shard seed=1] exit=0 wall=10560.1 s
+# ─────────────────────────────────────────────────────────────
+# finished 2026-05-30T05:00:18.124Z exit=0 signal=null wall=10560.19s
