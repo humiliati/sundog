@@ -33,6 +33,7 @@ results/arc/phase3e-program-sketch-oracle-v2-expanded/
 results/arc/phase3e-relative-locality-certificate/
 results/arc/phase3-branch-e-program-search/
 results/arc/phase3-branch-e-v2-program-search/
+results/arc/phase3-branch-e3-learned-ranker/
 
 # Test artifacts
 *.jsonl
