@@ -168,7 +168,7 @@ determining-modes count.*
 | Functional observability is **linear / finite-dim / network / estimation** (Montanari–Motter PNAS 2022); the nonlinear extension (arXiv 2301.04108) lists turbulent observables like energy on spatially-extended systems as an **open gap** | Instantiated on a (Galerkin) **NSE attractor**, for **energy** (the named-open observable), for a **decision** objective (not estimation), with a **measured** non-injectivity certificate |
 | **Determining functionals** determine the **state** (Cockburn–Jones–Titi 1997) | `Phi_K` is **below** the determining threshold (non-determining) yet decision-sufficient — the **complement** of that theory |
 | **Approximate inertial manifolds** slave high→low, i.e. state-**sufficient** | C1 is **below** the AIM threshold — state-**insufficient**, certified — the opposite regime |
-| **Mori–Zwanzig closure**: the unresolved coupling into the resolved energy budget is *approximable* via memory (Parish–Duraisamy 2017) | C1 does **not** model the coupling; it **certifies the decision is robust** to it on the lookahead horizon, on `mu`-a.e. pairs |
+| **Mori–Zwanzig closure**: the unresolved coupling into the resolved energy budget is *approximable* via memory (Parish–Duraisamy 2017) | C1 **measures** that the coupling `R` is ~99% **signature-determined** (`R²(R\|Φ_K)=0.998` (G=200) / `0.990` (G=300), at the exact-function ceiling, neg-control ~0) — a local energy-budget closure `R≈R(Φ_K)` that holds *precisely where state reconstruction fails*; this is the measured mechanism, not a fitted closure (see `PDE_C1_MZ_ENERGY_BUDGET.md` §10) |
 
 **Anti-folklore guard.** The natural reviewer reflex — "this is just
 LES / closure: of course coarse energy is predictable from coarse state" —

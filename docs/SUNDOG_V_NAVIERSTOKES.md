@@ -457,6 +457,34 @@ state. Pivotal reviewer claim isolated. Lane order chosen: **framing-first
 mechanism. Still UNPROMOTED; this strengthens the artifact + positioning,
 not the review status.
 
+**C1 MZ mechanism MEASURED 2026-05-29**
+([`proof/PDE_C1_MZ_ENERGY_BUDGET.md`](proof/PDE_C1_MZ_ENERGY_BUDGET.md)).
+Built the energy-budget decomposition `dE_low/dt = g(Φ_K) + R` (double
+nonlinear eval, full vs low-passed; validated: budget-closure 4e-5,
+`R→0` on a low state). **Two verification catches before any
+interpretation** — the verify-before-file discipline doing its job: (1)
+`T_LLL ≡ 0` *by detailed energy conservation* (the low band cannot
+self-feed its energy; **all** net transfer is high-mode-mediated) →
+reframed the question from "is `R` small" (trivially no) to "is `R`
+predictable from `Φ_K`"; (2) the first predictability estimator (kNN
+conditional variance) **failed its own `g`-control** (`eta_g≈0.42` where
+`g` is an exact function → confounded by `g`'s quadratic steepness +
+18-dim neighbourhood width) → replaced by an unbiased **held-out
+regression R²** with the same controls. **Result: `COUPLING_SIGNATURE_SLAVED`
+at both regimes** — `R²(R|Φ_K) = 0.998` (G=200) / `0.990` (G=300), *at the
+exact-function ceiling* (`R²(g) = 0.999 / 0.980`), negative control
+(permuted `R`) `≈ 0` on 15000 held-out points (no block-split leakage).
+**The mechanism, measured:** the net high-mode energy-transfer `R` into the
+low band is ~99% a *function of the signature* even though the high modes
+themselves are unreconstructable (twin states). A local energy-budget
+closure `R ≈ R(Φ_K)` that holds *precisely where state reconstruction
+fails* — which is *why* the decision is `Φ_K`-measurable (control-
+sufficiency is not "`R` small", it is "`R` signature-determined"). Closes
+the loop with the observability framing. **Explanatory, non-promotion** —
+it explains why the measured control-sufficiency holds; C1 status
+unchanged. The `c1-mz-budget-*` dirs stand as the `T_LLL≡0`
+conservation-finding record.
+
 ## Claim Boundary
 
 This document does **not** claim that Sundog has produced original
