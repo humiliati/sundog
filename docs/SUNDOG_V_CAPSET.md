@@ -26,6 +26,13 @@ its narrative cards informally point at the 2026 unit-distance result as
 the same shape of breakthrough. This ledger is where that informal
 pointer is staged for later, defensible coupling work.
 
+**Fresh lit-pass anchor (2026-05-30):**
+[`CAPSET_UNIT_DISTANCE_LITPASS_MEMO.md`](CAPSET_UNIT_DISTANCE_LITPASS_MEMO.md)
+is now the local source receipt for `/capset` and `/unit-distance`. It keeps
+the public pages citation-first: OpenAI + the proof PDF + the external
+companion remarks for unit-distance; Croot–Lev–Pach and Ellenberg–Gijswijt for
+cap-set; Sundog only as reader overlay, workbench, and claim-boundary apparatus.
+
 ### Promotions
 
 No candidates have been promoted out of this ledger yet. The block is

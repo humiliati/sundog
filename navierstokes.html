@@ -232,7 +232,7 @@
 
         .stat-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
             gap: 1rem;
             margin: 1.25rem 0 0;
         }
@@ -264,7 +264,7 @@
 
         .not-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
             gap: 1rem;
             margin-top: 1rem;
         }
@@ -297,7 +297,7 @@
 
         .modes-list {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
             gap: 1rem;
             margin-top: 1rem;
         }
@@ -337,7 +337,7 @@
 
         .source-list {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
             gap: 0.75rem;
             margin-top: 1rem;
         }
@@ -355,6 +355,58 @@
         }
 
         .source-list a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .citation-rail {
+            border: 1px solid rgba(184, 131, 30, 0.36);
+            border-radius: 8px;
+            background: rgba(255, 244, 214, 0.34);
+            padding: 1rem 1.1rem;
+            margin: 1rem 0 1.1rem;
+        }
+
+        .citation-rail-kicker {
+            margin: 0 0 0.35rem;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .citation-rail p {
+            margin: 0 0 0.75rem;
+            color: #40505C;
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
+        .citation-rail p:last-child {
+            margin-bottom: 0;
+        }
+
+        .citation-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        .citation-links a {
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: #FFFFFF;
+            padding: 0.45rem 0.7rem;
+            color: var(--primary-mid);
+            font-size: 0.82rem;
+            font-weight: 700;
+            text-decoration: none;
+            overflow-wrap: anywhere;
+        }
+
+        .citation-links a:hover {
             color: var(--primary-dark);
             text-decoration: underline;
         }
@@ -402,6 +454,12 @@
         @media (max-width: 760px) {
             .nse-hero { padding: 5.5rem 1.25rem 1.5rem; }
             .nse-section { padding: 1rem 1.25rem; }
+            .nse-hero .sd-def[data-def]::after,
+            .nse-hero .sd-def[data-def]::before,
+            .nse-section .sd-def[data-def]::after,
+            .nse-section .sd-def[data-def]::before {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -612,6 +670,22 @@
                     observable from the shadow even when the state is not. The
                     mechanism is known; the reconstruction-vs-decision
                     observability split is the contribution.
+                </div>
+                <div class="citation-rail" aria-label="Mori-Zwanzig citation spine">
+                    <p class="citation-rail-kicker">Citation Spine</p>
+                    <p>
+                        The MZ name is not a novelty grab. It points to the
+                        standard projection / memory formalism; the Sundog-specific
+                        claim is the measured decision-observability split where
+                        state reconstruction fails.
+                    </p>
+                    <div class="citation-links">
+                        <a href="https://academic.oup.com/ptp/article/33/3/423/1925580">Mori 1965</a>
+                        <a href="https://doi.org/10.1103/PhysRev.124.983">Zwanzig 1961</a>
+                        <a href="https://arxiv.org/abs/1611.03311">Parish-Duraisamy MZ-LES 2017</a>
+                        <a href="https://arxiv.org/pdf/1611.06277">MZ memory estimation</a>
+                        <a href="docs/proof/PDE_C1_MECHANISM_RECON.md">Mechanism / Novelty Recon</a>
+                    </div>
                 </div>
                 <div class="stat-grid">
                     <div class="stat-card">

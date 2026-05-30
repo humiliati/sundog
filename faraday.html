@@ -366,7 +366,7 @@
            ============================================================ */
         .battery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
             gap: 1rem;
             margin-top: 1rem;
         }
@@ -426,7 +426,7 @@
            ============================================================ */
         .outcomes-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
             gap: 1rem;
             margin-top: 1rem;
         }
@@ -479,7 +479,7 @@
            ============================================================ */
         .not-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
             gap: 1rem;
             margin-top: 1rem;
         }
@@ -511,7 +511,7 @@
            ============================================================ */
         .source-list {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
             gap: 0.75rem;
             margin-top: 1rem;
         }
@@ -556,6 +556,12 @@
             .far-hero { padding: 3.5rem 1.25rem 1.25rem; }
             .far-section { padding: 1rem 1.25rem; }
             .spectacle-frame { padding: 1rem 0.75rem 1.25rem; }
+            .far-hero .sd-def[data-def]::after,
+            .far-hero .sd-def[data-def]::before,
+            .far-section .sd-def[data-def]::after,
+            .far-section .sd-def[data-def]::before {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -1095,6 +1101,33 @@
         </section>
 
         <!-- ============================================================
+             GENERALITY CONTEXT
+             ============================================================ -->
+        <section class="far-section" aria-label="Generality context">
+            <div class="far-card">
+                <p class="eyebrow">Where This Sits</p>
+                <h2>Faraday is the calibration receipt; Generality is the stress test.</h2>
+                <p>
+                    Shadow Faraday is the clean-room version of the Sundog
+                    pattern: define a local shadow, pre-register the branch
+                    table, let the algebra land, and keep the boundary named.
+                    The result closes because classical electromagnetism is
+                    already understood; the contribution is the audit shape,
+                    not a new law of physics.
+                </p>
+                <p>
+                    The <a href="/generality">High-Stakes Generality</a> page
+                    asks what happens when the same discipline is carried into
+                    domains where the answer is not known in advance or the
+                    result is bounded-null: Navier-Stokes C1, Riemann,
+                    Yang-Mills, P-vs-NP, ARC-AGI, and Three-Body. Read
+                    Faraday as the method receipt, then Generality as the
+                    harder transfer matrix.
+                </p>
+            </div>
+        </section>
+
+        <!-- ============================================================
              CLAIM BOUNDARY
              ============================================================ -->
         <section class="far-section" aria-label="Claim boundary">
@@ -1141,6 +1174,7 @@
                 <a href="docs/faraday/SHADOW_FARADAY.md#phase-5-chapter-close">Phase 5 Chapter Close &middot; limitations, extensions, fidelity audit</a>
                 <a href="docs/faraday/FARADAY_PHASE3_DERIVATIONS.md">Phase 3 Derivation Receipt &middot; Branch A structural zero</a>
                 <a href="docs/faraday/FARADAY_PHASE4_VERIFICATION.md">Phase 4 Verification Receipt &middot; 5/5 support battery</a>
+                <a href="/generality">High-Stakes Generality &middot; transfer-test matrix</a>
                 <a href="/safety-method">Safety-method bridge essay &middot; the AI-safety translation</a>
                 <a href="/isotrophy">Isotrophy K_facet v0.3h &middot; precedent for the receipt discipline</a>
                 <a href="/threebody">Three-Body Workbench &middot; where the local-probe pattern was forged</a>
