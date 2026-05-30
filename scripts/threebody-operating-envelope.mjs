@@ -91,6 +91,7 @@ function parseArgs(argv) {
     else if (flag === "--multi-step-audit") args.multiStepAudit = !["0", "false", "no"].includes(String(value).toLowerCase());
     else if (flag === "--hazard-channel-audit") args.hazardChannelAudit = !["0", "false", "no"].includes(String(value).toLowerCase());
     else if (flag === "--hazard-counterfactual-audit") args.hazardCounterfactualAudit = !["0", "false", "no"].includes(String(value).toLowerCase());
+    else if (flag === "--radius-inward-magnitude") args.radiusInwardMagnitude = Number.parseFloat(value);
     else throw new Error(`Unknown flag: ${flag}`);
   }
 
@@ -401,6 +402,7 @@ function makeTrialConfig(args, envelopeCase, seed, regime, mode, guardThresholds
     multiStepAudit: args.multiStepAudit ?? false,
     hazardChannelAudit: args.hazardChannelAudit ?? false,
     hazardCounterfactualAudit: args.hazardCounterfactualAudit ?? false,
+    radiusInwardMagnitude: args.radiusInwardMagnitude ?? 0.4,
     counterfactualNormalizerFloor: args.counterfactualNormalizerFloor,
     initialParticle: scaleInitialParticle(baseParticle, envelopeCase.radiusScale, envelopeCase.velocityScale),
   });

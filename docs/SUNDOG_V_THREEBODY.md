@@ -901,8 +901,42 @@ explained by first actions that increase hazard margin at horizons `N in
 {8,16,32}`, separated from delay/sign-flip ablations. This is a mechanism audit,
 not a controller retune or claim broadening.
 
-Status: spec drafted 2026-05-29; pending lock review. No Phase 17 code has been
-written and no Phase 17 command has been run.
+Status: complete 2026-05-29. Formal branch: **Hazard-directed mechanism
+rejected**. Guarded TRACK has positive hazard-margin direction, but delay and
+shuffle ablations match or exceed it on the local counterfactual while failing
+to reproduce the survival envelope. The per-step counterfactual line is closed;
+the next test is whether the survival envelope reduces to radius-gated thrust.
+
+### Phase 18 - Radius-Only Controller Control
+
+Goal: test whether a controller gated solely on radius reproduces guarded
+TRACK's survival envelope. Rung 1 (`track_radius_guard`) keeps TRACK's tidal
+gradient thrust but drops non-radius guard clauses; rung 2
+(`track_radius_inward`) uses the inherited radius gate plus fixed inward thrust,
+with magnitude matched to guarded TRACK by favorable-pocket DeltaV before the
+measurement lock.
+
+Implementation-grade spec and pending result note:
+
+- [`docs/threebody/PHASE18_SPEC.md`](threebody/PHASE18_SPEC.md)
+- [`docs/threebody/PHASE18_RESULTS.md`](threebody/PHASE18_RESULTS.md)
+
+Reserved commands:
+
+```bash
+npm run threebody:phase18:smoke
+npm run threebody:phase18:calibrate
+npm run threebody:phase18:control
+```
+
+Exit criterion: the project can say whether either radius-only rung reaches
+Jaccard at least `0.60` with guarded TRACK's favorable candidate cells and keeps
+at least `2/3` of guarded candidate cells within `0.10` survival-delta, or
+whether both rungs fail by Jaccard `0.30` / half-survival bars. This is a
+mechanism diagnostic only and does not promote Phase 15.
+
+Status: spec locked 2026-05-29. No Phase 18 code has been written and no Phase
+18 command has been run.
 
 ### 3D Catalog / Isotrophy Sidecar
 
