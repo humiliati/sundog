@@ -751,7 +751,7 @@
         <section class="legend-section" aria-labelledby="generality-heading">
             <div class="section-heading">
                 <h2 id="generality-heading">High-Stakes Generality Vocabulary</h2>
-                <p class="section-note">The terms used on <a href="/generality">generality</a> (umbrella) and <a href="/navierstokes">navierstokes</a> (Navier-Stokes C1 deep dive), plus the status-tag taxonomy that distinguishes review-gated, design-hold, cost-hold, and execution-hold lanes.</p>
+                <p class="section-note">The terms used on <a href="/generality">generality</a> (umbrella) and <a href="/navierstokes">navierstokes</a> (Navier-Stokes C1 deep dive), the status-tag taxonomy that distinguishes review-gated, design-hold, cost-hold, and execution-hold lanes, and the <a href="docs/threebody/CROSS_SUBSTRATE_NOTES.md#cross-substrate-generality-failure-map">cross-substrate failure-mode taxonomy</a> that names <em>why</em> each lane sits where it does.</p>
             </div>
             <div class="phenomena-grid">
                 <article class="phenomenon-card" id="gen-reading-2-witness" data-status="method">
@@ -783,6 +783,11 @@
                     <h3>Bounded-null synthesis</h3>
                     <p>A named outcome class: pre-registered lanes that returned null verdicts with the specific substrate causes identified. Bounded nulls are receipts, not silent failures. Riemann and Yang-Mills publish bounded-null syntheses.</p>
                     <div class="status-line"><span class="mini-chip">term</span><span class="mini-chip">named outcome class</span></div>
+                </article>
+                <article class="phenomenon-card" id="gen-failure-taxonomy" data-status="method">
+                    <h3>Failure-mode taxonomy (cross-substrate)</h3>
+                    <p>The eight named ways a cross-substrate generalization fails: <em>marginal</em> (body barely resists its shadow), <em>numerical wall</em> (shadow unmeasurable with current tooling), <em>bounded-null</em> (shadow carries no separating structure), <em>vacuous</em> (rigidity trivially satisfied), <em>cost-bounded</em> (envelope blocks promotion), <em>convergence-to-null</em> (needs a reframing, not another sweep), <em>conditional</em> (rigid only after naming the held-fixed coordinate), <em>deflationary</em> (over-attribution corrected). Cataloguing the <em>mode</em>, not just the negative, is what turns each wall into a design constraint. Maintained in the <a href="docs/threebody/CROSS_SUBSTRATE_NOTES.md#cross-substrate-generality-failure-map">cross-substrate failure map</a>, which links bidirectionally to every lane ledger.</p>
+                    <div class="status-line"><span class="mini-chip">term</span><span class="mini-chip">8 named modes</span></div>
                 </article>
                 <article class="phenomenon-card" id="gen-review-gated" data-status="method">
                     <h3>Review-gated (status tag)</h3>

@@ -21,3 +21,6 @@ under the internal anniversary catch-all.
 - v0.7: [mechanism pre-registration](kfacet_v07_mechanism_preregistration.md), [velocity-fraction audit form](kfacet_v07a_velocity_fraction_audit_form.md), [restricted-scope form](kfacet_v07a_prime_restricted_scope_form.md), [chapter close](kfacet_v07_writeup.md)
 - v0.8: [mechanism pre-registration](kfacet_v08_mechanism_preregistration.md), [purity-quartile audit form](kfacet_v08a_purity_quartile_audit_form.md), [chapter close](kfacet_v08_writeup.md)
 - v0.9: [mechanism pre-registration](kfacet_v09_mechanism_preregistration.md), [signed-vf three-zone form](kfacet_v09a_signed_vf_three_zone_form.md), [chapter close](kfacet_v09_writeup.md)
+- v0.10: [J-T trend form](kfacet_v10a_jt_trend_form.md), [held-out predictor form](kfacet_v10b_monotone_vf_heldout_predictor_form.md)
+- v0.11: [m3-conditional vf rank form](kfacet_v11_m3_conditional_vf_rank_form.md)
+- v0.12: [external frozen transfer draft](kfacet_v12_external_frozen_transfer_form.md)

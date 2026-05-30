@@ -313,7 +313,7 @@ discarded.
 | Cap-set | dots in F_3^n with no 3-term AP | polynomial degree / rank over F_3 |
 | Unit-distance | dots in R^2 with many unit pairs | class-group pigeonhole in CM lattice; first complex coordinate |
 | Chat agent | token stream / surface response | maintained ledger packet, correlated with bottleneck subspaces |
-| Mesa controller | controller hidden state | entangled `5D net.7` subspace |
+| Mesa controller | controller hidden state (`net.7`, 256-wide but **effectively ~2-dim** - a fn of 6-dim obs) | entangled `5D net.7` subspace - **sharp on irreducibility, marginal on body-resistance** (`FVE(net.7\|5D)~0.97`); see the body-resistance note below |
 | Geometry / HaloSim | full atmospheric optics | small set of halo generators / canonical implied circles |
 | Threebody | 18-dim full state | radius-gated inward reflex in the mapped near-escape pocket |
 | Isotrophy | `S3` symmetry orbit of a 3-body choreography; supplementary-B stability catalog | residual `Z2` generators surviving `S3 -> Z2` mass perturbation; Floquet velocity-fraction conditioned on `m3` |
@@ -333,19 +333,56 @@ body can be reconstructed from the shadow (NSE-C1: `FVE ~ 0.99` in both
 physical norms) - state-rigidity and control-rigidity nearly coincide
 and the regime-2 separation collapses toward vacuity (strictly
 non-vacuous, but physically marginal). So a *sharp* control-regime-2
-needs the body to genuinely resist: **cap-set** (exponential body) and
-**Mesa** (a `5D net.7` subspace that resisted all further
-decomposition) are sharp; **2D NSE at moderate Grashof is marginal**
-because its attractor is low-dimensional, so the low-mode shadow nearly
-reconstructs the body, and the only residual is dynamically-negligible
-dissipation-range noise. The non-marginal NSE regime (high `G` / 3D,
+needs the body to genuinely resist - and **quantifying this
+(2026-05-29) showed two axes were being conflated**, correcting an
+earlier over-claim:
+
+- **Body-resistance** (`dim(body) >> dim(shadow)`, shadow *cannot*
+  reconstruct the state) - the actual Sundog regime-2 axis. **Cap-set /
+  unit-distance** have it (exponential body). **2D NSE (C1) does not**
+  (low-dim attractor; `FVE ~ 0.99`). **Mesa does not either** - measured by
+  porting the C1 FVE estimator to `net.7`: the 256-wide `net.7` is
+  effectively **~2-dimensional** (participation ratio 2.0, robust across
+  input distributions), so the 5D cliff shadow reconstructs
+  `FVE(net.7|5D) ~ 0.97-0.99`. Structural: `net.7` is a function of the
+  **6-dim** observation, so its image is an intrinsically low-dim manifold -
+  there is no high-dim body to resist.
+- **Shadow-irreducibility** (the shadow *cannot be decomposed* into
+  sparser/simpler pieces) - a *different* property. **Mesa has this** (the 5D
+  resisted SAE / top-k / PC decomposition; "read holistically"); C1's `Phi_K`
+  does not.
+
+So **Mesa is sharp on irreducibility but marginal on body-resistance**, and
+2D NSE is marginal on both. Reading Mesa's irreducibility as body-resistance
+was the over-claim the FVE measurement falsified. **Honest consequence: no
+*control* substrate in the portfolio is demonstrated sharp on the
+body-resistance (Sundog regime-2) axis** - both measurable control lanes have
+intrinsically low-dimensional states; the body-resisting substrates (cap-set,
+unit-distance) are read-off, not control. A sharp *control* regime-2 needs a
+genuinely high-dimensional input/state - high-Re turbulence (behind the
+numerical wall) or high-dim RL/LLM agents (not in the portfolio). The non-marginal NSE regime (high `G` / 3D,
 where physically-relevant content is genuinely under-determined) sits
 behind the same numerical wall as the C2 shell model and needs the
-adaptive integrator. Net: C1 anchors the *marginal* end of the
-projection-rigidity spectrum; the sharp regime-2 lives in the
-resistant-body substrates the portfolio already owns. Measured detail:
-`sundog/docs/proof/PDE_C1_NONMARGINAL_PROBE.md` and
-`PDE_C1_PROPOSITION.md`.
+adaptive integrator.
+
+**Three-for-three (2026-05-29): every measurable *control* substrate is
+marginal on body-resistance.** After C1 (NSE) and Mesa, the Sabra **shell
+model** — the best PDE candidate, with a forward cascade and a small-scale
+control objective — was probed cheaply (`PDE_C2_SHELL_DIMENSIONALITY_PROBE.md`,
+within the fixed-dt stable window): effective rank of the real inertial
+cascade ≈ **1.7 of 30** (low-rank, slaved power-law), and the perm-arbiter
+shows the shells are *predictable from the low-shell shadow* (`R²_real ≫
+R²_perm`) — directionally **marginal** too (window-limited by the same
+numerical wall, but eff-rank 1.7 is too low to flip). So the sharp
+*control* regime-2 is **not** demonstrated anywhere in the portfolio's
+control substrates — cascade-organized PDEs concentrate their relevant content
+in slaved/low-rank structure, and the controllers are low-dim by input. The
+genuinely body-resisting substrates (cap-set, unit-distance) are read-off, not
+control. **Where it would live: a substrate that is high-dimensional *by
+construction* — high-dim RL / LLM agents (high-dim observations or model
+states) — which is the structural property all three measured substrates
+lack.** Measured detail: `sundog/docs/proof/PDE_C1_NONMARGINAL_PROBE.md`,
+`PDE_C1_PROPOSITION.md`, `PDE_C2_SHELL_DIMENSIONALITY_PROBE.md`.
 
 ### 6.4 The math-or-Buddha epistemic stance
 
