@@ -2276,10 +2276,14 @@ Bounded sweeps with baselines and named failure regions:
 - **`/balance`** — shadow-derived cart-pole control inside a mapped
   lighting/delay envelope. Phase 10 confirms; Phase 15 claim-lock and
   Phase 16 data surface.
-- **`/threebody`** — guarded accelerometer-proxy TRACK control inside a
-  high-velocity near-escape pocket. Phase 11 + later-trials hazard
-  gates. Includes the catalog-sidecar (21+4 choreographies) that feeds
-  the K_facet verdict.
+- **`/threebody`** — a high-velocity near-escape survival pocket that is
+  real, bounded, and numerically stable through the tested horizon, but
+  whose Phase 18 mechanism reduces to a radius-gated inward thrust reflex
+  at matched duty — the accelerometer-proxy tidal steering is not
+  load-bearing for survival. Phase 13–18 chain (precision ladder, normalizer
+  + counterfactual rejections, radius warning repair, mechanism closure).
+  Includes the catalog-sidecar (21+4 choreographies) that feeds the
+  K_facet verdict.
 - **`/mines`** — confidence-gated pressure ordering; one Phase 10
   publishable pocket plus a paired failure region; Phase 13 Bayesian
   pressure-floor receipt.
