@@ -281,6 +281,68 @@ If projected full wall-clock exceeds about 10 minutes, the full transfer command
 must be staged for the operator or a long-budget runner. The agent must not run
 the full pass inline.
 
+## Probe Results (steps 1-4, executed 2026-05-30)
+
+Receipt: `results/isotrophy/k-facet-v12-external-frozen-transfer/`
+(`manifest.json`, `source_profile.csv`, `overlap_audit.csv`, `integration_smoke.csv`).
+Runner `scripts/v12_external_frozen_transfer.py` reuses the v0.7a D5
+`per_row_pipeline` verbatim -- identical monodromy / gauge / gate conventions, no
+reimplementation.
+
+**Profile (integration-free):**
+
+```text
+rows:                       10,059   (source gate PASS; all labels in {S,U})
+m3 strata:                  20 over [0.1, 2.0]   S = 1,996   U = 8,063
+overlap vs supp-B:          exact 235 / reflection 0  =  2.75%  (< 5% leakage abort)
+  -> reflection 0 = clean-separation receipt (both supplements canonicalize z0>0)
+strict m3=1 excluded:       1,504   (conservative "all m3=1"; see decision A)
+nonoverlap candidate rows:  8,320    (>> 500 floor)
+candidate primary strata:   17 pre-vf (N>=30 / S>=5 / U>=5)   (>> 5 floor)
+```
+
+**Smoke (30 rows, reused D5 pipeline, 34.9 min wall):**
+
+```text
+seconds_per_row:            69.77   (median 67, max 214 -- long-period dominated)
+integration success:        22/30 = 73.3%   (6 blocked + 2 sanity-fail)
+projected full wall-clock:  161 h  ~= 6.7 days single-threaded (8,320 rows)
+projected analyzable rows:  ~6,101
+```
+
+**Two findings that gate the full run:**
+
+1. **Cost: 6.7 days single-threaded.** The vf pass is row-independent, so the full
+   run must be SHARDED (Phase-15 pattern; the v0.7a runner already carries R2.C
+   append-per-row resume). 8x concurrent -> ~20 h; 16x -> ~10 h.
+
+2. **Attrition risk vs the locked >0.20 BLOCK gate.** Smoke attrition = 26.7%, and
+   it is period-biased: 7 of 8 failures are long-period (T = 38-201) hitting the
+   integrator step-size wall (6 blocked) or the symplecticity gate (2 sanity). The
+   smoke is period-STRATIFIED by design ({min,q25,median,q75,max} per m3 bin), so it
+   over-weights the hard long-period tail and OVER-ESTIMATES the uniform-catalog
+   `attrition_fraction` the Attrition Policy actually scores. The true full-run rate
+   is uncertain and could land in either the 0.05-0.20 "analyzable-domain transfer"
+   band or the >0.20 "external_transfer_blocked_by_attrition" band. An UNBIASED
+   uniform-random attrition probe (not period-stratified) is the cheap de-risk
+   before committing 6.7 days: if it reads >0.20, the locked policy pre-blocks the
+   full run and the compute is saved.
+
+**Staging (step 6) -- the full transfer pass is NOT run inline.** Three operator
+decisions precede authorizing the full run (step 7):
+
+```text
+A. m3=1 exclusion: conservative all-m3=1 (drops 1,504; safe over-exclusion) vs
+   strict-sigma3-only (recovers ~1,479 rows; needs a sigma3 pass on supp-A m3=1).
+B. Attrition de-risk: a uniform-random ~150-row attrition probe for an unbiased
+   attrition_fraction before the full run (recommended).
+C. Shard count for the full vf pass (8x ~20 h / 16x ~10 h), then build step 7
+   (stratified-permutation transfer statistic + verdict) on the analyzable output.
+```
+
+Steps 1-4 complete; the projection correctly fires the form's "stage, do not run
+inline" gate.
+
 ## Primary Transfer Domain
 
 Start from target rows that pass all of:
