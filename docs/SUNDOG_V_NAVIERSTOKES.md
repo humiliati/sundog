@@ -534,8 +534,29 @@ upper bracket reached (twins abundant at K=4). **Enstrophy: clause (ii)
 POSITIVE under `Z_low`** (`D_witness=0.035` vs energy 0.037) — control-
 sufficiency robust to the physical observable. **Three robustness axes now
 DEMONSTRATED: N (16→24), K (2,3,4), objective (energy+enstrophy).** Proposition
-ledger updated. Remaining OPEN: alternate projection, N=32 trend, `m_det`
-upper bracket (coverage-free `R²(Q_K|Φ_K)` across K).
+ledger updated.
+
+**C1 `m_det` bracket / state-determination probe 2026-05-29 — TEMPERS clause
+(i) (honest finding).** New `state-recon` adjudicator (coverage-free held-out
+regression: does `Φ_K` determine `Q_K`?). **Two verify-before-file catches:**
+(a) the first metric `R²(E_high|Φ_K)` across K=3-6 came out 0.997→0.878
+*decreasing* — it measures cascade-locality / local closure (E_high → far-UV
+as K grows), **not** state-determination; no bracket. (b) Corrected to the
+**energy-weighted full-`Q_K` FVE** (matches the twin-state metric's weighting):
+at K=3, **`FVE(Q_K|Φ_K)=0.9994` (state residual 0.06%)** — the attractor is an
+**approximate inertial manifold**, so **K=3 is NEAR the determining
+threshold**. BUT per-DOF the small scales are only `~0.73` determined — the
+genuine state-insufficiency lives in the low-energy small-scale modes. So the
+separation is **scale-selective and energy-MARGINAL**: real + certified
+(positive-measure non-injectivity, genuine small-scale under-determination)
+but small in the decision-relevant (energy) norm; twin pairs sit at the ~2-3σ
+tail of the 0.06% residual. **Honest caveat now in the proposition:** 2D NSE at
+moderate G is low-dimensional, so a non-marginal regime-2 separation likely
+needs a higher-dim regime (much higher G / 3D / different substrate). Clause
+(i) reframed (scale-selective, energy-marginal); ledger tag MEASURED
+(near-determining). The rigorous wave found the result's true size before any
+reviewer did. Runs: c1-recon-k3..k6 (local-closure metric), c1-recon-k3-fullQ
+(the determination number). Remaining OPEN: alt projection, N=32 trend.
 
 ## Claim Boundary
 

@@ -1714,22 +1714,49 @@ def aggregate_state_recon(
     r2_e_high = r2(e_high)
     r2_e_high_perm = r2(e_high[rng.permutation(n)])
 
-    # Variance-weighted FVE over the top-M high-mode components (the
-    # lowest-wavenumber unresolved modes, most state-relevant).
-    m_top = min(16, q.shape[1])
-    top = np.argsort(q.var(axis=0))[::-1][:m_top]
-    ss_res = 0.0
-    ss_tot = 0.0
-    for j in top:
+    # Full-Q_K state-determination. The twin-state non-injectivity metric is
+    # energy-weighted (Q_K = high_mode_vector, |.|^2 = high-band energy), so the
+    # PRIMARY measure is the variance-weighted FVE over the components carrying
+    # ~all the variance. A uniform-sample median per-component R^2 gives the
+    # equal-weight view that exposes the small (far-UV) scales.
+    col_var = q.var(axis=0)
+    order = np.argsort(col_var)[::-1]
+    total_var = float(col_var.sum()) + 1e-300
+    cum = np.cumsum(col_var[order]) / total_var
+    n_cover = min(int(np.searchsorted(cum, 0.999)) + 1, q.shape[1])
+    n_cover = max(n_cover, min(16, q.shape[1]))
+
+    def fit_ss(j: int):
         y = q[:, j]
         y_tr, y_te = y[:ntr], y[ntr:]
         if float(np.var(y_te)) <= 0.0:
-            continue
-        mdl = HistGradientBoostingRegressor(max_iter=150, random_state=0).fit(x_tr, y_tr)
+            return None
+        mdl = HistGradientBoostingRegressor(max_iter=120, random_state=0).fit(x_tr, y_tr)
         p = mdl.predict(x_te)
-        ss_res += float(np.sum((y_te - p) ** 2))
-        ss_tot += float(np.sum((y_te - np.mean(y_te)) ** 2))
-    fve_top = float(1.0 - ss_res / (ss_tot + 1e-300)) if ss_tot > 0 else float("nan")
+        return float(np.sum((y_te - p) ** 2)), float(np.sum((y_te - np.mean(y_te)) ** 2))
+
+    ss_res = 0.0
+    ss_tot = 0.0
+    per_r2: list[float] = []
+    for j in order[:n_cover]:
+        rr = fit_ss(int(j))
+        if rr is None:
+            continue
+        ss_res += rr[0]
+        ss_tot += rr[1]
+        per_r2.append(1.0 - rr[0] / (rr[1] + 1e-300))
+    fve_varweighted = float(1.0 - ss_res / (ss_tot + 1e-300)) if ss_tot > 0 else float("nan")
+    fve_top = fve_varweighted  # primary, energy-weighted (matches twin-state)
+    fve_median_energy = float(np.median(per_r2)) if per_r2 else float("nan")
+
+    rng2 = np.random.default_rng(cfg.random_seed + 7)
+    uni = rng2.choice(q.shape[1], size=min(48, q.shape[1]), replace=False)
+    uni_r2: list[float] = []
+    for j in uni:
+        rr = fit_ss(int(j))
+        if rr is not None:
+            uni_r2.append(1.0 - rr[0] / (rr[1] + 1e-300))
+    r2_median_uniform = float(np.median(uni_r2)) if uni_r2 else float("nan")
 
     interpretable = cfg.preset in VERDICT_BEARING_PRESETS
     estimator_ok = abs(r2_e_high_perm) < 0.10
@@ -1751,8 +1778,11 @@ def aggregate_state_recon(
         "high_mode_dimension": int(q.shape[1]),
         "r2_E_high_from_signature": r2_e_high,
         "r2_E_high_perm_control": r2_e_high_perm,
-        "fve_top_high_modes": fve_top,
-        "fve_top_m": m_top,
+        "fve_Q_K_varweighted": fve_varweighted,
+        "fve_components_covered": n_cover,
+        "fve_median_energy_modes": fve_median_energy,
+        "r2_median_uniform_components": r2_median_uniform,
+        "state_residual_varweighted": float(1.0 - fve_varweighted) if fve_varweighted == fve_varweighted else float("nan"),
         "train_count": ntr,
         "test_count": n - ntr,
     }
@@ -2190,31 +2220,38 @@ def write_receipt_state_recon(path: Path, manifest: dict) -> None:
         "",
         "## Does Phi_K determine the unresolved high modes Q_K?",
         "",
-        f"- **`R²(E_high | Phi_K)`** (high-band energy predictability): `{rr:.4g}`",
+        f"- **`FVE(Q_K | Phi_K)` variance-weighted** (energy-weighted, matches twin-state): "
+        f"`{r.get('fve_Q_K_varweighted', 0.0):.4g}`  → state residual "
+        f"`{r.get('state_residual_varweighted', 0.0):.4g}` "
+        f"(over `{r.get('fve_components_covered')}` components covering 99.9% variance)",
+        f"- `R²(E_high | Phi_K)` (high-band energy predictability): `{rr:.4g}`",
+        f"- median per-component R² (uniform sample, equal-weight incl. small scales): "
+        f"`{r.get('r2_median_uniform_components', 0.0):.4g}`",
         f"- `R²(E_high permuted)` control (want < 0.10): `{r.get('r2_E_high_perm_control', 0.0):.4g}`",
-        f"- `FVE(top-{r.get('fve_top_m')} high modes | Phi_K)` (variance explained): "
-        f"`{r.get('fve_top_high_modes', 0.0):.4g}`",
         f"- train / test: `{r.get('train_count', 0)}` / `{r.get('test_count', 0)}`",
         "",
         "## Reading",
         "",
     ]
+    fve = r.get("fve_Q_K_varweighted", 0.0)
+    resid = r.get("state_residual_varweighted", 1.0)
     if r["verdict"] == "SMOKE_ONLY":
         lines.append("Smoke-only preset; no bracket reading filed.")
     elif r["verdict"] == "STATE_RECON_ESTIMATOR_INVALID":
         lines.append("Permutation control failed (>= 0.10); the regression is unreliable here.")
-    elif rr >= 0.90:
+    elif fve >= 0.99:
         lines.append(
-            f"At K={r.get('k_signature')} the signature **determines** the unresolved energy "
-            f"(`R² = {rr:.3g} >= 0.90`): at/above the inertial-manifold / determining bracket — "
-            "state-reconstruction is effectively recovered here."
+            f"At K={r.get('k_signature')} the attractor is **approximately a graph over Phi_K** — "
+            f"an approximate inertial manifold: variance-weighted `FVE = {fve:.4g}`, state residual "
+            f"`{resid:.3g}`. K is **near the determining threshold**; the certified twin-state "
+            "non-injectivity lives in the small residual. The separation is real (positive-measure) "
+            "but marginal."
         )
     else:
         lines.append(
-            f"At K={r.get('k_signature')} the signature does **not** determine the unresolved "
-            f"energy (`R² = {rr:.3g} < 0.90`): below the determining bracket — consistent with "
-            "twin-state non-injectivity. The bracket `K*` is the smallest K where this crosses ~1 "
-            "(see the cross-K table in the robustness-wave doc)."
+            f"At K={r.get('k_signature')} the state is **genuinely under-determined** by Phi_K "
+            f"(`FVE = {fve:.4g}`, residual `{resid:.3g}`): below the determining threshold — a "
+            "non-marginal state/control separation."
         )
     lines.extend(["", "## Files", "", "- `manifest.json`"])
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")

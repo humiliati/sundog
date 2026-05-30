@@ -162,6 +162,44 @@ but does not reach ~1 within the grid-32 range (`K ≲ 10` by dealiasing), that
 approached — the honest outcome if `m_det` exceeds the resolution. This flips
 the proposition's `K*` tag from *registered* to *measured*.
 
+### Sweep 4 result (2026-05-29) — the bracket finding (tempers clause (i))
+
+Two catches, both recorded honestly (verify-before-file):
+
+**(a) The first metric measured the wrong thing.** `R²(E_high|Φ_K)` across K
+came out `0.997 / 0.918 / 0.878 / 0.878` (K=3/4/5/6) — **decreasing**, not
+rising. Reason: `E_high` is the energy *above* K, which becomes the far-UV
+tail as K grows (less predictable). So that metric tracks **cascade locality
+/ local closure**, not state-determination, and does **not** bracket `m_det`.
+`FVE_top16 ~0.99` at every K likewise just confirms the modes *just above* the
+band are slaved. Neither is the determining bracket.
+
+**(b) The corrected full-`Q_K` measure (energy-weighted, matches twin-state).**
+Re-run at K=3 (`c1-recon-k3-fullQ`) over the 69 components covering 99.9% of
+the variance:
+
+| measure | K=3 |
+| --- | --- |
+| **`FVE(Q_K\|Φ_K)` variance-weighted** | **0.9994** (state residual **0.06%**) |
+| median R² over energy modes (top-69) | 0.994 |
+| **median R² over uniform component sample** (incl. small scales) | **0.728** |
+| `R²(E_high)` / perm control | 0.997 / −0.001 |
+
+**Reading — scale-selective, energy-marginal.** Energy-weighted, the K=3
+attractor is `0.9994` a graph over `Φ_K` — an **approximate inertial
+manifold**, so `K=3` is **near the determining threshold**. But per-DOF the
+small scales are only `~0.73` determined — the **genuine** state-insufficiency
+lives in the low-energy small-scale modes. Because the decision (and the
+twin-state metric) are energy-weighted, the certified non-injectivity is real
+but **marginal in the decision-relevant norm** (twin pairs sit at the ~2–3σ
+tail of the 0.06% residual). This **tempers clause (i)**: the separation is
+real and genuine per-DOF, but not a gross state/control gap. The honest
+caveat — 2D NSE at moderate `G` is low-dimensional, so a non-marginal regime-2
+separation likely needs a higher-dimensional regime — is now in the
+proposition's "does/doesn't claim". No clean `K*` is reachable at grid 32; the
+proposition tag is **MEASURED** (near-determining at K=3) rather than a
+bracketed `K*`.
+
 ## Sweeps 5+ (registered, not yet run)
 
 - **N=32** (grid 64) — a second N point for a convergence *trend*. ~1.5 h.
