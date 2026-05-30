@@ -1,11 +1,46 @@
 # v0.13 External Target Search Form Draft
 
-Status: **DRAFTED 2026-05-30; pending operator lock review.** No v0.13
-runner has been written, no candidate inventory has been computed, no external
-file has been downloaded for this chapter, and no D5 velocity-fraction value has
-been scored. This document proposes the target-search procedure, eligibility
-gates, feasibility probes, selection rule, verdict tree, and claim boundary for
-finding a clean external transfer target after v0.12 blocked on attrition.
+Status: **OPERATOR LOCK 2026-05-30.** No v0.13 runner has been written, no candidate
+inventory has been computed, no external file has been downloaded for this chapter,
+and no D5 velocity-fraction value has been scored. This document locks the
+target-search procedure, eligibility gates, feasibility probes, selection rule,
+verdict tree, and claim boundary for finding a clean external transfer target after
+v0.12 blocked on attrition.
+
+Reviewed for self-consistency, non-circularity, and integrity:
+
+- **The anti-target-shopping firewall is airtight** across four layers: the Integrity
+  Caveat forbidden-list, the D5 probe not recording/using `velocity_fraction`, the
+  signal-blind selection rule, and the Next Chapter Boundary re-lock (a target lock
+  is permission to DRAFT a transfer, never to run or interpret one).
+- **Feasibility bars correctly encode the v0.12 lesson:** `attrition <= 0.10` AND
+  `Wilson95 upper <= 0.20`, so a target whose CI still plausibly crosses the 0.20
+  transfer-block gate cannot be locked. Internally consistent (at n=100 a 0.10 point
+  gives Wilson upper ~0.17 < 0.20; 30-row probes are correctly too wide to lock). The
+  96 h / 24 h-sharded runtime bars would have flagged supp-A (161 h) on speed alone.
+- **Independence tiers prevent overclaiming:** Tier 0 (supp-A/B / repo-derived) cannot
+  be selected; only Tier 1 -> "near-external," Tier 2/3 -> "independent external."
+- Verdict tree complete (locked / near / none / access-blocked / operator-probe);
+  claim boundary honestly scoped (no vf-signal claim, no v0.10b / K_facet revision).
+
+Two surgical adjustments at lock (both strengthen the firewall or the eventual
+transfer's validity; neither changes the chapter's substance):
+
+1. Discovery-blindness clause added to the Integrity Caveat forbidden-list: candidate
+   DISCOVERY, not just selection, must be signal-blind.
+2. Stability-label commensurability added to the Next Chapter Boundary re-lock list:
+   the external S/U label must denote the same linear (monodromy/Floquet) stability as
+   supp-B, or the transfer is invalid.
+
+Implementation note (already mandated by the D5 Feasibility Probe section; flagged
+because the v0.12 attrition-probe did the opposite): the v0.13 feasibility probe
+reuses `per_row_pipeline` but MUST NOT emit `velocity_fraction` or `zone_index` to any
+receipt -- only success/blocked/sanity, runtime, period, mass key, failure reason.
+
+Operational note: the inventory/discovery stage is an operator/agent-curated literature
+and data-store search (it is not algorithmic); the pre-registration firewall binds that
+search to be signal-blind per adjustment 1, and binds selection to be feature-blind per
+the Target Selection Rule.
 
 ## Frame
 
@@ -53,6 +88,10 @@ forbidden in v0.13:
   inspecting velocity_fraction zone counts by stability
   computing AUC_cond, J_cond, chi-squared, J-T, or any S/U-vs-feature statistic
   selecting a target because it appears likely to pass the v0.11 rule
+  searching for, prioritizing, or excluding candidate sources by any known or
+    suspected velocity_fraction-vs-stability behavior -- discovery itself must be
+    signal-blind (you may search for "3-body periodic catalog with linear-stability
+    labels"; you may not search for catalogs known to exhibit the vf/stability link)
   changing v0.11 cutpoints {0.25, 0.50}
   relaxing the frozen D5 numerical controls
   restricting a target post-hoc to the rows that integrate cleanly
@@ -417,6 +456,9 @@ chapter draft a frozen transfer statistic. That later chapter must re-lock:
 selected target path and hash
 overlap exclusion list
 primary conditioning strata
+stability-label commensurability with supp-B's linear (monodromy/Floquet) stability
+  convention -- the transfer is valid only if the external S/U label denotes the same
+  kind of stability; a non-commensurable label blocks the transfer
 attrition policy
 permutation null
 effect floor
