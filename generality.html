@@ -19,10 +19,10 @@
     <meta property="og:site_name" content="Sundog">
     <meta property="og:title" content="High-Stakes Generality - Transfer Tests, Walls, and Review Gates">
     <meta property="og:description" content="Six lanes asking whether signatures that work in one domain survive substrate changes. Navier-Stokes C1 is the strongest current witness; Riemann, Yang-Mills, P-vs-NP, ARC-AGI, and Three-Body 15C sit on the same matrix.">
-    <meta property="og:image" content="https://sundog.cc/og/sundog-generic.png">
+    <meta property="og:image" content="https://sundog.cc/og/generality.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="High-stakes generality umbrella card.">
+    <meta property="og:image:alt" content="High-stakes generality umbrella card: 6-lane matrix with Navier-Stokes C1 prominent, plus Riemann, Yang-Mills, P-vs-NP, ARC-AGI, and Three-Body 15C.">
     <meta property="og:url" content="https://sundog.cc/generality">
     <meta property="article:published_time" content="2026-05-30T00:00:00Z">
     <meta property="article:modified_time" content="2026-05-30T00:00:00Z">
@@ -34,8 +34,8 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="High-Stakes Generality - Sundog">
     <meta name="twitter:description" content="Six lanes asking whether signatures survive substrate changes. NSE C1 is the strongest witness; Riemann, Yang-Mills, P-vs-NP, ARC, Three-Body sit on the same matrix.">
-    <meta name="twitter:image" content="https://sundog.cc/og/sundog-generic.png">
-    <meta name="twitter:image:alt" content="High-stakes generality umbrella card.">
+    <meta name="twitter:image" content="https://sundog.cc/og/generality.png">
+    <meta name="twitter:image:alt" content="High-stakes generality umbrella card: 6-lane matrix with Navier-Stokes C1 prominent, plus Riemann, Yang-Mills, P-vs-NP, ARC-AGI, and Three-Body 15C.">
 
     <script type="application/ld+json">
     {
@@ -43,7 +43,7 @@
       "@type": "TechArticle",
       "headline": "High-Stakes Generality - Transfer Tests, Walls, and Review Gates",
       "description": "Sundog's umbrella view of high-stakes transfer-test lanes: Navier-Stokes C1 Reading-2 witness, Riemann bounded-null synthesis, Yang-Mills Phase 2 bounded-null, P-vs-NP safety-green cost-hold, ARC-AGI relative-locality hold, Three-Body Phase 15C.",
-      "image": "https://sundog.cc/og/sundog-generic.png",
+      "image": "https://sundog.cc/og/generality.png",
       "datePublished": "2026-05-30",
       "dateModified": "2026-05-30",
       "inLanguage": "en",
@@ -144,6 +144,25 @@
         }
 
         .gen-card p:last-child { margin-bottom: 0; }
+
+        .gen-intro {
+            max-width: 880px;
+            margin-bottom: 1.25rem;
+        }
+
+        .gen-intro h2 {
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: 1.4rem;
+            margin: 0.35rem 0 0.75rem;
+        }
+
+        .gen-intro p {
+            color: #40505C;
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 0.85rem;
+        }
 
         .gen-card code {
             background: rgba(184, 131, 30, 0.10);
@@ -367,13 +386,13 @@
 
         <section class="gen-section" aria-label="Status matrix">
             <figure class="gen-figure">
-                <img src="/media/generality-status-matrix.svg" width="1280" height="1100" alt="High-stakes generality status matrix: six project cards (Riemann, Navier-Stokes C1, P-vs-NP, Yang-Mills, ARC-AGI, Three-Body 15C) with review-gated, design-hold, draft-handoff, cost-hold, and execution-hold badges and per-project stat readouts.">
+                <img src="/media/generality-status-matrix.svg" width="1280" height="1100" alt="High-stakes generality status matrix: six project cards (Riemann, Navier-Stokes C1, P-vs-NP, Yang-Mills, ARC-AGI, Three-Body 15C) with review-gated, cost-hold, execution-hold, and running badges plus per-project stat readouts.">
                 <figcaption>Status matrix — six lanes, current verdicts and walls. Cards click through to per-lane ledgers below.</figcaption>
             </figure>
         </section>
 
         <section class="gen-section" aria-label="Lanes">
-            <div class="gen-card">
+            <div class="gen-intro">
                 <p class="eyebrow">The Lanes</p>
                 <h2>Six transfer tests; each one names its wall.</h2>
                 <p>
@@ -383,7 +402,8 @@
                     before the result is. Bounded-null results are named outcomes,
                     not silent failures.
                 </p>
-                <div class="lane-grid">
+            </div>
+            <div class="lane-grid">
                     <article class="lane-tile" data-lane="navierstokes">
                         <div class="lane-tile-figure">
                             <img src="/media/generality-navier-stokes-c1.svg" width="900" height="660" alt="Navier-Stokes C1 generality card: review-gated, Kolmogorov-flow Reading-2 witness at G=200 and G=300 with 942,834 witness pairs.">
@@ -418,16 +438,17 @@
 
                     <article class="lane-tile" data-lane="yangmills">
                         <div class="lane-tile-figure">
-                            <img src="/media/generality-yang-mills.svg" width="900" height="660" alt="Yang-Mills generality card: review-gated, four probes with one bounded null, Phase 2 NEG-A across the slate.">
+                            <img src="/media/generality-yang-mills.svg" width="900" height="660" alt="Yang-Mills generality card: review-gated, four SU(2) 3D Phase 2 probes with one bounded null and zero Clay-problem claims.">
                         </div>
                         <div class="lane-tile-body">
                             <span class="badge">Review gated</span>
                             <h3>Yang-Mills</h3>
                             <p class="summary">4 probes, 1 bounded null</p>
-                            <p>Four pre-registered probes (3 signature vocabularies × 2 target classes) on SU(2) 3D 12³ all landed <code>YM-P2-NEG-A no_rank_local_structure</code>; bounded-null synthesis filed. No mass-gap claim, no Clay-problem claim, no lit-pass or runner yet — Phase 0 handoff is the next move.</p>
+                            <p>Four pre-registered probes (3 signature vocabularies × 2 target classes) on SU(2) 3D 12³ all landed <code>YM-P2-NEG-A no_rank_local_structure</code>; bounded-null synthesis and review packet are filed. No mass-gap claim, no confinement claim, no continuum theorem, and no Clay-problem claim.</p>
                         </div>
                         <div class="lane-tile-actions">
                             <a href="docs/SUNDOG_V_YANG_MILLS.md">Ledger</a>
+                            <a href="docs/yang-mills/EXTERNAL_REVIEW_PACKET.md">Review packet</a>
                         </div>
                     </article>
 
@@ -452,10 +473,10 @@
                             <img src="/media/generality-arc-agi.svg" width="900" height="660" alt="ARC-AGI generality card: Phase 3E relative-locality hold, expanded 108-task register, Branch E3 learned ranker built but compute-paused.">
                         </div>
                         <div class="lane-tile-body">
-                            <span class="badge">Design hold</span>
+                            <span class="badge">Execution hold</span>
                             <h3>ARC-AGI</h3>
-                            <p class="summary">Phase 3E relative-locality hold</p>
-                            <p>Phase 3E rank-neighbor certificate proposal after absolute fibers stayed sparse on the expanded 108-task register. Branch E3 learned ranker built but compute-paused by operator decision 2026-05-29. Targets the ARC Prize 2026 Paper Track (Theory category).</p>
+                            <p class="summary">absolute fibers sparse; relative test held</p>
+                            <p>Seven exact-grid floors stand; expanded absolute fibers stayed sparse and surfaced oracle leakage on the 108-task register. The relative-locality lane stays held until tooling admission, leak checks, result path, smoke fingerprint, and freeze marker are all filed together.</p>
                         </div>
                         <div class="lane-tile-actions">
                             <a href="docs/SUNDOG_V_ARC.md">Ledger</a>
@@ -465,13 +486,13 @@
 
                     <article class="lane-tile" data-lane="threebody15c">
                         <div class="lane-tile-figure">
-                            <img src="/media/generality-three-body-15c.svg" width="900" height="660" alt="Three-Body Phase 15C generality card: multi-step counterfactual sweep, compute-blocked.">
+                            <img src="/media/generality-three-body-15c.svg" width="900" height="660" alt="Three-Body Phase 15C generality card: running multi-step counterfactual horizon audit with 6 of 12 shards logged.">
                         </div>
                         <div class="lane-tile-body">
-                            <span class="badge">Compute blocked</span>
+                            <span class="badge">Running</span>
                             <h3>Three-Body Phase 15C</h3>
-                            <p class="summary">multi-step counterfactual sweep</p>
-                            <p>Phase 15C multi-step counterfactual sweep on top of the existing high-velocity near-escape pocket. The Three-Body roadmap is the sibling source for Navier-Stokes Reading-2 — the same audit-chain discipline applied to a different substrate.</p>
+                            <p class="summary">6 / 12 shards logged</p>
+                            <p>The Phase 15C counterfactual horizon audit is implemented and smoke-passed; 6 of 12 lock shards are logged, but no candidate-split branch read exists yet. The Three-Body roadmap is the sibling source for Navier-Stokes Reading-2 — the same audit-chain discipline applied to a different substrate.</p>
                         </div>
                         <div class="lane-tile-actions">
                             <a href="docs/SUNDOG_V_THREEBODY.md">Ledger</a>
@@ -479,7 +500,6 @@
                         </div>
                     </article>
                 </div>
-            </div>
         </section>
 
         <section class="gen-section" aria-label="Transfer lanes">
@@ -489,12 +509,35 @@
             </figure>
         </section>
 
+        <section class="gen-section" aria-label="Site route">
+            <div class="gen-card">
+                <p class="eyebrow">Where This Sits</p>
+                <h2>From a first equation to transfer tests.</h2>
+                <p>
+                    The site now has two public math layers. <a href="/h-of-x">h-of-x</a>
+                    is the narrow geometry handle: write the inverse, name its
+                    eligibility boundary, and keep the failure case visible.
+                    <a href="/generality" aria-current="page">High-Stakes Generality</a>
+                    is the same discipline after the substrates get harder:
+                    ask whether a signature survives a regime change, publish
+                    the bounded nulls, and keep review gates attached to the claim.
+                </p>
+                <p>
+                    Use <a href="/geometry">Geometry</a> for the visual/math shelf,
+                    <a href="/alignment">Alignment</a> for same-information
+                    comparator language, <a href="/legend#generality-heading">Legend</a>
+                    for vocabulary, and <a href="/repo-map">Repo Map</a> when you
+                    want the whole public route in one place.
+                </p>
+            </div>
+        </section>
+
         <section class="gen-section" aria-label="Claim boundary">
             <p class="eyebrow">Claim Boundary</p>
             <div class="not-grid">
                 <div class="not-card">
                     <h3>Not a Clay-problem claim.</h3>
-                    <p>None of these six lanes claims progress on a Clay Millennium problem. Navier-Stokes C1 is a Kolmogorov-flow cell witness; Yang-Mills is a draft-handoff with no mass-gap claim; Riemann returned bounded nulls.</p>
+                    <p>None of these six lanes claims progress on a Clay Millennium problem. Navier-Stokes C1 is a Kolmogorov-flow cell witness; Yang-Mills is a finite-lattice bounded-null lane with no mass-gap claim; Riemann returned bounded nulls.</p>
                 </div>
                 <div class="not-card">
                     <h3>Not a theorem-claims page.</h3>
@@ -523,7 +566,11 @@
                 <a href="docs/SUNDOG_V_THREEBODY.md">Sundog Three-Body Roadmap</a>
                 <a href="docs/TODO.md">Operator TODO — Current Holds At A Glance</a>
                 <a href="docs/presentation/claims-and-scope.md">Claims and Scope</a>
-                <a href="/legend#kfacet">Legend — audit-chain vocabulary</a>
+                <a href="/h-of-x">h-of-x first-equation page</a>
+                <a href="/geometry">Geometry shelf</a>
+                <a href="/alignment">Alignment comparator primer</a>
+                <a href="/repo-map">Repo Map</a>
+                <a href="/legend#generality-heading">Legend — generality vocabulary</a>
             </div>
         </section>
     </main>
@@ -539,6 +586,7 @@
             <a href="docs/README.md">Documentation</a> |
             <a href="docs/SCIENTIFIC_CRITERIA.md">Scientific Criteria</a> |
             <a href="docs/presentation/claims-and-scope.md">Claims Policy</a> |
+            <a href="/h-of-x">h-of-x</a> |
             <a href="/navierstokes">NSE C1 deep dive</a>
         </p>
         <p class="footer-copyright">

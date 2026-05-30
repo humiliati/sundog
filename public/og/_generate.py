@@ -278,6 +278,88 @@ def viz_mines_grid() -> str:
 
 # ---------- Card configs ----------
 
+def viz_navierstokes_witness() -> str:
+    """NSE C1 Reading-2 witness: two Grashof regime boxes with witness-pair beads."""
+    return '\n'.join([
+        '<g transform="translate(660,160)" filter="url(#cardShadow)">',
+        '  <rect x="0" y="0" width="200" height="130" rx="10" fill="#FFFFFF" stroke="#B8831E" stroke-width="2"/>',
+        '  <text x="100" y="34" font-family="Verdana, Geneva, sans-serif" font-size="14" font-weight="800" letter-spacing="2" fill="#684811" text-anchor="middle">G = 200</text>',
+        '  <text x="100" y="62" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#684811" text-anchor="middle">Reading-2 witness</text>',
+        '  <text x="100" y="80" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#684811" text-anchor="middle">d = 32</text>',
+        '  <line x1="20" y1="92" x2="180" y2="92" stroke="#CFD8DC" stroke-width="1"/>',
+        '  <text x="100" y="112" font-family="Courier New, monospace" font-size="12" font-weight="700" fill="#1A3A52" text-anchor="middle">a_mm = -0.00079</text>',
+        '</g>',
+        '<g transform="translate(900,160)" filter="url(#cardShadow)">',
+        '  <rect x="0" y="0" width="200" height="130" rx="10" fill="#FFFFFF" stroke="#B8831E" stroke-width="3"/>',
+        '  <text x="100" y="34" font-family="Verdana, Geneva, sans-serif" font-size="14" font-weight="800" letter-spacing="2" fill="#684811" text-anchor="middle">G = 300</text>',
+        '  <text x="100" y="62" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#684811" text-anchor="middle">generality test</text>',
+        '  <text x="100" y="80" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#684811" text-anchor="middle">d = 18</text>',
+        '  <line x1="20" y1="92" x2="180" y2="92" stroke="#CFD8DC" stroke-width="1"/>',
+        '  <text x="100" y="112" font-family="Courier New, monospace" font-size="12" font-weight="700" fill="#1A3A52" text-anchor="middle">942,834 pairs</text>',
+        '</g>',
+        '<g>',
+        '  <line x1="860" y1="225" x2="900" y2="225" stroke="#B8831E" stroke-width="2" stroke-dasharray="4 4"/>',
+        '  <text x="880" y="218" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="700" fill="#684811" text-anchor="middle">eps_K</text>',
+        '  <text x="880" y="245" font-family="Courier New, monospace" font-size="11" font-weight="800" fill="#1A3A52" text-anchor="middle">0.0664</text>',
+        '</g>',
+        # 12 witness-pair beads
+        '<g>',
+        '  <circle cx="660" cy="360" r="5.5" fill="#F4C430" stroke="#C99517" stroke-width="1"/>',
+        '  <circle cx="700" cy="360" r="5.5" fill="#F4C430" stroke="#C99517" stroke-width="1"/>',
+        '  <circle cx="740" cy="360" r="5.5" fill="#F4C430" stroke="#C99517" stroke-width="1"/>',
+        '  <circle cx="780" cy="360" r="5.5" fill="#F4C430" stroke="#C99517" stroke-width="1"/>',
+        '  <circle cx="820" cy="360" r="5.5" fill="#F4C430" stroke="#C99517" stroke-width="1"/>',
+        '  <circle cx="860" cy="360" r="5.5" fill="#F4C430" stroke="#C99517" stroke-width="1"/>',
+        '  <circle cx="900" cy="360" r="5.5" fill="#F4C430" stroke="#C99517" stroke-width="1"/>',
+        '  <circle cx="940" cy="360" r="5.5" fill="#F4C430" stroke="#C99517" stroke-width="1"/>',
+        '  <circle cx="980" cy="360" r="5.5" fill="#F4C430" stroke="#C99517" stroke-width="1"/>',
+        '  <circle cx="1020" cy="360" r="5.5" fill="#F4C430" stroke="#C99517" stroke-width="1"/>',
+        '  <circle cx="1060" cy="360" r="5.5" fill="#F4C430" stroke="#C99517" stroke-width="1"/>',
+        '  <circle cx="1100" cy="360" r="5.5" fill="#F4C430" stroke="#C99517" stroke-width="1"/>',
+        '</g>',
+        '<text x="880" y="390" font-family="Verdana, Geneva, sans-serif" font-size="11" font-weight="700" fill="#6A7680" text-anchor="middle">witness pairs at eps_K</text>',
+        # Review-gated badge
+        '<g transform="translate(720,430)" filter="url(#cardShadow)">',
+        '  <rect x="0" y="0" width="320" height="46" rx="23" fill="#FFFFFF" stroke="#B8831E" stroke-width="2.2"/>',
+        '  <text x="160" y="29" font-family="Verdana, Geneva, sans-serif" font-size="13" font-weight="800" letter-spacing="2" fill="#684811" text-anchor="middle">REVIEW-GATED  C1 UNPROMOTED</text>',
+        '</g>',
+    ])
+
+
+def viz_generality_matrix() -> str:
+    """Six-lane mini-matrix for the generality umbrella."""
+    lanes = [
+        (660, 140, 230, 130, "Navier-Stokes C1",  "942,834 WITNESS PAIRS",  "#FFF4D6", "#B8831E", "#684811", True),
+        (910, 140, 230, 130, "Riemann",           "3 LANES, 3 BOUNDED NULLS", "#FFFFFF", "#B8831E", "#684811", False),
+        (660, 290, 230, 130, "Yang-Mills",        "4 PROBES, 1 BOUNDED NULL", "#FFFFFF", "#B8831E", "#684811", False),
+        (910, 290, 230, 130, "P-vs-NP",           "SAFETY GREEN, COST HOLD",  "#FFFFFF", "#B53A2C", "#7A1F14", False),
+        (660, 440, 230, 95,  "ARC-AGI",           "PHASE 3E DESIGN HOLD",     "#EDF2F7", "#64748B", "#37465A", False),
+        (910, 440, 230, 95,  "Three-Body 15C",    "COMPUTE-BLOCKED",          "#EDF2F7", "#64748B", "#37465A", False),
+    ]
+    parts = []
+    for (x, y, w, h, label, stat, sfill, sstroke, stext, prominent) in lanes:
+        sw = 3 if prominent else 1.5
+        parts.append(f'<g filter="url(#cardShadow)"><rect x="{x}" y="{y}" width="{w}" height="{h}" rx="10" fill="#FFFFFF" stroke="{sstroke}" stroke-width="{sw}"/></g>')
+        label_size = 18 if prominent else 16
+        parts.append(f'<text x="{x + 14}" y="{y + 30}" font-family="Georgia, serif" font-size="{label_size}" font-weight="700" fill="#1A3A52">{label}</text>')
+        bx = x + 14
+        by = y + (50 if h > 100 else 46)
+        bw = w - 28
+        parts.append(f'<rect x="{bx}" y="{by}" width="{bw}" height="22" rx="11" fill="{sfill}" stroke="{sstroke}" stroke-width="1"/>')
+        parts.append(f'<text x="{bx + bw/2}" y="{by + 15}" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" fill="{stext}" text-anchor="middle">{stat}</text>')
+        if h > 100:
+            note = {
+                "Navier-Stokes C1": ["Reading-2 witness G=200+300", "deep dive at /navierstokes"],
+                "Riemann":          ["no structural-zero edge", "external review filed"],
+                "Yang-Mills":       ["YM-P2-NEG-A across slate", "no mass-gap claim"],
+                "P-vs-NP":          ["v0-v5, 0 false accepts", "2 required reruns"],
+            }.get(label, ["", ""])
+            parts.append(f'<text x="{x + 14}" y="{y + 102}" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#40505C">{note[0]}</text>')
+            parts.append(f'<text x="{x + 14}" y="{y + 118}" font-family="Courier New, monospace" font-size="10" fill="#1A3A52">{note[1]}</text>')
+    parts.append('<text x="900" y="565" font-family="Verdana, Geneva, sans-serif" font-size="12" fill="#6A7680" text-anchor="middle">six transfer-test lanes</text>')
+    return "\n  ".join(parts)
+
+
 CARDS = {
     "index": {
         "filename": "home.png",
@@ -360,6 +442,30 @@ CARDS = {
         ],
         "url": "sundog.cc/sundog",
         "viz": viz_halo_atlas,
+    },
+    "navierstokes": {
+        "filename": "navierstokes.png",
+        "eyebrow": "SUNDOG · NAVIER-STOKES C1",
+        "headline": ["A witness at", "two Grashof", "regimes."],
+        "lede": [
+            "State-insufficient AND",
+            "control-sufficient. Not a",
+            "Clay-problem claim.",
+        ],
+        "url": "sundog.cc/navierstokes",
+        "viz": viz_navierstokes_witness,
+    },
+    "generality": {
+        "filename": "generality.png",
+        "eyebrow": "SUNDOG · HIGH-STAKES GENERALITY",
+        "headline": ["Transfer tests,", "walls, and", "review gates."],
+        "lede": [
+            "Six lanes asking whether",
+            "signatures survive substrate",
+            "changes. Receipts, not claims.",
+        ],
+        "url": "sundog.cc/generality",
+        "viz": viz_generality_matrix,
     },
 }
 

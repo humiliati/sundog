@@ -118,7 +118,8 @@ pin it down:
 | `B_δ` is genuine geometry, not artifact | **DEMONSTRATED** | `D_witness ≈ D_candidate` (paired exhibit) |
 | portability across `G` | **DEMONSTRATED** (2 points) + argued by construction | §4 table |
 | ∞-dimensional NSE-attractor analogue | **HYPOTHESIZED** | Galerkin-attractor upper-semicontinuity cited, not applied |
-| refinement-invariance (`N`, projection, objective family) | **OPEN** | the robustness wave (un-run) |
+| refinement-invariance, **N axis** | **DEMONSTRATED** (N=16→24) | all 3 clauses persist with ~identical numbers despite `Q_K` 422→1070 DOF ([`PDE_C1_ROBUSTNESS_WAVE.md`](PDE_C1_ROBUSTNESS_WAVE.md)); N=32 trend pending |
+| refinement-invariance — K-window, objective family, projection | **OPEN** | the rest of the robustness wave (registered, un-run) |
 
 ## 7. Glossary to accepted PDE / control language
 

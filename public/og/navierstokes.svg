@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="paper" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="#FFFAF0" stop-opacity="0.94"/>
+    </linearGradient>
+    <pattern id="ruled" x="0" y="0" width="1200" height="28" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="27" x2="1200" y2="27" stroke="#63A3DC" stroke-opacity="0.075" stroke-width="1"/>
+    </pattern>
+    <radialGradient id="halo" cx="0.18" cy="0.12" r="0.6">
+      <stop offset="0%" stop-color="#F4C430" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#F4C430" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="125%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6"/>
+      <feOffset dx="0" dy="4"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.15"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <!-- Paper-ruled base: warm cream + horizontal blue rules + red legal-pad margin -->
+  <rect width="1200" height="630" fill="#FEFDFB"/>
+  <rect width="1200" height="630" fill="url(#paper)"/>
+  <rect width="1200" height="630" fill="url(#ruled)"/>
+  <rect x="90" y="0" width="2" height="630" fill="#FF6363" fill-opacity="0.12"/>
+  <rect width="1200" height="630" fill="url(#halo)"/>
+
+  <!-- Top accent rule -->
+  <rect x="60" y="60" width="80" height="3" fill="#C99517"/>
+
+  <!-- Eyebrow -->
+  <text x="60" y="100" font-family="Verdana, Geneva, sans-serif" font-size="20" font-weight="700" fill="#2A5570" letter-spacing="3">SUNDOG · NAVIER-STOKES C1</text>
+
+  <!-- Headline -->
+  <text x="60" y="180" font-family="Georgia, 'Times New Roman', serif" font-size="48" font-weight="700" fill="#1A3A52">A witness at</text>
+  <text x="60" y="230" font-family="Georgia, 'Times New Roman', serif" font-size="48" font-weight="700" fill="#1A3A52">two Grashof</text>
+  <text x="60" y="281" font-family="Georgia, 'Times New Roman', serif" font-size="48" font-weight="700" fill="#1A3A52">regimes.</text>
+
+  <!-- Lede -->
+  <text x="60" y="380" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">State-insufficient AND</text>
+  <text x="60" y="412" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">control-sufficient. Not a</text>
+  <text x="60" y="444" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">Clay-problem claim.</text>
+
+  <!-- URL -->
+  <text x="60" y="560" font-family="Courier New, Courier, monospace" font-size="22" font-weight="700" fill="#1A3A52">sundog.cc/navierstokes</text>
+
+  <!-- Per-page visualization (right side, ~620 to ~1140) -->
+  <g transform="translate(660,160)" filter="url(#cardShadow)">
+  <rect x="0" y="0" width="200" height="130" rx="10" fill="#FFFFFF" stroke="#B8831E" stroke-width="2"/>
+  <text x="100" y="34" font-family="Verdana, Geneva, sans-serif" font-size="14" font-weight="800" letter-spacing="2" fill="#684811" text-anchor="middle">G = 200</text>
+  <text x="100" y="62" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#684811" text-anchor="middle">Reading-2 witness</text>
+  <text x="100" y="80" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#684811" text-anchor="middle">d = 32</text>
+  <line x1="20" y1="92" x2="180" y2="92" stroke="#CFD8DC" stroke-width="1"/>
+  <text x="100" y="112" font-family="Courier New, monospace" font-size="12" font-weight="700" fill="#1A3A52" text-anchor="middle">a_mm = -0.00079</text>
+</g>
+<g transform="translate(900,160)" filter="url(#cardShadow)">
+  <rect x="0" y="0" width="200" height="130" rx="10" fill="#FFFFFF" stroke="#B8831E" stroke-width="3"/>
+  <text x="100" y="34" font-family="Verdana, Geneva, sans-serif" font-size="14" font-weight="800" letter-spacing="2" fill="#684811" text-anchor="middle">G = 300</text>
+  <text x="100" y="62" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#684811" text-anchor="middle">generality test</text>
+  <text x="100" y="80" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#684811" text-anchor="middle">d = 18</text>
+  <line x1="20" y1="92" x2="180" y2="92" stroke="#CFD8DC" stroke-width="1"/>
+  <text x="100" y="112" font-family="Courier New, monospace" font-size="12" font-weight="700" fill="#1A3A52" text-anchor="middle">942,834 pairs</text>
+</g>
+<g>
+  <line x1="860" y1="225" x2="900" y2="225" stroke="#B8831E" stroke-width="2" stroke-dasharray="4 4"/>
+  <text x="880" y="218" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="700" fill="#684811" text-anchor="middle">eps_K</text>
+  <text x="880" y="245" font-family="Courier New, monospace" font-size="11" font-weight="800" fill="#1A3A52" text-anchor="middle">0.0664</text>
+</g>
+<g>
+  <circle cx="660" cy="360" r="5.5" fill="#F4C430" stroke="#C99517" stroke-width="1"/>
+  <circle cx="700" cy="360" r="5.5" fill="#F4C430" stroke="#C99517" stroke-width="1"/>
+  <circle cx="740" cy="360" r="5.5" fill="#F4C430" stroke="#C99517" stroke-width="1"/>
+  <circle cx="780" cy="360" r="5.5" fill="#F4C430" stroke="#C99517" stroke-width="1"/>
+  <circle cx="820" cy="360" r="5.5" fill="#F4C430" stroke="#C99517" stroke-width="1"/>
+  <circle cx="860" cy="360" r="5.5" fill="#F4C430" stroke="#C99517" stroke-width="1"/>
+  <circle cx="900" cy="360" r="5.5" fill="#F4C430" stroke="#C99517" stroke-width="1"/>
+  <circle cx="940" cy="360" r="5.5" fill="#F4C430" stroke="#C99517" stroke-width="1"/>
+  <circle cx="980" cy="360" r="5.5" fill="#F4C430" stroke="#C99517" stroke-width="1"/>
+  <circle cx="1020" cy="360" r="5.5" fill="#F4C430" stroke="#C99517" stroke-width="1"/>
+  <circle cx="1060" cy="360" r="5.5" fill="#F4C430" stroke="#C99517" stroke-width="1"/>
+  <circle cx="1100" cy="360" r="5.5" fill="#F4C430" stroke="#C99517" stroke-width="1"/>
+</g>
+<text x="880" y="390" font-family="Verdana, Geneva, sans-serif" font-size="11" font-weight="700" fill="#6A7680" text-anchor="middle">witness pairs at eps_K</text>
+<g transform="translate(720,430)" filter="url(#cardShadow)">
+  <rect x="0" y="0" width="320" height="46" rx="23" fill="#FFFFFF" stroke="#B8831E" stroke-width="2.2"/>
+  <text x="160" y="29" font-family="Verdana, Geneva, sans-serif" font-size="13" font-weight="800" letter-spacing="2" fill="#684811" text-anchor="middle">REVIEW-GATED  C1 UNPROMOTED</text>
+</g>
+
+  <!-- Bottom-right mark -->
+  <text x="1140" y="600" font-family="Verdana, Geneva, sans-serif" font-size="14" font-weight="700" letter-spacing="2" fill="#9AA4AC" text-anchor="end">sundog.cc</text>
+</svg>

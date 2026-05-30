@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="paper" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="#FFFAF0" stop-opacity="0.94"/>
+    </linearGradient>
+    <pattern id="ruled" x="0" y="0" width="1200" height="28" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="27" x2="1200" y2="27" stroke="#63A3DC" stroke-opacity="0.075" stroke-width="1"/>
+    </pattern>
+    <radialGradient id="halo" cx="0.18" cy="0.12" r="0.6">
+      <stop offset="0%" stop-color="#F4C430" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#F4C430" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="125%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6"/>
+      <feOffset dx="0" dy="4"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.15"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <!-- Paper-ruled base: warm cream + horizontal blue rules + red legal-pad margin -->
+  <rect width="1200" height="630" fill="#FEFDFB"/>
+  <rect width="1200" height="630" fill="url(#paper)"/>
+  <rect width="1200" height="630" fill="url(#ruled)"/>
+  <rect x="90" y="0" width="2" height="630" fill="#FF6363" fill-opacity="0.12"/>
+  <rect width="1200" height="630" fill="url(#halo)"/>
+
+  <!-- Top accent rule -->
+  <rect x="60" y="60" width="80" height="3" fill="#C99517"/>
+
+  <!-- Eyebrow -->
+  <text x="60" y="100" font-family="Verdana, Geneva, sans-serif" font-size="20" font-weight="700" fill="#2A5570" letter-spacing="3">SUNDOG · HIGH-STAKES GENERALITY</text>
+
+  <!-- Headline -->
+  <text x="60" y="180" font-family="Georgia, 'Times New Roman', serif" font-size="48" font-weight="700" fill="#1A3A52">Transfer tests,</text>
+  <text x="60" y="230" font-family="Georgia, 'Times New Roman', serif" font-size="48" font-weight="700" fill="#1A3A52">walls, and</text>
+  <text x="60" y="281" font-family="Georgia, 'Times New Roman', serif" font-size="48" font-weight="700" fill="#1A3A52">review gates.</text>
+
+  <!-- Lede -->
+  <text x="60" y="380" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">Six lanes asking whether</text>
+  <text x="60" y="412" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">signatures survive substrate</text>
+  <text x="60" y="444" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">changes. Receipts, not claims.</text>
+
+  <!-- URL -->
+  <text x="60" y="560" font-family="Courier New, Courier, monospace" font-size="22" font-weight="700" fill="#1A3A52">sundog.cc/generality</text>
+
+  <!-- Per-page visualization (right side, ~620 to ~1140) -->
+  <g filter="url(#cardShadow)"><rect x="660" y="140" width="230" height="130" rx="10" fill="#FFFFFF" stroke="#B8831E" stroke-width="3"/></g>
+  <text x="674" y="170" font-family="Georgia, serif" font-size="18" font-weight="700" fill="#1A3A52">Navier-Stokes C1</text>
+  <rect x="674" y="190" width="202" height="22" rx="11" fill="#FFF4D6" stroke="#B8831E" stroke-width="1"/>
+  <text x="775.0" y="205" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" fill="#684811" text-anchor="middle">942,834 WITNESS PAIRS</text>
+  <text x="674" y="242" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#40505C">Reading-2 witness G=200+300</text>
+  <text x="674" y="258" font-family="Courier New, monospace" font-size="10" fill="#1A3A52">deep dive at /navierstokes</text>
+  <g filter="url(#cardShadow)"><rect x="910" y="140" width="230" height="130" rx="10" fill="#FFFFFF" stroke="#B8831E" stroke-width="1.5"/></g>
+  <text x="924" y="170" font-family="Georgia, serif" font-size="16" font-weight="700" fill="#1A3A52">Riemann</text>
+  <rect x="924" y="190" width="202" height="22" rx="11" fill="#FFFFFF" stroke="#B8831E" stroke-width="1"/>
+  <text x="1025.0" y="205" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" fill="#684811" text-anchor="middle">3 LANES, 3 BOUNDED NULLS</text>
+  <text x="924" y="242" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#40505C">no structural-zero edge</text>
+  <text x="924" y="258" font-family="Courier New, monospace" font-size="10" fill="#1A3A52">external review filed</text>
+  <g filter="url(#cardShadow)"><rect x="660" y="290" width="230" height="130" rx="10" fill="#FFFFFF" stroke="#B8831E" stroke-width="1.5"/></g>
+  <text x="674" y="320" font-family="Georgia, serif" font-size="16" font-weight="700" fill="#1A3A52">Yang-Mills</text>
+  <rect x="674" y="340" width="202" height="22" rx="11" fill="#FFFFFF" stroke="#B8831E" stroke-width="1"/>
+  <text x="775.0" y="355" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" fill="#684811" text-anchor="middle">4 PROBES, 1 BOUNDED NULL</text>
+  <text x="674" y="392" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#40505C">YM-P2-NEG-A across slate</text>
+  <text x="674" y="408" font-family="Courier New, monospace" font-size="10" fill="#1A3A52">no mass-gap claim</text>
+  <g filter="url(#cardShadow)"><rect x="910" y="290" width="230" height="130" rx="10" fill="#FFFFFF" stroke="#B53A2C" stroke-width="1.5"/></g>
+  <text x="924" y="320" font-family="Georgia, serif" font-size="16" font-weight="700" fill="#1A3A52">P-vs-NP</text>
+  <rect x="924" y="340" width="202" height="22" rx="11" fill="#FFFFFF" stroke="#B53A2C" stroke-width="1"/>
+  <text x="1025.0" y="355" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" fill="#7A1F14" text-anchor="middle">SAFETY GREEN, COST HOLD</text>
+  <text x="924" y="392" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#40505C">v0-v5, 0 false accepts</text>
+  <text x="924" y="408" font-family="Courier New, monospace" font-size="10" fill="#1A3A52">2 required reruns</text>
+  <g filter="url(#cardShadow)"><rect x="660" y="440" width="230" height="95" rx="10" fill="#FFFFFF" stroke="#64748B" stroke-width="1.5"/></g>
+  <text x="674" y="470" font-family="Georgia, serif" font-size="16" font-weight="700" fill="#1A3A52">ARC-AGI</text>
+  <rect x="674" y="486" width="202" height="22" rx="11" fill="#EDF2F7" stroke="#64748B" stroke-width="1"/>
+  <text x="775.0" y="501" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" fill="#37465A" text-anchor="middle">PHASE 3E DESIGN HOLD</text>
+  <g filter="url(#cardShadow)"><rect x="910" y="440" width="230" height="95" rx="10" fill="#FFFFFF" stroke="#64748B" stroke-width="1.5"/></g>
+  <text x="924" y="470" font-family="Georgia, serif" font-size="16" font-weight="700" fill="#1A3A52">Three-Body 15C</text>
+  <rect x="924" y="486" width="202" height="22" rx="11" fill="#EDF2F7" stroke="#64748B" stroke-width="1"/>
+  <text x="1025.0" y="501" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" fill="#37465A" text-anchor="middle">COMPUTE-BLOCKED</text>
+  <text x="900" y="565" font-family="Verdana, Geneva, sans-serif" font-size="12" fill="#6A7680" text-anchor="middle">six transfer-test lanes</text>
+
+  <!-- Bottom-right mark -->
+  <text x="1140" y="600" font-family="Verdana, Geneva, sans-serif" font-size="14" font-weight="700" letter-spacing="2" fill="#9AA4AC" text-anchor="end">sundog.cc</text>
+</svg>
