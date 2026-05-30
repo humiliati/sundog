@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Sundog Isotrophy audit chain, v0.3 through v0.11: v0.3h's structural-zero receipts, the v0.7 velocity-fraction positive, v0.10b's mass-marginal held-out null, and v0.11's within-m3 conditional-rank pass.">
+    <meta name="description" content="Sundog Isotrophy audit chain, v0.3 through v0.12: v0.3h's structural-zero receipts, the v0.7 velocity-fraction positive, v0.10b's mass-marginal held-out null, v0.11's within-m3 conditional-rank pass, and v0.12's external-transfer block on supplementary-A (numerical feasibility, not a falsification).">
     <meta name="keywords" content="K_facet, isotrophy, choreography, three-body, structural zero, audit chain, Floquet velocity fraction, Sundog, claim hygiene, quarantine, Golod-Shafarevich">
     <meta name="theme-color" content="#1A3A52">
     <meta name="author" content="Sundog Research Lab">
@@ -12,7 +12,7 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="manifest" href="/site.webmanifest">
     <link rel="canonical" href="https://sundog.cc/isotrophy">
-    <title>Isotrophy Audit Chain v0.3-v0.11 &mdash; Sundog</title>
+    <title>Isotrophy Audit Chain v0.3-v0.12 &mdash; Sundog</title>
 
     <!-- OG-BLOCK-START (managed by public/og/_patch_meta.py) -->
     <meta property="og:type" content="article">
@@ -43,8 +43,8 @@
     {
       "@context": "https://schema.org",
       "@type": "TechArticle",
-      "headline": "Isotrophy Audit Chain v0.3-v0.11",
-      "description": "A pre-registered isotrophy audit chain: v0.3h's structural-zero receipts plus one O_617 quarantine, and a velocity-fraction signal that passes within fixed mass-ratio strata while failing as a mass-marginal held-out predictor.",
+      "headline": "Isotrophy Audit Chain v0.3-v0.12",
+      "description": "A pre-registered isotrophy audit chain: v0.3h's structural-zero receipts plus one O_617 quarantine, and a velocity-fraction signal that passes within fixed mass-ratio strata, fails as a mass-marginal held-out predictor, and does not yet transfer to an external catalog (v0.12 blocked on numerical attrition, not falsified).",
       "image": "https://sundog.cc/og/isotrophy.png",
       "datePublished": "2026-05-22",
       "dateModified": "2026-05-30",
@@ -421,7 +421,7 @@
 
     <main>
         <section class="iso-hero">
-            <p class="eyebrow">Isotrophy · K_facet · v0.3-v0.11</p>
+            <p class="eyebrow">Isotrophy · K_facet · v0.3-v0.12</p>
             <h1>The audit chain catches itself working.</h1>
             <p class="lede">
                 Twenty <a class="sd-def" href="/legend#kfacet-structural-zero-receipt" data-def-anchor="left" data-def="A row earns one when c_i = d_i = 0 by construction — not by tolerance, not by post-hoc pruning. The named artifact class.">structural-zero receipts</a> and one <a class="sd-def" href="/legend#kfacet-quarantine" data-def="A row held back from being counted for or against the prediction, with a specific representation-level reason given. O_617 is the sole quarantine in v0.3h.">named quarantine</a>. A
@@ -443,13 +443,16 @@
             </div>
             <p class="lede">
                 That v0.3h result became the first chapter of a
-                pre-registered program that now runs through v0.11. The
+                pre-registered program that now runs through v0.12. The
                 later chain sharpened the Floquet velocity-fraction finding:
                 it stratifies stability inside fixed mass-ratio strata
                 (<code>AUC_cond = 0.6783</code>, exact <code>p = 2.046e-7</code>)
                 but fails as a mass-marginal held-out predictor
                 (<code>AUC = 0.4125</code>). The honest shape is conditional,
-                not universal.
+                not universal &mdash; and v0.12 found it does not yet leave home:
+                taking the frozen rule to an external catalog was blocked by the
+                measurement itself (D5 attrition <code>0.3433</code>), not by the
+                data.
             </p>
             <div class="status-ribbon" aria-label="Isotrophy conditional rank profile">
                 <span>v0.7 restricted positive</span>
@@ -457,6 +460,7 @@
                 <span>AUC_cond = 0.6783</span>
                 <span>exact p = 2.046e-7</span>
                 <span>mass-marginal held-out null preserved</span>
+                <span>v0.12 external transfer blocked (numerical)</span>
             </div>
 
             <aside class="iso-crossref" aria-label="Where the 21 strict rows came from">
@@ -608,6 +612,17 @@
                             predictor.
                         </p>
                     </div>
+                    <div class="stage-card">
+                        <h3><span class="num">v0.12</span> External transfer blocked</h3>
+                        <p>
+                            Taking the frozen rule to supplementary-A, an unbiased
+                            uniform probe read attrition 0.3433 (Wilson95
+                            [0.2919, 0.3987], above the 0.20 gate). The frozen D5
+                            measurement is intractable on ~1/3 of the target &mdash;
+                            a feasibility limit, not a falsification. v0.13 opens a
+                            signal-blind search for a tractable external target.
+                        </p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -638,7 +653,12 @@
                     mass-marginal held-out predictor: v0.10b tested that directly
                     and failed at AUC = 0.4125. It is not the U-shape mechanism:
                     v0.9 showed that the physical-zone pattern is
-                    monotone-increasing rather than a true U.
+                    monotone-increasing rather than a true U. And it is not yet
+                    externally confirmed: v0.12 took the frozen rule to
+                    supplementary-A and was blocked by D5 attrition (0.34) &mdash;
+                    a numerical-feasibility wall on the nearest catalog, not a
+                    falsification &mdash; with v0.13 opening a signal-blind search
+                    for a tractable external target.
                 </p>
                 <p>
                     The durable public claim is narrower and better: this is the
