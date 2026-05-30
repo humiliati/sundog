@@ -8,14 +8,14 @@ Filed: **2026-05-29 (PT)**
 Status: **Phase 1 instrumentation closed across the full ladder 2026-05-29;
 Phase 2 v0 executed 2026-05-29 -> `YM-P2-NEG-A no_rank_local_structure`;
 Phase 2 v1 APE-smearing run executed 2026-05-29 ->
-`YM-P2-NEG-A no_rank_local_structure`; Phase 2 v2 correlator probe spec
-+ binding spec filed 2026-05-29**. See
+`YM-P2-NEG-A no_rank_local_structure`; Phase 2 v2 connected-correlator
+run executed 2026-05-29 -> `YM-P2-NEG-A no_rank_local_structure`**. See
 [`P0_DOMAIN_AND_RECEIPT_LOCK.md`](P0_DOMAIN_AND_RECEIPT_LOCK.md). This
 directory remains the home for any future Yang-Mills pre-registrations
 (Phase 1 runner manifests, Phase 2/3/4 phase specs, and any P0 amendments).
-The v0 and v1 Phase 2 receipts are named nulls and do not admit Phase 3
-observable-certificate work; v2 (connected-correlator signature on the
-same ensembles) is the next admitted scoring lane.
+The v0, v1, and v2 Phase 2 receipts are named nulls and do not admit Phase 3
+observable-certificate work. The next admitted artifact is a dated v3 probe
+spec for target-side redesign per the v2 fallback table.
 
 ## Filed Artifacts
 
@@ -100,18 +100,21 @@ same ensembles) is the next admitted scoring lane.
   scientifically clean. No P0 amendment needed (correlators are a new
   vocab class within the P0 fixed-loop framework, not smearing or
   blocking). Reuses v0 ensembles bit-for-bit; ONE aggregation
-  invocation. Runner not yet implemented.
+  invocation.
+  **Executed 2026-05-29 -> `YM-P2-NEG-A no_rank_local_structure`.**
+  Receipt:
+  [`../../yang-mills/receipts/2026-05-29_SU2_3D_phase2_v2_no_rank_local_structure.md`](../../yang-mills/receipts/2026-05-29_SU2_3D_phase2_v2_no_rank_local_structure.md).
 
 ## Required Next Artifact
 
-The next artifact should be the minimal v2 aggregation runner
-`scripts/yang-mills-phase2-v2-su2-3d-aggregate.mjs` + the correlator
-core module `scripts/lib/yang-mills-su2-3d-correlator.mjs` + the
-`yang-mills:phase2:v2:su2-3d:aggregate` npm script. v0 / v1
-aggregation runners + the bare SU(2) 3D core + the smearing module
-all remain bit-for-bit unchanged. If v2 also lands `YM-P2-NEG-A`,
-the v2 probe spec pre-states the v3 fallback (target redesign;
-likely a new P0 amendment for Polyakov or topological observables).
+The next artifact should be a dated v3 probe spec under
+`docs/yang-mills/specs/` selecting a target-side redesign from the
+pre-stated v2 fallback table. Because v0, v1, and v2 all landed
+`YM-P2-NEG-A`, do not open Phase 3 from the small-loop lane. Candidate
+v3 directions include a different target derived from the same held-out
+loops, a Polyakov-loop target, a topological-charge-proxy target, or a
+mass-gap-proxy target, with P0 amendment impact determined before any
+runner is written.
 
 ## Guardrail
 
@@ -248,4 +251,16 @@ ever needed, must be labelled exploratory and cannot be cited as receipts.
   links at frozen displacement slate `{(1,0,0), (1,1,0), (1,1,1),
   (2,0,0), (2,1,0)}`. Six controls scored on correlator signature; same
   promotion thresholds as v0/v1. ONE aggregation invocation only.
-  Compute estimate ~1-2 min. Runner implementation pending.
+  Compute estimate ~1-2 min.
+- 2026-05-29: Phase 2 v2 connected-correlator aggregation executed and
+  filed as
+  [`../../yang-mills/receipts/2026-05-29_SU2_3D_phase2_v2_no_rank_local_structure.md`](../../yang-mills/receipts/2026-05-29_SU2_3D_phase2_v2_no_rank_local_structure.md).
+  Verdict: `YM-P2-NEG-A no_rank_local_structure`. Bin-edge replay
+  matched v0 exactly (per-beta `0`, global `0`) and gauge-randomized
+  correlator residual was `3.33e-16`, but within-beta primary
+  bin-purity@5 = `0.308333333333`, primary-minus-random =
+  `0.020833333333`, and metadata beat the primary by `0.00625`.
+  This named null blocks Phase 3 from v2. With v0/v1/v2 all null, the
+  small-loop hypothesis is exhausted across marginal bare, marginal
+  smeared, and bare spatial connected-correlator summaries; route to a
+  dated v3 target-redesign probe spec per the pre-stated fallback table.
