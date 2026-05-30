@@ -394,10 +394,175 @@ def run_smoke(args):
           f"{smoke['full_run_exceeds_inline_budget']}  -> STAGE for operator")
 
 
+# --------------------------------------------------------------------------- #
+# Stage: attrition-probe (sharded uniform SRS) + merge                        #
+# --------------------------------------------------------------------------- #
+
+def uniform_sample_global_indices(n_candidates, probe_rows, seed):
+    """Deterministic uniform SRS (no replacement) of candidate positions, sorted.
+
+    Unbiased -- unlike the period-stratified smoke selection -- so the merged ratio
+    is an honest estimator of the Attrition Policy's catalog-wide attrition_fraction.
+    """
+    rng = np.random.default_rng(seed)
+    k = min(probe_rows, n_candidates)
+    chosen = rng.choice(n_candidates, size=k, replace=False)
+    return sorted(int(i) for i in chosen)
+
+
+def wilson_ci(k, n, z=1.96):
+    if n == 0:
+        return (0.0, 0.0)
+    p = k / n
+    denom = 1.0 + z * z / n
+    centre = (p + z * z / (2 * n)) / denom
+    half = (z * (p * (1 - p) / n + z * z / (4 * n * n)) ** 0.5) / denom
+    return (max(0.0, centre - half), min(1.0, centre + half))
+
+
+def run_attrition_probe(args):
+    out = Path(args.out)
+    out.mkdir(parents=True, exist_ok=True)
+    q = parse_and_quarantine(args.target, args.discovery)
+    candidate = q["candidate"]
+    sample = uniform_sample_global_indices(len(candidate), args.probe_rows, args.seed)
+    # Round-robin by sorted-sample position -> each shard gets a balanced m3/period mix.
+    my_global = [sample[j] for j in range(len(sample)) if j % args.shard_count == args.shard_index]
+
+    records = []
+    success = blocked = sanity_fail = 0
+    t0 = time.perf_counter()
+    for i, g in enumerate(my_global, start=1):
+        row = candidate[g]
+        rec = per_row_pipeline(row, canonical_omega_18(row.masses))
+        is_blocked = bool(rec.get("integration_blocked"))
+        is_sanity = (not is_blocked and (rec.get("symplecticity_status") == "fail"
+                                         or rec.get("reciprocal_pair_status") == "fail"))
+        ok = (not is_blocked and rec.get("symplecticity_status") == "pass"
+              and rec.get("reciprocal_pair_status") == "pass")
+        blocked += int(is_blocked)
+        sanity_fail += int(is_sanity)
+        success += int(ok)
+        vf = rec.get("velocity_fraction")
+        records.append({
+            "global_candidate_index": g, "m3": m3_key(row.m3), "index": row.index,
+            "period": round(row.period, 4), "stability": row.stability,
+            "total_seconds": round(rec.get("total_seconds") or 0.0, 4),
+            "integration_blocked": is_blocked, "sanity_fail": is_sanity,
+            "symplecticity_status": rec.get("symplecticity_status"),
+            "reciprocal_pair_status": rec.get("reciprocal_pair_status"),
+            "velocity_fraction": vf,
+            "zone_index": (zone_index(vf) if vf is not None else None), "ok": ok,
+        })
+        print(f"[v12-attr s{args.shard_index}/{args.shard_count}] {i}/{len(my_global)} "
+              f"{row.label:16s} T={row.period:7.2f} ok={ok} blk={is_blocked} "
+              f"sane_fail={is_sanity}", flush=True)
+
+    tag = f"{args.shard_index}_of_{args.shard_count}"
+    write_csv(out / f"attrition_shard_{tag}.csv", records,
+              ["global_candidate_index", "m3", "index", "period", "stability",
+               "total_seconds", "integration_blocked", "sanity_fail",
+               "symplecticity_status", "reciprocal_pair_status", "velocity_fraction",
+               "zone_index", "ok"])
+    shard_json = {
+        "shard_index": args.shard_index, "shard_count": args.shard_count,
+        "probe_rows": args.probe_rows, "seed": args.seed, "n_candidates": len(candidate),
+        "my_global_indices": my_global, "rows_run": len(my_global),
+        "success": success, "blocked": blocked, "sanity_fail": sanity_fail,
+        "shard_seconds": round(time.perf_counter() - t0, 2),
+    }
+    (out / f"attrition_shard_{tag}.json").write_text(
+        json.dumps(shard_json, indent=2) + "\n", encoding="utf-8")
+    print(f"[v12-attr s{args.shard_index}/{args.shard_count}] DONE {len(my_global)} rows: "
+          f"success={success} blocked={blocked} sanity_fail={sanity_fail} "
+          f"({shard_json['shard_seconds']}s)")
+
+
+def run_attrition_merge(args):
+    out = Path(args.out)
+    q = parse_and_quarantine(args.target, args.discovery)
+    n_candidates = len(q["candidate"])
+    expected = uniform_sample_global_indices(n_candidates, args.probe_rows, args.seed)
+
+    shards = [json.loads(p.read_text(encoding="utf-8"))
+              for p in sorted(out.glob(f"attrition_shard_*_of_{args.shard_count}.json"))]
+    abort = None
+    if len(shards) != args.shard_count:
+        abort = f"expected {args.shard_count} shards, found {len(shards)}"
+    covered = sorted(g for s in shards for g in s["my_global_indices"])
+    if abort is None and covered != expected:
+        abort = "shard coverage does not reconcile to the deterministic uniform sample"
+    if abort is None and ({s["seed"] for s in shards} != {args.seed}
+                          or {s["probe_rows"] for s in shards} != {args.probe_rows}):
+        abort = "shard seed / probe_rows mismatch"
+
+    rows = []
+    for p in sorted(out.glob(f"attrition_shard_*_of_{args.shard_count}.csv")):
+        with p.open(encoding="utf-8", newline="") as fh:
+            rows.extend(csv.DictReader(fh))
+    total = len(rows)
+    blocked = sum(1 for r in rows if r["integration_blocked"] == "True")
+    sanity = sum(1 for r in rows if r["sanity_fail"] == "True")
+    attrited = blocked + sanity
+    attr = (attrited / total) if total else None
+    lo, hi = wilson_ci(attrited, total)
+
+    by_m3 = defaultdict(lambda: {"N": 0, "blocked": 0, "sanity": 0})
+    for r in rows:
+        b = by_m3[r["m3"]]
+        b["N"] += 1
+        b["blocked"] += int(r["integration_blocked"] == "True")
+        b["sanity"] += int(r["sanity_fail"] == "True")
+    per_m3 = [{"m3": m, "N": by_m3[m]["N"], "blocked": by_m3[m]["blocked"],
+               "sanity_fail": by_m3[m]["sanity"],
+               "attrition": round((by_m3[m]["blocked"] + by_m3[m]["sanity"]) / by_m3[m]["N"], 4)}
+              for m in sorted(by_m3, key=float)]
+
+    decisive_below, decisive_above, straddles = hi < 0.20, lo > 0.20, (lo <= 0.20 <= hi)
+    if attr is None:
+        band = "no_rows"
+    elif hi < 0.05:
+        band = "clean_domain_likely (CI under 0.05)"
+    elif lo > 0.20:
+        band = "block_likely (external_transfer_blocked_by_attrition)"
+    elif attr <= 0.20:
+        band = "warning_band (analyzable-domain transfer per policy)"
+    else:
+        band = "block_band_point (>0.20)"
+
+    merged = {
+        "stage": "attrition-merge", "seed": args.seed, "probe_rows": args.probe_rows,
+        "shard_count": args.shard_count, "n_candidates": n_candidates,
+        "reconcile_abort": abort, "sample_size": total,
+        "blocked": blocked, "sanity_fail": sanity, "attrited": attrited,
+        "attrition_fraction": (round(attr, 4) if attr is not None else None),
+        "wilson95_low": round(lo, 4), "wilson95_high": round(hi, 4),
+        "policy_clean_threshold": 0.05, "policy_block_threshold": 0.20,
+        "ci_decisive_below_0p20": decisive_below, "ci_decisive_above_0p20": decisive_above,
+        "ci_straddles_0p20": straddles, "policy_band": band,
+        "smoke_period_biased_attrition": 0.2667, "per_m3": per_m3,
+    }
+    (out / "attrition_probe_merged.json").write_text(
+        json.dumps(merged, indent=2) + "\n", encoding="utf-8")
+    manifest = load_manifest(out)
+    manifest["attrition_probe"] = merged
+    save_manifest(out, manifest)
+
+    print(f"[v12-attr-merge] reconcile_abort={abort}")
+    print(f"[v12-attr-merge] sample={total}  attrited={attrited} "
+          f"(blocked={blocked}, sanity={sanity})")
+    print(f"[v12-attr-merge] attrition_fraction={merged['attrition_fraction']}  "
+          f"Wilson95=[{merged['wilson95_low']}, {merged['wilson95_high']}]")
+    print(f"[v12-attr-merge] vs locked 0.20 gate: decisive_below={decisive_below} "
+          f"decisive_above={decisive_above} straddles={straddles}")
+    print(f"[v12-attr-merge] POLICY BAND: {band}")
+    print(f"[v12-attr-merge] (smoke period-biased estimate was 26.67%)")
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     sub = ap.add_subparsers(dest="stage", required=True)
-    for name in ("profile", "smoke"):
+    for name in ("profile", "smoke", "attrition-probe", "attrition-merge"):
         sp = sub.add_parser(name)
         sp.add_argument("--target", default=DEFAULT_TARGET)
         sp.add_argument("--discovery", default=DEFAULT_DISCOVERY)
@@ -406,11 +571,21 @@ def main():
             sp.add_argument("--smoke-rows", type=int, default=30, dest="smoke_rows")
             sp.add_argument("--rtol", type=float, default=RTOL)  # accepted; locked value used
             sp.add_argument("--atol", type=float, default=ATOL)
+        if name in ("attrition-probe", "attrition-merge"):
+            sp.add_argument("--probe-rows", type=int, default=300, dest="probe_rows")
+            sp.add_argument("--seed", type=int, default=PERM_SEED)
+            sp.add_argument("--shard-count", type=int, default=6, dest="shard_count")
+        if name == "attrition-probe":
+            sp.add_argument("--shard-index", type=int, required=True, dest="shard_index")
     args = ap.parse_args()
     if args.stage == "profile":
         run_profile(args)
-    else:
+    elif args.stage == "smoke":
         run_smoke(args)
+    elif args.stage == "attrition-probe":
+        run_attrition_probe(args)
+    else:
+        run_attrition_merge(args)
 
 
 if __name__ == "__main__":

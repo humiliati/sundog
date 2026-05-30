@@ -26,7 +26,7 @@
     <meta property="og:image:alt" content="Cap-set workbench preview: a 3-layer F_3^3 grid with gold-lit dots and a red dashed forbidden line.">
     <meta property="og:url" content="https://sundog.cc/capset">
     <meta property="article:published_time" content="2026-05-21T00:00:00Z">
-    <meta property="article:modified_time" content="2026-05-21T00:00:00Z">
+    <meta property="article:modified_time" content="2026-05-30T00:00:00Z">
     <meta property="article:section" content="Research">
     <meta property="article:tag" content="cap set">
     <meta property="article:tag" content="polynomial method">
@@ -51,7 +51,7 @@
       "description": "Interactive cap-set workbench in F_3^n. A hands-on primer for the 2016 polynomial-method breakthrough — the precedent for OpenAI's 2026 unit-distance disproof of an Erdős conjecture.",
       "image": "https://sundog.cc/og/capset.png",
       "datePublished": "2026-05-21",
-      "dateModified": "2026-05-21",
+      "dateModified": "2026-05-30",
       "inLanguage": "en",
       "isAccessibleForFree": true,
       "author": {
@@ -146,6 +146,19 @@
             max-width: 1120px;
             margin: 0 auto;
             padding: 1.25rem 2rem 2rem;
+        }
+
+        .capset-section h2 {
+            color: var(--primary-dark);
+            margin: 0 0 1rem;
+            font-size: clamp(1.35rem, 2.4vw, 1.8rem);
+        }
+
+        .capset-section .section-copy {
+            max-width: 74ch;
+            color: #40505C;
+            font-size: 1rem;
+            line-height: 1.7;
         }
 
         .workbench {
@@ -440,7 +453,7 @@
         /* ---------- narrative cards ---------- */
         .capset-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
             gap: 1rem;
             margin-top: 1.25rem;
         }
@@ -466,9 +479,69 @@
 
         .source-list {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
             gap: 0.75rem;
             margin-top: 1rem;
+        }
+
+        .citation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .citation-card {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            min-height: 100%;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            padding: 1rem;
+            color: var(--primary-dark);
+            text-decoration: none;
+        }
+
+        .citation-card span {
+            color: var(--primary-mid);
+            font-family: var(--sd-font-data);
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .citation-card strong {
+            font-size: 0.98rem;
+            line-height: 1.35;
+        }
+
+        .citation-card small {
+            color: #5C6872;
+            line-height: 1.5;
+        }
+
+        .citation-card:hover {
+            border-color: var(--primary-mid);
+            text-decoration: underline;
+        }
+
+        .claim-note {
+            margin-top: 1.25rem;
+            background: rgba(244, 196, 48, 0.08);
+            border: 1px solid rgba(244, 196, 48, 0.45);
+            border-radius: 8px;
+            padding: 1rem 1.15rem;
+        }
+
+        .claim-note p {
+            margin: 0;
+            color: #3B4650;
+            font-size: 0.94rem;
+            line-height: 1.65;
+            max-width: none;
         }
 
         .source-list a {
@@ -536,6 +609,51 @@
                 <span>Croot–Lev–Pach · 2016</span>
                 <span>Ellenberg–Gijswijt bound: 2.7551<sup>n</sup></span>
                 <span>Companion: unit-distance disproof · 2026</span>
+                <span>Lit-pass refreshed · 2026-05-30</span>
+            </div>
+        </section>
+
+        <section class="capset-section" aria-label="Citation-first frame">
+            <p class="eyebrow">Fresh lit-pass</p>
+            <h2>Start with the papers; use the workbench as a toy model.</h2>
+            <p class="section-copy">
+                This page is a sourced primer, not a Sundog proof. The
+                load-bearing cap-set mathematics belongs to Croot-Lev-Pach
+                and Ellenberg-Gijswijt. Sundog's contribution here is the
+                clickable F<sub>3</sub><sup>n</sup> sandbox and the claim
+                boundary that connects this 2016 precedent to the 2026
+                unit-distance result without claiming either result.
+            </p>
+            <div class="citation-grid" aria-label="Primary citations">
+                <a class="citation-card" href="docs/CAPSET_UNIT_DISTANCE_LITPASS_MEMO.md">
+                    <span>Local receipt</span>
+                    <strong>Capset / Unit-Distance Lit-Pass Memo</strong>
+                    <small>Source order, claim boundary, and the 2026-05-30 citation refresh.</small>
+                </a>
+                <a class="citation-card" href="https://annals.math.princeton.edu/2017/185-1/p07">
+                    <span>2016 precursor</span>
+                    <strong>Croot-Lev-Pach, progression-free sets in Z_4^n</strong>
+                    <small>Polynomial-method precursor, official Annals version.</small>
+                </a>
+                <a class="citation-card" href="https://annals.math.princeton.edu/2017/185-1/p08">
+                    <span>Cap-set bound</span>
+                    <strong>Ellenberg-Gijswijt, large subsets of F_q^n</strong>
+                    <small>Adapts the method to cap-set; official Annals version.</small>
+                </a>
+                <a class="citation-card" href="/unit-distance">
+                    <span>Companion page</span>
+                    <strong>Unit-Distance Overlay</strong>
+                    <small>The 2026 OpenAI result read as a separate, citation-first overlay.</small>
+                </a>
+            </div>
+            <div class="claim-note">
+                <p>
+                    <strong>Boundary:</strong> the analogy is editorial. The
+                    workbench explains the cap-set setting and why an algebraic
+                    substrate can matter; it does not verify the OpenAI proof,
+                    prove a cap-set theorem, or turn the unit-distance result
+                    into a Sundog result.
+                </p>
             </div>
         </section>
 
@@ -657,12 +775,14 @@
         <section class="capset-section">
             <p class="eyebrow">Inspection Trail</p>
             <div class="source-list">
+                <a href="docs/CAPSET_UNIT_DISTANCE_LITPASS_MEMO.md">Sundog · Capset / Unit-Distance Lit-Pass Memo</a>
+                <a href="https://annals.math.princeton.edu/2017/185-1/p07">Croot–Lev–Pach · Progression-free sets in Z_4^n are exponentially small</a>
+                <a href="https://annals.math.princeton.edu/2017/185-1/p08">Ellenberg–Gijswijt · On large subsets of F_q^n with no three-term arithmetic progression</a>
+                <a href="https://arxiv.org/abs/2605.20695">Alon et al. · Remarks on the disproof of the unit-distance conjecture</a>
+                <a href="https://openai.com/index/model-disproves-discrete-geometry-conjecture/">OpenAI · Unit-distance disproof announcement (2026)</a>
+                <a href="/unit-distance">Sundog · Unit-Distance Overlay</a>
                 <a href="docs/SUNDOG_V_CAPSET.md">Sundog · Capset Ledger (coupling to the unit-distance result)</a>
-                <a href="https://openai.com/index/model-disproves-discrete-geometry-conjecture/">OpenAI · Unit-distance disproof (2026)</a>
-                <a href="https://arxiv.org/abs/1605.01506">Croot–Lev–Pach (2016)</a>
-                <a href="https://arxiv.org/abs/1605.09223">Ellenberg–Gijswijt cap-set bound</a>
-                <a href="https://en.wikipedia.org/wiki/Cap_set">Cap set — overview</a>
-                <a href="https://en.wikipedia.org/wiki/Set_(card_game)">SET (card game) — the n=3 case</a>
+                <a href="https://en.wikipedia.org/wiki/Set_(card_game)">SET (card game) · n=3 intuition only</a>
             </div>
         </section>
     </main>

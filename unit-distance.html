@@ -25,7 +25,7 @@
     <meta property="og:image:alt" content="Unit-distance overlay preview: a substrate-flow diagram from number field to planar point set.">
     <meta property="og:url" content="https://sundog.cc/unit-distance">
     <meta property="article:published_time" content="2026-05-22T00:00:00Z">
-    <meta property="article:modified_time" content="2026-05-22T00:00:00Z">
+    <meta property="article:modified_time" content="2026-05-30T00:00:00Z">
     <meta property="article:section" content="Research">
     <meta property="article:tag" content="unit distance problem">
     <meta property="article:tag" content="Erdős">
@@ -47,7 +47,7 @@
       "description": "A plain-English overlay of OpenAI's 2026 unit-distance disproof of an Erdős conjecture, with substrate-rhyme to cap-set, evidence tiers, and explicit claim boundary.",
       "image": "https://sundog.cc/og/unit-distance.png",
       "datePublished": "2026-05-22",
-      "dateModified": "2026-05-22",
+      "dateModified": "2026-05-30",
       "inLanguage": "en",
       "isAccessibleForFree": true,
       "author": {
@@ -202,7 +202,7 @@
 
         .ud-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
             gap: 0.85rem;
             margin: 1.25rem 0 0;
         }
@@ -287,9 +287,53 @@
 
         .source-list {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
             gap: 0.75rem;
             margin-top: 1rem;
+        }
+
+        .citation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .citation-card {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            min-height: 100%;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            padding: 1rem;
+            color: var(--primary-dark);
+            text-decoration: none;
+        }
+
+        .citation-card span {
+            color: var(--primary-mid);
+            font-family: var(--sd-font-data);
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .citation-card strong {
+            font-size: 0.98rem;
+            line-height: 1.35;
+        }
+
+        .citation-card small {
+            color: #5C6872;
+            line-height: 1.5;
+        }
+
+        .citation-card:hover {
+            border-color: var(--primary-mid);
+            text-decoration: underline;
         }
 
         .source-list a {
@@ -372,6 +416,48 @@
                 <span>OpenAI disproof · May 2026</span>
                 <span>Sawin refinement: ≥ <em>n</em><sup>1.014</sup></span>
                 <span>Upper bound still <em>n</em><sup>4/3</sup></span>
+                <span>Lit-pass refreshed · 2026-05-30</span>
+            </div>
+        </section>
+
+        <section class="ud-section" aria-label="Citation-first frame">
+            <p class="eyebrow">Fresh lit-pass</p>
+            <h2>Read the proof trail before the interpretation.</h2>
+            <p>
+                The citation order matters here. OpenAI announced the result
+                and published the proof artifact; external mathematicians
+                produced a companion account; Sundog is only supplying a
+                reader overlay and evidence-tier labels. The substrate-rhyme
+                with cap-set is an interpretation, not part of the theorem.
+            </p>
+            <div class="citation-grid" aria-label="Primary citations">
+                <a class="citation-card" href="docs/CAPSET_UNIT_DISTANCE_LITPASS_MEMO.md">
+                    <span>Local receipt</span>
+                    <strong>Capset / Unit-Distance Lit-Pass Memo</strong>
+                    <small>Source order, claim boundary, and the corrected tower-cutting citation.</small>
+                </a>
+                <a class="citation-card" href="https://openai.com/index/model-disproves-discrete-geometry-conjecture/">
+                    <span>Announcement</span>
+                    <strong>OpenAI, model-discovered unit-distance disproof</strong>
+                    <small>Public result framing, verification note, and Sawin's reported exponent.</small>
+                </a>
+                <a class="citation-card" href="https://cdn.openai.com/pdf/74c24085-19b0-4534-9c90-465b8e29ad73/unit-distance-proof.pdf">
+                    <span>Proof artifact</span>
+                    <strong>Planar Point Sets with Many Unit Distances</strong>
+                    <small>The load-bearing proof document for the construction.</small>
+                </a>
+                <a class="citation-card" href="https://arxiv.org/abs/2605.20695">
+                    <span>Companion remarks</span>
+                    <strong>Alon et al., remarks on the disproof</strong>
+                    <small>Human-digested account by outside mathematicians.</small>
+                </a>
+            </div>
+            <div class="claim-note">
+                <p>
+                    <strong>Boundary:</strong> Sundog did not produce, verify,
+                    or extend the proof. This page explains the public proof
+                    trail and names where Sundog's editorial apparatus begins.
+                </p>
             </div>
         </section>
 
@@ -813,16 +899,17 @@
             <p class="eyebrow">Inspection trail</p>
             <h2>Read the originals.</h2>
             <div class="source-list">
+                <a href="docs/CAPSET_UNIT_DISTANCE_LITPASS_MEMO.md">Sundog · Capset / Unit-Distance Lit-Pass Memo</a>
                 <a href="https://openai.com/index/model-disproves-discrete-geometry-conjecture/">OpenAI · Unit-distance disproof announcement (May 2026)</a>
                 <a href="https://cdn.openai.com/pdf/74c24085-19b0-4534-9c90-465b8e29ad73/unit-distance-proof.pdf">OpenAI · Proof PDF (Planar Point Sets with Many Unit Distances)</a>
+                <a href="https://arxiv.org/abs/2605.20695">Alon et al. · Remarks on the disproof of the unit-distance conjecture</a>
                 <a href="/capset">Sundog · Cap-set workbench (precedent for the substrate move)</a>
+                <a href="https://annals.math.princeton.edu/2017/185-1/p07">Croot–Lev–Pach · Polynomial-method precursor</a>
+                <a href="https://annals.math.princeton.edu/2017/185-1/p08">Ellenberg–Gijswijt · Cap-set bound</a>
                 <a href="/chat">Sundog · Chat experiment (0 / 5,670 empirical anchor)</a>
                 <a href="docs/SUNDOG_V_CAPSET.md">Sundog · Capset ledger (coupling to the unit-distance result)</a>
                 <a href="docs/SUNDOG_V_CHAT.md">Sundog · Chat ledger (the artifact-and-stack-invariance experiment)</a>
-                <a href="https://en.wikipedia.org/wiki/Unit_distance_graph">Unit-distance graph — overview</a>
-                <a href="https://en.wikipedia.org/wiki/Golod%E2%80%93Shafarevich_theorem">Golod–Shafarevich theorem</a>
-                <a href="https://arxiv.org/abs/math/0006148">Hajir–Maire · Asymptotically good towers of global fields</a>
-                <a href="https://arxiv.org/abs/2010.10398">Hajir–Maire–Ramakrishna · Cutting towers of number fields</a>
+                <a href="https://arxiv.org/abs/1901.04354">Hajir–Maire–Ramakrishna · Cutting towers of number fields</a>
                 <!-- RATCHET: COMPANDER_PAPER_HOOK · §9c · insert mod's paper citation as a new source-list entry when paper publishes · see internal/feedback/Human/REDDIT_ImOutOfIceCream_UNIT-DISTANCE.md -->
             </div>
         </section>

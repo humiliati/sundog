@@ -199,7 +199,7 @@
 
         .lane-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr));
             gap: 1.25rem;
             margin-top: 1rem;
         }
@@ -294,7 +294,7 @@
 
         .not-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
             gap: 1rem;
             margin-top: 1rem;
         }
@@ -327,7 +327,7 @@
 
         .source-list {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
             gap: 0.75rem;
             margin-top: 1rem;
         }
@@ -349,6 +349,10 @@
         @media (max-width: 760px) {
             .gen-hero { padding: 5.5rem 1.25rem 1.5rem; }
             .gen-section { padding: 1rem 1.25rem; }
+            .gen-section .sd-def[data-def]::after,
+            .gen-section .sd-def[data-def]::before {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -417,6 +421,7 @@
                         <div class="lane-tile-actions">
                             <a href="/navierstokes">Open the deep dive &rarr;</a>
                             <a href="docs/SUNDOG_V_NAVIERSTOKES.md">Ledger</a>
+                            <a href="docs/NAVIERSTOKES_LITPASS_MEMO.md">Lit-pass memo</a>
                         </div>
                     </article>
 
@@ -432,6 +437,7 @@
                         </div>
                         <div class="lane-tile-actions">
                             <a href="docs/SUNDOG_V_RIEMANN.md">Ledger</a>
+                            <a href="docs/RIEMANN_LITPASS_MEMO.md">Lit-pass memo</a>
                             <a href="docs/riemann/EXTERNAL_REVIEW_PACKET.md">External-review packet</a>
                         </div>
                     </article>
@@ -448,6 +454,7 @@
                         </div>
                         <div class="lane-tile-actions">
                             <a href="docs/SUNDOG_V_YANG_MILLS.md">Ledger</a>
+                            <a href="docs/YANG_MILLS_LITPASS_MEMO.md">Lit-pass memo</a>
                             <a href="docs/yang-mills/EXTERNAL_REVIEW_PACKET.md">Review packet</a>
                         </div>
                     </article>
@@ -464,6 +471,7 @@
                         </div>
                         <div class="lane-tile-actions">
                             <a href="docs/SUNDOG_V_P_V_NP.md">Ledger</a>
+                            <a href="docs/P_V_NP_LITPASS_MEMO.md">Lit-pass memo</a>
                             <a href="docs/pvnp/receipts/README.md">v0-v5 receipts</a>
                         </div>
                     </article>
@@ -523,6 +531,16 @@
                     the bounded nulls, and keep review gates attached to the claim.
                 </p>
                 <p>
+                    <a href="/faraday">Shadow Faraday</a> is the calibration
+                    receipt for this style before the substrates get hard: a
+                    known classical-EM identity, a local gauge-invariant shadow,
+                    a Branch A zero-out, and named quarantines at the boundary.
+                    It is not counted as a high-stakes lane because the
+                    mathematics is already understood; it is the clean pattern
+                    that makes the Navier-Stokes, Yang-Mills, Riemann, and
+                    P-vs-NP pages legible.
+                </p>
+                <p>
                     Use <a href="/geometry">Geometry</a> for the visual/math shelf,
                     <a href="/alignment">Alignment</a> for same-information
                     comparator language, <a href="/legend#generality-heading">Legend</a>
@@ -567,11 +585,16 @@
             <p class="eyebrow">Inspection Trail</p>
             <div class="source-list">
                 <a href="docs/threebody/CROSS_SUBSTRATE_NOTES.md">Cross-Substrate Notes &mdash; failure-mode taxonomy</a>
+                <a href="/faraday">Shadow Faraday Zero-Out &mdash; calibration receipt</a>
                 <a href="/navierstokes">Navier-Stokes C1 deep dive</a>
                 <a href="docs/SUNDOG_V_NAVIERSTOKES.md">Sundog v Navier-Stokes Ledger</a>
+                <a href="docs/NAVIERSTOKES_LITPASS_MEMO.md">Navier-Stokes Lit-Pass Memo</a>
                 <a href="docs/SUNDOG_V_RIEMANN.md">Sundog v Riemann Ledger</a>
+                <a href="docs/RIEMANN_LITPASS_MEMO.md">Riemann Lit-Pass Memo</a>
                 <a href="docs/SUNDOG_V_YANG_MILLS.md">Sundog vs Yang-Mills Ledger</a>
+                <a href="docs/YANG_MILLS_LITPASS_MEMO.md">Yang-Mills Lit-Pass Memo</a>
                 <a href="docs/SUNDOG_V_P_V_NP.md">Sundog vs P-vs-NP Ledger</a>
+                <a href="docs/P_V_NP_LITPASS_MEMO.md">P-vs-NP Lit-Pass Memo</a>
                 <a href="docs/SUNDOG_V_ARC.md">Sundog vs ARC-AGI Ledger</a>
                 <a href="docs/SUNDOG_V_THREEBODY.md">Sundog Three-Body Roadmap</a>
                 <a href="docs/TODO.md">Operator TODO — Current Holds At A Glance</a>

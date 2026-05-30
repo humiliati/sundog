@@ -160,14 +160,29 @@ whole three-for-three. Recommended as a Phase-0 add-on; can defer to Phase 1.
   fingerprint at *every* layer (cheap) and report the layer with max `eff_dim`
   as the body, plus the depth profile.
 
-**Remaining sub-knobs to confirm before the verdict-bearing run** (defaults in
-brackets — these fix the cell per spec self-consistency):
+**Cell frozen (2026-05-29 — the verdict-bearing config).** Downsized from the
+bracketed defaults for CPU feasibility (torch 2.11, CPU, 4 threads); the ratio
+that matters (a compact decision against a potentially wide body) is preserved.
+Implemented in `scripts/chatv2_phase0_bodyresist.py`; command
+`python scripts/chatv2_phase0_bodyresist.py --mode full`.
 
-- model size [`d_model=192`, `4 layers`, `4 heads`]; train budget [until
-  next-token loss plateaus, cap ~few k steps]; sequence length [≈128] / vocab
-  [small, e.g. 2 symbols/channel] / channels-per-`H` mapping [`H` channels];
-  `H` sweep [`{1,2,4,8,16,32}`]; **and whether to include the control-only
-  contrast model (§3) in Phase 0 [recommended yes].**
+- **model:** `d_model=128`, `3 layers`, `4 heads`, learned absolute positional
+  embeddings; tiny causal GPT (SDPA, pre-norm, GELU MLP ×4).
+- **data:** vocab 2 (bits), `bits_per_channel=16`, emission bias `delta=0.35`
+  (`p ∈ {0.15, 0.85}`), interleaved round-robin `H` channels, `L = 16·H`.
+- **training:** AdamW lr 3e-4, batch 128; next-token CE (generative) /
+  BCE-on-`z_1` (twin); ≤2500 steps, early-stop patience 4 on held-out loss.
+  Generative `eval_loss` is reported against the Bayes floor (so "did it learn
+  the latents" is visible — guards F4 vs F1).
+- **decision:** read `z_1` at the final position.
+- **`H` sweep:** `{1, 2, 4, 8, 16}` (dropped 32 to bound `L`/compute);
+  **control-only twin included** (signed off).
+- **fingerprint:** `N=3000`; top-20 body PCs for the FVE target; `k`-sweep
+  `{1,2,4,8,16,32,64}`; shadow = the `z_1` logistic read-direction (1-D).
+- **sharpness gate (all five):** `eff_dim ≥ 6` ∧ `k_control/eff_dim ≤ 0.20` ∧
+  `FVE ≤ 0.60` ∧ `FVE_perm ≤ 0.12` ∧ `z_recover ≥ 0.70`; `H*` = smallest
+  passing `H`. (Toy uses a ratio-based `eff_dim` floor of 6, not the §1
+  real-LLM `>50`.)
 
 ## 6. Cost / build / reuse
 
