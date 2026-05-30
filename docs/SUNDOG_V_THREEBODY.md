@@ -1455,25 +1455,18 @@ U-shape mechanism hypothesis with the monotone-increasing meta-
 finding preserved. Chapter close at
 `docs/isotrophy/kfacet/kfacet_v09_writeup.md`.
 
-**Isotrophy program PAUSED 2026-05-24 at end-of-v0.9.** Pause
+**Isotrophy program PAUSED 2026-05-24 at end-of-v0.9, then advanced
+off-pause through v0.10/v0.11 on 2026-05-30.** Pause/frontier
 document at `docs/isotrophy/kfacet/kfacet_isotrophy_program_pause.md`.
-Seven sequential pre-registered chapters; seven distinct chapter-
-close types; one load-bearing substantive positive (v0.7a' chi^2 =
-16.43, branch-independent, signed-direction); one comprehensive
-methodology surface (closure-relative discipline, two-pass
-classifier, audit-then-predictor, asymmetric falsifier, alignment-
-tightness guard, sparse-cell fallback, non-circularity sentence
-template for Floquet features, per-row integration-failure
-fallback, append-per-row resume, anti-circular framing for
-sequential audits). **Eight concrete reopening avenues** recorded
-for lab initiates: Jonckheere-Terpstra trend test on v0.9a;
-held-out v0.7b on the 250 analyzable rows; v0.7a relaxed-precision
-re-run; m_3 = 0.4 sub-catalog targeted investigation; joint
-(vf, Q_E) audit; cross-substrate transfer; action-angle / KAM
-decomposition; full-catalog audit at rtol = 1e-10. The program
-PAUSES, it does not RETIRE -- reopening is invited under the
-locked discipline. Bandwidth redirects to three-body Phase 15+
-per the original direction call.
+The live conditional profile is: v0.10a registers the monotone vf ->
+stability trend in-sample (`p = 7.304e-3`), v0.10b preserves the
+mass-marginal held-out null (`AUC = 0.4125 <= 0.5`), and v0.11
+registers the within-m_3 conditional rank signal (`AUC_cond = 0.6783`,
+exact `p = 2.046e-7`). This remains a conditional catalog signal, not
+a theorem-facing promotion and not a v0.3h K_facet structural-null
+revision. The program remains paused at the lab-bandwidth level;
+future reopening should be external-catalog, mass-conditional predictor,
+or new-mechanism work under the locked discipline.
 
 ### Cross-Substrate Hand-Offs
 

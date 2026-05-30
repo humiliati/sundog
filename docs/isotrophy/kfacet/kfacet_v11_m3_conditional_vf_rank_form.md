@@ -26,12 +26,36 @@ Reviewed for self-consistency, non-circularity, and integrity:
   information (post-hoc direction disclosed — the same footing that licensed v0.10a),
   NOT a global predictor, NOT a v0.10b overturn, NOT theorem-facing.
 - **Exact null is sound and cheap:** stratified Mann-Whitney with tied zone-groups;
-  `D_cond = sum S_m*U_m = 1467`, convolution support ~2934 integer bins, seconds.
+  `D_cond = sum S_m*U_m = 1467`, observed convolution support = 1486 doubled-J
+  bins inside the 0..2934 possible score range, seconds.
 
 Adjustment made at lock (one): added a non-binding within-stratum permutation sanity
 cross-check (seed 20260523, n=10000) guarding the hand-rolled enumeration +
 convolution kernel, with an ABORT-on-gross-divergence branch. The binding p-value
 remains `p_exact`; the sanity sidecar mirrors v0.10a's exact+permutation discipline.
+
+Execution receipt (2026-05-30):
+
+```text
+command: npm run isotrophy:m3-conditional-vf-rank
+out:     results/isotrophy/k-facet-v11-m3-conditional-vf-rank/
+verdict: m3_conditional_vf_rank_passes
+```
+
+Primary result:
+
+```text
+primary domain: 229 rows (82 S / 147 U), D_cond = 1467
+AUC_cond:       0.6782549421
+J_cond:         995.0
+exact p:        2.046197217e-7
+exact mass:     1.0000000000
+permutation sanity: p = 9.999e-5, consistent_with_exact = true
+```
+
+Readback: v0.11 registers the frozen vf zone order as a within-`m3` conditional
+rank signal on the locked 229-row primary domain. It does not overturn v0.10b's
+global held-out null and does not promote the program to a theorem-facing claim.
 
 ## Frame
 
