@@ -164,7 +164,32 @@ Phase 15+.
 
 ### 2. v0.7a' held-out predictor on the analyzable subset (LOW-MEDIUM EFFORT)
 
-**Status**: parent registration mentions v0.7b as a candidate;
+**Status**: **EXECUTED 2026-05-30 as v0.10b** —
+`kfacet_v10b_monotone_vf_heldout_predictor_form.md`,
+`scripts/isotrophy_vf_heldout_predictor.py`,
+`results/isotrophy/k-facet-v10b-monotone-vf-heldout/`. Verdict
+**`monotone_vf_predictor_fails_heldout`** — a clean **projection-limit** result, the
+audit-vs-predictor pattern for the THIRD time (cf. v0.5). The pre-registered primary
+gate (pooled leave-one-`m_3`-bin-out held-out AUC of a zone-only weighted-PAVA risk
+score) lands at **AUC = 0.4125 ≤ 0.5 → FAIL** (gate needs AUC>0.5 AND permutation
+p≤0.01). The mandated per-fold diagnostic shows the failure is a **cross-bin
+calibration artifact, not a within-bin signal failure**: per-fold held-out AUCs are
+mostly >0.5 (m_3 = 0.8→0.84, 0.9→0.90, 1.0→0.81, 1.1→0.82; mean ~0.65), and the
+within-`m_3` permutation p is tiny (observed 0.41 beats the shuffled-label null of
+0.265 → genuine zone structure). What fails is the **pooled** cross-bin ranking — the
+zone-only score is not comparable across `m_3` bins because the mass-bin base rate
+(which the predictor cannot use) dominates global ranking. The v0.10a in-sample /
+within-bin monotone trend is real but does **not** yield a globally-calibrated
+held-out risk score. Per the locked verdict tree the goalposts stay where locked
+(pooled AUC primary); the encouraging per-fold AUCs are diagnostic, not a rescue. A
+within-`m_3` or `m_3`-conditional predictor would be a **fresh** chapter. The
+exact-`m_3`=0.4 risk noted below materialized as predicted (its fold AUC 0.671 is
+strong but does not transfer pooled). Hard-label sidecar (non-gating) confirms the
+base-rate trap: accuracy delta vs always-U = −0.167, McNemar one-sided p = 0.99999.
+
+_Original registration text (pre-execution) follows._
+
+**Status (original)**: parent registration mentions v0.7b as a candidate;
 NEVER licensed under the v0.7a attrition verdict; could be
 licensed under v0.7a' restricted-scope PASS retrospectively if
 re-registered.
