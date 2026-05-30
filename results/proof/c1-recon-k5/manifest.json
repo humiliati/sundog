@@ -1,0 +1,184 @@
+{
+  "startedAt": "2026-05-30T09:44:08.247373+00:00",
+  "script": "scripts/pde_c1_kolmogorov_cell.py",
+  "spec": "docs/proof/PDE_C1_CELLSET_KOLMOGOROV.md",
+  "protocol": "docs/proof/PDE_C1_FIBER_PROTOCOL.md",
+  "config": {
+    "preset": "lock_v5_k5",
+    "grid_size": 32,
+    "n_modes": 16,
+    "k_signature": 5,
+    "forcing_wavenumber": 2,
+    "grashof": 200.0,
+    "forcing_amplitude": 1.0,
+    "viscosity": 0.07071067811865475,
+    "dt": 0.01,
+    "burnin_steps": 100000,
+    "sample_count": 50000,
+    "sample_interval_steps": 50,
+    "lookahead_steps": 500,
+    "n_min": 30,
+    "delta_action": 0.1,
+    "s_pos": 0.5,
+    "delta_proxy_min": 0.01,
+    "e_max_burnin_fraction": 0.25,
+    "random_seed": 20260528,
+    "integrator": "pseudo_spectral_vorticity_semi_implicit_euler",
+    "signature_dimension": 50,
+    "action_tiebreak": "no_op",
+    "adjudicator": "state-recon",
+    "k_neighbors": 30,
+    "delta_incompat": 0.01,
+    "twin_k_neighbors": 50,
+    "twin_delta_high_fraction": 0.05,
+    "twin_high_norm_floor": 1e-06,
+    "twin_min_witness_fraction": 0.01,
+    "twin_min_unique_pairs": 100,
+    "objective": "overshoot-burnin",
+    "objective_quantile": 0.7,
+    "calibration_sample_count": 0,
+    "calibration_gap_steps": 0,
+    "objective_observable": "energy"
+  },
+  "environment": {
+    "python": "3.14.4 (tags/v3.14.4:23116f9, Apr  7 2026, 14:10:54) [MSC v.1944 64 bit (AMD64)]",
+    "numpy": "2.4.4",
+    "platform": "win32",
+    "cwd": "C:\\Users\\hughe\\Dev\\sundog"
+  },
+  "result": {
+    "verdict": "STATE_RECON_MEASURED",
+    "verdict_label": "high_mode_reconstruction_from_signature",
+    "interpretable": true,
+    "adjudicator": "state-recon",
+    "n_samples": 50000,
+    "k_signature": 5,
+    "signature_dimension": 50,
+    "high_mode_dimension": 390,
+    "r2_E_high_from_signature": 0.8776729154754286,
+    "r2_E_high_perm_control": -0.0023984773084873012,
+    "fve_top_high_modes": 0.9950687005320134,
+    "fve_top_m": 16,
+    "train_count": 35000,
+    "test_count": 15000,
+    "objective": "overshoot-burnin",
+    "objective_quantile": null,
+    "calibration_sample_count": 0,
+    "calibration_damp_fraction": NaN,
+    "e_max": 0.7885609629210897,
+    "epsilon_k": 0.06279175753715968,
+    "h_k": 0.008880095511429422,
+    "burnin_energy_min": 0.7379366579309538,
+    "burnin_energy_max": 3.1262996727704024,
+    "burnin_energy_mean": 0.8629357739999832,
+    "sample_energy_min": 0.7685645702579827,
+    "sample_energy_max": 0.7886817034660939,
+    "sample_energy_mean": 0.7787839262663826,
+    "low_modes": [
+      {
+        "kx": 0,
+        "ky": 1
+      },
+      {
+        "kx": 1,
+        "ky": 0
+      },
+      {
+        "kx": 1,
+        "ky": 1
+      },
+      {
+        "kx": -1,
+        "ky": 1
+      },
+      {
+        "kx": 0,
+        "ky": 2
+      },
+      {
+        "kx": 2,
+        "ky": 0
+      },
+      {
+        "kx": 1,
+        "ky": 2
+      },
+      {
+        "kx": 2,
+        "ky": 1
+      },
+      {
+        "kx": -2,
+        "ky": 1
+      },
+      {
+        "kx": -1,
+        "ky": 2
+      },
+      {
+        "kx": 2,
+        "ky": 2
+      },
+      {
+        "kx": -2,
+        "ky": 2
+      },
+      {
+        "kx": 0,
+        "ky": 3
+      },
+      {
+        "kx": 3,
+        "ky": 0
+      },
+      {
+        "kx": 1,
+        "ky": 3
+      },
+      {
+        "kx": 3,
+        "ky": 1
+      },
+      {
+        "kx": -3,
+        "ky": 1
+      },
+      {
+        "kx": -1,
+        "ky": 3
+      },
+      {
+        "kx": 2,
+        "ky": 3
+      },
+      {
+        "kx": 3,
+        "ky": 2
+      },
+      {
+        "kx": -3,
+        "ky": 2
+      },
+      {
+        "kx": -2,
+        "ky": 3
+      },
+      {
+        "kx": 3,
+        "ky": 3
+      },
+      {
+        "kx": -3,
+        "ky": 3
+      },
+      {
+        "kx": 0,
+        "ky": 4
+      }
+    ],
+    "high_mode_count": 195,
+    "elapsed_seconds": 2429.9604771999875,
+    "total_steps": 2600450,
+    "steps_per_second": 1070.16143788651
+  }
+}
