@@ -404,6 +404,50 @@ Next actions:
 4. Keep any positive language caveated as rank-local sketch coherence under a
    leakage-caveated oracle, not a solver or sufficiency result.
 
+### ARC Branch E3 Learned Ranker (built, compute-paused)
+
+Sources:
+[`prereg/arc/PHASE3_BRANCH_E3_LEARNED_RANKER_SPEC.md`](prereg/arc/PHASE3_BRANCH_E3_LEARNED_RANKER_SPEC.md),
+[`prereg/arc/PHASE3_BRANCH_E_PROGRAM_SEARCH_SPEC.md`](prereg/arc/PHASE3_BRANCH_E_PROGRAM_SEARCH_SPEC.md),
+[`prereg/arc/PHASE3_BRANCH_E_V2_PROGRAM_SEARCH_SPEC.md`](prereg/arc/PHASE3_BRANCH_E_V2_PROGRAM_SEARCH_SPEC.md),
+[`prereg/arc/README.md`](prereg/arc/README.md).
+
+Status: `compute-blocked`, paused by operator decision 2026-05-29.
+
+Current state:
+
+Branch E v1 cleared a modest capability floor (2 distinct held-out tasks/lane);
+v2's deterministic expansion replicated but did not lift it (top-2 crowding). E3
+tests whether a learned MLP ranker over the FROZEN v2 candidate set beats that
+crowding. The runner is built and byte-verified: `enumerate_admitted` reproduces
+v2's candidate set exactly (identical `n_admitted` on all `be94b721`/`f25fbde4`
+instances; the `v2_deterministic_selector` control reproduces the v2 gated
+solves), with a 591-dim target-free feature schema, the RankerMLP, the five
+controls, a three-split no-target barrier, and shard/merge plumbing. py_compile +
+leak-check green; dry-run + candidate-gen sanity pass.
+
+Blocker:
+
+A single-shard timing probe (12 aux tasks -> 49 held-out instances, 38m45s)
+measured **~47.5 s/instance** -- the intrinsic frozen-v2 enumeration cost over
+uncurated auxiliary grids. The full ~892-task auxiliary pool extrapolates to
+**~48 h** of candidate generation (memory is fine: ~220k training rows,
+~0.5 GB). The ~48 h sharded binding run was deliberately NOT launched.
+
+Next actions:
+
+1. To resume, append the E3 tooling freeze-marker amendment, then either (a)
+   stage + run the full sharded slate (32-48 shards, concurrent as cores allow;
+   resumable shard+merge with a runner-content SHA audit / byte-equivalence to a
+   serial run), or (b) first amend the spec to bound the aux pool (a deterministic
+   sha256 sample of N tasks and/or a lower aux candidate budget) to cut the wall
+   ~3-4x, then run.
+2. Do not run the multi-hour/multi-day lock from an interactive coding-agent
+   session; use a local operator slate or a dispatched runner.
+3. On completion, adjudicate `branch_e3_ranker_*` on `learned_ranker` over
+   `U_primary` vs `S_v1v2 = {be94b721, f25fbde4}`; keep all language as held-out
+   public-training capability, not sufficiency / solve / eval / Kaggle.
+
 ## P2 Active Follow-Ups
 
 ### 6. Bayesian Floors Across Workbenches
