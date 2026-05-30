@@ -114,7 +114,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--adjudicator",
-        choices=["bin", "knn", "knn-sweep", "twin-state"],
+        choices=["bin", "knn", "knn-sweep", "twin-state", "mz-budget"],
         default="bin",
         help="Fiber-locality adjudicator: hard binning (default), kNN/disintegration, "
         "knn-sweep (convergence check over k), or twin-state support certificate.",
@@ -380,6 +380,13 @@ class KolmogorovStepper:
         self.forcing_hat[0, 0] = 0.0
         self.low_indices = select_low_modes(wave, cfg.k_signature, cfg.forcing_wavenumber)
         self.high_indices = select_high_modes(wave, cfg.n_modes, self.dealias_mask, self.low_indices)
+        # Low-pass mask for the MZ energy-budget decomposition: True only at the
+        # signature low modes and their conjugates (so the low-passed field is a
+        # real-valued band projection). Spec: PDE_C1_MZ_ENERGY_BUDGET.md.
+        self.low_pass_mask = np.zeros((m, m), dtype=bool)
+        for ix, iy in self.low_indices:
+            self.low_pass_mask[ix, iy] = True
+            self.low_pass_mask[(m - ix) % m, (m - iy) % m] = True
 
     def initial_state(self) -> np.ndarray:
         rng = np.random.default_rng(self.cfg.random_seed)
@@ -441,6 +448,46 @@ class KolmogorovStepper:
     def low_energy(self, omega_hat: np.ndarray) -> float:
         sig = self.signature(omega_hat)
         return float(np.dot(sig, sig))
+
+    def energy_budget(self, omega_hat: np.ndarray) -> dict:
+        """Mori-Zwanzig decomposition of the low-band energy tendency.
+
+        `dE_low/dt = g(Phi_K) + R`, where `g = D_low + F_low + T_LLL` (low
+        dissipation + forcing + band-closed nonlinear transfer) depends only
+        on the low modes, and `R` is the transfer involving >=1 high mode
+        (the orthogonal-dynamics / MZ coupling), obtained by re-evaluating the
+        nonlinear term on the low-passed field. Exact; no closure model.
+        Sums over the same low modes as `low_energy`. Spec:
+        docs/proof/PDE_C1_MZ_ENERGY_BUDGET.md.
+        """
+        scale2 = float(self.cfg.grid_size) ** 4
+        nu = self.cfg.viscosity
+        nl_full = self.nonlinear_hat(omega_hat)
+        nl_low = self.nonlinear_hat(omega_hat * self.low_pass_mask)
+        f = self.forcing_hat
+        t_low = 0.0
+        t_lll = 0.0
+        d_low = 0.0
+        f_low = 0.0
+        for ix, iy in self.low_indices:
+            k2 = float(self.k2[ix, iy])
+            w = omega_hat[ix, iy]
+            wc = w.conjugate()
+            t_low += -(2.0 / (scale2 * k2)) * float((wc * nl_full[ix, iy]).real)
+            t_lll += -(2.0 / (scale2 * k2)) * float((wc * nl_low[ix, iy]).real)
+            d_low += -(2.0 * nu / scale2) * float(abs(w) ** 2)
+            f_low += (2.0 / (scale2 * k2)) * float((wc * f[ix, iy]).real)
+        r = t_low - t_lll
+        g = d_low + f_low + t_lll
+        return {
+            "dEdt": g + r,
+            "g": g,
+            "R": r,
+            "D_low": d_low,
+            "F_low": f_low,
+            "T_low": t_low,
+            "T_lll": t_lll,
+        }
 
 
 def select_low_modes(wave: np.ndarray, k_signature: int, forced_k: int) -> list[tuple[int, int]]:
@@ -532,6 +579,11 @@ def run_cell(cfg: RunConfig) -> dict:
         if cfg.adjudicator == "twin-state"
         else None
     )
+    sample_mz = (
+        np.empty((cfg.sample_count, 7), dtype=np.float64)
+        if cfg.adjudicator == "mz-budget"
+        else None
+    )
     sig_min = np.full(cfg.signature_dimension, np.inf)
     sig_max = np.full(cfg.signature_dimension, -np.inf)
 
@@ -552,6 +604,11 @@ def run_cell(cfg: RunConfig) -> dict:
             sample_energy[idx] = energy
             if sample_high_modes is not None:
                 sample_high_modes[idx, :] = stepper.high_mode_vector(omega_hat)
+            if sample_mz is not None:
+                b = stepper.energy_budget(omega_hat)
+                sample_mz[idx, :] = (
+                    b["dEdt"], b["g"], b["R"], b["D_low"], b["F_low"], b["T_low"], b["T_lll"]
+                )
         if step < total_steps:
             omega_hat = stepper.step(omega_hat)
         if step > 0 and step % progress_stride == 0:
@@ -596,6 +653,8 @@ def run_cell(cfg: RunConfig) -> dict:
         result, bin_rows, sample_rows, twin_witness_rows = aggregate_twin_state(
             sample_signatures, sample_high_modes, actions, epsilon_k, cfg
         )
+    elif cfg.adjudicator == "mz-budget":
+        result, bin_rows, sample_rows, _ = aggregate_mz_budget(sample_mz, actions, cfg)
     else:
         bin_rows, sample_rows = aggregate_bins(sample_signatures, sample_energy, actions, sig_min, h_k, cfg)
         result = summarize(bin_rows, cfg)
@@ -1433,6 +1492,82 @@ def summarize_twin_state(
     }
 
 
+def aggregate_mz_budget(sample_mz: np.ndarray, actions: np.ndarray, cfg: RunConfig) -> tuple[dict, list, list, list]:
+    """Mori-Zwanzig energy-budget diagnostic (Level 1, instantaneous).
+
+    EXPLANATORY, not promotion-bearing: grounds the known MZ/closure
+    mechanism in this cell and contextualizes the D_witness boundary layer.
+    Headline is a population RMS ratio (robust to per-sample dEdt->0), with a
+    bounded per-sample rho = |R|/(|g|+|R|) as secondary. Spec:
+    docs/proof/PDE_C1_MZ_ENERGY_BUDGET.md.
+    """
+    # columns: dEdt, g, R, D_low, F_low, T_low, T_lll
+    dEdt = sample_mz[:, 0]
+    g = sample_mz[:, 1]
+    R = sample_mz[:, 2]
+    D_low = sample_mz[:, 3]
+    F_low = sample_mz[:, 4]
+    T_low = sample_mz[:, 5]
+    n = int(sample_mz.shape[0])
+    absR = np.abs(R)
+    absg = np.abs(g)
+    rho = absR / (absg + absR + 1e-300)
+
+    def rms(a: np.ndarray) -> float:
+        return float(np.sqrt(np.mean(a * a))) if a.size else 0.0
+
+    rms_R, rms_g, rms_dEdt, rms_T = rms(R), rms(g), rms(dEdt), rms(T_low)
+    damp = int(actions.sum())
+    no_op = int(n - damp)
+    d_low_max = float(np.max(D_low)) if n else 0.0
+    structural_ok = d_low_max <= 1e-12  # dissipation must be <= 0 by construction
+
+    interpretable = cfg.preset in VERDICT_BEARING_PRESETS
+    if not interpretable:
+        verdict = "SMOKE_ONLY"
+    elif not structural_ok:
+        verdict = "MZ_BUDGET_INVALID_DISSIPATION_SIGN"
+    else:
+        verdict = "MZ_BUDGET_DIAGNOSTIC"
+
+    rms_R_over_dEdt = rms_R / (rms_dEdt + 1e-300)
+    result = {
+        "verdict": verdict,
+        "verdict_label": "explanatory_mechanism_diagnostic_non_promotion",
+        "interpretable": interpretable and structural_ok,
+        "adjudicator": "mz-budget",
+        "n_samples": n,
+        "rms_R_over_rms_dEdt": rms_R_over_dEdt,
+        "rms_R_over_rms_g": rms_R / (rms_g + 1e-300),
+        "rms_R_over_rms_T_low": rms_R / (rms_T + 1e-300),
+        "coupling_dominated_fraction": float(np.mean(absR > absg)) if n else 0.0,
+        "rho_median": float(np.median(rho)) if n else 0.0,
+        "rho_p90": float(np.percentile(rho, 90)) if n else 0.0,
+        "rho_mean": float(np.mean(rho)) if n else 0.0,
+        "rms_R": rms_R,
+        "rms_g": rms_g,
+        "rms_dEdt": rms_dEdt,
+        "rms_T_low": rms_T,
+        "D_low_mean": float(np.mean(D_low)) if n else 0.0,
+        "D_low_max": d_low_max,
+        "F_low_mean": float(np.mean(F_low)) if n else 0.0,
+        "no_op_count": no_op,
+        "damp_low_band_count": damp,
+        "damp_fraction": damp / max(1, n),
+    }
+    sample_rows = [
+        {
+            "i": i,
+            "dEdt": float(dEdt[i]),
+            "g": float(g[i]),
+            "R": float(R[i]),
+            "rho": float(rho[i]),
+        }
+        for i in range(min(n, 200))
+    ]
+    return result, [], sample_rows, []
+
+
 def bin_key(idx: Iterable[int]) -> str:
     return ";".join(str(int(x)) for x in idx)
 
@@ -1465,6 +1600,8 @@ def write_outputs(out_dir: Path, cfg: RunConfig, result: dict, write_samples: bo
         write_csv(out_dir / "knn-radius-histogram.csv", result.get("knn_histogram", []))
     elif cfg.adjudicator == "twin-state":
         write_csv(out_dir / "twin-state-witnesses.csv", result.get("twin_witness_rows", []))
+    elif cfg.adjudicator == "mz-budget":
+        write_csv(out_dir / "mz-budget-samples.csv", result.get("sample_rows", []))
     else:
         write_csv(out_dir / "bin-summary.csv", result["bin_rows"])
         if write_samples or result["sample_rows"]:
@@ -1483,6 +1620,9 @@ def write_receipt(path: Path, manifest: dict) -> None:
         return
     if c.get("adjudicator") == "twin-state":
         write_receipt_twin_state(path, manifest)
+        return
+    if c.get("adjudicator") == "mz-budget":
+        write_receipt_mz_budget(path, manifest)
         return
     lines = [
         "# PDE C1 Kolmogorov v0 Receipt",
@@ -1764,6 +1904,71 @@ def write_receipt_twin_state(path: Path, manifest: dict) -> None:
             "proof of injectivity."
         )
     lines.extend(["", "## Files", "", "- `manifest.json`", "- `twin-state-witnesses.csv`"])
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def write_receipt_mz_budget(path: Path, manifest: dict) -> None:
+    r = manifest["result"]
+    c = manifest["config"]
+    lines = [
+        "# PDE C1 Mori-Zwanzig Energy-Budget Receipt (Level 1)",
+        "",
+        f"**Status:** {r['verdict']}  (explanatory, NOT promotion-bearing)",
+        f"**Preset:** `{c['preset']}`",
+        f"**Adjudicator:** `mz-budget`",
+        "",
+        "## Decomposition `dE_low/dt = g(Phi_K) + R`",
+        "",
+        "`g` = low dissipation + forcing + band-closed transfer (Phi_K-only); "
+        "`R` = nonlinear transfer involving >=1 high mode (the Mori-Zwanzig coupling).",
+        "",
+        "## Coupling magnitude (population, robust)",
+        "",
+        f"- `rms(R) / rms(dE_low/dt)`: `{r.get('rms_R_over_rms_dEdt', 0.0):.4g}`",
+        f"- `rms(R) / rms(g)`: `{r.get('rms_R_over_rms_g', 0.0):.4g}`",
+        f"- `rms(R) / rms(T_low)`: `{r.get('rms_R_over_rms_T_low', 0.0):.4g}`",
+        f"- samples with `|R| > |g|`: `{r.get('coupling_dominated_fraction', 0.0):.4g}`",
+        "",
+        "## Per-sample coupling fraction `rho = |R|/(|g|+|R|)`",
+        "",
+        f"- median / mean / p90: `{r.get('rho_median', 0.0):.4g}` / "
+        f"`{r.get('rho_mean', 0.0):.4g}` / `{r.get('rho_p90', 0.0):.4g}`",
+        "",
+        "## Validation / context",
+        "",
+        f"- dissipation `D_low` mean / max: `{r.get('D_low_mean', 0.0):.4g}` / "
+        f"`{r.get('D_low_max', 0.0):.4g}` (max must be <= 0)",
+        f"- forcing input `F_low` mean: `{r.get('F_low_mean', 0.0):.4g}` (should be > 0)",
+        f"- `damp_fraction`: `{r.get('damp_fraction', 0.0):.4g}`  samples: `{r.get('n_samples', 0)}`",
+        "",
+        "## Reading",
+        "",
+    ]
+    rr = r.get("rms_R_over_rms_dEdt", 0.0)
+    if r["verdict"] == "SMOKE_ONLY":
+        lines.append("Smoke-only preset; no diagnostic reading filed.")
+    elif r["verdict"] == "MZ_BUDGET_INVALID_DISSIPATION_SIGN":
+        lines.append(
+            "Validation failed: low-band dissipation is not non-positive. The "
+            "decomposition is mis-wired; do not interpret."
+        )
+    elif rr < 0.5:
+        lines.append(
+            f"The unresolved (high-mode) coupling `R` is a **minority** of the "
+            f"low-band energy tendency (`rms(R)/rms(dE_low/dt) = {rr:.3g}`): the "
+            "tendency is mostly low-determined. This grounds the (known) "
+            "Mori-Zwanzig / closure mechanism in this cell. Explanatory only; "
+            "C1 promotion status is unchanged."
+        )
+    else:
+        lines.append(
+            f"The unresolved coupling `R` is **not** a small minority of the "
+            f"tendency (`rms(R)/rms(dE_low/dt) = {rr:.3g}`): instantaneous "
+            "control-sufficiency must come from cancellation/averaging over the "
+            "lookahead (Level 2), a subtler story. Explanatory only; C1 status "
+            "unchanged."
+        )
+    lines.extend(["", "## Files", "", "- `manifest.json`", "- `mz-budget-samples.csv`"])
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
