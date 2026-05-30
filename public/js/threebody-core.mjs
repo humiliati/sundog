@@ -28,6 +28,7 @@ export const DEFAULT_THREEBODY_CONFIG = Object.freeze({
   counterfactualAudit: false,
   multiStepAudit: false,
   hazardChannelAudit: false,
+  hazardCounterfactualAudit: false,
   counterfactualNormalizerFloor: 1e-9,
   logEvery: 10,
 });
@@ -871,6 +872,59 @@ function computeMultiStepCounterfactualHorizon(state, thrust, oracleStrictThrust
   return results;
 }
 
+const HAZARD_CF_HORIZONS = [1, 4, 8, 16, 32];
+
+// Phase 17: signed geometric distance to the frozen hazard boundary. Reuses the
+// exact geometry of stateHasTerminalHazard (r3 > escapeRadius OR minPrimaryDist
+// < closeApproachRadius); hazardMargin <= 0 iff the state is on/beyond a boundary.
+function hazardMargins(state, config) {
+  const x3 = state[4];
+  const y3 = state[5];
+  const radius = Math.sqrt(x3 * x3 + y3 * y3);
+  let minPrimaryDistance = Infinity;
+  for (let i = 0; i < 2; i += 1) {
+    const dx = x3 - state[i * 2];
+    const dy = y3 - state[i * 2 + 1];
+    minPrimaryDistance = Math.min(minPrimaryDistance, Math.sqrt(dx * dx + dy * dy));
+  }
+  const escapeMargin = config.escapeRadius - radius;
+  const closeMargin = minPrimaryDistance - config.closeApproachRadius;
+  return { escapeMargin, closeMargin, hazardMargin: Math.min(escapeMargin, closeMargin) };
+}
+
+// Phase 17: matched actual-vs-noop rollout (drops the 15C oracle arm + normalizer).
+// actual applies `thrust` every step; noop applies [0,0] at step 1 then the same
+// `thrust` for steps 2..N. Terminal score is the raw hazard-margin difference.
+function computeHazardCounterfactualHorizon(state, thrust, cfg) {
+  const hSet = new Set(HAZARD_CF_HORIZONS);
+  const maxH = HAZARD_CF_HORIZONS[HAZARD_CF_HORIZONS.length - 1];
+  let actualState = state;
+  let noopState = state;
+  let actualHazardReached = false;
+  let noopHazardReached = false;
+  const results = {};
+  for (let i = 1; i <= maxH; i += 1) {
+    actualState = integrateStep(actualState, cfg.dt, cfg, thrust);
+    noopState = integrateStep(noopState, cfg.dt, cfg, i === 1 ? [0, 0] : thrust);
+    if (stateHasTerminalHazard(actualState, cfg)) actualHazardReached = true;
+    if (stateHasTerminalHazard(noopState, cfg)) noopHazardReached = true;
+    if (hSet.has(i)) {
+      const a = hazardMargins(actualState, cfg);
+      const n = hazardMargins(noopState, cfg);
+      const hazardAvoided = noopHazardReached && !actualHazardReached ? 1
+        : actualHazardReached && !noopHazardReached ? -1
+          : 0;
+      results[i] = {
+        marginEffect: a.hazardMargin - n.hazardMargin,
+        escapeMarginEffect: a.escapeMargin - n.escapeMargin,
+        closeMarginEffect: a.closeMargin - n.closeMargin,
+        hazardAvoided,
+      };
+    }
+  }
+  return results;
+}
+
 export function computeControlThrust(state, controllerState = {}, config = {}) {
   const cfg = normalizeConfig(config);
   const mode = cfg.controllerMode;
@@ -1262,6 +1316,19 @@ export function runTrial(config = {}) {
   const msNonFloorEligible = [0, 0, 0, 0];
   const msNonFloorScoreSum = [0, 0, 0, 0];
   let msEligible = 0;
+  // Phase 17 hazard-aligned counterfactual accumulators (one entry per HAZARD_CF_HORIZONS)
+  const hcfZeros = () => HAZARD_CF_HORIZONS.map(() => 0);
+  const hcfMarginEffectSum = hcfZeros();
+  const hcfAbsMarginEffectSum = hcfZeros();
+  const hcfMarginPositive = hcfZeros();
+  const hcfEscapeEffectSum = hcfZeros();
+  const hcfEscapePositive = hcfZeros();
+  const hcfCloseEffectSum = hcfZeros();
+  const hcfClosePositive = hcfZeros();
+  const hcfHazardAvoidedSum = hcfZeros();
+  const hcfHazardAvoidedCount = hcfZeros();
+  const hcfHazardCausedCount = hcfZeros();
+  let hcfEligible = 0;
 
   for (let step = 0; step <= steps; step += 1) {
     const time = step * cfg.dt;
@@ -1326,6 +1393,23 @@ export function runTrial(config = {}) {
             }
           }
         }
+      }
+    }
+    if (cfg.hazardCounterfactualAudit && !controllerState.stepWarmup && thrustMagnitude > 1e-6) {
+      const hcf = computeHazardCounterfactualHorizon(state, thrust, cfg);
+      hcfEligible += 1;
+      for (let hi = 0; hi < HAZARD_CF_HORIZONS.length; hi += 1) {
+        const r = hcf[HAZARD_CF_HORIZONS[hi]];
+        hcfMarginEffectSum[hi] += r.marginEffect;
+        hcfAbsMarginEffectSum[hi] += Math.abs(r.marginEffect);
+        if (r.marginEffect > 0) hcfMarginPositive[hi] += 1;
+        hcfEscapeEffectSum[hi] += r.escapeMarginEffect;
+        if (r.escapeMarginEffect > 0) hcfEscapePositive[hi] += 1;
+        hcfCloseEffectSum[hi] += r.closeMarginEffect;
+        if (r.closeMarginEffect > 0) hcfClosePositive[hi] += 1;
+        hcfHazardAvoidedSum[hi] += r.hazardAvoided;
+        if (r.hazardAvoided === 1) hcfHazardAvoidedCount[hi] += 1;
+        if (r.hazardAvoided === -1) hcfHazardCausedCount[hi] += 1;
       }
     }
     if (cfg.trackActionCoupling) {
@@ -1533,6 +1617,21 @@ export function runTrial(config = {}) {
             ]))
             : {}),
         }
+        : {}),
+      ...(cfg.hazardCounterfactualAudit
+        ? Object.fromEntries(HAZARD_CF_HORIZONS.flatMap((N, hi) => [
+          [`hazardCfH${N}EligibleSteps`, hcfEligible],
+          [`hazardCfH${N}MeanMarginEffect`, hcfEligible > 0 ? roundNumber(hcfMarginEffectSum[hi] / hcfEligible, 8) : null],
+          [`hazardCfH${N}MeanAbsMarginEffect`, hcfEligible > 0 ? roundNumber(hcfAbsMarginEffectSum[hi] / hcfEligible, 8) : null],
+          [`hazardCfH${N}PositiveRate`, hcfEligible > 0 ? roundNumber(hcfMarginPositive[hi] / hcfEligible, 6) : null],
+          [`hazardCfH${N}MeanEscapeMarginEffect`, hcfEligible > 0 ? roundNumber(hcfEscapeEffectSum[hi] / hcfEligible, 8) : null],
+          [`hazardCfH${N}EscapePositiveRate`, hcfEligible > 0 ? roundNumber(hcfEscapePositive[hi] / hcfEligible, 6) : null],
+          [`hazardCfH${N}MeanCloseMarginEffect`, hcfEligible > 0 ? roundNumber(hcfCloseEffectSum[hi] / hcfEligible, 8) : null],
+          [`hazardCfH${N}ClosePositiveRate`, hcfEligible > 0 ? roundNumber(hcfClosePositive[hi] / hcfEligible, 6) : null],
+          [`hazardCfH${N}MeanHazardAvoided`, hcfEligible > 0 ? roundNumber(hcfHazardAvoidedSum[hi] / hcfEligible, 6) : null],
+          [`hazardCfH${N}HazardAvoidedRate`, hcfEligible > 0 ? roundNumber(hcfHazardAvoidedCount[hi] / hcfEligible, 6) : null],
+          [`hazardCfH${N}HazardCausedRate`, hcfEligible > 0 ? roundNumber(hcfHazardCausedCount[hi] / hcfEligible, 6) : null],
+        ]))
         : {}),
       ...(cfg.trackActionCoupling
         ? {
