@@ -1,6 +1,8 @@
 # v0.10a Jonckheere–Terpstra Trend Test Form Lock
 
-Status: **OPERATOR LOCK 2026-05-29.** The adjustment pass made the primary p-value
+Status: **VERDICT LANDED 2026-05-29: `jt_trend_monotone_registered`** — exact
+fixed-margin enumeration one-sided **p = 7.304e-3 < 0.01**. Locked 2026-05-29; the
+adjustment pass made the primary p-value
 a deterministic **exact fixed-margin enumeration** (the 1,340-table
 multivariate-hypergeometric null over S-allocations across zone sizes 19/165/66 at
 fixed total S=87), demoted the 10,000-shuffle permutation to a **secondary sanity
@@ -17,6 +19,38 @@ It executes **candidate D** of the v0.9 parent registration (Jonckheere–Terpst
 which v0.9a held back. The name `v0.9b` is left **reserved** for the held-out
 predictor (avenue 2), which v0.9a's fail did not license; that is the planned
 follow-on, not this chapter.
+
+## Verdict (Landed 2026-05-29)
+
+Receipt: `results/isotrophy/k-facet-v10a-jt-trend/manifest.json`.
+
+```text
+verdict:                jt_trend_monotone_registered
+frozen-input check:     PASSED (zones N=19/165/66, S=2/56/29, U=17/109/37 = 250/87/163;
+                        zones recomputed from velocity_fraction under {0.25,0.50} match)
+J_observed:             8760.5
+
+exact fixed-margin enumeration (PRIMARY, binding):
+  feasible tables:      1340
+  probability mass:     1.0000000000   (enumeration self-check clean)
+  one-sided p:          7.304e-3   <  alpha = 0.01   -> PASS
+
+permutation sanity (secondary, seed 20260523, n=10000):
+  one-sided p:          7.499e-3   (agrees with exact)
+normal-approx (context, moments from the exact null):
+  z = 2.471, one-sided p = 6.731e-3
+```
+
+**Reading.** The right statistic finds the signal the blunt one missed: v0.9a's
+χ²-of-independence gave p=0.0245 (missed the 0.01 floor); the ordered J-T trend test
+gives **p=0.0073** (clears it). The monotone-increasing velocity-fraction → stability
+relationship (S-fraction 0.105 → 0.339 → 0.439) is now a **registered ordered trend**.
+
+**Bound (per the Integrity Caveat).** This is an **in-sample** registration of a
+post-hoc-discovered ordered direction — NOT held-out prediction, NOT an independent
+confirmation, NOT a theorem-facing claim, NOT a change to the v0.3h K_facet
+structural-null. The held-out predictor (the reserved `v0.9b`) remains the only path
+to a predictive claim.
 
 ## Frame
 
