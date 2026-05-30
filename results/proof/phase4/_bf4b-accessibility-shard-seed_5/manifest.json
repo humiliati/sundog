@@ -1,0 +1,209 @@
+{
+  "schema": "sundog.threebody.phase4-bf4b-iad-shard-seed_5.bayes_floor.v1",
+  "startedAt": "2026-05-30T08:59:46.535Z",
+  "purpose": "Phase 4 same-signature particle-belief MPC Bayesian-floor evaluator.",
+  "args": {
+    "phase": "phase4-bf4b-iad-shard-seed_5",
+    "out": "C:\\Users\\hughe\\Dev\\sundog\\results\\proof\\phase4\\_bf4b-accessibility-shard-seed_5",
+    "seedStart": 5,
+    "seeds": 1,
+    "regimes": [
+      "near_escape"
+    ],
+    "duration": 16,
+    "timesteps": [
+      0.01
+    ],
+    "logEvery": 1,
+    "massRatios": [
+      1
+    ],
+    "targetTidal": 2,
+    "tidalSpikeThreshold": 50,
+    "localAccelerationWarningThreshold": 10,
+    "eventWarningHorizon": 1,
+    "radiusScales": [
+      1.075
+    ],
+    "velocityScales": [
+      1.15
+    ],
+    "thrustLimits": [
+      0.4
+    ],
+    "sensorNoiseSweep": [
+      0.01
+    ],
+    "trackGuardMode": "hazard_quantile",
+    "trackGuardQuantiles": [
+      0.75
+    ],
+    "trackGuardMinRadiusSweep": [
+      1.15
+    ],
+    "trackGuardMaxLocalAccelerationSweep": [
+      2.5
+    ],
+    "trackGuardMaxTidalMagnitudeSweep": [
+      35
+    ],
+    "particleCount": 512,
+    "planningHorizonSteps": 800,
+    "resampleThreshold": 0.5,
+    "shapeFraction": 0.5,
+    "signatureAdvantageDtMultiplier": 1,
+    "candidateHoldSteps": 800,
+    "bootstrapSeed": 40604
+  },
+  "cases": [
+    {
+      "massRatio": 1,
+      "timestep": 0.01,
+      "radiusScale": 1.075,
+      "velocityScale": 1.15,
+      "thrustLimit": 0.4,
+      "sensorNoiseStd": 0.01,
+      "sensorDelaySteps": 0,
+      "microManeuverContaminationStd": 0.08,
+      "trackGuardQuantile": 0.75,
+      "trackGuardMinRadius": 1.15,
+      "trackGuardMaxLocalAcceleration": 2.5,
+      "trackGuardMaxTidalMagnitude": 35
+    }
+  ],
+  "actionSelectionInputs": [
+    "guarded_accelerometer_signature_history",
+    "particle_belief"
+  ],
+  "rawStateUse": [
+    "truth_rollout",
+    "particle_simulation",
+    "readout_only"
+  ],
+  "controllerMode": "bayes_floor_particle_mpc",
+  "observationModel": {
+    "observedSignature": "observeGuardedAccelSignature(state, cfg, actualSensorState)",
+    "particlePrediction": "observeGuardedAccelSignature(particle.state, { ...cfg, sensorNoiseStd: 0 }, particle.sensorState)",
+    "likelihood": "diagonal Gaussian-like score over |T_hat|, gradX, gradY plus guard mismatch penalty"
+  },
+  "planningObjective": {
+    "form": "expected within-horizon survival time + shapeFraction * dt * expected terminal energy-trend margin",
+    "shapeFraction": 0.5,
+    "signatureAdvantageDtMultiplier": 1,
+    "candidateHoldSteps": 800,
+    "candidateHoldNote": "lattice candidate holds its thrust for candidateHoldSteps steps then follows signature policy; 1 = prior single-step rollout (one-step deviations are invisible over a short horizon); >1 is the information-accessibility diagnostic rollout",
+    "terminalMargin": "energy-trend margin clamp(0.5 + 0.5 * (E_start - E_end) / max(|E_start|, 1e-9), 0, 1) over the particle rollout (total energy = kinetic + potential; lower = more bound); 0 if a terminal hazard was reached in the rollout. Belief-only: computed from particle rollout states, never the true state.",
+    "floorValidityInvariant": "terminal margin in [0,1] and shapeFraction < 1 => shaping term < one dt, so a candidate whose true survival is longer by >= one dt is never overtaken on margin; the floor never prefers an earlier-escape action",
+    "signatureFallbackInvariant": "the guarded-signature policy is an explicit same-information candidate; the evaluator deviates from it only when predicted shaped-score advantage exceeds signatureAdvantageDtMultiplier * dt",
+    "supersedes": "BF-4 pure steps-survived objective (degenerated to passive) then the bounded radius/close-approach margin (BF-4b: valid but inert off-set, cross-candidate spread ~1e-6); replaced 2026-05-16 with the energy-trend margin so a one-step deviation is discriminable even when within-horizon survival is flat",
+    "tieOrder": "signature baseline unless best predicted shaped score beats it by the configured dt-scaled advantage threshold; within 1e-9 -> min expected delta-V; then first in candidate order"
+  },
+  "actionCandidates": [
+    {
+      "index": 0,
+      "kind": "signature_policy",
+      "description": "guarded-signature controller action computed from the admitted observation"
+    },
+    {
+      "index": 1,
+      "kind": "lattice_first_step_then_signature_policy",
+      "actionKey": "0:0",
+      "thrust": [
+        0,
+        0
+      ]
+    },
+    {
+      "index": 2,
+      "kind": "lattice_first_step_then_signature_policy",
+      "actionKey": "0.4:0",
+      "thrust": [
+        0.4,
+        0
+      ]
+    },
+    {
+      "index": 3,
+      "kind": "lattice_first_step_then_signature_policy",
+      "actionKey": "-0.4:0",
+      "thrust": [
+        -0.4,
+        0
+      ]
+    },
+    {
+      "index": 4,
+      "kind": "lattice_first_step_then_signature_policy",
+      "actionKey": "0:0.4",
+      "thrust": [
+        0,
+        0.4
+      ]
+    },
+    {
+      "index": 5,
+      "kind": "lattice_first_step_then_signature_policy",
+      "actionKey": "0:-0.4",
+      "thrust": [
+        0,
+        -0.4
+      ]
+    },
+    {
+      "index": 6,
+      "kind": "lattice_first_step_then_signature_policy",
+      "actionKey": "0.28284271:0.28284271",
+      "thrust": [
+        0.28284271247461906,
+        0.28284271247461906
+      ]
+    },
+    {
+      "index": 7,
+      "kind": "lattice_first_step_then_signature_policy",
+      "actionKey": "0.28284271:-0.28284271",
+      "thrust": [
+        0.28284271247461906,
+        -0.28284271247461906
+      ]
+    },
+    {
+      "index": 8,
+      "kind": "lattice_first_step_then_signature_policy",
+      "actionKey": "-0.28284271:0.28284271",
+      "thrust": [
+        -0.28284271247461906,
+        0.28284271247461906
+      ]
+    },
+    {
+      "index": 9,
+      "kind": "lattice_first_step_then_signature_policy",
+      "actionKey": "-0.28284271:-0.28284271",
+      "thrust": [
+        -0.28284271247461906,
+        -0.28284271247461906
+      ]
+    }
+  ],
+  "trials": [
+    {
+      "id": "mu_1__dt_0p01__r_1p075__v_1p15__thrust_0p4__noise_0p01__gq_0p75__gminr_1p15__gaccel_2p5__gtidal_35__near_escape__bayes_floor_particle_mpc__seed_005",
+      "caseId": "mu_1__dt_0p01__r_1p075__v_1p15__thrust_0p4__noise_0p01__gq_0p75__gminr_1p15__gaccel_2p5__gtidal_35",
+      "seed": 5,
+      "regime": "near_escape",
+      "initialParticle": {
+        "x": 1.6185790465184253,
+        "y": 0.2628873222187394,
+        "vx": 0.09346722342888826,
+        "vy": 1.6163721340720074
+      },
+      "summary": {
+        "terminalOutcome": "escape",
+        "simulatedTime": 3.68,
+        "totalDeltaV": 0.18
+      }
+    }
+  ],
+  "completedAt": "2026-05-30T15:05:14.013Z"
+}
