@@ -877,6 +877,33 @@ cells defined; energy `0.655508` with `27/27` cells defined. This flips the
 warning verdict under `radius` while preserving the Phase 15 Fail-Magnitude
 mechanism verdict.
 
+### Phase 17 - Hazard-Aligned Counterfactual
+
+Goal: test whether guarded TRACK actions move the state away from the same
+frozen hazard boundary used by the Phase 15/16 oracle label, rather than toward
+lower energy. The primary score is signed distance to the nearest terminal
+hazard boundary: `min(escapeRadius - r3, minPrimaryDistance - closeApproachRadius)`.
+
+Implementation-grade draft and pending result note:
+
+- [`docs/threebody/PHASE17_SPEC.md`](threebody/PHASE17_SPEC.md)
+- [`docs/threebody/PHASE17_RESULTS.md`](threebody/PHASE17_RESULTS.md)
+
+Reserved commands:
+
+```bash
+npm run threebody:phase17:hazard-cf-smoke
+npm run threebody:phase17:hazard-cf
+```
+
+Exit criterion: the project can say whether guarded TRACK's survival pocket is
+explained by first actions that increase hazard margin at horizons `N in
+{8,16,32}`, separated from delay/sign-flip ablations. This is a mechanism audit,
+not a controller retune or claim broadening.
+
+Status: spec drafted 2026-05-29; pending lock review. No Phase 17 code has been
+written and no Phase 17 command has been run.
+
 ### 3D Catalog / Isotrophy Sidecar
 
 Goal: test whether the new Li-Liao 2025 three-dimensional orbit catalog gives
