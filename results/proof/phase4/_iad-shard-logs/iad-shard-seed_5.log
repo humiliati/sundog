@@ -1,0 +1,6 @@
+# iad-shard seed=5 particles=512
+# started 2026-05-30T08:59:46.350Z
+# command: C:\Program Files\nodejs\node.exe scripts/threebody-phase4-iad-shard.mjs --seed 5 --particles 512 --out-root results/proof/phase4
+# ─────────────────────────────────────────────────────────────
+[iad-shard seed=5] particles=512 out=results\proof\phase4\_bf4b-accessibility-shard-seed_5
+[iad-shard seed=5] starting at 2026-05-30T08:59:46.447Z
