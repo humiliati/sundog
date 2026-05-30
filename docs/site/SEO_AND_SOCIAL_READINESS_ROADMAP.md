@@ -110,6 +110,8 @@ Legend: ✓ = done · ◐ = partial · ✗ = missing · — = N/A for the page's
 | `/atlas` | D | — | — | — | — | — | — | ✗ | alias / redirect to `/sundog`; `noindex, follow` added 2026-05-21 PM (final). |
 | `/safety-method` | B | ✓ | safety-method.png | TechArticle | ✓ | ✓ | `/index` → `/faraday` → `/safety-method.html` | ✓ | SKETCH method-essay filed 2026-05-25 as the bridge between the `/faraday` Branch A receipt and three load-bearing translations to AI behavioral guarantees (local gauge-invariant readout, structural zero, named quarantine). Indexable (no `noindex`) but page carries a visible SKETCH banner so claim hygiene is preserved while the translation is evaluated. Local Bucket 1 artifacts are now present: bespoke 1200×630 `og:image`, full OG/Twitter metadata, JSON-LD `TechArticle`, tuned title/description, sitemap entry, clean-url redirect, and the inbound thread from `index.html` through `/faraday` to `/safety-method.html`. Post-deploy validator pass and the staged compander citation ratchet remain owed before an external push. Anchored to [`SHADOW_FARADAY.md#phase-5-chapter-close`](../faraday/SHADOW_FARADAY.md#phase-5-chapter-close) as the worked example. The three numbered claims are each paired with a falsifiable next experiment, and the new good-faith hooks keep credit, proof scope, and falsifier discipline separated. |
 | `/faraday` | A | ✓ | faraday.png | TechArticle | ✓ | ✓ | homepage pillar + sitemap | ✓ | Public Shadow Faraday Zero-Out evidence page promoted 2026-05-25 after [`SUNDOG_V_FARADAY.md`](../faraday/SUNDOG_V_FARADAY.md) v0.1 closed Phases 1–5. Receipts live at [`SHADOW_FARADAY.md`](../faraday/SHADOW_FARADAY.md): Phase 3 landed Branch A in [`FARADAY_PHASE3_DERIVATIONS.md`](../faraday/FARADAY_PHASE3_DERIVATIONS.md), Phase 4 landed 5/5 in [`FARADAY_PHASE4_VERIFICATION.md`](../faraday/FARADAY_PHASE4_VERIFICATION.md) via `npm run faraday:phase4`, and Phase 5 chapter close landed in [`SHADOW_FARADAY.md#phase-5-chapter-close`](../faraday/SHADOW_FARADAY.md#phase-5-chapter-close) with receipts catalog, seven scope limitations, six suggested next minimal extensions, and a fidelity audit. Local Bucket 1 artifacts are present: designed 1200×630 `og:image`, full OG/Twitter metadata, JSON-LD `TechArticle`, tuned title/description, homepage internal link, sitemap entry, clean-url redirect, and onward bridge to `/safety-method`. Post-deploy LinkedIn/Twitter validator pass remains to record after deployment. |
+| `/navierstokes` | A | ✓ | navierstokes.png | TechArticle | ✓ | ✓ | seventh load-bearing pillar + generality umbrella + sitemap | ✓ | Filed 2026-05-30 alongside [`/generality`](generality). The Reading-2 witness deep dive for the Kolmogorov-flow C1 cell: G=200 + G=300 replication under a portable objective, 942,834 G=300 witness pairs, composed at matching `ε_K = 0.0664`. Bespoke 1200×630 `og:image` shows two regime boxes + 12 witness-pair beads + a prominent `REVIEW-GATED · C1 UNPROMOTED` badge so the Standing-Rule discipline survives social cards. Page carries five named falsification modes (Front-A vacuity/miscalibration, Front-B vacuity/reach, coupling overreach) and four claim-boundary cards (not Clay, not NSE smoothness, not energy-method replacement, determining modes are not Sundog's idea). Standing claim boundary: this is a witness, not a Navier-Stokes existence or smoothness claim. Cross-ref from [`SUNDOG_V_NAVIERSTOKES.md`](../SUNDOG_V_NAVIERSTOKES.md) and from the seventh load-bearing pillar on the homepage. Post-deploy LinkedIn/Twitter validator pass remains to record after deployment. |
+| `/generality` | A | ✓ | generality.png | TechArticle | ✓ | ✓ | seventh pillar + `/h-of-x` + geometry/alignment/legend/repo-map + sitemap | ✓ | Filed 2026-05-30 as the umbrella over six high-stakes transfer lanes: NSE C1 (review-gated witness, strongest current lane — links out to [`/navierstokes`](navierstokes) for the deep dive), Riemann (3 lanes, 3 bounded nulls, review-gated), Yang-Mills (4 probes, 1 bounded null, Phase 2 NEG-A across the slate), P-vs-NP (safety green, cost-hold on v5), ARC-AGI (execution-hold after sparse absolute fibers and oracle-leakage findings), Three-Body 15C (running, 6/12 shards logged). Bespoke 1200×630 `og:image` shows a 6-tile mini-matrix with NSE prominent (bolder border) and P-vs-NP red (cost-hold differentiated). Carries the asymmetric framing explicitly — NSE has its own page, the other five are honest cards on the matrix — and now includes a site-route bridge from `/h-of-x` first-equation discipline to harder transfer-test substrates. Four claim-boundary disavowals: not a Clay-problem claim, not a theorem-claims page, not symmetric weight, not a launch surface for the underlying ledgers. Post-deploy LinkedIn/Twitter validator pass remains to record after deployment. |
 
 ### Promoted from B to A (2026-05-21 PM)
 
@@ -125,19 +127,27 @@ the Class A pages did. Promotion notes retained here for posterity.
 
 ## Phase Status
 
-**Phase 1 (Bucket 1) — CLEARED 2026-05-21; one Class A page added 2026-05-22.**
-Fourteen Class A pages ship with OG block + designed 1200×630 image +
-JSON-LD + tuned title/description + sitemap entry + homepage internal link. The three
-load-bearing pillar pages (`/h-of-x`, `/mesa`, `/structural-failure`)
-moved from header/footer references to dedicated pillar cards in the
-`Load-Bearing Evidence` section on `index.html`, with per-node
-clickable SVGs and hover tooltips routing readers to specific phase
-documents rather than the roadmap overview. The four Class C pages
-each received a sentinel-wrapped minimal OG block pointing at a shared
-generic Sundog card. The three Class D pages received
-`noindex, follow` robots meta and `/repo-map` was removed from the
-sitemap. `/geometry` was discovered mid-sweep (existed but wasn't in
-the matrix) and brought to full Class A treatment.
+**Phase 1 (Bucket 1) — CLEARED 2026-05-21; Class A page additions through 2026-05-30.**
+Seventeen Class A pages ship with OG block + designed 1200×630 image +
+JSON-LD + tuned title/description + sitemap entry + homepage internal link.
+The load-bearing pillar pages (`/h-of-x`, `/mesa`, `/structural-failure`,
+`/isotrophy`, `/faraday`, `/navierstokes`) moved from header/footer
+references to dedicated pillar cards in the `Load-Bearing Evidence`
+section on `index.html`, with per-node clickable SVGs and hover
+tooltips routing readers to specific phase documents rather than the
+roadmap overview. The four Class C pages each received a
+sentinel-wrapped minimal OG block pointing at a shared generic Sundog
+card. The three Class D pages received `noindex, follow` robots meta
+and `/repo-map` was removed from the sitemap. `/geometry` was
+discovered mid-sweep (existed but wasn't in the matrix) and brought to
+full Class A treatment. `/navierstokes` and `/generality` were filed
+2026-05-30 as the asymmetric high-stakes-math architecture: NSE C1
+earns its own deep-dive page (strongest current witness, the only
+"probably fruitful" lane); the generality umbrella covers all six
+lanes (NSE + Riemann + Yang-Mills + P-vs-NP + ARC-AGI + Three-Body 15C)
+with the discipline-framing carried explicitly into the layout
+("bounded-null and review-gated results are receipts, not failures";
+asymmetric weight is the discipline, not a flaw).
 
 Outstanding from Phase 1: the *one* item that needs your hands and not
 the codebase — running [LinkedIn Post Inspector](https://www.linkedin.com/post-inspector/)

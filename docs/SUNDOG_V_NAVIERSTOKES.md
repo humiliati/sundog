@@ -503,6 +503,22 @@ fuller theorem-shape: the **robustness wave** (item 6 — N-refinement /
 enstrophy objective / K-window; the one OPEN tag) and an optional
 separation diagram.
 
+**C1 robustness wave — sweep 1 (N-refinement) PASSED 2026-05-29**
+([`proof/PDE_C1_ROBUSTNESS_WAVE.md`](proof/PDE_C1_ROBUSTNESS_WAVE.md)). New
+cell `lock_v5_n48` = `lock_v5` with the Galerkin grid refined 32→48 (`n_modes`
+16→24, dealias ~10→~16), **ν / G / k_f / K / objective / dt / sampling held
+fixed** — a clean N-only refinement; the unresolved complement `Q_K` grows
+**422→1070 DOF**. Stability gated first (grid 48 at dt=0.01 stable, `E_low`
+~0.73 matches grid 32 — C2 CFL lesson applied). **All three clauses persist at
+N=24, near-identical numbers:** (i) twin-state CERTIFIED (689,263 witness pairs
+vs 693,795); (ii) `PAIRED_FIBER_CONSTANCY_POSITIVE`, `D_witness=0.0377` vs
+0.0367, `D_candidate=0.0319` *unchanged*; (iii) `COUPLING_SIGNATURE_SLAVED`,
+`R²(R|Φ_K)=0.998` (controls `R²(g)=0.999`, `R²(perm)=−0.001`, clean at the
+finer resolution). The separation does **not** degrade as 2.5× more high modes
+are added — *structural, not a truncation artifact*. Flips the proposition's
+refinement tag OPEN → DEMONSTRATED on the **N axis** (one step; N=32 trend
+registered). K-window / enstrophy / projection sweeps remain open.
+
 ## Claim Boundary
 
 This document does **not** claim that Sundog has produced original

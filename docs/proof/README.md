@@ -211,6 +211,18 @@ that claim provably fails.
   analogue; OPEN refinement). Sits *above* the separation statement (its
   detailed-argument backing). Honest ceiling: theorem-*shaped*
   certified-empirical, not a deductive PDE theorem.
+- [`PDE_C1_ROBUSTNESS_WAVE.md`](PDE_C1_ROBUSTNESS_WAVE.md)
+  — **the robustness wave** (2026-05-29, pre-registration + sweep-1 result):
+  closes the proposition's one `OPEN` tag (refinement-invariance). Priority
+  N-refinement → K-window → enstrophy → projection, each verdict-bearing and
+  reusing the validated clause adjudicators. **Sweep 1 (N-refinement)
+  PASSED:** `lock_v5_n48` = `lock_v5` with grid 32→48 (`Q_K` 422→1070 DOF;
+  ν/G/k_f/K/objective/dt fixed; stability gated first). All three clauses
+  persist near-identically at N=24 — (i) twin CERTIFIED 689k pairs, (ii)
+  paired POSITIVE `D_witness 0.0377` / `D_candidate 0.0319` unchanged, (iii)
+  SLAVED `R²=0.998` (controls clean). Separation does not degrade with 2.5×
+  more high modes → structural, not truncation-artifact. Flips the refinement
+  tag OPEN→DEMONSTRATED on the N axis; K-window / enstrophy / projection open.
 - [`PDE_C1_SEPARATION_STATEMENT.md`](PDE_C1_SEPARATION_STATEMENT.md)
   — **desk-first hardening, part (b): reviewer-facing statement**
   (2026-05-29). Consolidates the Postulate-1 reading note into one
