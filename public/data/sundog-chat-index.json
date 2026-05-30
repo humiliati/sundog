@@ -620,9 +620,9 @@
     {
       "id": "threebody_operating_envelope:1",
       "routeId": "threebody_operating_envelope",
-      "doc": "docs/APPLICATIONS.md",
-      "href": "/docs/APPLICATIONS.md",
-      "section": "Three-Body Dynamics Workbench",
+      "doc": "docs/threebody/PHASE18_RESULTS.md",
+      "href": "/docs/threebody/PHASE18_RESULTS.md",
+      "section": "Branch A - Reduces to radius",
       "tier": "operating_envelope_study",
       "disposition": "allow_with_boundary",
       "freshness": "current_claim_map",
@@ -630,7 +630,8 @@
       "boundaryTags": [
         "Do not claim Sundog solves the three-body problem.",
         "Do not claim chaos prediction.",
-        "Do not present the privileged heuristic oracle as an optimal controller."
+        "Do not present the privileged heuristic oracle as an optimal controller.",
+        "Do not present the survival mechanism as sophisticated tidal sensing; Phase 18 reduces it to radius-gated inward thrust in the tested pocket."
       ],
       "questionPatterns": [
         "what is the three-body problem",
@@ -639,14 +640,14 @@
         "three-body evidence",
         "three body"
       ],
-      "text": "The Three-Body workbench is a bounded operating-envelope study. In the tested planar restricted setup, the guarded accelerometer-proxy TRACK controller shows survival improvement versus passive and naive baselines in a robust high-velocity near-escape pocket only, while lower-velocity and equal-mass cells remain harm boundaries. what is the three-body problem what is the three-body sundog approach does sundog solve the three-body problem three-body evidence three body Do not claim Sundog solves the three-body problem. Do not claim chaos prediction. Do not present the privileged heuristic oracle as an optimal controller."
+      "text": "The Three-Body workbench is a bounded operating-envelope study. In the tested planar restricted setup, a robust high-velocity near-escape survival pocket exists through the 16-second horizon, but Phase 18 shows the mechanism is deflationary: at matched duty, a radius-gated inward-thrust reflex reproduces guarded TRACK's survival envelope without tidal sensing or gradient steering. Lower-velocity and equal-mass cells remain harm boundaries, and the result does not solve three-body dynamics or promote the Phase 15 Fail-Magnitude verdict. what is the three-body problem what is the three-body sundog approach does sundog solve the three-body problem three-body evidence three body Do not claim Sundog solves the three-body problem. Do not claim chaos prediction. Do not present the privileged heuristic oracle as an optimal controller. Do not present the survival mechanism as sophisticated tidal sensing; Phase 18 reduces it to radius-gated inward thrust in the tested pocket."
     },
     {
       "id": "threebody_operating_envelope:2",
       "routeId": "threebody_operating_envelope",
-      "doc": "docs/THREEBODY_PHASE11_SUMMARY.md",
-      "href": "/docs/THREEBODY_PHASE11_SUMMARY.md",
-      "section": "Phase 11 summary",
+      "doc": "docs/SUNDOG_V_THREEBODY.md",
+      "href": "/docs/SUNDOG_V_THREEBODY.md",
+      "section": "Phase 18 - Radius-Only Controller Control",
       "tier": "operating_envelope_study",
       "disposition": "allow_with_boundary",
       "freshness": "current_claim_map",
@@ -654,7 +655,8 @@
       "boundaryTags": [
         "Do not claim Sundog solves the three-body problem.",
         "Do not claim chaos prediction.",
-        "Do not present the privileged heuristic oracle as an optimal controller."
+        "Do not present the privileged heuristic oracle as an optimal controller.",
+        "Do not present the survival mechanism as sophisticated tidal sensing; Phase 18 reduces it to radius-gated inward thrust in the tested pocket."
       ],
       "questionPatterns": [
         "what is the three-body problem",
@@ -663,7 +665,7 @@
         "three-body evidence",
         "three body"
       ],
-      "text": "The Three-Body workbench is a bounded operating-envelope study. In the tested planar restricted setup, the guarded accelerometer-proxy TRACK controller shows survival improvement versus passive and naive baselines in a robust high-velocity near-escape pocket only, while lower-velocity and equal-mass cells remain harm boundaries. what is the three-body problem what is the three-body sundog approach does sundog solve the three-body problem three-body evidence three body Do not claim Sundog solves the three-body problem. Do not claim chaos prediction. Do not present the privileged heuristic oracle as an optimal controller."
+      "text": "The Three-Body workbench is a bounded operating-envelope study. In the tested planar restricted setup, a robust high-velocity near-escape survival pocket exists through the 16-second horizon, but Phase 18 shows the mechanism is deflationary: at matched duty, a radius-gated inward-thrust reflex reproduces guarded TRACK's survival envelope without tidal sensing or gradient steering. Lower-velocity and equal-mass cells remain harm boundaries, and the result does not solve three-body dynamics or promote the Phase 15 Fail-Magnitude verdict. what is the three-body problem what is the three-body sundog approach does sundog solve the three-body problem three-body evidence three body Do not claim Sundog solves the three-body problem. Do not claim chaos prediction. Do not present the privileged heuristic oracle as an optimal controller. Do not present the survival mechanism as sophisticated tidal sensing; Phase 18 reduces it to radius-gated inward thrust in the tested pocket."
     },
     {
       "id": "threebody_operating_envelope:3",
@@ -678,7 +680,8 @@
       "boundaryTags": [
         "Do not claim Sundog solves the three-body problem.",
         "Do not claim chaos prediction.",
-        "Do not present the privileged heuristic oracle as an optimal controller."
+        "Do not present the privileged heuristic oracle as an optimal controller.",
+        "Do not present the survival mechanism as sophisticated tidal sensing; Phase 18 reduces it to radius-gated inward thrust in the tested pocket."
       ],
       "questionPatterns": [
         "what is the three-body problem",
@@ -687,7 +690,7 @@
         "three-body evidence",
         "three body"
       ],
-      "text": "The Three-Body workbench is a bounded operating-envelope study. In the tested planar restricted setup, the guarded accelerometer-proxy TRACK controller shows survival improvement versus passive and naive baselines in a robust high-velocity near-escape pocket only, while lower-velocity and equal-mass cells remain harm boundaries. what is the three-body problem what is the three-body sundog approach does sundog solve the three-body problem three-body evidence three body Do not claim Sundog solves the three-body problem. Do not claim chaos prediction. Do not present the privileged heuristic oracle as an optimal controller."
+      "text": "The Three-Body workbench is a bounded operating-envelope study. In the tested planar restricted setup, a robust high-velocity near-escape survival pocket exists through the 16-second horizon, but Phase 18 shows the mechanism is deflationary: at matched duty, a radius-gated inward-thrust reflex reproduces guarded TRACK's survival envelope without tidal sensing or gradient steering. Lower-velocity and equal-mass cells remain harm boundaries, and the result does not solve three-body dynamics or promote the Phase 15 Fail-Magnitude verdict. what is the three-body problem what is the three-body sundog approach does sundog solve the three-body problem three-body evidence three body Do not claim Sundog solves the three-body problem. Do not claim chaos prediction. Do not present the privileged heuristic oracle as an optimal controller. Do not present the survival mechanism as sophisticated tidal sensing; Phase 18 reduces it to radius-gated inward thrust in the tested pocket."
     },
     {
       "id": "balance_operating_envelope:1",

@@ -212,7 +212,7 @@ Current operating-envelope studies:
 
 | Workbench | Current bounded result | Boundary |
 | --- | --- | --- |
-| Three-Body Dynamics | Guarded accelerometer-proxy TRACK improves survival over passive and naive local baselines across a mapped high-velocity near-escape pocket through a 16-second tested horizon. | The low-velocity `velocityScale=0.95` boundary, especially equal-mass cells, still exposes controller harms. |
+| Three-Body Dynamics | A mapped high-velocity near-escape survival pocket persists through a 16-second tested horizon, and Phase 18 shows the mechanism reduces to radius-gated inward thrust at matched duty rather than sophisticated tidal steering. | The low-velocity `velocityScale=0.95` boundary, especially equal-mass cells, still exposes controller harms; the result does not solve three-body dynamics or promote the Phase 15 Fail-Magnitude verdict. |
 | Sundog Balance | Shadow-derived cart-pole control beats naive shadow-centering on 28/28 diagnostic-positive cells in the repaired Phase 10 verdict. | Overhead-light and high-delay cells remain degradation boundaries. |
 | Pressure Mines | In the density 0.16 / pressure-noise 2.0 / dropout 0.2 pocket, pressure-derived Sundog variants improve budget-adjusted safe-tile progress before mine trigger. | The paired density 0.22 / pressure-noise 1.0 / dropout 0.35 region is a published failure case. |
 
@@ -284,11 +284,11 @@ pages or changing deployment behavior.
 **Control workbenches**
 
 - [Three-body dynamics workbench](threebody.html): local experiment
-  surface whose Phase 13 result maps a bounded high-velocity
-  near-escape pocket where guarded accelerometer-proxy TRACK control
-  improves survival through a 16-second tested horizon over passive
-  and naive local baselines, while the low-velocity/equal-mass
-  boundary remains explicit.
+  surface whose Phase 13-18 chain maps a bounded high-velocity
+  near-escape survival pocket and then deflates its mechanism: at
+  matched duty, a radius-gated inward reflex reproduces guarded
+  TRACK's survival envelope without tidal sensing or gradient steering,
+  while the low-velocity/equal-mass boundary remains explicit.
 - [Sundog Balance workbench](balance.html): cart-pole surface where
   the controller is denied pole angle and acts from cast-shadow
   geometry. Phase 10 confirmed the diagnostic-positive envelope while

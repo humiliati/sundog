@@ -1,8 +1,8 @@
 # Three-Body Phase 15C - Multi-Step Counterfactual Horizon Audit Results
 
-Status: spec created 2026-05-28; implementation commit complete 2026-05-28.
-Smoke passed as an instrumentation check. Operator-signed lock started
-2026-05-29; shard readback is in progress below.
+Status: **complete 2026-05-29; formal branch: Multi-step steering REJECTED.**
+Smoke passed as an instrumentation check; the 12-shard lock completed and the
+readback is recorded below.
 
 Phase 15C is a diagnostic follow-on to the Phase 15B **Mixed/Partial Diagnostic** verdict.
 It does not revise Phase 15, retune the controller, or upgrade the claim.

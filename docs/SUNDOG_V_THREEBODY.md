@@ -534,7 +534,7 @@ Claim after Phase 9:
 > passive and naive local baselines on specified metrics, while losing to or
 > approaching a privileged oracle depending on regime.
 
-Current Phase 9 earned wording:
+Phase 9 earned wording (historical; superseded on mechanism by Phase 18):
 
 > In the tested planar restricted setup, a guarded accelerometer-proxy TRACK
 > controller improves survival over passive behavior in a connected
@@ -542,13 +542,24 @@ Current Phase 9 earned wording:
 > near-escape cells still show harms, and hazard-derived gates trade a smaller
 > candidate region for lower control effort.
 
-Current Phase 13 earned wording:
+Phase 13 earned wording (historical; outcome still real, mechanism superseded by Phase 18):
 
 > In the tested planar restricted setup, a guarded accelerometer-proxy TRACK
 > controller improves survival over passive and naive local baselines across a
 > mapped high-velocity near-escape pocket through a 16-second tested horizon.
 > The result is not global: the low-velocity boundary, especially equal-mass
-> cells near `velocityScale=0.95`, still exposes controller harms.
+> cells near `velocityScale=0.95`, still exposes controller harms. Phase 18
+> later shows the survival edge reduces to radius-gated inward thrust rather
+> than sophisticated tidal steering.
+
+Current Phase 18 mechanism wording:
+
+> In the tested planar restricted setup, the high-velocity near-escape survival
+> pocket is real, but its mechanism reduces to a simple radius-gated inward
+> thrust reflex at matched duty. The noisy-accelerometer tidal steering and
+> three-condition guard are not load-bearing for survival in this pocket. This
+> explains the mechanism without promoting the Phase 15 Fail-Magnitude verdict
+> or broadening the claim beyond the mapped envelope.
 
 Do not claim:
 
@@ -796,12 +807,12 @@ Goal: test whether Phase 15's favorable guarded-TRACK pocket is explained by
 cumulative trajectory steering over short horizons rather than by one-step
 energy reduction.
 
-Implementation-grade spec:
+Implementation-grade spec and result note:
 
 - [`docs/threebody/PHASE15C_SPEC.md`](threebody/PHASE15C_SPEC.md)
+- [`docs/threebody/PHASE15C_RESULTS.md`](threebody/PHASE15C_RESULTS.md)
 
-Reserved commands, not runnable until the implementation commit adds the
-multi-step audit flag and npm scripts:
+Commands:
 
 ```bash
 npm run threebody:phase15c:multistep-smoke
@@ -813,9 +824,12 @@ scores at `N in {4,8,16,32}` explain the survival pocket that one-step energy
 reduction did not. This phase is diagnostic only: it does not revise Phase 15,
 retune the controller, or upgrade the earned claim.
 
-Status: spec filed 2026-05-28. Implementation is held until an additive runner
-commit pins the CSV columns, smoke command, capped rate probe, and lock
-readback path.
+Status: complete 2026-05-29 as **Multi-step steering rejected**. The 1,728-trial
+lock reproduced the same 44/180 candidate-envelope rows while guarded candidate
+scores declined with horizon (`H4` `+0.100` to `H32` `+0.032`) and normalizer
+floor rate stayed near `0.970`. The survival pocket is therefore not explained
+by cumulative 4-32-step energy steering, and the Phase 15 Fail-Magnitude verdict
+remains unchanged.
 
 ### Phase 16 - Hazard-Score Channel Audit
 
@@ -884,12 +898,12 @@ frozen hazard boundary used by the Phase 15/16 oracle label, rather than toward
 lower energy. The primary score is signed distance to the nearest terminal
 hazard boundary: `min(escapeRadius - r3, minPrimaryDistance - closeApproachRadius)`.
 
-Implementation-grade draft and pending result note:
+Implementation-grade spec and result note:
 
 - [`docs/threebody/PHASE17_SPEC.md`](threebody/PHASE17_SPEC.md)
 - [`docs/threebody/PHASE17_RESULTS.md`](threebody/PHASE17_RESULTS.md)
 
-Reserved commands:
+Commands:
 
 ```bash
 npm run threebody:phase17:hazard-cf-smoke
@@ -916,12 +930,12 @@ gradient thrust but drops non-radius guard clauses; rung 2
 with magnitude matched to guarded TRACK by favorable-pocket DeltaV before the
 measurement lock.
 
-Implementation-grade spec and pending result note:
+Implementation-grade spec and result note:
 
 - [`docs/threebody/PHASE18_SPEC.md`](threebody/PHASE18_SPEC.md)
 - [`docs/threebody/PHASE18_RESULTS.md`](threebody/PHASE18_RESULTS.md)
 
-Reserved commands:
+Commands:
 
 ```bash
 npm run threebody:phase18:smoke
@@ -935,8 +949,15 @@ at least `2/3` of guarded candidate cells within `0.10` survival-delta, or
 whether both rungs fail by Jaccard `0.30` / half-survival bars. This is a
 mechanism diagnostic only and does not promote Phase 15.
 
-Status: spec locked 2026-05-29. No Phase 18 code has been written and no Phase
-18 command has been run.
+Status: complete and committed (`2c3a9a8d`) as **Branch A - reduces to radius**.
+At matched inward magnitude `m=0.4`,
+`track_radius_inward` reproduces guarded TRACK's favorable-pocket survival
+envelope: 25/27 candidate cells, Jaccard `0.815`, 19/24 guarded candidate cells
+within `0.10` survival-delta, and mean favorable survival-delta `0.8009`, matching
+guarded to four decimals. The mechanism line is therefore closed: the survival
+edge is a cumulative radius-gated inward reflex, not sophisticated tidal sensing
+or per-step counterfactual steering. Phase 15's Fail-Magnitude verdict remains
+unchanged.
 
 ### 3D Catalog / Isotrophy Sidecar
 
@@ -1800,6 +1821,13 @@ Current Phase 9 implementation:
   Phase 11 (`0.229` vs `0.218` delta-v per simulated second for guarded TRACK
   candidate rows). See
   [`docs/threebody/PHASE13_RESULTS.md`](threebody/PHASE13_RESULTS.md).
+- Phase 18 mechanism result: `npm run threebody:phase18:control` confirms the
+  favorable survival envelope reduces to radius-gated inward thrust at matched
+  duty. `track_radius_inward` reaches 25 / 27 favorable candidate cells, Jaccard
+  `0.815` with guarded TRACK, and mean favorable survival delta `0.8009`, matching
+  guarded to four decimals. This closes the mechanism line as a deflationary
+  explanation, not a claim upgrade. See
+  [`docs/threebody/PHASE18_RESULTS.md`](threebody/PHASE18_RESULTS.md).
 - Next work: move to the cross-substrate follow-ups in
   [`docs/threebody/CROSS_SUBSTRATE_NOTES.md`](threebody/CROSS_SUBSTRATE_NOTES.md).
 

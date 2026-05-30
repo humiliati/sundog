@@ -375,16 +375,16 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "operating_envelope_study",
-      "answerTemplate": "The Three-Body workbench is a bounded operating-envelope study. In the tested planar restricted setup, the guarded accelerometer-proxy TRACK controller shows survival improvement versus passive and naive baselines in a robust high-velocity near-escape pocket only, while lower-velocity and equal-mass cells remain harm boundaries.",
+      "answerTemplate": "The Three-Body workbench is a bounded operating-envelope study. In the tested planar restricted setup, a robust high-velocity near-escape survival pocket exists through the 16-second horizon, but Phase 18 shows the mechanism is deflationary: at matched duty, a radius-gated inward-thrust reflex reproduces guarded TRACK's survival envelope without tidal sensing or gradient steering. Lower-velocity and equal-mass cells remain harm boundaries, and the result does not solve three-body dynamics or promote the Phase 15 Fail-Magnitude verdict.",
       "support": [
         {
-          "doc": "docs/APPLICATIONS.md",
-          "section": "Three-Body Dynamics Workbench",
+          "doc": "docs/threebody/PHASE18_RESULTS.md",
+          "section": "Branch A - Reduces to radius",
           "status": "primary"
         },
         {
-          "doc": "docs/THREEBODY_PHASE11_SUMMARY.md",
-          "section": "Phase 11 summary",
+          "doc": "docs/SUNDOG_V_THREEBODY.md",
+          "section": "Phase 18 - Radius-Only Controller Control",
           "status": "supporting"
         },
         {
@@ -396,7 +396,8 @@
       "boundaries": [
         "Do not claim Sundog solves the three-body problem.",
         "Do not claim chaos prediction.",
-        "Do not present the privileged heuristic oracle as an optimal controller."
+        "Do not present the privileged heuristic oracle as an optimal controller.",
+        "Do not present the survival mechanism as sophisticated tidal sensing; Phase 18 reduces it to radius-gated inward thrust in the tested pocket."
       ],
       "nextAction": {
         "label": "Open Three-Body page",

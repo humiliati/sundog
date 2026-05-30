@@ -29,15 +29,17 @@ Mesa and Geometry both converged on field-shaped structure:
 - Geometry: a small set of shared halo generators whose visible arcs are
   forward-rich but inverse-narrow, with HaloSim acting as an independent
   forward oracle.
-- Threebody: a local accelerometer/tidal proxy that improves outcomes only in a
-  mapped near-escape pocket, with lower-velocity and equal-mass boundaries where
-  control can actively hurt.
+- Threebody: a mapped near-escape survival pocket whose Phase 18 mechanism
+  audit is deflationary: at matched duty, radius-gated inward thrust reproduces
+  guarded TRACK without tidal sensing or gradient steering, while lower-velocity
+  and equal-mass boundaries still expose harms.
 
 The shared theorem posture is:
 
 > Useful action can emerge from indirect signatures when the signature remains
 > attached to the field, but the attachment is substrate-specific, asymmetric,
-> and bounded by failure maps.
+> sometimes simpler than the first successful controller, and bounded by failure
+> maps.
 
 ## 2. Mesa Lessons for Threebody
 
@@ -89,6 +91,12 @@ phase specs should rank signals by validated control utility, not by how
 physically evocative they are.
 
 ## 4. Candidate Future Phases
+
+Historical note: this section was drafted before Phases 14-18 ran. The
+suggestions below remain useful as provenance for the mechanism program, but
+the current controller interpretation is the Phase 18 result: the favorable
+survival envelope reduces to radius-gated inward thrust, not tidal-gradient
+steering.
 
 ### Phase 14 - Mechanism Decomposition and Action Coupling
 
@@ -224,7 +232,7 @@ discarded.
 | Chat agent | token stream / surface response | maintained ledger packet, correlated with bottleneck subspaces |
 | Mesa controller | controller hidden state | entangled `5D net.7` subspace |
 | Geometry / HaloSim | full atmospheric optics | small set of halo generators / canonical implied circles |
-| Threebody | 18-dim full state | accelerometer / tidal proxy (3-dim) |
+| Threebody | 18-dim full state | radius-gated inward reflex in the mapped near-escape pocket |
 | Isotrophy | `S3` symmetry orbit of a 3-body choreography | residual `Z2` generators surviving `S3 -> Z2` mass perturbation |
 
 The columns are the same operator. The substrate-specificity in row
@@ -338,7 +346,12 @@ vocabulary instead of rediscovering it.
 
 ### 7.3 Threebody
 
-The accelerometer / tidal proxy is **the projection from 18-dim
+Phase 18 revises this row. The accelerometer / tidal proxy was a useful scaffold
+for finding the high-velocity near-escape pocket, but it is not the load-bearing
+projection for survival. The current mechanism reduces to radius crossing an
+inherited guard threshold plus an inward reflex at matched duty.
+
+The accelerometer / tidal proxy was previously treated as **the projection from 18-dim
 full state to 3-dim control signal.** The Phase 13 pocket-of-operation
 result is then a claim about *where in the orbit space that
 projection preserves load-bearing structure* and where it does not
@@ -346,15 +359,15 @@ projection preserves load-bearing structure* and where it does not
 boundaries (low velocity, equal mass, overhead light) marking the
 edges of the projection's domain of validity.
 
-Action: future Phase 14-16 specs can keep the existing "warning
-quality / action coupling / outcome effect" decomposition (it is
-the right operational granularity) while noting in the spec
-preamble that all three are measurements on a *single projection*
-whose rigidity is bounded. This earns the spec a half-page of
-audit-cost: when Phase 16 extends to 3D, the question "does the
-projection survive the spatial extension" is asked once and the
-specific decomposition checks follow from it, instead of each
-check being framed from scratch.
+Current reading: Phase 18 narrows that old interpretation. The load-bearing
+projection is radius-gated geometry, and the failure-map boundaries (low velocity
+and equal mass) mark the edges of that projection's domain of validity.
+
+Post-Phase-18 action: future threebody specs can keep the existing "warning
+quality / action coupling / outcome effect" decomposition, but they should not
+describe the planar near-escape survival mechanism as sophisticated tidal
+sensing unless a fresh locked phase earns that claim. For the current pocket,
+the mechanism line is closed: radius-gated inward thrust explains survival.
 
 ### 7.4 Geometry / HaloSim and Chat
 
