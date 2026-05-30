@@ -1,4 +1,4 @@
-# Yang-Mills Pre-Registration Holding Pen
+﻿# Yang-Mills Pre-Registration Holding Pen
 
 Roadmap: [`SUNDOG_V_YANG_MILLS.md`](../../SUNDOG_V_YANG_MILLS.md)
 Lit-pass: [`YANG_MILLS_LITPASS_MEMO.md`](../../YANG_MILLS_LITPASS_MEMO.md)
@@ -6,36 +6,32 @@ Lit-pass: [`YANG_MILLS_LITPASS_MEMO.md`](../../YANG_MILLS_LITPASS_MEMO.md)
 Filed: **2026-05-29 (PT)**
 
 Status: **Phase 1 instrumentation closed across the full ladder 2026-05-29;
-Phase 2 v0 / v1 / v2 all executed 2026-05-29 ->
-`YM-P2-NEG-A no_rank_local_structure` (three consistent named nulls
-across signature vocabs v1 bare, v4 smeared, v5 correlator on the
-γ_held tertile target); Phase 2 v3 target-redesign probe + binding spec
-filed 2026-05-29 (vocab v1 signature × new vocab v2 σ²_W33 target, no
-P0 amendment)**. See
+Phase 2 v0 / v1 / v2 / v3 all executed 2026-05-29 ->
+`YM-P2-NEG-A no_rank_local_structure`; bounded-null synthesis filed
+2026-05-29**. See
 [`P0_DOMAIN_AND_RECEIPT_LOCK.md`](P0_DOMAIN_AND_RECEIPT_LOCK.md). This
 directory remains the home for any future Yang-Mills pre-registrations
 (Phase 1 runner manifests, Phase 2/3/4 phase specs, and any P0 amendments).
-The v0, v1, and v2 Phase 2 receipts are named nulls and do not admit
-Phase 3 observable-certificate work; v3 (target redesign on the same v0
-ensembles) is the next admitted scoring lane. If v3 also lands NEG-A,
-the pre-stated v4 fallback is bounded-null synthesis, not unbounded
-ladder continuation.
+The v0, v1, v2, and v3 Phase 2 receipts are named nulls and do not admit
+Phase 3 observable-certificate work. The pre-stated v4 fallback is now
+resolved as PAUSE-and-synthesize: no automatic v4 probe-ladder continuation
+is admitted without fresh external scientific motivation.
 
 ## Filed Artifacts
 
-- [`P0_DOMAIN_AND_RECEIPT_LOCK.md`](P0_DOMAIN_AND_RECEIPT_LOCK.md) —
-  cell ladder, lattice slate, action, β slate, generator algorithms,
+- [`P0_DOMAIN_AND_RECEIPT_LOCK.md`](P0_DOMAIN_AND_RECEIPT_LOCK.md) â€”
+  cell ladder, lattice slate, action, Î² slate, generator algorithms,
   burn-in / thinning / autocorrelation rules, signature vocabulary v1,
   held-out target vocabulary v1, seven-entry leakage controls battery,
   admission requirements, outcome-branch table, anti-scope-creep rule,
   public-language boundary, and external-reviewer category. Closes the
-  five §11 open decisions in
+  five Â§11 open decisions in
   [`../../SUNDOG_V_YANG_MILLS.md`](../../SUNDOG_V_YANG_MILLS.md).
 - [`PHASE1_U1_2D_gauge_invariance_smoke.md`](PHASE1_U1_2D_gauge_invariance_smoke.md)
   - runner manifest for the cheapest Abelian instrumentation cell:
   `U1_2D`, 16x16, beta 1.0, gauge-randomization and raw-link residual
   smoke only. No non-Abelian or certificate claim admitted.
-  **Executed 2026-05-29 → `P1-A smoke_pass`.**
+  **Executed 2026-05-29 â†’ `P1-A smoke_pass`.**
 - [`PHASE1_SU2_2D_gauge_invariance_smoke.md`](PHASE1_SU2_2D_gauge_invariance_smoke.md)
   - runner manifest for the SU(2) 2D harness cell:
   `SU2_2D`, 16x16, beta 2.0, SU(2) Creutz heatbath + Kennedy-Pendleton +
@@ -49,41 +45,41 @@ ladder continuation.
   same SU(2) Creutz+KP heatbath + Brown-Woch overrelaxation (1 HB + 4 OR
   per combined sweep), master seed 202605290103, identity + 8 random
   SU(2) Haar gauge transforms per config. Adds 3D-specific gates: per-
-  orientation mean-plaquette isotropy spread ≤ 5% (new branch
+  orientation mean-plaquette isotropy spread â‰¤ 5% (new branch
   `YM-P1-QUAR-C orientation_anisotropy`) and the explicit link-unitarity
-  Frobenius residual ≤ 1e-10 (new named branch
+  Frobenius residual â‰¤ 1e-10 (new named branch
   `YM-P1-QUAR-D unitarity_drift`, promoted from SU2_2D's implicit check).
   No Phase 2 or rank-locality claim admitted.
   **Executed 2026-05-29 -> `P1-A smoke_pass`.**
 - [`PHASE2_SU2_3D_relative_locality_v0.md`](PHASE2_SU2_3D_relative_locality_v0.md)
   - the actual non-Abelian primary read. Binding v0 spec for the
-  `SU2_3D` 12³ × β slate `{2.0, 2.4, 2.8}` × 32-configs-per-β
-  relative-locality certificate. Per-β tertile bin freezing on per-config
-  `γ_held` (LS slope of `ln Re(W)` vs area on the held-out loops
+  `SU2_3D` 12Â³ Ã— Î² slate `{2.0, 2.4, 2.8}` Ã— 32-configs-per-Î²
+  relative-locality certificate. Per-Î² tertile bin freezing on per-config
+  `Î³_held` (LS slope of `ln Re(W)` vs area on the held-out loops
   `W14, W23, W33`); Euclidean L2 in z-score-normalized 8-dim signature
-  space; within-β k-NN bin-purity@k=5 as primary discrimination ratio
-  (chance baseline 1/3), across-β bin-purity vs `CTRL_RAND_STRAT` as the
+  space; within-Î² k-NN bin-purity@k=5 as primary discrimination ratio
+  (chance baseline 1/3), across-Î² bin-purity vs `CTRL_RAND_STRAT` as the
   coupling-triviality cross-check; six controls scored
   (`CTRL_META`, `CTRL_RAW`, `CTRL_RAND`, `CTRL_RAND_STRAT`, `CTRL_PERM`,
   `CTRL_GAUGE_RAND`), `CTRL_FINITE_SIZE` declared but deferred to
   Phase 4. New branch `YM-P2-NEG-D raw_dominates` introduced. Three
-  per-β ensemble invocation commands + one aggregation invocation
+  per-Î² ensemble invocation commands + one aggregation invocation
   command all locked in the spec.
   **Executed 2026-05-29 -> `YM-P2-NEG-A no_rank_local_structure`.**
   Receipt:
   [`../../yang-mills/receipts/2026-05-29_SU2_3D_phase2_no_rank_local_structure.md`](../../yang-mills/receipts/2026-05-29_SU2_3D_phase2_no_rank_local_structure.md).
 - [`P0_AMENDMENT_2026-05-29_ape_smearing.md`](P0_AMENDMENT_2026-05-29_ape_smearing.md)
   - Amendment 1 to the P0 lock. Admits APE smearing as a primary-signature
-  class (vocab v4) with frozen parameters `(α, N_sm) = (0.5, 10)`,
+  class (vocab v4) with frozen parameters `(Î±, N_sm) = (0.5, 10)`,
   closest-SU(2) projection after every iteration, applied to `SU2_2D` /
   `SU2_3D` cells. Held-out target unchanged. New
   `YM-P*-QUAR-E smearing_drift` quarantine branch. Triggered by the v0
   NEG-A receipt and the v1 smearing probe spec.
 - [`PHASE2_SU2_3D_relative_locality_v1.md`](PHASE2_SU2_3D_relative_locality_v1.md)
   - binding v1 spec mirroring v0 with signature vocabulary v4 (smeared).
-  Reuses the **same three v0 per-β ensemble dirs** as inputs (no new
+  Reuses the **same three v0 per-Î² ensemble dirs** as inputs (no new
   ensemble generation; same seeds `0201`/`0202`/`0203`, same configs,
-  same bare γ_held, same per-β tertile bin edges — asserted as v1
+  same bare Î³_held, same per-Î² tertile bin edges â€” asserted as v1
   bin-edge defense). One aggregation invocation only; runner reads
   v0 configs, applies smearing per the P0 amendment, computes v4
   signatures, scores against unchanged bare-link held-out target.
@@ -99,7 +95,7 @@ ladder continuation.
   vocabulary v5 = 20-dim connected 2-point correlator of bare-link
   Wilson loops `{W11, W12, W13, W22}` at the locked five
   cubic-symmetry displacement classes `{(1,0,0), (1,1,0), (1,1,1),
-  (2,0,0), (2,1,0)}`. Held-out target and per-β bin edges unchanged
+  (2,0,0), (2,1,0)}`. Held-out target and per-Î² bin edges unchanged
   from v0/v1; correlators only (no marginal moments) to keep test
   scientifically clean. No P0 amendment needed (correlators are a new
   vocab class within the P0 fixed-loop framework, not smearing or
@@ -111,26 +107,31 @@ ladder continuation.
 - [`PHASE2_SU2_3D_relative_locality_v3.md`](PHASE2_SU2_3D_relative_locality_v3.md)
   - binding v3 spec selecting the v2 probe's pre-stated "different
   target derived from same loops" path. **Held-out target vocabulary
-  v2** = per-config spatial variance `σ²_W33` of `(1/2) Re Tr U_loop_3x3`
-  across all `12³ × 3 = 5184` (position × orientation) samples (biased
+  v2** = per-config spatial variance `ÏƒÂ²_W33` of `(1/2) Re Tr U_loop_3x3`
+  across all `12Â³ Ã— 3 = 5184` (position Ã— orientation) samples (biased
   estimator, no Bessel correction). **Signature unchanged** (vocab v1
-  bare 8-dim mean+var, re-read from v0 signature CSV — NOT recomputed,
-  hash-asserted against v0). New per-β tertile bin edges computed on
-  σ²_W33 within each β; NOT asserted equal to v0's γ_held edges (target
+  bare 8-dim mean+var, re-read from v0 signature CSV â€” NOT recomputed,
+  hash-asserted against v0). New per-Î² tertile bin edges computed on
+  ÏƒÂ²_W33 within each Î²; NOT asserted equal to v0's Î³_held edges (target
   is different). No P0 amendment needed. Reuses v0 ensembles
   bit-for-bit; ONE aggregation invocation; ~1-2 min compute. Pre-states
-  v4 fallback if v3 also NEG-As: σ²_W14 / σ²_W23, Polyakov-target
+  v4 fallback if v3 also NEG-As: ÏƒÂ²_W14 / ÏƒÂ²_W23, Polyakov-target
   + P0 amendment 2, or PAUSE-and-synthesize.
+  **Executed 2026-05-29 -> `YM-P2-NEG-A no_rank_local_structure`.**
+  Receipt:
+  [`../../yang-mills/receipts/2026-05-29_SU2_3D_phase2_v3_no_rank_local_structure.md`](../../yang-mills/receipts/2026-05-29_SU2_3D_phase2_v3_no_rank_local_structure.md).
+- [`../../yang-mills/receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md`](../../yang-mills/receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md)
+  - bounded-null synthesis receipt for the four Phase 2 `SU2_3D`
+  named nulls across three signature vocabularies and two target
+  classes. Implements the v3 probe's PAUSE-and-synthesize fallback.
 
 ## Required Next Artifact
 
-The next artifact should be the minimal v3 aggregation runner
-`scripts/yang-mills-phase2-v3-su2-3d-aggregate.mjs` + the
-`yang-mills:phase2:v3:su2-3d:aggregate` npm script. The per-position
-W33 evaluator already lives in
-`scripts/lib/yang-mills-su2-3d-core.mjs` from Phase 1 and is reused
-directly. v0 / v1 / v2 aggregation runners + the bare SU(2) 3D core
-+ smearing module + correlator module all remain bit-for-bit unchanged.
+No automatic next runner is admitted. The lane is paused at a bounded
+cell-local null on `SU2_3D`, `12^3`, beta slate `{2.0, 2.4, 2.8}`.
+Future `sigma2_W14`, `sigma2_W23`, Polyakov, topological, or smeared-
+target probes require a fresh dated spec with external scientific
+motivation and any P0-amendment impact stated before code.
 
 ## Guardrail
 
@@ -153,13 +154,13 @@ ever needed, must be labelled exploratory and cannot be cited as receipts.
   Runner subsequently executed against that exact manifest.
 - 2026-05-29: Phase 1 U(1) 2D smoke executed and filed as
   [`../../yang-mills/receipts/2026-05-29_U1_2D_phase1_gauge_invariance_smoke_pos.md`](../../yang-mills/receipts/2026-05-29_U1_2D_phase1_gauge_invariance_smoke_pos.md).
-  Verdict: `P1-A smoke_pass`. Pilot τ_int = 2.89 (well under 16),
+  Verdict: `P1-A smoke_pass`. Pilot Ï„_int = 2.89 (well under 16),
   random-gauge signature residual max 6.66e-16 (machine epsilon),
   raw-link median normalized L2 = 0.495, wall clock 0.74 s. Mean
-  plaquette 0.444 ≈ I₁(1)/I₀(1) ≈ 0.446.
+  plaquette 0.444 â‰ˆ Iâ‚(1)/Iâ‚€(1) â‰ˆ 0.446.
 - 2026-05-29: Phase 1 SU(2) 2D harness manifest filed at
   [`PHASE1_SU2_2D_gauge_invariance_smoke.md`](PHASE1_SU2_2D_gauge_invariance_smoke.md).
-  Locks `SU2_2D` 16x16 at β=2.0 with Creutz+KP heatbath + Brown-Woch
+  Locks `SU2_2D` 16x16 at Î²=2.0 with Creutz+KP heatbath + Brown-Woch
   overrelaxation (1 HB + 4 OR), master seed 202605290102, 8 random SU(2)
   Haar gauge transforms per config, new `YM-P1-QUAR-B heatbath_pathology`
   branch for KP fallback >0.1% of link updates.
@@ -173,7 +174,7 @@ ever needed, must be labelled exploratory and cannot be cited as receipts.
   clock 7.18 s. Code commit `8f1f25f3...`, gitDirty=true.
 - 2026-05-29: Phase 1 SU(2) 3D primary-cell manifest filed at
   [`PHASE1_SU2_3D_gauge_invariance_smoke.md`](PHASE1_SU2_3D_gauge_invariance_smoke.md).
-  Locks `SU2_3D` 8x8x8 at β=2.4 (mid-crossover for 3D SU(2)) with the
+  Locks `SU2_3D` 8x8x8 at Î²=2.4 (mid-crossover for 3D SU(2)) with the
   same Creutz+KP heatbath + Brown-Woch overrelaxation (1 HB + 4 OR),
   master seed 202605290103, 8 random SU(2) Haar gauge transforms per
   config, two new 3D-specific quarantine branches
@@ -190,19 +191,19 @@ ever needed, must be labelled exploratory and cannot be cited as receipts.
   Phase 1 instrumentation is closed across `U1_2D`, `SU2_2D`, and `SU2_3D`.
 - 2026-05-29: Phase 2 v0 relative-locality spec filed at
   [`PHASE2_SU2_3D_relative_locality_v0.md`](PHASE2_SU2_3D_relative_locality_v0.md).
-  Locks `SU2_3D` 12³ × β slate `{2.0, 2.4, 2.8}` × 32 configs/β; per-β
-  tertile bin freezing on per-config `γ_held` (LS slope of `ln Re(W)` vs
-  area on `W14, W23, W33` with 1e-10 hard ε floor); Euclidean L2 in
-  z-score-normalized 8-dim signature space; within-β bin-purity@k=5 as
-  primary discrimination ratio (chance baseline 1/3); across-β
+  Locks `SU2_3D` 12Â³ Ã— Î² slate `{2.0, 2.4, 2.8}` Ã— 32 configs/Î²; per-Î²
+  tertile bin freezing on per-config `Î³_held` (LS slope of `ln Re(W)` vs
+  area on `W14, W23, W33` with 1e-10 hard Îµ floor); Euclidean L2 in
+  z-score-normalized 8-dim signature space; within-Î² bin-purity@k=5 as
+  primary discrimination ratio (chance baseline 1/3); across-Î²
   bin-purity vs `CTRL_RAND_STRAT` as coupling-triviality cross-check.
   Six controls scored (`CTRL_META`, `CTRL_RAW`, `CTRL_RAND`,
   `CTRL_RAND_STRAT`, `CTRL_PERM`, `CTRL_GAUGE_RAND`), `CTRL_FINITE_SIZE`
   declared but deferred to Phase 4. Promotion thresholds: primary
   bin-purity@5 `>= 0.5` AND beats `CTRL_RAND`/`CTRL_META`/`CTRL_RAW`
-  by margin `>= 0.10`; across-β primary beats `CTRL_RAND_STRAT` by
+  by margin `>= 0.10`; across-Î² primary beats `CTRL_RAND_STRAT` by
   margin `>= 0.05`. New branch `YM-P2-NEG-D raw_dominates` introduced.
-  Per-β master seeds `202605290201` / `0202` / `0203`. Three per-β
+  Per-Î² master seeds `202605290201` / `0202` / `0203`. Three per-Î²
   ensemble invocation commands + one aggregation invocation command
   all locked in the spec.
 - 2026-05-29: Phase 2 v0 four-invocation verdict executed and filed as
@@ -222,15 +223,15 @@ ever needed, must be labelled exploratory and cannot be cited as receipts.
 - 2026-05-29: P0 amendment 1 filed at
   [`P0_AMENDMENT_2026-05-29_ape_smearing.md`](P0_AMENDMENT_2026-05-29_ape_smearing.md).
   Admits APE smearing as primary-signature class (vocab v4) with
-  frozen `(α, N_sm) = (0.5, 10)` and exact closest-SU(2) projection
+  frozen `(Î±, N_sm) = (0.5, 10)` and exact closest-SU(2) projection
   after every iteration, for `SU2_2D` / `SU2_3D` cells. Held-out target
   unchanged. New `YM-P*-QUAR-E smearing_drift` quarantine branch
   (cited by phase index in the consuming receipt).
 - 2026-05-29: Phase 2 v1 binding spec filed at
   [`PHASE2_SU2_3D_relative_locality_v1.md`](PHASE2_SU2_3D_relative_locality_v1.md).
-  Reuses the three v0 per-β ensemble dirs as inputs (no new ensemble
+  Reuses the three v0 per-Î² ensemble dirs as inputs (no new ensemble
   generation; same seeds 0201/0202/0203, same configs, same bare
-  γ_held, asserted per-β bin-edge match to machine epsilon as a void
+  Î³_held, asserted per-Î² bin-edge match to machine epsilon as a void
   gate). Applies APE smearing per the amendment; recomputes v4
   smeared signature; recomputes bare v1 signature for integrity check
   vs v0; six controls scored on smeared signature; YM-P2-QUAR-E
@@ -253,16 +254,16 @@ ever needed, must be labelled exploratory and cannot be cited as receipts.
   [`../../yang-mills/specs/2026-05-29_phase2_v2_correlator_probe.md`](../../yang-mills/specs/2026-05-29_phase2_v2_correlator_probe.md).
   Diagnoses v1 NEG-A: hypothesis 1 (UV-noise dominance) FALSIFIED
   (smeared primary slightly worse than bare v0, not better); hypothesis 2
-  (small-loop mean+var summaries don't encode γ_held) strongly favored
-  — but tested only marginal-moment summaries so far. Promotes T2
+  (small-loop mean+var summaries don't encode Î³_held) strongly favored
+  â€” but tested only marginal-moment summaries so far. Promotes T2
   (connected 2-point correlator) from the v1 audit as the natural last
-  small-loop richness test. Locks vocab v5 = 20-dim (4 loops × 5
+  small-loop richness test. Locks vocab v5 = 20-dim (4 loops Ã— 5
   cubic-symmetry displacement classes). No P0 amendment needed
   (correlators are new vocab class within fixed-loop framework). Pre-
   states v3 fallback (target redesign) if v2 also lands NEG-A.
 - 2026-05-29: Phase 2 v2 binding spec filed at
   [`PHASE2_SU2_3D_relative_locality_v2.md`](PHASE2_SU2_3D_relative_locality_v2.md).
-  Reuses v0 ensembles bit-for-bit; same bare γ_held; same per-β bin
+  Reuses v0 ensembles bit-for-bit; same bare Î³_held; same per-Î² bin
   edges asserted to v0 to 1e-12; vocab v5 connected correlators on bare
   links at frozen displacement slate `{(1,0,0), (1,1,0), (1,1,1),
   (2,0,0), (2,1,0)}`. Six controls scored on correlator signature; same
@@ -280,3 +281,25 @@ ever needed, must be labelled exploratory and cannot be cited as receipts.
   small-loop hypothesis is exhausted across marginal bare, marginal
   smeared, and bare spatial connected-correlator summaries; route to a
   dated v3 target-redesign probe spec per the pre-stated fallback table.
+- 2026-05-29: v3 target-redesign probe spec filed at
+  [`../../yang-mills/specs/2026-05-29_phase2_v3_target_redesign_probe.md`](../../yang-mills/specs/2026-05-29_phase2_v3_target_redesign_probe.md),
+  followed by Phase 2 v3 binding spec
+  [`PHASE2_SU2_3D_relative_locality_v3.md`](PHASE2_SU2_3D_relative_locality_v3.md).
+  v3 isolates target redesign: unchanged v1 signature re-read from v0
+  CSV with SHA-256 assertions; new held-out target vocab v2 =
+  `sigma2_W33`, biased spatial variance over all 5184 W33 samples per
+  config. No P0 amendment needed.
+- 2026-05-29: Phase 2 v3 aggregation executed and filed as
+  [`../../yang-mills/receipts/2026-05-29_SU2_3D_phase2_v3_no_rank_local_structure.md`](../../yang-mills/receipts/2026-05-29_SU2_3D_phase2_v3_no_rank_local_structure.md).
+  Verdict: `YM-P2-NEG-A no_rank_local_structure`. Signature hashes,
+  target spread, bin-edge timing, and gauge-randomization gates passed
+  (`signature` residual `5.00e-13`, target residual `2.22e-16`), but
+  within-beta primary bin-purity@5 = `0.329166666667`, primary-minus-
+  random = `0.027083333333`, and across-beta primary trailed
+  `CTRL_RAND_STRAT` by `0.041666666667`.
+- 2026-05-29: bounded-null synthesis receipt filed as
+  [`../../yang-mills/receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md`](../../yang-mills/receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md).
+  Disposition: PAUSE-and-synthesize. Four consistent Phase 2 named nulls
+  across three signature vocabularies and two target classes are treated
+  as a substantive cell-bounded null, not as permission for automatic
+  v4 probe-ladder continuation.

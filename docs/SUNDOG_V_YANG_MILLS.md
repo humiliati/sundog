@@ -1,4 +1,4 @@
-# Sundog vs. Yang-Mills
+﻿# Sundog vs. Yang-Mills
 
 Working hook:
 
@@ -11,12 +11,9 @@ Short version:
 > still certify bounded structure?
 
 Status: **Phase 1 instrumentation closed across the full ladder
-2026-05-29; Phase 2 v0 / v1 / v2 all executed ->
-`YM-P2-NEG-A no_rank_local_structure` (three named nulls on the γ_held
-tertile target across signature vocabs v1 bare, v4 smeared, v5
-correlator); Phase 2 v3 target-redesign probe spec + binding spec
-(vocab v1 signature × new vocab v2 σ²_W33 target, no P0 amendment)
-filed 2026-05-29**.
+2026-05-29; Phase 2 v0 / v1 / v2 / v3 all executed ->
+`YM-P2-NEG-A no_rank_local_structure`; bounded-null synthesis filed
+2026-05-29.**
 Roadmap draft at this file; lit-pass at
 [`YANG_MILLS_LITPASS_MEMO.md`](YANG_MILLS_LITPASS_MEMO.md); P0 lock at
 [`prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md`](prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md);
@@ -38,7 +35,7 @@ with named-null receipt at
 [`yang-mills/receipts/2026-05-29_SU2_3D_phase2_no_rank_local_structure.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase2_no_rank_local_structure.md);
 v1 smearing probe spec at
 [`yang-mills/specs/2026-05-29_phase2_v1_smearing_probe.md`](yang-mills/specs/2026-05-29_phase2_v1_smearing_probe.md);
-P0 amendment 1 (APE smearing, vocab v4, frozen α=0.5 / N_sm=10) at
+P0 amendment 1 (APE smearing, vocab v4, frozen Î±=0.5 / N_sm=10) at
 [`prereg/yang-mills/P0_AMENDMENT_2026-05-29_ape_smearing.md`](prereg/yang-mills/P0_AMENDMENT_2026-05-29_ape_smearing.md);
 Phase 2 v1 binding spec (reuses v0 ensembles, smeared signature) at
 [`prereg/yang-mills/PHASE2_SU2_3D_relative_locality_v1.md`](prereg/yang-mills/PHASE2_SU2_3D_relative_locality_v1.md)
@@ -54,14 +51,17 @@ with named-null receipt at
 v3 target-redesign probe spec at
 [`yang-mills/specs/2026-05-29_phase2_v3_target_redesign_probe.md`](yang-mills/specs/2026-05-29_phase2_v3_target_redesign_probe.md);
 Phase 2 v3 binding spec (vocab v1 signature unchanged + new vocab v2
-σ²_W33 target, no P0 amendment) at
-[`prereg/yang-mills/PHASE2_SU2_3D_relative_locality_v3.md`](prereg/yang-mills/PHASE2_SU2_3D_relative_locality_v3.md).
-The Phase 1 receipts are instrumentation only. Phase 2 v0 / v1 / v2 all
+sigma2_W33 target, no P0 amendment) at
+[`prereg/yang-mills/PHASE2_SU2_3D_relative_locality_v3.md`](prereg/yang-mills/PHASE2_SU2_3D_relative_locality_v3.md)
+with named-null receipt at
+[`yang-mills/receipts/2026-05-29_SU2_3D_phase2_v3_no_rank_local_structure.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase2_v3_no_rank_local_structure.md);
+bounded-null synthesis receipt at
+[`yang-mills/receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md).
+The Phase 1 receipts are instrumentation only. Phase 2 v0 / v1 / v2 / v3 all
 landed `YM-P2-NEG-A`. No continuum, confinement, mass-gap, or
-result-bearing Yang-Mills claim exists. Next artifact is the minimal v3
-aggregation runner per the v3 binding spec. If v3 also lands NEG-A,
-the pre-stated v4 fallback is a bounded-null synthesis receipt, NOT
-unbounded probe-ladder continuation.
+result-bearing Yang-Mills claim exists. The lane is paused at a bounded
+cell-local null; no automatic v4 probe-ladder continuation is admitted
+without fresh external scientific motivation.
 
 This is not a claim to progress on the Clay Yang-Mills existence and mass gap
 problem. It is a plan for a bounded receipt program that asks whether Sundog's
@@ -452,6 +452,28 @@ v2 execution:
   0.020833333333 above `CTRL_RAND`, and below `CTRL_META`; bin-edge
   replay and gauge-randomization integrity passed.
 
+v3 execution:
+
+- `PHASE2_SU2_3D_relative_locality_v3.md` filed 2026-05-29 after the
+  target-redesign probe spec;
+- one locked aggregation invocation executed 2026-05-29 on the same v0
+  ensembles, with unchanged v1 signature re-read from v0 CSVs and new
+  held-out target `sigma2_W33`;
+- receipt filed at
+  [`yang-mills/receipts/2026-05-29_SU2_3D_phase2_v3_no_rank_local_structure.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase2_v3_no_rank_local_structure.md);
+- verdict `YM-P2-NEG-A no_rank_local_structure`: within-beta
+  bin-purity@5 = 0.329166666667, below the registered 0.5 gate and only
+  0.027083333333 above `CTRL_RAND`; signature-hash, target-spread,
+  edge-timing, and gauge-randomization gates passed.
+
+bounded-null synthesis:
+
+- four consistent Phase 2 named nulls now span three signature vocabs and
+  two target classes;
+- synthesis receipt filed at
+  [`yang-mills/receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md);
+- disposition: PAUSE-and-synthesize, not automatic v4 probe continuation.
+
 Failure:
 
 `YM-P2-NEG-A no_rank_local_structure` or `YM-P2-NEG-B metadata_only`.
@@ -542,20 +564,20 @@ Next agent should:
 
 1. ~~Promote `docs/prereg/yang-mills/README.md` into a frozen Phase 0 domain
    lock only after the exact finite-lattice cell is chosen.~~
-   **Done 2026-05-29** — see [`prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md`](prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md).
+   **Done 2026-05-29** â€” see [`prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md`](prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md).
 2. Use [`YANG_MILLS_LITPASS_MEMO.md`](YANG_MILLS_LITPASS_MEMO.md) as the
    citation spine; re-audit it before any public-facing claim or after six
    months.
 3. ~~Choose the first finite-lattice domain and source library.~~
-   **Done 2026-05-29** — U(1) 2D → SU(2) 2D → SU(2) 3D ladder, in-repo
+   **Done 2026-05-29** â€” U(1) 2D â†’ SU(2) 2D â†’ SU(2) 3D ladder, in-repo
    Creutz / Kennedy-Pendleton / Brown-Woch generator; see P0 lock.
 4. ~~Freeze the observable labels and controls before code.~~
-   **Done 2026-05-29** — held-out larger-Wilson-loop area-law proxy class
-   (γ_held tertile bin); seven-entry leakage controls battery; see P0 lock.
+   **Done 2026-05-29** â€” held-out larger-Wilson-loop area-law proxy class
+   (Î³_held tertile bin); seven-entry leakage controls battery; see P0 lock.
 5. Stage, not run, any compute expected to exceed the repo's ten-minute rule.
 6. Keep every output under `results/yang-mills/<phase>/` and every durable
    conclusion as a dated receipt under `docs/yang-mills/receipts/`.
-   **Stood up 2026-05-29** — see [`yang-mills/receipts/README.md`](yang-mills/receipts/README.md).
+   **Stood up 2026-05-29** â€” see [`yang-mills/receipts/README.md`](yang-mills/receipts/README.md).
 7. Add Yang-Mills to the generality gallery only as a draft-handoff card until
    Phase 0 is filed. **Phase 0 now filed**; gallery card admission is the next
    adjacent decision (no public surface yet).
@@ -595,38 +617,46 @@ Next agent should:
     correlator aggregation runner; execute the single v2 invocation.~~
     **Done 2026-05-29** - named-null receipt filed at
     [`yang-mills/receipts/2026-05-29_SU2_3D_phase2_v2_no_rank_local_structure.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase2_v2_no_rank_local_structure.md).
-16. **New next artifact (2026-05-29):** file a dated v3 target-redesign
-    probe spec under `docs/yang-mills/specs/`. Because v0, v1, and v2
-    all landed `YM-P2-NEG-A`, do not open Phase 3 from the small-loop
-    lane. Choose from the v2 probe spec's pre-stated fallback table and
-    state any P0 amendment impact before writing runner code.
+16. ~~File a dated v3 target-redesign probe spec, Phase 2 v3 binding spec,
+    and v3 aggregation runner; execute the single v3 invocation.~~
+    **Done 2026-05-29** - named-null receipt filed at
+    [`yang-mills/receipts/2026-05-29_SU2_3D_phase2_v3_no_rank_local_structure.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase2_v3_no_rank_local_structure.md).
+17. ~~Apply the v3 probe spec's default PAUSE-and-synthesize fallback if v3
+    also lands `YM-P2-NEG-A`.~~
+    **Done 2026-05-29** - bounded-null synthesis receipt filed at
+    [`yang-mills/receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md).
+18. **Standing guardrail (2026-05-29):** no automatic v4 runner. Any future
+    `sigma2_W14`, `sigma2_W23`, Polyakov, topological, or smeared-target
+    probe needs a fresh dated spec with external scientific motivation and
+    P0-amendment impact stated before code.
 
 ## 11. Open Decisions
 
 All five originally-open decisions were closed by the P0 lock filed
 2026-05-29. See [`prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md`](prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md)
-§ "Open Decisions Closed By This Lock" for the resolution table.
+Â§ "Open Decisions Closed By This Lock" for the resolution table.
 
 Resolutions, restated here for navigation:
 
-1. ~~Start with SU(2) only, or include an abelian toy control first?~~ →
+1. ~~Start with SU(2) only, or include an abelian toy control first?~~ â†’
    Staged ladder: `U1_2D` instrumentation, `SU2_2D` harness, `SU2_3D`
    primary; 4D deferred.
-2. ~~Which library/generator is acceptable for finite-lattice ensembles?~~ →
+2. ~~Which library/generator is acceptable for finite-lattice ensembles?~~ â†’
    In-repo Creutz heatbath + Kennedy-Pendleton + Brown-Woch overrelaxation
    for SU(2); staple-based Metropolis for U(1).
-3. ~~Which observable label is least likely to be a metadata shortcut?~~ →
-   Larger-Wilson-loop area-law proxy class, γ_held tertile bin; signature
+3. ~~Which observable label is least likely to be a metadata shortcut?~~ â†’
+   Larger-Wilson-loop area-law proxy class, Î³_held tertile bin; signature
    vocabulary strictly disjoint from target vocabulary.
 4. ~~Should Phase 2 use fixed loop sets only, or include smearing/blocking
-   levels?~~ → Fixed loop set only at P0; smearing/blocking deferred to a
+   levels?~~ â†’ Fixed loop set only at P0; smearing/blocking deferred to a
    later P0 amendment.
-5. ~~Who is the right external reviewer category~~ → Lattice gauge theorist.
+5. ~~Who is the right external reviewer category~~ â†’ Lattice gauge theorist.
 
-Decisions still open (not §11 originals; surfaced by the P0 lock):
+Decisions still open (not Â§11 originals; surfaced by the P0 lock):
 
-- v3 target-side redesign after the Phase 2 v0, v1, and v2 named nulls;
-- gallery-card admission timing — currently still blocked per §10 item 7.
+- future target/signature probes after the Phase 2 bounded-null synthesis,
+  admitted only with fresh external scientific motivation;
+- gallery-card admission timing â€” currently still blocked per Â§10 item 7.
 
 ## 12. Ratified Public Boundary
 
