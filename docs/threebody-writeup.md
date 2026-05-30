@@ -6,13 +6,27 @@ The three-body problem is famously intractable in closed form — no general ana
 
 **Can an agent act usefully in three-body dynamics by reading the signatures around instability instead of reconstructing the full state?**
 
-The current answer is bounded but no longer merely speculative. In the tested
-planar restricted setup, a guarded accelerometer-proxy TRACK controller improves
-survival over passive and naive local baselines across a mapped high-velocity
-near-escape operating pocket through a 16-second tested horizon. The effect is
-not global: the low-velocity boundary, especially equal-mass cells near
-`velocityScale=0.95`, still shows controller harms, and guard quantile choice
-controls the survival/effort trade.
+The current answer is bounded, heavily probed, and — as of Phase 18 —
+deflationary about its own mechanism. In the tested planar restricted setup, a
+guarded accelerometer-proxy TRACK controller improves survival over passive and
+naive local baselines across a mapped high-velocity near-escape operating pocket
+through a 16-second tested horizon. **The survival pocket is real, bounded, and
+numerically stable through the tested horizon — it survived a long chain of
+adversarial probes (a precision ladder, a normalizer audit, multi-step and
+hazard-aligned counterfactuals) — but the mechanism is simple: at matched control
+duty, a radius-gated inward thrust reproduces guarded TRACK's entire survival
+envelope.** A controller that does nothing but thrust toward the center whenever
+the test particle drifts past a passive-derived radius threshold — no tidal
+sensing, no gradient steering, no error term — matches the guarded controller's
+survival across every mass ratio. The "tidal intelligence" is not load-bearing;
+the survival is a geometric reflex.
+
+So the posture is stronger and humbler at once: stronger because the pocket
+survived many probes, humbler because the sophistication got deflated to a
+radius gate. The effect is also not global: the low-velocity boundary, especially
+equal-mass cells near `velocityScale=0.95`, still shows controller harms, and
+guard quantile choice controls the survival/effort trade. Sundog does not solve
+three-body dynamics; it maps where a dumb reflex suffices and where it breaks.
 
 ## The Pattern
 
