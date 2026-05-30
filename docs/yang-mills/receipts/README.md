@@ -66,3 +66,15 @@ the [receipt template](../RECEIPT_TEMPLATE.md).
   `0.308333333333`, below the registered `0.5` gate and only
   `0.020833333333` above `CTRL_RAND`. Named null; no Phase 3 artifact
   is admitted from this v2 run.
+- [`2026-05-29_SU2_3D_phase2_v3_no_rank_local_structure.md`](2026-05-29_SU2_3D_phase2_v3_no_rank_local_structure.md)
+  - `YM-P2-NEG-A no_rank_local_structure` for the target-redesign v3
+  read: unchanged v1 bare signature, re-read from v0 CSVs, scored
+  against new held-out target vocab v2 `sigma2_W33`. Signature hashes,
+  target spread, edge timing, and gauge-randomization gates passed, but
+  within-beta bin-purity@5 was `0.329166666667`, below the registered
+  `0.5` gate and only `0.027083333333` above `CTRL_RAND`.
+- [`2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md`](2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md)
+  - PAUSE-and-synthesize receipt for the four Phase 2 `SU2_3D` named
+  nulls. Records the bounded cell-local null across three signature
+  vocabularies and two target classes; no automatic v4 probe-ladder
+  continuation is admitted without fresh external scientific motivation.
