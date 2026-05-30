@@ -135,8 +135,14 @@ followed up.
 
 ### 1. Jonckheere-Terpstra trend test on v0.9a three-zone data (LOW EFFORT, HIGH SUBSTANCE)
 
-**Status**: registered as candidate D in `kfacet_v09_mechanism_preregistration.md`,
-never run.
+**Status**: **EXECUTED 2026-05-29 as v0.10a** — `kfacet_v10a_jt_trend_form.md`,
+`scripts/isotrophy_jt_trend.py`, `results/isotrophy/k-facet-v10a-jt-trend/`. Verdict
+**`jt_trend_monotone_registered`**: exact fixed-margin enumeration (1,340-table
+multivariate-hypergeometric null) one-sided **p = 7.304e-3 < 0.01** (permutation
+sanity 7.50e-3; normal-approx 6.73e-3). The monotone velocity-fraction → stability
+trend that v0.9a's χ² (p=0.0245) missed is registered under the aligned ordered
+statistic — **in-sample only** (the direction was post-hoc from v0.9a). The held-out
+predictor (avenue 2, reserved `v0.9b`) remains the next rung for a predictive claim.
 
 **Hypothesis**: the three-zone contingency `S_fraction = 0.105 /
 0.339 / 0.439` shows a monotone-increasing trend in vf that would
