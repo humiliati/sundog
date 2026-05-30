@@ -14,7 +14,7 @@
 > cross-substrate "convergence" is a shared **operator**, not a shared word —
 > and the pre-registered failure boundary is *predicted*, not patched.
 >
-> **Status as of 2026-05-17:** Phase 0 definitions lock landed at
+> **Status as of 2026-05-29:** Phase 0 definitions lock landed at
 > [`proof/POSTULATE1_DEFINITIONS.md`](proof/POSTULATE1_DEFINITIONS.md);
 > Phase 1 LQG proof reviewed and closed **positive** at
 > [`proof/PHASE1_LQG.md`](proof/PHASE1_LQG.md); Phase 2 finite-MDP proof
@@ -33,9 +33,16 @@
 > sharded/full-lock staging remains blocked before the Phase 4 gate can be
 > interpreted;
 > Phase 6
-> lambda-confound control is staged at
-> [`proof/PHASE6_LAMBDA_CONTROL.md`](proof/PHASE6_LAMBDA_CONTROL.md) with the
-> empirical result still open.
+> lambda-confound control **closed 2026-05-29 with Branch 3 verdict** at
+> [`proof/PHASE6_LAMBDA_CONTROL.md`](proof/PHASE6_LAMBDA_CONTROL.md):
+> Control A (no-op) HELD (`old_basin_pref` 0.003 / 5.367 at λ=0.95 / 0.97 delta —
+> cliff still localized to (0.95, 0.97]); Control B (rescale) did NOT follow the
+> predicted `lambda_eff` map (κ=2 cliff sits in (0.90, 0.91], not at predicted
+> 0.909, with the {0.90, 0.92} bracket inverted; κ=0.5 bracket {0.97, 0.98} all
+> protected after midpoint at 0.975 anchored it). Branch 1 ruled out → Mesa
+> survives as Phase-5 substrate, Postulate 4 stays alive, anniversary cliff
+> citable as operating-envelope reference only; Postulate-2 capacity-law
+> promotion blocked pending optimizer diagnosis.
 > This is a
 > theory-track roadmap, not an operating-envelope workbench — it is the *trunk*
 > of which the Formal Separability Theorem appendix
@@ -234,9 +241,18 @@ redirects the campaign, fixed *before* the phase runs, per AGENTS.md ▸
   (the [`internal/feedback/quarantine/attack_vectors.md`](../internal/feedback/quarantine/attack_vectors.md) ▸ #4
   defense — an experiment, not an argument).
 - **Exit.** `docs/proof/PHASE6_LAMBDA_CONTROL.md` with the invariance/scaling
-  result. **Spec staged 2026-05-16** at
-  [`proof/PHASE6_LAMBDA_CONTROL.md`](proof/PHASE6_LAMBDA_CONTROL.md); empirical
-  result open.
+  result. **Spec staged 2026-05-16; empirical run 2026-05-29; closed 2026-05-29
+  with Branch 3 verdict** at
+  [`proof/PHASE6_LAMBDA_CONTROL.md`](proof/PHASE6_LAMBDA_CONTROL.md): no-op
+  invariance held (Control A: `old_basin_pref` 0.003 protected at λ=0.95 delta,
+  5.367 collapsed at λ=0.97 delta — cliff still localized to (0.95, 0.97]);
+  reward-rescale did not follow the predicted `lambda_eff` map (Control B: κ=2
+  cliff in (0.90, 0.91] not at predicted 0.909, with {0.90, 0.92} bracket
+  inverted; κ=0.5 bracket {0.97, 0.98} all protected after midpoint at 0.975
+  anchored it). Anniversary cliff language survives as operating-envelope
+  reference; Postulate-2 capacity-law promotion blocked pending optimizer
+  diagnosis (reward normalization, value-loss scale, gradient norms per
+  Branch 3).
 - **Pre-registered negative.** If the cliff moves under the no-op transform, λ is
   an optimizer artifact: Mesa loses its standing as a Phase-5 substrate,
   Postulate 4 dies, Postulate 2's cliff-prediction is unsupported, and the

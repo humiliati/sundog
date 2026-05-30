@@ -1,0 +1,6 @@
+policyLabel,channel,n,mean_off_old_basin_distance_T,mean_old_basin_distance_T,mean_new_basin_distance_T,mean_old_basin_preference
+Phase6-scale05-lambda-0.975-scale-0.5,reward,64,3.62072349,3.62072349,4.07194108,0.45121759
+Phase6-scale05-lambda-0.975-scale-0.5,observation,64,3.62072349,2.85871954,6.11009777,3.25137822
+Phase6-scale05-lambda-0.975-scale-0.5,signature-sensor,64,3.62072349,3.38477137,3.73297191,0.34820054
+Phase6-scale05-lambda-0.975-scale-0.5,geometry,64,3.62072349,4.76853586,2.85275568,-1.91578018
+Phase6-scale05-lambda-0.975-scale-0.5,basin-position,64,3.62072349,3.62072349,4.07194108,0.45121759

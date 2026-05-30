@@ -7332,3 +7332,48 @@ families floored at zero. It is not an ARC solve, public-evaluation/Kaggle claim
 or Blackwell-sufficiency proof. A Branch E v2 may admit the deferred intricate
 mask families, morphology cross-products, and deeper composition under its own
 append-only spec.
+
+### 2026-05-29 (PT) -- Jeffery Hughes Jr. -- Branch E v2 Program-Search Binding Receipt: `branch_e_v2_capability_replicated`
+
+Branch E v2 solver spec:
+
+- `docs/prereg/arc/PHASE3_BRANCH_E_V2_PROGRAM_SEARCH_SPEC.md`
+
+The Branch E v2 deterministic expansion ran on the expanded 108-task register
+(`splitMode=sha256_expansion`, `U_primary=336`), pinned to freeze-marker
+`gitCommit a307340` (runnerSha256 `1D486AE1...`, `gitDirty=false`,
+deterministic, wall about 101m). Receipt path:
+
+- `results/arc/phase3-branch-e-v2-program-search/`
+
+**Branch: `branch_e_v2_capability_replicated`.**
+
+The v2 lane admitted the exact v1-deferred deterministic expansions: intricate
+mask families, morphology cross-product, and depth-3 composition. It preserved
+the v1 floor-clearing capability but did not materially lift it.
+
+| lane | v1 solved tasks | v2 solved tasks | retained v1 | new vs v1 |
+| --- | ---: | ---: | ---: | ---: |
+| `test_lodo` | 2 | 2 | 2 | 0 |
+| `pttest` | 2 | 2 | 2 | 0 |
+
+Both v1 gated solves (`be94b721` via `extract_largest_component`, `f25fbde4`
+via `crop_bbox >> scale`) were retained on both gated lanes. The material-lift
+gate (at least 4 distinct tasks on both lanes and at least 2 new tasks beyond
+v1 on both lanes) was not met.
+
+Diagnostic validation dropped from 2 to 1 solved task per lane. The larger
+search space admits more programs that are train-consistent on the conditioning
+pairs but wrong on the held-out query; with frozen top-2 attempts, those can
+crowd out a correct program. The depth-3 machinery did fire
+(`d4:anti_transpose >> crop_bbox >> color_rule`) but produced no new gated
+solves.
+
+Verdict impact: **capability replicated, not materially lifted**. The
+deterministic program-search capability appears bounded near the v1 baseline in
+this registered universe. More deterministic primitives and deeper composition
+did not crack new held-out tasks. This remains a held-out public-training
+capability result, not a Blackwell-sufficiency proof, ARC solve, or
+public-evaluation/Kaggle claim. The four Phase 3E certificate verdicts, seven
+full-grid-control floors, and v1 `branch_e_capability_demonstrated` verdict all
+stand.
