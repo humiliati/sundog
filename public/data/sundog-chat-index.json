@@ -435,6 +435,8 @@
         "The defect in O_617 lives in the bridge representation outside the valid D_3 representation — not in admission and not in the Gamma_i audit chain.",
         "Do not say K_facet v0.3h closes the isotropy theorem. The audit chain is intact; the theorem-facing result is not closed.",
         "Do not say v0.3h proves choreography isotropy. It resolves 20 strict G.2 rows as structural zeros at m_3 = 1 — a specific, defensible, narrow finding, not a universal theorem.",
+        "Do not convert the v0.11 conditional-rank pass into a mass-marginal held-out predictor. v0.10b tested that and failed at AUC = 0.4125.",
+        "Do not promote the velocity-fraction result to a theorem-facing claim. It is a conditional catalog signal on the analyzable supplementary-B domain.",
         "Always name the quarantine separately from the prediction. Refuse to absorb O_617 into a clean number."
       ],
       "questionPatterns": [
@@ -459,9 +461,16 @@
         "did sundog prove isotropy",
         "did sundog prove the choreography theorem",
         "what is K_facet",
-        "what is a structural-zero receipt"
+        "what is a structural-zero receipt",
+        "velocity fraction",
+        "floquet velocity fraction",
+        "v0.11",
+        "within m3",
+        "conditional rank",
+        "mass-marginal",
+        "held-out predictor"
       ],
-      "text": "K_facet v0.3h is the third audit-chain artifact in the public ledger (alongside the structural-failure boundary map and the mesa-trap envelope). v0.3h resolves 20 strict G.2 catalog rows as structural zeros at m_3 = 1. The sole quarantined row, O_617, is a clean opposite-strict row whose bridge direction sits outside the valid D_3 representation; it is not a Gamma_i audit-chain failure and not an admission weakness. Compact form: 20/21 structural zeros plus one quarantined O_617 defective-D3 bridge — not a closed 21/21 theorem-facing result. The audit chain is intact; the theorem-facing result is not closed. isotrophy k_facet kfacet k facet v0.3h structural zero structural-zero receipt named quarantine O_617 o617 choreography G.2 catalog Li Liao catalog 21 strict 20 of 21 20/21 audit chain Sundog audit chain did sundog prove isotropy did sundog prove the choreography theorem what is K_facet what is a structural-zero receipt STANDING RULE 5: Never say 21/21 as a positive outcome. The verdict is 20/21 plus one named quarantine. STANDING RULE 6: Never frame O_617 as a weak-admission failure. O_617 is a clean opposite-strict row with admission residual 1.01e-8; the 1.62e-1 canonical residual is diagnostic-only. The defect in O_617 lives in the bridge representation outside the valid D_3 representation — not in admission and not in the Gamma_i audit chain. Do not say K_facet v0.3h closes the isotropy theorem. The audit chain is intact; the theorem-facing result is not closed. Do not say v0.3h proves choreography isotropy. It resolves 20 strict G.2 rows as structural zeros at m_3 = 1 — a specific, defensible, narrow finding, not a universal theorem. Always name the quarantine separately from the prediction. Refuse to absorb O_617 into a clean number."
+      "text": "K_facet v0.3h is the third audit-chain artifact in the public ledger (alongside the structural-failure boundary map and the mesa-trap envelope). v0.3h resolves 20 strict G.2 catalog rows as structural zeros at m_3 = 1. The sole quarantined row, O_617, is a clean opposite-strict row whose bridge direction sits outside the valid D_3 representation; it is not a Gamma_i audit-chain failure and not an admission weakness. Compact form: 20/21 structural zeros plus one quarantined O_617 defective-D3 bridge -- not a closed 21/21 theorem-facing result. The wider v0.3-v0.11 isotrophy program adds a separate conditional stability result: Floquet velocity-fraction ranks stable above unstable piano-trio rows within fixed m_3 strata (AUC_cond = 0.6783, exact p = 2.046e-7 on the locked 229-row primary domain), while the mass-marginal held-out predictor fails (AUC = 0.4125). The audit chain is intact; the theorem-facing result is not closed. isotrophy k_facet kfacet k facet v0.3h structural zero structural-zero receipt named quarantine O_617 o617 choreography G.2 catalog Li Liao catalog 21 strict 20 of 21 20/21 audit chain Sundog audit chain did sundog prove isotropy did sundog prove the choreography theorem what is K_facet what is a structural-zero receipt velocity fraction floquet velocity fraction v0.11 within m3 conditional rank mass-marginal held-out predictor STANDING RULE 5: Never say 21/21 as a positive outcome. The verdict is 20/21 plus one named quarantine. STANDING RULE 6: Never frame O_617 as a weak-admission failure. O_617 is a clean opposite-strict row with admission residual 1.01e-8; the 1.62e-1 canonical residual is diagnostic-only. The defect in O_617 lives in the bridge representation outside the valid D_3 representation — not in admission and not in the Gamma_i audit chain. Do not say K_facet v0.3h closes the isotropy theorem. The audit chain is intact; the theorem-facing result is not closed. Do not say v0.3h proves choreography isotropy. It resolves 20 strict G.2 rows as structural zeros at m_3 = 1 — a specific, defensible, narrow finding, not a universal theorem. Do not convert the v0.11 conditional-rank pass into a mass-marginal held-out predictor. v0.10b tested that and failed at AUC = 0.4125. Do not promote the velocity-fraction result to a theorem-facing claim. It is a conditional catalog signal on the analyzable supplementary-B domain. Always name the quarantine separately from the prediction. Refuse to absorb O_617 into a clean number."
     },
     {
       "id": "isotrophy_k_facet_v03h:2",
@@ -479,6 +488,8 @@
         "The defect in O_617 lives in the bridge representation outside the valid D_3 representation — not in admission and not in the Gamma_i audit chain.",
         "Do not say K_facet v0.3h closes the isotropy theorem. The audit chain is intact; the theorem-facing result is not closed.",
         "Do not say v0.3h proves choreography isotropy. It resolves 20 strict G.2 rows as structural zeros at m_3 = 1 — a specific, defensible, narrow finding, not a universal theorem.",
+        "Do not convert the v0.11 conditional-rank pass into a mass-marginal held-out predictor. v0.10b tested that and failed at AUC = 0.4125.",
+        "Do not promote the velocity-fraction result to a theorem-facing claim. It is a conditional catalog signal on the analyzable supplementary-B domain.",
         "Always name the quarantine separately from the prediction. Refuse to absorb O_617 into a clean number."
       ],
       "questionPatterns": [
@@ -503,12 +514,72 @@
         "did sundog prove isotropy",
         "did sundog prove the choreography theorem",
         "what is K_facet",
-        "what is a structural-zero receipt"
+        "what is a structural-zero receipt",
+        "velocity fraction",
+        "floquet velocity fraction",
+        "v0.11",
+        "within m3",
+        "conditional rank",
+        "mass-marginal",
+        "held-out predictor"
       ],
-      "text": "K_facet v0.3h is the third audit-chain artifact in the public ledger (alongside the structural-failure boundary map and the mesa-trap envelope). v0.3h resolves 20 strict G.2 catalog rows as structural zeros at m_3 = 1. The sole quarantined row, O_617, is a clean opposite-strict row whose bridge direction sits outside the valid D_3 representation; it is not a Gamma_i audit-chain failure and not an admission weakness. Compact form: 20/21 structural zeros plus one quarantined O_617 defective-D3 bridge — not a closed 21/21 theorem-facing result. The audit chain is intact; the theorem-facing result is not closed. isotrophy k_facet kfacet k facet v0.3h structural zero structural-zero receipt named quarantine O_617 o617 choreography G.2 catalog Li Liao catalog 21 strict 20 of 21 20/21 audit chain Sundog audit chain did sundog prove isotropy did sundog prove the choreography theorem what is K_facet what is a structural-zero receipt STANDING RULE 5: Never say 21/21 as a positive outcome. The verdict is 20/21 plus one named quarantine. STANDING RULE 6: Never frame O_617 as a weak-admission failure. O_617 is a clean opposite-strict row with admission residual 1.01e-8; the 1.62e-1 canonical residual is diagnostic-only. The defect in O_617 lives in the bridge representation outside the valid D_3 representation — not in admission and not in the Gamma_i audit chain. Do not say K_facet v0.3h closes the isotropy theorem. The audit chain is intact; the theorem-facing result is not closed. Do not say v0.3h proves choreography isotropy. It resolves 20 strict G.2 rows as structural zeros at m_3 = 1 — a specific, defensible, narrow finding, not a universal theorem. Always name the quarantine separately from the prediction. Refuse to absorb O_617 into a clean number."
+      "text": "K_facet v0.3h is the third audit-chain artifact in the public ledger (alongside the structural-failure boundary map and the mesa-trap envelope). v0.3h resolves 20 strict G.2 catalog rows as structural zeros at m_3 = 1. The sole quarantined row, O_617, is a clean opposite-strict row whose bridge direction sits outside the valid D_3 representation; it is not a Gamma_i audit-chain failure and not an admission weakness. Compact form: 20/21 structural zeros plus one quarantined O_617 defective-D3 bridge -- not a closed 21/21 theorem-facing result. The wider v0.3-v0.11 isotrophy program adds a separate conditional stability result: Floquet velocity-fraction ranks stable above unstable piano-trio rows within fixed m_3 strata (AUC_cond = 0.6783, exact p = 2.046e-7 on the locked 229-row primary domain), while the mass-marginal held-out predictor fails (AUC = 0.4125). The audit chain is intact; the theorem-facing result is not closed. isotrophy k_facet kfacet k facet v0.3h structural zero structural-zero receipt named quarantine O_617 o617 choreography G.2 catalog Li Liao catalog 21 strict 20 of 21 20/21 audit chain Sundog audit chain did sundog prove isotropy did sundog prove the choreography theorem what is K_facet what is a structural-zero receipt velocity fraction floquet velocity fraction v0.11 within m3 conditional rank mass-marginal held-out predictor STANDING RULE 5: Never say 21/21 as a positive outcome. The verdict is 20/21 plus one named quarantine. STANDING RULE 6: Never frame O_617 as a weak-admission failure. O_617 is a clean opposite-strict row with admission residual 1.01e-8; the 1.62e-1 canonical residual is diagnostic-only. The defect in O_617 lives in the bridge representation outside the valid D_3 representation — not in admission and not in the Gamma_i audit chain. Do not say K_facet v0.3h closes the isotropy theorem. The audit chain is intact; the theorem-facing result is not closed. Do not say v0.3h proves choreography isotropy. It resolves 20 strict G.2 rows as structural zeros at m_3 = 1 — a specific, defensible, narrow finding, not a universal theorem. Do not convert the v0.11 conditional-rank pass into a mass-marginal held-out predictor. v0.10b tested that and failed at AUC = 0.4125. Do not promote the velocity-fraction result to a theorem-facing claim. It is a conditional catalog signal on the analyzable supplementary-B domain. Always name the quarantine separately from the prediction. Refuse to absorb O_617 into a clean number."
     },
     {
       "id": "isotrophy_k_facet_v03h:3",
+      "routeId": "isotrophy_k_facet_v03h",
+      "doc": "docs/isotrophy/kfacet/kfacet_v11_m3_conditional_vf_rank_form.md",
+      "href": "/docs/isotrophy/kfacet/kfacet_v11_m3_conditional_vf_rank_form.md",
+      "section": "Execution receipt / Claim Boundary",
+      "tier": "audit_chain_receipt",
+      "disposition": "allow_with_boundary",
+      "freshness": "current_claim_map",
+      "supportStatus": "conditional-catalog-signal",
+      "boundaryTags": [
+        "STANDING RULE 5: Never say 21/21 as a positive outcome. The verdict is 20/21 plus one named quarantine.",
+        "STANDING RULE 6: Never frame O_617 as a weak-admission failure. O_617 is a clean opposite-strict row with admission residual 1.01e-8; the 1.62e-1 canonical residual is diagnostic-only.",
+        "The defect in O_617 lives in the bridge representation outside the valid D_3 representation — not in admission and not in the Gamma_i audit chain.",
+        "Do not say K_facet v0.3h closes the isotropy theorem. The audit chain is intact; the theorem-facing result is not closed.",
+        "Do not say v0.3h proves choreography isotropy. It resolves 20 strict G.2 rows as structural zeros at m_3 = 1 — a specific, defensible, narrow finding, not a universal theorem.",
+        "Do not convert the v0.11 conditional-rank pass into a mass-marginal held-out predictor. v0.10b tested that and failed at AUC = 0.4125.",
+        "Do not promote the velocity-fraction result to a theorem-facing claim. It is a conditional catalog signal on the analyzable supplementary-B domain.",
+        "Always name the quarantine separately from the prediction. Refuse to absorb O_617 into a clean number."
+      ],
+      "questionPatterns": [
+        "isotrophy",
+        "k_facet",
+        "kfacet",
+        "k facet",
+        "v0.3h",
+        "structural zero",
+        "structural-zero receipt",
+        "named quarantine",
+        "O_617",
+        "o617",
+        "choreography",
+        "G.2 catalog",
+        "Li Liao catalog",
+        "21 strict",
+        "20 of 21",
+        "20/21",
+        "audit chain",
+        "Sundog audit chain",
+        "did sundog prove isotropy",
+        "did sundog prove the choreography theorem",
+        "what is K_facet",
+        "what is a structural-zero receipt",
+        "velocity fraction",
+        "floquet velocity fraction",
+        "v0.11",
+        "within m3",
+        "conditional rank",
+        "mass-marginal",
+        "held-out predictor"
+      ],
+      "text": "K_facet v0.3h is the third audit-chain artifact in the public ledger (alongside the structural-failure boundary map and the mesa-trap envelope). v0.3h resolves 20 strict G.2 catalog rows as structural zeros at m_3 = 1. The sole quarantined row, O_617, is a clean opposite-strict row whose bridge direction sits outside the valid D_3 representation; it is not a Gamma_i audit-chain failure and not an admission weakness. Compact form: 20/21 structural zeros plus one quarantined O_617 defective-D3 bridge -- not a closed 21/21 theorem-facing result. The wider v0.3-v0.11 isotrophy program adds a separate conditional stability result: Floquet velocity-fraction ranks stable above unstable piano-trio rows within fixed m_3 strata (AUC_cond = 0.6783, exact p = 2.046e-7 on the locked 229-row primary domain), while the mass-marginal held-out predictor fails (AUC = 0.4125). The audit chain is intact; the theorem-facing result is not closed. isotrophy k_facet kfacet k facet v0.3h structural zero structural-zero receipt named quarantine O_617 o617 choreography G.2 catalog Li Liao catalog 21 strict 20 of 21 20/21 audit chain Sundog audit chain did sundog prove isotropy did sundog prove the choreography theorem what is K_facet what is a structural-zero receipt velocity fraction floquet velocity fraction v0.11 within m3 conditional rank mass-marginal held-out predictor STANDING RULE 5: Never say 21/21 as a positive outcome. The verdict is 20/21 plus one named quarantine. STANDING RULE 6: Never frame O_617 as a weak-admission failure. O_617 is a clean opposite-strict row with admission residual 1.01e-8; the 1.62e-1 canonical residual is diagnostic-only. The defect in O_617 lives in the bridge representation outside the valid D_3 representation — not in admission and not in the Gamma_i audit chain. Do not say K_facet v0.3h closes the isotropy theorem. The audit chain is intact; the theorem-facing result is not closed. Do not say v0.3h proves choreography isotropy. It resolves 20 strict G.2 rows as structural zeros at m_3 = 1 — a specific, defensible, narrow finding, not a universal theorem. Do not convert the v0.11 conditional-rank pass into a mass-marginal held-out predictor. v0.10b tested that and failed at AUC = 0.4125. Do not promote the velocity-fraction result to a theorem-facing claim. It is a conditional catalog signal on the analyzable supplementary-B domain. Always name the quarantine separately from the prediction. Refuse to absorb O_617 into a clean number."
+    },
+    {
+      "id": "isotrophy_k_facet_v03h:4",
       "routeId": "isotrophy_k_facet_v03h",
       "doc": "legend.html",
       "href": "/legend",
@@ -523,6 +594,8 @@
         "The defect in O_617 lives in the bridge representation outside the valid D_3 representation — not in admission and not in the Gamma_i audit chain.",
         "Do not say K_facet v0.3h closes the isotropy theorem. The audit chain is intact; the theorem-facing result is not closed.",
         "Do not say v0.3h proves choreography isotropy. It resolves 20 strict G.2 rows as structural zeros at m_3 = 1 — a specific, defensible, narrow finding, not a universal theorem.",
+        "Do not convert the v0.11 conditional-rank pass into a mass-marginal held-out predictor. v0.10b tested that and failed at AUC = 0.4125.",
+        "Do not promote the velocity-fraction result to a theorem-facing claim. It is a conditional catalog signal on the analyzable supplementary-B domain.",
         "Always name the quarantine separately from the prediction. Refuse to absorb O_617 into a clean number."
       ],
       "questionPatterns": [
@@ -547,9 +620,16 @@
         "did sundog prove isotropy",
         "did sundog prove the choreography theorem",
         "what is K_facet",
-        "what is a structural-zero receipt"
+        "what is a structural-zero receipt",
+        "velocity fraction",
+        "floquet velocity fraction",
+        "v0.11",
+        "within m3",
+        "conditional rank",
+        "mass-marginal",
+        "held-out predictor"
       ],
-      "text": "K_facet v0.3h is the third audit-chain artifact in the public ledger (alongside the structural-failure boundary map and the mesa-trap envelope). v0.3h resolves 20 strict G.2 catalog rows as structural zeros at m_3 = 1. The sole quarantined row, O_617, is a clean opposite-strict row whose bridge direction sits outside the valid D_3 representation; it is not a Gamma_i audit-chain failure and not an admission weakness. Compact form: 20/21 structural zeros plus one quarantined O_617 defective-D3 bridge — not a closed 21/21 theorem-facing result. The audit chain is intact; the theorem-facing result is not closed. isotrophy k_facet kfacet k facet v0.3h structural zero structural-zero receipt named quarantine O_617 o617 choreography G.2 catalog Li Liao catalog 21 strict 20 of 21 20/21 audit chain Sundog audit chain did sundog prove isotropy did sundog prove the choreography theorem what is K_facet what is a structural-zero receipt STANDING RULE 5: Never say 21/21 as a positive outcome. The verdict is 20/21 plus one named quarantine. STANDING RULE 6: Never frame O_617 as a weak-admission failure. O_617 is a clean opposite-strict row with admission residual 1.01e-8; the 1.62e-1 canonical residual is diagnostic-only. The defect in O_617 lives in the bridge representation outside the valid D_3 representation — not in admission and not in the Gamma_i audit chain. Do not say K_facet v0.3h closes the isotropy theorem. The audit chain is intact; the theorem-facing result is not closed. Do not say v0.3h proves choreography isotropy. It resolves 20 strict G.2 rows as structural zeros at m_3 = 1 — a specific, defensible, narrow finding, not a universal theorem. Always name the quarantine separately from the prediction. Refuse to absorb O_617 into a clean number."
+      "text": "K_facet v0.3h is the third audit-chain artifact in the public ledger (alongside the structural-failure boundary map and the mesa-trap envelope). v0.3h resolves 20 strict G.2 catalog rows as structural zeros at m_3 = 1. The sole quarantined row, O_617, is a clean opposite-strict row whose bridge direction sits outside the valid D_3 representation; it is not a Gamma_i audit-chain failure and not an admission weakness. Compact form: 20/21 structural zeros plus one quarantined O_617 defective-D3 bridge -- not a closed 21/21 theorem-facing result. The wider v0.3-v0.11 isotrophy program adds a separate conditional stability result: Floquet velocity-fraction ranks stable above unstable piano-trio rows within fixed m_3 strata (AUC_cond = 0.6783, exact p = 2.046e-7 on the locked 229-row primary domain), while the mass-marginal held-out predictor fails (AUC = 0.4125). The audit chain is intact; the theorem-facing result is not closed. isotrophy k_facet kfacet k facet v0.3h structural zero structural-zero receipt named quarantine O_617 o617 choreography G.2 catalog Li Liao catalog 21 strict 20 of 21 20/21 audit chain Sundog audit chain did sundog prove isotropy did sundog prove the choreography theorem what is K_facet what is a structural-zero receipt velocity fraction floquet velocity fraction v0.11 within m3 conditional rank mass-marginal held-out predictor STANDING RULE 5: Never say 21/21 as a positive outcome. The verdict is 20/21 plus one named quarantine. STANDING RULE 6: Never frame O_617 as a weak-admission failure. O_617 is a clean opposite-strict row with admission residual 1.01e-8; the 1.62e-1 canonical residual is diagnostic-only. The defect in O_617 lives in the bridge representation outside the valid D_3 representation — not in admission and not in the Gamma_i audit chain. Do not say K_facet v0.3h closes the isotropy theorem. The audit chain is intact; the theorem-facing result is not closed. Do not say v0.3h proves choreography isotropy. It resolves 20 strict G.2 rows as structural zeros at m_3 = 1 — a specific, defensible, narrow finding, not a universal theorem. Do not convert the v0.11 conditional-rank pass into a mass-marginal held-out predictor. v0.10b tested that and failed at AUC = 0.4125. Do not promote the velocity-fraction result to a theorem-facing claim. It is a conditional catalog signal on the analyzable supplementary-B domain. Always name the quarantine separately from the prediction. Refuse to absorb O_617 into a clean number."
     },
     {
       "id": "application_tier_summary:1",

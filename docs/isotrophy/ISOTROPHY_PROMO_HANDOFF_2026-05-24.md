@@ -1,9 +1,17 @@
 # Isotrophy Promo Handoff (2026-05-24)
 
-Status: ready for promo-team execution. The isotrophy program paused
-at end-of-v0.9 on 2026-05-24; three public-facing pages need
-updating to reflect the seven-chapter arc, the load-bearing
-substantive positive at v0.7, and the program-pause framing.
+Status: **SUPERSEDED FOR CLAIM COPY as of 2026-05-30.** This handoff remains as
+historical provenance for the v0.3-v0.9 pause. Use
+`docs/isotrophy/kfacet/kfacet_isotrophy_program_pause.md` and
+`docs/isotrophy/kfacet/kfacet_v11_m3_conditional_vf_rank_form.md` for current
+copy: the v0.10/v0.11 frontier now says velocity-fraction stratifies stability
+within fixed `m3` strata (`AUC_cond = 0.6783`, exact `p = 2.046e-7`) while
+failing as a mass-marginal held-out predictor (`AUC = 0.4125`).
+
+Original 2026-05-24 status: ready for promo-team execution. The isotrophy
+program paused at end-of-v0.9 on 2026-05-24; three public-facing pages need
+updating to reflect the seven-chapter arc, the load-bearing substantive positive
+at v0.7, and the program-pause framing.
 
 Audience: promo team writers, public-copy reviewers. Anyone who
 will edit `index.html`, `threebody.html`, or `isotrophy.html` to
