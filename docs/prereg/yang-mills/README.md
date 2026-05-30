@@ -133,6 +133,16 @@ Future `sigma2_W14`, `sigma2_W23`, Polyakov, topological, or smeared-
 target probes require a fresh dated spec with external scientific
 motivation and any P0-amendment impact stated before code.
 
+The Phase 5 external-review packet is drafted and **owner-pending send**
+to a lattice gauge theorist:
+[`../../yang-mills/EXTERNAL_REVIEW_PACKET.md`](../../yang-mills/EXTERNAL_REVIEW_PACKET.md)
+with email cover-letter draft at
+[`../../yang-mills/EXTERNAL_REVIEW_EMAIL_DRAFT.md`](../../yang-mills/EXTERNAL_REVIEW_EMAIL_DRAFT.md).
+Owner fills `[Name]`, `[reviewer specialty signal]`, `[link]`, `[Your name]`
+per the email's "Owner Fill-In Checklist Before Sending" before sending.
+The generality-gallery draft-handoff card admission is the other admissible
+move, blocked only by external-review-pending banner discipline.
+
 ## Guardrail
 
 No Yang-Mills code run is admitted unless a phase manifest under this
@@ -303,3 +313,18 @@ ever needed, must be labelled exploratory and cannot be cited as receipts.
   across three signature vocabularies and two target classes are treated
   as a substantive cell-bounded null, not as permission for automatic
   v4 probe-ladder continuation.
+- 2026-05-29: Phase 5 external-review packet drafted at
+  [`../../yang-mills/EXTERNAL_REVIEW_PACKET.md`](../../yang-mills/EXTERNAL_REVIEW_PACKET.md)
+  with email cover-letter draft at
+  [`../../yang-mills/EXTERNAL_REVIEW_EMAIL_DRAFT.md`](../../yang-mills/EXTERNAL_REVIEW_EMAIL_DRAFT.md).
+  Reviewer category locked at lattice gauge theorist per P0. Packet
+  mirrors the riemann `EXTERNAL_REVIEW_PACKET.md` shape (reviewer
+  snapshot, falsification surface, one-sentence ask, what we are/aren't
+  asking, seven adapted reviewer questions, 10/25/60-minute review-budget
+  tiers, four-receipt summary, files-to-read map, single-comment fallback,
+  packet hygiene). Two questions are bounded-null-specific (probe-ladder
+  completeness, pre-registration discipline as a methodological claim)
+  beyond the five locked P0 reviewer questions. Email draft has short
+  and slightly-warmer versions plus accept/decline follow-ups and an
+  Owner Fill-In Checklist. Owner-pending: fill `[Name]`, `[reviewer
+  specialty signal]`, `[link]`, `[Your name]` and send.

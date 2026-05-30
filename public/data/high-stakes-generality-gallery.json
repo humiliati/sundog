@@ -213,23 +213,24 @@
       "shortName": "Yang-Mills",
       "fullName": "Finite-lattice gauge-invariant certificate lane",
       "category": "math-ledger",
-      "status": "draft-handoff",
+      "status": "review-gated",
       "transferQuestion": "Can a compact gauge-invariant signature preserve finite-lattice observable structure beyond controls?",
-      "currentRead": "Roadmap drafted only; no lit-pass, preregistration, runner, or result exists.",
-      "blocker": "Phase 0 must lock the finite-lattice domain, observables, source library, controls, and claim boundary before code.",
-      "nextAction": "Draft the lit-pass and P0 domain lock; keep the gallery card in draft-handoff posture until Phase 0 is filed.",
+      "currentRead": "Four pre-registered probes (3 signature vocabs x 2 target classes) on SU(2) 3D 12^3 all landed YM-P2-NEG-A; bounded-null synthesis filed.",
+      "blocker": "External lattice-gauge-theorist sanity check before any public claim beyond bounded-null discipline.",
+      "nextAction": "Send the external-review email, record the response; any reopened probe requires fresh external scientific motivation and a new dated preregistration.",
       "publicBoundary": "No Yang-Mills existence, mass-gap, confinement, continuum-limit, or Clay-problem claim is licensed.",
-      "chartHeadline": "finite-lattice certificate draft",
+      "chartHeadline": "4 probes, 1 bounded null",
+      "pageHeadline": "Four pre-registered probes, one bounded cell-local null on SU(2) 3D 12^3 - lattice-gauge review packet drafted.",
       "metrics": [
         {
-          "label": "live receipts",
-          "value": 0,
-          "unit": "receipts"
+          "label": "phase 2 probes",
+          "value": 4,
+          "unit": "probes"
         },
         {
-          "label": "phase 0 files",
-          "value": 0,
-          "unit": "filed"
+          "label": "bounded nulls",
+          "value": 1,
+          "unit": "synthesis"
         },
         {
           "label": "claimed Clay progress",
@@ -238,12 +239,18 @@
         }
       ],
       "sources": [
-        "docs/SUNDOG_V_YANG_MILLS.md"
+        "docs/SUNDOG_V_YANG_MILLS.md",
+        "docs/YANG_MILLS_LITPASS_MEMO.md",
+        "docs/prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md",
+        "docs/prereg/yang-mills/P0_AMENDMENT_2026-05-29_ape_smearing.md",
+        "docs/yang-mills/receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md",
+        "docs/yang-mills/EXTERNAL_REVIEW_PACKET.md",
+        "docs/yang-mills/EXTERNAL_REVIEW_EMAIL_DRAFT.md"
       ],
       "svgFocus": [
         "status-card",
-        "draft-handoff",
-        "claim-boundary"
+        "review-gate",
+        "bounded-null-count"
       ]
     },
     {
