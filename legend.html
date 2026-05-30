@@ -748,6 +748,61 @@
             </div>
         </section>
 
+        <section class="legend-section" aria-labelledby="generality-heading">
+            <div class="section-heading">
+                <h2 id="generality-heading">High-Stakes Generality Vocabulary</h2>
+                <p class="section-note">The terms used on <a href="/generality">generality</a> (umbrella) and <a href="/navierstokes">navierstokes</a> (Navier-Stokes C1 deep dive), plus the status-tag taxonomy that distinguishes review-gated, design-hold, cost-hold, and execution-hold lanes.</p>
+            </div>
+            <div class="phenomena-grid">
+                <article class="phenomenon-card" id="gen-reading-2-witness" data-status="method">
+                <article class="phenomenon-card" id="gen-reading-2-witness" data-status="method">
+                    <h3>Reading-2 witness</h3>
+                    <p>A constructive witness in the Postulate-1 idiom: pairs of trajectories that agree on a Sundog-style signature to within <code>&epsilon;_K</code> also agree on the proxy-action objective. The "Reading 2" regime is where standard determining-modes signals fail to reconstruct full state but a smaller signature suffices for control.</p>
+                    <div class="status-line"><span class="mini-chip">term</span><span class="mini-chip">state-insufficient + control-sufficient</span></div>
+                </article>
+                <article class="phenomenon-card" id="gen-regime-generality" data-status="method">
+                    <h3>Regime generality (G value)</h3>
+                    <p>Whether a witness that holds at one Grashof number <code>G</code> on a Kolmogorov-flow cell also holds at a second. The NSE C1 witness now replicates at <code>G = 200</code> and <code>G = 300</code>; that's the current span.</p>
+                    <div class="status-line"><span class="mini-chip">term</span><span class="mini-chip">two Grashof regimes</span></div>
+                </article>
+                <article class="phenomenon-card" id="gen-portable-objective" data-status="method">
+                    <h3>Portable objective</h3>
+                    <p>A control objective designed to transport across Grashof regimes — held-out-quantile rather than a fixed-percentile threshold pinned to one cell.</p>
+                    <div class="status-line"><span class="mini-chip">term</span><span class="mini-chip">portable across regimes</span></div>
+                </article>
+                <article class="phenomenon-card" id="gen-damp-fraction" data-status="method">
+                    <h3>Damp fraction</h3>
+                    <p>A portability-gate quantity. The G=300 adjusted damp fraction is <code>0.2688</code>, well above the v6 <code>0.004</code> vacuity that motivated the regime-generality pivot.</p>
+                    <div class="status-line"><span class="mini-chip">term</span><span class="mini-chip">portability gate</span></div>
+                </article>
+                <article class="phenomenon-card" id="gen-witness-pair" data-status="method">
+                    <h3>Witness pair</h3>
+                    <p>A pair of trajectories that compose the Reading-2 witness. The G=300 twin-state lock is certified with 942,834 unique pairs, 100% witness coverage.</p>
+                    <div class="status-line"><span class="mini-chip">term</span><span class="mini-chip">942,834 at G=300</span></div>
+                </article>
+                <article class="phenomenon-card" id="gen-bounded-null" data-status="method">
+                    <h3>Bounded-null synthesis</h3>
+                    <p>A named outcome class: pre-registered lanes that returned null verdicts with the specific substrate causes identified. Bounded nulls are receipts, not silent failures. Riemann and Yang-Mills publish bounded-null syntheses.</p>
+                    <div class="status-line"><span class="mini-chip">term</span><span class="mini-chip">named outcome class</span></div>
+                </article>
+                <article class="phenomenon-card" id="gen-review-gated" data-status="method">
+                    <h3>Review-gated (status tag)</h3>
+                    <p>A lane whose next move depends on an external review pass. NSE C1, Riemann, and Yang-Mills are currently review-gated. The badge stays prominent on public pages until the gate closes.</p>
+                    <div class="status-line"><span class="mini-chip">term</span><span class="mini-chip">external review needed</span></div>
+                </article>
+                <article class="phenomenon-card" id="gen-cost-hold" data-status="method">
+                    <h3>Cost hold (status tag)</h3>
+                    <p>A lane whose safety floor is positive but whose cost has not been adjudicated. P-vs-NP v5: safety green, cost-unresolved.</p>
+                    <div class="status-line"><span class="mini-chip">term</span><span class="mini-chip">safety green, cost open</span></div>
+                </article>
+                <article class="phenomenon-card" id="gen-unpromoted" data-status="not-modeled">
+                    <h3>UNPROMOTED</h3>
+                    <p>A lane whose witness is in hand but whose promotion criteria are not all met. Public copy carries this badge to refuse collapsing a witness into a theorem-facing claim. NSE C1 remains UNPROMOTED until criterion (c) closes.</p>
+                    <div class="status-line"><span class="mini-chip">term</span><span class="mini-chip">NSE C1 status</span></div>
+                </article>
+            </div>
+        </section>
+
         <section class="legend-callout" aria-label="Project boundary">
             <p>
                 This legend is a map of current project status, not a claim that Sundog has solved every halo. Phase 14 fills the accounting matrix; Phase 15 is reserved for speculative or unphotographed halos that need math, brute-force ray tracing, atlas comparison, and HaloSim receipts before promotion.

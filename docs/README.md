@@ -63,9 +63,16 @@ code, experiments, prior theorem materials, and application bridges.
 - [Isotrophy folder](isotrophy/README.md): public K_facet ledger, full
   isotrophy roadmap, supplementary mirrors, and permanent K_facet appendix
   set after the v0.3-v0.9 pause.
+- [Isotrophy K_facet v0.3h verdict](SUNDOG_V_ISOTROPHY_KFACET.md): public
+  staging ledger for the v0.3h audit-chain result — 20 structural-zero
+  receipts plus one named quarantine (O_617). Standing Rules 5 + 6 bind
+  public copy; audit chain intact, theorem-facing result not closed.
 - [Shadow Faraday folder](faraday/README.md): closed Phase 1-6 Faraday receipt
   chain, Phase 3 derivations, Phase 4 verification battery, and Phase 7
   source/topology boundary-audit spec.
+- [Shadow Faraday ledger](SUNDOG_V_FARADAY.md): top-level Faraday roadmap
+  with closed Phase 1-6 receipt chain and Phase 7 source/topology
+  boundary-audit spec.
 - [Sundog Balance roadmap](sundog_v_balance.md): confirmed cart-pole
   operating-envelope workbench for balancing from a shadow-derived signal.
 - [Sundog Pressure Mines roadmap](sundog_v_minesweeper.md): Phase 11
@@ -73,6 +80,20 @@ code, experiments, prior theorem materials, and application bridges.
 - [Sundog Chat roadmap](SUNDOG_V_CHAT.md): browser site-helper roadmap and
   substantiation for evidence-tier and claim-boundary preservation under prompt
   pressure, including the completed Phase 12 open-weight sweep.
+- [Sundog Chat v2 ledger](SUNDOG_V_CHAT_V2.md): next-generation chat-library
+  roadmap; staging surface set, audit-chain claim integration, and the
+  Phase 13+ refresh plan.
+- [Bayesian comparator ledger](SUNDOG_V_BAYES.md): cross-cutting Bayesian
+  floor/comparator design — same-observation floor profiles, route-fidelity
+  comparators, and the audit-chain integration across workbenches.
+- [Sundog Perception roadmap](SUNDOG_V_PERCEPTION.md): atlas-as-instrument
+  program — smartphone-tier Phase 1, deep observation ladder, and the path
+  from sensing-grade to evidence-grade calibration.
+- [Sundog Path ledger](SUNDOG_V_PATH.md): cross-workbench path-integral and
+  trajectory-coupling notes; staging for cross-application connective tissue.
+- [Mesa v2 spine](SUNDOG_V_MESAV2.md): future-integration spine sister to the
+  mesa-v1 roadmap — four actionable phases (0.5, 0.6, 1', 6.5) plus the
+  Formal Separability appendix retention.
 - [Sundog Geometry roadmap](SUNDOG_V_GEOMETRY.md): parhelion-derived
   geometry workbench shelf — parametric halo render, parhelion-offset
   inverse, calibration boundaries, and the path-to-promotion phases.
@@ -149,7 +170,6 @@ underlying public problems.
 
 ## Supporting Docs
 
-- [Runners](runners.md): Gone Rogue / EyesOnly runner integration.
 - [Phase-2 blocks design](PHASE2_BLOCKS_DESIGN.md): occlusion and block-based
   follow-up experiment design.
 - [Icon assets](site/ICON_ASSETS.md): favicon, app icon, manifest, and HTML tags for

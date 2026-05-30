@@ -15,7 +15,105 @@ Status tags:
 - `design-blocked`: the next result needs a sharper spec before execution.
 - `public-surface`: the next result affects site copy, Ask Sundog, or launch
   posture.
+- `review-gated`: the next result is blocked on an external review packet
+  landing — a sanity-check pass from an outside reader, a referee response, a
+  collaborator review, or a publication-style review cycle. Distinguishes
+  external-cycle waits from internal blockers. Riemann bounded-null synthesis
+  is the canonical example.
+- `internal-resource`: the lane is on hold for internal capacity reasons
+  (compute budget, bandwidth, operator focus elsewhere) rather than for a
+  missing artifact, spec, or review. Use when the work is ready to run but the
+  program has chosen to spend the cycles elsewhere. The Isotrophy K_facet
+  v0.3-v0.9 program post-pause sits here.
 - `deferred`: worth keeping visible, but not a launch gate.
+- `dead-end`: a closed-negative result that has been audited and is retained
+  for the record but is no longer actionable. Distinguishes "we tried this, it
+  did not yield a structural edge, here's why" from "still queued, just not
+  scheduled." Use when reopening would require new substrate, new theory, or
+  new instrument — not just more cycles. Default presumption is that
+  dead-ends do not need re-triage on each pass.
+
+## Current Holds At A Glance (2026-05-29 inventory)
+
+A snapshot of where each tracked lane sits, sorted by tag class. This is a
+read-through summary, not authoritative — each item's own section below is the
+source of truth.
+
+### `review-gated` — waiting for an outside reader
+
+- **Riemann bounded-null synthesis** — three-lane null with named substrate
+  causes; external-review packet at
+  [`riemann/EXTERNAL_REVIEW_PACKET.md`](riemann/EXTERNAL_REVIEW_PACKET.md).
+  Public surface blocked on review return.
+
+### `internal-resource` — paused for capacity reasons, not artifact gaps
+
+- **Isotrophy K_facet program (v0.3-v0.9)** — paused 2026-05-24 after seven
+  pre-registered chapters and the v0.3h structural-zero verdict shipped to
+  `/isotrophy`. Pause document:
+  [`isotrophy/kfacet/kfacet_isotrophy_program_pause.md`](isotrophy/kfacet/kfacet_isotrophy_program_pause.md).
+  Eight reopening avenues catalogued for any lab initiate with bandwidth.
+  Bandwidth currently directed to three-body Phase 15+ and the
+  coarse-graining proof trunk.
+- **ARC Branch E3 learned ranker** — built, compute-paused by operator
+  decision 2026-05-29. Not blocked on a missing artifact; the program
+  chose to spend cycles elsewhere.
+
+### `review-gated` + draft handoff — review surface not yet built
+
+- **Yang-Mills Phase 0 handoff** — draft finite-lattice gauge-invariant
+  certificate lane. No lit-pass, preregistration, runner, receipt,
+  mass-gap claim, or Clay-problem claim is live. The next move is the
+  handoff itself; until then this is `design-blocked, draft-handoff`.
+
+### `design-blocked` — sharper spec needed before execution
+
+- **Navier-Stokes C1 regime-generality wall** — `G = 300` regime-generality
+  attempt hit objective vacuity rather than fiber-locality. Next move is a
+  portable-objective design decision.
+- **ARC Phase 3E relative-locality hold** — rank-neighbor certificate
+  proposal after absolute fibers stayed sparse on the expanded 108-task
+  register.
+
+### `operator-blocked` — needs a human artifact, review, or measurement
+
+- **Structural-Failure Cut 3** — admission check held open; reopening
+  requires H0 angular calibration, corpus records, baselines, edit
+  operators, and renewed admission before any execution claim.
+- **P-vs-NP Phase 1 v5** — provisional cost-adjudication hold on the toy
+  verifier cost receipt.
+
+### `compute-blocked` — the next result needs a long run
+
+- **Coarse-graining proof trunk** — Phase 4 BF-4b second diagnostic
+  scheduled, not run.
+- **Mesa Phase 7 v3** — basin-attractor caveat extension.
+- **Three-Body Phase 15C** — multi-step counterfactual sweep.
+
+### `public-surface` — site / chat / launch posture
+
+- **Ask Sundog claim-map freshness** — chat library rewrite is the next
+  major surface move; the 2026-05-22 regen against the refreshed claim
+  map is in place, library rewrite still to come.
+- **Application evidence assets** — receipt-grade visuals across the
+  workbenches.
+- **Anniversary rollout aftercare** — post-anniversary surface follow-ups.
+- **Canonical routes / deploy verification** — pre-deploy hygiene.
+
+### `deferred` — visible but not a launch gate
+
+- Vortex / Wishing-Well toy
+- Repo Map / Agent Navigation Surface (delivered for /repo-map this pass;
+  the agent-navigation generator remains deferred)
+- V0.3h K_facet Tooling Polish — ~10-hour budget, no compute lock
+
+### `dead-end` — closed, retained for audit only
+
+- *(none currently flagged)* — V0.4b through V0.9 of the K_facet program
+  are chapter-closed verdicts that landed inside the
+  `internal-resource` Isotrophy pause envelope rather than dead-ends.
+  Reserve this tag for lanes that would require new substrate, theory,
+  or instrument to reopen.
 
 ## P0/P1 Load-Bearing Queue
 

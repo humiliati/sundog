@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sundog's high-stakes generality program: a transfer-test umbrella across Navier-Stokes C1, Riemann, Yang-Mills, P-vs-NP, ARC-AGI, and Three-Body 15C. Bounded-null and review-gated results published as receipts, not failures.">
+    <meta name="keywords" content="generality, Navier-Stokes, Riemann, Yang-Mills, P-vs-NP, ARC-AGI, Three-Body, Sundog, audit chain, review-gated, bounded null, claim hygiene">
+    <meta name="theme-color" content="#1A3A52">
+    <meta name="author" content="Sundog Research Lab">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://sundog.cc/generality">
+    <title>High-Stakes Generality - Sundog</title>
+
+    <!-- OG-BLOCK-START (managed by public/og/_patch_meta.py) -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Sundog">
+    <meta property="og:title" content="High-Stakes Generality - Transfer Tests, Walls, and Review Gates">
+    <meta property="og:description" content="Six lanes asking whether signatures that work in one domain survive substrate changes. Navier-Stokes C1 is the strongest current witness; Riemann, Yang-Mills, P-vs-NP, ARC-AGI, and Three-Body 15C sit on the same matrix.">
+    <meta property="og:image" content="https://sundog.cc/og/sundog-generic.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="High-stakes generality umbrella card.">
+    <meta property="og:url" content="https://sundog.cc/generality">
+    <meta property="article:published_time" content="2026-05-30T00:00:00Z">
+    <meta property="article:modified_time" content="2026-05-30T00:00:00Z">
+    <meta property="article:section" content="Research">
+    <meta property="article:tag" content="generality">
+    <meta property="article:tag" content="audit chain">
+    <meta property="article:tag" content="review gated">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="High-Stakes Generality - Sundog">
+    <meta name="twitter:description" content="Six lanes asking whether signatures survive substrate changes. NSE C1 is the strongest witness; Riemann, Yang-Mills, P-vs-NP, ARC, Three-Body sit on the same matrix.">
+    <meta name="twitter:image" content="https://sundog.cc/og/sundog-generic.png">
+    <meta name="twitter:image:alt" content="High-stakes generality umbrella card.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "High-Stakes Generality - Transfer Tests, Walls, and Review Gates",
+      "description": "Sundog's umbrella view of high-stakes transfer-test lanes: Navier-Stokes C1 Reading-2 witness, Riemann bounded-null synthesis, Yang-Mills Phase 2 bounded-null, P-vs-NP safety-green cost-hold, ARC-AGI relative-locality hold, Three-Body Phase 15C.",
+      "image": "https://sundog.cc/og/sundog-generic.png",
+      "datePublished": "2026-05-30",
+      "dateModified": "2026-05-30",
+      "inLanguage": "en",
+      "isAccessibleForFree": true,
+      "author": {
+        "@type": "Organization",
+        "name": "Sundog Research Lab",
+        "url": "https://sundog.cc"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Stellar Aqua LLC",
+        "url": "https://sundog.cc"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://sundog.cc/generality"
+      },
+      "about": [
+        { "@type": "Thing", "name": "High-stakes generality" },
+        { "@type": "Thing", "name": "Transfer testing" },
+        { "@type": "Thing", "name": "Audit-chain receipt" },
+        { "@type": "Thing", "name": "Claim hygiene" }
+      ]
+    }
+    </script>
+    <!-- OG-BLOCK-END -->
+
+    <link rel="stylesheet" href="/css/sundog-theme.css">
+    <link rel="stylesheet" href="/css/sundog-defs.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        main {
+            background:
+                radial-gradient(circle at 16% 8%, rgba(184, 131, 30, 0.10), transparent 22rem),
+                linear-gradient(180deg, #F8FBFC 0%, #FFFFFF 36rem);
+        }
+
+        .gen-hero {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 7rem 2rem 2rem;
+        }
+
+        .gen-hero .eyebrow,
+        .gen-section .eyebrow {
+            color: var(--primary-mid);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .gen-hero h1 {
+            max-width: 920px;
+            margin: 1rem 0 1.25rem;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: clamp(2.1rem, 6.5vw, 4.4rem);
+            line-height: 1.04;
+            overflow-wrap: anywhere;
+        }
+
+        .gen-hero .lede {
+            max-width: 820px;
+            color: #40505C;
+            font-size: 1.15rem;
+            line-height: 1.75;
+        }
+
+        .gen-section {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1.25rem 2rem 2rem;
+        }
+
+        .gen-card {
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #FFFFFF;
+            padding: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .gen-card h2 {
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: 1.4rem;
+            margin: 0 0 0.75rem;
+        }
+
+        .gen-card p {
+            color: #40505C;
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 0.85rem;
+        }
+
+        .gen-card p:last-child { margin-bottom: 0; }
+
+        .gen-card code {
+            background: rgba(184, 131, 30, 0.10);
+            color: var(--primary-dark);
+            padding: 0.1rem 0.35rem;
+            border-radius: 3px;
+            font-family: var(--sd-font-data);
+            font-size: 0.95em;
+        }
+
+        .gen-figure {
+            margin: 0 0 2rem;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #FFFFFF;
+            overflow: hidden;
+            max-width: 1280px;
+        }
+
+        .gen-figure img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .gen-figure figcaption {
+            padding: 0.65rem 1rem;
+            font-family: var(--sd-font-data);
+            font-size: 0.78rem;
+            color: #6A7680;
+            border-top: 1px solid var(--line);
+            background: #F8FBFC;
+        }
+
+        .lane-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+            gap: 1.25rem;
+            margin-top: 1rem;
+        }
+
+        .lane-tile {
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #FFFFFF;
+            overflow: hidden;
+        }
+
+        .lane-tile-figure {
+            border-bottom: 1px solid var(--line);
+            background: #F8FBFC;
+        }
+
+        .lane-tile-figure img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .lane-tile-body {
+            padding: 1rem 1.15rem 1.1rem;
+        }
+
+        .lane-tile-body .badge {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border: 1px solid rgba(184, 131, 30, 0.55);
+            background: rgba(255, 244, 214, 0.5);
+            color: #684811;
+            border-radius: 999px;
+            font-family: var(--sd-font-data);
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .lane-tile-body .badge.green {
+            border-color: rgba(46, 125, 90, 0.45);
+            background: rgba(46, 125, 90, 0.06);
+            color: #2E7D5A;
+        }
+
+        .lane-tile-body .badge.red {
+            border-color: rgba(181, 58, 44, 0.45);
+            background: rgba(181, 58, 44, 0.06);
+            color: #B53A2C;
+        }
+
+        .lane-tile-body h3 {
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: 1.25rem;
+            margin: 0.5rem 0 0.35rem;
+        }
+
+        .lane-tile-body .summary {
+            color: #C9972F;
+            font-family: var(--sd-font-data);
+            font-size: 0.78rem;
+            font-weight: 800;
+            margin: 0 0 0.6rem;
+        }
+
+        .lane-tile-body p {
+            color: #40505C;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            margin: 0 0 0.85rem;
+        }
+
+        .lane-tile-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            padding: 0 1.15rem 1rem;
+        }
+
+        .lane-tile-actions a {
+            color: var(--primary-mid);
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+
+        .lane-tile-actions a:hover { color: var(--primary-dark); text-decoration: underline; }
+
+        .not-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .not-card {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            padding: 1.1rem;
+        }
+
+        .not-card h3 {
+            color: var(--primary-dark);
+            font-size: 0.95rem;
+            margin: 0 0 0.5rem;
+        }
+
+        .not-card h3::before {
+            content: "✗ ";
+            color: #B53A2C;
+            font-weight: 800;
+        }
+
+        .not-card p {
+            color: #40505C;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .source-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .source-list a {
+            display: block;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            padding: 1rem;
+            color: var(--primary-mid);
+            text-decoration: none;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .source-list a:hover { color: var(--primary-dark); text-decoration: underline; }
+
+        @media (max-width: 760px) {
+            .gen-hero { padding: 5.5rem 1.25rem 1.5rem; }
+            .gen-section { padding: 1rem 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="/" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="/about">About</a>
+                <a href="/sundog">Atlas</a>
+                <a href="/applications-gallery">Applications</a>
+                <a href="/alignment">Align</a>
+                <a href="/chat">Chat</a>
+                <a href="docs/">Docs</a>
+                <a href="https://github.com/humiliati/sundog">GitHub</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="gen-hero">
+            <p class="eyebrow">High-Stakes Generality · umbrella · 2026-05-30</p>
+            <h1>Transfer tests, walls, and review gates.</h1>
+            <p class="lede">
+                Sundog tests whether signatures that work in one domain survive
+                substrate changes, and publishes the walls as receipts. Six lanes
+                sit on this matrix: Navier-Stokes C1, Riemann, Yang-Mills,
+                P-vs-NP, ARC-AGI, and Three-Body 15C. <a href="/navierstokes">Navier-Stokes
+                C1</a> is the strongest current witness — review-gated, with a
+                two-regime Reading-2 witness. The rest are bounded-null,
+                review-gated, or cost-held — also receipts, also not failures.
+                None are theorem claims. This page is the asymmetric snapshot.
+            </p>
+        </section>
+
+        <section class="gen-section" aria-label="Status matrix">
+            <figure class="gen-figure">
+                <img src="/media/generality-status-matrix.svg" width="1280" height="1100" alt="High-stakes generality status matrix: six project cards (Riemann, Navier-Stokes C1, P-vs-NP, Yang-Mills, ARC-AGI, Three-Body 15C) with review-gated, design-hold, draft-handoff, cost-hold, and execution-hold badges and per-project stat readouts.">
+                <figcaption>Status matrix — six lanes, current verdicts and walls. Cards click through to per-lane ledgers below.</figcaption>
+            </figure>
+        </section>
+
+        <section class="gen-section" aria-label="Lanes">
+            <div class="gen-card">
+                <p class="eyebrow">The Lanes</p>
+                <h2>Six transfer tests; each one names its wall.</h2>
+                <p>
+                    Each lane is a pre-registered <a class="sd-def" href="/legend#kfacet-audit-chain" data-def="A receipt-first, closure-relative pipeline. Constants and outcome categories are registered before any row is interpreted.">audit chain</a>:
+                    constants and outcome categories registered in code and spec
+                    before any row is interpreted, so the failure modes are visible
+                    before the result is. Bounded-null results are named outcomes,
+                    not silent failures.
+                </p>
+                <div class="lane-grid">
+                    <article class="lane-tile" data-lane="navierstokes">
+                        <div class="lane-tile-figure">
+                            <img src="/media/generality-navier-stokes-c1.svg" width="900" height="660" alt="Navier-Stokes C1 generality card: review-gated, Kolmogorov-flow Reading-2 witness at G=200 and G=300 with 942,834 witness pairs.">
+                        </div>
+                        <div class="lane-tile-body">
+                            <span class="badge">Review gated</span>
+                            <h3>Navier-Stokes C1</h3>
+                            <p class="summary">Reading-2 witness · two Grashof regimes</p>
+                            <p>Postulate-1 Reading-2 regime-2 witness now replicates at <code>G=200</code> and <code>G=300</code> under a portable objective. Dimension-robust (<code>d=32</code> / <code>d=18</code>), 942,834 G=300 witness pairs, composed at matching <code>ε_K</code>. C1 remains UNPROMOTED until an external PDE reviewer pass closes promotion criterion (c).</p>
+                        </div>
+                        <div class="lane-tile-actions">
+                            <a href="/navierstokes">Open the deep dive &rarr;</a>
+                            <a href="docs/SUNDOG_V_NAVIERSTOKES.md">Ledger</a>
+                        </div>
+                    </article>
+
+                    <article class="lane-tile" data-lane="riemann">
+                        <div class="lane-tile-figure">
+                            <img src="/media/generality-riemann.svg" width="900" height="660" alt="Riemann generality card: review-gated, three lanes with three bounded nulls and no structural-zero edge.">
+                        </div>
+                        <div class="lane-tile-body">
+                            <span class="badge">Review gated</span>
+                            <h3>Riemann</h3>
+                            <p class="summary">3 lanes, 3 bounded nulls</p>
+                            <p>Three lanes returned bounded nulls by distinct substrate causes; no structural-zero edge was found in the RH-adjacent zero data. The external-review packet is filed; public surface blocked on review return. <strong>0 claimed RH progress.</strong></p>
+                        </div>
+                        <div class="lane-tile-actions">
+                            <a href="docs/SUNDOG_V_RIEMANN.md">Ledger</a>
+                            <a href="docs/riemann/EXTERNAL_REVIEW_PACKET.md">External-review packet</a>
+                        </div>
+                    </article>
+
+                    <article class="lane-tile" data-lane="yangmills">
+                        <div class="lane-tile-figure">
+                            <img src="/media/generality-yang-mills.svg" width="900" height="660" alt="Yang-Mills generality card: review-gated, four probes with one bounded null, Phase 2 NEG-A across the slate.">
+                        </div>
+                        <div class="lane-tile-body">
+                            <span class="badge">Review gated</span>
+                            <h3>Yang-Mills</h3>
+                            <p class="summary">4 probes, 1 bounded null</p>
+                            <p>Four pre-registered probes (3 signature vocabularies × 2 target classes) on SU(2) 3D 12³ all landed <code>YM-P2-NEG-A no_rank_local_structure</code>; bounded-null synthesis filed. No mass-gap claim, no Clay-problem claim, no lit-pass or runner yet — Phase 0 handoff is the next move.</p>
+                        </div>
+                        <div class="lane-tile-actions">
+                            <a href="docs/SUNDOG_V_YANG_MILLS.md">Ledger</a>
+                        </div>
+                    </article>
+
+                    <article class="lane-tile" data-lane="pvnp">
+                        <div class="lane-tile-figure">
+                            <img src="/media/generality-p-vs-np.svg" width="900" height="660" alt="P-vs-NP generality card: safety green, cost unresolved across v0 through v5.">
+                        </div>
+                        <div class="lane-tile-body">
+                            <span class="badge red">Cost hold</span>
+                            <h3>P-vs-NP</h3>
+                            <p class="summary">safety green; cost unresolved</p>
+                            <p>The <code>v0</code>-<code>v5</code> chain closed multiple safety holes — <strong>0 false accepts on v5</strong> — but v5 is still cost-unadjudicated after environment-hash drift. Two required reruns. The bounded alignment-verification version of P-vs-NP, not the full Clay problem.</p>
+                        </div>
+                        <div class="lane-tile-actions">
+                            <a href="docs/SUNDOG_V_P_V_NP.md">Ledger</a>
+                            <a href="docs/pvnp/receipts/README.md">v0-v5 receipts</a>
+                        </div>
+                    </article>
+
+                    <article class="lane-tile" data-lane="arc">
+                        <div class="lane-tile-figure">
+                            <img src="/media/generality-arc-agi.svg" width="900" height="660" alt="ARC-AGI generality card: Phase 3E relative-locality hold, expanded 108-task register, Branch E3 learned ranker built but compute-paused.">
+                        </div>
+                        <div class="lane-tile-body">
+                            <span class="badge">Design hold</span>
+                            <h3>ARC-AGI</h3>
+                            <p class="summary">Phase 3E relative-locality hold</p>
+                            <p>Phase 3E rank-neighbor certificate proposal after absolute fibers stayed sparse on the expanded 108-task register. Branch E3 learned ranker built but compute-paused by operator decision 2026-05-29. Targets the ARC Prize 2026 Paper Track (Theory category).</p>
+                        </div>
+                        <div class="lane-tile-actions">
+                            <a href="docs/SUNDOG_V_ARC.md">Ledger</a>
+                            <a href="docs/prereg/arc/README.md">Pre-registration folder</a>
+                        </div>
+                    </article>
+
+                    <article class="lane-tile" data-lane="threebody15c">
+                        <div class="lane-tile-figure">
+                            <img src="/media/generality-three-body-15c.svg" width="900" height="660" alt="Three-Body Phase 15C generality card: multi-step counterfactual sweep, compute-blocked.">
+                        </div>
+                        <div class="lane-tile-body">
+                            <span class="badge">Compute blocked</span>
+                            <h3>Three-Body Phase 15C</h3>
+                            <p class="summary">multi-step counterfactual sweep</p>
+                            <p>Phase 15C multi-step counterfactual sweep on top of the existing high-velocity near-escape pocket. The Three-Body roadmap is the sibling source for Navier-Stokes Reading-2 — the same audit-chain discipline applied to a different substrate.</p>
+                        </div>
+                        <div class="lane-tile-actions">
+                            <a href="docs/SUNDOG_V_THREEBODY.md">Ledger</a>
+                            <a href="/threebody">Workbench</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="gen-section" aria-label="Transfer lanes">
+            <figure class="gen-figure">
+                <img src="/media/generality-transfer-lanes.svg" width="1480" height="1144" alt="Transfer-lanes diagram: per-project question, current read, and blocker columns. These are not victory cards; they are the current transfer questions and the gates that keep each result honest.">
+                <figcaption>Transfer lanes — what changed, what happened, what waits. The blocker column is where the discipline lives.</figcaption>
+            </figure>
+        </section>
+
+        <section class="gen-section" aria-label="Claim boundary">
+            <p class="eyebrow">Claim Boundary</p>
+            <div class="not-grid">
+                <div class="not-card">
+                    <h3>Not a Clay-problem claim.</h3>
+                    <p>None of these six lanes claims progress on a Clay Millennium problem. Navier-Stokes C1 is a Kolmogorov-flow cell witness; Yang-Mills is a draft-handoff with no mass-gap claim; Riemann returned bounded nulls.</p>
+                </div>
+                <div class="not-card">
+                    <h3>Not a theorem-claims page.</h3>
+                    <p>Receipts, witnesses, and bounded nulls are the artifact class. Reopening any lane to a theorem-facing claim requires the corresponding ledger's promotion criteria to all close.</p>
+                </div>
+                <div class="not-card">
+                    <h3>Not symmetric weight.</h3>
+                    <p>Navier-Stokes C1 has its own page (<a href="/navierstokes">/navierstokes</a>) because it is the strongest current lane. The other five are honest cards on this matrix. Symmetric layout when the underlying results are asymmetric would be a credibility loss.</p>
+                </div>
+                <div class="not-card">
+                    <h3>Not a launch surface for the underlying ledgers.</h3>
+                    <p>Each per-lane ledger remains the source of truth. This umbrella is the discipline-frame; the load-bearing claims live in <code>docs/SUNDOG_V_*.md</code>.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="gen-section">
+            <p class="eyebrow">Inspection Trail</p>
+            <div class="source-list">
+                <a href="/navierstokes">Navier-Stokes C1 deep dive</a>
+                <a href="docs/SUNDOG_V_NAVIERSTOKES.md">Sundog v Navier-Stokes Ledger</a>
+                <a href="docs/SUNDOG_V_RIEMANN.md">Sundog v Riemann Ledger</a>
+                <a href="docs/SUNDOG_V_YANG_MILLS.md">Sundog vs Yang-Mills Ledger</a>
+                <a href="docs/SUNDOG_V_P_V_NP.md">Sundog vs P-vs-NP Ledger</a>
+                <a href="docs/SUNDOG_V_ARC.md">Sundog vs ARC-AGI Ledger</a>
+                <a href="docs/SUNDOG_V_THREEBODY.md">Sundog Three-Body Roadmap</a>
+                <a href="docs/TODO.md">Operator TODO — Current Holds At A Glance</a>
+                <a href="docs/presentation/claims-and-scope.md">Claims and Scope</a>
+                <a href="/legend#kfacet">Legend — audit-chain vocabulary</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>
+            The Sundog Project - <a href="docs/presentation/message-house.md">Alignment Without Sight</a>
+        </p>
+        <p class="footer-links">
+            <a href="https://github.com/humiliati/sundog">GitHub</a> |
+            <a href="/origin">Origin</a> |
+            <a href="/applications-gallery">Applications Gallery</a> |
+            <a href="docs/README.md">Documentation</a> |
+            <a href="docs/SCIENTIFIC_CRITERIA.md">Scientific Criteria</a> |
+            <a href="docs/presentation/claims-and-scope.md">Claims Policy</a> |
+            <a href="/navierstokes">NSE C1 deep dive</a>
+        </p>
+        <p class="footer-copyright">
+            &copy; 2026 Stellar Aqua LLC. Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC.
+        </p>
+    </footer>
+
+    <script type="module" src="/js/sundog-chat-widget.mjs"></script>
+</body>
+</html>

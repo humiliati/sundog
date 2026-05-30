@@ -121,6 +121,16 @@
       "entry": "faraday.html",
       "kind": "evidence-page",
       "publicLaunchIntent": "Public Shadow Faraday Zero-Out evidence page. Experiment chapter is closed: Phases 1-5 receipts cross-linked at docs/faraday/SHADOW_FARADAY.md (with Branch A Phase 3 in docs/faraday/FARADAY_PHASE3_DERIVATIONS.md, 5/5 Phase 4 battery in docs/faraday/FARADAY_PHASE4_VERIFICATION.md via npm run faraday:phase4, and Phase 5 chapter close at docs/faraday/SHADOW_FARADAY.md#phase-5-chapter-close with receipts catalog, scope limitations, extension menu, and fidelity audit). Bucket 1 local artifacts are present: designed 1200x630 og:image at public/og/faraday.png, full OG/Twitter metadata, JSON-LD TechArticle, sitemap entry, clean-url redirect, index.html internal link, and onward bridge to /safety-method. Post-deploy LinkedIn/Twitter validator pass remains to record after deployment."
+    },
+    {
+      "entry": "navierstokes.html",
+      "kind": "evidence-page",
+      "publicLaunchIntent": "Public Navier-Stokes C1 evidence page: deep dive for the Reading-2 regime-2 witness that now replicates at G=200 and G=300 under a portable objective. State-insufficient AND control-sufficient witness, dimension-robust (d=32, d=18), 942,834 G=300 witness pairs, composed at matching epsilon_K. Standing claim boundary: this is a witness, not a Navier-Stokes existence or smoothness claim, not a Clay-problem-adjacent claim. Review-gated; C1 remains UNPROMOTED until an external PDE reviewer pass closes promotion criterion (c). Inbound from generality.html umbrella and from the seventh load-bearing pillar on the homepage. OG card deferred; uses sundog-generic.png temporarily."
+    },
+    {
+      "entry": "generality.html",
+      "kind": "evidence-page",
+      "publicLaunchIntent": "Public High-Stakes Generality umbrella: transfer-test matrix across six lanes — Navier-Stokes C1 (review-gated witness, strongest current lane, deep dive at /navierstokes), Riemann (3 lanes 3 bounded nulls, review-gated), Yang-Mills (4 probes 1 bounded null, review-gated), P-vs-NP (safety green / cost-hold), ARC-AGI (Phase 3E relative-locality design hold), and Three-Body Phase 15C (compute-blocked). Carries the asymmetric framing explicitly — NSE has its own page, the other five are honest cards on the matrix. Not a Clay-problem claims page; not a theorem-claims page. OG card deferred; uses sundog-generic.png temporarily."
     }
   ]
 }
