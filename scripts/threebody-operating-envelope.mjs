@@ -90,6 +90,7 @@ function parseArgs(argv) {
     else if (flag === "--counterfactual-normalizer-floor") args.counterfactualNormalizerFloor = Number.parseFloat(value);
     else if (flag === "--multi-step-audit") args.multiStepAudit = !["0", "false", "no"].includes(String(value).toLowerCase());
     else if (flag === "--hazard-channel-audit") args.hazardChannelAudit = !["0", "false", "no"].includes(String(value).toLowerCase());
+    else if (flag === "--hazard-counterfactual-audit") args.hazardCounterfactualAudit = !["0", "false", "no"].includes(String(value).toLowerCase());
     else throw new Error(`Unknown flag: ${flag}`);
   }
 
@@ -399,6 +400,7 @@ function makeTrialConfig(args, envelopeCase, seed, regime, mode, guardThresholds
     counterfactualAudit: args.counterfactualAudit ?? false,
     multiStepAudit: args.multiStepAudit ?? false,
     hazardChannelAudit: args.hazardChannelAudit ?? false,
+    hazardCounterfactualAudit: args.hazardCounterfactualAudit ?? false,
     counterfactualNormalizerFloor: args.counterfactualNormalizerFloor,
     initialParticle: scaleInitialParticle(baseParticle, envelopeCase.radiusScale, envelopeCase.velocityScale),
   });
@@ -486,6 +488,21 @@ export function makePairedRows(trials) {
           [`counterfactualH${N}MeanScore`, trial.summary[`counterfactualH${N}MeanScore`]],
           [`counterfactualH${N}FloorPositiveRate`, trial.summary[`counterfactualH${N}FloorPositiveRate`]],
           [`counterfactualH${N}NonFloorMeanScore`, trial.summary[`counterfactualH${N}NonFloorMeanScore`]],
+        ]))
+        : {}),
+      ...(trial.summary.hazardCfH1EligibleSteps !== undefined
+        ? Object.fromEntries([1, 4, 8, 16, 32].flatMap((N) => [
+          [`hazardCfH${N}EligibleSteps`, trial.summary[`hazardCfH${N}EligibleSteps`]],
+          [`hazardCfH${N}MeanMarginEffect`, trial.summary[`hazardCfH${N}MeanMarginEffect`]],
+          [`hazardCfH${N}MeanAbsMarginEffect`, trial.summary[`hazardCfH${N}MeanAbsMarginEffect`]],
+          [`hazardCfH${N}PositiveRate`, trial.summary[`hazardCfH${N}PositiveRate`]],
+          [`hazardCfH${N}MeanEscapeMarginEffect`, trial.summary[`hazardCfH${N}MeanEscapeMarginEffect`]],
+          [`hazardCfH${N}EscapePositiveRate`, trial.summary[`hazardCfH${N}EscapePositiveRate`]],
+          [`hazardCfH${N}MeanCloseMarginEffect`, trial.summary[`hazardCfH${N}MeanCloseMarginEffect`]],
+          [`hazardCfH${N}ClosePositiveRate`, trial.summary[`hazardCfH${N}ClosePositiveRate`]],
+          [`hazardCfH${N}MeanHazardAvoided`, trial.summary[`hazardCfH${N}MeanHazardAvoided`]],
+          [`hazardCfH${N}HazardAvoidedRate`, trial.summary[`hazardCfH${N}HazardAvoidedRate`]],
+          [`hazardCfH${N}HazardCausedRate`, trial.summary[`hazardCfH${N}HazardCausedRate`]],
         ]))
         : {}),
       ...(trial.summary.finalRelEnergyDrift !== undefined
@@ -609,6 +626,21 @@ export function makeTrialOutcomeRows(pairedRows) {
         [`counterfactual_h${N}_mean_score`, row[`counterfactualH${N}MeanScore`]],
         [`counterfactual_h${N}_floor_positive_rate`, row[`counterfactualH${N}FloorPositiveRate`]],
         [`counterfactual_h${N}_non_floor_mean_score`, row[`counterfactualH${N}NonFloorMeanScore`]],
+      ]))
+      : {}),
+    ...(row.hazardCfH1EligibleSteps !== undefined
+      ? Object.fromEntries([1, 4, 8, 16, 32].flatMap((N) => [
+        [`hazard_cf_h${N}_eligible_steps`, row[`hazardCfH${N}EligibleSteps`]],
+        [`hazard_cf_h${N}_mean_margin_effect`, row[`hazardCfH${N}MeanMarginEffect`]],
+        [`hazard_cf_h${N}_mean_abs_margin_effect`, row[`hazardCfH${N}MeanAbsMarginEffect`]],
+        [`hazard_cf_h${N}_positive_rate`, row[`hazardCfH${N}PositiveRate`]],
+        [`hazard_cf_h${N}_mean_escape_margin_effect`, row[`hazardCfH${N}MeanEscapeMarginEffect`]],
+        [`hazard_cf_h${N}_escape_positive_rate`, row[`hazardCfH${N}EscapePositiveRate`]],
+        [`hazard_cf_h${N}_mean_close_margin_effect`, row[`hazardCfH${N}MeanCloseMarginEffect`]],
+        [`hazard_cf_h${N}_close_positive_rate`, row[`hazardCfH${N}ClosePositiveRate`]],
+        [`hazard_cf_h${N}_mean_hazard_avoided`, row[`hazardCfH${N}MeanHazardAvoided`]],
+        [`hazard_cf_h${N}_hazard_avoided_rate`, row[`hazardCfH${N}HazardAvoidedRate`]],
+        [`hazard_cf_h${N}_hazard_caused_rate`, row[`hazardCfH${N}HazardCausedRate`]],
       ]))
       : {}),
     ...(row.finalRelEnergyDrift !== undefined
@@ -777,6 +809,20 @@ export function summarizeRows(rows, args, includeRegime = true) {
             }
             : {}),
         }
+        : {}),
+      ...(group.some((row) => row.hazardCfH1EligibleSteps !== undefined)
+        ? Object.fromEntries([1, 4, 8, 16, 32].flatMap((N) => [
+          [`totalHazardCfH${N}EligibleSteps`, group.reduce((sum, row) => sum + (row[`hazardCfH${N}EligibleSteps`] ?? 0), 0)],
+          [`meanHazardCfH${N}MeanMarginEffect`, roundMetric(mean(group.map((row) => row[`hazardCfH${N}MeanMarginEffect`])), 8)],
+          [`meanHazardCfH${N}PositiveRate`, roundMetric(mean(group.map((row) => row[`hazardCfH${N}PositiveRate`])))],
+          [`meanHazardCfH${N}MeanEscapeMarginEffect`, roundMetric(mean(group.map((row) => row[`hazardCfH${N}MeanEscapeMarginEffect`])), 8)],
+          [`meanHazardCfH${N}EscapePositiveRate`, roundMetric(mean(group.map((row) => row[`hazardCfH${N}EscapePositiveRate`])))],
+          [`meanHazardCfH${N}MeanCloseMarginEffect`, roundMetric(mean(group.map((row) => row[`hazardCfH${N}MeanCloseMarginEffect`])), 8)],
+          [`meanHazardCfH${N}ClosePositiveRate`, roundMetric(mean(group.map((row) => row[`hazardCfH${N}ClosePositiveRate`])))],
+          [`meanHazardCfH${N}MeanHazardAvoided`, roundMetric(mean(group.map((row) => row[`hazardCfH${N}MeanHazardAvoided`])))],
+          [`meanHazardCfH${N}HazardAvoidedRate`, roundMetric(mean(group.map((row) => row[`hazardCfH${N}HazardAvoidedRate`])))],
+          [`meanHazardCfH${N}HazardCausedRate`, roundMetric(mean(group.map((row) => row[`hazardCfH${N}HazardCausedRate`])))],
+        ]))
         : {}),
       ...(group.some((row) => row.finalRelEnergyDrift !== undefined)
         ? {
