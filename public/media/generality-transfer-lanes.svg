@@ -89,8 +89,8 @@
 <g data-project="yang_mills">
     <text x="52" y="672" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20" font-weight="850" letter-spacing="0">Yang-Mills</text>
     <g>
-    <rect x="52" y="688" width="166" height="30" rx="8" fill="#E7F4EC" stroke="#2F7D4F" stroke-width="1"/>
-    <text x="66" y="708" fill="#214B36" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">DRAFT HANDOFF</text>
+    <rect x="52" y="688" width="166" height="30" rx="8" fill="#FFF4D6" stroke="#B8831E" stroke-width="1"/>
+    <text x="66" y="708" fill="#684811" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">REVIEW GATED</text>
   </g>
     <g>
         <rect x="262" y="640" width="245" height="126" rx="8" fill="#FFFFFF" stroke="#DCE6EC" stroke-width="1"/>
@@ -99,15 +99,15 @@
       </g><g>
         <rect x="529" y="640" width="245" height="126" rx="8" fill="#FFFFFF" stroke="#DCE6EC" stroke-width="1"/>
         <text x="545" y="665" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="11" font-weight="850" letter-spacing="0.04em">CURRENT READ</text>
-        <text x="545" y="690" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="400" text-anchor="start" letter-spacing="0"><tspan x="545" dy="0">Roadmap drafted only; no</tspan><tspan x="545" dy="16">lit-pass, preregistration,</tspan><tspan x="545" dy="16">runner, or result exists.</tspan></text>
+        <text x="545" y="690" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="400" text-anchor="start" letter-spacing="0"><tspan x="545" dy="0">Four pre-registered probes (3</tspan><tspan x="545" dy="16">signature vocabs x 2 target</tspan><tspan x="545" dy="16">classes) on SU(2) 3D 12^3 all</tspan><tspan x="545" dy="16">landed YM-P2-NEG-A;</tspan><tspan x="545" dy="16">bounded-null synthesis filed.</tspan></text>
       </g><g>
-        <rect x="796" y="640" width="245" height="126" rx="8" fill="#FFFFFF" stroke="#2F7D4F" stroke-width="1.5"/>
-        <text x="812" y="665" fill="#214B36" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="11" font-weight="850" letter-spacing="0.04em">BLOCKER</text>
-        <text x="812" y="690" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="400" text-anchor="start" letter-spacing="0"><tspan x="812" dy="0">Phase 0 must lock the</tspan><tspan x="812" dy="16">finite-lattice domain,</tspan><tspan x="812" dy="16">observables, source library,</tspan><tspan x="812" dy="16">controls, and claim boundary</tspan><tspan x="812" dy="16">before code.</tspan></text>
+        <rect x="796" y="640" width="245" height="126" rx="8" fill="#FFFFFF" stroke="#B8831E" stroke-width="1.5"/>
+        <text x="812" y="665" fill="#684811" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="11" font-weight="850" letter-spacing="0.04em">BLOCKER</text>
+        <text x="812" y="690" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="400" text-anchor="start" letter-spacing="0"><tspan x="812" dy="0">External</tspan><tspan x="812" dy="16">lattice-gauge-theorist sanity</tspan><tspan x="812" dy="16">check before any public claim</tspan><tspan x="812" dy="16">beyond bounded-null</tspan><tspan x="812" dy="16">discipline.</tspan></text>
       </g><g>
         <rect x="1063" y="640" width="245" height="126" rx="8" fill="#FFFFFF" stroke="#DCE6EC" stroke-width="1"/>
         <text x="1079" y="665" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="11" font-weight="850" letter-spacing="0.04em">NEXT</text>
-        <text x="1079" y="690" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="400" text-anchor="start" letter-spacing="0"><tspan x="1079" dy="0">Draft the lit-pass and P0</tspan><tspan x="1079" dy="16">domain lock; keep the gallery</tspan><tspan x="1079" dy="16">card in draft-handoff posture</tspan><tspan x="1079" dy="16">until Phase 0 is filed.</tspan></text>
+        <text x="1079" y="690" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="400" text-anchor="start" letter-spacing="0"><tspan x="1079" dy="0">Send the external-review</tspan><tspan x="1079" dy="16">email, record the response;</tspan><tspan x="1079" dy="16">any reopened probe requires</tspan><tspan x="1079" dy="16">fresh external scientific</tspan><tspan x="1079" dy="16">motivation and a new dated</tspan><tspan x="1079" dy="16">preregistration.</tspan></text>
       </g>
     <line x1="507" y1="703" x2="529" y2="703" stroke="#DCE6EC" stroke-width="2" marker-end="url(#arrow)"/><line x1="774" y1="703" x2="796" y2="703" stroke="#DCE6EC" stroke-width="2" marker-end="url(#arrow)"/><line x1="1041" y1="703" x2="1063" y2="703" stroke="#DCE6EC" stroke-width="2" marker-end="url(#arrow)"/>
   </g>

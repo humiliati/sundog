@@ -13,7 +13,8 @@ Short version:
 Status: **Phase 1 instrumentation closed across the full ladder
 2026-05-29; Phase 2 v0 / v1 / v2 / v3 all executed ->
 `YM-P2-NEG-A no_rank_local_structure`; bounded-null synthesis filed
-2026-05-29.**
+2026-05-29; Phase 5 external-review packet + email cover-letter draft
+filed 2026-05-29 (owner-pending send to a lattice gauge theorist).**
 Roadmap draft at this file; lit-pass at
 [`YANG_MILLS_LITPASS_MEMO.md`](YANG_MILLS_LITPASS_MEMO.md); P0 lock at
 [`prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md`](prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md);
@@ -56,7 +57,11 @@ sigma2_W33 target, no P0 amendment) at
 with named-null receipt at
 [`yang-mills/receipts/2026-05-29_SU2_3D_phase2_v3_no_rank_local_structure.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase2_v3_no_rank_local_structure.md);
 bounded-null synthesis receipt at
-[`yang-mills/receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md).
+[`yang-mills/receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md);
+Phase 5 external-review packet at
+[`yang-mills/EXTERNAL_REVIEW_PACKET.md`](yang-mills/EXTERNAL_REVIEW_PACKET.md)
+with email cover-letter draft at
+[`yang-mills/EXTERNAL_REVIEW_EMAIL_DRAFT.md`](yang-mills/EXTERNAL_REVIEW_EMAIL_DRAFT.md).
 The Phase 1 receipts are instrumentation only. Phase 2 v0 / v1 / v2 / v3 all
 landed `YM-P2-NEG-A`. No continuum, confinement, mass-gap, or
 result-bearing Yang-Mills claim exists. The lane is paused at a bounded

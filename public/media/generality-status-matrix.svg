@@ -74,21 +74,21 @@
   </g>
 <g class="generality-card" data-project="yang_mills">
     <rect x="652" y="504" width="570" height="250" rx="8" fill="#FFFFFF" stroke="#DCE6EC" stroke-width="1"/>
-    <rect x="652" y="504" width="8" height="250" rx="4" fill="#2F7D4F"/>
+    <rect x="652" y="504" width="8" height="250" rx="4" fill="#B8831E"/>
     <g>
-    <rect x="1046" y="524" width="154" height="30" rx="8" fill="#E7F4EC" stroke="#2F7D4F" stroke-width="1"/>
-    <text x="1060" y="544" fill="#214B36" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">DRAFT HANDOFF</text>
+    <rect x="1046" y="524" width="154" height="30" rx="8" fill="#FFF4D6" stroke="#B8831E" stroke-width="1"/>
+    <text x="1060" y="544" fill="#684811" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">REVIEW GATED</text>
   </g>
     <text x="678" y="544" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="24" font-weight="850" letter-spacing="0">Yang-Mills</text>
-    <text x="678" y="572" fill="#C9972F" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" font-weight="800" text-anchor="start" letter-spacing="0"><tspan x="678" dy="0">finite-lattice certificate draft</tspan></text>
-    <text x="678" y="620" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="400" text-anchor="start" letter-spacing="0"><tspan x="678" dy="0">Roadmap drafted only; no lit-pass,</tspan><tspan x="678" dy="19">preregistration, runner, or result exists.</tspan></text>
+    <text x="678" y="572" fill="#C9972F" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" font-weight="800" text-anchor="start" letter-spacing="0"><tspan x="678" dy="0">4 probes, 1 bounded null</tspan></text>
+    <text x="678" y="620" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="400" text-anchor="start" letter-spacing="0"><tspan x="678" dy="0">Four pre-registered probes (3 signature vocabs</tspan><tspan x="678" dy="19">x 2 target classes) on SU(2) 3D 12^3 all landed</tspan><tspan x="678" dy="19">YM-P2-NEG-A; bounded-null synthesis filed.</tspan></text>
     <line x1="678" y1="666" x2="1196" y2="666" stroke="#DCE6EC" stroke-width="1"/>
     <g>
-        <text x="678" y="696" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="22" font-weight="850" letter-spacing="0">0</text>
-        <text x="678" y="718" fill="#6B7B88" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="10" font-weight="700" text-anchor="start" letter-spacing="0"><tspan x="678" dy="0">live receipts</tspan><tspan x="678" dy="13">(receipts)</tspan></text>
+        <text x="678" y="696" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="22" font-weight="850" letter-spacing="0">4</text>
+        <text x="678" y="718" fill="#6B7B88" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="10" font-weight="700" text-anchor="start" letter-spacing="0"><tspan x="678" dy="0">phase 2 probes</tspan><tspan x="678" dy="13">(probes)</tspan></text>
       </g><g>
-        <text x="780" y="696" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="22" font-weight="850" letter-spacing="0">0</text>
-        <text x="780" y="718" fill="#6B7B88" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="10" font-weight="700" text-anchor="start" letter-spacing="0"><tspan x="780" dy="0">phase 0 files</tspan><tspan x="780" dy="13">(filed)</tspan></text>
+        <text x="780" y="696" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="22" font-weight="850" letter-spacing="0">1</text>
+        <text x="780" y="718" fill="#6B7B88" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="10" font-weight="700" text-anchor="start" letter-spacing="0"><tspan x="780" dy="0">bounded nulls</tspan><tspan x="780" dy="13">(synthesis)</tspan></text>
       </g><g>
         <text x="882" y="696" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="22" font-weight="850" letter-spacing="0">0</text>
         <text x="882" y="718" fill="#6B7B88" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="10" font-weight="700" text-anchor="start" letter-spacing="0"><tspan x="882" dy="0">claimed Clay</tspan><tspan x="882" dy="13">progress</tspan><tspan x="882" dy="13">(claims)</tspan></text>
