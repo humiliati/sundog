@@ -29,17 +29,18 @@
 > Let `𝒮_N`, `μ_G`, `Φ_K`, `Q_K`, `J_q`, `π*` be as in §1. Then for
 > **`G ∈ {200, 300}`**, on `supp μ_G`:
 >
-> **(i) State-insufficient (scale-selective; energy-marginal).** `Φ_K` is
+> **(i) State-insufficient (certified, but physically marginal).** `Φ_K` is
 > non-injective: positive `μ_G`-mass of pairs `(x,y)` with
-> `‖Φ_K x − Φ_K y‖ ≤ ε_K` and `‖Q_K x − Q_K y‖ ≥ δ_H`. **Quantified
-> (robustness wave §4):** the genuine under-determination is in the
-> *small-scale degrees of freedom* — per-component the high modes are only
-> `~0.73` predictable from `Φ_K` (uniform sample). But those carry little
-> energy: the **energy-weighted** state determination is
-> `FVE(Q_K|Φ_K) = 0.9994` (residual `0.06%`), so `Φ_K` is an **approximate
-> inertial manifold** and `K=3` is **near the determining threshold**. The
-> non-injectivity is real (positive-measure, certified) but small in the
-> decision-relevant (energy) norm — the separation is **marginal**, not gross.
+> `‖Φ_K x − Φ_K y‖ ≤ ε_K` and `‖Q_K x − Q_K y‖ ≥ δ_H`. **Quantified across
+> norms (robustness wave §4 + non-marginal probe):** the state is
+> ~99% determined in *both* physical norms — energy-weighted
+> `FVE = 0.997`, enstrophy-weighted `FVE = 0.993` — so `Φ_K` is an
+> **approximate inertial manifold** and `K=3` is **near the determining
+> threshold**. The genuine under-determination (per-component `R² ~ 0.71`,
+> equal-weight) is concentrated in **dissipation-range** DOF that carry
+> negligible energy and enstrophy — physically irrelevant, read by no physical
+> objective. The non-injectivity is real (positive-measure, certified) but
+> **physically marginal**: a weak, not gross, example of the regime-2 target.
 >
 > **(ii) Control-sufficient.** `π*` is `Φ_K`-measurable up to a set of
 > `μ_G`-measure `≤ δ`, `δ ≈ 0.037`: on the certified non-injective pairs of
@@ -70,17 +71,20 @@ infinite-dimensional NSE attractor (clauses hold on a finite truncation and a
 sampled measure); a new determining-modes bound; or generality beyond the
 tested objective family and the single forcing geometry `k_f=2`.
 
-**Key honest limitation (robustness wave §4).** The separation is
-**marginal in the energy norm**: `Φ_K` is an approximate inertial manifold
-(`FVE = 0.9994`), so `K=3` is **near the determining threshold** for this
-attractor. This is expected — **2D NSE at moderate `G` has a low-dimensional
-attractor**, so a small low-mode projection is nearly state-determining, and
-a genuinely *non-marginal* regime-2 separation likely requires a
-higher-dimensional regime (much higher `G`, 3D, or a different substrate).
-The result is strictly non-vacuous (positive-measure non-injectivity, genuine
-small-scale under-determination) but should not be oversold as a gross
-state/control gap. C1 is **PROVISIONAL, UNPROMOTED**, gated on external
-review.
+**Key honest limitation (robustness wave §4 + non-marginal probe).** The
+separation is **marginal in *every physical norm***: `Φ_K` is an approximate
+inertial manifold (energy `FVE = 0.997`, enstrophy `FVE = 0.993`), so `K=3`
+is **near the determining threshold**, and the under-determined part of the
+state is dynamically-negligible **dissipation-range noise**. This is expected
+— **2D NSE at moderate `G` has a low-dimensional attractor**. A genuinely
+*non-marginal* regime-2 separation (where physically-relevant content is
+under-determined) requires a **higher-dimensional regime** (much higher `G`,
+3D, or a different substrate); the cheap norm-reframe at G=200 was tested and
+**failed** (enstrophy still marginal), and the high-`G` route hits the same
+numerical wall as C2 (needs an adaptive integrator). The result is strictly
+non-vacuous but should be read as a **weak** example of the regime-2 target,
+not a gross state/control gap. C1 is **PROVISIONAL, UNPROMOTED**, gated on
+external review.
 
 ## 4. Two-regime stability (item: portability)
 
