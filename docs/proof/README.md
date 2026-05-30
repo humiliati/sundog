@@ -226,6 +226,23 @@ that claim provably fails.
   B from "discover" to "measure the known MZ coupling + explain the
   `D_witness` boundary layer"; elevates language lane D as the novelty
   home. Sources cited.
+- [`PDE_C1_MZ_ENERGY_BUDGET.md`](PDE_C1_MZ_ENERGY_BUDGET.md)
+  — **mechanism lane (B): the measured energy-budget closure** (2026-05-29,
+  pre-registration + result). Decomposes `dE_low/dt = g(Φ_K) + R` via a
+  double nonlinear evaluation (full vs low-passed field; validated:
+  budget-closure 4e-5, `R→0` on a low state). Two verification catches
+  before any interpretation: (1) `T_LLL ≡ 0` by detailed energy conservation
+  (the low band can't self-feed; all transfer is high-mode-mediated) →
+  reframed from "is `R` small" to "is `R` predictable from `Φ_K`"; (2) the
+  kNN conditional-variance estimator failed its own `g`-control
+  (steepness/18-dim-width confound) → replaced by **held-out regression
+  R²**. **Result `COUPLING_SIGNATURE_SLAVED` both regimes** (§10):
+  `R²(R|Φ_K) = 0.998` (G=200) / `0.990` (G=300) at the exact-function
+  ceiling, neg-control ~0 (no leakage) — the high-mode coupling is ~99%
+  signature-determined even though the state isn't (twin states). The
+  measured mechanism for control-sufficiency: a local closure `R≈R(Φ_K)`
+  that holds where reconstruction fails. Explanatory, non-promotion; C1
+  status unchanged.
 - [`PDE_C1_EXTERNAL_REVIEW_EMAIL_DRAFT.md`](PDE_C1_EXTERNAL_REVIEW_EMAIL_DRAFT.md)
   — reviewer outreach draft for Candidate 1 after `PDE-C1-RG-POS`.
   Keeps the ask bounded: finite-Galerkin / sampled-support /

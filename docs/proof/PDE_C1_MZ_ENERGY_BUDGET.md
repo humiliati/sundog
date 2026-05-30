@@ -202,6 +202,54 @@ with the kNN action result (`Var(action|Φ_K)->0`).
 Re-runs: `results/proof/c1-mz-coupling-g200/`, `…-g300/` (new dirs; the v1
 `c1-mz-budget-*` dirs stand as the conservation-finding record).
 
+## 10. Level-1 v2 result (2026-05-29) — COUPLING_SIGNATURE_SLAVED, both regimes
+
+The corrected diagnostic ran on the full registered 50000-sample sets and
+returned `COUPLING_SIGNATURE_SLAVED` at both Grashof regimes, with both
+calibration controls clean.
+
+| quantity | G=200 (`lock_v5`) | G=300 (`lock_v7_g300`) |
+| --- | --- | --- |
+| verdict | `COUPLING_SIGNATURE_SLAVED` | `COUPLING_SIGNATURE_SLAVED` |
+| **`slaving_index = R²(R\|Φ_K)`** | **0.998** | **0.990** |
+| `R²(g)` positive control (ceiling) | 0.999 | 0.980 |
+| `R²(permuted R)` negative control | −0.001 | −0.0005 |
+| `corr(g,R)` | −0.85 | −0.93 |
+| `rms(R)/rms(dE/dt)` | 14.1 | 2.9 |
+| `T_LLL` check `rms(R)/rms(T_low)` | 1.0 | 1.0 |
+| train / test (held out) | 35000 / 15000 | 35000 / 15000 |
+
+Results: `results/proof/c1-mz-coupling-g200/`, `…-g300/`.
+
+**Reading.** The net high-mode energy-transfer `R = T_low` into the low band
+is **~99% predictable from the signature `Φ_K`** at both regimes — *at the
+exact-function ceiling* set by the `g`-control — while the negative control
+(permuted `R`) sits at ~0 on 15000 held-out points, ruling out block-split
+leakage. So `R` is, empirically, an approximate **function of `Φ_K`**, even
+though the high modes themselves are certified **not** reconstructable from
+`Φ_K` (twin-state non-injectivity). Equivalently the low-band energy
+*tendency* is ~99% signature-determined (`R` and `dE/dt` differ only by the
+exact function `g`).
+
+**The mechanism, measured.** The state roams; its decision-relevant aggregate
+is slaved to the signature. This is the local, approximate **energy-budget
+closure** `R ≈ R(Φ_K)` — the Mori–Zwanzig orthogonal/memory part is only
+~1% here — and it holds *precisely where state reconstruction fails*. That is
+why the safety decision is `Φ_K`-measurable (control-sufficiency): not because
+the coupling is small (it is the whole transfer, by conservation), but
+because it is signature-determined. Closes the loop with the observability
+framing (separation statement §7): functional observability of the decision
+works because the energy-budget closure survives the unresolved state.
+
+**Scope / honesty.** Explanatory, not promotion-bearing — it explains *why*
+the measured control-sufficiency holds; it does not change C1's status.
+Instantaneous-budget predictability (the lookahead-integrated tie, Level 2,
+remains a registered option but is now less necessary — the instantaneous
+coupling is already ~99% slaved). Finite-Galerkin, sampled-support, two
+Grashof points at `k_f=2`. The `c1-mz-budget-*` dirs (superseded magnitude
+diagnostic) stand as the `T_LLL≡0` conservation-finding record. **C1 stays
+PROVISIONAL, UNPROMOTED.**
+
 ## 7. Cross-references
 
 - [`PDE_C1_MECHANISM_RECON.md`](PDE_C1_MECHANISM_RECON.md) — why this is grounding, not discovery.
