@@ -55,10 +55,26 @@ Run 2026-05-29: `npm run threebody:phase17:hazard-cf-smoke`
 
 ## Lock Readback
 
-<!-- To be filled after the 12-shard lock: branch (per §6); candidate/non-candidate
-mode×horizon tables; favorable-pocket guarded TRACK read at N=8,16,32;
-guarded-vs-delay and guarded-vs-sign-flip separation (sign_flip via the
-favorable-pocket fallback); escape-vs-close subtype diagnostic. -->
+Operator go 2026-05-29. Running as 12 shards in 4 concurrent waves of 3
+(favorable pocket first), per the locked spec.
+
+### Shard run log
+
+| # | shard | trials | wall (min) | hazardCf cols | candidate | outcomes (bnd·esc·close) | wave |
+|--:|---|--:|--:|--:|--:|---|:--:|
+| 1 | mu1-v1p1 | 144 | 7.6 | 55 | 5/15 | 50·93·1 | 1 |
+| 2 | mu0p3-v1p1 | 144 | 7.2 | 55 | 3/15 | 31·109·4 | 1 |
+| 3 | mu0p01-v1p1 | 144 | 5.7 | 55 | 3/15 | 20·124·0 | 1 |
+
+**Frozen-slate check:** wave-1 candidate rows + outcomes are **identical to the
+Phase 15C wave-1 shards** (15C: mu1 5/15·50·93·1; mu0.3 3/15·31·109·4; mu0.01
+3/15·20·124·0). Confirms the `--hazard-counterfactual-audit` instrumentation is a
+passive observer — dropping `--precision-receipts`/`--track-action-coupling` did
+not change dynamics or candidate classification.
+
+<!-- §6 candidate-split branch readback to be filled after all 12 shards land -->
+
+### Hard-void gates (pre-lock)
 
 ### Hard-void gates (pre-lock)
 
