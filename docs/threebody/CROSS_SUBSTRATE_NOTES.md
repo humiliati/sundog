@@ -216,12 +216,20 @@ Suggested checks:
 Historical note: the sidecar no longer stops at the original v0.3 symmetry-
 descent workbench. The current claim profile is two-layered. First, K_facet v0.3h
 resolved 20 strict G.2 rows as structural zeros and quarantined O_617 rather
-than converting it into a false 21/21. Second, the v0.10/v0.11 reopening found a
+than converting it into a false 21/21. Second, the v0.10-v0.13 reopening found a
 conditional stability signal in the supplementary-B piano-trio catalog:
 velocity-fraction ranks stable above unstable rows within fixed `m3` strata
 (`AUC_cond = 0.6783`, exact `p = 2.046e-7`) while the mass-marginal held-out
 predictor fails (`AUC = 0.4125`). This is a conditional catalog signal, not a
-promotion of K_facet and not a controller result.
+promotion of K_facet and not a controller result. v0.12 then tried to externalize
+it: the frozen rule taken to supplementary-A landed
+`external_transfer_blocked_by_attrition` (unbiased uniform probe attrition `0.3433`,
+Wilson95 `[0.2919, 0.3987]` above the 0.20 gate) -- the frozen D5 measurement is
+numerically intractable on ~1/3 of supp-A, a measurement-feasibility wall rather
+than a falsification. v0.13 (form locked, runner in progress) opens a signal-blind
+search for a tractable, independent external target. So the cross-substrate lesson
+sharpens: a real within-stratum signal can be blocked from external confirmation by
+the *measurement's* numerical reach, not only by the data.
 
 Question: can Sundog make a non-tautological first-principles prediction over
 an external three-body catalog, before writing another controller sweep?
@@ -453,7 +461,7 @@ operator and noting the cap-set / unit-distance cousins for
 audiences with the math background to follow. Layperson framings
 keep *shadow* / *field*.
 
-### 7.2 Isotrophy Red Team (v0.3-v0.11)
+### 7.2 Isotrophy Red Team (v0.3-v0.13)
 
 The S3 → Z2 mass-perturbation symmetry-descent **is a projection in
 the precise mathematical sense.** The v0.3a-h ratchet is, in
