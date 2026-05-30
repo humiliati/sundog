@@ -428,6 +428,35 @@ surface ablation; an enstrophy-objective family check. C1 stays
 **PROVISIONAL, UNPROMOTED** — the wave sharpens the witness and the
 reviewer artifact, it does not discharge external review.
 
+**C1 mechanism-lane recon + framing-first 2026-05-29 (toward PDE
+significance without waiting on the email).** Strategy pass on converting
+C1 from a finite-Galerkin story into a general/PDE-significant result. A
+novelty recon
+([`proof/PDE_C1_MECHANISM_RECON.md`](proof/PDE_C1_MECHANISM_RECON.md))
+found the *mechanism* is largely known — "the low-band energy budget is
+approximately closed / the unresolved coupling is small" is **Mori–Zwanzig
+/ AIM / closure folklore** — so the energy-budget diagnostic is reframed
+from *discover* to *measure the known MZ coupling here + explain the
+`D_witness` boundary layer*, and must **not** be claimed as a new closure.
+The genuinely novel axis is the **framing**: a measured
+**reconstruction-vs-decision observability separation**. A deep-read
+confirmed the gap — **functional observability** (Montanari–Motter PNAS
+2022; nonlinear arXiv 2301.04108) is linear / finite-dimensional /
+network / *estimation*, and explicitly flags turbulent-energy
+observability on spatially-extended systems as an **open question**; it has
+no decision-vs-reconstruction separation and no NSE-attractor instance. So
+C1 restates (new §7 of the separation statement) as **`Φ_K`
+decision-observable but state-unobservable** — functional observability of
+a decision event on an NSE attractor, **below** the determining-modes
+threshold, with the twin-state certificate as the state-unobservability
+witness. The anti-folklore guard (vs "this is just LES/closure"): closure /
+AIM assume or derive state-**sufficiency** via slaving; C1 **certifies
+state-insufficiency** and shows the decision survives the unreconstructable
+state. Pivotal reviewer claim isolated. Lane order chosen: **framing-first
+(secure novelty) → then** the MZ energy-budget diagnostic to ground the
+mechanism. Still UNPROMOTED; this strengthens the artifact + positioning,
+not the review status.
+
 ## Claim Boundary
 
 This document does **not** claim that Sundog has produced original

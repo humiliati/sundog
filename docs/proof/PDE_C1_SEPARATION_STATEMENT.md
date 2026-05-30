@@ -139,7 +139,47 @@ measured, not asserted.
   Generality beyond the tested objective family / forcing geometry (`k_f = 2`)
   — that is the robustness sub-goal, in progress.
 
-## 7. Review path and cross-references
+## 7. Observer-theory restatement and prior-art positioning
+
+The separation restates cleanly in control/observer language, which is
+where its novelty sits (recon:
+[`PDE_C1_MECHANISM_RECON.md`](PDE_C1_MECHANISM_RECON.md)). Take the Galerkin
+flow as the system, `Phi_K` as the measurement/output map, `mu` as the
+invariant measure. Then C1 says:
+
+> `Phi_K` is **decision-observable but state-unobservable** on `supp mu`:
+> the full state is *not* functionally observable from `Phi_K` (certified
+> non-injectivity — the output map has positive-`mu`-mass fibers), yet the
+> registered safety decision `a(x) = 1[ max_{t<=tau} E_low(flow_t x) >
+> E_max ]` *is* `Phi_K`-measurable up to a measure-`delta` boundary layer
+> (`delta ~ D_witness ~ 0.037`).
+
+**Pivotal claim a reviewer must bless or reject (everything else is
+support):** *on the sampled invariant measure of this Galerkin 2D-NSE
+system, the low-band projection `Phi_K` is non-injective (state-
+unobservable) yet the registered decision is `Phi_K`-measurable up to a
+measure-`delta` boundary layer (decision-observable), with `K` below the
+determining-modes count.*
+
+**Prior-art delta** — why this is an extension, not a renaming:
+
+| Established | C1's delta |
+| --- | --- |
+| Functional observability is **linear / finite-dim / network / estimation** (Montanari–Motter PNAS 2022); the nonlinear extension (arXiv 2301.04108) lists turbulent observables like energy on spatially-extended systems as an **open gap** | Instantiated on a (Galerkin) **NSE attractor**, for **energy** (the named-open observable), for a **decision** objective (not estimation), with a **measured** non-injectivity certificate |
+| **Determining functionals** determine the **state** (Cockburn–Jones–Titi 1997) | `Phi_K` is **below** the determining threshold (non-determining) yet decision-sufficient — the **complement** of that theory |
+| **Approximate inertial manifolds** slave high→low, i.e. state-**sufficient** | C1 is **below** the AIM threshold — state-**insufficient**, certified — the opposite regime |
+| **Mori–Zwanzig closure**: the unresolved coupling into the resolved energy budget is *approximable* via memory (Parish–Duraisamy 2017) | C1 does **not** model the coupling; it **certifies the decision is robust** to it on the lookahead horizon, on `mu`-a.e. pairs |
+
+**Anti-folklore guard.** The natural reviewer reflex — "this is just
+LES / closure: of course coarse energy is predictable from coarse state" —
+is exactly what the non-injectivity certificate forecloses. LES / AIM /
+closure assume or derive **state-sufficiency** via slaving; C1 *certifies
+state-insufficiency* (twin states) and shows the **decision** survives the
+unreconstructable state anyway. That is the distinction between "coarse
+predicts coarse because coarse slaves fine" and "the coarse decision is
+robust to genuinely unresolved fine state."
+
+## 8. Review path and cross-references
 
 The three reviewer questions (sidecar Section "External Review Path") map to:
 (1) Reading 1 faithful to determining modes — Section 5 + lit-pass; (2)

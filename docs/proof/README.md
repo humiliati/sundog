@@ -206,7 +206,26 @@ that claim provably fails.
   upper bracket — no borrowed asymptotic constant). States the
   theorem-vs-witness boundary explicitly (finite-dim existence witness on
   sampled support; **not** the ∞-dim NSE attractor, **not** a Millennium
-  claim). The artifact to attach to the reviewer email.
+  claim). The artifact to attach to the reviewer email. **§7 added
+  2026-05-29 (framing-first lane): observer-theory restatement +
+  prior-art positioning** — recasts C1 as `Phi_K`
+  **decision-observable but state-unobservable** (functional observability
+  of a decision event on an NSE attractor, below the determining
+  threshold), isolates the single pivotal claim a reviewer must bless or
+  reject, and tables the prior-art delta vs functional observability /
+  determining functionals / AIM / Mori-Zwanzig.
+- [`PDE_C1_MECHANISM_RECON.md`](PDE_C1_MECHANISM_RECON.md)
+  — **mechanism-lane novelty recon** (2026-05-29). De-risk pass before any
+  mechanism proof: the "low-band energy budget is approximately closed"
+  phenomenon is **Mori-Zwanzig / AIM / closure folklore** (don't reprove
+  it); the genuinely novel axis is the **reconstruction-vs-decision
+  observability separation** framed via functional observability, which the
+  deep-read confirmed is open territory (functional observability is
+  linear/finite-dim/estimation; turbulent-energy observability on
+  spatially-extended systems is a named open gap). Reframes mechanism lane
+  B from "discover" to "measure the known MZ coupling + explain the
+  `D_witness` boundary layer"; elevates language lane D as the novelty
+  home. Sources cited.
 - [`PDE_C1_EXTERNAL_REVIEW_EMAIL_DRAFT.md`](PDE_C1_EXTERNAL_REVIEW_EMAIL_DRAFT.md)
   — reviewer outreach draft for Candidate 1 after `PDE-C1-RG-POS`.
   Keeps the ask bounded: finite-Galerkin / sampled-support /
