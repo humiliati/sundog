@@ -558,6 +558,27 @@ needs a higher-dim regime (much higher G / 3D / different substrate). Clause
 reviewer did. Runs: c1-recon-k3..k6 (local-closure metric), c1-recon-k3-fullQ
 (the determination number). Remaining OPEN: alt projection, N=32 trend.
 
+**C1 non-marginal-regime hunt 2026-05-29 — cheap reframe FAILED; C1@G200 is
+physically marginal (honest endpoint).**
+([`proof/PDE_C1_NONMARGINAL_PROBE.md`](proof/PDE_C1_NONMARGINAL_PROBE.md)).
+Goal: a *non-marginal* regime-2 (under-determined content that is physically
+relevant). (1) **High-G path hit the C2 numerical wall** — `lock_hidim_g1000`
+(G=1000, grid 64) blows up at dt=0.01/0.002; stable only at dt=0.001 (10×
+steps, ~7h/run) AND fragile (C2-style intermittent blow-up risk over 27M
+steps). Not brute-forced; robust path = adaptive integrator (shared C2 resume
+build). (2) **Cheap norm-reframe at G=200 — TESTED, FAILED.** Added a
+three-norm `state-recon` (energy / enstrophy-`|k|²` / equal-weight). Result:
+energy `FVE=0.997`, **enstrophy `FVE=0.993` (still marginal!)**, equal-weight
+per-DOF `0.71`. The enstrophy norm does NOT rescue non-marginality; the only
+non-marginal number is the unphysical equal-weight per-DOF count, whose
+under-determination sits in **dissipation-range noise** (negligible energy AND
+enstrophy, read by no physical objective). **Honest conclusion: C1 at G=200 is
+marginal in EVERY physical norm** — `Φ_K` determines all energy/enstrophy-
+carrying content; only viscous dissipation-range noise is unreconstructed.
+Strictly non-vacuous but a **weak** example of the regime-2 target. A genuine
+non-marginal separation needs the high-dim regime → adaptive integrator; no
+shortcut at G=200. Proposition clause (i) + limitation updated honestly.
+
 ## Claim Boundary
 
 This document does **not** claim that Sundog has produced original

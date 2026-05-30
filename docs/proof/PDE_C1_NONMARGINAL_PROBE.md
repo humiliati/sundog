@@ -59,10 +59,38 @@ matched (enstrophy) norm. **Honest caveat:** it is norm-dependent — marginal
 in energy, non-marginal in enstrophy/per-DOF; a skeptic can note the norm
 choice, so both must be reported side by side.
 
-## 3. Result (2026-05-29)
+## 3. Result (2026-05-29) — REFRAME FAILED; G=200 is marginal in all physical norms
 
-*(to be filled when `c1-recon-k3-norms` lands)* — the three-norm FVE at K=3,
-and the reframe of proposition clause (i).
+Three-norm state-determination at K=3, G=200 (`c1-recon-k3-norms`, uniform
+sample over the high-mode spectrum, perm control −0.001):
+
+| norm | `FVE(Q_K\|Φ_K)` | state residual |
+| --- | --- | --- |
+| energy-weighted (large scales) | 0.9972 | 0.28% |
+| **enstrophy-weighted** (`\|k\|²`) | **0.9934** | **0.66%** |
+| equal-weight per-component (median R²) | 0.71 | — |
+
+**The hypothesis is falsified.** The enstrophy-weighted FVE (0.9934) is only
+marginally below the energy-weighted (0.9972) — both ~0.99, both **marginal**.
+The enstrophy norm does *not* rescue non-marginality. The only non-marginal
+number is the **equal-weight per-DOF** median (0.71), but that weights every
+Fourier mode equally, and most modes are far-UV **dissipation-range** modes
+carrying negligible energy *and* enstrophy. So the under-determined part of
+the state is **viscous dissipation-range noise** — physically irrelevant, read
+by no physical objective.
+
+**Honest conclusion.** `Φ_K` determines all the *physically-relevant*
+(energy- and enstrophy-carrying) state content at G=200; it fails to
+reconstruct only dynamically-negligible dissipation-range noise. The
+control-vs-reconstruction separation is therefore **marginal in every
+physical norm** — strictly non-vacuous (certified positive-measure
+non-injectivity) but physically marginal, i.e. a *weak* example of the
+regime-2 target. **A genuine non-marginal separation requires a
+higher-dimensional regime** (high G / 3D) where physically-relevant content is
+under-determined — which needs the adaptive/stiff integrator (§1). There is
+no shortcut at G=200. Proposition clause (i) updated accordingly; the
+robustness wave stands (N/K/objective robust), but the separation it is robust
+*about* is physically marginal at this regime.
 
 ## 4. Cross-references
 
