@@ -1,8 +1,9 @@
 # K_facet Isotrophy Program Pause (2026-05-24)
 
 Status: **PAUSED 2026-05-24** at end-of-v0.9, then **ADVANCED off-pause
-2026-05-29/30** with the v0.10 frontier pair (v0.10a + v0.10b) and the
-v0.11 conditional-rank close.
+2026-05-29/30** with the v0.10 frontier pair (v0.10a + v0.10b), the
+v0.11 conditional-rank close, the v0.12 external-transfer test, and the
+v0.13 target-search (form locked, runner in progress).
 The chain ran from v0.3 (December 2025 / January 2026, pre-anniversary)
 through v0.9 (May 2026) as seven sequential pre-registered chapters with
 seven distinct chapter-close types and one load-bearing in-sample positive
@@ -23,6 +24,16 @@ conditional-positive sequence**:
   the locked 229-row primary domain (`AUC_cond = 0.6783`, exact stratified
   `p = 2.046e-7`; permutation sanity consistent). This registers the
   conditional rank signal while preserving v0.10b's global held-out null.
+- **v0.12 (the external-transfer boundary):** the conditional rule does NOT yet
+  transfer to an independent catalog. The nearest target, same-paper
+  supplementary-A, is `external_transfer_blocked_by_attrition`: an unbiased uniform
+  probe (300 rows, 6 shards) reads attrition 0.3433, Wilson95 [0.2919, 0.3987] --
+  the whole CI above the locked 0.20 block gate. NOT a falsification: the frozen
+  v0.7 D5 measurement is numerically intractable on ~1/3 of supp-A. The ~2.5 h
+  probe spared the projected 6.7-day full run.
+- **v0.13 (the target search):** opened to find an independent, low-leakage,
+  D5-tractable external catalog where the frozen rule COULD be tested, under a
+  signal-blind firewall (form locked 2026-05-30; runner in progress).
 
 The mature, falsifiable claim is **"yes, but only after conditioning"**:
 velocity-fraction stratifies three-body stability, but as a function of the
@@ -31,9 +42,12 @@ statement than either a bare in-sample positive or a bare held-out null —
 the held-out chapter localized the signal rather than killing it.
 
 The program remains **paused at the lab-bandwidth level**, not retired. The
-within-m_3 conditional rung that v0.10b motivated has now been executed as v0.11;
-future reopening should be external-catalog, mass-conditional predictor, or
-new-mechanism work rather than another rephrasing of the same table.
+within-m_3 conditional rung that v0.10b motivated is closed (v0.11); the
+external-catalog rung is now ACTIVE -- v0.12 tried the nearest target (supp-A) and
+hit a D5-attrition wall, and v0.13 is the signal-blind search for a tractable
+independent target. Remaining reopening axes beyond the target search: a
+mass-conditional predictor or new-mechanism work, not another rephrasing of the
+same table.
 
 Audience: paper-side writers, future coding agents, isotrophy-
 program lab initiates, anyone who wants to know what's left.
@@ -131,13 +145,32 @@ v0.11:  within-m_3 conditional vf rank test on the locked 229-row
         and the within-stratum permutation sanity sidecar is consistent.
         This registers the conditional signal explicitly, while leaving
         v0.10b's mass-marginal held-out null intact.
+
+v0.12:  external transfer of the frozen v0.11 rule to same-paper
+        supplementary-A (10,059 rows; 8,320 candidates after overlap
+        quarantine + strict-m3=1 exclusion; reflection-overlap 0).
+        Outcome: external_transfer_blocked_by_attrition. An unbiased
+        uniform probe (300 rows, 6 shards, seed 20260523) reads
+        attrition_fraction = 0.3433, Wilson95 [0.2919, 0.3987] -- the
+        entire CI above the locked 0.20 block gate, systemic across m3.
+        The frozen v0.7 D5 measurement (DOP853, 1e-12) is numerically
+        intractable on ~1/3 of supp-A. NOT a falsification of the vf
+        hypothesis. The ~2.5 h probe spared the projected 6.7-day run.
+
+v0.13:  external target-search chapter (pre-feature source selection).
+        Status: form LOCKED 2026-05-30, runner in progress. Inventory +
+        leakage/source-quality gates + signal-blind D5 feasibility probes
+        to find and lock an independent (Tier 2/3), low-leakage,
+        D5-tractable external catalog where the frozen rule COULD be
+        tested. Four-layer anti-target-shopping firewall; a target lock is
+        permission to DRAFT a transfer, not to run or interpret one.
 ```
 
 ## The Load-Bearing Findings
 
-After seven chapters plus the v0.10/v0.11 frontier-advance, three findings
+After seven chapters plus the v0.10-v0.13 frontier-advance, three findings
 carry the program's substantive output (the second is now a publishable
-conditional profile):
+conditional profile, bounded by an external-transfer null):
 
 1. **The v0.7a' chi^2 = 16.43 positive**. On the 250-row analyzable
    supp-B subset (post v0.7a integration-attrition), the velocity-
@@ -185,6 +218,18 @@ conditional profile):
    than either a bare in-sample positive or a bare held-out null; the
    held-out chapter LOCALIZED the signal rather than killing it, and v0.11
    registered that localization under the exact conditional rank gate.
+
+   **The external-transfer boundary (v0.12 / v0.13).** The conditional positive is,
+   so far, supp-B-internal. v0.12 took the frozen rule to the nearest external
+   catalog (same-paper supplementary-A) and hit
+   `external_transfer_blocked_by_attrition`: an unbiased uniform probe read attrition
+   0.3433 (Wilson95 [0.2919, 0.3987] -- the whole CI above the locked 0.20 gate),
+   because the frozen v0.7 D5 measurement cannot integrate ~1/3 of supp-A. That is a
+   measurement-feasibility limit, NOT a falsification of the velocity-fraction
+   hypothesis. v0.13 (form locked, runner in progress) is the signal-blind search for
+   an independent, low-leakage, D5-tractable catalog that could host a genuine
+   external test. Until one is found, the conditional positive stands as a supp-B
+   result without external confirmation.
 
 3. **The methodology surface**. The chain produced and locked
    a comprehensive set of pre-registration discipline tools that
