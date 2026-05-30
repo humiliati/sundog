@@ -186,8 +186,15 @@ that claim provably fails.
   that never overrides `TWIN_STATE_CERTIFIED`); deterministic re-runs
   reproduce the certificates bit-for-bit. Pre-registered threshold =
   existing `delta_action = 0.10`; real negative branch `PDE-C1-PAIRED-NEG`
-  (regime 3 on the witnessed pairs). **Verdict-bearing runs in flight**
-  (G=200 `lock_v5`, G=300 `lock_v7_g300`).
+  (regime 3 on the witnessed pairs). **Executed 2026-05-29 →
+  `PAIRED_FIBER_CONSTANCY_POSITIVE` at both regimes** (§7): `D_witness =
+  0.0367` (G=200) / `0.0382` (G=300) — well under `0.10` and within ~1
+  point of the candidate-pair rate (`0.0319` / `0.0290`), so high-mode
+  separation adds almost nothing to action disagreement (residual is a
+  signature-space boundary layer, not `Q_K`-driven). Both reproduced their
+  twin-state certificate **bit-for-bit** (no-regression). Composes
+  state-insufficiency + control-sufficiency on the *same* pairs in both
+  Grashof regimes; C1 still unpromoted.
 - [`PDE_C1_SEPARATION_STATEMENT.md`](PDE_C1_SEPARATION_STATEMENT.md)
   — **desk-first hardening, part (b): reviewer-facing statement**
   (2026-05-29). Consolidates the Postulate-1 reading note into one

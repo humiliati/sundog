@@ -267,6 +267,19 @@ witness at this cell: within `ε_K` signature-balls, Q_K varies
 measure-zero (the kNN POSITIVE). The signature collapses distinct full
 states yet suffices for the control objective.
 
+**Sharpened 2026-05-29 (paired fiber-constancy).** The composition above
+is at a *matched radius* — two population statistics over the same
+`ε_K`-balls. [`PDE_C1_PAIRED_FIBER_CONSTANCY.md`](PDE_C1_PAIRED_FIBER_CONSTANCY.md)
+tightens it to a **paired** test on the *same* witness pairs: among the
+certified `Q_K`-separated pairs, the proxy-action disagreement is
+`D_witness = 0.0367` (G=200) / `0.0382` (G=300), both well under the
+`delta_action = 0.10` line and within ~1 point of the candidate-pair rate
+(`0.0319` / `0.0290`). High-mode separation adds almost nothing to action
+disagreement — the residual is a signature-space boundary layer, not
+`Q_K`-driven. Both runs reproduced this certificate bit-for-bit
+(`PAIRED_FIBER_CONSTANCY_POSITIVE`), composing state-insufficiency and
+control-sufficiency on the same pairs in both regimes.
+
 **Honest calibration.** This was the *expected-easy* half — on a
 chaotic attractor with a 422-dim high-mode complement at ~0.23
 amplitude, signature-local states with separated high modes are nearly
