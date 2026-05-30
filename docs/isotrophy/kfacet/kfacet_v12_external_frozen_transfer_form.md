@@ -340,8 +340,53 @@ C. Shard count for the full vf pass (8x ~20 h / 16x ~10 h), then build step 7
    (stratified-permutation transfer statistic + verdict) on the analyzable output.
 ```
 
-Steps 1-4 complete; the projection correctly fires the form's "stage, do not run
-inline" gate.
+### Attrition de-risk probe result (decision B, executed 2026-05-30)
+
+A sharded uniform-random SRS (NOT period-stratified) of 300 candidate rows --
+6 shards x 50, seed 20260523, reusing `per_row_pipeline`; the merge reconciles the
+shards to the exact deterministic sample (`reconcile_abort = None`).
+
+```text
+uniform attrition_fraction = 0.3433   (103/300: 66 blocked + 37 sanity-fail)
+Wilson 95% CI              = [0.2919, 0.3987]   -- entire interval ABOVE 0.20
+vs locked 0.20 BLOCK gate  = decisive_above (CI low 0.292 >> 0.20; no straddle)
+verdict implication        = external_transfer_blocked_by_attrition
+```
+
+Per-m3 the loss is SYSTEMIC, not localized (so no domain restriction rescues it,
+and restriction would be a disallowed post-hoc move regardless): m3=0.4 is 0% but
+m3 = 0.5-1.8 run 23-67%, rising with m3 (0.7 -> 35%, 0.8 -> 41%, 1.2 -> 44%,
+1.3 -> 53%, 1.6 -> 67%).
+
+**Honest correction to the step-5 readback.** It predicted the period-stratified
+smoke (26.7%) would OVER-estimate the uniform rate. It UNDER-estimated: uniform is
+34.3%, higher. The smoke forces each bin's {min,q25} short-period rows (which
+succeed) into the sample, so it under-represents the catalog's long-period bulk.
+The directional guess was wrong; the probe was decisive regardless -- which is the
+whole reason we measured the unbiased rate instead of assuming it.
+
+**Verdict: the full transfer run is policy-BLOCKED and is NOT run.** The locked D5
+measurement (DOP853, rtol/atol 1e-12, max_step 0.02 T) cannot integrate ~1/3 of
+supp-A's candidate orbits at the frozen precision (long-period / high-m3 step-size
+wall + symplecticity failures). Per the Attrition Policy this is
+`external_transfer_blocked_by_attrition`: NOT a failure of the velocity-fraction
+hypothesis, but a statement that the frozen measurement cannot support the external
+transfer question on this target. Both rescue paths are closed by the form ---
+relaxing precision breaks the "identical frozen v0.7 measurement" requirement (it
+would no longer be the same feature), and restricting to the short-period analyzable
+subset is a disallowed post-hoc fail-rescue that would bias the transfer. The ~2.5 h
+probe saved the projected 6.7-day full run.
+
+The supp-B conditional-positive (v0.10a in-sample trend + v0.11 within-m3 rank,
+exact p = 2.05e-7) stands unchanged; it simply does not receive an external-catalog
+confirmation from supp-A, because supp-A is numerically intractable for the frozen
+D5 integrator. A genuinely external confirmation would need either a different
+target catalog whose orbits integrate cleanly at 1e-12, or a separately-registered
+measurement chapter -- not a v0.12 refinement.
+
+Steps 1-4 plus the decision-B de-risk probe are complete; the unbiased probe
+decisively blocks the full run under the locked attrition policy, so step 7 (the
+full 8,320-row pass + transfer statistic) is NOT run.
 
 ## Primary Transfer Domain
 
