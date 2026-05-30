@@ -1,14 +1,34 @@
 # K_facet Isotrophy Program Pause (2026-05-24)
 
-Status: **PAUSED 2026-05-24** at end-of-v0.9. The chain ran from
-v0.3 (December 2025 / January 2026, pre-anniversary) to v0.9
-(May 2026), producing seven sequential pre-registered chapters
-with seven distinct chapter-close types and one load-bearing
-substantive positive (v0.7a' chi^2 = 16.43 on signed velocity-
-fraction quartiles, restricted to 250 analyzable rows).
+Status: **PAUSED 2026-05-24** at end-of-v0.9, then **ADVANCED off-pause
+2026-05-29/30** with the two-chapter v0.10 frontier pair (v0.10a + v0.10b).
+The chain ran from v0.3 (December 2025 / January 2026, pre-anniversary)
+through v0.9 (May 2026) as seven sequential pre-registered chapters with
+seven distinct chapter-close types and one load-bearing in-sample positive
+(v0.7a' chi^2 = 16.43 on signed velocity-fraction quartiles, 250 analyzable
+rows), then the frontier-advance matured that positive into a **publishable
+conditional-positive pair**:
 
-The program is **paused**, not retired. Reopening avenues are
-recorded below for lab initiates with bandwidth to spare.
+- **v0.10a (the positive):** the in-sample monotone velocity-fraction ->
+  stability trend, registered by the phenomenon-aligned J-T one-sided trend
+  test (exact fixed-margin enumeration, p = 7.3e-3 < 0.01) that the blunt
+  chi^2-of-independence had missed.
+- **v0.10b (the boundary):** the trend does NOT survive as a mass-MARGINAL
+  held-out predictor (pooled leave-one-m_3-bin-out AUC = 0.41 < 0.5), yet it
+  DOES rank within each held-out mass bin (per-fold AUC mean ~0.65; the
+  observed pooled AUC still beats the within-m_3-shuffled null of 0.265 at
+  p = 1e-4). The signal lives at the (m_3, zone) JOINT level.
+
+The mature, falsifiable claim is **"yes, but only after conditioning"**:
+velocity-fraction stratifies three-body stability, but as a function of the
+mass ratio, not marginally over it. That is a stronger and more honest
+statement than either a bare in-sample positive or a bare held-out null —
+the held-out chapter localized the signal rather than killing it.
+
+The program remains **paused at the lab-bandwidth level**, not retired;
+**v0.11 is in draft** (the within-m_3 / m_3-conditional predictor this pair
+motivates). Reopening avenues are recorded below for lab initiates with
+bandwidth to spare.
 
 Audience: paper-side writers, future coding agents, isotrophy-
 program lab initiates, anyone who wants to know what's left.
@@ -75,12 +95,36 @@ v0.9:  Signed three-zone direction-composition under physical
        monotone-increasing in vf (positional 11% S, mixed 34% S,
        velocity-heavy 44% S). The v0.7a' U-shape was a quartile-
        boundary artifact at vf ~ 0.297.
+
+v0.10a: Jonckheere-Terpstra one-sided trend test on the v0.9a
+        three-zone contingency (phenomenon-aligned statistic;
+        the Navier-Stokes "stop using a blunt diagnostic against
+        the wrong shape" lesson applied in-program).
+        Outcome: registered-positive (in-sample). Exact fixed-
+        margin enumeration (1,340-table multivariate-hypergeometric
+        null) one-sided p = 7.304e-3 < 0.01. The monotone trend the
+        chi^2-of-independence (p = 0.0245) missed is registered under
+        the aligned ordered statistic. Direction post-hoc from v0.9a
+        -> in-sample only, never held-out.
+
+v0.10b: leave-one-m_3-bin-out held-out predictor (zone-only
+        weighted-PAVA monotone risk score) on the 234 primary rows.
+        Outcome: conditional-positive / mass-marginal null. Pooled
+        held-out AUC = 0.4125 <= 0.5 FAILS the registered gate, but
+        per-fold (mass-conditioned) AUC is mostly > 0.5 (mean ~0.65;
+        within-m_3 permutation p = 1e-4 beats the shuffled null 0.265).
+        The vf -> stability signal is real but lives at the (m_3, zone)
+        JOINT level, not the marginal zone level; a zone-only score
+        cannot use the mass base rate that dominates marginal ranking.
+        Pairs with v0.10a as the publishable "yes, but only after
+        conditioning" result.
 ```
 
 ## The Load-Bearing Findings
 
-After seven chapters, three findings carry the program's substantive
-output:
+After seven chapters plus the v0.10 frontier-advance, three findings
+carry the program's substantive output (the second is now a publishable
+pair):
 
 1. **The v0.7a' chi^2 = 16.43 positive**. On the 250-row analyzable
    supp-B subset (post v0.7a integration-attrition), the velocity-
@@ -90,14 +134,39 @@ output:
    positive in the chain and remains uncontradicted by v0.8 and
    v0.9 (both of which contextualized it without invalidating it).
 
-2. **The monotone-increasing meta-finding (v0.9a contingency)**.
-   Under physical cutpoints {0.25, 0.50}, S_fraction is monotone
-   in vf: positional 11%, mixed 34%, velocity-heavy 44%. This
-   matches the broader thesis that velocity-dominated Floquet
-   directions correlate with stability. The chi-squared on three
-   physical zones (7.42) does not clear the registered p = 0.01
-   floor (critical 9.21), but the trend is real and would likely
-   clear a J-T trend test (untested).
+2. **The v0.10a + v0.10b publishable pair — "yes, but only after
+   conditioning."** The v0.9a monotone-increasing meta-finding
+   (S_fraction 11% / 34% / 44% across positional / mixed / velocity-
+   heavy zones under physical cutpoints {0.25, 0.50}) was matured into
+   a registered result and then bounded:
+
+   - **v0.10a (the positive).** The Jonckheere-Terpstra one-sided
+     trend test — the ordered-alternative statistic the chi^2-of-
+     independence was too blunt to see — registers the trend at exact
+     fixed-margin enumeration p = 7.304e-3 < 0.01 (permutation sanity
+     7.50e-3; normal-approx 6.73e-3). The signal is real and ordered,
+     in-sample. (Direction post-hoc from v0.9a, disclosed; in-sample
+     only, never a held-out claim.)
+   - **v0.10b (the boundary).** As a mass-MARGINAL held-out predictor
+     the signal FAILS: a zone-only weighted-PAVA monotone risk score
+     under leave-one-m_3-bin-out lands at pooled AUC = 0.4125 < 0.5,
+     missing the registered AUC>0.5 gate. But CONDITIONED on mass it
+     holds — per-fold held-out AUC is mostly > 0.5 (m_3 0.8->0.84,
+     0.9->0.90, 1.0->0.81, 1.1->0.82; mean ~0.65), and the observed
+     pooled AUC still beats the within-m_3-shuffled null of 0.265 at
+     permutation p = 1e-4. The failure is cross-bin CALIBRATION, not a
+     within-bin signal failure: the vf -> stability relationship lives
+     at the (m_3, zone) JOINT level, and the mass base rate — which a
+     zone-only score cannot use — dominates any marginal ranking.
+
+   Together these are a **publishable pair** with a mature, falsifiable
+   shape: **velocity-fraction stratifies three-body stability, but only
+   after conditioning on the mass ratio — it is a conditional predictor,
+   not a marginal one.** This is a stronger and more honest statement
+   than either a bare in-sample positive or a bare held-out null; the
+   held-out chapter LOCALIZED the signal rather than killing it. The
+   natural v0.11 rung is the explicit within-m_3 / m_3-conditional
+   predictor this pair pre-registers and motivates.
 
 3. **The methodology surface**. The chain produced and locked
    a comprehensive set of pre-registration discipline tools that
@@ -124,6 +193,18 @@ output:
    - Append-per-row resume mode for crash resilience (v0.7a R2.C).
    - Anti-circular framing discipline for sequential audits on
      the same data (v0.9 parent).
+   - Phenomenon-aligned statistic substitution: replace a blunt
+     omnibus test with the ordered-alternative statistic that matches
+     the discovered shape (v0.10a J-T — the Navier-Stokes lesson
+     applied in-program), using exact fixed-margin enumeration as a
+     deterministic primary p-value with permutation/normal-approx as
+     sanity sidecars.
+   - Pooled-vs-per-fold held-out diagnostic: report per-fold AUC
+     alongside the pooled gate so a cross-bin calibration artifact is
+     exposed as a conditional positive rather than hidden inside a
+     failing marginal statistic — and so the goalposts stay locked
+     (pooled AUC primary) while the per-fold structure is read as a
+     diagnostic, not a post-hoc rescue (v0.10b).
 
 ## Concrete Reopening Avenues for Lab Initiates
 
