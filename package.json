@@ -176,6 +176,8 @@
     "isotrophy:jt-trend": "python scripts/isotrophy_jt_trend.py --in results/isotrophy/k-facet-v09a-signed-vf-three-zone --out results/isotrophy/k-facet-v10a-jt-trend",
     "isotrophy:vf-heldout": "python scripts/isotrophy_vf_heldout_predictor.py --in results/isotrophy/k-facet-v09a-signed-vf-three-zone --v10a results/isotrophy/k-facet-v10a-jt-trend --out results/isotrophy/k-facet-v10b-monotone-vf-heldout",
     "isotrophy:m3-conditional-vf-rank": "python scripts/isotrophy_m3_conditional_vf_rank.py --in results/isotrophy/k-facet-v09a-signed-vf-three-zone --v10a results/isotrophy/k-facet-v10a-jt-trend --v10b results/isotrophy/k-facet-v10b-monotone-vf-heldout --out results/isotrophy/k-facet-v11-m3-conditional-vf-rank",
+    "isotrophy:v12-profile": "python scripts/v12_external_frozen_transfer.py profile",
+    "isotrophy:v12-smoke": "python scripts/v12_external_frozen_transfer.py smoke --smoke-rows 30",
     "deploy": "npm run build && node scripts/deploy-pages.mjs",
     "faraday:phase4": "node scripts/faraday-phase4-battery.mjs",
     "arc:phase0:inventory": "node scripts/arc-phase0-inventory.mjs",
