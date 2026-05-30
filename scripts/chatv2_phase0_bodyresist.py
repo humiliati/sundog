@@ -292,10 +292,15 @@ def run(cfg, out_dir):
     device = torch.device("cpu")
     t0 = time.time()
     records = []
+    print(f"[start] mode={cfg.mode} H_sweep={cfg.h_sweep} threads={torch.get_num_threads()} "
+          f"d_model={cfg.d_model} layers={cfg.n_layers} steps<={cfg.max_steps}", flush=True)
     for H in cfg.h_sweep:
         hs = cfg.seed + 1000 * H
         tg = time.time()
+        print(f"[H={H}] training generative (L={cfg.bits_per_channel*H})...", flush=True)
         gen, gmeta = train_generative(H, cfg, device, hs)
+        print(f"[H={H}] gen done: eval_loss={gmeta['eval_loss']:.4f} vs bayes "
+              f"{gmeta['bayes_floor']:.4f} ({gmeta['steps']} steps); fingerprint+twin...", flush=True)
         gbodies, gz = extract_body(gen, H, cfg, device, hs, twin=False)
         gfp = fingerprint(gbodies, gz, cfg, hs)
 
