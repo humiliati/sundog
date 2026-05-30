@@ -11,9 +11,12 @@ Short version:
 > still certify bounded structure?
 
 Status: **Phase 1 instrumentation closed across the full ladder
-2026-05-29; Phase 2 v0 executed -> `YM-P2-NEG-A no_rank_local_structure`;
-Phase 2 v1 APE-smearing run executed -> `YM-P2-NEG-A no_rank_local_structure`;
-Phase 2 v2 connected-correlator run executed -> `YM-P2-NEG-A no_rank_local_structure`**.
+2026-05-29; Phase 2 v0 / v1 / v2 all executed ->
+`YM-P2-NEG-A no_rank_local_structure` (three named nulls on the γ_held
+tertile target across signature vocabs v1 bare, v4 smeared, v5
+correlator); Phase 2 v3 target-redesign probe spec + binding spec
+(vocab v1 signature × new vocab v2 σ²_W33 target, no P0 amendment)
+filed 2026-05-29**.
 Roadmap draft at this file; lit-pass at
 [`YANG_MILLS_LITPASS_MEMO.md`](YANG_MILLS_LITPASS_MEMO.md); P0 lock at
 [`prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md`](prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md);
@@ -47,12 +50,18 @@ Phase 2 v2 binding spec (vocab v5 = 20-dim connected correlators on
 v0 ensembles, no smearing, no P0 amendment) at
 [`prereg/yang-mills/PHASE2_SU2_3D_relative_locality_v2.md`](prereg/yang-mills/PHASE2_SU2_3D_relative_locality_v2.md)
 with named-null receipt at
-[`yang-mills/receipts/2026-05-29_SU2_3D_phase2_v2_no_rank_local_structure.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase2_v2_no_rank_local_structure.md).
-The Phase 1 receipts are instrumentation only. Phase 2 v0, v1, and v2 did
-not earn a certificate; v2 repeated the named null on the connected-
-correlator lane. No continuum, confinement, mass-gap, or result-bearing
-Yang-Mills claim exists. Next artifact is a dated v3
-target-redesign probe spec per the v2 fallback table.
+[`yang-mills/receipts/2026-05-29_SU2_3D_phase2_v2_no_rank_local_structure.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase2_v2_no_rank_local_structure.md);
+v3 target-redesign probe spec at
+[`yang-mills/specs/2026-05-29_phase2_v3_target_redesign_probe.md`](yang-mills/specs/2026-05-29_phase2_v3_target_redesign_probe.md);
+Phase 2 v3 binding spec (vocab v1 signature unchanged + new vocab v2
+σ²_W33 target, no P0 amendment) at
+[`prereg/yang-mills/PHASE2_SU2_3D_relative_locality_v3.md`](prereg/yang-mills/PHASE2_SU2_3D_relative_locality_v3.md).
+The Phase 1 receipts are instrumentation only. Phase 2 v0 / v1 / v2 all
+landed `YM-P2-NEG-A`. No continuum, confinement, mass-gap, or
+result-bearing Yang-Mills claim exists. Next artifact is the minimal v3
+aggregation runner per the v3 binding spec. If v3 also lands NEG-A,
+the pre-stated v4 fallback is a bounded-null synthesis receipt, NOT
+unbounded probe-ladder continuation.
 
 This is not a claim to progress on the Clay Yang-Mills existence and mass gap
 problem. It is a plan for a bounded receipt program that asks whether Sundog's

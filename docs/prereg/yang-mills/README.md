@@ -6,16 +6,20 @@ Lit-pass: [`YANG_MILLS_LITPASS_MEMO.md`](../../YANG_MILLS_LITPASS_MEMO.md)
 Filed: **2026-05-29 (PT)**
 
 Status: **Phase 1 instrumentation closed across the full ladder 2026-05-29;
-Phase 2 v0 executed 2026-05-29 -> `YM-P2-NEG-A no_rank_local_structure`;
-Phase 2 v1 APE-smearing run executed 2026-05-29 ->
-`YM-P2-NEG-A no_rank_local_structure`; Phase 2 v2 connected-correlator
-run executed 2026-05-29 -> `YM-P2-NEG-A no_rank_local_structure`**. See
+Phase 2 v0 / v1 / v2 all executed 2026-05-29 ->
+`YM-P2-NEG-A no_rank_local_structure` (three consistent named nulls
+across signature vocabs v1 bare, v4 smeared, v5 correlator on the
+γ_held tertile target); Phase 2 v3 target-redesign probe + binding spec
+filed 2026-05-29 (vocab v1 signature × new vocab v2 σ²_W33 target, no
+P0 amendment)**. See
 [`P0_DOMAIN_AND_RECEIPT_LOCK.md`](P0_DOMAIN_AND_RECEIPT_LOCK.md). This
 directory remains the home for any future Yang-Mills pre-registrations
 (Phase 1 runner manifests, Phase 2/3/4 phase specs, and any P0 amendments).
-The v0, v1, and v2 Phase 2 receipts are named nulls and do not admit Phase 3
-observable-certificate work. The next admitted artifact is a dated v3 probe
-spec for target-side redesign per the v2 fallback table.
+The v0, v1, and v2 Phase 2 receipts are named nulls and do not admit
+Phase 3 observable-certificate work; v3 (target redesign on the same v0
+ensembles) is the next admitted scoring lane. If v3 also lands NEG-A,
+the pre-stated v4 fallback is bounded-null synthesis, not unbounded
+ladder continuation.
 
 ## Filed Artifacts
 
@@ -104,17 +108,29 @@ spec for target-side redesign per the v2 fallback table.
   **Executed 2026-05-29 -> `YM-P2-NEG-A no_rank_local_structure`.**
   Receipt:
   [`../../yang-mills/receipts/2026-05-29_SU2_3D_phase2_v2_no_rank_local_structure.md`](../../yang-mills/receipts/2026-05-29_SU2_3D_phase2_v2_no_rank_local_structure.md).
+- [`PHASE2_SU2_3D_relative_locality_v3.md`](PHASE2_SU2_3D_relative_locality_v3.md)
+  - binding v3 spec selecting the v2 probe's pre-stated "different
+  target derived from same loops" path. **Held-out target vocabulary
+  v2** = per-config spatial variance `σ²_W33` of `(1/2) Re Tr U_loop_3x3`
+  across all `12³ × 3 = 5184` (position × orientation) samples (biased
+  estimator, no Bessel correction). **Signature unchanged** (vocab v1
+  bare 8-dim mean+var, re-read from v0 signature CSV — NOT recomputed,
+  hash-asserted against v0). New per-β tertile bin edges computed on
+  σ²_W33 within each β; NOT asserted equal to v0's γ_held edges (target
+  is different). No P0 amendment needed. Reuses v0 ensembles
+  bit-for-bit; ONE aggregation invocation; ~1-2 min compute. Pre-states
+  v4 fallback if v3 also NEG-As: σ²_W14 / σ²_W23, Polyakov-target
+  + P0 amendment 2, or PAUSE-and-synthesize.
 
 ## Required Next Artifact
 
-The next artifact should be a dated v3 probe spec under
-`docs/yang-mills/specs/` selecting a target-side redesign from the
-pre-stated v2 fallback table. Because v0, v1, and v2 all landed
-`YM-P2-NEG-A`, do not open Phase 3 from the small-loop lane. Candidate
-v3 directions include a different target derived from the same held-out
-loops, a Polyakov-loop target, a topological-charge-proxy target, or a
-mass-gap-proxy target, with P0 amendment impact determined before any
-runner is written.
+The next artifact should be the minimal v3 aggregation runner
+`scripts/yang-mills-phase2-v3-su2-3d-aggregate.mjs` + the
+`yang-mills:phase2:v3:su2-3d:aggregate` npm script. The per-position
+W33 evaluator already lives in
+`scripts/lib/yang-mills-su2-3d-core.mjs` from Phase 1 and is reused
+directly. v0 / v1 / v2 aggregation runners + the bare SU(2) 3D core
++ smearing module + correlator module all remain bit-for-bit unchanged.
 
 ## Guardrail
 
