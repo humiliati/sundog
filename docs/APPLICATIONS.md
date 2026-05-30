@@ -58,11 +58,11 @@ separate so the claim can stay audit-friendly.
 
 The useful current claim is bounded:
 
-> In the tested planar restricted setup, the guarded accelerometer-proxy TRACK
-> controller improves survival over passive and naive local baselines in a
-> robust high-velocity near-escape pocket. The result is not global: lower
-> velocity and equal-mass boundary cells still expose controller harms, mostly
-> through controller-shortened passive survival and control effort/saturation.
+> In the tested planar restricted setup, the high-velocity near-escape survival
+> pocket is real, but Phase 18 shows its mechanism reduces to radius-gated
+> inward thrust at matched duty. The result is not global: lower velocity and
+> equal-mass boundary cells still expose controller harms, and this does not
+> solve three-body dynamics.
 
 ### Evidence Shape
 

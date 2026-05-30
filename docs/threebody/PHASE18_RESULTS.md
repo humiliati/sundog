@@ -1,8 +1,8 @@
 # Three-Body Phase 18 - Radius-Only Controller Control Results
 
-Status: **spec locked 2026-05-29; implementation + smoke + gates complete;
-calibration → measurement lock pending.** Phase 18 is a mechanism diagnostic
-only: it does not retune guarded TRACK, change the inherited radius threshold,
+Status: **complete 2026-05-29; formal branch: Branch A - Reduces to radius.**
+Phase 18 is a mechanism diagnostic only: it does not retune guarded TRACK,
+change the inherited radius threshold,
 alter the hazard label, revise the Phase 15 Fail-Magnitude verdict, or broaden
 the gravity claim.
 

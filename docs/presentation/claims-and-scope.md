@@ -33,7 +33,7 @@ These claims are defensible with current evidence:
   stop-conditioned action batches, and a seedable Playwright bridge.
 - Dungeon Gleaner demonstrates verb-field NPC behavior: unmet needs diffuse across satisfier nodes to produce lightweight idle orbits without scripted planners.
 - Money Bags demonstrates graph-based interpretation of softbody motion, making torsion, deformation, symmetry, and recovery metrics legible.
-- The three-body workbench demonstrates a bounded operating-envelope result: in the tested planar restricted setup, guarded accelerometer-proxy TRACK control improves survival over passive and naive local baselines inside a high-velocity near-escape pocket, while lower-velocity and equal-mass cells remain known harm boundaries.
+- The three-body workbench demonstrates a bounded operating-envelope result: in the tested planar restricted setup, the high-velocity near-escape survival pocket is real, but Phase 18 reduces its mechanism to radius-gated inward thrust at matched duty rather than sophisticated tidal steering, while lower-velocity and equal-mass cells remain known harm boundaries.
 - The Balance workbench demonstrates a bounded operating-envelope result: in the tested browser cart-pole setup, a shadow-derived controller beats naive shadow-centering inside the diagnostic-positive envelope, while overhead-light and high-delay cells remain degradation boundaries.
 - The Pressure Mines workbench demonstrates a bounded operating-envelope result: in the named density 0.16 / pressure-noise 2.0 / dropout 0.2 pocket, pressure-derived Sundog variants improve budget-adjusted safe-tile progress over naive pressure before mine trigger, while a paired density 0.22 / pressure-noise 1.0 / dropout 0.35 region is published as a failure case.
 - The K_facet v0.3h verdict resolves 20 strict catalog rows as structural zeros on the strict G.2 single-curve choreographies at m₃ = 1. One row (O_617) is held back as a named quarantine — a clean opposite-strict row whose bridge direction sits outside the valid D₃ representation. Audit chain intact; theorem-facing result is not closed.
@@ -180,7 +180,7 @@ Formal alignment score definition, frozen terrain fixtures, matched disturbance 
 
 ### Three-Body Dynamics Workbench
 **Safe:**
-"In the tested planar restricted setup, the guarded accelerometer-proxy TRACK controller improves survival over passive and naive local baselines in a robust high-velocity near-escape pocket. The result is not global: lower velocity and equal-mass boundary cells still expose controller harms."
+"In the tested planar restricted setup, the high-velocity near-escape survival pocket is real, but Phase 18 shows the mechanism is a radius-gated inward reflex at matched duty, not sophisticated tidal steering. The result is not global: lower velocity and equal-mass boundary cells still expose controller harms."
 
 **Avoid:**
 "Sundog solves the three-body problem."

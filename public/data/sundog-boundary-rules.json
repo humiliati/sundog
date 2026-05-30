@@ -104,11 +104,12 @@
       "boundaries": [
         "Do not claim Sundog solves the three-body problem.",
         "Do not claim chaos prediction.",
-        "Do not present the privileged heuristic oracle as an optimal controller."
+        "Do not present the privileged heuristic oracle as an optimal controller.",
+        "Do not present the survival mechanism as sophisticated tidal sensing; Phase 18 reduces it to radius-gated inward thrust in the tested pocket."
       ],
       "supportDocs": [
-        "docs/APPLICATIONS.md",
-        "docs/THREEBODY_PHASE11_SUMMARY.md",
+        "docs/threebody/PHASE18_RESULTS.md",
+        "docs/SUNDOG_V_THREEBODY.md",
         "docs/presentation/claims-and-scope.md"
       ]
     },
