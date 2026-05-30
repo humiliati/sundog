@@ -1,5 +1,9 @@
 # Three-Body Phase 17 - Hazard-Aligned Counterfactual Results
 
+Current status: **complete 2026-05-29; formal branch: Hazard-directed mechanism
+REJECTED.** The older pre-lock status line below is stale and superseded by the
+lock readback in this file.
+
 Status: **spec locked 2026-05-29; implementation + smoke complete; lock pending
 operator go.** Phase 17 is a mechanism audit only. It does not retune the
 controller, alter the hazard label, or revise the locked Phase 15 Fail-Magnitude
@@ -180,4 +184,3 @@ Re-run 2026-05-29 after the core touch — **both byte-identical**:
 - phase14 → 6,048 trials / 130·648 candidate rows / 1269·4616·163 ✓
 
 The `--hazard-counterfactual-audit` path is additive and non-perturbing.
-

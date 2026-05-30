@@ -24,6 +24,7 @@ export const DEFAULT_THREEBODY_CONFIG = Object.freeze({
   trackGuardMinRadius: 1.15,
   trackGuardMaxLocalAcceleration: 2.5,
   trackGuardMaxTidalMagnitude: 35,
+  radiusInwardMagnitude: 0.4,
   precisionReceipts: false,
   counterfactualAudit: false,
   multiStepAudit: false,
@@ -398,6 +399,7 @@ export function computeTidalGradient(state, config = {}) {
 function controllerSensorVariant(mode) {
   if (mode.endsWith("_sensor_accel")) return "accelerometer_array_noisy";
   if (mode === "track_sensor_accel_guarded") return "accelerometer_array_noisy";
+  if (mode === "track_radius_guard") return "accelerometer_array_noisy";
   if (PHASE14_ABLATION_MODES.has(mode)) return "accelerometer_array_noisy";
   if (mode.endsWith("_sensor_delayed")) return "delayed_local_probe";
   if (mode.endsWith("_sensor_micro")) return "micro_maneuver_noisy";
@@ -522,6 +524,8 @@ export const KNOWN_CONTROLLER_MODES = new Set([
   "track_sensor_delayed",
   "seek_sensor_micro",
   "track_sensor_micro",
+  "track_radius_guard",
+  "track_radius_inward",
   ...PHASE14_ABLATION_MODES,
 ]);
 
@@ -960,6 +964,7 @@ export function computeControlThrust(state, controllerState = {}, config = {}) {
     || mode === "seek_sensor_accel"
     || mode === "track_sensor_accel"
     || mode === "track_sensor_accel_guarded"
+    || mode === "track_radius_guard"
     || mode === "seek_sensor_delayed"
     || mode === "track_sensor_delayed"
     || mode === "seek_sensor_micro"
@@ -971,7 +976,7 @@ export function computeControlThrust(state, controllerState = {}, config = {}) {
     let gradient = null;
     if (
       sensorVariant === "accelerometer_array_noisy"
-      && (mode === "track_sensor_accel_guarded" || PHASE14_ABLATION_MODES.has(mode))
+      && (mode === "track_sensor_accel_guarded" || mode === "track_radius_guard" || PHASE14_ABLATION_MODES.has(mode))
     ) {
       const observed = observeGuardedAccelSignatureDetails(state, cfg, controllerState);
       guardedSignature = observed.signature;
@@ -1003,6 +1008,13 @@ export function computeControlThrust(state, controllerState = {}, config = {}) {
     if (mode === "track_sensor_accel_guarded" && !guardedSignature.guard) {
       return [0, 0];
     }
+    if (mode === "track_radius_guard") {
+      const guardX = state[4];
+      const guardY = state[5];
+      if (Math.sqrt(guardX * guardX + guardY * guardY) < cfg.trackGuardMinRadius) {
+        return [0, 0];
+      }
+    }
     let guardSuppressed = false;
     if (PHASE14_ABLATION_MODES.has(mode) && !shouldRunGuardedTrack(state, tidal, cfg)) {
       guardSuppressed = true;
@@ -1019,6 +1031,15 @@ export function computeControlThrust(state, controllerState = {}, config = {}) {
         thrustX = direction * thrustMagnitude * gradX / gradMag;
         thrustY = direction * thrustMagnitude * gradY / gradMag;
       }
+    }
+  } else if (mode === "track_radius_inward") {
+    const x3 = state[4];
+    const y3 = state[5];
+    const radius = Math.sqrt(x3 * x3 + y3 * y3);
+    if (radius >= cfg.trackGuardMinRadius && radius > 1e-9) {
+      const magnitude = cfg.radiusInwardMagnitude;
+      thrustX = -magnitude * x3 / radius;
+      thrustY = -magnitude * y3 / radius;
     }
   }
 
