@@ -133,6 +133,48 @@ proxy-specific (one objective family, one forcing geometry). It is not a
 theorem about the infinite-dimensional NSE attractor and does not by itself
 discharge external review. C1 stays **PROVISIONAL, UNPROMOTED**.
 
+## 7. Result (2026-05-29) — POSITIVE at both regimes
+
+Both deterministic re-runs returned `PAIRED_FIBER_CONSTANCY_POSITIVE`, and
+both reproduced their twin-state certificate **bit-for-bit** (verdict,
+witness-pair count, `damp_fraction`, `epsilon_K`, `E_max`, `delta_H`,
+witness high-distance p50 all identical to the original) — so the paired
+read is provably additive on the *exact* certified pairs, not a re-derived
+or drifted sample.
+
+| quantity | G=200 (`lock_v5`) | G=300 (`lock_v7_g300`) |
+| --- | --- | --- |
+| `paired_fiber_verdict` | `PAIRED_FIBER_CONSTANCY_POSITIVE` | `PAIRED_FIBER_CONSTANCY_POSITIVE` |
+| `D_witness` (unique) | **0.0367** (25460 / 693795) | **0.0382** (36003 / 942834) |
+| `D_witness` (directed) | 0.0360 | 0.0376 |
+| `D_candidate` (comparator) | 0.0319 (1263121 pairs) | 0.0290 (1318748 pairs) |
+| `D_witness - D_candidate` | +0.0048 | +0.0092 |
+| `delta_action` threshold | 0.10 (clears ~2.7x) | 0.10 (clears ~2.6x) |
+| no-regression vs certificate | bit-for-bit | bit-for-bit |
+
+Results: `results/proof/c1-paired-fiber-g200/`, `…-g300/`.
+
+**Reading.** `D_witness` is ~3.7-3.8%, not literally zero — a small set of
+state-separated signature-near pairs do straddle the safety-trigger
+boundary. The decisive fact is that `D_witness` is **within ~1 point of
+`D_candidate`** in both regimes: high-mode (`Q_K`) separation adds almost
+nothing to action disagreement. So the residual non-constancy is a
+**signature-space boundary layer** — pairs whose look-ahead sits right at
+`E_max` flip the label regardless of high modes — and **not** something the
+unresolved state drives. This is the Reading-2 regime-2 claim sharpened:
+the proxy action is (a.e.) blind to `Q_K`; what little non-constancy exists
+is governed by signature proximity near the decision surface, which is
+exactly the coordinate the controller is meant to use. It composes the
+state-insufficiency and control-sufficiency reads on the **same** certified
+pairs, in both Grashof regimes — closing the matched-radius-aggregate gap.
+
+**Honest residual.** This does not pin the ~0.5-0.9 point witness-minus-
+candidate gap to signature distance vs `Q_K` definitively; a matched-
+signature-distance control (compare `Q_K`-separated vs `Q_K`-close pairs at
+equal signature distance) would. Registered as a follow-up; not required for
+the POSITIVE verdict. Scope is unchanged: finite-Galerkin, sampled-support,
+two Grashof points at `k_f = 2`. **C1 stays PROVISIONAL, UNPROMOTED.**
+
 ## 6. Cross-references
 
 - [`PDE_DETERMINING_MODES_POSTULATE1.md`](PDE_DETERMINING_MODES_POSTULATE1.md)

@@ -388,6 +388,46 @@ The C1 reviewer-outreach draft is staged at
 [`proof/PDE_C1_EXTERNAL_REVIEW_EMAIL_DRAFT.md`](proof/PDE_C1_EXTERNAL_REVIEW_EMAIL_DRAFT.md)
 (criterion-(c) prep).
 
+**C1 desk-first hardening wave 2026-05-29 (toward finite-Galerkin
+structural separation).** Two parts, no new long compute beyond two
+deterministic re-runs. **(a) Paired fiber-constancy exhibit**
+([`proof/PDE_C1_PAIRED_FIBER_CONSTANCY.md`](proof/PDE_C1_PAIRED_FIBER_CONSTANCY.md)):
+the regime-2 witness composed state-insufficiency (twin-state) and
+control-sufficiency (kNN) as **two population statistics at a matched
+radius** `ε_K`, leaving open the confound that a different sub-population
+carries the action-homogeneity. The twin-state adjudicator was extended
+**additively** (per-pair proxy-action agreement on the certified witness
+pairs + a secondary `paired_fiber_verdict` that never overrides
+`TWIN_STATE_CERTIFIED`) and re-run deterministically at both regimes.
+**Both → `PAIRED_FIBER_CONSTANCY_POSITIVE`**: witness-pair action
+disagreement `D_witness = 0.0367` (G=200) / `0.0382` (G=300), both under
+the pre-registered `delta_action = 0.10` and within ~1 point of the
+candidate-pair rate (`0.0319` / `0.0290`) — so high-mode `Q_K` separation
+adds almost nothing to action disagreement (the residual is a
+signature-space boundary layer, not state-driven). Both runs reproduced
+their twin-state certificate **bit-for-bit** (built-in no-regression
+check), so the paired read is provably additive on the exact certified
+pairs. This composes the two halves on the **same** pairs in both Grashof
+regimes, closing the matched-radius gap and instantiating the Reading-2
+fiber criterion directly on the non-injective support. **(b)
+Reviewer-facing separation statement**
+([`proof/PDE_C1_SEPARATION_STATEMENT.md`](proof/PDE_C1_SEPARATION_STATEMENT.md)):
+consolidates the Postulate-1 reading note into one self-contained
+finite-Galerkin separation claim (state space 440 real DOF, signature
+resolves 18, 422 unresolved) + an **anti-vacuity ledger** (each vacuity
+mode excluded by construction, anchored on the held-out-quantile objective
+being a full-state look-ahead, not a function of `Φ_K`) + an **internal
+determining-modes comparator** (fixed-Galerkin K-bracket: `K=3` certified
+non-injective is the lower bracket; smallest `K*` where injectivity returns
+is the registered upper bracket — no borrowed asymptotic constant) + an
+explicit theorem-vs-witness boundary. The artifact to attach to the
+reviewer email. **Registered follow-ups (next robustness wave):** a
+matched-signature-distance control for the ~0.5-0.9 point witness-minus-
+candidate gap; the K-window / K-bracket run; a per-component decision-
+surface ablation; an enstrophy-objective family check. C1 stays
+**PROVISIONAL, UNPROMOTED** — the wave sharpens the witness and the
+reviewer artifact, it does not discharge external review.
+
 ## Claim Boundary
 
 This document does **not** claim that Sundog has produced original
