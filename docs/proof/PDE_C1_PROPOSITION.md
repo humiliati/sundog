@@ -29,9 +29,17 @@
 > Let `𝒮_N`, `μ_G`, `Φ_K`, `Q_K`, `J_q`, `π*` be as in §1. Then for
 > **`G ∈ {200, 300}`**, on `supp μ_G`:
 >
-> **(i) State-insufficient.** `Φ_K` is non-injective: there is positive
-> `μ_G`-mass of pairs `(x,y)` with `‖Φ_K x − Φ_K y‖ ≤ ε_K` and
-> `‖Q_K x − Q_K y‖ ≥ δ_H`.
+> **(i) State-insufficient (scale-selective; energy-marginal).** `Φ_K` is
+> non-injective: positive `μ_G`-mass of pairs `(x,y)` with
+> `‖Φ_K x − Φ_K y‖ ≤ ε_K` and `‖Q_K x − Q_K y‖ ≥ δ_H`. **Quantified
+> (robustness wave §4):** the genuine under-determination is in the
+> *small-scale degrees of freedom* — per-component the high modes are only
+> `~0.73` predictable from `Φ_K` (uniform sample). But those carry little
+> energy: the **energy-weighted** state determination is
+> `FVE(Q_K|Φ_K) = 0.9994` (residual `0.06%`), so `Φ_K` is an **approximate
+> inertial manifold** and `K=3` is **near the determining threshold**. The
+> non-injectivity is real (positive-measure, certified) but small in the
+> decision-relevant (energy) norm — the separation is **marginal**, not gross.
 >
 > **(ii) Control-sufficient.** `π*` is `Φ_K`-measurable up to a set of
 > `μ_G`-measure `≤ δ`, `δ ≈ 0.037`: on the certified non-injective pairs of
@@ -51,16 +59,28 @@ decision-relevant energy coupling (iii) are `Φ_K`-determined.
 
 ## 3. What this does / does not claim
 
-**Does claim:** a measured, pre-registered, two-regime separation in a
-finite-dimensional dynamical system derived from 2D NSE — `Φ_K` is
-state-insufficient yet control-sufficient on the sampled invariant measure,
-with the coupling mechanism (iii) explaining *why* — stated in standard
-observer-theory terms (§5). **Does not claim:** any Navier–Stokes
-existence/smoothness result; a theorem about the infinite-dimensional NSE
-attractor (clauses hold on a finite truncation and a sampled measure); a new
-determining-modes bound; or generality beyond the tested objective family and
-the single forcing geometry `k_f=2`. C1 is **PROVISIONAL, UNPROMOTED**, gated
-on external review.
+**Does claim:** a measured, pre-registered, two-regime, scale-selective
+separation in a finite-dimensional dynamical system derived from 2D NSE —
+`Φ_K` determines the energy-carrying content but not the small-scale DOF, so
+it is state-insufficient (certified non-injective) yet control-sufficient on
+the sampled invariant measure, with the coupling mechanism (iii) explaining
+*why* — stated in standard observer-theory terms (§5). **Does not claim:** any
+Navier–Stokes existence/smoothness result; a theorem about the
+infinite-dimensional NSE attractor (clauses hold on a finite truncation and a
+sampled measure); a new determining-modes bound; or generality beyond the
+tested objective family and the single forcing geometry `k_f=2`.
+
+**Key honest limitation (robustness wave §4).** The separation is
+**marginal in the energy norm**: `Φ_K` is an approximate inertial manifold
+(`FVE = 0.9994`), so `K=3` is **near the determining threshold** for this
+attractor. This is expected — **2D NSE at moderate `G` has a low-dimensional
+attractor**, so a small low-mode projection is nearly state-determining, and
+a genuinely *non-marginal* regime-2 separation likely requires a
+higher-dimensional regime (much higher `G`, 3D, or a different substrate).
+The result is strictly non-vacuous (positive-measure non-injectivity, genuine
+small-scale under-determination) but should not be oversold as a gross
+state/control gap. C1 is **PROVISIONAL, UNPROMOTED**, gated on external
+review.
 
 ## 4. Two-regime stability (item: portability)
 
@@ -114,7 +134,7 @@ pin it down:
 | (i) `Φ_K` non-injective on `supp μ_G` | **CERTIFIED-EMPIRICAL** | twin-state certificate, pre-registered, both regimes |
 | (ii) control-sufficient up to `B_δ`, `δ≈0.037` | **CERTIFIED-EMPIRICAL** | kNN convergence POSITIVE + paired fiber-constancy POSITIVE |
 | (iii) coupling slaving `R²(R\|Φ_K)≥0.99` | **CERTIFIED-EMPIRICAL** | held-out regression R², calibrated controls, both regimes |
-| `K=3` below the determining count | **CERTIFIED (internal)** | non-injectivity at `K=3`; fixed-Galerkin `K*` upper bracket registered |
+| state-determination at `K=3` is **near-complete (marginal separation)** | **MEASURED** | energy-weighted `FVE(Q_K\|Φ_K)=0.9994` (residual 0.06%) — approximate inertial manifold; per-DOF small scales `~0.73` (genuine under-determination); non-injectivity certified but energy-marginal (robustness wave §4) |
 | `B_δ` is genuine geometry, not artifact | **DEMONSTRATED** | `D_witness ≈ D_candidate` (paired exhibit) |
 | portability across `G` | **DEMONSTRATED** (2 points) + argued by construction | §4 table |
 | ∞-dimensional NSE-attractor analogue | **HYPOTHESIZED** | Galerkin-attractor upper-semicontinuity cited, not applied |
