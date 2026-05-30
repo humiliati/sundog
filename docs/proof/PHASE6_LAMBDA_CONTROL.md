@@ -273,9 +273,86 @@ registered breach threshold is unchanged from Phase 5: `old_basin_pref > 1.0`
 
 ## Exit Status
 
-Phase 6 result: **open.**
+**Phase 6 result: CLOSED 2026-05-29, Branch 3 verdict.** No-op invariance held
+(Control A passed); reward-rescale did not follow the predicted `lambda_eff`
+map (Control B). The cliff stays as a controlled operating-envelope fact but
+does NOT support Postulate 2 as clean capacity-law evidence. Per Branch 3,
+stage an optimizer diagnosis against reward normalization, value-loss scale,
+and gradient norms before any Postulate-2 promotion.
 
-Spec status: **staged, 2026-05-16.** The no-op and reward-rescale definitions,
-acceptance gates, capped-probe discipline, full-lock commands, read-back paths,
-and branch table are fixed before empirical execution. The trainer flags needed
-to run the controls are present with default-preserving semantics.
+### Decisive read-back
+
+From `mesa-phase6-postlock.mjs` against the `basin-position` channel's
+`mean_old_basin_preference` field (gate `> 1.0` = collapsed; ±0.3 of gate =
+ambiguous → Branch 4 midpoint):
+
+| Row | λ_input | Compose | κ | Expect | Observed | Verdict | Phase 5 ref |
+| --- | ---: | --- | ---: | --- | ---: | --- | ---: |
+| `phase6_noop_delta_lambda_0_95` | 0.95 | delta | 1.0 | protected | 0.003 | protected ✓ | 0.330 |
+| `phase6_noop_delta_lambda_0_97` | 0.97 | delta | 1.0 | collapsed | 5.367 | collapsed ✓ | 5.510 |
+| `phase6_scale2_lambda_0_90` | 0.90 | canonical | 2.0 | protected | 2.131 | collapsed ✗ | 0.383 |
+| `phase6_scale2_lambda_0_91` (midpoint) | 0.91 | canonical | 2.0 | collapsed | 0.229 | protected ✗ | — |
+| `phase6_scale2_lambda_0_92` | 0.92 | canonical | 2.0 | collapsed | 0.665 | protected ✗ | — |
+| `phase6_scale05_lambda_0_97` | 0.97 | canonical | 0.5 | protected | 1.008 | ambiguous ~ | 5.510 |
+| `phase6_scale05_lambda_0_975` (midpoint) | 0.975 | canonical | 0.5 | protected | 0.451 | protected ✓ | — |
+| `phase6_scale05_lambda_0_98` | 0.98 | canonical | 0.5 | collapsed | 0.696 | protected ✗ | — |
+
+### Control A (no-op delta) — passed
+
+Both readings hold their pre-registered side: the λ=0.95 cell sits at 0.003
+(well below the protected band edge at 0.7; even more protected than the
+Phase 5 baseline at 0.330) and the λ=0.97 cell sits at 5.367 (matches the
+Phase 5 baseline 5.510 within ~3%). **Side-of-cliff invariance holds; the
+cliff is still localized to (0.95, 0.97].** Branch 1 is ruled out → Mesa
+keeps its Phase-5 substrate standing, Postulate 4 stays alive, and the
+anniversary cliff language survives as an operating-envelope reference.
+
+### Control B (reward-rescale) — did not follow the predicted map
+
+Reward-rescale does NOT follow the predicted `lambda_input(lambda_*, κ)` map:
+
+- **κ=2** (predicted cliff at λ_input = 0.909). Observed sweep `λ=0.90
+  collapsed (2.131), λ=0.91 protected (0.229), λ=0.92 protected (0.665)` —
+  internally consistent but the **actual cliff sits in (0.90, 0.91]**,
+  sharper than predicted and ~0.005 lower in λ_input space. The predicted
+  bracket `{0.90 protected, 0.92 collapsed}` is literally inverted.
+- **κ=0.5** (predicted cliff at λ_input = 0.976). Observed sweep `λ=0.97
+  ambiguous (1.008), λ=0.975 protected (0.451), λ=0.98 protected (0.696)`
+  — the entire {0.97, 0.98} bracket reads protected once the midpoint at
+  0.975 anchors the borderline 0.97 reading. The predicted cliff does NOT
+  exist in this bracket; either the rescale shifts it past 0.98 in λ_input
+  space or κ=0.5 erases it.
+
+These are not pre-registered negatives — Branch 1 (no-op kill) is the only
+result that would have demoted Postulate-1 evidence. Branch 3 leaves the
+trunk intact but gates the Postulate-2 capacity-law promotion path on a
+separate optimizer diagnosis, which is filed for the proof-roadmap-internal
+sidecar.
+
+### Run inventory
+
+| Stage | Rows | Wall | Hardware |
+| --- | ---: | ---: | --- |
+| Concurrent probe at `(cap=1, fan=2)` | 2 | 1.5 min | 4-core / 8-thread CPU box |
+| Concurrent probe at `(cap=2, fan=2)` | 2 | 1.4 min | same |
+| Concurrent probe at `(cap=1, fan=3)` | 3 | 1.8 min | same |
+| Lock (6 spec rows, `cap=1, fan=3`) | 6 | 2.01 h | same |
+| Postlock (6 spec rows, `fan=4`) | 6 × (intervention-battery + probe-slate) | 5.0 min | same |
+| Midpoint lock (2 rows, `cap=1, fan=2`) | 2 | 59.9 min | same |
+| Midpoint postlock (2 rows, `fan=4`) | 2 × (intervention-battery + probe-slate) | 3.1 min | same |
+
+Runner code: [`scripts/mesa-phase6-shard.mjs`](../../scripts/mesa-phase6-shard.mjs)
+(single-shard wrapper), [`scripts/mesa-phase6-probe-concurrent.mjs`](../../scripts/mesa-phase6-probe-concurrent.mjs)
+(concurrent lock/probe orchestrator), [`scripts/mesa-phase6-postlock.mjs`](../../scripts/mesa-phase6-postlock.mjs)
+(intervention-battery + probe-slate orchestrator with decisive-metric parser
+and 4-branch verdict logic), shared library at
+[`scripts/lib/mesa-phase6-rows.mjs`](../../scripts/lib/mesa-phase6-rows.mjs)
+pinning the 6 spec rows + 2 midpoint rows + 2 spec-canonical probe rows.
+
+Spec status: **staged, 2026-05-16; empirical run 2026-05-29; closed
+2026-05-29.** The no-op and reward-rescale definitions, acceptance gates,
+capped-probe discipline, full-lock commands, read-back paths, and branch
+table were fixed before empirical execution. The trainer flags needed to
+run the controls were present with default-preserving semantics. Branch 3
+decision was fired by `mesa-phase6-postlock.mjs` against the per-spec
+`basin-position` ▸ `mean_old_basin_preference` channel.
