@@ -19,6 +19,73 @@ theme-matching.
 > lives in
 > `internal/feedback/Human/REDDIT_ImOutOfIceCream_UNIT-DISTANCE.md`.
 
+## Cross-Substrate Generality Failure Map
+
+> The promoted companion to §1 "What Transfers": **where the projection /
+> signature-control operator hit a boundary.** Collecting the failures by
+> *mode* is the design guardrail this whole doc exists for - "Sundog works
+> across substrates" is only as honest as its catalogued failure boundaries.
+> Each entry is its own failure mode; the recurring lesson (§6.3) is that a
+> sharp control-regime-2 needs a **body that genuinely resists its shadow**,
+> and the bullets below are the distinct ways that requirement can fail.
+> Bidirectional: each lane ledger links back here.
+
+- **Navier-Stokes C1 - MARGINAL (near-invertible projection).** 2D Kolmogorov
+  at moderate Grashof is low-dimensional, so the low-Fourier shadow `Phi_K`
+  nearly reconstructs the body (read-off `FVE ~ 0.99` in both physical norms).
+  State-rigidity and control-rigidity nearly coincide -> the regime-2
+  separation is strictly non-vacuous but **physically marginal**; the only
+  under-determined content is dynamically-negligible dissipation-range noise
+  (§6.3 row). The non-marginal regime needs high `G` / 3D (numerical wall).
+  -> [`../SUNDOG_V_NAVIERSTOKES.md`](../SUNDOG_V_NAVIERSTOKES.md),
+  [`../proof/PDE_C1_NONMARGINAL_PROBE.md`](../proof/PDE_C1_NONMARGINAL_PROBE.md).
+- **Navier-Stokes C2 (Sabra shell) - NUMERICAL WALL (shadow unmeasurable with
+  current tooling).** Fixed-dt RK4 blows up integrating through the intermittent
+  dissipation bursts the task is about (four-obstruction catalogue); the
+  matched-budget comparison never ran. Not a result - a *tooling* boundary.
+  Resume needs an adaptive/stiff integrator (the shared C1-high-G / C2 build).
+  -> [`../proof/PDE_C2_CELLSET_SABRA_v1.md`](../proof/PDE_C2_CELLSET_SABRA_v1.md).
+- **Yang-Mills (SU(2) 3D, Phase 2) - BOUNDED NULL (shadow carries no separating
+  structure on the cell).** Four consecutive `YM-P2-NEG-A` (bare / smeared /
+  correlator signatures x held-out coupling, plus spatial variance) all within
+  +-0.04 of chance: the gauge-invariant signature does not rank the coupling
+  here. Bounded cell-local null, lane PAUSED; external-review packet drafted.
+  -> [`../SUNDOG_V_YANG_MILLS.md`](../SUNDOG_V_YANG_MILLS.md),
+  [`../yang-mills/receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md`](../yang-mills/receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md).
+- **Riemann (Path i) - VACUOUS (rigidity trivially satisfied).** The
+  `Z2`-descent is admitted but vacuous on gap-only features: the maximum
+  reflection residual is identity-zero, so the projection's rigidity check
+  passes *for the wrong reason* and carries no information. Escalation = an
+  `S3`-triple bridge (Probe 01b) or external sanity check.
+  -> [`../SUNDOG_V_RIEMANN.md`](../SUNDOG_V_RIEMANN.md).
+- **P-vs-NP - COST-BOUNDED (the shadow works, but the operating envelope blocks
+  promotion).** Bounded alignment-verification: v0-v5 are all named quarantines
+  - safety repaired (0 false accepts since v2, 0 spoof since v1) but the **cost
+  gate** never clears (cap not_estimated; rollout ratio / absolute wall-time
+  fail). The projection is control-useful yet bounded out of promotion by its
+  cost envelope. -> [`../SUNDOG_V_P_V_NP.md`](../SUNDOG_V_P_V_NP.md).
+- **ARC-AGI - CONVERGENCE-TO-NULL (needs a reframing, not another sweep).**
+  Phase 3 converged deterministically across three task-hardness receipts;
+  Branch C selected, lane PAUSED. Reopening requires a different framing
+  (stochastic per-task, Pass-C threshold revision, or a new framing) - not more
+  cells of the same shape. -> [`../SUNDOG_V_ARC.md`](../SUNDOG_V_ARC.md).
+- **Isotrophy - CONDITIONAL (rigid only after naming the held-fixed
+  coordinate).** The velocity-fraction shadow ranks stability only *within*
+  fixed `m3` strata; it fails as a mass-marginal held-out predictor. Already
+  documented at §7.2; listed here for the map.
+- **Threebody - DEFLATIONARY (the projection is simpler than first claimed).**
+  Phase 18 reduced "guarded TRACK / tidal sensing" to a radius-gated inward
+  reflex - an over-attribution corrected, not a separation. Already at §7.3.
+
+**Failure-mode taxonomy.** These are eight distinct ways a cross-substrate
+generalization fails: *marginal* (body doesn't resist), *numerical*
+(shadow unmeasurable), *bounded-null* (shadow non-separating), *vacuous*
+(rigidity trivial), *cost-bounded* (envelope blocks promotion),
+*convergence-to-null* (needs reframing), *conditional* (rigid only after
+conditioning), *deflationary* (over-attribution). Cataloguing the mode - not
+just the negative - is what turns each failure into a design constraint for
+the next substrate.
+
 ## 1. What Transfers
 
 Mesa and Geometry both converged on field-shaped structure:
@@ -250,10 +317,35 @@ discarded.
 | Geometry / HaloSim | full atmospheric optics | small set of halo generators / canonical implied circles |
 | Threebody | 18-dim full state | radius-gated inward reflex in the mapped near-escape pocket |
 | Isotrophy | `S3` symmetry orbit of a 3-body choreography; supplementary-B stability catalog | residual `Z2` generators surviving `S3 -> Z2` mass perturbation; Floquet velocity-fraction conditioned on `m3` |
+| Navier-Stokes (C1) | 2D Kolmogorov attractor state (finite-Galerkin, 440 real DOF) | low-Fourier signature `Phi_K` (K=3, 18-dim) - **but the body barely resists**: read-off `FVE(body\|shadow) ~ 0.997` (energy) / `0.993` (enstrophy), a near-invertible projection, so the regime-2 separation is **marginal**; genuine under-determination (`R^2 ~ 0.71` per-DOF) sits only in physically-negligible dissipation-range modes |
 
 The columns are the same operator. The substrate-specificity in row
 3-5 is what bounds the operating envelope; the cross-substrate
 recurrence in rows 1-2 is what tells us the operator is real.
+
+**Body-resistance is the load-bearing property (2026-05-29, NSE
+addition).** The Navier-Stokes (C1) row is the table's *marginal
+boundary*, and it sharpens what "bounds the operating envelope" means
+for the **control** reading of the operator (Postulate-1: a
+control-rigid shadow of a state-resistant body). Where the body barely
+resists the shadow - where the projection is near-invertible, so the
+body can be reconstructed from the shadow (NSE-C1: `FVE ~ 0.99` in both
+physical norms) - state-rigidity and control-rigidity nearly coincide
+and the regime-2 separation collapses toward vacuity (strictly
+non-vacuous, but physically marginal). So a *sharp* control-regime-2
+needs the body to genuinely resist: **cap-set** (exponential body) and
+**Mesa** (a `5D net.7` subspace that resisted all further
+decomposition) are sharp; **2D NSE at moderate Grashof is marginal**
+because its attractor is low-dimensional, so the low-mode shadow nearly
+reconstructs the body, and the only residual is dynamically-negligible
+dissipation-range noise. The non-marginal NSE regime (high `G` / 3D,
+where physically-relevant content is genuinely under-determined) sits
+behind the same numerical wall as the C2 shell model and needs the
+adaptive integrator. Net: C1 anchors the *marginal* end of the
+projection-rigidity spectrum; the sharp regime-2 lives in the
+resistant-body substrates the portfolio already owns. Measured detail:
+`sundog/docs/proof/PDE_C1_NONMARGINAL_PROBE.md` and
+`PDE_C1_PROPOSITION.md`.
 
 ### 6.4 The math-or-Buddha epistemic stance
 

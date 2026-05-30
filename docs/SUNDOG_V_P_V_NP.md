@@ -1,5 +1,10 @@
 # Sundog vs. P-vs-NP Verification
 
+> **Cross-substrate failure-map entry:** COST-BOUNDED (the verification shadow
+> works, but the operating-cost envelope blocks promotion) — see
+> [`threebody/CROSS_SUBSTRATE_NOTES.md`](threebody/CROSS_SUBSTRATE_NOTES.md)
+> "Cross-Substrate Generality Failure Map".
+
 Working hook:
 
 > Safe policies may be hard to find, but their shadows may be easier to verify.
