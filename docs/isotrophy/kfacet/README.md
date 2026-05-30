@@ -24,3 +24,4 @@ under the internal anniversary catch-all.
 - v0.10: [J-T trend form](kfacet_v10a_jt_trend_form.md), [held-out predictor form](kfacet_v10b_monotone_vf_heldout_predictor_form.md)
 - v0.11: [m3-conditional vf rank form](kfacet_v11_m3_conditional_vf_rank_form.md)
 - v0.12: [external frozen transfer draft](kfacet_v12_external_frozen_transfer_form.md)
+- v0.13: [external target search draft](kfacet_v13_external_target_search_form.md)
