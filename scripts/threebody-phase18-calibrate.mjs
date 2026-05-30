@@ -24,7 +24,7 @@ function harnessArgs(m) {
     "--phase", `phase18-radius-control-calibrate-m${tag(m)}`,
     "--out", `${OUT_ROOT}-m${tag(m)}`,
     "--regimes", "near_escape",
-    "--modes", "track_sensor_accel_guarded,track_radius_inward",
+    "--modes", "off,track_sensor_accel_guarded,track_radius_inward",
     "--mass-ratios", "0.01,0.3,1",
     "--timesteps", "0.004",
     "--radius-scales", "1.025,1.05,1.075",

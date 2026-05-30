@@ -46,13 +46,23 @@ bounded. Per-mode duty (totalDeltaV):
 (E/N/NW), magnitude = m, and is **gated off** when `radius < trackGuardMinRadius`.
 Correct by construction.
 
-## Calibration (pending)
+## Calibration — matched-m = 0.4 (recorded before the measurement lock)
 
-```powershell
-npm run threebody:phase18:calibrate    # favorable pocket; selects matched-m by ΔV, blind to survival
-```
+`npm run threebody:phase18:calibrate` — favorable-pocket mean `totalDeltaV`,
+selected on ΔV **blind to survival**. guarded ΔV is identical across all four
+runs (cross-run spread 0), confirming magnitude-independence.
 
-<!-- matched-m + ΔV table to be recorded HERE before the measurement lock -->
+| inward m | mean ΔV | ratio vs guarded (3.727) | \|Δ\| |
+|--:|--:|--:|--:|
+| 0.1 | 0.555 | 0.149 | 3.173 |
+| 0.2 | 1.461 | 0.392 | 2.266 |
+| 0.3 | 2.697 | 0.724 | 1.030 |
+| **0.4** | **3.909** | **1.049** | **0.181** (min) |
+
+**matched-m = 0.4**, ΔV ratio **1.049** — a within-5% duty match. (matched-m sits
+at the top of the locked grid; linear interpolation puts the exact ΔV match at
+m≈0.385, but the locked `argmin` over `{0.1,0.2,0.3,0.4}` selects 0.4. The full
+m-sweep survival is reported as a sensitivity curve in the readback.)
 
 ## Measurement Lock + Readback (pending)
 
