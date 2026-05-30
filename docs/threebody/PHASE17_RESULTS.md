@@ -65,6 +65,9 @@ Operator go 2026-05-29. Running as 12 shards in 4 concurrent waves of 3
 | 1 | mu1-v1p1 | 144 | 7.6 | 55 | 5/15 | 50·93·1 | 1 |
 | 2 | mu0p3-v1p1 | 144 | 7.2 | 55 | 3/15 | 31·109·4 | 1 |
 | 3 | mu0p01-v1p1 | 144 | 5.7 | 55 | 3/15 | 20·124·0 | 1 |
+| 4 | mu1-v1p15 | 144 | 5.4 | 55 | 6/15 | 36·108·0 | 2 |
+| 5 | mu0p3-v1p15 | 144 | 5.2 | 55 | 5/15 | 26·117·1 | 2 |
+| 6 | mu0p01-v1p15 | 144 | 3.8 | 55 | 3/15 | 18·126·0 | 2 |
 
 **Frozen-slate check:** wave-1 candidate rows + outcomes are **identical to the
 Phase 15C wave-1 shards** (15C: mu1 5/15·50·93·1; mu0.3 3/15·31·109·4; mu0.01
