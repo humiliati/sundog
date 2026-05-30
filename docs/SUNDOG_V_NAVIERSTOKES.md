@@ -519,6 +519,24 @@ are added — *structural, not a truncation artifact*. Flips the proposition's
 refinement tag OPEN → DEMONSTRATED on the **N axis** (one step; N=32 trend
 registered). K-window / enstrophy / projection sweeps remain open.
 
+**C1 robustness wave — sweeps 2 & 3 (K-window + enstrophy) PASSED
+2026-05-29.** New presets `lock_v5_k2` / `lock_v5_k4` (signature band K only)
+and `lock_v5_enstrophy` (low-band ENSTROPHY `Z_low` trigger, signature
+unchanged; added a `low_enstrophy` observable + `objective_observable` config
+field). **K-window: regime-2 holds across K∈{2,3,4}** — (i) twin CERTIFIED at
+all three (849k / 694k / 1.14M pairs); (ii) paired POSITIVE (`D_witness`
+0.050 / 0.037 / 0.035, all <0.10, all ≈ candidate rate); (iii) mz SLAVED at
+K=2 (R²=0.999, controls clean). **Pre-registration prediction falsified
+(recorded honestly):** K=4 was predicted to defer on coverage — it did NOT
+(full coverage, 1.14M pairs); the v2/v4 K=4 coverage failure was a **bin**-
+adjudicator property, not twin-state (ε_K-balls are coverage-robust). No
+upper bracket reached (twins abundant at K=4). **Enstrophy: clause (ii)
+POSITIVE under `Z_low`** (`D_witness=0.035` vs energy 0.037) — control-
+sufficiency robust to the physical observable. **Three robustness axes now
+DEMONSTRATED: N (16→24), K (2,3,4), objective (energy+enstrophy).** Proposition
+ledger updated. Remaining OPEN: alternate projection, N=32 trend, `m_det`
+upper bracket (coverage-free `R²(Q_K|Φ_K)` across K).
+
 ## Claim Boundary
 
 This document does **not** claim that Sundog has produced original

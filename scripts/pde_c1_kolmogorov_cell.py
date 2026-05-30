@@ -47,6 +47,8 @@ VERDICT_BEARING_PRESETS = {
     "lock_v5_n48",
     "lock_v5_k2",
     "lock_v5_k4",
+    "lock_v5_k5",
+    "lock_v5_k6",
     "lock_v5_enstrophy",
     "lock_v6",
     "lock_v7_g200",
@@ -114,6 +116,8 @@ def parse_args() -> argparse.Namespace:
             "lock_v5_n48",
             "lock_v5_k2",
             "lock_v5_k4",
+            "lock_v5_k5",
+            "lock_v5_k6",
             "lock_v5_enstrophy",
             "lock_v6",
             "lock_v7_g200",
@@ -123,7 +127,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--adjudicator",
-        choices=["bin", "knn", "knn-sweep", "twin-state", "mz-budget"],
+        choices=["bin", "knn", "knn-sweep", "twin-state", "mz-budget", "state-recon"],
         default="bin",
         help="Fiber-locality adjudicator: hard binning (default), kNN/disintegration, "
         "knn-sweep (convergence check over k), or twin-state support certificate.",
@@ -285,18 +289,19 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         k_signature = 3
         grid_size = 48
         n_modes = 24
-    elif args.preset in ("lock_v5_k2", "lock_v5_k4"):
-        # Robustness wave, K-window: identical to lock_v5 except the signature
-        # band K (observation-choice axis). k2 is the coarser lower-bracket
-        # test; k4 is the finer upper probe (expected coverage-limited per the
-        # v2/v4 curse-of-dimensionality finding that motivated K=3). Spec:
+    elif args.preset in ("lock_v5_k2", "lock_v5_k4", "lock_v5_k5", "lock_v5_k6"):
+        # Robustness wave, K-window + m_det bracket: identical to lock_v5 except
+        # the signature band K (observation-choice axis). k2 = coarser lower
+        # test; k4/k5/k6 = finer, used with the state-recon adjudicator to
+        # measure where the high modes become signature-determined (the
+        # coverage-free m_det / inertial-manifold upper bracket). Spec:
         # docs/proof/PDE_C1_ROBUSTNESS_WAVE.md.
         burnin_steps = 100_000
         sample_count = 50_000
         kf = 2
         grashof = 200.0
         e_max_burnin_fraction = 0.25
-        k_signature = 2 if args.preset == "lock_v5_k2" else 4
+        k_signature = int(args.preset.split("_k")[-1])
     elif args.preset == "lock_v5_enstrophy":
         # Robustness wave, objective axis: identical to lock_v5 except the
         # safety trigger watches low-band ENSTROPHY (Sum_low |omega|^2) instead
@@ -641,7 +646,7 @@ def run_cell(cfg: RunConfig) -> dict:
     sample_energy = np.empty(cfg.sample_count, dtype=np.float64)
     sample_high_modes = (
         np.empty((cfg.sample_count, 2 * len(stepper.high_indices)), dtype=np.float64)
-        if cfg.adjudicator == "twin-state"
+        if cfg.adjudicator in ("twin-state", "state-recon")
         else None
     )
     sample_mz = (
@@ -722,6 +727,10 @@ def run_cell(cfg: RunConfig) -> dict:
     elif cfg.adjudicator == "mz-budget":
         result, bin_rows, sample_rows, _ = aggregate_mz_budget(
             sample_signatures, sample_mz, actions, epsilon_k, cfg
+        )
+    elif cfg.adjudicator == "state-recon":
+        result, bin_rows, sample_rows, _ = aggregate_state_recon(
+            sample_signatures, sample_high_modes, cfg
         )
     else:
         bin_rows, sample_rows = aggregate_bins(sample_signatures, sample_energy, actions, sig_min, h_k, cfg)
@@ -1669,6 +1678,87 @@ def aggregate_mz_budget(
     return result, [], sample_rows, []
 
 
+def aggregate_state_recon(
+    sample_signatures: np.ndarray, sample_high_modes: np.ndarray | None, cfg: RunConfig
+) -> tuple[dict, list, list, list]:
+    """State-reconstruction / m_det upper bracket (coverage-free).
+
+    Does the signature `Phi_K` determine the unresolved high-mode content
+    `Q_K`? Held-out R^2 of the high-band energy `E_high = Sum_high |.|^2` and a
+    variance-weighted FVE over the top-M high-mode components, predicted from
+    `Phi_K` with the validated HGB estimator (block split, no temporal
+    leakage). As K grows toward the determining / inertial-manifold threshold
+    these -> 1; below it they are < 1 (consistent with twin-state
+    non-injectivity). Unlike twin-state this needs no signature-near pairs, so
+    it is not coverage-limited at large K. Spec: PDE_C1_ROBUSTNESS_WAVE.md.
+    """
+    from sklearn.ensemble import HistGradientBoostingRegressor
+
+    if sample_high_modes is None:
+        raise ValueError("state-recon adjudicator requires captured high-mode vectors")
+    n = int(sample_signatures.shape[0])
+    q = sample_high_modes
+    e_high = np.sum(q * q, axis=1)
+    ntr = max(2, int(0.7 * n))
+    x_tr, x_te = sample_signatures[:ntr], sample_signatures[ntr:]
+
+    def r2(y: np.ndarray) -> float:
+        y_tr, y_te = y[:ntr], y[ntr:]
+        if y_te.size < 2 or float(np.var(y_te)) <= 0.0:
+            return float("nan")
+        mdl = HistGradientBoostingRegressor(max_iter=200, random_state=0).fit(x_tr, y_tr)
+        p = mdl.predict(x_te)
+        return float(1.0 - np.sum((y_te - p) ** 2) / (np.sum((y_te - np.mean(y_te)) ** 2) + 1e-300))
+
+    rng = np.random.default_rng(cfg.random_seed + 1)
+    r2_e_high = r2(e_high)
+    r2_e_high_perm = r2(e_high[rng.permutation(n)])
+
+    # Variance-weighted FVE over the top-M high-mode components (the
+    # lowest-wavenumber unresolved modes, most state-relevant).
+    m_top = min(16, q.shape[1])
+    top = np.argsort(q.var(axis=0))[::-1][:m_top]
+    ss_res = 0.0
+    ss_tot = 0.0
+    for j in top:
+        y = q[:, j]
+        y_tr, y_te = y[:ntr], y[ntr:]
+        if float(np.var(y_te)) <= 0.0:
+            continue
+        mdl = HistGradientBoostingRegressor(max_iter=150, random_state=0).fit(x_tr, y_tr)
+        p = mdl.predict(x_te)
+        ss_res += float(np.sum((y_te - p) ** 2))
+        ss_tot += float(np.sum((y_te - np.mean(y_te)) ** 2))
+    fve_top = float(1.0 - ss_res / (ss_tot + 1e-300)) if ss_tot > 0 else float("nan")
+
+    interpretable = cfg.preset in VERDICT_BEARING_PRESETS
+    estimator_ok = abs(r2_e_high_perm) < 0.10
+    if not interpretable:
+        verdict = "SMOKE_ONLY"
+    elif not estimator_ok:
+        verdict = "STATE_RECON_ESTIMATOR_INVALID"
+    else:
+        verdict = "STATE_RECON_MEASURED"
+
+    result = {
+        "verdict": verdict,
+        "verdict_label": "high_mode_reconstruction_from_signature",
+        "interpretable": interpretable and estimator_ok,
+        "adjudicator": "state-recon",
+        "n_samples": n,
+        "k_signature": cfg.k_signature,
+        "signature_dimension": cfg.signature_dimension,
+        "high_mode_dimension": int(q.shape[1]),
+        "r2_E_high_from_signature": r2_e_high,
+        "r2_E_high_perm_control": r2_e_high_perm,
+        "fve_top_high_modes": fve_top,
+        "fve_top_m": m_top,
+        "train_count": ntr,
+        "test_count": n - ntr,
+    }
+    return result, [], [], []
+
+
 def bin_key(idx: Iterable[int]) -> str:
     return ";".join(str(int(x)) for x in idx)
 
@@ -1724,6 +1814,9 @@ def write_receipt(path: Path, manifest: dict) -> None:
         return
     if c.get("adjudicator") == "mz-budget":
         write_receipt_mz_budget(path, manifest)
+        return
+    if c.get("adjudicator") == "state-recon":
+        write_receipt_state_recon(path, manifest)
         return
     lines = [
         "# PDE C1 Kolmogorov v0 Receipt",
@@ -2081,6 +2174,49 @@ def write_receipt_mz_budget(path: Path, manifest: dict) -> None:
             "(Level 2). Explanatory; C1 unchanged."
         )
     lines.extend(["", "## Files", "", "- `manifest.json`", "- `mz-budget-samples.csv`"])
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def write_receipt_state_recon(path: Path, manifest: dict) -> None:
+    r = manifest["result"]
+    c = manifest["config"]
+    rr = r.get("r2_E_high_from_signature", 0.0)
+    lines = [
+        "# PDE C1 State-Reconstruction / m_det Bracket Receipt",
+        "",
+        f"**Status:** {r['verdict']}  (m_det bracket measurement, not C1 promotion)",
+        f"**Preset:** `{c['preset']}`  **K:** `{r.get('k_signature')}`  "
+        f"(signature dim `{r.get('signature_dimension')}`, high-mode dim `{r.get('high_mode_dimension')}`)",
+        "",
+        "## Does Phi_K determine the unresolved high modes Q_K?",
+        "",
+        f"- **`R²(E_high | Phi_K)`** (high-band energy predictability): `{rr:.4g}`",
+        f"- `R²(E_high permuted)` control (want < 0.10): `{r.get('r2_E_high_perm_control', 0.0):.4g}`",
+        f"- `FVE(top-{r.get('fve_top_m')} high modes | Phi_K)` (variance explained): "
+        f"`{r.get('fve_top_high_modes', 0.0):.4g}`",
+        f"- train / test: `{r.get('train_count', 0)}` / `{r.get('test_count', 0)}`",
+        "",
+        "## Reading",
+        "",
+    ]
+    if r["verdict"] == "SMOKE_ONLY":
+        lines.append("Smoke-only preset; no bracket reading filed.")
+    elif r["verdict"] == "STATE_RECON_ESTIMATOR_INVALID":
+        lines.append("Permutation control failed (>= 0.10); the regression is unreliable here.")
+    elif rr >= 0.90:
+        lines.append(
+            f"At K={r.get('k_signature')} the signature **determines** the unresolved energy "
+            f"(`R² = {rr:.3g} >= 0.90`): at/above the inertial-manifold / determining bracket — "
+            "state-reconstruction is effectively recovered here."
+        )
+    else:
+        lines.append(
+            f"At K={r.get('k_signature')} the signature does **not** determine the unresolved "
+            f"energy (`R² = {rr:.3g} < 0.90`): below the determining bracket — consistent with "
+            "twin-state non-injectivity. The bracket `K*` is the smallest K where this crosses ~1 "
+            "(see the cross-K table in the robustness-wave doc)."
+        )
+    lines.extend(["", "## Files", "", "- `manifest.json`"])
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 

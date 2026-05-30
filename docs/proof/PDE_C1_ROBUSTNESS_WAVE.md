@@ -109,12 +109,63 @@ objective-free and identical; the new content is the **paired fiber-constancy
 `PAIRED_FIBER_CONSTANCY_POSITIVE` under enstrophy → clause (ii) is robust to
 the physical observable, not an artifact of the energy proxy.
 
-## Sweeps 4–5 (registered, not yet run)
+### Sweeps 2 & 3 result (2026-05-29) — both PASSED
+
+**K-window (energy, G=200).** Regime-2 holds across **K ∈ {2,3,4}**:
+
+| K (d) | (i) twin | (ii) paired `D_witness`/`D_cand` | (iii) mz `R²` (controls) |
+| --- | --- | --- | --- |
+| 2 (8) | CERTIFIED, 849,229 | POSITIVE 0.0500 / 0.0375 | SLAVED 0.9989 (g 0.9994, perm −0.0004) |
+| 3 (18) baseline | CERTIFIED, 693,795 | POSITIVE 0.0367 / 0.0319 | SLAVED 0.998 |
+| 4 (32) | CERTIFIED, 1,140,366 | POSITIVE 0.0348 / 0.0324 | — |
+
+**Pre-registration prediction falsified (honestly recorded):** K=4 was
+predicted to defer on coverage. It did **not** — full coverage
+(`candidate_sample_fraction = 1.0`), 1.14M witness pairs, clean POSITIVE.
+The original K=4 coverage failure (v2/v4) was a property of the **bin**
+adjudicator (hard cells); the twin-state's `ε_K`-ball neighbourhoods are
+coverage-robust, so K=4 adjudicates cleanly. The regime-2 window is at least
+`K ∈ {2,3,4}` (no upper bracket reached — twins still abundant at K=4).
+
+**Enstrophy objective (`Z_low` trigger, K=3).** Clause (i) CERTIFIED
+(identical 693,795 — objective-free); **clause (ii)
+`PAIRED_FIBER_CONSTANCY_POSITIVE`, `D_witness = 0.0350` / `D_cand = 0.0315`**.
+Control-sufficiency is robust to the physical observable, not an artifact of
+the energy proxy. Results: `results/proof/c1-k2-twin|c1-k2-mz|c1-k4-twin|c1-enstrophy-twin/`.
+
+**Net:** every `D_witness` clusters 0.035–0.05 (all < 0.10, all ≈ candidate
+rate) across K and objective — the boundary-layer-not-`Q_K` disposition is
+itself robust. Three axes demonstrated: **N** (16→24), **K** (2,3,4),
+**objective** (energy + enstrophy).
+
+## Sweep 4 — `m_det` upper bracket (state-recon, running)
+
+The clean, **coverage-free** state-determination measurement that twin-state
+cannot give (twin-state needs signature-near pairs; this is a regression).
+New `state-recon` adjudicator: does the signature `Φ_K` determine the
+unresolved high modes `Q_K`? Held-out R² (the validated HGB estimator, block
+split) of:
+
+- **`R²(E_high | Φ_K)`** — the high-band energy `E_high = Σ_high|·|²` (primary);
+- **`FVE(top-16 high modes | Φ_K)`** — variance-weighted reconstruction of the
+  most state-relevant (lowest-wavenumber) unresolved components;
+- **`R²(E_high permuted)`** — negative control, must be `< 0.10` (else
+  `STATE_RECON_ESTIMATOR_INVALID`).
+
+Run across **K ∈ {3,4,5,6}** (`lock_v5` / `lock_v5_k4/k5/k6`, grid 32). As K
+grows toward the determining / inertial-manifold threshold, `R²(E_high|Φ_K)`
+rises toward 1; **the bracket `K*`** is the smallest K where it crosses ~0.90
+(the attractor becomes a graph over `Φ_K` — state-determined). At K=3 it must
+be `< 1` (twin-state non-injectivity is its complement). If the trend rises
+but does not reach ~1 within the grid-32 range (`K ≲ 10` by dealiasing), that
+*brackets `m_det` above the tested range* and confirms determination is
+approached — the honest outcome if `m_det` exceeds the resolution. This flips
+the proposition's `K*` tag from *registered* to *measured*.
+
+## Sweeps 5+ (registered, not yet run)
 
 - **N=32** (grid 64) — a second N point for a convergence *trend*. ~1.5 h.
 - **Alternate projection** — a different 9-mode low subset: "not a lucky basis."
-- **`m_det` upper bracket** — `R²(Q_K|Φ_K)` across K (coverage-free), to
-  measure where the high modes become signature-slaved (state-determination).
 
 ## Cross-references
 
