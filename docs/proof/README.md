@@ -221,8 +221,13 @@ that claim provably fails.
   persist near-identically at N=24 — (i) twin CERTIFIED 689k pairs, (ii)
   paired POSITIVE `D_witness 0.0377` / `D_candidate 0.0319` unchanged, (iii)
   SLAVED `R²=0.998` (controls clean). Separation does not degrade with 2.5×
-  more high modes → structural, not truncation-artifact. Flips the refinement
-  tag OPEN→DEMONSTRATED on the N axis; K-window / enstrophy / projection open.
+  more high modes → structural, not truncation-artifact. **Sweeps 2 & 3
+  (K-window + enstrophy) also PASSED:** regime-2 holds across K∈{2,3,4} (K=4
+  did *not* defer on coverage — falsified pre-reg prediction, recorded; the
+  old K=4 failure was bin-adjudicator-specific) and clause (ii) holds under a
+  `Z_low` enstrophy trigger (`D_witness=0.035`). **Three robustness axes
+  DEMONSTRATED — N (16→24), K (2,3,4), objective (energy+enstrophy).**
+  Remaining open: alternate projection, N=32 trend, `m_det` upper bracket.
 - [`PDE_C1_SEPARATION_STATEMENT.md`](PDE_C1_SEPARATION_STATEMENT.md)
   — **desk-first hardening, part (b): reviewer-facing statement**
   (2026-05-29). Consolidates the Postulate-1 reading note into one
