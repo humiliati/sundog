@@ -1,0 +1,179 @@
+{
+  "startedAt": "2026-05-30T08:15:53.959755+00:00",
+  "script": "scripts/pde_c1_kolmogorov_cell.py",
+  "spec": "docs/proof/PDE_C1_CELLSET_KOLMOGOROV.md",
+  "protocol": "docs/proof/PDE_C1_FIBER_PROTOCOL.md",
+  "config": {
+    "preset": "lock_v5_k4",
+    "grid_size": 32,
+    "n_modes": 16,
+    "k_signature": 4,
+    "forcing_wavenumber": 2,
+    "grashof": 200.0,
+    "forcing_amplitude": 1.0,
+    "viscosity": 0.07071067811865475,
+    "dt": 0.01,
+    "burnin_steps": 100000,
+    "sample_count": 50000,
+    "sample_interval_steps": 50,
+    "lookahead_steps": 500,
+    "n_min": 30,
+    "delta_action": 0.1,
+    "s_pos": 0.5,
+    "delta_proxy_min": 0.01,
+    "e_max_burnin_fraction": 0.25,
+    "random_seed": 20260528,
+    "integrator": "pseudo_spectral_vorticity_semi_implicit_euler",
+    "signature_dimension": 32,
+    "action_tiebreak": "no_op",
+    "adjudicator": "twin-state",
+    "k_neighbors": 30,
+    "delta_incompat": 0.01,
+    "twin_k_neighbors": 50,
+    "twin_delta_high_fraction": 0.05,
+    "twin_high_norm_floor": 1e-06,
+    "twin_min_witness_fraction": 0.01,
+    "twin_min_unique_pairs": 100,
+    "objective": "overshoot-burnin",
+    "objective_quantile": 0.7,
+    "calibration_sample_count": 0,
+    "calibration_gap_steps": 0,
+    "objective_observable": "energy"
+  },
+  "environment": {
+    "python": "3.14.4 (tags/v3.14.4:23116f9, Apr  7 2026, 14:10:54) [MSC v.1944 64 bit (AMD64)]",
+    "numpy": "2.4.4",
+    "platform": "win32",
+    "cwd": "C:\\Users\\hughe\\Dev\\sundog"
+  },
+  "result": {
+    "verdict": "TWIN_STATE_CERTIFIED",
+    "verdict_label": "signature_near_high_mode_separated_twins",
+    "interpretable": true,
+    "paired_fiber_verdict": "PAIRED_FIBER_CONSTANCY_POSITIVE",
+    "witness_action_disagree_unique": 39648,
+    "witness_action_disagree_directed": 75206,
+    "witness_action_disagree_fraction_unique": 0.0347677850795271,
+    "witness_action_disagree_fraction_directed": 0.03418280523900601,
+    "candidate_action_disagree_unique": 41014,
+    "candidate_action_disagree_fraction_unique": 0.03241419098876955,
+    "paired_fiber_delta_action": 0.1,
+    "n_samples": 50000,
+    "k_neighbors_effective": 50,
+    "epsilon_k_radius_threshold": 0.06260360939751715,
+    "delta_h": 0.0034686711576500575,
+    "twin_delta_high_fraction": 0.05,
+    "twin_high_norm_floor": 1e-06,
+    "twin_min_witness_fraction": 0.01,
+    "twin_min_unique_pairs": 100,
+    "candidate_sample_count": 50000,
+    "candidate_sample_fraction": 1.0,
+    "candidate_pair_count_directed": 2450000,
+    "candidate_pair_count_unique": 1265310,
+    "witness_sample_count": 50000,
+    "witness_sample_fraction": 1.0,
+    "witness_fraction_of_candidates": 1.0,
+    "witness_pair_count_directed": 2200112,
+    "witness_pair_count_unique": 1140366,
+    "max_candidate_high_distance": 0.01572164083901825,
+    "witness_high_distance_p50": 0.007499976256595461,
+    "witness_high_distance_p95": 0.01143325335527154,
+    "witness_signature_distance_p50": 0.03379642756001111,
+    "witness_signature_distance_p95": 0.04631758095659665,
+    "high_norm_median": 0.06937342315300114,
+    "high_norm_min": 0.06420875502840015,
+    "high_norm_max": 0.07816935662671579,
+    "no_op_count": 34993,
+    "damp_low_band_count": 15007,
+    "damp_fraction": 0.30014,
+    "s_pos": 0.5,
+    "high_norm_p05": 0.06453505614116127,
+    "high_norm_p50": 0.06937342315300114,
+    "high_norm_p95": 0.07765676077152839,
+    "adjudicator": "twin-state",
+    "objective": "overshoot-burnin",
+    "objective_quantile": null,
+    "calibration_sample_count": 0,
+    "calibration_damp_fraction": NaN,
+    "e_max": 0.7838423819193794,
+    "epsilon_k": 0.06260360939751715,
+    "h_k": 0.011066859182934562,
+    "burnin_energy_min": 0.7337716359276496,
+    "burnin_energy_max": 3.126298938277075,
+    "burnin_energy_mean": 0.8582500353635791,
+    "sample_energy_min": 0.7648763505777608,
+    "sample_energy_max": 0.7842894384744158,
+    "sample_energy_mean": 0.7746589957943747,
+    "low_modes": [
+      {
+        "kx": 0,
+        "ky": 1
+      },
+      {
+        "kx": 1,
+        "ky": 0
+      },
+      {
+        "kx": 1,
+        "ky": 1
+      },
+      {
+        "kx": -1,
+        "ky": 1
+      },
+      {
+        "kx": 0,
+        "ky": 2
+      },
+      {
+        "kx": 2,
+        "ky": 0
+      },
+      {
+        "kx": 1,
+        "ky": 2
+      },
+      {
+        "kx": 2,
+        "ky": 1
+      },
+      {
+        "kx": -2,
+        "ky": 1
+      },
+      {
+        "kx": -1,
+        "ky": 2
+      },
+      {
+        "kx": 2,
+        "ky": 2
+      },
+      {
+        "kx": -2,
+        "ky": 2
+      },
+      {
+        "kx": 0,
+        "ky": 3
+      },
+      {
+        "kx": 3,
+        "ky": 0
+      },
+      {
+        "kx": 1,
+        "ky": 3
+      },
+      {
+        "kx": 3,
+        "ky": 1
+      }
+    ],
+    "high_mode_count": 204,
+    "high_mode_dimension": 408,
+    "elapsed_seconds": 2479.5141747999587,
+    "total_steps": 2600450,
+    "steps_per_second": 1048.7739997459394
+  }
+}

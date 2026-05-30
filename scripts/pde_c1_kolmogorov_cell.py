@@ -45,6 +45,9 @@ VERDICT_BEARING_PRESETS = {
     "lock_v5",
     "fallback_v5",
     "lock_v5_n48",
+    "lock_v5_k2",
+    "lock_v5_k4",
+    "lock_v5_enstrophy",
     "lock_v6",
     "lock_v7_g200",
     "lock_v7_g300",
@@ -87,6 +90,7 @@ class RunConfig:
     objective_quantile: float
     calibration_sample_count: int
     calibration_gap_steps: int
+    objective_observable: str = "energy"
 
 
 def parse_args() -> argparse.Namespace:
@@ -108,6 +112,9 @@ def parse_args() -> argparse.Namespace:
             "lock_v5",
             "fallback_v5",
             "lock_v5_n48",
+            "lock_v5_k2",
+            "lock_v5_k4",
+            "lock_v5_enstrophy",
             "lock_v6",
             "lock_v7_g200",
             "lock_v7_g300",
@@ -181,6 +188,10 @@ def build_config(args: argparse.Namespace) -> RunConfig:
     objective_quantile = 0.70
     calibration_sample_count = 0
     calibration_gap_steps = 0
+    # Trigger observable for the objective: low-band energy (default) or low-band
+    # enstrophy (robustness wave, objective axis). The signature Phi_K is
+    # unchanged; only the quantity the safety trigger watches changes.
+    objective_observable = "energy"
     random_seed = 20260528
 
     if args.preset == "lock":
@@ -274,6 +285,30 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         k_signature = 3
         grid_size = 48
         n_modes = 24
+    elif args.preset in ("lock_v5_k2", "lock_v5_k4"):
+        # Robustness wave, K-window: identical to lock_v5 except the signature
+        # band K (observation-choice axis). k2 is the coarser lower-bracket
+        # test; k4 is the finer upper probe (expected coverage-limited per the
+        # v2/v4 curse-of-dimensionality finding that motivated K=3). Spec:
+        # docs/proof/PDE_C1_ROBUSTNESS_WAVE.md.
+        burnin_steps = 100_000
+        sample_count = 50_000
+        kf = 2
+        grashof = 200.0
+        e_max_burnin_fraction = 0.25
+        k_signature = 2 if args.preset == "lock_v5_k2" else 4
+    elif args.preset == "lock_v5_enstrophy":
+        # Robustness wave, objective axis: identical to lock_v5 except the
+        # safety trigger watches low-band ENSTROPHY (Sum_low |omega|^2) instead
+        # of energy. The signature Phi_K is unchanged. Tests clause (ii)
+        # objective-robustness beyond the energy proxy.
+        burnin_steps = 100_000
+        sample_count = 50_000
+        kf = 2
+        grashof = 200.0
+        e_max_burnin_fraction = 0.25
+        k_signature = 3
+        objective_observable = "enstrophy"
     elif args.preset == "fallback_v5":
         burnin_steps = 100_000
         sample_count = 200_000
@@ -370,6 +405,7 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         objective_quantile=objective_quantile,
         calibration_sample_count=calibration_sample_count,
         calibration_gap_steps=calibration_gap_steps,
+        objective_observable=objective_observable,
         twin_k_neighbors=twin_k_neighbors,
         twin_delta_high_fraction=twin_delta_high_fraction,
         twin_high_norm_floor=twin_high_norm_floor,
@@ -466,6 +502,17 @@ class KolmogorovStepper:
     def low_energy(self, omega_hat: np.ndarray) -> float:
         sig = self.signature(omega_hat)
         return float(np.dot(sig, sig))
+
+    def low_enstrophy(self, omega_hat: np.ndarray) -> float:
+        """Low-band enstrophy Sum_low |omega_hat/scale|^2 (energy without the
+        1/|k|^2 weighting). Robustness-wave objective-axis trigger; the
+        signature Phi_K is unchanged."""
+        scale = float(self.cfg.grid_size * self.cfg.grid_size)
+        total = 0.0
+        for ix, iy in self.low_indices:
+            amp = omega_hat[ix, iy] / scale
+            total += float((amp * amp.conjugate()).real)
+        return total
 
     def energy_budget(self, omega_hat: np.ndarray) -> dict:
         """Mori-Zwanzig decomposition of the low-band energy tendency.
@@ -607,8 +654,9 @@ def run_cell(cfg: RunConfig) -> dict:
 
     started = time.perf_counter()
     progress_stride = max(1, total_steps // 10)
+    observable = stepper.low_enstrophy if cfg.objective_observable == "enstrophy" else stepper.low_energy
     for step in range(total_steps + 1):
-        energy = stepper.low_energy(omega_hat)
+        energy = observable(omega_hat)
         energy_by_step[step] = energy
         if step <= burn:
             sig = stepper.signature(omega_hat)
