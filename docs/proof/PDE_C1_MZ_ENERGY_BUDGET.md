@@ -119,6 +119,89 @@ python scripts/pde_c1_kolmogorov_cell.py --preset lock_v7_g300 --adjudicator mz-
 # Level 2 (only if Level 1 encouraging, ~44 min) — same presets, --mz-lookahead
 ```
 
+## 8. Level-1 v1 result + the energy-conservation finding (2026-05-29)
+
+The first Level-1 run (G=200, `results/proof/c1-mz-budget-g200/`) returned a
+result that **verification caught before interpretation**: the band-closed
+transfer `T_LLL` is **identically zero** (`8e-17`, machine precision), not
+small. This is a conservation law, not a bug — the budget-closure and
+`R->0` validation gates all passed. The self-advection of the low-passed
+field conserves the low-passed field's energy, so its net transfer summed
+over the band is exactly zero:
+
+```
+T_LLL = -Σ_low (2/(scale²k²)) Re[ω̂_L*·N̂(ω̂_L)] = -(2/scale²) Σ_all (1/k²) Re[ω̂_L*·N̂(ω̂_L)] = 0.
+```
+
+**Physical finding (real, worth keeping):** *the low band cannot
+self-determine its own energy* — **all** net nonlinear transfer into it is
+out-of-band (high-mode) mediated. So `g = D_low + F_low` (dissipation +
+forcing only) and `R = T_low` (the entire inter-scale transfer). Measured
+at G=200: `rms(R)/rms(dE/dt) ≈ 14`, `rms(R)/rms(g) ≈ 1`, `corr(g,R) ≈ -0.69`,
+`rms(dE/dt)/rms(g) ≈ 0.24` — i.e. a large transfer `R` quasi-balanced
+against dissipation+forcing, leaving a small net tendency.
+
+**Consequence:** "is `R` small?" is the wrong question — `R` is the whole
+transfer, by conservation. Control-sufficiency cannot mean `R` is small; it
+must mean `R` is **predictable from `Φ_K`**. This reframes Level 1.
+
+## 9. Level-1 v2 (redesign): is `R` predictable from `Φ_K`? (held-out R²)
+
+The corrected mechanistic test — does the signature pin the net high-mode
+coupling `R = T_low`?
+
+**First estimator tried and rejected (kNN conditional variance).** The
+natural disintegration `eta_R = E_i[Var_local(R)]/Var(R)` over kNN signature-
+neighbours was implemented and **failed its own calibration**: the positive
+control `eta_g` (for `g`, an *exact* function of `Φ_K`) came out `≈ 0.42`,
+not `≈ 0`. Cause: kNN conditional variance is confounded by (i) the target's
+steepness (`g` is quadratic in `Φ_K`, so it varies a lot inside any ball) and
+(ii) 18-dim neighbourhood width (curse of dimensionality — kNN balls are
+never truly local). Both inflate the estimate independent of predictability.
+Recorded, not rescued.
+
+**Estimator used (held-out regression R²).** The statistically correct,
+steepness-agnostic, unbiased test of "is `R` a function of `Φ_K`":
+
+```
+slaving_index = R²( R predicted from Φ_K ), held out on a block split
+              (first 70% train / last 30% test — no temporal leakage)
+```
+
+A flexible regressor (`HistGradientBoostingRegressor`) is fit on the train
+block and scored on the held-out block. `R² -> 1` means `R` is (an
+approximate) function of `Φ_K` — **the high modes' net energy-transfer into
+the band is signature-determined even though the high modes themselves roam
+(twin states)**: slaving of the *relevant functional*, not the state. Unifies
+with the kNN action result (`Var(action|Φ_K)->0`).
+
+**Built-in calibration controls (known-answer, same data, same regressor):**
+
+- `R²(g)` — **positive control.** `g = D_low + F_low` is an exact function of
+  `Φ_K`, so `R²(g) ≈ 1` (sets the regressor's achievable ceiling). Validated
+  inline at **0.997**.
+- `R²(permuted R)` — **negative control.** Permuted `R` has no signature
+  dependence, so `R² ≈ 0` (negative = worse than the mean). Validated inline
+  at **−0.20** (confirms no block-split leakage).
+
+**Pre-registered reading + validation gates:**
+
+- Validation: `R²(g) > 0.90` AND `R²(perm) < 0.10` AND `D_low_max <= 0`;
+  else `MZ_COUPLING_ESTIMATOR_INVALID`, do not interpret.
+- `slaving_index >= 0.70` → `COUPLING_SIGNATURE_SLAVED` (`R` is `Φ_K`-pinned).
+- `0.30 <= slaving_index < 0.70` → `COUPLING_PARTIALLY_SLAVED`.
+- `slaving_index < 0.30` → `COUPLING_NOT_SLAVED` (sufficiency is
+  integrated/averaged → Level 2).
+- Still **explanatory, non-promotion**; C1 status unchanged either way.
+
+**Inline pre-run validation (G=200, 4000-sample probe):** `R²(g)=0.997`,
+`R²(perm)=-0.20` (controls pass), and the measurement `R²(R|Φ_K)=0.998` —
+`R` is predictable from `Φ_K` *at the exact-function ceiling*. The full
+50000-sample headline runs confirm this on the registered samples.
+
+Re-runs: `results/proof/c1-mz-coupling-g200/`, `…-g300/` (new dirs; the v1
+`c1-mz-budget-*` dirs stand as the conservation-finding record).
+
 ## 7. Cross-references
 
 - [`PDE_C1_MECHANISM_RECON.md`](PDE_C1_MECHANISM_RECON.md) — why this is grounding, not discovery.

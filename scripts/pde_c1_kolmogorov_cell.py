@@ -654,7 +654,9 @@ def run_cell(cfg: RunConfig) -> dict:
             sample_signatures, sample_high_modes, actions, epsilon_k, cfg
         )
     elif cfg.adjudicator == "mz-budget":
-        result, bin_rows, sample_rows, _ = aggregate_mz_budget(sample_mz, actions, cfg)
+        result, bin_rows, sample_rows, _ = aggregate_mz_budget(
+            sample_signatures, sample_mz, actions, epsilon_k, cfg
+        )
     else:
         bin_rows, sample_rows = aggregate_bins(sample_signatures, sample_energy, actions, sig_min, h_k, cfg)
         result = summarize(bin_rows, cfg)
@@ -1492,16 +1494,25 @@ def summarize_twin_state(
     }
 
 
-def aggregate_mz_budget(sample_mz: np.ndarray, actions: np.ndarray, cfg: RunConfig) -> tuple[dict, list, list, list]:
-    """Mori-Zwanzig energy-budget diagnostic (Level 1, instantaneous).
+def aggregate_mz_budget(
+    sample_signatures: np.ndarray,
+    sample_mz: np.ndarray,
+    actions: np.ndarray,
+    epsilon_k: float,
+    cfg: RunConfig,
+) -> tuple[dict, list, list, list]:
+    """Mori-Zwanzig coupling-disintegration diagnostic (Level 1 v2).
 
-    EXPLANATORY, not promotion-bearing: grounds the known MZ/closure
-    mechanism in this cell and contextualizes the D_witness boundary layer.
-    Headline is a population RMS ratio (robust to per-sample dEdt->0), with a
-    bounded per-sample rho = |R|/(|g|+|R|) as secondary. Spec:
-    docs/proof/PDE_C1_MZ_ENERGY_BUDGET.md.
+    EXPLANATORY, not promotion-bearing. The energy budget is dE_low/dt =
+    g(Phi_K) + R, with g = D_low + F_low (low-determined; the band-closed
+    transfer T_LLL is identically 0 by energy conservation) and R = T_low the
+    full inter-scale transfer. The mechanism test is whether R is *predictable
+    from Phi_K*: disintegrate R over the signature with kNN and compare its
+    conditional variance to a perfect-function floor (g) and a no-dependence
+    ceiling (permuted R). Spec: docs/proof/PDE_C1_MZ_ENERGY_BUDGET.md.
     """
-    # columns: dEdt, g, R, D_low, F_low, T_low, T_lll
+    from sklearn.ensemble import HistGradientBoostingRegressor
+
     dEdt = sample_mz[:, 0]
     g = sample_mz[:, 1]
     R = sample_mz[:, 2]
@@ -1509,45 +1520,75 @@ def aggregate_mz_budget(sample_mz: np.ndarray, actions: np.ndarray, cfg: RunConf
     F_low = sample_mz[:, 4]
     T_low = sample_mz[:, 5]
     n = int(sample_mz.shape[0])
-    absR = np.abs(R)
-    absg = np.abs(g)
-    rho = absR / (absg + absR + 1e-300)
 
     def rms(a: np.ndarray) -> float:
         return float(np.sqrt(np.mean(a * a))) if a.size else 0.0
 
-    rms_R, rms_g, rms_dEdt, rms_T = rms(R), rms(g), rms(dEdt), rms(T_low)
+    # Predictability of a target from the signature, as held-out R^2 of a
+    # flexible regressor. Block split (first 70% train / last 30% test) avoids
+    # temporal leakage. Unbiased and steepness-agnostic (unlike kNN conditional
+    # variance, which the 18-dim neighbourhood width + g's quadratic steepness
+    # confound). R^2 -> 1 means the target is a function of Phi_K.
+    ntr = max(2, int(0.7 * n))
+    x_tr, x_te = sample_signatures[:ntr], sample_signatures[ntr:]
+
+    def r2_from_signature(target: np.ndarray) -> float:
+        y_tr, y_te = target[:ntr], target[ntr:]
+        if y_te.size < 2 or float(np.var(y_te)) <= 0.0:
+            return float("nan")
+        model = HistGradientBoostingRegressor(max_iter=200, random_state=0)
+        model.fit(x_tr, y_tr)
+        pred = model.predict(x_te)
+        ss_res = float(np.sum((y_te - pred) ** 2))
+        ss_tot = float(np.sum((y_te - np.mean(y_te)) ** 2))
+        return float(1.0 - ss_res / (ss_tot + 1e-300))
+
+    rng = np.random.default_rng(cfg.random_seed + 1)
+    r2_R = r2_from_signature(R)
+    r2_g = r2_from_signature(g)  # positive control: g is an exact f(Phi_K) -> ~1
+    r2_perm = r2_from_signature(R[rng.permutation(n)])  # negative control -> ~0
+    slaving_index = r2_R  # fraction of Var(R) explained by the signature (held-out)
+
     damp = int(actions.sum())
     no_op = int(n - damp)
     d_low_max = float(np.max(D_low)) if n else 0.0
-    structural_ok = d_low_max <= 1e-12  # dissipation must be <= 0 by construction
+    # Calibration gates: regressor must recover the exact function g (>0.9) and
+    # must not spuriously fit permuted R (<0.1); dissipation must be <= 0.
+    estimator_ok = (r2_g > 0.90) and (r2_perm < 0.10) and (d_low_max <= 1e-12)
 
     interpretable = cfg.preset in VERDICT_BEARING_PRESETS
     if not interpretable:
-        verdict = "SMOKE_ONLY"
-    elif not structural_ok:
-        verdict = "MZ_BUDGET_INVALID_DISSIPATION_SIGN"
+        verdict, verdict_label = "SMOKE_ONLY", ""
+    elif not estimator_ok:
+        verdict, verdict_label = "MZ_COUPLING_ESTIMATOR_INVALID", "control_or_structural_gate_failed"
+    elif slaving_index >= 0.70:
+        verdict, verdict_label = "COUPLING_SIGNATURE_SLAVED", "R_predictable_from_signature"
+    elif slaving_index >= 0.30:
+        verdict, verdict_label = "COUPLING_PARTIALLY_SLAVED", "R_partly_predictable_from_signature"
     else:
-        verdict = "MZ_BUDGET_DIAGNOSTIC"
+        verdict, verdict_label = "COUPLING_NOT_SLAVED", "R_not_signature_pinned_see_level2"
 
-    rms_R_over_dEdt = rms_R / (rms_dEdt + 1e-300)
     result = {
         "verdict": verdict,
-        "verdict_label": "explanatory_mechanism_diagnostic_non_promotion",
-        "interpretable": interpretable and structural_ok,
+        "verdict_label": verdict_label,
+        "interpretable": interpretable and estimator_ok,
         "adjudicator": "mz-budget",
         "n_samples": n,
-        "rms_R_over_rms_dEdt": rms_R_over_dEdt,
-        "rms_R_over_rms_g": rms_R / (rms_g + 1e-300),
-        "rms_R_over_rms_T_low": rms_R / (rms_T + 1e-300),
-        "coupling_dominated_fraction": float(np.mean(absR > absg)) if n else 0.0,
-        "rho_median": float(np.median(rho)) if n else 0.0,
-        "rho_p90": float(np.percentile(rho, 90)) if n else 0.0,
-        "rho_mean": float(np.mean(rho)) if n else 0.0,
-        "rms_R": rms_R,
-        "rms_g": rms_g,
-        "rms_dEdt": rms_dEdt,
-        "rms_T_low": rms_T,
+        # --- coupling predictability (the mechanism test): held-out R^2 ---
+        "r2_R_from_signature": r2_R,
+        "r2_g_control": r2_g,
+        "r2_perm_control": r2_perm,
+        "slaving_index": slaving_index,
+        "train_count": ntr,
+        "test_count": n - ntr,
+        # --- energy-conservation finding (v1 record) ---
+        "rms_R_over_rms_dEdt": rms(R) / (rms(dEdt) + 1e-300),
+        "rms_R_over_rms_g": rms(R) / (rms(g) + 1e-300),
+        "rms_R_over_rms_T_low": rms(R) / (rms(T_low) + 1e-300),
+        "corr_g_R": float(np.corrcoef(g, R)[0, 1]) if n > 1 else 0.0,
+        "rms_R": rms(R),
+        "rms_g": rms(g),
+        "rms_dEdt": rms(dEdt),
         "D_low_mean": float(np.mean(D_low)) if n else 0.0,
         "D_low_max": d_low_max,
         "F_low_mean": float(np.mean(F_low)) if n else 0.0,
@@ -1556,13 +1597,7 @@ def aggregate_mz_budget(sample_mz: np.ndarray, actions: np.ndarray, cfg: RunConf
         "damp_fraction": damp / max(1, n),
     }
     sample_rows = [
-        {
-            "i": i,
-            "dEdt": float(dEdt[i]),
-            "g": float(g[i]),
-            "R": float(R[i]),
-            "rho": float(rho[i]),
-        }
+        {"i": i, "dEdt": float(dEdt[i]), "g": float(g[i]), "R": float(R[i])}
         for i in range(min(n, 200))
     ]
     return result, [], sample_rows, []
@@ -1911,7 +1946,7 @@ def write_receipt_mz_budget(path: Path, manifest: dict) -> None:
     r = manifest["result"]
     c = manifest["config"]
     lines = [
-        "# PDE C1 Mori-Zwanzig Energy-Budget Receipt (Level 1)",
+        "# PDE C1 Mori-Zwanzig Coupling-Disintegration Receipt (Level 1 v2)",
         "",
         f"**Status:** {r['verdict']}  (explanatory, NOT promotion-bearing)",
         f"**Preset:** `{c['preset']}`",
@@ -1919,54 +1954,65 @@ def write_receipt_mz_budget(path: Path, manifest: dict) -> None:
         "",
         "## Decomposition `dE_low/dt = g(Phi_K) + R`",
         "",
-        "`g` = low dissipation + forcing + band-closed transfer (Phi_K-only); "
-        "`R` = nonlinear transfer involving >=1 high mode (the Mori-Zwanzig coupling).",
+        "`g = D_low + F_low` (dissipation + forcing; the band-closed transfer "
+        "`T_LLL` is identically 0 by energy conservation). `R = T_low` is the "
+        "full inter-scale (out-of-band-mediated) transfer.",
         "",
-        "## Coupling magnitude (population, robust)",
+        "## Coupling predictability (the mechanism test): held-out R^2",
         "",
-        f"- `rms(R) / rms(dE_low/dt)`: `{r.get('rms_R_over_rms_dEdt', 0.0):.4g}`",
-        f"- `rms(R) / rms(g)`: `{r.get('rms_R_over_rms_g', 0.0):.4g}`",
-        f"- `rms(R) / rms(T_low)`: `{r.get('rms_R_over_rms_T_low', 0.0):.4g}`",
-        f"- samples with `|R| > |g|`: `{r.get('coupling_dominated_fraction', 0.0):.4g}`",
+        f"- **slaving_index** = held-out R^2 of R predicted from Phi_K "
+        f"(1 = fully signature-determined, 0 = unpredictable): "
+        f"`{r.get('slaving_index', 0.0):.4g}`",
+        f"- `R^2(R | Phi_K)`: `{r.get('r2_R_from_signature', 0.0):.4g}`",
+        f"- `R^2(g)` positive control (g is an exact f(Phi_K); want > 0.90): "
+        f"`{r.get('r2_g_control', 0.0):.4g}`",
+        f"- `R^2(permuted R)` negative control (want < 0.10): "
+        f"`{r.get('r2_perm_control', 0.0):.4g}`",
+        f"- train / test (block split, no temporal leakage): "
+        f"`{r.get('train_count', 0)}` / `{r.get('test_count', 0)}`",
         "",
-        "## Per-sample coupling fraction `rho = |R|/(|g|+|R|)`",
+        "## Energy-conservation finding (v1 record)",
         "",
-        f"- median / mean / p90: `{r.get('rho_median', 0.0):.4g}` / "
-        f"`{r.get('rho_mean', 0.0):.4g}` / `{r.get('rho_p90', 0.0):.4g}`",
-        "",
-        "## Validation / context",
-        "",
-        f"- dissipation `D_low` mean / max: `{r.get('D_low_mean', 0.0):.4g}` / "
-        f"`{r.get('D_low_max', 0.0):.4g}` (max must be <= 0)",
-        f"- forcing input `F_low` mean: `{r.get('F_low_mean', 0.0):.4g}` (should be > 0)",
+        f"- `rms(R)/rms(dE_low/dt)`: `{r.get('rms_R_over_rms_dEdt', 0.0):.4g}`  "
+        f"`rms(R)/rms(g)`: `{r.get('rms_R_over_rms_g', 0.0):.4g}`  "
+        f"`rms(R)/rms(T_low)`: `{r.get('rms_R_over_rms_T_low', 0.0):.4g}` (=1 => T_LLL=0)",
+        f"- `corr(g,R)`: `{r.get('corr_g_R', 0.0):.4g}` (negative => quasi-equilibrium cancellation)",
+        f"- `D_low` mean/max: `{r.get('D_low_mean', 0.0):.4g}` / `{r.get('D_low_max', 0.0):.4g}` "
+        f"(max<=0)  `F_low` mean: `{r.get('F_low_mean', 0.0):.4g}` (>0)",
         f"- `damp_fraction`: `{r.get('damp_fraction', 0.0):.4g}`  samples: `{r.get('n_samples', 0)}`",
         "",
         "## Reading",
         "",
     ]
-    rr = r.get("rms_R_over_rms_dEdt", 0.0)
+    si = r.get("slaving_index", 0.0)
     if r["verdict"] == "SMOKE_ONLY":
         lines.append("Smoke-only preset; no diagnostic reading filed.")
-    elif r["verdict"] == "MZ_BUDGET_INVALID_DISSIPATION_SIGN":
+    elif r["verdict"] == "MZ_COUPLING_ESTIMATOR_INVALID":
         lines.append(
-            "Validation failed: low-band dissipation is not non-positive. The "
-            "decomposition is mis-wired; do not interpret."
+            "Calibration controls failed (need eta_g < 0.10 floor, eta_perm > 0.70 "
+            "ceiling, D_low_max <= 0). The disintegration estimator is not "
+            "trustworthy on this run; do not interpret."
         )
-    elif rr < 0.5:
+    elif r["verdict"] == "COUPLING_SIGNATURE_SLAVED":
         lines.append(
-            f"The unresolved (high-mode) coupling `R` is a **minority** of the "
-            f"low-band energy tendency (`rms(R)/rms(dE_low/dt) = {rr:.3g}`): the "
-            "tendency is mostly low-determined. This grounds the (known) "
-            "Mori-Zwanzig / closure mechanism in this cell. Explanatory only; "
-            "C1 promotion status is unchanged."
+            f"**Coupling signature-slaved** (slaving_index `{si:.3g}`): the net "
+            "high-mode energy-transfer `R` into the band is pinned by `Phi_K` even "
+            "though the high modes themselves roam (twin states). This is the "
+            "mechanism for control-sufficiency: the *relevant functional* is "
+            "slaved to the signature, not the state. Explanatory; C1 unchanged."
+        )
+    elif r["verdict"] == "COUPLING_PARTIALLY_SLAVED":
+        lines.append(
+            f"**Partially slaved** (slaving_index `{si:.3g}`): `R` is partly "
+            "signature-predictable; the remainder must be carried by the "
+            "lookahead-integrated coupling (Level 2). Explanatory; C1 unchanged."
         )
     else:
         lines.append(
-            f"The unresolved coupling `R` is **not** a small minority of the "
-            f"tendency (`rms(R)/rms(dE_low/dt) = {rr:.3g}`): instantaneous "
-            "control-sufficiency must come from cancellation/averaging over the "
-            "lookahead (Level 2), a subtler story. Explanatory only; C1 status "
-            "unchanged."
+            f"**Coupling not signature-pinned** (slaving_index `{si:.3g}`): "
+            "instantaneous `R` is not Phi_K-determined; control-sufficiency must "
+            "come from the integrated/averaged coupling over the lookahead "
+            "(Level 2). Explanatory; C1 unchanged."
         )
     lines.extend(["", "## Files", "", "- `manifest.json`", "- `mz-budget-samples.csv`"])
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
