@@ -123,18 +123,18 @@ const projects = [
     transferQuestion:
       "Can a compact signature behave like a cheaper certificate for a bounded alignment-verification problem?",
     currentRead:
-      "The v0-v6 chain is safety-complete and v6 op-count positive; Phase 2 v0 named-quarantined on raw-log provenance.",
+      "The v0-v6 chain is safety-complete and v6 op-count positive; Phase 2 v1 earned a bounded-positive mesa bridge receipt.",
     blocker:
-      "Wall-time remains diagnostic-only; the claim is op-count bounded, not machine-time cheap.",
+      "Wall-time remains diagnostic-only, and capacity-relative one-wayness is not estimated.",
     nextAction:
-      "Implement frozen v1 bridge reader; run raw-logged Small rerun; execute v1.",
+      "Freeze Phase 3 one-wayness slate before attacker runs.",
     publicBoundary:
       "No complexity-class result, polynomial certificate, or P-vs-NP progress is claimed.",
     chartHeadline: "op-count positive; wall-time diagnostic",
     metrics: [
-      { label: "filed receipts", value: 8, unit: "incl p2v0" },
+      { label: "filed receipts", value: 9, unit: "incl p2v1" },
       { label: "v6 false accepts", value: 0, unit: "items" },
-      { label: "p2 raw gaps", value: 7, unit: "cells" },
+      { label: "p2 raw gaps", value: 0, unit: "cells" },
     ],
     sources: [
       "docs/SUNDOG_V_P_V_NP.md",
@@ -142,7 +142,9 @@ const projects = [
       "docs/pvnp/PHASE1_V6_SLATE.md",
       "docs/pvnp/PHASE2_MESA_BRIDGE_V0_SLATE.md",
       "docs/pvnp/PHASE2_MESA_BRIDGE_V1_SLATE.md",
+      "docs/pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md",
       "docs/pvnp/receipts/2026-05-31_phase2_mesa_bridge_v0.md",
+      "docs/pvnp/receipts/2026-05-31_phase2_mesa_bridge_v1.md",
       "docs/pvnp/receipts/README.md",
     ],
     svgFocus: ["status-card", "receipt-chain", "op-count-positive"],
