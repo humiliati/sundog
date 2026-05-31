@@ -93,3 +93,14 @@ the [receipt template](../RECEIPT_TEMPLATE.md).
   correctly failed the power self-validation and Polyakov gauge residual max
   was `1.6653345369377348e-16`. Quarantine-class, not a `NEG-A`; Stage 2 was
   not scored. The registered continuation is finite-temperature v6.
+- [`2026-05-31_SU2_3D_phase2_v6_pilot_unbracketed.md`](2026-05-31_SU2_3D_phase2_v6_pilot_unbracketed.md)
+  - `Z beta_peak_unbracketed` for the finite-temperature Polyakov v6 pilot.
+  The locked grid `{6.0, 6.3, 6.55, 6.8, 7.1}` did not bracket the pilot
+  `mean_chi_P` peak; it landed at beta `6.0`, the lower boundary. Void pilot;
+  no finite-T ensembles, Stage 1 audit, or Stage 2 score were run.
+- [`2026-05-31_SU2_3D_phase2_v6a_finite_t_polyakov_neg_a.md`](2026-05-31_SU2_3D_phase2_v6a_finite_t_polyakov_neg_a.md)
+  - `YM-P2-NEG-A no_rank_local_structure` for the amended finite-temperature
+  Polyakov v6a run. The amended pilot froze beta slate `{6.3, 6.55, 6.8}`;
+  `abs_mean_P` was powered and disjoint (mean ICC `0.964866`, mean leakage
+  CV-R2 `-0.332186`); Stage 2 scored at/below controls (`PRIMARY@5 0.304167`,
+  `CTRL_RAND 0.329167`, across-beta matching `CTRL_RAND_STRAT`).

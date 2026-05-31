@@ -1,5 +1,14 @@
 # Yang-Mills Phase 2 Bounded-Null Synthesis - SU2 3D
 
+> **Superseded as the lane conclusion (2026-05-31).** This four-probe (v0–v3)
+> synthesis remains valid for its four Wilson-loop-target probes, but it is no
+> longer the lane's current conclusion. A follow-up audit (v4/v5) showed the
+> v0–v3 held-out targets were **not powered**, so these four nulls are
+> uninformative about the signature. The lane escalated to a powered, disjoint
+> finite-temperature Polyakov target (v6a) and produced an **informative**
+> `YM-P2-NEG-A`. Current conclusion:
+> [`2026-05-31_SU2_3D_phase2_informative_null_synthesis.md`](2026-05-31_SU2_3D_phase2_informative_null_synthesis.md).
+
 - Synthesis id: `2026-05-29_SU2_3D_phase2_bounded_null_synthesis`
 - Cell label: `SU2_3D`
 - Phase: 2 synthesis

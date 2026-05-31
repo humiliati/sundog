@@ -1,0 +1,11 @@
+{
+  "autocorr_pilot/plaquette_by_orientation.csv": "c43d4d0a894440e398c8bcd0f5efdeda3442693186f1a9a016e4483e46ea2e9a",
+  "autocorr_pilot/plaquette_series.csv": "b5e03e6a141a7bba922bf9fb743315df330477f2b926d6b01dbc7325d4cddacd",
+  "configs/su2_links.jsonl": "3473f13fd1c1bef83d17482677e59d30eda19d8700e2a084d2f6ba5b7e272565",
+  "heldout/finite_t_polyakov_summary.csv": "92d5a373ec07ba94d6de7e548ce65240e03c67fa82d5a08584ae2e9229ca16a7",
+  "heldout/heldout_loop_values.csv": "ac699a8ed3276dd0b9c5db57faec073aebc70ec38d79dab67ec9526680e9399d",
+  "heldout/heldout_summary.csv": "050598d824bc8f3736c3d174f1e01017e43c29c53194abda06f0dddb9a73301f",
+  "manifest.json": "472621523a5ee0100bea42afac10e24fcf9b0d49540b8494ea2751ba166ddab7",
+  "signatures/signature_vectors.csv": "1c8ebd9c04ffa78bca413de702d576768c4cd30f493eb56894f7459f298f344d",
+  "summary.json": "26601b9d4257c386be6fd3783e455cd8c2e1fb2203ba45e61929e7210833c063"
+}

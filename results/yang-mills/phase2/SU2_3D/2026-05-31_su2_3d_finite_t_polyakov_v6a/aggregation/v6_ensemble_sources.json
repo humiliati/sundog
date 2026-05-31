@@ -1,0 +1,38 @@
+[
+  {
+    "beta": 6.3,
+    "betaKey": "6.3",
+    "betaIndex": 0,
+    "resultDir": "C:/Users/hughe/Dev/sundog/results/yang-mills/phase2/SU2_3D/2026-05-31_su2_3d_finite_t_polyakov_v6a/ensembles/beta6p3",
+    "manifestCodeCommit": "def333ee0541ffc9280aec1baaf9879024fe1d7d",
+    "manifestGitDirty": true,
+    "summaryBranch": "P1-A ensemble_health_pass",
+    "configsSha256": "c87e07d602554a3aaf4d6c7ff45fe3a0fedee7cdb9e8fbd88cf9239ffbbf160b",
+    "signatureVectorsSha256": "e6b62131521a70f0cd38f2940f71c56159d04fce868f21672faf3af858e0cc7d",
+    "polyakovSummarySha256": "2365a6d2d2bb66f4c4a9eff735a0639257a3a252f3b8e8d42518557b7e00f6c5"
+  },
+  {
+    "beta": 6.55,
+    "betaKey": "6.55",
+    "betaIndex": 1,
+    "resultDir": "C:/Users/hughe/Dev/sundog/results/yang-mills/phase2/SU2_3D/2026-05-31_su2_3d_finite_t_polyakov_v6a/ensembles/beta6p55",
+    "manifestCodeCommit": "def333ee0541ffc9280aec1baaf9879024fe1d7d",
+    "manifestGitDirty": true,
+    "summaryBranch": "P1-A ensemble_health_pass",
+    "configsSha256": "3473f13fd1c1bef83d17482677e59d30eda19d8700e2a084d2f6ba5b7e272565",
+    "signatureVectorsSha256": "1c8ebd9c04ffa78bca413de702d576768c4cd30f493eb56894f7459f298f344d",
+    "polyakovSummarySha256": "92d5a373ec07ba94d6de7e548ce65240e03c67fa82d5a08584ae2e9229ca16a7"
+  },
+  {
+    "beta": 6.8,
+    "betaKey": "6.8",
+    "betaIndex": 2,
+    "resultDir": "C:/Users/hughe/Dev/sundog/results/yang-mills/phase2/SU2_3D/2026-05-31_su2_3d_finite_t_polyakov_v6a/ensembles/beta6p8",
+    "manifestCodeCommit": "def333ee0541ffc9280aec1baaf9879024fe1d7d",
+    "manifestGitDirty": true,
+    "summaryBranch": "P1-A ensemble_health_pass",
+    "configsSha256": "e049a6daa8cf49e40328a9b7b9de753f85246f938dfc29b8ff4730ee706788a1",
+    "signatureVectorsSha256": "068bdae0e2494dadc062f62f39b3a23c032f058e65fc1027c9e269c501b85c57",
+    "polyakovSummarySha256": "60a76daee2eee5263f5d19df47cca7945ef52d95a0870df34e183a66b1cc3375"
+  }
+]

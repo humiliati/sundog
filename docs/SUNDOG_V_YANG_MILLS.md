@@ -21,7 +21,10 @@ Status: **Phase 1 instrumentation closed across the full ladder
 2026-05-29; Phase 2 v4 powered-target reopen executed 2026-05-31 ->
 `YM-P2-UNDERPOWERED no_powered_target_in_envelope`; Phase 2 v5 symmetric
 Polyakov audit executed 2026-05-31 ->
-`YM-P2-UNDERPOWERED no_powered_target_in_envelope`; Phase 5
+`YM-P2-UNDERPOWERED no_powered_target_in_envelope`; Phase 2 v6 finite-T
+Polyakov pilot executed 2026-05-31 -> `Z beta_peak_unbracketed`; Phase 2
+v6a amended finite-T Polyakov run executed 2026-05-31 ->
+`YM-P2-NEG-A no_rank_local_structure`; Phase 5
 external-review packet + email cover-letter draft filed 2026-05-29
 (owner-pending send to a lattice gauge theorist).**
 Roadmap draft at this file; lit-pass at
@@ -84,7 +87,13 @@ ensembles) at
 with underpowered-envelope receipt at
 [`yang-mills/receipts/2026-05-31_SU2_3D_phase2_v5_polyakov_underpowered.md`](yang-mills/receipts/2026-05-31_SU2_3D_phase2_v5_polyakov_underpowered.md);
 Phase 2 v6 finite-temperature Polyakov spec at
-[`prereg/yang-mills/PHASE2_SU2_3D_finite_t_polyakov_v6.md`](prereg/yang-mills/PHASE2_SU2_3D_finite_t_polyakov_v6.md);
+[`prereg/yang-mills/PHASE2_SU2_3D_finite_t_polyakov_v6.md`](prereg/yang-mills/PHASE2_SU2_3D_finite_t_polyakov_v6.md)
+with pilot-void receipt at
+[`yang-mills/receipts/2026-05-31_SU2_3D_phase2_v6_pilot_unbracketed.md`](yang-mills/receipts/2026-05-31_SU2_3D_phase2_v6_pilot_unbracketed.md);
+v6 follow-up pilot-metric amendment at
+[`prereg/yang-mills/PHASE2_SU2_3D_finite_t_polyakov_v6_AMENDMENT_2026-05-31_pilot_metric.md`](prereg/yang-mills/PHASE2_SU2_3D_finite_t_polyakov_v6_AMENDMENT_2026-05-31_pilot_metric.md)
+with v6a finite-T Polyakov named-null receipt at
+[`yang-mills/receipts/2026-05-31_SU2_3D_phase2_v6a_finite_t_polyakov_neg_a.md`](yang-mills/receipts/2026-05-31_SU2_3D_phase2_v6a_finite_t_polyakov_neg_a.md);
 Phase 5 external-review packet at
 [`yang-mills/EXTERNAL_REVIEW_PACKET.md`](yang-mills/EXTERNAL_REVIEW_PACKET.md)
 with email cover-letter draft at
@@ -93,8 +102,10 @@ The Phase 1 receipts are instrumentation only. Phase 2 v0 / v1 / v2 / v3 all
 landed `YM-P2-NEG-A`; v4 and v5 landed `YM-P2-UNDERPOWERED`,
 quarantine-class target-power results, not additional named nulls. No
 continuum, confinement, mass-gap, or result-bearing Yang-Mills claim exists.
-The registered next continuation is the finite-temperature v6 Polyakov build,
-not another symmetric-cell retry.
+The first v6 finite-T pilot did not freeze a beta slate because the pilot peak
+landed on the grid boundary; the v6a amendment corrected the pilot selector and
+froze `{6.3, 6.55, 6.8}`. v6a then admitted a powered, disjoint Polyakov target
+and still landed `YM-P2-NEG-A`; the positive route to Phase 3 did not open.
 
 This is not a claim to progress on the Clay Yang-Mills existence and mass gap
 problem. It is a plan for a bounded receipt program that asks whether Sundog's
@@ -541,6 +552,33 @@ v5 execution:
   precision. Stage 2 rank-locality scoring was not run. The registered next
   continuation is finite-temperature v6 (`12^2 x 4`), not a symmetric retry.
 
+v6 pilot execution:
+
+- finite-temperature `12x12x4` Polyakov runner implemented and invoked with
+  the locked pilot grid `{6.0, 6.3, 6.55, 6.8, 7.1}` before any ensemble
+  generation;
+- receipt filed at
+  [`yang-mills/receipts/2026-05-31_SU2_3D_phase2_v6_pilot_unbracketed.md`](yang-mills/receipts/2026-05-31_SU2_3D_phase2_v6_pilot_unbracketed.md);
+- verdict `Z beta_peak_unbracketed`: pilot `mean_chi_P` was largest at beta
+  6.0, the lower grid boundary, so no three-beta finite-T slate was frozen.
+  No finite-T ensembles, Stage 1 audit, or Stage 2 rank-locality score were
+  run. The next admissible move is a dated v6 follow-up amendment/spec that
+  expands the pilot grid or clarifies the finite-T susceptibility metric before
+  generation.
+- v6 follow-up amendment filed at
+  [`prereg/yang-mills/PHASE2_SU2_3D_finite_t_polyakov_v6_AMENDMENT_2026-05-31_pilot_metric.md`](prereg/yang-mills/PHASE2_SU2_3D_finite_t_polyakov_v6_AMENDMENT_2026-05-31_pilot_metric.md):
+  the amended v6a pilot keeps the cell/target pool unchanged, selects on
+  ensemble-level `order_suscept_abs_mean_P = (12*12) * Var(abs_mean_P)`,
+  extends the grid to `{6.0, 6.3, 6.55, 6.8, 7.1, 7.4, 7.7, 8.0}`, and writes
+  to a new `v6a` result directory so the original void receipt remains intact.
+- v6a execution receipt filed at
+  [`yang-mills/receipts/2026-05-31_SU2_3D_phase2_v6a_finite_t_polyakov_neg_a.md`](yang-mills/receipts/2026-05-31_SU2_3D_phase2_v6a_finite_t_polyakov_neg_a.md):
+  pilot peak bracketed at beta `6.55`, frozen slate `{6.3, 6.55, 6.8}`;
+  `abs_mean_P` admitted as powered and disjoint (mean ICC `0.964866`, mean
+  leakage CV-R2 `-0.332186`); Stage 2 landed
+  `YM-P2-NEG-A no_rank_local_structure` with within-beta primary@5 `0.304167`,
+  `CTRL_RAND` `0.329167`, and across-beta primary matching `CTRL_RAND_STRAT`.
+
 Failure / quarantine:
 
 `YM-P2-NEG-A no_rank_local_structure`, `YM-P2-NEG-B metadata_only`, or
@@ -706,11 +744,23 @@ Next agent should:
     v5 was filed and executed, and the receipt landed
     `YM-P2-UNDERPOWERED no_powered_target_in_envelope` at
     [`yang-mills/receipts/2026-05-31_SU2_3D_phase2_v5_polyakov_underpowered.md`](yang-mills/receipts/2026-05-31_SU2_3D_phase2_v5_polyakov_underpowered.md).
-20. **Standing guardrail (2026-05-31):** v6 is the only registered
-    continuation from v5 underpowering. It requires the finite-temperature
-    `12^2 x 4` Polyakov build in
-    [`prereg/yang-mills/PHASE2_SU2_3D_finite_t_polyakov_v6.md`](prereg/yang-mills/PHASE2_SU2_3D_finite_t_polyakov_v6.md);
-    no additional symmetric-cell retry is admitted.
+20. ~~Implement and invoke the finite-temperature v6 Polyakov pilot before
+    ensemble generation.~~
+    **Done 2026-05-31** - the runner stopped at
+    `Z beta_peak_unbracketed`; receipt filed at
+    [`yang-mills/receipts/2026-05-31_SU2_3D_phase2_v6_pilot_unbracketed.md`](yang-mills/receipts/2026-05-31_SU2_3D_phase2_v6_pilot_unbracketed.md).
+21. **Standing guardrail (2026-05-31):** no automatic finite-T retry after
+    `Z beta_peak_unbracketed`. Continuing requires a dated v6 follow-up
+    amendment/spec that expands the pilot grid or clarifies the finite-T
+    susceptibility metric before ensemble generation.
+22. ~~Run the amended v6a invocation from the v6a pilot-metric amendment.~~
+    **Done 2026-05-31** - receipt filed at
+    [`prereg/yang-mills/PHASE2_SU2_3D_finite_t_polyakov_v6_AMENDMENT_2026-05-31_pilot_metric.md`](prereg/yang-mills/PHASE2_SU2_3D_finite_t_polyakov_v6_AMENDMENT_2026-05-31_pilot_metric.md) and
+    [`yang-mills/receipts/2026-05-31_SU2_3D_phase2_v6a_finite_t_polyakov_neg_a.md`](yang-mills/receipts/2026-05-31_SU2_3D_phase2_v6a_finite_t_polyakov_neg_a.md).
+23. **Current guardrail (2026-05-31):** no automatic Yang-Mills probe ladder
+    after v6a. Further target/signature work requires fresh external scientific
+    motivation or reviewer feedback; otherwise update the external-review
+    packet and hold the Phase-2 bounded null as the lane result.
 
 ## 11. Open Decisions
 

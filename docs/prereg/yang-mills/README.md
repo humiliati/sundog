@@ -11,7 +11,10 @@ Phase 2 v0 / v1 / v2 / v3 all executed 2026-05-29 ->
 2026-05-29; Phase 2 v4 powered-target reopen executed 2026-05-31 ->
 `YM-P2-UNDERPOWERED no_powered_target_in_envelope`; Phase 2 v5 symmetric
 Polyakov audit executed 2026-05-31 ->
-`YM-P2-UNDERPOWERED no_powered_target_in_envelope`**. See
+`YM-P2-UNDERPOWERED no_powered_target_in_envelope`; Phase 2 v6 finite-T
+Polyakov pilot executed 2026-05-31 -> `Z beta_peak_unbracketed`; Phase 2 v6a
+amended finite-T Polyakov run executed 2026-05-31 ->
+`YM-P2-NEG-A no_rank_local_structure`**. See
 [`P0_DOMAIN_AND_RECEIPT_LOCK.md`](P0_DOMAIN_AND_RECEIPT_LOCK.md). This
 directory remains the home for any future Yang-Mills pre-registrations
 (Phase 1 runner manifests, Phase 2/3/4 phase specs, and any P0 amendments).
@@ -21,8 +24,14 @@ underpowered, not a named null: Stage 2 was not scored because no candidate
 target was both powered and disjoint across all three beta values. Any
 v5 continuation followed that pre-stated P0-amendment path and also landed
 underpowered: the symmetric-cell Polyakov targets were disjoint but lacked
-split-half power. Any continuation now routes to the pre-stated finite-
-temperature v6 Polyakov build, not to a silent symmetric-cell retry.
+split-half power. The registered continuation then routed to the pre-stated
+finite-temperature v6 Polyakov build, not to a silent symmetric-cell retry. The
+first v6 pilot did not freeze a beta slate because the pilot peak landed on the
+grid boundary; the continuation therefore required a dated pilot-grid or
+susceptibility-metric amendment before ensemble generation.
+The v6a amendment supplied that continuation, admitted a powered/disjoint
+finite-T Polyakov target, and still landed `YM-P2-NEG-A`; no positive route to
+Phase 3 is open.
 
 ## Filed Artifacts
 
@@ -163,14 +172,25 @@ temperature v6 Polyakov build, not to a silent symmetric-cell retry.
   after v5 underpowering. It is a new build (`12^2 x 4`, asymmetric
   lattice support, finite-temperature ensembles) and is not a continuation
   of the symmetric-cell runner.
+  **Pilot executed 2026-05-31 -> `Z beta_peak_unbracketed`.**
+  Receipt:
+  [`../../yang-mills/receipts/2026-05-31_SU2_3D_phase2_v6_pilot_unbracketed.md`](../../yang-mills/receipts/2026-05-31_SU2_3D_phase2_v6_pilot_unbracketed.md).
+- [`PHASE2_SU2_3D_finite_t_polyakov_v6_AMENDMENT_2026-05-31_pilot_metric.md`](PHASE2_SU2_3D_finite_t_polyakov_v6_AMENDMENT_2026-05-31_pilot_metric.md)
+  - binding v6 follow-up amendment after the pilot void. It keeps the
+  finite-T cell and target pool unchanged, clarifies the pilot selector as
+  ensemble-level order-parameter susceptibility
+  `order_suscept_abs_mean_P = (12*12) * Var(abs_mean_P)`, and extends the
+  pilot grid upward to `{6.0, 6.3, 6.55, 6.8, 7.1, 7.4, 7.7, 8.0}`.
+  Executed 2026-05-31 with receipt:
+  [`../../yang-mills/receipts/2026-05-31_SU2_3D_phase2_v6a_finite_t_polyakov_neg_a.md`](../../yang-mills/receipts/2026-05-31_SU2_3D_phase2_v6a_finite_t_polyakov_neg_a.md).
 
 ## Required Next Artifact
 
-The next registered continuation is the finite-temperature v6 Polyakov build
-at `12^2 x 4`, because v5 found that the symmetric-cell Polyakov targets were
-disjoint but underpowered. No automatic symmetric-cell retry is admitted. The
-other valid disposition is PAUSE: the v4 and v5 underpowered-envelope
-receipts stand as the result.
+No automatic finite-T retry, symmetric-cell retry, or target/signature probe
+ladder is admitted after v6a. Further Yang-Mills work requires fresh external
+scientific motivation or reviewer feedback. The default next artifact is an
+updated external-review packet / bounded-null synthesis addendum that includes
+the powered finite-T Polyakov `NEG-A`.
 
 The Phase 5 external-review packet is drafted and **owner-pending send**
 to a lattice gauge theorist:
@@ -391,3 +411,18 @@ ever needed, must be labelled exploratory and cannot be cited as receipts.
   self-validation and Polyakov gauge residual max was
   `1.6653345369377348e-16`. Stage 2 rank-locality scoring was not run;
   v6 finite-temperature Polyakov is the only registered continuation.
+- 2026-05-31: v6 finite-temperature Polyakov runner invoked on the locked
+  pilot grid `{6.0, 6.3, 6.55, 6.8, 7.1}` and filed as
+  [`../../yang-mills/receipts/2026-05-31_SU2_3D_phase2_v6_pilot_unbracketed.md`](../../yang-mills/receipts/2026-05-31_SU2_3D_phase2_v6_pilot_unbracketed.md).
+  Verdict: `Z beta_peak_unbracketed`. The pilot `mean_chi_P` peak landed at
+  beta `6.0`, the lower boundary, so no finite-T beta slate was frozen and no
+  ensembles were generated.
+- 2026-05-31: v6 follow-up amendment filed at
+  [`PHASE2_SU2_3D_finite_t_polyakov_v6_AMENDMENT_2026-05-31_pilot_metric.md`](PHASE2_SU2_3D_finite_t_polyakov_v6_AMENDMENT_2026-05-31_pilot_metric.md).
+  It changes only the pre-generation pilot selector/grid: the selector is now
+  ensemble-level `order_suscept_abs_mean_P`, and the grid extends upward to
+  `{6.0, 6.3, 6.55, 6.8, 7.1, 7.4, 7.7, 8.0}`.
+- 2026-05-31: v6a executed and filed as
+  [`../../yang-mills/receipts/2026-05-31_SU2_3D_phase2_v6a_finite_t_polyakov_neg_a.md`](../../yang-mills/receipts/2026-05-31_SU2_3D_phase2_v6a_finite_t_polyakov_neg_a.md).
+  The amended pilot froze `{6.3, 6.55, 6.8}`; `abs_mean_P` was admitted as
+  powered/disjoint; Stage 2 landed `YM-P2-NEG-A no_rank_local_structure`.

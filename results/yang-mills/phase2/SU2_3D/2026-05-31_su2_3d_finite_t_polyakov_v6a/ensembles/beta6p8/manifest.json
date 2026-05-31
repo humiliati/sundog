@@ -1,0 +1,59 @@
+{
+  "phase": "phase2",
+  "phaseVersion": "v6a",
+  "cell": "SU2_3D",
+  "latticeSize": [
+    12,
+    12,
+    4
+  ],
+  "temporalMu": 2,
+  "beta": 6.8,
+  "betaIndex": 2,
+  "boundary": "periodic",
+  "action": "Wilson",
+  "generator": "su2_heatbath_overrelax_v1",
+  "updateMix": {
+    "heatbath": 1,
+    "overrelaxation": 4
+  },
+  "masterSeed": 202605310602,
+  "burnInSweeps": 2000,
+  "pilotTauIntPlaquette": 0.7312919806346335,
+  "registeredThinning": 32,
+  "retainedConfigurations": 32,
+  "signatureVocabularyVersion": "v1",
+  "heldOutTargetVocabularyVersion": "v4",
+  "temporalPolyakovSampleCountPerConfig": 144,
+  "gammaHeldEpsilonFloor": 1e-10,
+  "heatbathFallbackCount": 0,
+  "heatbathFallbackFraction": 0,
+  "heatbathLinkUpdates": 6110208,
+  "heatbathRejectionAttempts": 24496805,
+  "linkUnitarityMaxFrobenius": 7.850462293418876e-16,
+  "perOrientationMeanPlaquette": {
+    "xy": 0.8464462849594109,
+    "xz": 0.8469584637895256,
+    "yz": 0.8471382037174475
+  },
+  "perOrientationVariancePlaquette": {
+    "xy": 0.00003085615672876886,
+    "xz": 0.00002818556445179078,
+    "yz": 0.00002850463026842978
+  },
+  "perOrientationRelativeSpreadRecordOnlyFiniteT": 0.0008167719918666636,
+  "codeCommit": "def333ee0541ffc9280aec1baaf9879024fe1d7d",
+  "gitDirty": true,
+  "commandLine": "C:\\Program Files\\nodejs\\node.exe C:\\Users\\hughe\\Dev\\sundog\\scripts\\yang-mills-phase2-v6-finite-t-polyakov.mjs --cell SU2_3D --lattice-size 12x12x4 --boundary periodic --action Wilson --generator su2_heatbath_overrelax_v1 --pilot-beta-grid 6.0,6.3,6.55,6.8,7.1,7.4,7.7,8.0 --out results/yang-mills/phase2/SU2_3D/2026-05-31_su2_3d_finite_t_polyakov_v6a --power-icc-gate 0.50 --power-agreement-gate 0.50 --leakage-cvr2-gate 0.25 --k-primary 5 --bootstrap 1000 --seed 202605310600",
+  "wallClockSeconds": 60.29016609999997,
+  "artifactHashes": {
+    "autocorr_pilot/plaquette_by_orientation.csv": "b485b2120e30acdf89ccc3a9ae75fbd5dcd293eae5cfdad811bb981e8f67bd7f",
+    "autocorr_pilot/plaquette_series.csv": "5e0fa7ea3935d64aa9ea081c120802151499d7b1feb0483ddeab5ee7145a2293",
+    "configs/su2_links.jsonl": "e049a6daa8cf49e40328a9b7b9de753f85246f938dfc29b8ff4730ee706788a1",
+    "heldout/finite_t_polyakov_summary.csv": "60a76daee2eee5263f5d19df47cca7945ef52d95a0870df34e183a66b1cc3375",
+    "heldout/heldout_loop_values.csv": "4a13f0b64e93133b6f5f0bcec1ab25bb54cd12e5e0a50ffd939166bba3c7e112",
+    "heldout/heldout_summary.csv": "1f0db0e29b39d8114b26e8fb006d32e93aae0b2ceecb71361c10537896d9109d",
+    "signatures/signature_vectors.csv": "068bdae0e2494dadc062f62f39b3a23c032f058e65fc1027c9e269c501b85c57",
+    "summary.json": "1361b986749c33e3486daf3a31741cff6807f08ffa5e34b4a1e8f2c46307ac54"
+  }
+}

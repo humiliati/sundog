@@ -1,0 +1,149 @@
+{
+  "frozenAt": "2026-05-31T20:09:22.700Z",
+  "literatureAnchor": {
+    "betaC": 6.53661,
+    "betaCUncertainty": 0.00013,
+    "source": "Edwards-von Smekal 2009 arXiv:0908.4030",
+    "convention": "beta=4/g^2 a"
+  },
+  "pilotGrid": [
+    6,
+    6.3,
+    6.55,
+    6.8,
+    7.1,
+    7.4,
+    7.7,
+    8
+  ],
+  "pilotScan": {
+    "burnIn": 800,
+    "measurements": 96,
+    "thinning": 4,
+    "selectionMetric": "order_suscept_abs_mean_P",
+    "selectionMetricDefinition": "V_perp * Var(abs_mean_P) across pilot measurements; V_perp=12*12",
+    "recordOnlyPriorMetric": "mean_chi_P"
+  },
+  "rows": [
+    {
+      "beta": 6,
+      "betaKey": "6.0",
+      "meanAbsMeanP": 0.3338503915667204,
+      "meanMeanAbsP": 0.4690732579037342,
+      "meanChiP": 0.16339626930631868,
+      "orderSusceptAbsMeanP": 2.9008723930356246,
+      "orderSusceptMeanAbsP": 0.47075185526992913,
+      "varianceAbsMeanP": 0.020144947173858504,
+      "varianceMeanAbsP": 0.0032691101060411745,
+      "meanPlaquette": 0.8247675535055743,
+      "heatbathFallbackFraction": 0,
+      "heatbathLinkUpdates": 2045952
+    },
+    {
+      "beta": 6.3,
+      "betaKey": "6.3",
+      "meanAbsMeanP": 0.35896851755130915,
+      "meanMeanAbsP": 0.47659533918170577,
+      "meanChiP": 0.15478403878115007,
+      "orderSusceptAbsMeanP": 2.481619186293564,
+      "orderSusceptMeanAbsP": 0.45821594427181256,
+      "varianceAbsMeanP": 0.017233466571483082,
+      "varianceMeanAbsP": 0.003182055168554254,
+      "meanPlaquette": 0.8336891688965458,
+      "heatbathFallbackFraction": 0,
+      "heatbathLinkUpdates": 2045952
+    },
+    {
+      "beta": 6.55,
+      "betaKey": "6.55",
+      "meanAbsMeanP": 0.3725123297297966,
+      "meanMeanAbsP": 0.48931682819254085,
+      "meanChiP": 0.15091045481578774,
+      "orderSusceptAbsMeanP": 3.524815429122728,
+      "orderSusceptMeanAbsP": 0.5542853532455619,
+      "varianceAbsMeanP": 0.024477884924463386,
+      "varianceMeanAbsP": 0.003849203841983069,
+      "meanPlaquette": 0.8399255469872768,
+      "heatbathFallbackFraction": 0,
+      "heatbathLinkUpdates": 2045952
+    },
+    {
+      "beta": 6.8,
+      "betaKey": "6.8",
+      "meanAbsMeanP": 0.42966712735805923,
+      "meanMeanAbsP": 0.5079701508637785,
+      "meanChiP": 0.13212160208551937,
+      "orderSusceptAbsMeanP": 2.230297167038664,
+      "orderSusceptMeanAbsP": 0.5728239533779819,
+      "varianceAbsMeanP": 0.015488174771101834,
+      "varianceMeanAbsP": 0.00397794412068043,
+      "meanPlaquette": 0.8464327181542751,
+      "heatbathFallbackFraction": 0,
+      "heatbathLinkUpdates": 2045952
+    },
+    {
+      "beta": 7.1,
+      "betaKey": "7.1",
+      "meanAbsMeanP": 0.46035469849308003,
+      "meanMeanAbsP": 0.5259738792138021,
+      "meanChiP": 0.12036302325378088,
+      "orderSusceptAbsMeanP": 2.5431436531850116,
+      "orderSusceptMeanAbsP": 0.7303411402253923,
+      "varianceAbsMeanP": 0.017660719813784802,
+      "varianceMeanAbsP": 0.0050718134737874464,
+      "meanPlaquette": 0.8537761845468368,
+      "heatbathFallbackFraction": 0,
+      "heatbathLinkUpdates": 2045952
+    },
+    {
+      "beta": 7.4,
+      "betaKey": "7.4",
+      "meanAbsMeanP": 0.465524734420724,
+      "meanMeanAbsP": 0.5304829424549609,
+      "meanChiP": 0.11626546059889122,
+      "orderSusceptAbsMeanP": 3.300998921158528,
+      "orderSusceptMeanAbsP": 0.9516697236610694,
+      "varianceAbsMeanP": 0.022923603619156446,
+      "varianceMeanAbsP": 0.006608817525424093,
+      "meanPlaquette": 0.8602637880661606,
+      "heatbathFallbackFraction": 0,
+      "heatbathLinkUpdates": 2045952
+    },
+    {
+      "beta": 7.7,
+      "betaKey": "7.7",
+      "meanAbsMeanP": 0.5154056553290155,
+      "meanMeanAbsP": 0.559680944050733,
+      "meanChiP": 0.10321386756014428,
+      "orderSusceptAbsMeanP": 2.4612245086641185,
+      "orderSusceptMeanAbsP": 0.8994383774696831,
+      "varianceAbsMeanP": 0.017091836865723044,
+      "varianceMeanAbsP": 0.006246099843539466,
+      "meanPlaquette": 0.8652437814894198,
+      "heatbathFallbackFraction": 0,
+      "heatbathLinkUpdates": 2045952
+    },
+    {
+      "beta": 8,
+      "betaKey": "8.0",
+      "meanAbsMeanP": 0.5158882548277534,
+      "meanMeanAbsP": 0.5575043948018706,
+      "meanChiP": 0.09977437147945985,
+      "orderSusceptAbsMeanP": 2.296187237696746,
+      "orderSusceptMeanAbsP": 0.7926463007711047,
+      "varianceAbsMeanP": 0.015945744706227404,
+      "varianceMeanAbsP": 0.005504488199799338,
+      "meanPlaquette": 0.871303985699914,
+      "heatbathFallbackFraction": 0,
+      "heatbathLinkUpdates": 2045952
+    }
+  ],
+  "peakIndex": 2,
+  "peakBracketed": true,
+  "frozenBetaSlate": [
+    6.3,
+    6.55,
+    6.8
+  ],
+  "wallClockSeconds": 188.0212984
+}
