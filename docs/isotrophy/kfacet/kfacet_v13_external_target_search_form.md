@@ -51,6 +51,16 @@ D5 velocity-fraction value has been emitted. The probe path sanitizes
 `per_row_pipeline` output to omit `velocity_fraction`, `zone_index`, and stability
 labels from per-row feasibility receipts.
 
+Discovery receipt (post-lock, 2026-05-31): a signal-blind literature/data sweep
+populated `results/isotrophy/k-facet-v13-external-target-search/target_inventory.csv`
+and `target_discovery_notes.md`, with a tracked snapshot at
+`docs/isotrophy/kfacet/kfacet_v13_target_inventory_snapshot.md`. This is an
+inventory only: no profile, D5 probe, selection, target lock, or
+velocity-fraction computation was run. The sweep used schema/source queries for
+periodic three-body catalogs with initial conditions, periods, masses, and
+linear-stability metadata; it did not search for catalogs by known or suspected
+velocity-fraction/stability behavior.
+
 ## Frame
 
 The isotrophy reopening now has a four-step ledger:

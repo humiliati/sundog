@@ -1,0 +1,441 @@
+{
+  "lane": "chatv2",
+  "phase": 0,
+  "verdict": "MARGINAL",
+  "H_star": null,
+  "cfg": {
+    "mode": "full",
+    "h_sweep": [
+      1,
+      2,
+      4,
+      8,
+      16
+    ],
+    "bits_per_channel": 16,
+    "delta": 0.35,
+    "d_model": 128,
+    "n_layers": 3,
+    "n_heads": 4,
+    "lr": 0.0003,
+    "batch": 128,
+    "eval_batch": 512,
+    "max_steps": 2500,
+    "eval_every": 250,
+    "patience": 4,
+    "n_fingerprint": 3000,
+    "fve_targets": 20,
+    "ks": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32,
+      64
+    ],
+    "seed": 0,
+    "eff_dim_floor": 6.0,
+    "ratio_max": 0.2,
+    "fve_max": 0.6,
+    "fve_perm_max": 0.12,
+    "z_recover_min": 0.7
+  },
+  "records": [
+    {
+      "H": 1,
+      "generative": {
+        "eff_dim_by_layer": [
+          1.0,
+          1.572,
+          1.47,
+          1.4
+        ],
+        "body_layer": 1,
+        "eff_dim": 1.572,
+        "k_control": 2,
+        "k_control_accs": {
+          "1": 0.8413,
+          "2": 1.0,
+          "4": 1.0,
+          "8": 1.0,
+          "16": 1.0,
+          "32": 1.0,
+          "64": 1.0
+        },
+        "z1_full_acc": 1.0,
+        "fve_body_given_z1": 0.714,
+        "fve_perm": 0.0,
+        "z_recover_mean": 1.0,
+        "z_recover_each": [
+          1.0
+        ]
+      },
+      "gen_train": {
+        "eval_loss": 0.45386311411857605,
+        "bayes_floor": 0.4227090878059909,
+        "steps": 1250
+      },
+      "twin": {
+        "eff_dim_by_layer": [
+          1.0,
+          1.556,
+          1.412,
+          1.28
+        ],
+        "body_layer": 1,
+        "eff_dim": 1.556,
+        "k_control": 1,
+        "k_control_accs": {
+          "1": 0.997,
+          "2": 0.9997,
+          "4": 0.9997,
+          "8": 0.9997,
+          "16": 0.9997,
+          "32": 0.9997,
+          "64": 0.9997
+        },
+        "z1_full_acc": 0.9997,
+        "fve_body_given_z1": 0.8047,
+        "fve_perm": 0.0,
+        "z_recover_mean": 0.9997,
+        "z_recover_each": [
+          0.9997
+        ]
+      },
+      "twin_train": {
+        "train_acc_z1": 1.0
+      },
+      "sharp": false,
+      "secs": 384.6
+    },
+    {
+      "H": 2,
+      "generative": {
+        "eff_dim_by_layer": [
+          1.0,
+          1.424,
+          2.063,
+          1.628
+        ],
+        "body_layer": 2,
+        "eff_dim": 2.063,
+        "k_control": 2,
+        "k_control_accs": {
+          "1": 0.495,
+          "2": 0.9993,
+          "4": 0.9997,
+          "8": 0.9997,
+          "16": 0.9997,
+          "32": 0.9997,
+          "64": 0.9997
+        },
+        "z1_full_acc": 0.9997,
+        "fve_body_given_z1": 0.4779,
+        "fve_perm": 0.0,
+        "z_recover_mean": 0.999,
+        "z_recover_each": [
+          0.9993,
+          0.9987
+        ]
+      },
+      "gen_train": {
+        "eval_loss": 0.46087417006492615,
+        "bayes_floor": 0.4227090878059909,
+        "steps": 2250
+      },
+      "twin": {
+        "eff_dim_by_layer": [
+          1.0,
+          2.023,
+          1.536,
+          1.371
+        ],
+        "body_layer": 1,
+        "eff_dim": 2.023,
+        "k_control": 2,
+        "k_control_accs": {
+          "1": 0.9367,
+          "2": 0.9967,
+          "4": 0.998,
+          "8": 0.9977,
+          "16": 0.9977,
+          "32": 0.9977,
+          "64": 0.9977
+        },
+        "z1_full_acc": 0.9977,
+        "fve_body_given_z1": 0.5086,
+        "fve_perm": 0.0,
+        "z_recover_mean": 0.9285,
+        "z_recover_each": [
+          0.998,
+          0.859
+        ]
+      },
+      "twin_train": {
+        "train_acc_z1": 1.0
+      },
+      "sharp": false,
+      "secs": 1040.7
+    },
+    {
+      "H": 4,
+      "generative": {
+        "eff_dim_by_layer": [
+          1.0,
+          1.33,
+          1.706,
+          1.627
+        ],
+        "body_layer": 2,
+        "eff_dim": 1.706,
+        "k_control": 4,
+        "k_control_accs": {
+          "1": 0.5017,
+          "2": 0.867,
+          "4": 0.987,
+          "8": 0.9927,
+          "16": 0.996,
+          "32": 0.996,
+          "64": 0.996
+        },
+        "z1_full_acc": 0.996,
+        "fve_body_given_z1": 0.1471,
+        "fve_perm": 0.0,
+        "z_recover_mean": 0.9912,
+        "z_recover_each": [
+          0.9963,
+          0.99,
+          0.9837,
+          0.995
+        ]
+      },
+      "gen_train": {
+        "eval_loss": 0.46283793449401855,
+        "bayes_floor": 0.4227090878059909,
+        "steps": 2500
+      },
+      "twin": {
+        "eff_dim_by_layer": [
+          1.0,
+          2.402,
+          1.991,
+          1.503
+        ],
+        "body_layer": 1,
+        "eff_dim": 2.402,
+        "k_control": 1,
+        "k_control_accs": {
+          "1": 0.9757,
+          "2": 0.9743,
+          "4": 0.9717,
+          "8": 0.9733,
+          "16": 0.9737,
+          "32": 0.9737,
+          "64": 0.9737
+        },
+        "z1_full_acc": 0.9737,
+        "fve_body_given_z1": 0.7354,
+        "fve_perm": 0.0,
+        "z_recover_mean": 0.7123,
+        "z_recover_each": [
+          0.9737,
+          0.5093,
+          0.524,
+          0.842
+        ]
+      },
+      "twin_train": {
+        "train_acc_z1": 1.0
+      },
+      "sharp": false,
+      "secs": 1933.7
+    },
+    {
+      "H": 8,
+      "generative": {
+        "eff_dim_by_layer": [
+          1.0,
+          1.246,
+          1.299,
+          1.331
+        ],
+        "body_layer": 3,
+        "eff_dim": 1.331,
+        "k_control": 8,
+        "k_control_accs": {
+          "1": 0.9067,
+          "2": 0.906,
+          "4": 0.9123,
+          "8": 0.9897,
+          "16": 0.99,
+          "32": 0.9913,
+          "64": 0.9913
+        },
+        "z1_full_acc": 0.9913,
+        "fve_body_given_z1": 0.7641,
+        "fve_perm": 0.0,
+        "z_recover_mean": 0.9233,
+        "z_recover_each": [
+          0.9913,
+          0.9173,
+          0.986,
+          0.935,
+          0.9143,
+          0.8713,
+          0.8803,
+          0.891
+        ]
+      },
+      "gen_train": {
+        "eval_loss": 0.45945799350738525,
+        "bayes_floor": 0.4227090878059909,
+        "steps": 2500
+      },
+      "twin": {
+        "eff_dim_by_layer": [
+          1.0,
+          2.214,
+          2.529,
+          1.442
+        ],
+        "body_layer": 2,
+        "eff_dim": 2.529,
+        "k_control": 2,
+        "k_control_accs": {
+          "1": 0.897,
+          "2": 0.98,
+          "4": 0.9893,
+          "8": 0.9963,
+          "16": 0.9973,
+          "32": 0.9973,
+          "64": 0.9973
+        },
+        "z1_full_acc": 0.9973,
+        "fve_body_given_z1": 0.4437,
+        "fve_perm": 0.0,
+        "z_recover_mean": 0.8582,
+        "z_recover_each": [
+          0.9973,
+          0.8333,
+          0.8227,
+          0.8413,
+          0.843,
+          0.8313,
+          0.8353,
+          0.8617
+        ]
+      },
+      "twin_train": {
+        "train_acc_z1": 1.0
+      },
+      "sharp": false,
+      "secs": 3449.5
+    },
+    {
+      "H": 16,
+      "generative": {
+        "eff_dim_by_layer": [
+          1.0,
+          1.233,
+          1.296,
+          1.614
+        ],
+        "body_layer": 3,
+        "eff_dim": 1.614,
+        "k_control": 64,
+        "k_control_accs": {
+          "1": 0.4833,
+          "2": 0.4923,
+          "4": 0.5427,
+          "8": 0.6727,
+          "16": 0.7027,
+          "32": 0.75,
+          "64": 0.7747
+        },
+        "z1_full_acc": 0.7747,
+        "fve_body_given_z1": 0.0016,
+        "fve_perm": 0.0,
+        "z_recover_mean": 0.8543,
+        "z_recover_each": [
+          0.776,
+          0.8247,
+          0.8113,
+          0.8347,
+          0.803,
+          0.8913,
+          0.8453,
+          0.9537,
+          0.91,
+          0.959,
+          0.8807,
+          0.8107,
+          0.8133,
+          0.8373,
+          0.854,
+          0.8643
+        ]
+      },
+      "gen_train": {
+        "eval_loss": 0.46720001101493835,
+        "bayes_floor": 0.4227090878059909,
+        "steps": 2500
+      },
+      "twin": {
+        "eff_dim_by_layer": [
+          1.0,
+          2.411,
+          1.93,
+          1.382
+        ],
+        "body_layer": 1,
+        "eff_dim": 2.411,
+        "k_control": 4,
+        "k_control_accs": {
+          "1": 0.492,
+          "2": 0.934,
+          "4": 0.9467,
+          "8": 0.9557,
+          "16": 0.9653,
+          "32": 0.9657,
+          "64": 0.9657
+        },
+        "z1_full_acc": 0.9657,
+        "fve_body_given_z1": 0.3097,
+        "fve_perm": 0.0,
+        "z_recover_mean": 0.6638,
+        "z_recover_each": [
+          0.9663,
+          0.6143,
+          0.6247,
+          0.6663,
+          0.6033,
+          0.6273,
+          0.5893,
+          0.6267,
+          0.629,
+          0.6347,
+          0.6493,
+          0.6553,
+          0.614,
+          0.614,
+          0.6547,
+          0.851
+        ]
+      },
+      "twin_train": {
+        "train_acc_z1": 1.0
+      },
+      "sharp": false,
+      "secs": 6947.1
+    }
+  ],
+  "total_secs": 13755.7,
+  "sharp_criteria": {
+    "eff_dim_floor": 6.0,
+    "ratio_max": 0.2,
+    "fve_max": 0.6,
+    "fve_perm_max": 0.12,
+    "z_recover_min": 0.7
+  }
+}
