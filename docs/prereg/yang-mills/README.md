@@ -8,14 +8,17 @@ Filed: **2026-05-29 (PT)**
 Status: **Phase 1 instrumentation closed across the full ladder 2026-05-29;
 Phase 2 v0 / v1 / v2 / v3 all executed 2026-05-29 ->
 `YM-P2-NEG-A no_rank_local_structure`; bounded-null synthesis filed
-2026-05-29**. See
+2026-05-29; Phase 2 v4 powered-target reopen executed 2026-05-31 ->
+`YM-P2-UNDERPOWERED no_powered_target_in_envelope`**. See
 [`P0_DOMAIN_AND_RECEIPT_LOCK.md`](P0_DOMAIN_AND_RECEIPT_LOCK.md). This
 directory remains the home for any future Yang-Mills pre-registrations
 (Phase 1 runner manifests, Phase 2/3/4 phase specs, and any P0 amendments).
 The v0, v1, v2, and v3 Phase 2 receipts are named nulls and do not admit
-Phase 3 observable-certificate work. The pre-stated v4 fallback is now
-resolved as PAUSE-and-synthesize: no automatic v4 probe-ladder continuation
-is admitted without fresh external scientific motivation.
+Phase 3 observable-certificate work. The v4 receipt is quarantine-class
+underpowered, not a named null: Stage 2 was not scored because no candidate
+target was both powered and disjoint across all three beta values. Any
+continuation routes to the pre-stated v5 P0-amendment path, not to a silent
+retry inside the same envelope.
 
 ## Filed Artifacts
 
@@ -124,14 +127,28 @@ is admitted without fresh external scientific motivation.
   - bounded-null synthesis receipt for the four Phase 2 `SU2_3D`
   named nulls across three signature vocabularies and two target
   classes. Implements the v3 probe's PAUSE-and-synthesize fallback.
+- [`PHASE2_SU2_3D_relative_locality_v4.md`](PHASE2_SU2_3D_relative_locality_v4.md)
+  - binding v4 spec triggered by the dated powered-target probe spec
+  [`../../yang-mills/specs/2026-05-31_phase2_v4_powered_target_probe.md`](../../yang-mills/specs/2026-05-31_phase2_v4_powered_target_probe.md).
+  Stage 1 audits candidate held-out summaries `mean_W14`, `mean_W23`,
+  `sigma2_W14`, `sigma2_W23`, and `ratio_W23_W14` for split-half power
+  and signature disjointness before any rank-locality score. Reuses the
+  v0 ensembles bit-for-bit and introduces `YM-P2-UNDERPOWERED
+  no_powered_target_in_envelope` when no candidate is admitted.
+  **Executed 2026-05-31 -> `YM-P2-UNDERPOWERED no_powered_target_in_envelope`.**
+  Receipt:
+  [`../../yang-mills/receipts/2026-05-31_SU2_3D_phase2_v4_underpowered.md`](../../yang-mills/receipts/2026-05-31_SU2_3D_phase2_v4_underpowered.md).
 
 ## Required Next Artifact
 
-No automatic next runner is admitted. The lane is paused at a bounded
-cell-local null on `SU2_3D`, `12^3`, beta slate `{2.0, 2.4, 2.8}`.
-Future `sigma2_W14`, `sigma2_W23`, Polyakov, topological, or smeared-
-target probes require a fresh dated spec with external scientific
-motivation and any P0-amendment impact stated before code.
+No automatic next runner is admitted. The reopened v4 lane did not reach
+Stage 2: the `SU2_3D`, `12^3`, beta slate `{2.0, 2.4, 2.8}` envelope had
+no powered+disjoint target in the registered candidate pool. If the lane
+continues, the next artifact is a dated v5 P0 amendment to a powered
+regime (for example weaker beta slate, larger volume, or a different
+target class) with the amendment impact stated before code. The other
+valid disposition is PAUSE: the underpowered-envelope receipt stands as
+the result.
 
 The Phase 5 external-review packet is drafted and **owner-pending send**
 to a lattice gauge theorist:
@@ -312,7 +329,8 @@ ever needed, must be labelled exploratory and cannot be cited as receipts.
   Disposition: PAUSE-and-synthesize. Four consistent Phase 2 named nulls
   across three signature vocabularies and two target classes are treated
   as a substantive cell-bounded null, not as permission for automatic
-  v4 probe-ladder continuation.
+  v4 probe-ladder continuation. The later v4 reopen therefore required,
+  and received, a fresh dated diagnostic spec.
 - 2026-05-29: Phase 5 external-review packet drafted at
   [`../../yang-mills/EXTERNAL_REVIEW_PACKET.md`](../../yang-mills/EXTERNAL_REVIEW_PACKET.md)
   with email cover-letter draft at
@@ -328,3 +346,13 @@ ever needed, must be labelled exploratory and cannot be cited as receipts.
   and slightly-warmer versions plus accept/decline follow-ups and an
   Owner Fill-In Checklist. Owner-pending: fill `[Name]`, `[reviewer
   specialty signal]`, `[link]`, `[Your name]` and send.
+- 2026-05-31: powered-target v4 reopen filed at
+  [`../../yang-mills/specs/2026-05-31_phase2_v4_powered_target_probe.md`](../../yang-mills/specs/2026-05-31_phase2_v4_powered_target_probe.md)
+  and
+  [`PHASE2_SU2_3D_relative_locality_v4.md`](PHASE2_SU2_3D_relative_locality_v4.md).
+  The single locked invocation executed and filed as
+  [`../../yang-mills/receipts/2026-05-31_SU2_3D_phase2_v4_underpowered.md`](../../yang-mills/receipts/2026-05-31_SU2_3D_phase2_v4_underpowered.md).
+  Verdict: `YM-P2-UNDERPOWERED no_powered_target_in_envelope`. No
+  candidate target cleared both power and disjointness across all three
+  beta values; `gamma_held` failed the power self-validation as required;
+  Stage 2 rank-locality scoring was not run.

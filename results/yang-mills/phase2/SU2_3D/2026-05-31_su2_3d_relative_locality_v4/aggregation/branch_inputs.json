@@ -1,0 +1,15 @@
+{
+  "branch": "YM-P2-UNDERPOWERED no_powered_target_in_envelope",
+  "reason": "no candidate target is powered and disjoint in all three beta values",
+  "stage2Scored": false,
+  "gammaHeldPoweredAllBetas": false,
+  "admittedCandidateCount": 0,
+  "thresholds": {
+    "powerIccGate": 0.5,
+    "powerAgreementGate": 0.5,
+    "leakageCvR2Gate": 0.25,
+    "undefinedFractionMax": 0.05,
+    "aggregationWallClockSecondsMax": 600
+  },
+  "wallClockSeconds": 3.8390121999999995
+}

@@ -1,0 +1,10 @@
+{
+  "admitted_target.json": "84a6445d666836c71aedcb3291761ab655214c535db66f3c8308802c81a47313",
+  "branch_inputs.json": "d13d3062bc2f6e830051ca0752ef0aa6daa4e52fbef3d766a81d73e372ae2891",
+  "manifest.json": "e5f11557932cef732518418d0c286bd0010ccd040c60124016e9c10d3b02b6e9",
+  "summary.json": "8f96c2445f17e30284e830a5d2d9723494f413adc8c6588fe5eb67e125534c46",
+  "target_power_audit.csv": "df14ecc6b129c2ec9ffe9b205a5efdb73c8c98b8ad1b8d94d1fd8529b7f0a26e",
+  "target_power_audit.json": "b1cf3805d89d0a0ac73a2847ed29c070cf136a948903402927d243c7f0d22b12",
+  "v0_ensemble_sources.json": "a18454f6e2760944e10ae3ec6f6f470bb5fe989052d94406af5cab94f4a1332e",
+  "v4_target_resummaries.csv": "b52c277e378213587c5601d8769b4d4bde8aef731c1a61fdfec5a57d67551100"
+}
