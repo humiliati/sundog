@@ -1,0 +1,667 @@
+{
+  "schema": "sundog.threebody.phase4.cell_fibers.v1",
+  "classifier": {
+    "partitionKeys": [
+      "guard_t",
+      "log_binned_abs_tidal_magnitude",
+      "gradient_angle_sector",
+      "log_binned_gradient_magnitude",
+      "sensor_noise_std"
+    ],
+    "fiberMinSamples": 20,
+    "tidalLogBinWidth": 0.25,
+    "gradientMagnitudeLogBinWidth": 0.25,
+    "gradientAngleSectors": 8,
+    "commonActionRule": "exact action_key match; zero action is represented by its exact key",
+    "undecidableRule": "no fiber with at least fiberMinSamples Bayes-reached samples"
+  },
+  "cells": {
+    "mu_1__dt_0p01__r_1p075__v_1p15__thrust_0p4__noise_0p01__gq_0p75__gminr_1p15__gaccel_2p5__gtidal_35\tnear_escape": {
+      "cellKey": "mu_1__dt_0p01__r_1p075__v_1p15__thrust_0p4__noise_0p01__gq_0p75__gminr_1p15__gaccel_2p5__gtidal_35\tnear_escape",
+      "cellClass": "off",
+      "decidableFiberCount": 55,
+      "fiberCount": 428,
+      "fibers": [
+        {
+          "fiber": "guard=false|tidal=[0.25,0.5)|angle=4|grad=[0.75,1)|noise=0.01",
+          "sampleCount": 80,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[0,0.25)|angle=4|grad=[0.5,0.75)|noise=0.01",
+          "sampleCount": 45,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[0.25,0.5)|angle=4|grad=[0.5,0.75)|noise=0.01",
+          "sampleCount": 41,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[0,0.25)|angle=4|grad=[0.25,0.5)|noise=0.01",
+          "sampleCount": 38,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[0,0.25)|angle=5|grad=[0.25,0.5)|noise=0.01",
+          "sampleCount": 58,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=5|grad=[0,0.25)|noise=0.01",
+          "sampleCount": 72,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[0,0.25)|angle=5|grad=[0,0.25)|noise=0.01",
+          "sampleCount": 65,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=5|grad=[-0.25,0)|noise=0.01",
+          "sampleCount": 90,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[0,0.25)|angle=5|grad=[-0.25,0)|noise=0.01",
+          "sampleCount": 32,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=4|grad=[-0.25,0)|noise=0.01",
+          "sampleCount": 35,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.5,-0.25)|angle=5|grad=[-0.5,-0.25)|noise=0.01",
+          "sampleCount": 61,
+          "actionSet": [
+            "0:-0.4",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=6|grad=[-0.75,-0.5)|noise=0.01",
+          "sampleCount": 43,
+          "actionSet": [
+            "0:-0.4",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.5,-0.25)|angle=4|grad=[-0.5,-0.25)|noise=0.01",
+          "sampleCount": 27,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=5|grad=[-0.5,-0.25)|noise=0.01",
+          "sampleCount": 120,
+          "actionSet": [
+            "0:-0.4",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.5,-0.25)|angle=4|grad=[-1,-0.75)|noise=0.01",
+          "sampleCount": 25,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=5|grad=[-1,-0.75)|noise=0.01",
+          "sampleCount": 86,
+          "actionSet": [
+            "0:-0.4",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=4|grad=[-0.75,-0.5)|noise=0.01",
+          "sampleCount": 78,
+          "actionSet": [
+            "0:-0.4",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.5,-0.25)|angle=5|grad=[-0.75,-0.5)|noise=0.01",
+          "sampleCount": 59,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[0,0.25)|angle=5|grad=[-0.5,-0.25)|noise=0.01",
+          "sampleCount": 25,
+          "actionSet": [
+            "0:-0.4",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=6|grad=[-1,-0.75)|noise=0.01",
+          "sampleCount": 80,
+          "actionSet": [
+            "0:-0.4",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.5,-0.25)|angle=4|grad=[-0.75,-0.5)|noise=0.01",
+          "sampleCount": 54,
+          "actionSet": [
+            "0:-0.4",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.5,-0.25)|angle=6|grad=[-1,-0.75)|noise=0.01",
+          "sampleCount": 43,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=5|grad=[-0.75,-0.5)|noise=0.01",
+          "sampleCount": 116,
+          "actionSet": [
+            "0:-0.4",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.5,-0.25)|angle=5|grad=[-1,-0.75)|noise=0.01",
+          "sampleCount": 42,
+          "actionSet": [
+            "0:-0.4",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=4|grad=[-0.5,-0.25)|noise=0.01",
+          "sampleCount": 43,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=4|grad=[-1,-0.75)|noise=0.01",
+          "sampleCount": 45,
+          "actionSet": [
+            "0:-0.4",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=6|grad=[-0.5,-0.25)|noise=0.01",
+          "sampleCount": 25,
+          "actionSet": [
+            "0:-0.4",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=7|grad=[-0.75,-0.5)|noise=0.01",
+          "sampleCount": 25,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.5,-0.25)|angle=6|grad=[-1.25,-1)|noise=0.01",
+          "sampleCount": 36,
+          "actionSet": [
+            "0:-0.4",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=4|grad=[-1.5,-1.25)|noise=0.01",
+          "sampleCount": 25,
+          "actionSet": [
+            "0:-0.4",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=2|grad=[-1,-0.75)|noise=0.01",
+          "sampleCount": 20,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=7|grad=[-1,-0.75)|noise=0.01",
+          "sampleCount": 46,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.5,-0.25)|angle=5|grad=[-1.5,-1.25)|noise=0.01",
+          "sampleCount": 37,
+          "actionSet": [
+            "0:-0.4",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=true|tidal=[-0.5,-0.25)|angle=6|grad=[-1,-0.75)|noise=0.01",
+          "sampleCount": 37,
+          "actionSet": [
+            "0.0390795:-0.39808641",
+            "0.05700915:-0.3959166",
+            "0.06527765:-0.39463759",
+            "0.08146431:-0.39161661",
+            "0.09589951:-0.38833399",
+            "0.09834321:-0.38772234",
+            "0.10553323:-0.38582734",
+            "0.11030589:-0.38449007",
+            "0.12417765:-0.38023665",
+            "0.12954437:-0.37844188",
+            "0.13372052:-0.3769865",
+            "0.13670951:-0.3759129",
+            "0.13990524:-0.37473527",
+            "0.1458628:-0.37245677",
+            "0.14917178:-0.37114388",
+            "0.16158427:-0.36591054",
+            "0.16599867:-0.36392917",
+            "0.17138877:-0.36142204",
+            "0.17348207:-0.36042193",
+            "0.17660059:-0.35890421",
+            "0.17781965:-0.35830179",
+            "0.17949987:-0.357463",
+            "0.18258875:-0.35589514",
+            "0.18763302:-0.35326173",
+            "0.19010794:-0.35193603",
+            "0.19386269:-0.34988178",
+            "0.1985365:-0.347251",
+            "0.19917546:-0.3468849",
+            "0.20783673:-0.34176585",
+            "0.22133765:-0.3331811",
+            "0.23221652:-0.32569232",
+            "0.24438018:-0.31666754",
+            "0.24693815:-0.31467689",
+            "0.2661512:-0.29860264",
+            "0.27248593:-0.29283343",
+            "0.2788084:-0.28682029",
+            "0.28256148:-0.28312367"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=6|grad=[-1.25,-1)|noise=0.01",
+          "sampleCount": 57,
+          "actionSet": [
+            "0:-0.4",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.5,-0.25)|angle=5|grad=[-1.25,-1)|noise=0.01",
+          "sampleCount": 29,
+          "actionSet": [
+            "0:-0.4",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=7|grad=[-1.5,-1.25)|noise=0.01",
+          "sampleCount": 24,
+          "actionSet": [
+            "0:-0.4",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.5,-0.25)|angle=7|grad=[-1.5,-1.25)|noise=0.01",
+          "sampleCount": 24,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=5|grad=[-1.25,-1)|noise=0.01",
+          "sampleCount": 42,
+          "actionSet": [
+            "0:-0.4",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=2|grad=[-1.25,-1)|noise=0.01",
+          "sampleCount": 21,
+          "actionSet": [
+            "0:-0.4",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=true|tidal=[-0.5,-0.25)|angle=6|grad=[-1.25,-1)|noise=0.01",
+          "sampleCount": 30,
+          "actionSet": [
+            "0.01997178:-0.3995011",
+            "0.02749319:-0.39905404",
+            "0.0289692:-0.3989496",
+            "0.04346427:-0.39763156",
+            "0.0483334:-0.39706912",
+            "0.06325043:-0.39496757",
+            "0.06647392:-0.39443785",
+            "0.08381819:-0.39111956",
+            "0.09178678:-0.38932658",
+            "0.10153982:-0.38689749",
+            "0.11565761:-0.38291424",
+            "0.12238257:-0.38081821",
+            "0.13712766:-0.37576057",
+            "0.13850884:-0.37525365",
+            "0.15482032:-0.36882336",
+            "0.16539017:-0.36420611",
+            "0.17883115:-0.35779801",
+            "0.18969435:-0.35215913",
+            "0.19237083:-0.35070424",
+            "0.19570291:-0.34885581",
+            "0.2051903:-0.34336124",
+            "0.21098465:-0.33983154",
+            "0.21622347:-0.33652253",
+            "0.22991975:-0.32731775",
+            "0.24380681:-0.31710919",
+            "0.25668358:-0.3067793",
+            "0.25864828:-0.30512468",
+            "0.26648262:-0.29830691",
+            "0:-0.4"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=0|grad=[-1.5,-1.25)|noise=0.01",
+          "sampleCount": 28,
+          "actionSet": [
+            "0:-0.4",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.5,-0.25)|angle=2|grad=[-1.5,-1.25)|noise=0.01",
+          "sampleCount": 20,
+          "actionSet": [
+            "0:-0.4",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=5|grad=[-1.5,-1.25)|noise=0.01",
+          "sampleCount": 25,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.5,-0.25)|angle=6|grad=[-1.5,-1.25)|noise=0.01",
+          "sampleCount": 32,
+          "actionSet": [
+            "0:-0.4",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=7|grad=[-1.25,-1)|noise=0.01",
+          "sampleCount": 36,
+          "actionSet": [
+            "0:-0.4",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=2|grad=[-1.5,-1.25)|noise=0.01",
+          "sampleCount": 23,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=6|grad=[-1.5,-1.25)|noise=0.01",
+          "sampleCount": 36,
+          "actionSet": [
+            "0:-0.4",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=true|tidal=[-0.5,-0.25)|angle=7|grad=[-1.25,-1)|noise=0.01",
+          "sampleCount": 24,
+          "actionSet": [
+            "0.28389649:-0.28178499",
+            "0.29799253:-0.26683413",
+            "0.29833651:-0.26644948",
+            "0.29905724:-0.26564029",
+            "0.30736561:-0.25598121",
+            "0.30834136:-0.25480504",
+            "0.32334934:-0.23546806",
+            "0.32476453:-0.23351232",
+            "0.32573524:-0.23215632",
+            "0.33146523:-0.22389908",
+            "0.33660247:-0.216099",
+            "0.34109226:-0.20894035",
+            "0.35061588:-0.19253184",
+            "0.35352945:-0.18712811",
+            "0.3622199:-0.16969603",
+            "0.37606639:-0.13628671",
+            "0.37686164:-0.13407201",
+            "0.37721397:-0.13307749",
+            "0.37981666:-0.12545637",
+            "0.38310599:-0.11502088",
+            "0.3862254:-0.10406699",
+            "0.38788979:-0.09768066",
+            "0.39444414:-0.06643656",
+            "0.39696831:-0.04915444"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[0.5,0.75)|angle=4|grad=[1,1.25)|noise=0.01",
+          "sampleCount": 22,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[0,0.25)|angle=6|grad=[0,0.25)|noise=0.01",
+          "sampleCount": 23,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=6|grad=[-0.25,0)|noise=0.01",
+          "sampleCount": 23,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=true|tidal=[-0.5,-0.25)|angle=7|grad=[-1,-0.75)|noise=0.01",
+          "sampleCount": 33,
+          "actionSet": [
+            "0.28487495:-0.28079577",
+            "0.29198311:-0.27339689",
+            "0.29880811:-0.2659205",
+            "0.31040838:-0.25228286",
+            "0.3134249:-0.24852531",
+            "0.319167:-0.24110667",
+            "0.32634256:-0.23130183",
+            "0.32644981:-0.23115042",
+            "0.32721987:-0.23005903",
+            "0.33413855:-0.21988959",
+            "0.33764398:-0.21446805",
+            "0.33789208:-0.21407695",
+            "0.33988159:-0.21090402",
+            "0.34427646:-0.20365097",
+            "0.35030293:-0.19310065",
+            "0.35200476:-0.18998066",
+            "0.3556359:-0.18309317",
+            "0.35630941:-0.18177899",
+            "0.35642296:-0.18155625",
+            "0.35804025:-0.17834568",
+            "0.3666368:-0.15992954",
+            "0.36702725:-0.15903143",
+            "0.37475953:-0.13984024",
+            "0.37522287:-0.13859221",
+            "0.37970973:-0.12577964",
+            "0.3855262:-0.10662807",
+            "0.38730219:-0.09998506",
+            "0.38798054:-0.09731959",
+            "0.39426162:-0.06751127",
+            "0.39443102:-0.06651442",
+            "0.39512488:-0.06226015",
+            "0.39554983:-0.0595007",
+            "0.39978097:-0.01323532"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=0|grad=[-0.5,-0.25)|noise=0.01",
+          "sampleCount": 23,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=0|grad=[-0.25,0)|noise=0.01",
+          "sampleCount": 35,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        }
+      ]
+    }
+  }
+}

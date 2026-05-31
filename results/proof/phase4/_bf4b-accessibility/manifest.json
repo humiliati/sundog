@@ -1,0 +1,119 @@
+{
+  "schema": "sundog.threebody.phase4-bf4b-accessibility.merged.v1",
+  "mergedFrom": [
+    {
+      "seed": 0,
+      "shardDir": "results\\proof\\phase4\\_bf4b-accessibility-shard-seed_0",
+      "startedAt": "2026-05-30T02:04:18.125Z",
+      "completedAt": "2026-05-30T08:59:45.706Z",
+      "schema": "sundog.threebody.phase4-bf4b-iad-shard-seed_0.bayes_floor.v1"
+    },
+    {
+      "seed": 1,
+      "shardDir": "results\\proof\\phase4\\_bf4b-accessibility-shard-seed_1",
+      "startedAt": "2026-05-30T02:04:18.119Z",
+      "completedAt": "2026-05-30T05:00:17.885Z",
+      "schema": "sundog.threebody.phase4-bf4b-iad-shard-seed_1.bayes_floor.v1"
+    },
+    {
+      "seed": 2,
+      "shardDir": "results\\proof\\phase4\\_bf4b-accessibility-shard-seed_2",
+      "startedAt": "2026-05-30T02:04:18.130Z",
+      "completedAt": "2026-05-31T05:20:02.873Z",
+      "schema": "sundog.threebody.phase4-bf4b-iad-shard-seed_2.bayes_floor.v1"
+    },
+    {
+      "seed": 3,
+      "shardDir": "results\\proof\\phase4\\_bf4b-accessibility-shard-seed_3",
+      "startedAt": "2026-05-30T05:00:18.266Z",
+      "completedAt": "2026-05-30T08:50:28.404Z",
+      "schema": "sundog.threebody.phase4-bf4b-iad-shard-seed_3.bayes_floor.v1"
+    },
+    {
+      "seed": 4,
+      "shardDir": "results\\proof\\phase4\\_bf4b-accessibility-shard-seed_4",
+      "startedAt": "2026-05-30T08:50:29.250Z",
+      "completedAt": "2026-05-30T15:09:04.619Z",
+      "schema": "sundog.threebody.phase4-bf4b-iad-shard-seed_4.bayes_floor.v1"
+    },
+    {
+      "seed": 5,
+      "shardDir": "results\\proof\\phase4\\_bf4b-accessibility-shard-seed_5",
+      "startedAt": "2026-05-30T08:59:46.535Z",
+      "completedAt": "2026-05-30T15:05:14.013Z",
+      "schema": "sundog.threebody.phase4-bf4b-iad-shard-seed_5.bayes_floor.v1"
+    },
+    {
+      "seed": 6,
+      "shardDir": "results\\proof\\phase4\\_bf4b-accessibility-shard-seed_6",
+      "startedAt": "2026-05-30T15:05:14.544Z",
+      "completedAt": "2026-05-30T20:10:05.474Z",
+      "schema": "sundog.threebody.phase4-bf4b-iad-shard-seed_6.bayes_floor.v1"
+    },
+    {
+      "seed": 7,
+      "shardDir": "results\\proof\\phase4\\_bf4b-accessibility-shard-seed_7",
+      "startedAt": "2026-05-30T15:09:05.150Z",
+      "completedAt": "2026-05-30T20:40:48.137Z",
+      "schema": "sundog.threebody.phase4-bf4b-iad-shard-seed_7.bayes_floor.v1"
+    }
+  ],
+  "purpose": "Merged IAD shards — output structure mirrors a single 8-seed invocation for the regret reducer.",
+  "args": {
+    "phase": "phase4-bf4b-accessibility",
+    "out": "results\\proof\\phase4\\_bf4b-accessibility",
+    "seedStart": 0,
+    "seeds": 8,
+    "regimes": [
+      "near_escape"
+    ],
+    "duration": 16,
+    "timesteps": [
+      0.01
+    ],
+    "logEvery": 1,
+    "massRatios": [
+      1
+    ],
+    "targetTidal": 2,
+    "tidalSpikeThreshold": 50,
+    "localAccelerationWarningThreshold": 10,
+    "eventWarningHorizon": 1,
+    "radiusScales": [
+      1.075
+    ],
+    "velocityScales": [
+      1.15
+    ],
+    "thrustLimits": [
+      0.4
+    ],
+    "sensorNoiseSweep": [
+      0.01
+    ],
+    "trackGuardMode": "hazard_quantile",
+    "trackGuardQuantiles": [
+      0.75
+    ],
+    "trackGuardMinRadiusSweep": [
+      1.15
+    ],
+    "trackGuardMaxLocalAccelerationSweep": [
+      2.5
+    ],
+    "trackGuardMaxTidalMagnitudeSweep": [
+      35
+    ],
+    "particleCount": 512,
+    "planningHorizonSteps": 800,
+    "resampleThreshold": 0.5,
+    "shapeFraction": 0.5,
+    "signatureAdvantageDtMultiplier": 1,
+    "candidateHoldSteps": 800,
+    "bootstrapSeed": 40604
+  },
+  "startedAt": "2026-05-30T02:04:18.119Z",
+  "completedAt": "2026-05-31T05:20:02.873Z",
+  "shardCount": 8,
+  "trialCount": 8
+}
