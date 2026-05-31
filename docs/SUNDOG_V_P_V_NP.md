@@ -434,8 +434,8 @@ Status: spec/charter opened, v0 execution slate frozen, and v0 executed as a
 named quarantine; see
 [`pvnp/PHASE2_MESA_BRIDGE.md`](pvnp/PHASE2_MESA_BRIDGE.md) and
 [`pvnp/PHASE2_MESA_BRIDGE_V0_SLATE.md`](pvnp/PHASE2_MESA_BRIDGE_V0_SLATE.md).
-The next step is a v1 slate for either raw-logged Small reruns or an explicit
-Medium-only bridge.
+The v1 slate is frozen for implementation and selects raw-logged Small reruns
+over Medium-only downscope. No v1 execution has run.
 
 Deliverables:
 
@@ -657,6 +657,8 @@ baselines, reproduced metrics, and archived artifacts.
   verification bridge spec / charter (opened 2026-05-31).
 - [`pvnp/PHASE2_MESA_BRIDGE_V0_SLATE.md`](pvnp/PHASE2_MESA_BRIDGE_V0_SLATE.md):
   frozen first mesa-bridge execution slate.
+- [`pvnp/PHASE2_MESA_BRIDGE_V1_SLATE.md`](pvnp/PHASE2_MESA_BRIDGE_V1_SLATE.md):
+  frozen provenance-repair slate selecting raw-logged Small reruns.
 - [`pvnp/receipts/2026-05-31_phase2_mesa_bridge_v0.md`](pvnp/receipts/2026-05-31_phase2_mesa_bridge_v0.md):
   Phase 2 v0 named-quarantine receipt.
 - [`pvnp/RECEIPT_TEMPLATE.md`](pvnp/RECEIPT_TEMPLATE.md): receipt template
