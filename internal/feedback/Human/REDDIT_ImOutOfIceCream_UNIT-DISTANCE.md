@@ -515,7 +515,7 @@ anchors (matching `scripts/rollout-compander-citation.mjs`'s
 `EXPECTED_HOOKS` array: `unit-distance.html` ×2, `chat.html`,
 `docs/SUNDOG_V_CHAT.md`, `capset.html`, `geometry.html`,
 `docs/promo/PROMO_HIGHLIGHTS.md`) **plus** one internal-doc anchor
-(`docs/threebody/CROSS_SUBSTRATE_NOTES.md` §6.5 → §6.6 backfill).
+(`docs/CROSS_SUBSTRATE_NOTES.md` §6.5 → §6.6 backfill).
 If the count is wrong, an anchor was deleted or duplicated and the
 surface list above needs reconciling before deployment. The
 rollout script will validate its 6 public-surface anchors
@@ -543,7 +543,7 @@ When the gate trips:
    and depends on the rest being deployed first.
 7. Send the mod a heads-up message with links to all six surfaces.
 8. **Manual backfill: lift §6.6 placeholder in
-   `docs/threebody/CROSS_SUBSTRATE_NOTES.md` into a real §6.6**
+   `docs/CROSS_SUBSTRATE_NOTES.md` into a real §6.6**
    that threads the now-cited compander / dual-subspace /
    categorical-centroid ⊥ generator-algebra mapping into the
    cross-substrate vocabulary table at §6.3. This sits outside
@@ -584,7 +584,7 @@ The user has already operationalised the ratchet:
    `requiredChecks`.
 5. Run `npm run build`.
 6. Manually update the §6.6 placeholder in
-   `docs/threebody/CROSS_SUBSTRATE_NOTES.md` (step 8 of §10c).
+   `docs/CROSS_SUBSTRATE_NOTES.md` (step 8 of §10c).
 7. Send the mod the heads-up message from §10c step 7.
 
 The eight-step sequence in §10c is the conceptual order; this

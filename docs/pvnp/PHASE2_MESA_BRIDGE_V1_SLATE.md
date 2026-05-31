@@ -58,7 +58,7 @@ body-resistance / Sundog-regime-2 result: the mesa control substrate is
 0.97-0.99`), so the bridge cannot demonstrate signature verification on a body
 that genuinely resists its shadow. See the charter's Inherited Claim Boundary
 ([`PHASE2_MESA_BRIDGE.md`](PHASE2_MESA_BRIDGE.md)) and
-[`../threebody/CROSS_SUBSTRATE_NOTES.md`](../threebody/CROSS_SUBSTRATE_NOTES.md).
+[`../CROSS_SUBSTRATE_NOTES.md`](../CROSS_SUBSTRATE_NOTES.md).
 The v1 receipt must restate this boundary.
 
 ## Non-Changes From v0

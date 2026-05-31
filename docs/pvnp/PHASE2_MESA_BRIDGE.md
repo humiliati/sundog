@@ -5,7 +5,8 @@ Status: opened 2026-05-31. v0 executed -> **named quarantine** (provenance:
 [`receipts/2026-05-31_phase2_mesa_bridge_v0.md`](receipts/2026-05-31_phase2_mesa_bridge_v0.md).
 v1 provenance-repair slate
 [`PHASE2_MESA_BRIDGE_V1_SLATE.md`](PHASE2_MESA_BRIDGE_V1_SLATE.md) is
-**frozen for implementation** (raw-logged Small rerun; no v1 execution yet).
+executed as a **bounded-positive provenance repair**; receipt
+[`receipts/2026-05-31_phase2_mesa_bridge_v1.md`](receipts/2026-05-31_phase2_mesa_bridge_v1.md).
 
 This is the Phase 2 analogue of
 [`PHASE1_TOY_VERIFIER_SPEC.md`](PHASE1_TOY_VERIFIER_SPEC.md): it defines the
@@ -31,7 +32,7 @@ Phase 1 earned exactly this and Phase 2 may not silently widen it:
   alignment-verification claim is made.
 
 **Body-resistance boundary (from the cross-substrate note, 2026-05-29).**
-[`../threebody/CROSS_SUBSTRATE_NOTES.md`](../threebody/CROSS_SUBSTRATE_NOTES.md)
+[`../CROSS_SUBSTRATE_NOTES.md`](../CROSS_SUBSTRATE_NOTES.md)
 Section 6.3 measured the mesa control substrate directly: `net.7` is effectively
 **~2-dimensional** (participation ratio 2.0, a function of the 6-dim
 observation), so the 5D cliff shadow reconstructs it at
@@ -177,14 +178,11 @@ Phase 2 fails, and must say so, if any of:
 
 ## Next Allowed Step
 
-Implement the frozen Phase 2 v1 slate:
-[`PHASE2_MESA_BRIDGE_V1_SLATE.md`](PHASE2_MESA_BRIDGE_V1_SLATE.md). The v0 run
-named-quarantined on raw-log provenance: Small-tier source manifests did not
-save per-seed trial logs, so the registered raw-recompute gate could not pass.
-The v1 contract selects raw-logged Small reruns over Medium-only downscope. The
-next step is post-freeze implementation wiring: add the small-raw rerun command,
-implement repaired-root precedence in the bridge reader, then execute v1 under
-this frozen contract.
+Phase 3 is opened for review in
+[`PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md`](PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md).
+The v1 bridge closed the v0 provenance gap, but it did not estimate
+`capacity_threshold` or test cheap inversion/spoof resistance. Freeze the
+Phase 3 attacker/capacity battery before any execution.
 
 ## Cross-References
 
@@ -193,6 +191,10 @@ this frozen contract.
   v0 execution slate.
 - [`PHASE2_MESA_BRIDGE_V1_SLATE.md`](PHASE2_MESA_BRIDGE_V1_SLATE.md): frozen
   provenance-repair slate.
+- [`receipts/2026-05-31_phase2_mesa_bridge_v1.md`](receipts/2026-05-31_phase2_mesa_bridge_v1.md):
+  bounded-positive v1 provenance-repair receipt.
+- [`PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md`](PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md):
+  opened Phase 3 capacity-relative one-wayness slate.
 - [`receipts/2026-05-31_phase1_toy_verifier_v6.md`](receipts/2026-05-31_phase1_toy_verifier_v6.md):
   the bounded-positive Phase 1 receipt that authorized opening Phase 2.
 - [`../SUNDOG_V_MESA.md`](../SUNDOG_V_MESA.md): mesa lane roadmap.

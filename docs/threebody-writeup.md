@@ -434,7 +434,7 @@ This separation keeps the experiment honest: if a compressed diagnostic works on
   "separate warning quality, action coupling, and outcome effect; use
   forward-oracle checks before promoting inverse/control handles; preserve
   boundary negatives." See
-  [threebody/CROSS_SUBSTRATE_NOTES.md](threebody/CROSS_SUBSTRATE_NOTES.md).
+  [CROSS_SUBSTRATE_NOTES.md](CROSS_SUBSTRATE_NOTES.md).
 - **Phase 14, mechanism decomposition**: The first mechanism-decomposition lock
   has run and the exact Phase 13 regression gate passed bit-for-bit. Guarded
   TRACK remains the only strong favorable-pocket arm; action shuffle and signal

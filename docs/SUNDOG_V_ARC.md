@@ -2,7 +2,7 @@
 
 > **Cross-substrate failure-map entry:** CONVERGENCE-TO-NULL (Phase 3 converged
 > deterministically; reopening needs a reframing, not another sweep) — see
-> [`threebody/CROSS_SUBSTRATE_NOTES.md`](threebody/CROSS_SUBSTRATE_NOTES.md)
+> [`CROSS_SUBSTRATE_NOTES.md`](CROSS_SUBSTRATE_NOTES.md)
 > "Cross-Substrate Generality Failure Map".
 
 Working hook:

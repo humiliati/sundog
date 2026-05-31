@@ -6,7 +6,7 @@ Audience: collaborators, paper-side writers, future coding agents.
 Canonical sources: `kfacet_v06_mechanism_preregistration.md`,
 `kfacet_v06a_energy_quartile_audit_form.md`,
 `kfacet_v06b_within_branch_energy_audit_form.md`, and
-[`../../threebody/CROSS_SUBSTRATE_NOTES.md`](../../threebody/CROSS_SUBSTRATE_NOTES.md)
+[`../../CROSS_SUBSTRATE_NOTES.md`](../../CROSS_SUBSTRATE_NOTES.md)
 sections 6-7 (projection-language framing).
 Companion (closed v0.5 chapter): `kfacet_v05_writeup.md`.
 
@@ -345,7 +345,7 @@ direction."* v0.7a runner pending implementation
   (grand-companion).
 - `kfacet_v03h_writeup.md` -- v0.3 domain-of-applicability close
   (great-grand-companion).
-- `docs/threebody/CROSS_SUBSTRATE_NOTES.md` sections 6-7 -- projection-
+- `docs/CROSS_SUBSTRATE_NOTES.md` sections 6-7 -- projection-
   language framing (body / shadow / projection-limit / conditional-
   independence vocabulary).
 

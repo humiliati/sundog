@@ -6,7 +6,7 @@ Audience: collaborators, paper-side writers, future coding agents.
 Canonical sources: `kfacet_v07_mechanism_preregistration.md`,
 `kfacet_v07a_velocity_fraction_audit_form.md`,
 `kfacet_v07a_prime_restricted_scope_form.md`, and
-[`../../threebody/CROSS_SUBSTRATE_NOTES.md`](../../threebody/CROSS_SUBSTRATE_NOTES.md)
+[`../../CROSS_SUBSTRATE_NOTES.md`](../../CROSS_SUBSTRATE_NOTES.md)
 sections 6-7 (projection-language framing).
 Companion (closed v0.6 chapter): `kfacet_v06_writeup.md`.
 
@@ -372,7 +372,7 @@ No runner work until v0.8a is separately locked.
 - `kfacet_v05_writeup.md` -- v0.5 projection-limit chapter close.
 - `kfacet_v04_writeup.md` -- v0.4 structural-negative chapter close.
 - `kfacet_v03h_writeup.md` -- v0.3 domain-of-applicability close.
-- `docs/threebody/CROSS_SUBSTRATE_NOTES.md` sections 6-7 --
+- `docs/CROSS_SUBSTRATE_NOTES.md` sections 6-7 --
   projection-language framing.
 
 The chapter closes cleanly. Receipts are durable. v0.7a's

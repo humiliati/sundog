@@ -2,7 +2,7 @@
 
 > **Cross-substrate failure-map entry:** VACUOUS (Path i — the `Z2`-descent
 > rigidity check is trivially satisfied on gap-only features) — see
-> [`threebody/CROSS_SUBSTRATE_NOTES.md`](threebody/CROSS_SUBSTRATE_NOTES.md)
+> [`CROSS_SUBSTRATE_NOTES.md`](CROSS_SUBSTRATE_NOTES.md)
 > "Cross-Substrate Generality Failure Map".
 
 Working hook:

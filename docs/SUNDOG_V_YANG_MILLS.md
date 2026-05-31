@@ -2,7 +2,7 @@
 
 > **Cross-substrate failure-map entry:** BOUNDED NULL (the gauge-invariant
 > shadow carries no separating structure on the SU(2) 3D cell) — see
-> [`threebody/CROSS_SUBSTRATE_NOTES.md`](threebody/CROSS_SUBSTRATE_NOTES.md)
+> [`CROSS_SUBSTRATE_NOTES.md`](CROSS_SUBSTRATE_NOTES.md)
 > "Cross-Substrate Generality Failure Map".
 
 Working hook:

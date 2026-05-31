@@ -2,7 +2,7 @@
 
 > **Cross-substrate failure-map entry:** COST-BOUNDED (the verification shadow
 > works, but the operating-cost envelope blocks promotion) — see
-> [`threebody/CROSS_SUBSTRATE_NOTES.md`](threebody/CROSS_SUBSTRATE_NOTES.md)
+> [`CROSS_SUBSTRATE_NOTES.md`](CROSS_SUBSTRATE_NOTES.md)
 > "Cross-Substrate Generality Failure Map".
 
 Working hook:
@@ -430,12 +430,12 @@ Spec draft:
 
 Goal: connect the toy verifier to the mesa lane.
 
-Status: spec/charter opened, v0 execution slate frozen, and v0 executed as a
-named quarantine; see
+Status: spec/charter opened, v0 executed as a named quarantine, and v1 executed
+as a bounded-positive provenance repair; see
 [`pvnp/PHASE2_MESA_BRIDGE.md`](pvnp/PHASE2_MESA_BRIDGE.md) and
 [`pvnp/PHASE2_MESA_BRIDGE_V0_SLATE.md`](pvnp/PHASE2_MESA_BRIDGE_V0_SLATE.md).
-The v1 slate is frozen for implementation and selects raw-logged Small reruns
-over Medium-only downscope. No v1 execution has run.
+The v1 slate selects raw-logged Small reruns over Medium-only downscope and
+preserves the original registered v0 population.
 
 Deliverables:
 
@@ -458,6 +458,10 @@ Exit criterion: the P-vs-NP roadmap can use mesa probes as verifier-failure
 tests rather than as generic alignment demonstrations.
 
 ### Phase 3 — Capacity-Relative One-Wayness Battery
+
+Status: v0 slate opened for review; see
+[`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md).
+No attacker execution has run.
 
 Goal: measure when the signature remains useful as a verifier but resists cheap
 inversion or spoofing.
@@ -661,11 +665,15 @@ baselines, reproduced metrics, and archived artifacts.
   frozen provenance-repair slate selecting raw-logged Small reruns.
 - [`pvnp/receipts/2026-05-31_phase2_mesa_bridge_v0.md`](pvnp/receipts/2026-05-31_phase2_mesa_bridge_v0.md):
   Phase 2 v0 named-quarantine receipt.
+- [`pvnp/receipts/2026-05-31_phase2_mesa_bridge_v1.md`](pvnp/receipts/2026-05-31_phase2_mesa_bridge_v1.md):
+  Phase 2 v1 bounded-positive provenance-repair receipt.
+- [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md):
+  Phase 3 capacity-relative one-wayness slate opened for review.
 - [`pvnp/RECEIPT_TEMPLATE.md`](pvnp/RECEIPT_TEMPLATE.md): receipt template
   for phase and probe results.
 - [`pvnp/receipts/README.md`](pvnp/receipts/README.md): receipt index —
-  Phase 1 v0–v5 named-quarantine receipts and the v6 op-count
-  bounded-positive receipt.
+  Phase 1 v0–v5 named-quarantine receipts plus the v6 and Phase 2 v1
+  bounded-positive receipts.
 
 ## 11. Cross-References
 
