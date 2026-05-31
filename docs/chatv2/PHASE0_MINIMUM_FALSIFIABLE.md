@@ -279,6 +279,62 @@ re-measurement is instant (no retrain). Command:
 `python scripts/chatv2_phase0_bodyresist.py --mode full --stage all`
 (then `--stage measure` to re-judge from saved bodies).
 
+### Amendment 1 — Result (2026-05-30): artifact overturned; first non-flatly-marginal substrate
+
+Ran `--mode full --stage all` (~4.1 h; bodies saved at
+`results/chatv2/phase0-full/`). **Registered verdict: `MARGINAL` (`H*=None`)** —
+but the registered verdict is driven by a **mis-specified contrast criterion**
+(below). The underlying science is the lane's first positive body-resistance read.
+
+**The un-masking worked — the first run's `MARGINAL` was the artifact.**
+Decodable dimensionality climbs with `H` while the variance `eff_dim` stays flat:
+
+| `H` | `d_dec` (gen) | masked `eff_dim` | `leak` (z₁→others) |
+| --- | --- | --- | --- |
+| 1 | 1.0 | 1.6 | — |
+| 2 | 1.9 | 2.1 | 0.51 |
+| 4 | 3.0 | 1.6 | 0.50 |
+| 8 | 5.7 | 1.3 | 0.51 |
+| 16 | **12.3** | 1.3 | **0.52** |
+
+`d_dec → 12.3 / 16` (the generative body is genuinely high-dim); `leak ≈ chance`
+throughout (the z₁ shadow is state-insufficient for the other latents).
+High-dim body + control-sufficient (`z1` 0.88–1.0) + state-insufficient = the
+regime-2 target.
+
+**The mechanism appeared — in representation *strength* (`z_recover`), which the
+verdict did not test.** The criterion gated the twin contrast on `d_dec` (rank);
+the twin reaches `d_dec = 11.5 ≈ gen 12.3`, so it read `MARGINAL`. The real
+contrast is strength: at `H=16` the generative model decodes **all 16** latents
+at **~0.91**, while the control-only twin nails its target z₁ at **1.00** but
+leaves the other 15 at **~0.64**. Generative training lifts the *whole* state;
+control training lifts only the decision. **The registered verdict is NOT
+retroactively flipped (anti-p-hack); the criterion is recorded as mis-specified —
+it measured rank, not strength.**
+
+**Honest confound — passive-decodability floor.** The latents are simple
+(linear-aggregate) functions of the input bits, so they are partly linearly
+decodable from *any* transformer's residual stream — the twin's ~0.64 non-target
+floor. The high-dimensionality is therefore partly "free" and the resistance
+partly trivial; the **non-trivial, objective-driven** signal is the
+*strengthening* 0.64 → 0.91, which the twin proves is not automatic.
+
+**Outlier characterization (owner's atmospheric-medium hypothesis) — supported,
+and it evolves with `H`.** `carry` 1.00 → 0.62, `survive` 0.68 → 0.87 across
+`H = 1 → 16`. At `H=1` the lone latent *lives in* the high-variance directions
+(atmosphere-is-signal); at high `H` the latents spread into the broad
+low-variance subspace (`survive` = 0.87) while the outliers still carry a
+majority share (`carry` = 0.62). The high-variance medium does real perceptual
+work — not nuisance.
+
+**Disposition.** Not a fourth-marginal — body-resistance held up once un-masked,
+and the objective-driven mechanism showed. Not promotable — one toy, the
+passive-decodability confound, and a mis-specified contrast metric. →
+**Phase 0.2** ([`PHASE0_2_COMPUTED_LATENTS.md`](PHASE0_2_COMPUTED_LATENTS.md)):
+computed (nonlinear, not input-linear-decodable) latents to make resistance
+non-trivial, plus a pre-registered strength-based contrast criterion. Bodies are
+saved, so re-measuring this run under a new metric is instant.
+
 ## 8. Cross-references
 
 - [`LANE_CHARTER.md`](LANE_CHARTER.md) — the lane mission + the measured mandate.
