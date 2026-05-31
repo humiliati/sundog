@@ -64,8 +64,8 @@
 <g data-project="pvnp">
     <text x="52" y="522" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20" font-weight="850" letter-spacing="0">P-vs-NP</text>
     <g>
-    <rect x="52" y="538" width="166" height="30" rx="8" fill="#F8E7E3" stroke="#A85043" stroke-width="1"/>
-    <text x="66" y="558" fill="#6B3029" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">COST HOLD</text>
+    <rect x="52" y="538" width="166" height="30" rx="8" fill="#E7F4EC" stroke="#2F7D4F" stroke-width="1"/>
+    <text x="66" y="558" fill="#214B36" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">DRAFT HANDOFF</text>
   </g>
     <g>
         <rect x="262" y="490" width="245" height="126" rx="8" fill="#FFFFFF" stroke="#DCE6EC" stroke-width="1"/>
@@ -74,15 +74,15 @@
       </g><g>
         <rect x="529" y="490" width="245" height="126" rx="8" fill="#FFFFFF" stroke="#DCE6EC" stroke-width="1"/>
         <text x="545" y="515" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="11" font-weight="850" letter-spacing="0.04em">CURRENT READ</text>
-        <text x="545" y="540" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="400" text-anchor="start" letter-spacing="0"><tspan x="545" dy="0">The v0-v5 chain closed</tspan><tspan x="545" dy="16">multiple safety holes, but v5</tspan><tspan x="545" dy="16">is still cost-unadjudicated</tspan><tspan x="545" dy="16">after environment-hash drift.</tspan></text>
+        <text x="545" y="540" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="400" text-anchor="start" letter-spacing="0"><tspan x="545" dy="0">The v0-v6 chain is</tspan><tspan x="545" dy="16">safety-complete and v6</tspan><tspan x="545" dy="16">op-count positive; Phase 2 v0</tspan><tspan x="545" dy="16">named-quarantined on raw-log</tspan><tspan x="545" dy="16">provenance.</tspan></text>
       </g><g>
-        <rect x="796" y="490" width="245" height="126" rx="8" fill="#FFFFFF" stroke="#A85043" stroke-width="1.5"/>
-        <text x="812" y="515" fill="#6B3029" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="11" font-weight="850" letter-spacing="0.04em">BLOCKER</text>
-        <text x="812" y="540" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="400" text-anchor="start" letter-spacing="0"><tspan x="812" dy="0">Two quiescent v5 reruns are</tspan><tspan x="812" dy="16">required before v6 or Phase 2</tspan><tspan x="812" dy="16">can be interpreted.</tspan></text>
+        <rect x="796" y="490" width="245" height="126" rx="8" fill="#FFFFFF" stroke="#2F7D4F" stroke-width="1.5"/>
+        <text x="812" y="515" fill="#214B36" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="11" font-weight="850" letter-spacing="0.04em">BLOCKER</text>
+        <text x="812" y="540" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="400" text-anchor="start" letter-spacing="0"><tspan x="812" dy="0">Wall-time remains</tspan><tspan x="812" dy="16">diagnostic-only; the claim is</tspan><tspan x="812" dy="16">op-count bounded, not</tspan><tspan x="812" dy="16">machine-time cheap.</tspan></text>
       </g><g>
         <rect x="1063" y="490" width="245" height="126" rx="8" fill="#FFFFFF" stroke="#DCE6EC" stroke-width="1"/>
         <text x="1079" y="515" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="11" font-weight="850" letter-spacing="0.04em">NEXT</text>
-        <text x="1079" y="540" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="400" text-anchor="start" letter-spacing="0"><tspan x="1079" dy="0">Rerun v5 twice, compare</tspan><tspan x="1079" dy="16">environment hashes and median</tspan><tspan x="1079" dy="16">cost, then finalize or void</tspan><tspan x="1079" dy="16">the provisional receipt.</tspan></text>
+        <text x="1079" y="540" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="400" text-anchor="start" letter-spacing="0"><tspan x="1079" dy="0">Open a Phase 2 v1 slate:</tspan><tspan x="1079" dy="16">raw-logged Small rerun or</tspan><tspan x="1079" dy="16">explicitly Medium-only</tspan><tspan x="1079" dy="16">bridge.</tspan></text>
       </g>
     <line x1="507" y1="553" x2="529" y2="553" stroke="#DCE6EC" stroke-width="2" marker-end="url(#arrow)"/><line x1="774" y1="553" x2="796" y2="553" stroke="#DCE6EC" stroke-width="2" marker-end="url(#arrow)"/><line x1="1041" y1="553" x2="1063" y2="553" stroke="#DCE6EC" stroke-width="2" marker-end="url(#arrow)"/>
   </g>

@@ -1,0 +1,94 @@
+{
+  "phase": "phase2",
+  "phaseVersion": "v5",
+  "cell": "SU2_3D",
+  "latticeSize": [
+    12,
+    12,
+    12
+  ],
+  "betaSlate": [
+    2,
+    2.4,
+    2.8
+  ],
+  "perBetaConfigurations": 32,
+  "totalConfigurations": 96,
+  "signatureVocabularyVersion": "v1",
+  "signatureSource": "v0_reread",
+  "heldOutTargetVocabularyVersion": "v4",
+  "heldOutTargetCandidatePool": [
+    "abs_mean_P",
+    "mean_abs_P",
+    "chi_P"
+  ],
+  "heldOutPriorTargetsReportedNotAdmissible": [
+    "gamma_held"
+  ],
+  "heldOutTargetSampleCountPerConfig": 432,
+  "heldOutPriorTargetSampleCountPerConfig": 5184,
+  "splitRule": "transverse_site_parity",
+  "powerGate": {
+    "iccMin": 0.5,
+    "agreementMin": 0.5
+  },
+  "leakageGate": {
+    "cvR2Max": 0.25,
+    "estimator": "5_fold_cv_ols_r2_numpy_default_rng_seed_0_fold_order"
+  },
+  "primarySelectionRule": "highest_mean_beta_icc_then_lowest_mean_leakage",
+  "rankLocalityScored": false,
+  "kSlate": [
+    3,
+    5,
+    10
+  ],
+  "primaryK": 5,
+  "bootstrapResamples": 1000,
+  "controlsScored": [],
+  "controlsDeferred": [
+    "CTRL_FINITE_SIZE"
+  ],
+  "v0EnsembleSources": [
+    {
+      "beta": 2,
+      "betaKey": "2.0",
+      "resultDir": "C:/Users/hughe/Dev/sundog/results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_beta2.0_ensemble_v0",
+      "manifestCodeCommit": "f37ee57b70fd92dcc88bd5ecb8bceca8af02c37c",
+      "manifestGitDirty": true,
+      "summaryBranch": "P1-A ensemble_health_pass",
+      "configsSha256": "61f79ece31ad323f53bf34b8a173087da4bf3c02f0c73765ddb9c76c1b382f8d",
+      "hashesJsonConfigsSha256": "61f79ece31ad323f53bf34b8a173087da4bf3c02f0c73765ddb9c76c1b382f8d",
+      "signatureVectorsSha256": "047c340082a0b932dd5bacf96611222a87d6cbe46b2d344b2318b5bae9dc063a",
+      "hashesJsonSignatureVectorsSha256": "047c340082a0b932dd5bacf96611222a87d6cbe46b2d344b2318b5bae9dc063a"
+    },
+    {
+      "beta": 2.4,
+      "betaKey": "2.4",
+      "resultDir": "C:/Users/hughe/Dev/sundog/results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_beta2.4_ensemble_v0",
+      "manifestCodeCommit": "509222c450496e51495d47f90b569a4d5e330250",
+      "manifestGitDirty": true,
+      "summaryBranch": "P1-A ensemble_health_pass",
+      "configsSha256": "b94174654c93ef1ee793e455b3ffd0386e9d2054e98644d9ea14b818c2a39e3d",
+      "hashesJsonConfigsSha256": "b94174654c93ef1ee793e455b3ffd0386e9d2054e98644d9ea14b818c2a39e3d",
+      "signatureVectorsSha256": "a3731a3eadfbd5de990a1208817625d0b5d67978a943312d04b82a4d94496196",
+      "hashesJsonSignatureVectorsSha256": "a3731a3eadfbd5de990a1208817625d0b5d67978a943312d04b82a4d94496196"
+    },
+    {
+      "beta": 2.8,
+      "betaKey": "2.8",
+      "resultDir": "C:/Users/hughe/Dev/sundog/results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_beta2.8_ensemble_v0",
+      "manifestCodeCommit": "7844025aa1bf0aa6f7d783ca60521916ccfef937",
+      "manifestGitDirty": true,
+      "summaryBranch": "P1-A ensemble_health_pass",
+      "configsSha256": "d0a76960dae0d726280f972df1bc50c8c5c4402cd899f3689373a5b84573fd19",
+      "hashesJsonConfigsSha256": "d0a76960dae0d726280f972df1bc50c8c5c4402cd899f3689373a5b84573fd19",
+      "signatureVectorsSha256": "4df00104409a50642e0a73078b94dc3f6e6e5ab09c08dde0fd1b3c9188f2475c",
+      "hashesJsonSignatureVectorsSha256": "4df00104409a50642e0a73078b94dc3f6e6e5ab09c08dde0fd1b3c9188f2475c"
+    }
+  ],
+  "codeCommit": "5c2812b9c11a8b1b1d7b36e0f08e2279cc72b89a",
+  "gitDirty": true,
+  "commandLine": "C:\\Program Files\\nodejs\\node.exe C:\\Users\\hughe\\Dev\\sundog\\scripts\\yang-mills-phase2-v5-su2-3d-aggregate.mjs --ensemble-root results/yang-mills/phase2/SU2_3D --out results/yang-mills/phase2/SU2_3D/2026-05-31_su2_3d_relative_locality_v5 --power-icc-gate 0.50 --power-agreement-gate 0.50 --leakage-cvr2-gate 0.25 --k-primary 5 --bootstrap 1000 --seed 202605310205",
+  "wallClockSeconds": 2.3039848000000003
+}

@@ -1,0 +1,11 @@
+{
+  "admitted_target.json": "fa802b4f373f017442750488526f7d0518485e14256afbccb6e4fcab7e054d3d",
+  "branch_inputs.json": "b81c1d2634619acfbdca4977b68b73727f8545a12976ec2735cecec52e369313",
+  "manifest.json": "32ff0a764b33782a66dc3fdedb482fa9f9568dcb5d6850882c06d2adefa97f16",
+  "polyakov_gauge_health.json": "6d90c3ff9264913ed64ee221fed0c3fed9f597685f99242fa319fecf75e17dae",
+  "summary.json": "cf084a150ba4f1a6d3af2c96cc34f3d0d2e67fae94b6dce4a66f8505d555021e",
+  "target_power_audit.csv": "e268e3f33f984c3fa3d5c781d402ce1468390b9878152bd6e9a8ef5c299ac6ec",
+  "target_power_audit.json": "5fc5dab9891ac3c57719194f36cac69cbf62848c6c77adaae2acc2dd959d5aa8",
+  "v0_ensemble_sources.json": "a18454f6e2760944e10ae3ec6f6f470bb5fe989052d94406af5cab94f4a1332e",
+  "v5_polyakov_target_resummaries.csv": "7d9157e264ca3cc67587e6e67f52e618dd525ba00c3179d30213a68aa484f7fd"
+}

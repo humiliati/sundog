@@ -6,11 +6,12 @@
 > relationship with the reviewer.
 
 > **2026-05-31 status addendum:** do not send this draft as-is. It was
-> written before the v4 powered-target audit, which landed
+> written before the v4/v5 powered-target audits, both of which landed
 > `YM-P2-UNDERPOWERED no_powered_target_in_envelope`. If external review is
-> still pursued, revise the ask around the current surface: four prior nulls
-> were uninformative because the targets lacked power, and v4 found no
-> powered+disjoint target inside the registered 12^3 envelope.
+> still pursued, revise the ask around the current surface: four prior nulls,
+> a Wilson-loop powered-target audit with no admitted target, and a symmetric
+> Polyakov audit whose targets were disjoint but underpowered; v6 finite-
+> temperature Polyakov is the only registered continuation.
 
 ## Short Version
 

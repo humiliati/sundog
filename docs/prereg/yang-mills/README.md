@@ -9,6 +9,8 @@ Status: **Phase 1 instrumentation closed across the full ladder 2026-05-29;
 Phase 2 v0 / v1 / v2 / v3 all executed 2026-05-29 ->
 `YM-P2-NEG-A no_rank_local_structure`; bounded-null synthesis filed
 2026-05-29; Phase 2 v4 powered-target reopen executed 2026-05-31 ->
+`YM-P2-UNDERPOWERED no_powered_target_in_envelope`; Phase 2 v5 symmetric
+Polyakov audit executed 2026-05-31 ->
 `YM-P2-UNDERPOWERED no_powered_target_in_envelope`**. See
 [`P0_DOMAIN_AND_RECEIPT_LOCK.md`](P0_DOMAIN_AND_RECEIPT_LOCK.md). This
 directory remains the home for any future Yang-Mills pre-registrations
@@ -17,8 +19,10 @@ The v0, v1, v2, and v3 Phase 2 receipts are named nulls and do not admit
 Phase 3 observable-certificate work. The v4 receipt is quarantine-class
 underpowered, not a named null: Stage 2 was not scored because no candidate
 target was both powered and disjoint across all three beta values. Any
-continuation routes to the pre-stated v5 P0-amendment path, not to a silent
-retry inside the same envelope.
+v5 continuation followed that pre-stated P0-amendment path and also landed
+underpowered: the symmetric-cell Polyakov targets were disjoint but lacked
+split-half power. Any continuation now routes to the pre-stated finite-
+temperature v6 Polyakov build, not to a silent symmetric-cell retry.
 
 ## Filed Artifacts
 
@@ -138,17 +142,35 @@ retry inside the same envelope.
   **Executed 2026-05-31 -> `YM-P2-UNDERPOWERED no_powered_target_in_envelope`.**
   Receipt:
   [`../../yang-mills/receipts/2026-05-31_SU2_3D_phase2_v4_underpowered.md`](../../yang-mills/receipts/2026-05-31_SU2_3D_phase2_v4_underpowered.md).
+- [`P0_AMENDMENT_2026-05-31_polyakov.md`](P0_AMENDMENT_2026-05-31_polyakov.md)
+  - Amendment 2 to the P0 lock. Admits the Polyakov loop as held-out
+  target vocabulary v4 with summaries `abs_mean_P`, `mean_abs_P`, and
+  `chi_P`, covering both the symmetric v5 audit on the v0 ensembles and
+  the finite-temperature v6 setup. Topological charge remains deferred.
+- [`PHASE2_SU2_3D_relative_locality_v5.md`](PHASE2_SU2_3D_relative_locality_v5.md)
+  - binding v5 spec triggered by the dated Polyakov probe spec
+  [`../../yang-mills/specs/2026-05-31_phase2_v5_polyakov_probe.md`](../../yang-mills/specs/2026-05-31_phase2_v5_polyakov_probe.md).
+  Stage 1 audits symmetric Polyakov summaries `abs_mean_P`, `mean_abs_P`,
+  and `chi_P` for transverse-parity split-half power and signature
+  disjointness before any rank-locality score. Reuses the v0 ensembles
+  bit-for-bit and re-audits `gamma_held` as the required self-validation
+  prior.
+  **Executed 2026-05-31 -> `YM-P2-UNDERPOWERED no_powered_target_in_envelope`.**
+  Receipt:
+  [`../../yang-mills/receipts/2026-05-31_SU2_3D_phase2_v5_polyakov_underpowered.md`](../../yang-mills/receipts/2026-05-31_SU2_3D_phase2_v5_polyakov_underpowered.md).
+- [`PHASE2_SU2_3D_finite_t_polyakov_v6.md`](PHASE2_SU2_3D_finite_t_polyakov_v6.md)
+  - binding v6 finite-temperature Polyakov spec, pre-stated as the route
+  after v5 underpowering. It is a new build (`12^2 x 4`, asymmetric
+  lattice support, finite-temperature ensembles) and is not a continuation
+  of the symmetric-cell runner.
 
 ## Required Next Artifact
 
-No automatic next runner is admitted. The reopened v4 lane did not reach
-Stage 2: the `SU2_3D`, `12^3`, beta slate `{2.0, 2.4, 2.8}` envelope had
-no powered+disjoint target in the registered candidate pool. If the lane
-continues, the next artifact is a dated v5 P0 amendment to a powered
-regime (for example weaker beta slate, larger volume, or a different
-target class) with the amendment impact stated before code. The other
-valid disposition is PAUSE: the underpowered-envelope receipt stands as
-the result.
+The next registered continuation is the finite-temperature v6 Polyakov build
+at `12^2 x 4`, because v5 found that the symmetric-cell Polyakov targets were
+disjoint but underpowered. No automatic symmetric-cell retry is admitted. The
+other valid disposition is PAUSE: the v4 and v5 underpowered-envelope
+receipts stand as the result.
 
 The Phase 5 external-review packet is drafted and **owner-pending send**
 to a lattice gauge theorist:
@@ -356,3 +378,16 @@ ever needed, must be labelled exploratory and cannot be cited as receipts.
   candidate target cleared both power and disjointness across all three
   beta values; `gamma_held` failed the power self-validation as required;
   Stage 2 rank-locality scoring was not run.
+- 2026-05-31: Polyakov amendment 2 and v5/v6 specs filed at
+  [`P0_AMENDMENT_2026-05-31_polyakov.md`](P0_AMENDMENT_2026-05-31_polyakov.md),
+  [`PHASE2_SU2_3D_relative_locality_v5.md`](PHASE2_SU2_3D_relative_locality_v5.md),
+  and
+  [`PHASE2_SU2_3D_finite_t_polyakov_v6.md`](PHASE2_SU2_3D_finite_t_polyakov_v6.md).
+  The v5 symmetric Polyakov single locked invocation executed and filed as
+  [`../../yang-mills/receipts/2026-05-31_SU2_3D_phase2_v5_polyakov_underpowered.md`](../../yang-mills/receipts/2026-05-31_SU2_3D_phase2_v5_polyakov_underpowered.md).
+  Verdict: `YM-P2-UNDERPOWERED no_powered_target_in_envelope`. All three
+  Polyakov candidates were disjoint, but none cleared split-half power
+  across all three beta values; `gamma_held` failed the power
+  self-validation and Polyakov gauge residual max was
+  `1.6653345369377348e-16`. Stage 2 rank-locality scoring was not run;
+  v6 finite-temperature Polyakov is the only registered continuation.
