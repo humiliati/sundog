@@ -1,0 +1,54 @@
+{
+  "schema": "sundog.threebody.phase4.regret_reducer.v1",
+  "generatedAt": "2026-05-31T06:28:01.915Z",
+  "inputs": {
+    "bayesIn": "results/proof/phase4/_bf4b-accessibility",
+    "signatureIn": "results/proof/phase4/_bf4b-satisfiability",
+    "signatureMode": "track_sensor_accel_guarded",
+    "anchorSlate": "results/proof/phase4/_bf4b-satisfiability"
+  },
+  "tMax": 16,
+  "regret": {
+    "formula": "(T_safe_bayes - T_safe_signature) / t_max",
+    "joinedRowCount": 8
+  },
+  "bootstrap": {
+    "seed": 40604,
+    "iterations": 2000,
+    "classSeedRule": "bootstrap_seed + classIndex * 1009 over [on, off, undecidable]",
+    "ci": "95% paired bootstrap (2.5/97.5 percentile)"
+  },
+  "floorSanity": {
+    "threshold": 0.05,
+    "globalNegativeRegretRate": 0.5,
+    "status": "non_decisive_floor_repair_required"
+  },
+  "fiberClassifier": {
+    "partitionKeys": [
+      "guard_t",
+      "log_binned_abs_tidal_magnitude",
+      "gradient_angle_sector",
+      "log_binned_gradient_magnitude",
+      "sensor_noise_std"
+    ],
+    "fiberMinSamples": 20,
+    "tidalLogBinWidth": 0.25,
+    "gradientMagnitudeLogBinWidth": 0.25,
+    "gradientAngleSectors": 8,
+    "commonActionRule": "exact action_key match; zero action is represented by its exact key",
+    "undecidableRule": "no fiber with at least fiberMinSamples Bayes-reached samples"
+  },
+  "anchor": {
+    "status": "seed_matched",
+    "pass": true,
+    "anchorSlatePath": "results/proof/phase4/_bf4b-satisfiability",
+    "signatureMode": "track_sensor_accel_guarded",
+    "expectedCount": 8,
+    "realizedCount": 8,
+    "missingKeys": [],
+    "extraKeys": [],
+    "droppedBayesCount": 0,
+    "droppedBayesKeys": [],
+    "emptyExpectedSlate": false
+  }
+}
