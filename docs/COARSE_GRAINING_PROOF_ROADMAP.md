@@ -14,7 +14,7 @@
 > cross-substrate "convergence" is a shared **operator**, not a shared word —
 > and the pre-registered failure boundary is *predicted*, not patched.
 >
-> **Status as of 2026-05-29:** Phase 0 definitions lock landed at
+> **Status as of 2026-05-31:** Phase 0 definitions lock landed at
 > [`proof/POSTULATE1_DEFINITIONS.md`](proof/POSTULATE1_DEFINITIONS.md);
 > Phase 1 LQG proof reviewed and closed **positive** at
 > [`proof/PHASE1_LQG.md`](proof/PHASE1_LQG.md); Phase 2 finite-MDP proof
@@ -26,12 +26,24 @@
 > [`proof/PHASE4_THREEBODY.md`](proof/PHASE4_THREEBODY.md); the Bayesian-floor
 > controller buildout is staged and BF-4 smoke-passed at
 > [`proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md);
-> BF-4b off-set calibration has a first negative receipt (cell `off`, regret CI
-> `[0, 0]`), but the satisfiability probe validated the pre-registered cell
-> (oracle-signature headroom CI `[0.064, 0.499]`), so the next gate is the
-> compute-unconstrained Information-Accessibility Diagnostic and BF-5
-> sharded/full-lock staging remains blocked before the Phase 4 gate can be
-> interpreted;
+> BF-4b off-set calibration first receipt failed criterion (2) (cell `off`,
+> regret CI `[0, 0]`), but the satisfiability probe validated the pre-registered
+> cell (oracle-signature headroom CI `[0.064, 0.499]`). The compute-unconstrained
+> Information-Accessibility Diagnostic **closed 2026-05-31 with Privileged-only
+> verdict on three-body** (8 seeds × 512 particles × 800-step horizon × 800-step
+> hold; mean regret `0.0213`, 95% CI `[-0.00055, 0.052]` — includes 0; only ~7%
+> of oracle headroom recovered; 4/8 negative-regret rate): the off-set headroom
+> is NOT recoverable from `Φ` history on the three-body cell-`Φ` triple.
+> Per the Privileged-only branch, BF-5 is NOT the path forward; substrate
+> re-scope launched. Balance substrate-empirical leg **closed 2026-05-31
+> Φ-ACCESSIBLE** at
+> [`proof/PHASE4_BALANCE.md`](proof/PHASE4_BALANCE.md):
+> 8 seeds × 512 particles × 0.5s horizon on `near_fall × light_elevation=8`,
+> mean regret `0.4089`, 95% CI `[0.1040, 0.7132]` — CI lower well above 0,
+> 0/8 negative-regret rate, 153% of Phase-15 reference recovered. **Phase 4
+> closes positive overall on Balance with the three-body negative documented as
+> a substrate boundary;** Phase 5 unblocked (Balance + Mesa give the ≥2
+> substrates needed);
 > Phase 6
 > lambda-confound control **closed 2026-05-29 with Branch 3 verdict** at
 > [`proof/PHASE6_LAMBDA_CONTROL.md`](proof/PHASE6_LAMBDA_CONTROL.md):
@@ -187,10 +199,21 @@ redirects the campaign, fixed *before* the phase runs, per AGENTS.md ▸
   floor sanity passed, but the off-set regret CI was `[0, 0]`. Follow-up
   diagnostic work rejected multiplier-only tuning, retained the energy-trend
   terminal value, and validated the pre-registered cell by the satisfiability
-  probe (oracle-signature headroom mean `0.310`, CI `[0.064, 0.499]`). Next
-  operator gate is the compute-unconstrained Information-Accessibility
-  Diagnostic; BF-5 sharded/full-lock staging remains blocked at
-  [`proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md).
+  probe (oracle-signature headroom mean `0.310`, CI `[0.064, 0.499]`). **BF-4b
+  Information-Accessibility Diagnostic closed 2026-05-31 with Privileged-only
+  verdict** (`_bf4b-accessibility`, 8 seeds × 512 particles × 800-step horizon
+  × 800-step hold, sharded 3-wide via
+  [`scripts/threebody-phase4-iad-{shard,concurrent,merge}.mjs`](../scripts);
+  mean off-class regret `0.0213`, 95% CI `[-0.00055, 0.052]` — includes 0 by
+  the strict pre-registered rule; ~7% of oracle headroom recovered; 4/8
+  negative-regret rate; `floor_status = non_decisive_floor_repair_required`).
+  **BF-5 is NOT the next step** per the pre-registered Privileged-only branch
+  — more floor engineering will not make the off-set arm satisfiable on this
+  cell. The Phase-4 substrate-empirical leg as currently scoped needs re-scope
+  (different cell, different `Φ`, different substrate, or accept the Phases 1-3
+  analytical trunk without a positive Phase-4 substrate leg). See
+  [`proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md)
+  ▸ §IAD Receipt for full per-seed table and run inventory.
 - **Pre-registered negative.** Gate, fixed now: signature-only regret vs Bayes
   must → 0 (within bootstrap CI) **on** the `𝓕_σ`-measurable cell set and stay
   bounded away from 0 (CI excludes 0) **off** it. If regret is bounded-away *on*
@@ -252,7 +275,18 @@ redirects the campaign, fixed *before* the phase runs, per AGENTS.md ▸
   anchored it). Anniversary cliff language survives as operating-envelope
   reference; Postulate-2 capacity-law promotion blocked pending optimizer
   diagnosis (reward normalization, value-loss scale, gradient norms per
-  Branch 3).
+  Branch 3). **Substrate split close 2026-05-31**: three-body IAD closed
+  Privileged-only at
+  [`proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md)
+  ▸ §IAD Receipt (mean regret 0.0213, CI `[-0.00055, 0.052]` — includes 0;
+  ~7% reference recovered; 4/8 negative-regret rate); Balance substrate-leg
+  re-scope closed Φ-ACCESSIBLE at
+  [`proof/PHASE4_BALANCE.md`](proof/PHASE4_BALANCE.md) (mean regret 0.4089,
+  CI `[0.1040, 0.7132]` — lower well above 0; 0/8 negative-regret rate; 153%
+  of Phase-15 reference recovered on the `near_fall × light_elevation=8`
+  cell with `sundog_shadow`-signature vs `bayes_floor_shadow_particle`).
+  **Phase 4 substrate-empirical leg closes positive on Balance with three-body
+  documented as a substrate boundary case;** Phase 5 entry unblocked.
 - **Pre-registered negative.** If the cliff moves under the no-op transform, λ is
   an optimizer artifact: Mesa loses its standing as a Phase-5 substrate,
   Postulate 4 dies, Postulate 2's cliff-prediction is unsupported, and the

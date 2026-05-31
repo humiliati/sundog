@@ -637,6 +637,100 @@ Pre-registered decision (uses the gate's regret readout + CI):
   quantify the accessible fraction; decide tractable-floor vs. scope on the
   recorded number, pre-registered before the run.
 
+#### BF-4b IAD Receipt (2026-05-31, `_bf4b-accessibility`)
+
+**Verdict: PRIVILEGED-ONLY.** Phase-4-decisive negative — the off-set headroom
+is not recoverable from `Φ` history even with binding constraints removed
+(particle count 512, planning horizon 800 steps, sustained 800-step candidate
+hold). No admissible floor can make the off-set arm fire on this cell.
+**BF-5 is NOT the next step** ("more floor engineering" per the pre-registered
+Privileged-only branch); Phase 4 needs scope reassessment instead.
+
+**Decisive numbers** (regret = (T_safe_bayes − T_safe_signature) / t_max,
+95% paired-bootstrap CI over 8 seeds, 2000 iterations):
+
+| Metric | Value |
+| --- | ---: |
+| Mean regret (off-class) | **0.0213** |
+| 95% CI | **[-0.00055, 0.052]** |
+| Oracle headroom reference (sat probe) | ~0.31 |
+| % oracle headroom recovered | ~7% |
+| Negative-regret rate | **4/8 (50%)** |
+| Floor status | `non_decisive_floor_repair_required` |
+
+CI lower at -0.00055 is hairline below 0 → CI includes 0 → strict
+pre-registered Privileged-only rule fires. Even reading generously, the mean
+recovers only ~7% of the satisfiability-probe oracle-vs-signature headroom,
+with the bayes-floor controller losing to signature on 4 of 8 seeds.
+
+**Per-seed regret** (signature = `track_sensor_accel_guarded`,
+bayes = `bayes_floor_particle_mpc`):
+
+| Seed | T_safe_signature | T_safe_bayes | Regret | Direction |
+| ---: | ---: | ---: | ---: | --- |
+| 0 | 5.02 | 5.41 | +0.024 | bayes wins |
+| 1 | 4.91 | 5.68 | +0.048 | bayes wins |
+| 2 | 14.25 | 16.00 | **+0.109** | bayes wins (the 27.3 h outlier; biggest positive) |
+| 3 | 2.67 | 2.80 | +0.008 | bayes wins |
+| 4 | 3.34 | 3.33 | −0.001 | tie / sig |
+| 5 | 3.80 | 3.68 | −0.008 | sig wins |
+| 6 | 4.12 | 3.96 | −0.010 | sig wins |
+| 7 | 3.56 | 3.54 | −0.001 | tie / sig |
+
+The split is real and symmetric — the floor neither cleanly recovers nor
+cleanly degrades the headroom; the mean lands near zero and the CI brackets it.
+
+**Doctrinal consequences.** Per the pre-registered Privileged-only branch:
+
+- Postulate-1 trunk through Phase 3 unchanged (LQG + finite-MDP + boundary
+  proofs stand).
+- Mesa as Phase-5 substrate unchanged (Phase 6 already closed this).
+- **The Phase-4 substrate-empirical leg as currently scoped (planar restricted
+  three-body, near-escape pocket, `track_sensor_accel_guarded` signature) does
+  NOT admit Φ-sufficient control.** The off-set arm of the BF-4b gate is not
+  satisfiable by any admissible controller on this cell.
+- **BF-5 / full lock is NOT the next step.** "More floor engineering" is
+  explicitly ruled out by the pre-registered branch language. BF-5 staging
+  remains blocked, but now for the right reason: not because the floor needs
+  more iteration, but because the substrate-empirical leg needs re-scope.
+
+**Re-scope options** (not pre-registered; recorded here as the live planning
+surface, not as commitments):
+
+- A different cell on the same workbench where `Φ` is provably accessible
+  (e.g., a cell where signature already saturates `T_safe` and the head-room is
+  zero by construction — but then there is no off-set arm to fire).
+- A different signature `Φ` with broader Blackwell-sufficient content.
+- A different substrate entirely (the `mesa`/`balance`/`mines` workbenches all
+  have Bayesian-floor smoke harnesses already wired).
+- Accept the Phase-1/2/3 analytical trunk as the Postulate-1 evidence base
+  without a positive Phase-4 substrate leg, treating the IAD as a documented
+  negative finding on this particular substrate-cell pair.
+
+**Run inventory** (sharded execution, all on the 4-core / 8-thread CPU box):
+
+| Stage | Rows | Wall | Notes |
+| --- | ---: | ---: | --- |
+| IAD rate probe (1 seed × 128 particles × 800 horizon × 800 hold) | 1 | 43 min | confirmed horizon is not the binding cost; planner-invocation count is |
+| IAD shard fleet (8 seeds × 512 particles, 3-wide fan-out) | 8 | 27.3 h | seed 2 outlier (27.3 h vs median 5.5 h); see `_iad-shard-logs/` |
+| Sat-probe seed=8 slice (substitute, ultimately unneeded) | 3 trials | <1 min | seed 2 finished before seed 8 was needed |
+| Merge → `_bf4b-accessibility` (strict args + slate checks) | 8 trials | <1 s | `threebody-phase4-iad-merge.mjs` |
+| Regret reducer (8-seed slate matched) | 8 joined rows | <1 s | `phase4-regret.csv` + `phase4-regret-summary.csv` |
+
+**Sharded infrastructure** (this receipt's tooling, persisted for any future
+substrate re-scope of the same shape):
+[`scripts/threebody-phase4-iad-shard.mjs`](../../scripts/threebody-phase4-iad-shard.mjs)
+(single-seed wrapper, pins spec IAD args, resume-safe),
+[`scripts/threebody-phase4-iad-concurrent.mjs`](../../scripts/threebody-phase4-iad-concurrent.mjs)
+(worker-pool orchestrator, fan-out N over seeds, `trackChild` signal
+forwarding),
+[`scripts/threebody-phase4-iad-merge.mjs`](../../scripts/threebody-phase4-iad-merge.mjs)
+(strict-checked merger; verifies pinned args match across shards, no duplicate
+seeds, all completed),
+[`scripts/threebody-phase4-iad-sat-slate.mjs`](../../scripts/threebody-phase4-iad-sat-slate.mjs)
+(signature-side slate composer for non-contiguous seed sets; drafted as a
+contingency for the seed=2/seed=8 swap, ultimately unused).
+
 ### BF-5: Full Lock Handoff
 
 BF-4 floor-sanity is passed for the smoke slate, **but BF-5 is additionally
