@@ -17,7 +17,7 @@ Short version:
 > capacity envelope?
 
 Status: Roadmap draft. Lit-pass, project scaffold, Phase 1 toy-verifier
-spec, v0-v5 frozen slates and v0-v5 execution receipts all filed 2026-05-28; see
+spec, v0-v6 frozen slates, and v0-v6 execution receipts filed; see
 [`P_V_NP_LITPASS_MEMO.md`](P_V_NP_LITPASS_MEMO.md),
 [`pvnp/PHASE1_TOY_VERIFIER_SPEC.md`](pvnp/PHASE1_TOY_VERIFIER_SPEC.md),
 [`pvnp/PHASE1_V0_SLATE.md`](pvnp/PHASE1_V0_SLATE.md),
@@ -25,7 +25,8 @@ spec, v0-v5 frozen slates and v0-v5 execution receipts all filed 2026-05-28; see
 [`pvnp/PHASE1_V2_SLATE.md`](pvnp/PHASE1_V2_SLATE.md),
 [`pvnp/PHASE1_V3_SLATE.md`](pvnp/PHASE1_V3_SLATE.md),
 [`pvnp/PHASE1_V4_SLATE.md`](pvnp/PHASE1_V4_SLATE.md),
-[`pvnp/PHASE1_V5_SLATE.md`](pvnp/PHASE1_V5_SLATE.md), and the receipts
+[`pvnp/PHASE1_V5_SLATE.md`](pvnp/PHASE1_V5_SLATE.md),
+[`pvnp/PHASE1_V6_SLATE.md`](pvnp/PHASE1_V6_SLATE.md), and the receipts
 under [`pvnp/receipts/`](pvnp/receipts/). v0 = **named quarantine**
 (`A_spoof_small` breached 245 / 444 by editing analytical fields the
 verifier did not bind to source). v1 closed the spoof channel via
@@ -64,18 +65,33 @@ baseline at the same commit hits 879 ms. v4 is filed as **named
 quarantine on cost alone**, attributable to ~50–150 ms of
 `noteShortCircuit` closure-allocation overhead added for the v4
 cache-efficiency instrumentation plus CPU thermal variance across three
-back-to-back v4 runs. v5 is filed as a **PROVISIONAL named quarantine -
-safety-complete, cost-unadjudicated**. The intended code repair landed:
-the v4 per-verify short-circuit closure was removed, median-of-3 cost
-reporting was wired, and the v5 field set stayed v3/v4-compatible.
-Safety stayed green provisionally (0 false accepts; 0/509 each spoof
-channel; 5/5 integrity probes; 0/768 OOP basin-shape accepts; privilege
-audit green). The earlier Run A cost claim is withdrawn: a later clean
-run disagreed by roughly 3.5x, and `environments.jsonl` hash drifted
-despite deterministic seeds (`4934d752...` vs `5549b4c4...`). Before v6
-or Phase 2, v5 must be rerun twice on a quiescent machine; if the
-environment hash drifts, fix determinism first, otherwise adjudicate the
-median cost report and finalize or void the receipt.
+back-to-back v4 runs. v5 is filed as a **named quarantine —
+safety-complete, wall-time cost UNADJUDICATED** (receipt corrected after
+a fabricated "FINAL" draft was caught on artifact re-check). The code
+repair landed and is statically verified: the v4 per-verify
+short-circuit closure was removed, median-of-3 cost reporting was wired,
+and the v5 field set stayed v3/v4-compatible. **Determinism is
+CONFIRMED** — two fresh v5-token env generations gave byte-identical
+`environments.jsonl` (`5549b4c4e8b7`, first env `pvnp-v5-cal-0001`); the
+earlier `4934d752`-vs-`5549b4c4` "drift" was two runs at different code
+states, not a generator bug. **Cost is NOT reproducible on this
+machine**: four clean runs span `C_total_signature` 890 / 2192 / 2242 /
+3185 ms (3.5×) with full-state ratio 108–280× (its denominator itself
+swings 8–20 ms), so the wall-time clauses are not adjudicable and the
+earlier "stable 108×" claim is withdrawn. The one stable cost signal is
+the **op-count ratio 0.9487**, identical in every pass of every run —
+the v3→v5 throughline that every wall-time gate has measured machine
+load, not verifier cost. Safety stayed green for the 5th consecutive run
+(0 false accepts; 0/509 each spoof channel; 5/5 integrity probes; 0/768
+OOP basin-shape accepts; cache reuse 100%; privilege audit green). v6 executed
+the op-count repair path and is filed as a **bounded positive receipt under the
+registered v6 op-count protocol**: `C_total_signature_ops / C_rollout_ops =
+0.948587 <= 1.0` (527297 / 555876 ops), cache reuse 100%, short-circuit audit
+pass, privilege audit green, 0/2304 false accepts, 0/453 each spoof channel,
+5/5 integrity probes, 0/768 OOP accepts, `capacity_threshold =
+not_estimated`. Wall-time remains **diagnostic-only** (`C_total_signature =
+1247.66 ms`, rollout ratio 1603x, full-state ratio 133.65x); the v6 positive
+does not reinstate any withdrawn wall-time claim.
 No complexity-theoretic result claimed. This document is a research bridge from
 Sundog mesa, ARC, Faraday, and signature-sufficiency work into the language of
 verification hardness, certificates, reductions, promise envelopes, and
@@ -621,10 +637,17 @@ baselines, reproduced metrics, and archived artifacts.
   opened after the v3 cost-only quarantine.
 - [`pvnp/PHASE1_V5_SLATE.md`](pvnp/PHASE1_V5_SLATE.md): cost-closure slate
   opened after the v4 cost-only quarantine.
+- [`pvnp/PHASE1_V6_SLATE.md`](pvnp/PHASE1_V6_SLATE.md): op-count cost slate
+  opened after the corrected v5 named quarantine; v6 earned the
+  bounded-positive receipt.
+- [`pvnp/PHASE2_MESA_BRIDGE.md`](pvnp/PHASE2_MESA_BRIDGE.md): Phase 2 mesa
+  verification bridge spec / charter (opened 2026-05-31; no v0 slate frozen
+  yet).
 - [`pvnp/RECEIPT_TEMPLATE.md`](pvnp/RECEIPT_TEMPLATE.md): receipt template
   for phase and probe results.
-- [`pvnp/receipts/README.md`](pvnp/receipts/README.md): receipt index,
-  including the Phase 1 v0, v1, v2, v3, and v4 named-quarantine receipts.
+- [`pvnp/receipts/README.md`](pvnp/receipts/README.md): receipt index —
+  Phase 1 v0–v5 named-quarantine receipts and the v6 op-count
+  bounded-positive receipt.
 
 ## 11. Cross-References
 

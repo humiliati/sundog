@@ -40,6 +40,7 @@ const TARGET_FULL_STATE_RATIO = 105;
 const TARGET_OP_RATIO = 1.0;
 const TARGET_SPREAD_PCT = 25;
 const CACHE_REUSE_FLOOR = 0.95;
+const V6_TARGET_OP_RATIO = 1.0;
 
 function parseArgs(argv) {
   const args = { runDir: "results/pvnp/phase1-toy-verifier-v5" };
@@ -78,7 +79,7 @@ function mean(values) { return values.reduce((a, b) => a + b, 0) / values.length
 //   - the legacy `noteShortCircuit` closure identifier is absent;
 //   - short-circuit counting goes through the module-level
 //     recordPreIntegrityShortCircuit() called directly.
-async function shortCircuitInstrumentationAudit() {
+async function shortCircuitInstrumentationAudit(version = "v5") {
   const src = await readFile(VERIFIER_CORE, "utf8");
   const hasLegacyClosure = /const\s+noteShortCircuit\s*=/.test(src)
     || /noteShortCircuit\s*\(\s*\)/.test(src);
@@ -87,7 +88,7 @@ async function shortCircuitInstrumentationAudit() {
   const hoistedGuard = src.includes("const hasCacheState = cacheState !== null");
   const passed = !hasLegacyClosure && hasDirectCounter && hoistedGuard;
   return {
-    schema: "pvnp-phase1-short-circuit-instrumentation-audit-v5",
+    schema: `pvnp-phase1-short-circuit-instrumentation-audit-${version}`,
     audited_file: "scripts/lib/pvnp-phase1-verifier-core.mjs",
     legacy_closure_present: hasLegacyClosure,
     direct_counter_present: hasDirectCounter,
@@ -98,24 +99,119 @@ async function shortCircuitInstrumentationAudit() {
   };
 }
 
+async function writeV6OpCountGateReport(outDir, scAudit) {
+  const partial = JSON.parse(await readFile(path.join(outDir, "costs.partial.json"), "utf8"));
+  const denomAudit = await readJsonIfExists(path.join(outDir, "cost_denominator_audit.json"));
+  const cacheEff = await readJsonIfExists(path.join(outDir, "cache_efficiency_report.json"));
+
+  const baselines = partial.baselines || {};
+  const signature = partial.signature || { wall_ms: 0, ops: 0, calls: 0 };
+  const verifier = partial.verifier || { wall_ms: 0, ops: 0, calls: 0 };
+
+  const cSignatureOps = signature.ops ?? 0;
+  const cVerifyOps = verifier.ops ?? 0;
+  const cTotalSignatureOps = cSignatureOps + cVerifyOps;
+  const cRolloutOps = baselines.rollout?.ops ?? 0;
+  const cFullStateOps = baselines.full_state?.ops ?? 0;
+
+  const cSignatureMs = signature.wall_ms ?? 0;
+  const cVerifyMs = verifier.wall_ms ?? 0;
+  const cTotalSignatureMs = cSignatureMs + cVerifyMs;
+  const cRolloutMs = baselines.rollout?.wall_ms ?? 0;
+  const cFullStateMs = baselines.full_state?.wall_ms ?? 0;
+
+  const rolloutOpRatio = cRolloutOps > 0 ? cTotalSignatureOps / cRolloutOps : null;
+  const fullStateOpRatio = cFullStateOps > 0 ? cTotalSignatureOps / cFullStateOps : null;
+  const rolloutWallRatio = cRolloutMs > 0 ? cTotalSignatureMs / cRolloutMs : null;
+  const fullStateWallRatio = cFullStateMs > 0 ? cTotalSignatureMs / cFullStateMs : null;
+  const cacheReuseRate = cacheEff ? cacheEff.cache_eligible_reuse_hit_rate : null;
+
+  const clauses = {
+    rollout_ops_positive: cRolloutOps > 0,
+    op_count_ratio_le_1: rolloutOpRatio !== null && rolloutOpRatio <= V6_TARGET_OP_RATIO,
+    cache_eligible_reuse_ge_95: cacheReuseRate !== null && cacheReuseRate >= CACHE_REUSE_FLOOR,
+    short_circuit_instrumentation_passed: scAudit.passed,
+    wall_time_diagnostic_only: denomAudit?.rollout_ratio_status === "wall_time_diagnostic_only",
+  };
+
+  const report = {
+    schema: "pvnp-phase1-op-count-cost-gate-report-v6",
+    source_artifacts: [
+      "costs.partial.json",
+      "costs.csv",
+      "cost_denominator_audit.json",
+      "cache_efficiency_report.json",
+      "short_circuit_instrumentation_audit.json",
+    ],
+    op_counts: {
+      c_signature_ops: cSignatureOps,
+      c_verify_ops: cVerifyOps,
+      c_total_signature_ops: cTotalSignatureOps,
+      c_rollout_ops: cRolloutOps,
+      c_full_state_ops: cFullStateOps,
+    },
+    ratios: {
+      rollout_op_ratio: rolloutOpRatio,
+      full_state_op_ratio_diagnostic: fullStateOpRatio,
+    },
+    diagnostic_wall_time: {
+      c_signature_ms: cSignatureMs,
+      c_verify_ms: cVerifyMs,
+      c_total_signature_ms: cTotalSignatureMs,
+      c_rollout_ms: cRolloutMs,
+      c_full_state_ms: cFullStateMs,
+      rollout_wall_ratio_diagnostic: rolloutWallRatio,
+      full_state_wall_ratio_diagnostic: fullStateWallRatio,
+    },
+    targets: {
+      rollout_op_ratio_max: V6_TARGET_OP_RATIO,
+      cache_eligible_reuse_min: CACHE_REUSE_FLOOR,
+      wall_time_status: "diagnostic_only",
+    },
+    cross_artifact_inputs: {
+      rollout_ratio_status: denomAudit?.rollout_ratio_status ?? null,
+      cache_eligible_reuse_hit_rate: cacheReuseRate,
+      short_circuit_instrumentation_passed: scAudit.passed,
+    },
+    cost_gate_clauses: clauses,
+    cost_repair_passed: Object.values(clauses).every(Boolean),
+  };
+
+  await writeFile(
+    path.join(outDir, "op_count_cost_gate_report.json"),
+    JSON.stringify(report, null, 2) + "\n",
+    "utf8",
+  );
+
+  console.log("v6 op-count cost gate:");
+  console.log(`  C_total_signature_ops=${cTotalSignatureOps} C_rollout_ops=${cRolloutOps} ratio=${rolloutOpRatio === null ? "n/a" : rolloutOpRatio.toFixed(4)} (<=${V6_TARGET_OP_RATIO}? ${clauses.op_count_ratio_le_1})`);
+  console.log(`  wall_time_status=${clauses.wall_time_diagnostic_only ? "diagnostic_only" : "unexpected"} cache_reuse=${cacheReuseRate} short_circuit_audit_passed=${scAudit.passed}`);
+  console.log(`  op_count_cost_repair_passed=${report.cost_repair_passed}`);
+}
+
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const outDir = path.resolve(REPO_ROOT, args.runDir);
   const slate = getPhase1RunConfig(args.runDir);
   const version = slate.schema_suffix;
-  if (version !== "v5") {
-    console.log(`cost-median is a v5-only artifact; skipping for ${version}`);
+  if (version !== "v5" && version !== "v6") {
+    console.log(`cost-median/op-count gate is a v5/v6 artifact; skipping for ${version}`);
     return;
   }
   await mkdir(outDir, { recursive: true });
 
   // ── Short-circuit instrumentation audit (required for cost repair) ──
-  const scAudit = await shortCircuitInstrumentationAudit();
+  const scAudit = await shortCircuitInstrumentationAudit(version);
   await writeFile(
     path.join(outDir, "short_circuit_instrumentation_audit.json"),
     JSON.stringify(scAudit, null, 2) + "\n",
     "utf8",
   );
+
+  if (version === "v6") {
+    await writeV6OpCountGateReport(outDir, scAudit);
+    return;
+  }
 
   const traces = await readJsonl(path.join(outDir, "traces.jsonl"));
   const envsRaw = await readJsonl(path.join(outDir, "environments.jsonl"));

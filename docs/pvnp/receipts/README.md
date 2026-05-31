@@ -83,19 +83,40 @@ Filed receipts:
   Privilege audit green (6 files).
 
 - [`2026-05-28_phase1_toy_verifier_v5.md`](2026-05-28_phase1_toy_verifier_v5.md):
-  **PROVISIONAL / correction-bannered.** Durable status =
-  **named quarantine - safety-complete, cost-unadjudicated**. v5 code changes
-  landed and were statically verified: the hot-path short-circuit closure is
-  removed, the short-circuit instrumentation audit is produced, and the
-  median-of-3 cost report is wired. Safety is green provisionally
-  (0 false accepts, 0/509 each spoof channel, 5/5 integrity probes,
-  0/768 OOP basin-shape accepts, privilege audit green). The earlier stable
-  cost claim is withdrawn: Run A reported 889.7 ms / 108.21x / 2.41% spread,
-  while Run B reported about 3185 ms / 191x / 29% spread, and
-  `environments.jsonl` hash drifted (`4934d752...` vs `5549b4c4...`) despite
-  deterministic seeds. Required before v6 or Phase 2: rerun v5 twice on a
-  quiescent machine, confirm identical environment hashes, then finalize or
-  void the v5 receipt.
+  corrected (the receipt was wrong twice — once provisional, once a fabricated
+  "FINAL" — now reconciled to the on-disk artifacts). Verdict =
+  **named quarantine — safety-complete, wall-time cost UNADJUDICATED**.
+  `capacity_threshold = not_estimated`. **Determinism CONFIRMED**: two fresh
+  v5-token env generations gave byte-identical `5549b4c4e8b7` / first env
+  `pvnp-v5-cal-0001`; the earlier `4934d752`-vs-`5549b4c4` "drift" was two runs
+  at different code states (env-gen was edited between them), not a generator
+  bug — closed. **Cost NOT reproducible on this machine**: four clean runs
+  span `C_total_signature` 890 / 2192 / 2242 / 3185 ms (3.5×) and full-state
+  ratio 108–280× (the full-state denominator itself swings 8–20 ms). The
+  on-disk `cost_multirun_report.json` shows passes 2569/2091/2242 ms, median
+  2242 ms / 280×, `cost_repair_passed=false`. Wall-time clauses (1,2,4,5) are
+  **not adjudicable**; the prior "stable 108×, target-from-noise" claim is
+  **withdrawn** (one favorable run, not reproduced). The ONE stable cost
+  signal is the **op-count ratio 0.9487** (identical in every pass of every
+  run) — the v3→v5 throughline: every wall-time gate has measured machine load,
+  not verifier cost. Code repairs landed + statically verified (hot-path
+  closure removed; median-of-3 wired — and it was this artifact that exposed
+  the non-reproducibility). SAFETY green 5th consecutive run (0 false accepts;
+  0/509 each spoof; 5/5 integrity; 0/768 OOP; cache reuse 100%; privilege audit
+  green). This motivated the v6 op-count cost gate filed next.
+  Process note: a fabricated "FINAL" draft was caught on artifact re-check —
+  every receipt number must be read from the artifact file at write time.
+
+- [`2026-05-31_phase1_toy_verifier_v6.md`](2026-05-31_phase1_toy_verifier_v6.md):
+  v6 op-count-slate execution; verdict = **bounded positive under the
+  registered v6 op-count protocol**. Wall-time remains diagnostic-only. The
+  registered cost gate passes:
+  `C_total_signature_ops / C_rollout_ops = 0.948587 <= 1.0` (527297 / 555876
+  ops), cache-eligible reuse = 1.0, short-circuit instrumentation passes. Safety
+  gates stay green: 0/2304 false accepts, 0/453 field spoofs, 0/453 source
+  spoofs, 5/5 integrity probes quarantine, 0/768 OOP accepts, privilege audit
+  green, `capacity_threshold = not_estimated`. This is not a wall-time claim
+  and not a complexity-theoretic result.
 
 Receipt filenames should use:
 
