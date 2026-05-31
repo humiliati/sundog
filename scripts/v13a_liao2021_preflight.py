@@ -9,14 +9,17 @@ for a v0.13 profile + rate-probe, by proving two contracts BEFORE any sweep:
   C1  expansion-only adapter  -- only parse_liao2021 + expand_liao2021_state + a thin
       explicit-state integration wrapper are new; the DOP853 path, monodromy, gamma
       selection, vf definition, and gates are imported byte-for-byte from v0.7/v0.12.
-      Verified by P1 (code-inheritance identity) + P2 (frame-invariance of monodromy
-      eigenvalues + gate residuals; NO vf computed).
+      Verified by P1 (code-inheritance identity) + P2 (vf-invariance under isometries,
+      Amendment R1 -- the original eigenvalue-multiset invariant was numerically
+      unachievable for 3-body monodromy).
 
   C2  cross-ansatz leakage bound -- canonical-invariant overlap against supp-A/B,
       dominated by mass-tuple disjointness. Leakage <= 0.05 to proceed.
 
-The preflight computes NO velocity_fraction and emits none. E/|L|/T are used only as
-canonical overlap invariants.
+Under Amendment R1 the preflight computes velocity_fraction ONLY as a discarded P2
+frame-invariance assertion -- never recorded in a receipt, never stability-associated;
+only the invariance residual |dvf| is kept. E/|L|/T are used only as canonical overlap
+invariants.
 """
 from __future__ import annotations
 
@@ -188,29 +191,18 @@ def _rotation_z(theta_deg: float) -> np.ndarray:
     return np.array([[c, -s, 0.0], [s, c, 0.0], [0.0, 0.0, 1.0]], dtype=float)
 
 
-def monodromy_signature(masses, x0, v0, period):
-    """Integration + monodromy + gates ONLY (NO vf). Returns the frame-invariant
-    signature used by P2: sorted eigenvalues + gate residuals."""
+def vf_value(masses, x0, v0, period) -> float:
+    """P2 (Amendment R1): full integration + monodromy + gamma selection + vf. The
+    returned velocity_fraction is used ONLY to form a discarded frame-invariance
+    residual; it is never recorded in a receipt nor associated with a stability label."""
     integrated = integrate_liao2021_state(masses, x0, v0, period)
     M_i = compute_monodromy_vectorized(integrated, RTOL, ATOL, MAX_STEP_FRACTION)
-    eigvals = np.linalg.eigvals(M_i)
-    order = np.lexsort((eigvals.imag, eigvals.real))
-    eig_sorted = eigvals[order]
-    absvals = np.abs(eigvals)
-    omega = canonical_omega_18(masses)
-    return {
-        "eig": eig_sorted,
-        "symp": symplecticity_residual(M_i, omega),
-        "recip": reciprocal_pair_residual(eigvals),
-        "abs_max": float(absvals.max()),
-        "abs_min": float(absvals.min()),
-    }
+    gamma = select_gamma_1(M_i, masses)
+    return float(velocity_fraction_and_z_fraction(gamma["gamma_1"], masses)["velocity_fraction"])
 
 
-def _sig_distance(a: dict, b: dict) -> float:
-    eig_d = np.abs(a["eig"] - b["eig"]) / np.maximum(1.0, np.maximum(np.abs(a["eig"]), np.abs(b["eig"])))
-    rel = lambda x, y: abs(x - y) / max(1.0, abs(x), abs(y))
-    return float(max(eig_d.max(), rel(a["symp"], b["symp"]), rel(a["recip"], b["recip"])))
+def _rel_resid(a: float, b: float) -> float:
+    return abs(a - b) / max(1.0, abs(a), abs(b))
 
 
 def run_parity(rows: list[Liao2021Row]) -> dict:
@@ -218,55 +210,52 @@ def run_parity(rows: list[Liao2021Row]) -> dict:
     pick = sorted(int(i) for i in rng.choice(len(rows), size=min(K_PARITY, len(rows)), replace=False))
     per_row = []
     worst = 0.0
-    any_failed = False
+    any_base_failed = False
+    rows_uncheckable = 0
     for i in pick:
         row = rows[i]
         masses, x0, v0 = expand_liao2021_state(row, center_com=True)
         try:
-            base = monodromy_signature(masses, x0, v0, row.period)
+            vf_base = vf_value(masses, x0, v0, row.period)
         except Exception as exc:  # noqa: BLE001
-            any_failed = True
+            any_base_failed = True
             per_row.append({"orbit_index": row.index, "period": round(row.period, 6),
-                            "max_residual": None, "status": f"base_failed: {exc}"})
+                            "max_vf_residual": None, "isometries_compared": 0,
+                            "status": f"base_failed: {exc}"})
             print(f"[v13a-parity] row {row.index} T={row.period:.3f} BASE FAILED: {exc}", flush=True)
             continue
-        row_worst = 0.0
-        isometry_failed = False
-        states = [("rot", _rotation_z(d)) for d in PARITY_ROTATIONS_DEG]
-        for _name, R in states:
+        residuals = []
+        isometry_failed = 0
+        # rotations (skip 0 deg = identity = base) + translation
+        for deg in PARITY_ROTATIONS_DEG[1:]:
+            R = _rotation_z(deg)
             xr, vr = x0 @ R.T, v0 @ R.T
             try:
-                sig = monodromy_signature(masses, xr, vr, row.period)
-                row_worst = max(row_worst, _sig_distance(base, sig))
+                residuals.append(_rel_resid(vf_value(masses, xr, vr, row.period), vf_base))
             except Exception:  # noqa: BLE001
-                isometry_failed = True
-        # translation absorbed by CoM-centering
-        d_t = None
+                isometry_failed += 1
         try:
             xt = x0 + PARITY_TRANSLATION
             xt = xt - np.average(xt, axis=0, weights=masses)
-            sig_t = monodromy_signature(masses, xt, v0, row.period)
-            d_t = _sig_distance(base, sig_t)
-            row_worst = max(row_worst, d_t)
+            residuals.append(_rel_resid(vf_value(masses, xt, v0, row.period), vf_base))
         except Exception:  # noqa: BLE001
-            isometry_failed = True
-        any_failed = any_failed or isometry_failed
-        worst = max(worst, row_worst)
+            isometry_failed += 1
+        row_max = max(residuals) if residuals else None
+        if row_max is None:
+            rows_uncheckable += 1
+        else:
+            worst = max(worst, row_max)
         per_row.append({"orbit_index": row.index, "period": round(row.period, 6),
-                        "max_residual": row_worst, "translation_residual": d_t,
-                        "lambda_abs_max": base["abs_max"], "lambda_abs_min": base["abs_min"],
-                        "lambda_condition": base["abs_max"] / max(base["abs_min"], 1e-300),
-                        "isometry_integration_failed": isometry_failed,
-                        "rotation_set": PARITY_ROTATIONS_DEG})
-        print(f"[v13a-parity] row {row.index} T={row.period:.3f} max_residual={row_worst:.2e} "
-              f"|lambda| in [{base['abs_min']:.2e}, {base['abs_max']:.2e}] "
-              f"(cond {base['abs_max']/max(base['abs_min'],1e-300):.1e}) "
-              f"isom_fail={isometry_failed}", flush=True)
+                        "max_vf_residual": row_max, "isometries_compared": len(residuals),
+                        "isometry_integration_failed": isometry_failed})
+        rstr = "n/a" if row_max is None else f"{row_max:.2e}"
+        print(f"[v13a-parity] row {row.index} T={row.period:.3f} max_vf_residual={rstr} "
+              f"compared={len(residuals)} isom_fail={isometry_failed}", flush=True)
+    passed = (not any_base_failed) and rows_uncheckable == 0 and worst <= TOL_PARITY
     return {"k_parity": len(pick), "seed": PARITY_SEED, "tol_parity": TOL_PARITY,
-            "max_frame_invariance_residual": worst,
-            "any_integration_failure": any_failed,
-            "passed": (worst <= TOL_PARITY) and not any_failed,
-            "per_row": per_row}
+            "invariant": "vf_invariance_R1", "max_vf_residual": worst,
+            "any_base_integration_failure": any_base_failed,
+            "rows_uncheckable": rows_uncheckable, "passed": passed, "per_row": per_row}
 
 
 # --------------------------------------------------------------------------- #
@@ -396,7 +385,7 @@ def main():
     if not args.skip_parity:
         t0 = time.perf_counter()
         parity = run_parity(rows)
-        print(f"[v13a] parity: max_residual={parity['max_frame_invariance_residual']:.2e} "
+        print(f"[v13a] parity (vf-invariance R1): max_vf_residual={parity['max_vf_residual']:.2e} "
               f"passed={parity['passed']} ({time.perf_counter()-t0:.0f}s)")
 
     # verdict tree
@@ -428,8 +417,7 @@ def main():
     if parity:
         with (out / "parity_rows.csv").open("w", newline="", encoding="utf-8") as fh:
             w = csv.DictWriter(fh, extrasaction="ignore", fieldnames=[
-                "orbit_index", "period", "max_residual", "translation_residual",
-                "lambda_abs_max", "lambda_abs_min", "lambda_condition",
+                "orbit_index", "period", "max_vf_residual", "isometries_compared",
                 "isometry_integration_failed", "status"])
             w.writeheader(); w.writerows(parity["per_row"])
 
