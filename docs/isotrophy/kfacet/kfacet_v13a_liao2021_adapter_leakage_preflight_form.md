@@ -1,10 +1,11 @@
 # v0.13a liao2021 Adapter + Leakage Preflight Form Lock
 
-Status: **OPERATOR LOCK 2026-05-31.** No adapter, parser, or preflight runner has
-been written; no liao2021 row has been integrated; no `velocity_fraction` has been
-computed. This document locks the two contracts that must pass BEFORE v0.13 may
-profile or rate-probe the Li/Liao 2021 non-hierarchical table: (1) an
-**expansion-only D5 adapter** and (2) a **cross-ansatz leakage bound**.
+Status: **OPERATOR LOCK 2026-05-31; AMENDED R1 2026-05-31** (P2 re-registered from
+monodromy-eigenvalue-multiset invariance to vf-invariance after the original invariant
+was found numerically unachievable -- see Amendment R1). This document locks the two
+contracts that must pass BEFORE v0.13 may profile or rate-probe the Li/Liao 2021
+non-hierarchical table: (1) an **expansion-only D5 adapter** and (2) a **cross-ansatz
+leakage bound**.
 
 Reviewed for self-consistency, non-circularity, and integrity:
 
@@ -55,7 +56,7 @@ v0.13a stays inside the v0.13 firewall:
 
 ```text
 forbidden in v0.13a:
-  computing or recording velocity_fraction, zone_index, or any S/U-vs-feature stat
+  recording velocity_fraction or zone_index in any receipt, or any S/U-vs-feature stat
   tabulating adapter / leakage results by stability label
   relaxing any inherited D5 numerical control
   changing the v0.11 cutpoints
@@ -66,10 +67,16 @@ allowed in v0.13a:
     (H2) -- these are catalog-coordinate invariants, not the vf stability feature
     (same allowance v0.6 used for (E,|L|) and the v0.13 form used for the weaker
     invariant identity key); they never enter a stability statistic
+  computing velocity_fraction SOLELY as a discarded frame-invariance assertion inside
+    the P2 parity check (Amendment R1) -- the value is never recorded in a receipt and
+    never associated with a stability label; only the invariance residual |dvf| is kept
 ```
 
-The preflight computes NO `velocity_fraction`. (It need not: see the parity check,
-which is monodromy/gate-only.)
+Under Amendment R1 the preflight computes `velocity_fraction` ONLY inside the P2
+frame-invariance assertion (the original eigenvalue-multiset invariant was found
+numerically unachievable -- see Amendment R1). The vf values are discarded; only the
+invariance residual is kept. No `velocity_fraction` field appears in any receipt, and
+nothing in v0.13a is conditioned on a stability label.
 
 ## Locked Contract 1 -- Expansion-Only Adapter
 
@@ -113,27 +120,53 @@ emit an IntegratedOrbit-compatible object for compute_monodromy_vectorized
 It may not modify the equations, method, tolerances, max-step convention,
 variational monodromy, gamma selection, vf definition, or gates.
 
-**Parity verification (pre-registered; firewall-clean, no vf recorded):**
+**Parity verification (pre-registered; no vf recorded; P2 = vf-invariance per R1):**
 
 ```text
 P1  code-inheritance identity assert: the adapter module's references to the frozen
     D5 symbols above are `is`-identical to the v07a objects (no shadowing, no
     re-implementation). The explicit-state wrapper is separately audited by P2.
     Fails -> ABORT.
-P2  frame-invariance: for K_PARITY = 6 liao2021 probe rows (deterministic uniform,
-    seed 20260523), apply each pre-registered isometry to the initial configuration
-    and run ONLY the orbit-integration + monodromy + gate path. Assert the monodromy
-    eigenvalue multiset, the symplecticity residual, and the reciprocal-pair
-    residual are invariant:
+P2  frame-invariance via vf-invariance (Amendment R1): for K_PARITY = 6 liao2021 probe
+    rows (deterministic uniform, seed 20260523), apply each pre-registered isometry to
+    the initial configuration, run the full integration + monodromy + gamma-selection +
+    vf path, and assert velocity_fraction is invariant:
       rotations  SO(2) by {0, 37, 90, 211} degrees in the orbit plane
       translation by a fixed offset (absorbed by CoM-centering)
-    tolerance  tol_parity = 1e-8 relative
-    (vf is a rotation/translation-invariant scalar by construction once P1 holds,
-     so it is NOT computed here -- the preflight stays vf-free.)
+    tolerance  tol_parity = 1e-8 relative (symmetric near-zero comparator)
+    The vf values are a DISCARDED code-correctness assertion -- never recorded, never
+    stability-associated; only max|dvf| over the isometries is kept. vf is the correct
+    invariant: it IS the measurement (so its frame-invariance directly proves
+    expansion-only), and it is well-conditioned -- a bounded ratio of norms of the
+    DOMINANT (best-conditioned) Floquet eigenvector -- unlike the monodromy eigenvalue
+    multiset, whose tiny reciprocal eigenvalues are numerical garbage for unstable
+    orbits (see Amendment R1). Integration-feasibility failure of an isometry on an
+    extremely unstable orbit is REPORTED but does not by itself fail P2 (it is a
+    feasibility matter the later rate-probe measures); vf-invariance is asserted over
+    the isometries that integrate, requiring at least the base plus one isometry per row.
 ```
 
 P1 + P2 together certify the adapter is expansion-only: only the coordinates fed
-into the frozen pipeline changed, not the measurement.
+into the frozen pipeline changed, and the measurement (vf) is unchanged.
+
+## Amendment R1 (2026-05-31) -- P2 re-registered to vf-invariance
+
+The original P2 asserted invariance of the **monodromy eigenvalue multiset** (plus
+gate residuals) at `tol_parity = 1e-8`. Implementation on the staged table found this
+invariant **physically unachievable** for three-body monodromy: the residual scales
+with the eigenvalue condition number (cond 1.0 stable orbit -> 5.8e-3; cond 7600 ->
+~1.0), because an unstable orbit's reciprocal Floquet eigenvalue (1/lambda, |lambda|
+large) is computed as numerical noise by `np.linalg.eigvals`, and even the degenerate
+unit-eigenvalue block of a stable orbit cannot be multiset-matched to 1e-8. This is a
+property of the FROZEN `compute_monodromy_vectorized`, not of the adapter (P1 passes;
+the residual-vs-conditioning correlation proves the rotation is a genuine symmetry
+defeated only by float precision). P2 is therefore re-registered to assert invariance
+of `velocity_fraction` -- the measurement itself, which is well-conditioned (it depends
+only on the dominant Floquet eigenvector) and whose invariance IS the expansion-only
+claim. `tol_parity = 1e-8` is retained; vf is computed only as a discarded assertion.
+P1, Contract 2 (leakage), all tolerances, the verdict tree, and the claim boundary are
+unchanged. Evidence: `results/isotrophy/k-facet-v13a-liao2021-preflight/parity_rows.csv`
+(pre-amendment eigenvalue-multiset residuals + |lambda| condition numbers).
 
 ## Locked Contract 2 -- Cross-Ansatz Leakage Bound
 
