@@ -5,6 +5,14 @@
 > it easy for a reviewer to say "yes, this null is correctly characterized,"
 > "no, this overstates X," or "you missed standard issue Y."
 
+> **2026-05-31 status addendum:** this packet was drafted before the v4
+> powered-target audit. The v4 receipt landed
+> `YM-P2-UNDERPOWERED no_powered_target_in_envelope`: no candidate target in
+> the 12^3 envelope was both powered and disjoint, and Stage 2 was not scored.
+> Do not send this packet as-is; update the ask from "four-probe bounded null"
+> to "four uninformative nulls plus an underpowered-envelope audit" if external
+> review is still pursued.
+
 **Date:** 2026-05-29
 **Status:** draft reviewer packet
 **Primary synthesis:** [`receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md`](receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md)

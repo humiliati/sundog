@@ -1,0 +1,23 @@
+{
+  "branch": "YM-P2-UNDERPOWERED no_powered_target_in_envelope",
+  "reason": "no candidate target is powered and disjoint in all three beta values",
+  "phaseVersion": "v4",
+  "rankLocalityScored": false,
+  "poweredTargetAudit": {
+    "path": "aggregation/target_power_audit.csv",
+    "candidatePool": [
+      "mean_W14",
+      "mean_W23",
+      "sigma2_W14",
+      "sigma2_W23",
+      "ratio_W23_W14"
+    ],
+    "priorTargetsReportedNotAdmissible": [
+      "gamma_held",
+      "sigma2_W33"
+    ],
+    "admittedCandidateCount": 0,
+    "primaryTarget": null
+  },
+  "wallClockSeconds": 3.8390121999999995
+}

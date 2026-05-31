@@ -1,0 +1,38 @@
+[
+  {
+    "beta": 2,
+    "betaKey": "2.0",
+    "resultDir": "C:/Users/hughe/Dev/sundog/results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_beta2.0_ensemble_v0",
+    "manifestCodeCommit": "f37ee57b70fd92dcc88bd5ecb8bceca8af02c37c",
+    "manifestGitDirty": true,
+    "summaryBranch": "P1-A ensemble_health_pass",
+    "configsSha256": "61f79ece31ad323f53bf34b8a173087da4bf3c02f0c73765ddb9c76c1b382f8d",
+    "hashesJsonConfigsSha256": "61f79ece31ad323f53bf34b8a173087da4bf3c02f0c73765ddb9c76c1b382f8d",
+    "signatureVectorsSha256": "047c340082a0b932dd5bacf96611222a87d6cbe46b2d344b2318b5bae9dc063a",
+    "hashesJsonSignatureVectorsSha256": "047c340082a0b932dd5bacf96611222a87d6cbe46b2d344b2318b5bae9dc063a"
+  },
+  {
+    "beta": 2.4,
+    "betaKey": "2.4",
+    "resultDir": "C:/Users/hughe/Dev/sundog/results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_beta2.4_ensemble_v0",
+    "manifestCodeCommit": "509222c450496e51495d47f90b569a4d5e330250",
+    "manifestGitDirty": true,
+    "summaryBranch": "P1-A ensemble_health_pass",
+    "configsSha256": "b94174654c93ef1ee793e455b3ffd0386e9d2054e98644d9ea14b818c2a39e3d",
+    "hashesJsonConfigsSha256": "b94174654c93ef1ee793e455b3ffd0386e9d2054e98644d9ea14b818c2a39e3d",
+    "signatureVectorsSha256": "a3731a3eadfbd5de990a1208817625d0b5d67978a943312d04b82a4d94496196",
+    "hashesJsonSignatureVectorsSha256": "a3731a3eadfbd5de990a1208817625d0b5d67978a943312d04b82a4d94496196"
+  },
+  {
+    "beta": 2.8,
+    "betaKey": "2.8",
+    "resultDir": "C:/Users/hughe/Dev/sundog/results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_beta2.8_ensemble_v0",
+    "manifestCodeCommit": "7844025aa1bf0aa6f7d783ca60521916ccfef937",
+    "manifestGitDirty": true,
+    "summaryBranch": "P1-A ensemble_health_pass",
+    "configsSha256": "d0a76960dae0d726280f972df1bc50c8c5c4402cd899f3689373a5b84573fd19",
+    "hashesJsonConfigsSha256": "d0a76960dae0d726280f972df1bc50c8c5c4402cd899f3689373a5b84573fd19",
+    "signatureVectorsSha256": "4df00104409a50642e0a73078b94dc3f6e6e5ab09c08dde0fd1b3c9188f2475c",
+    "hashesJsonSignatureVectorsSha256": "4df00104409a50642e0a73078b94dc3f6e6e5ab09c08dde0fd1b3c9188f2475c"
+  }
+]

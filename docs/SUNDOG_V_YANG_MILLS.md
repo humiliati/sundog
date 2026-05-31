@@ -18,8 +18,10 @@ Short version:
 Status: **Phase 1 instrumentation closed across the full ladder
 2026-05-29; Phase 2 v0 / v1 / v2 / v3 all executed ->
 `YM-P2-NEG-A no_rank_local_structure`; bounded-null synthesis filed
-2026-05-29; Phase 5 external-review packet + email cover-letter draft
-filed 2026-05-29 (owner-pending send to a lattice gauge theorist).**
+2026-05-29; Phase 2 v4 powered-target reopen executed 2026-05-31 ->
+`YM-P2-UNDERPOWERED no_powered_target_in_envelope`; Phase 5
+external-review packet + email cover-letter draft filed 2026-05-29
+(owner-pending send to a lattice gauge theorist).**
 Roadmap draft at this file; lit-pass at
 [`YANG_MILLS_LITPASS_MEMO.md`](YANG_MILLS_LITPASS_MEMO.md); P0 lock at
 [`prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md`](prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md);
@@ -63,15 +65,22 @@ with named-null receipt at
 [`yang-mills/receipts/2026-05-29_SU2_3D_phase2_v3_no_rank_local_structure.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase2_v3_no_rank_local_structure.md);
 bounded-null synthesis receipt at
 [`yang-mills/receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md);
+v4 powered-target probe spec at
+[`yang-mills/specs/2026-05-31_phase2_v4_powered_target_probe.md`](yang-mills/specs/2026-05-31_phase2_v4_powered_target_probe.md);
+Phase 2 v4 binding spec (power-gate-first target audit, no P0 amendment)
+at
+[`prereg/yang-mills/PHASE2_SU2_3D_relative_locality_v4.md`](prereg/yang-mills/PHASE2_SU2_3D_relative_locality_v4.md)
+with underpowered-envelope receipt at
+[`yang-mills/receipts/2026-05-31_SU2_3D_phase2_v4_underpowered.md`](yang-mills/receipts/2026-05-31_SU2_3D_phase2_v4_underpowered.md);
 Phase 5 external-review packet at
 [`yang-mills/EXTERNAL_REVIEW_PACKET.md`](yang-mills/EXTERNAL_REVIEW_PACKET.md)
 with email cover-letter draft at
 [`yang-mills/EXTERNAL_REVIEW_EMAIL_DRAFT.md`](yang-mills/EXTERNAL_REVIEW_EMAIL_DRAFT.md).
 The Phase 1 receipts are instrumentation only. Phase 2 v0 / v1 / v2 / v3 all
-landed `YM-P2-NEG-A`. No continuum, confinement, mass-gap, or
-result-bearing Yang-Mills claim exists. The lane is paused at a bounded
-cell-local null; no automatic v4 probe-ladder continuation is admitted
-without fresh external scientific motivation.
+landed `YM-P2-NEG-A`; v4 landed `YM-P2-UNDERPOWERED`, a quarantine-class
+target-power result, not a fifth null. No continuum, confinement, mass-gap,
+or result-bearing Yang-Mills claim exists. The lane is paused unless a dated
+v5 P0 amendment selects a powered regime before code.
 
 This is not a claim to progress on the Clay Yang-Mills existence and mass gap
 problem. It is a plan for a bounded receipt program that asks whether Sundog's
@@ -484,9 +493,27 @@ bounded-null synthesis:
   [`yang-mills/receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md);
 - disposition: PAUSE-and-synthesize, not automatic v4 probe continuation.
 
-Failure:
+v4 execution:
 
-`YM-P2-NEG-A no_rank_local_structure` or `YM-P2-NEG-B metadata_only`.
+- reopened only after the dated powered-target diagnostic spec and binding
+  spec filed 2026-05-31;
+- one locked aggregation invocation executed 2026-05-31 on the same v0
+  ensembles, with Stage 1 auditing `mean_W14`, `mean_W23`, `sigma2_W14`,
+  `sigma2_W23`, and `ratio_W23_W14` for split-half power and signature
+  disjointness before any rank-locality score;
+- receipt filed at
+  [`yang-mills/receipts/2026-05-31_SU2_3D_phase2_v4_underpowered.md`](yang-mills/receipts/2026-05-31_SU2_3D_phase2_v4_underpowered.md);
+- verdict `YM-P2-UNDERPOWERED no_powered_target_in_envelope`: no candidate
+  was both powered and disjoint across all three beta values. `mean_W14`
+  came closest but missed the beta 2.0 ICC gate and failed the beta 2.8
+  leakage gate; `gamma_held` failed the power self-validation as required.
+  Stage 2 rank-locality scoring was not run.
+
+Failure / quarantine:
+
+`YM-P2-NEG-A no_rank_local_structure`, `YM-P2-NEG-B metadata_only`, or
+`YM-P2-UNDERPOWERED no_powered_target_in_envelope` when no valid target is
+admitted for scoring.
 
 ### Phase 3 - Observable-Certificate Gate
 
@@ -635,10 +662,16 @@ Next agent should:
     also lands `YM-P2-NEG-A`.~~
     **Done 2026-05-29** - bounded-null synthesis receipt filed at
     [`yang-mills/receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md).
-18. **Standing guardrail (2026-05-29):** no automatic v4 runner. Any future
-    `sigma2_W14`, `sigma2_W23`, Polyakov, topological, or smeared-target
-    probe needs a fresh dated spec with external scientific motivation and
-    P0-amendment impact stated before code.
+18. ~~Apply the standing no-automatic-v4 guardrail unless fresh external
+    scientific motivation appears.~~
+    **Done 2026-05-31** - the powered-target diagnostic supplied the dated
+    reopen, v4 was filed and executed, and the receipt landed
+    `YM-P2-UNDERPOWERED no_powered_target_in_envelope` at
+    [`yang-mills/receipts/2026-05-31_SU2_3D_phase2_v4_underpowered.md`](yang-mills/receipts/2026-05-31_SU2_3D_phase2_v4_underpowered.md).
+19. **Standing guardrail (2026-05-31):** no automatic v5 runner. Continuing
+    past the underpowered-envelope receipt requires a dated P0 amendment to a
+    powered regime, with the beta slate / volume / target-class change stated
+    before code.
 
 ## 11. Open Decisions
 

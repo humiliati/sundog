@@ -1,0 +1,264 @@
+{
+  "frozenAt": "2026-05-31T08:10:40.988Z",
+  "status": "no_admitted_target",
+  "primaryTarget": null,
+  "selectionRule": "highest mean-over-beta ICC among candidates admitted in all beta values; tie-break lowest mean leakage CV-R2",
+  "admittedTargets": [],
+  "rejectedTargets": [
+    {
+      "target": "mean_W14",
+      "poweredAllBetas": false,
+      "disjointAllBetas": false,
+      "meanIcc": 0.5934545636053002,
+      "meanLeakageCvR2": 0.3135152826596496,
+      "perBeta": {
+        "2.0": {
+          "beta": 2,
+          "validCount": 32,
+          "flaggedCount": 0,
+          "flaggedIds": [],
+          "undefinedFraction": 0,
+          "undefinedStatus": false,
+          "icc": 0.4870654859111687,
+          "agreement": 0.53125,
+          "leakageCvR2": 0.20107117025436905,
+          "powered": false,
+          "disjoint": true,
+          "admitted": false
+        },
+        "2.4": {
+          "beta": 2.4,
+          "validCount": 32,
+          "flaggedCount": 0,
+          "flaggedIds": [],
+          "undefinedFraction": 0,
+          "undefinedStatus": false,
+          "icc": 0.6415848321207479,
+          "agreement": 0.5,
+          "leakageCvR2": 0.1633592538485915,
+          "powered": true,
+          "disjoint": true,
+          "admitted": true
+        },
+        "2.8": {
+          "beta": 2.8,
+          "validCount": 32,
+          "flaggedCount": 0,
+          "flaggedIds": [],
+          "undefinedFraction": 0,
+          "undefinedStatus": false,
+          "icc": 0.6517133727839842,
+          "agreement": 0.53125,
+          "leakageCvR2": 0.5761154238759882,
+          "powered": true,
+          "disjoint": false,
+          "admitted": false
+        }
+      }
+    },
+    {
+      "target": "mean_W23",
+      "poweredAllBetas": false,
+      "disjointAllBetas": false,
+      "meanIcc": 0.30676315787838676,
+      "meanLeakageCvR2": -0.23162670555143652,
+      "perBeta": {
+        "2.0": {
+          "beta": 2,
+          "validCount": 32,
+          "flaggedCount": 0,
+          "flaggedIds": [],
+          "undefinedFraction": 0,
+          "undefinedStatus": false,
+          "icc": 0.2282859834036179,
+          "agreement": 0.4375,
+          "leakageCvR2": 0.1448425899068232,
+          "powered": false,
+          "disjoint": true,
+          "admitted": false
+        },
+        "2.4": {
+          "beta": 2.4,
+          "validCount": 32,
+          "flaggedCount": 0,
+          "flaggedIds": [],
+          "undefinedFraction": 0,
+          "undefinedStatus": false,
+          "icc": 0.2176144904999855,
+          "agreement": 0.25,
+          "leakageCvR2": -1.163581276469917,
+          "powered": false,
+          "disjoint": true,
+          "admitted": false
+        },
+        "2.8": {
+          "beta": 2.8,
+          "validCount": 32,
+          "flaggedCount": 0,
+          "flaggedIds": [],
+          "undefinedFraction": 0,
+          "undefinedStatus": false,
+          "icc": 0.47438899973155696,
+          "agreement": 0.5,
+          "leakageCvR2": 0.32385856990878426,
+          "powered": false,
+          "disjoint": false,
+          "admitted": false
+        }
+      }
+    },
+    {
+      "target": "sigma2_W14",
+      "poweredAllBetas": false,
+      "disjointAllBetas": true,
+      "meanIcc": 0.029148018164719274,
+      "meanLeakageCvR2": -0.4648818092887184,
+      "perBeta": {
+        "2.0": {
+          "beta": 2,
+          "validCount": 32,
+          "flaggedCount": 0,
+          "flaggedIds": [],
+          "undefinedFraction": 0,
+          "undefinedStatus": false,
+          "icc": -0.12494769692919369,
+          "agreement": 0.3125,
+          "leakageCvR2": -0.9314124385909481,
+          "powered": false,
+          "disjoint": true,
+          "admitted": false
+        },
+        "2.4": {
+          "beta": 2.4,
+          "validCount": 32,
+          "flaggedCount": 0,
+          "flaggedIds": [],
+          "undefinedFraction": 0,
+          "undefinedStatus": false,
+          "icc": 0.051799491182078265,
+          "agreement": 0.34375,
+          "leakageCvR2": -0.3826281199166397,
+          "powered": false,
+          "disjoint": true,
+          "admitted": false
+        },
+        "2.8": {
+          "beta": 2.8,
+          "validCount": 32,
+          "flaggedCount": 0,
+          "flaggedIds": [],
+          "undefinedFraction": 0,
+          "undefinedStatus": false,
+          "icc": 0.16059226024127324,
+          "agreement": 0.3125,
+          "leakageCvR2": -0.08060486935856748,
+          "powered": false,
+          "disjoint": true,
+          "admitted": false
+        }
+      }
+    },
+    {
+      "target": "sigma2_W23",
+      "poweredAllBetas": false,
+      "disjointAllBetas": true,
+      "meanIcc": 0.025418397490604594,
+      "meanLeakageCvR2": -0.5426302512668858,
+      "perBeta": {
+        "2.0": {
+          "beta": 2,
+          "validCount": 32,
+          "flaggedCount": 0,
+          "flaggedIds": [],
+          "undefinedFraction": 0,
+          "undefinedStatus": false,
+          "icc": -0.11013119532715372,
+          "agreement": 0.3125,
+          "leakageCvR2": -0.5630049083982192,
+          "powered": false,
+          "disjoint": true,
+          "admitted": false
+        },
+        "2.4": {
+          "beta": 2.4,
+          "validCount": 32,
+          "flaggedCount": 0,
+          "flaggedIds": [],
+          "undefinedFraction": 0,
+          "undefinedStatus": false,
+          "icc": 0.05939062812874713,
+          "agreement": 0.28125,
+          "leakageCvR2": -0.3916540937889319,
+          "powered": false,
+          "disjoint": true,
+          "admitted": false
+        },
+        "2.8": {
+          "beta": 2.8,
+          "validCount": 32,
+          "flaggedCount": 0,
+          "flaggedIds": [],
+          "undefinedFraction": 0,
+          "undefinedStatus": false,
+          "icc": 0.12699575967022037,
+          "agreement": 0.34375,
+          "leakageCvR2": -0.6732317516135062,
+          "powered": false,
+          "disjoint": true,
+          "admitted": false
+        }
+      }
+    },
+    {
+      "target": "ratio_W23_W14",
+      "poweredAllBetas": false,
+      "disjointAllBetas": true,
+      "meanIcc": 0.21652328944423985,
+      "meanLeakageCvR2": -0.36275261489016136,
+      "perBeta": {
+        "2.0": {
+          "beta": 2,
+          "validCount": 32,
+          "flaggedCount": 0,
+          "flaggedIds": [],
+          "undefinedFraction": 0,
+          "undefinedStatus": false,
+          "icc": 0.04572519361233788,
+          "agreement": 0.46875,
+          "leakageCvR2": -0.05478667255362346,
+          "powered": false,
+          "disjoint": true,
+          "admitted": false
+        },
+        "2.4": {
+          "beta": 2.4,
+          "validCount": 32,
+          "flaggedCount": 0,
+          "flaggedIds": [],
+          "undefinedFraction": 0,
+          "undefinedStatus": false,
+          "icc": 0.31450973324670656,
+          "agreement": 0.4375,
+          "leakageCvR2": -0.8851467512478255,
+          "powered": false,
+          "disjoint": true,
+          "admitted": false
+        },
+        "2.8": {
+          "beta": 2.8,
+          "validCount": 32,
+          "flaggedCount": 0,
+          "flaggedIds": [],
+          "undefinedFraction": 0,
+          "undefinedStatus": false,
+          "icc": 0.28933494147367517,
+          "agreement": 0.53125,
+          "leakageCvR2": -0.14832442086903508,
+          "powered": false,
+          "disjoint": true,
+          "admitted": false
+        }
+      }
+    }
+  ]
+}

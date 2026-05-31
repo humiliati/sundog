@@ -78,3 +78,11 @@ the [receipt template](../RECEIPT_TEMPLATE.md).
   nulls. Records the bounded cell-local null across three signature
   vocabularies and two target classes; no automatic v4 probe-ladder
   continuation is admitted without fresh external scientific motivation.
+  The later v4 reopen therefore required a new dated diagnostic spec.
+- [`2026-05-31_SU2_3D_phase2_v4_underpowered.md`](2026-05-31_SU2_3D_phase2_v4_underpowered.md)
+  - `YM-P2-UNDERPOWERED no_powered_target_in_envelope` for the reopened
+  powered-target v4 audit. No candidate among `mean_W14`, `mean_W23`,
+  `sigma2_W14`, `sigma2_W23`, and `ratio_W23_W14` was both powered and
+  disjoint in all three beta values; `gamma_held` correctly failed the
+  power self-validation. Quarantine-class, not a `NEG-A`; Stage 2 was not
+  scored.

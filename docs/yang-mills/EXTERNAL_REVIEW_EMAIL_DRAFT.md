@@ -5,6 +5,13 @@
 > before sending. Three versions below; pick the one that matches your
 > relationship with the reviewer.
 
+> **2026-05-31 status addendum:** do not send this draft as-is. It was
+> written before the v4 powered-target audit, which landed
+> `YM-P2-UNDERPOWERED no_powered_target_in_envelope`. If external review is
+> still pursued, revise the ask around the current surface: four prior nulls
+> were uninformative because the targets lacked power, and v4 found no
+> powered+disjoint target inside the registered 12^3 envelope.
+
 ## Short Version
 
 **Subject:** Quick sanity check request: bounded-null finite-lattice SU(2)
