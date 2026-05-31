@@ -359,6 +359,18 @@ non-contractible-topology cases are the relevant Branch B boundary tests.
 Execution has not started; the future result receipt target is
 `docs/faraday/FARADAY_PHASE7_BOUNDARY.md`.
 
+**Progress note (2026-05-31, cross-substrate framing)**: Faraday is now
+represented in the portfolio cross-substrate map. The promoted
+[`../CROSS_SUBSTRATE_NOTES.md`](../CROSS_SUBSTRATE_NOTES.md) §8 reads the closed
+Branch A result and the open Phase 7 cases through the projection /
+body-resistance vocabulary. Two tagged claims: Faraday closure = zero
+body-resistance *by identity* (the Bianchi half of Maxwell) [PROVED, = Phase 3];
+and the Aharonov-Bohm case (Phase 7 case 3) is pre-registered as the portfolio's
+first *exact, topological* regime-2 separation [HYPOTHESIZED - earned only by the
+Phase 7 boundary receipt]. This is framing/interpretation, not a new Faraday
+result: no public copy changes, and the Phase 7 execution +
+`FARADAY_PHASE7_BOUNDARY.md` receipt remain pending.
+
 This keeps the Sundog standard: traceable, falsifiable, receipt-driven, and public. The final artifact is both a mathematical result **and** a clean public page that demonstrates the method. 
 
 Ready when you are.

@@ -75,8 +75,8 @@ source of truth.
   proposal after absolute fibers stayed sparse on the expanded 108-task
   register.
 - **P-vs-NP Phase 2 mesa bridge** - Phase 2 v0 named-quarantined on raw-log
-  provenance; v1 slate is frozen for implementation with raw-logged Small
-  reruns.
+  provenance; v1 provenance repair executed as a bounded-positive
+  mesa-bridge receipt. Capacity threshold remains not estimated.
 
 ### `operator-blocked` — needs a human artifact, review, or measurement
 
@@ -441,9 +441,11 @@ Sources:
 [`pvnp/README.md`](pvnp/README.md),
 [`pvnp/PHASE1_V6_SLATE.md`](pvnp/PHASE1_V6_SLATE.md),
 [`pvnp/PHASE2_MESA_BRIDGE_V0_SLATE.md`](pvnp/PHASE2_MESA_BRIDGE_V0_SLATE.md),
-[`pvnp/receipts/README.md`](pvnp/receipts/README.md).
+[`pvnp/receipts/README.md`](pvnp/receipts/README.md),
+[`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md).
 
-Status: `phase2-v0-named-quarantine`, v6 op-count positive.
+Status: `phase3-v0-slate-opened-for-review`, v6 and Phase 2 v1 bounded
+positive.
 
 Current state:
 
@@ -451,26 +453,27 @@ Phase 1 v0-v6 produced a useful chain of verifier receipts. v5 is a corrected
 named quarantine: safety-complete, wall-time cost unadjudicated. v6 is bounded
 positive under the registered op-count protocol: `C_total_signature_ops /
 C_rollout_ops = 0.948587 <= 1.0`, with wall-time diagnostic-only. Phase 2 v0
-is implemented and filed as named quarantine: raw-log recomputation fails for
-Small-tier cells whose manifests record `trial_logs_saved=false`, while Medium
-cells show the intended reward-blind bridge behavior.
+is filed as named quarantine, and Phase 2 v1 closes the raw-log provenance gap
+as a bounded positive under the frozen mesa-bridge contract. Phase 3 v0 is now
+opened for review to register attacker capacity, inversion, and spoof tests.
 
 Blocker:
 
-The next move is not another Phase 1 cost repair. Phase 1's claim boundary is
-now fixed. Phase 2's immediate blocker is provenance shape: the registered v0
-population needs per-seed raw logs, and the Small-tier artifacts do not have
-them.
+The next move is not another Phase 1 cost repair or Phase 2 provenance repair.
+Those claim boundaries are fixed. The remaining open question is
+capacity-relative one-wayness / spoof resistance under a frozen Phase 3
+attacker battery.
 
 Next actions:
 
-1. Implement the frozen Phase 2 v1 bridge reader and npm wiring.
-2. Run the raw-logged Small rerun under the frozen v1 contract, inline if the
-   current timing remains under the repo's approximately 10-minute rule.
-3. Carry forward the v6 boundary verbatim: op-count positive, wall-time
+1. Review and freeze the Phase 3 capacity-relative one-wayness v0 slate.
+2. Decide whether v0 runs seed-extension batteries or named-quarantines spoof
+   search as unfaithful.
+3. Freeze the attacker/capacity battery before any execution.
+4. Carry forward the v6 boundary verbatim: op-count positive, wall-time
    diagnostic-only, no complexity-theoretic claim.
-4. Do not use the v3/v5 favorable wall-time samples as evidence.
-5. Treat `capacity_threshold = not_estimated` as still open for any larger
+5. Do not use the v3/v5 favorable wall-time samples as evidence.
+6. Treat `capacity_threshold = not_estimated` as still open for any larger
    attacker or domain expansion.
 
 ### ARC Phase 3E Relative-Locality Hold
@@ -819,7 +822,7 @@ Sources:
 [`../docs/isotrophy/kfacet/kfacet_v04a_domain_map_preregistration.md`](../docs/isotrophy/kfacet/kfacet_v04a_domain_map_preregistration.md)
 (includes the Verdict (Landed, 2026-05-22) section with per-row
 provenance and the Pass 2 rescue table),
-[`threebody/CROSS_SUBSTRATE_NOTES.md`](threebody/CROSS_SUBSTRATE_NOTES.md)
+[`CROSS_SUBSTRATE_NOTES.md`](CROSS_SUBSTRATE_NOTES.md)
 §7.2 (projection-language framing for the v0.3 -> v0.4 transition).
 
 Receipts:
@@ -840,7 +843,7 @@ Sources:
 (domain locked: 273/273 Z2_clean),
 [`../docs/isotrophy/kfacet/kfacet_v04b_gamma3prime_form.md`](../docs/isotrophy/kfacet/kfacet_v04b_gamma3prime_form.md),
 [`../docs/isotrophy/kfacet/kfacet_v04_writeup.md`](../docs/isotrophy/kfacet/kfacet_v04_writeup.md),
-[`threebody/CROSS_SUBSTRATE_NOTES.md`](threebody/CROSS_SUBSTRATE_NOTES.md)
+[`CROSS_SUBSTRATE_NOTES.md`](CROSS_SUBSTRATE_NOTES.md)
 §7.2 (projection-language framing).
 
 Status: **CHAPTER CLOSED 2026-05-23, structural-negative**. Both
