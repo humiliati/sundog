@@ -1,13 +1,16 @@
 # Phase 2 Mesa Verification Bridge
 
-Status: opened 2026-05-31; v0 execution slate frozen in
-[`PHASE2_MESA_BRIDGE_V0_SLATE.md`](PHASE2_MESA_BRIDGE_V0_SLATE.md). Nothing has
-run.
+Status: opened 2026-05-31. v0 executed -> **named quarantine** (provenance:
+7/15 Small cells lacked raw trial logs); receipt
+[`receipts/2026-05-31_phase2_mesa_bridge_v0.md`](receipts/2026-05-31_phase2_mesa_bridge_v0.md).
+v1 provenance-repair slate
+[`PHASE2_MESA_BRIDGE_V1_SLATE.md`](PHASE2_MESA_BRIDGE_V1_SLATE.md) is
+**frozen for implementation** (raw-logged Small rerun; no v1 execution yet).
 
 This is the Phase 2 analogue of
 [`PHASE1_TOY_VERIFIER_SPEC.md`](PHASE1_TOY_VERIFIER_SPEC.md): it defines the
-bridge object and exit criterion. The frozen v0 slate is the implementable run
-contract.
+bridge object and exit criterion. Frozen slates are the implementable run
+contracts.
 
 Opened on the strength of the Phase 1 v6 bounded-positive receipt
 ([`receipts/2026-05-31_phase1_toy_verifier_v6.md`](receipts/2026-05-31_phase1_toy_verifier_v6.md)),
@@ -26,6 +29,24 @@ Phase 1 earned exactly this and Phase 2 may not silently widen it:
   (`capacity_threshold = not_estimated`).
 - No complexity-theoretic result, polynomial certificate, or general cheap
   alignment-verification claim is made.
+
+**Body-resistance boundary (from the cross-substrate note, 2026-05-29).**
+[`../threebody/CROSS_SUBSTRATE_NOTES.md`](../threebody/CROSS_SUBSTRATE_NOTES.md)
+Section 6.3 measured the mesa control substrate directly: `net.7` is effectively
+**~2-dimensional** (participation ratio 2.0, a function of the 6-dim
+observation), so the 5D cliff shadow reconstructs it at
+`FVE(net.7 | 5D) ~ 0.97-0.99`. The note's verdict: **mesa is sharp on
+shadow-irreducibility but *marginal* on body-resistance**, and "no control
+substrate in the portfolio is demonstrated sharp on the body-resistance
+(Sundog regime-2) axis." Consequence for this bridge: a Phase 2
+bounded-positive can show only that the **certificate discipline transfers
+to the mesa control substrate** - it **cannot** show that signature
+verification works where the body genuinely resists the shadow
+(high-dimensional agents), because mesa's body does not resist. The bridge
+is a control-rigidity / certificate-discipline transfer test, **not** a
+body-resistance or regime-2 demonstration; per the note, the regime-2
+question lives in the `chatv2` lane (first sharp control regime-2, low-dim,
+unpromoted), not here. Any bridge receipt must restate this.
 
 Phase 2 asks whether the same certificate discipline can survive contact with
 mesa artifacts. It does not inherit a "verification is solved" premise.
@@ -156,17 +177,22 @@ Phase 2 fails, and must say so, if any of:
 
 ## Next Allowed Step
 
-Open a Phase 2 v1 slate. The v0 run named-quarantined on raw-log provenance:
-Small-tier source manifests did not save per-seed trial logs, so the registered
-raw-recompute gate could not pass. v1 must choose its shape before execution:
-either rerun the missing Small cells with raw logs saved, or explicitly
-downscope to a Medium-only raw-log bridge.
+Implement the frozen Phase 2 v1 slate:
+[`PHASE2_MESA_BRIDGE_V1_SLATE.md`](PHASE2_MESA_BRIDGE_V1_SLATE.md). The v0 run
+named-quarantined on raw-log provenance: Small-tier source manifests did not
+save per-seed trial logs, so the registered raw-recompute gate could not pass.
+The v1 contract selects raw-logged Small reruns over Medium-only downscope. The
+next step is post-freeze implementation wiring: add the small-raw rerun command,
+implement repaired-root precedence in the bridge reader, then execute v1 under
+this frozen contract.
 
 ## Cross-References
 
 - [`SUNDOG_V_P_V_NP.md`](../SUNDOG_V_P_V_NP.md) Phase 2.
 - [`PHASE2_MESA_BRIDGE_V0_SLATE.md`](PHASE2_MESA_BRIDGE_V0_SLATE.md): frozen
   v0 execution slate.
+- [`PHASE2_MESA_BRIDGE_V1_SLATE.md`](PHASE2_MESA_BRIDGE_V1_SLATE.md): frozen
+  provenance-repair slate.
 - [`receipts/2026-05-31_phase1_toy_verifier_v6.md`](receipts/2026-05-31_phase1_toy_verifier_v6.md):
   the bounded-positive Phase 1 receipt that authorized opening Phase 2.
 - [`../SUNDOG_V_MESA.md`](../SUNDOG_V_MESA.md): mesa lane roadmap.

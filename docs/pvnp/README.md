@@ -50,6 +50,10 @@ Phase specs:
   Certificates must recompute from per-seed raw trial logs, and the op-count
   comparator must be a same-artifact-tier raw-trace audit rather than a full
   mesa battery regeneration.
+- [`PHASE2_MESA_BRIDGE_V1_SLATE.md`](PHASE2_MESA_BRIDGE_V1_SLATE.md) -
+  frozen provenance-repair slate after the v0 named quarantine. Chooses
+  raw-logged Small reruns over Medium-only downscope; post-freeze
+  implementation is next.
 
 Templates:
 
@@ -137,5 +141,9 @@ Current state:
   op-count comparator (`0.734877`). It cannot promote because 7/15 registered
   cells lack raw trial logs (`trial_logs_saved=false` for Small-tier source
   manifests), leaving raw recomputation, integrity, and the 3/4 signature
-  accept floor failed. Next step is a Phase 2 v1 slate: raw-logged Small rerun
-  or explicitly Medium-only bridge.
+  accept floor failed.
+- Phase 2 mesa bridge v1 slate frozen for implementation: 2026-05-31.
+  [`PHASE2_MESA_BRIDGE_V1_SLATE.md`](PHASE2_MESA_BRIDGE_V1_SLATE.md) selects
+  the raw-logged Small rerun repair, preserves the v0 population and
+  thresholds, records full-size timing probes, and stages exact Phase 4 rerun
+  commands. No v1 execution has run.
