@@ -1,22 +1,21 @@
-# External Review Email Draft (Yang-Mills Bounded Null)
+# External Review Email Draft (Yang-Mills Informative Null)
 
 > Send to a lattice gauge theorist. Owner fills `[Name]`, `[reviewer
 > specialty signal]`, `[link or attachment to packet]`, and `[Your name]`
 > before sending. Three versions below; pick the one that matches your
 > relationship with the reviewer.
 
-> **2026-05-31 status addendum:** do not send this draft as-is. It was
-> written before the v4/v5 powered-target audits, both of which landed
-> `YM-P2-UNDERPOWERED no_powered_target_in_envelope`. If external review is
-> still pursued, revise the ask around the current surface: four prior nulls,
-> a Wilson-loop powered-target audit with no admitted target, and a symmetric
-> Polyakov audit whose targets were disjoint but underpowered; v6 finite-
-> temperature Polyakov is the only registered continuation.
+> **2026-05-31:** this draft is re-pointed to the informative-null story (the
+> v4/v5/v6a escalation). The ask is no longer "is our four-probe bounded null
+> honest" — it is "we ran a powered, disjoint, finite-temperature Polyakov
+> (confinement order parameter) test and the small-loop signature still showed
+> no rank-locality; is that powered test sound, and is the null expected on
+> gauge-theory grounds?"
 
 ## Short Version
 
-**Subject:** Quick sanity check request: bounded-null finite-lattice SU(2)
-relative-locality test
+**Subject:** Quick sanity check request: a powered finite-T SU(2)
+relative-locality null
 
 Hi [Name],
 
@@ -24,53 +23,49 @@ Could I ask for a small sanity check on a finite-lattice Yang-Mills note?
 This is not a Clay-problem claim and not a confinement / mass-gap claim.
 The point is the opposite: we ran a Sundog-style "lossy gauge-invariant
 signature must preserve a held-out observable label beyond controls"
-apparatus on pure SU(2) lattice gauge theory and now think the correct
-conclusion is a bounded cell-local null.
+apparatus on pure SU(2) lattice gauge theory, and after escalating to a
+genuinely powered test, we now think the correct conclusion is an
+informative cell-local null.
 
 The claim I want checked is:
 
-> Inside the registered SU(2) 3D, 12³, Wilson-action ensemble at β slate
-> {2.0, 2.4, 2.8} with 32 configurations per β (Creutz + Kennedy-Pendleton
-> heatbath + Brown-Woch overrelaxation, 1 HB + 4 OR per combined sweep,
-> τ_int(plaquette) ≈ 0.5–1.0, thinning interval 32 sweeps), the v1 small-
-> Wilson-loop signature class (mean and variance of W11/W12/W13/W22 across
-> all positions and three plane orientations) does not preserve within-β
-> rank-local structure for either of two held-out targets — area-law decay
-> slope γ_held on (W14, W23, W33) or per-config spatial variance σ²_W33 —
-> with k-NN bin-purity at k=5 against per-β tertile labels. Three signature
-> variants were registered before scoring: bare loop moments, APE-smeared
-> loop moments at frozen (α, N_sm)=(0.5, 10), and connected 2-point
-> correlator at a frozen displacement slate. All four (signature × target)
-> probes landed within ±0.04 of chance baseline 1/3 and failed both
-> registered promotion gates (absolute purity ≥ 0.5, margin over random
-> ≥ 0.10).
+> On a **powered** (split-half ICC 0.965) and **disjoint** (leakage
+> CV-R² −0.332) held-out target — the finite-temperature Polyakov loop, the
+> SU(2) confinement order parameter, on a 12²×4 (N_t=4) Wilson-action ensemble
+> at the deconfinement crossover (β slate {6.3, 6.55, 6.8}, susceptibility peak
+> 6.55, consistent with the literature β_c = 6.53661(13)) — the unchanged bare
+> small-Wilson-loop signature (mean and variance of W11/W12/W13/W22) does not
+> preserve within-β rank-local structure beyond controls (k-NN bin-purity@5
+> against per-β tertile labels: 0.304, vs random-neighbor control 0.329, chance
+> 1/3). The earlier Wilson-loop-target probes failed too, but their targets were
+> later shown un-powered; v6a is the first powered, disjoint target, so this null
+> implicates the signature, not the test.
 
 The most useful review would be a short "yes, that framing is conservative"
-or "no, this overstates X." In particular, I would love your view on three
-questions:
+or "no, this overstates X." In particular, three questions:
 
-1. **Signature/target disjointness.** Is the v1 signature (small Wilson
-   loops W11/W12/W13/W22 mean + variance) disjoint enough from the
-   held-out target (larger loops W14/W23/W33 entering either an LS-slope
-   γ_held or a per-config spatial variance σ²_W33) that any positive
-   would have been the natural read rather than trivial leakage?
-2. **N and ensemble health.** Is 32 configurations per β at 12³ large
-   enough for k-NN tertile-bin rank-locality scoring to mean anything?
-   Are the locked τ_int / thinning thresholds (τ_int ≤ 16 combined sweeps,
-   thinning ≥ 2 · τ_int) defensible at the registered β values?
-3. **Probe-ladder completeness.** Is there an obvious small-loop
-   signature class or held-out summary that a lattice gauge theorist
-   would expect to test before declaring a bounded null on this cell?
-   The four probes ran (signature × target) combinations bare/smeared/
-   correlator × γ_held plus bare × σ²_W33. Pre-stated but unrun: σ²_W14,
-   σ²_W23, Polyakov-loop target, smeared × σ²_W33.
+1. **Is the powered finite-T test sound?** Is a 12²×4 (N_t=4) SU(2) ensemble
+   at the deconfinement crossover, with per-config Polyakov summaries
+   (temporal-wrap loop averaged over the 12² transverse sites) as the held-out
+   target, a reasonable way to obtain a powered, disjoint order-parameter label
+   for this kind of rank-locality test?
+2. **Is the null expected or surprising?** Is there a *known* gauge-theory
+   reason a small local-loop signature would carry no rank-locality of the
+   (non-local, temporal-wrap) Polyakov order parameter — a center-symmetry or
+   locality argument? If it's the textbook outcome, is it still a clean
+   confirmation that the apparatus reports "no structure" correctly, or just
+   uninteresting?
+3. **Is the powered-target audit sound?** We certify a target as "powered"
+   via a split-half ICC ≥ 0.50 (transverse-site parity) plus tertile agreement
+   ≥ 0.50 in all three β, and "disjoint" via 5-fold OLS CV-R²(target | signature)
+   ≤ 0.25, with a known-noise target (γ_held) carried as a must-fail control
+   (it failed). Is that a defensible way to call a target powered and disjoint?
 
 Packet: [link or attachment to docs/yang-mills/EXTERNAL_REVIEW_PACKET.md]
 
-No endorsement requested. A one-paragraph reply is genuinely enough; the
-most useful possible answer might be a one-liner like "this is dominated
-by N=32 noise; re-run with N ≥ Y before claiming anything," or "the σ²_W33
-target is too correlated with mean W33, do X."
+No endorsement requested. A one-paragraph reply is genuinely enough; the most
+useful possible answer might be "this is the expected textbook null because A,"
+or "your N=32 per β is too small to call it powered; re-run with N ≥ Y."
 
 Thanks,
 [Your name]
@@ -84,58 +79,51 @@ Hi [Name],
 
 I have a small, bounded sanity-check request if you have the bandwidth.
 We've been testing a Sundog "lossy gauge-invariant shadow" apparatus on
-pure SU(2) lattice gauge theory. The result is not a positive claim. It
-is a bounded cell-local null: after four pre-registered relative-locality
-probes on the same finite-lattice SU(2) 3D × β slate ensemble, the
-conservative conclusion appears to be that the small-loop signature
-classes we tested do not earn a within-β rank-locality certificate on
-the held-out targets we tested.
+pure SU(2) lattice gauge theory. The result is not a positive claim — it's
+an informative cell-local null, and I want to make sure it's framed honestly
+before any public surface exists.
 
-The four probes (registered in order, each as a separate pre-run spec)
-were:
+The honest part of the story is the escalation. We first ran four
+pre-registered relative-locality probes against Wilson-loop targets, all
+near chance:
 
-- v0: bare-loop mean+variance signature vs γ_held LS-slope target →
-  bin-purity@5 = 0.310 (chance 0.333), margin over CTRL_RAND = +0.010,
-  fails both promotion gates;
-- v1: APE-smeared mean+variance at frozen (α, N_sm) = (0.5, 10) vs same
-  γ_held target → bin-purity 0.294, **slightly worse** than the bare
-  baseline (so UV-noise dominance was falsified as the v0 explanation);
-- v2: bare connected 2-point correlator at a frozen displacement slate
-  vs same γ_held target → bin-purity 0.308, also fails;
-- v3: bare-loop signature (re-read from v0 with SHA-256 assertion)
-  against a new held-out target σ²_W33 = per-config spatial variance of
-  the largest held-out loop → bin-purity 0.329, also fails.
+- v0: bare-loop mean+variance vs γ_held area-law slope → bin-purity@5 0.310;
+- v1: APE-smeared mean+variance at frozen (α, N_sm)=(0.5, 10) vs same target
+  → 0.294 (slightly worse than bare, so "UV noise" was falsified as the cause);
+- v2: bare connected 2-point correlator vs same target → 0.308;
+- v3: bare-loop signature vs a new target σ²_W33 (spatial variance) → 0.329.
 
-What I want to know is whether that "four signature × target
-combinations, four named nulls on the registered envelope, no
-relative-locality certificate" framing is mathematically and statistically
-honest as a lattice-gauge result, given finite-lattice / finite-ensemble
-standard practice. If it is too strong, or if one of the four is better
-called an N-too-small artifact or a target-leakage artifact, I want to
-quarantine it before any public surface exists.
+But then we audited those targets and found they were **not powered** — no
+Wilson-loop or symmetric-Polyakov summary in the registered envelope was both
+powered (split-half ICC ≥ 0.50) and disjoint from the signature. So those four
+nulls said nothing about the signature. We escalated to a finite-temperature
+12²×4 cell at the SU(2) deconfinement crossover, where the Polyakov loop is a
+genuine order parameter — and there we finally got a powered (ICC 0.965),
+disjoint (CV-R² −0.332) target. The small-loop signature **still** showed no
+within-β rank-locality (bin-purity@5 0.304 vs 0.329 random-neighbor control).
+
+What I want to know is whether that "powered, disjoint, order-parameter test,
+no relative-locality certificate" framing is honest as a lattice-gauge result,
+and — just as important — whether the null is the *expected* outcome (small
+local loops can't resolve a non-local order parameter) or something a lattice
+gauge theorist would find at all surprising.
 
 The review packet is here: [link or attachment to docs/yang-mills/EXTERNAL_REVIEW_PACKET.md]
 
-The packet is written so a 10-minute skim of the synthesis section and
-the four-receipt matrix should be enough to answer the main question.
-Methodology context (gauge-invariance smoke tests, ensemble health
-gates, pre-registration discipline) is one click deeper. No endorsement
-requested; even "this is standard, cite X, and don't call it Y" would be
-extremely helpful.
+A 10-minute skim of the synthesis "The upgrade" section and the arc table
+should be enough for the main question; the powered-target audit and ensemble
+health are one click deeper. No endorsement requested; even "this is standard,
+cite X, and don't call it Y" would be extremely helpful.
 
-Specifically, I would value your view on three things if you have time:
+Specifically, I'd value your view on three things if you have time:
 
-1. Is the v1 signature (small-loop mean + variance) disjoint enough from
-   the held-out target (larger-loop area-law slope, or large-loop spatial
-   variance) that this is a genuine independence test rather than
-   trivial signature-into-target leakage?
-2. Is 32 configurations per β at 12³ enough for any k-NN tertile-bin
-   rank-locality scoring to be meaningful, given the τ_int / thinning
-   rule we registered?
-3. The pre-stated unrun probes (σ²_W14, σ²_W23, Polyakov-loop target,
-   smeared × σ²_W33) — should any of those be flagged as "you should
-   have done this before declaring bounded null" rather than "optional
-   with external scientific motivation"?
+1. Is the 12²×4 (N_t=4) crossover cell a sound place to pose this test, or is
+   there a better-conditioned finite-T geometry?
+2. Is the null expected on gauge-theory grounds (center symmetry / non-locality
+   of the Polyakov loop vs small local loops)? Is it still a clean confirmation
+   if so?
+3. Is the powered-target audit (split-half ICC + disjointness CV-R², γ_held as
+   a must-fail control) a defensible way to call the target "powered"?
 
 Thanks,
 [Your name]
@@ -144,20 +132,25 @@ Thanks,
 
 Thank you. The most useful path is:
 
-1. Read the load-bearing bounded-null statement, the four-receipt matrix,
-   and the PAUSE Disposition in
-   `receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md`.
-2. Check the seven questions in `EXTERNAL_REVIEW_PACKET.md` — the first
-   five are direct adaptations of the questions the P0 lock pre-registered
-   as the review surface; questions 6 and 7 are bounded-null-specific.
-3. Reply with any of:
+1. Read the load-bearing statement in "The upgrade" section, plus the arc
+   table, in
+   `receipts/2026-05-31_SU2_3D_phase2_informative_null_synthesis.md`.
+2. Skim the powered finite-T probe receipt
+   `receipts/2026-05-31_SU2_3D_phase2_v6a_finite_t_polyakov_neg_a.md` — the
+   Stage-1 powered-target audit (ICC/leakage) and Stage-2 scores (primary vs
+   six controls).
+3. Check the seven questions in `EXTERNAL_REVIEW_PACKET.md` — questions 1–3
+   are the new centerpiece (powered test soundness, expected-vs-surprising,
+   audit soundness); 4–7 cover the β slate, finite-T artifacts, probe-ladder
+   completeness, and pre-registration discipline.
+4. Reply with any of:
    - "framing is conservative";
-   - "quarantine the synthesis because X";
-   - "this is dominated by N=32 noise; re-run with N ≥ Y";
-   - "the v3 σ²_W33 target is too correlated with mean W33; do X";
-   - "the probe ladder missed obvious combination C; that should be in
-     the ladder before declaring bounded null";
-   - "cite this standard reference; the bounded null is in family with X."
+   - "'powered' is overstated because X; re-run with N ≥ Y";
+   - "this is the expected textbook null because A — frame it as confirmation,
+     not discovery";
+   - "the finite-T cell is mis-conditioned; use N_t = B / volume C";
+   - "the probe ladder should have ended on order parameter / observable E";
+   - "cite this standard reference; the informative null is in family with X."
 
 I am not asking for a full referee report.
 
@@ -166,9 +159,9 @@ I am not asking for a full referee report.
 No worries at all, and thank you for considering it. If there is someone
 who would be a better fit for a quick lattice gauge theory sanity check —
 ideally someone with [reviewer specialty signal, e.g. "experience with
-small-lattice SU(2) Wilson-loop / area-law work" or "with rank-locality
-or signature-based ML methods on lattice ensembles"] — I would be
-grateful for a pointer.
+finite-temperature SU(2) deconfinement / Polyakov-loop work" or "with
+rank-locality or signature-based ML methods on lattice ensembles"] — I would
+be grateful for a pointer.
 
 ## Owner Fill-In Checklist Before Sending
 
@@ -187,6 +180,7 @@ Before sending either the short or the warmer version, verify:
       language boundary: "Sundog has a Yang-Mills result," "Sundog proves
       confinement," "Sundog found a mass gap," "approaches the Clay
       problem," "implies the continuum theorem."
-- [ ] Optional: include a ZIP of the four Phase 2 result directories
-      under `results/yang-mills/phase2/SU2_3D/` if the reviewer asks for
-      raw artifacts.
+- [ ] Optional: include a ZIP of the powered finite-T result directory
+      `results/yang-mills/phase2/SU2_3D/2026-05-31_su2_3d_finite_t_polyakov_v6a/`
+      (and the three v0 ensemble dirs reused by v1–v5) if the reviewer asks
+      for raw artifacts.

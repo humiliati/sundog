@@ -6,6 +6,17 @@ returns `YM-P2-UNDERPOWERED` (symmetric-cell Polyakov too weak in the confined
 `⟨P⟩≈0` regime). Filed in parallel with v5 so an underpowered symmetric result
 flows straight into the finite-T run with no second sign-off.
 
+Follow-up amendment after the first pilot void:
+[`PHASE2_SU2_3D_finite_t_polyakov_v6_AMENDMENT_2026-05-31_pilot_metric.md`](PHASE2_SU2_3D_finite_t_polyakov_v6_AMENDMENT_2026-05-31_pilot_metric.md).
+This amendment governs the current v6a invocation: the target/gate/Stage-2
+contract is unchanged, but the pre-generation pilot selector is clarified as
+ensemble-level order-parameter susceptibility and the pilot grid is extended
+upward.
+
+Execution status: **v6a executed 2026-05-31 -> `YM-P2-NEG-A no_rank_local_structure`**.
+Receipt:
+[`../../yang-mills/receipts/2026-05-31_SU2_3D_phase2_v6a_finite_t_polyakov_neg_a.md`](../../yang-mills/receipts/2026-05-31_SU2_3D_phase2_v6a_finite_t_polyakov_neg_a.md).
+
 P0 lock: [`P0_DOMAIN_AND_RECEIPT_LOCK.md`](P0_DOMAIN_AND_RECEIPT_LOCK.md) ·
 amendment 2 (Polyakov class + finite-T slate):
 [`P0_AMENDMENT_2026-05-31_polyakov.md`](P0_AMENDMENT_2026-05-31_polyakov.md).
@@ -29,12 +40,17 @@ held-out target is most likely to exist.
   one near, one above the susceptibility peak), recorded in the runner manifest
   and frozen thereafter (mirrors parent P0's "β revisable once before generation").
   - **Literature anchor (seeds the pilot grid):** the SU(2) 2+1D `N_t=4`
-    deconfinement critical coupling is `β_c = 6.53661(13)` (Edwards–von Smekal
-    2009, [arXiv:0908.4030](https://arxiv.org/abs/0908.4030); β = 4/g²a
-    convention, identical to the sundog Wilson action). Center the coarse pilot
-    grid there — e.g. `{6.0, 6.3, 6.55, 6.8, 7.1}` — to locate the finite-`12²`
-    Polyakov-susceptibility peak (which sits slightly below the infinite-volume
-    `β_c`), then freeze the 3-β slate to bracket it.
+     deconfinement critical coupling is `β_c = 6.53661(13)` (Edwards–von Smekal
+     2009, [arXiv:0908.4030](https://arxiv.org/abs/0908.4030); β = 4/g²a
+     convention, identical to the sundog Wilson action). Center the coarse pilot
+     grid there — e.g. `{6.0, 6.3, 6.55, 6.8, 7.1}` — to locate the finite-`12²`
+     Polyakov-susceptibility peak (which sits slightly below the infinite-volume
+     `β_c`), then freeze the 3-β slate to bracket it.
+  - **2026-05-31 v6a amendment:** the first pilot voided because the selected peak
+    landed on the grid boundary. The amended pilot uses grid
+    `{6.0, 6.3, 6.55, 6.8, 7.1, 7.4, 7.7, 8.0}` and selects on
+    `order_suscept_abs_mean_P = (12*12) * Var(abs_mean_P)` across pilot
+    measurements; the prior `mean_chi_P` is record-only.
 - Generator: the SU(2) 3D core (Creutz + Kennedy-Pendleton + Brown-Woch),
   **generalized to an asymmetric lattice** (see §5). Burn-in ≥ 2000; thinning ≥
   2·τ_int from a pilot; standard unitarity/health gates.
@@ -68,9 +84,25 @@ Unlike v5, v6 is **not** an aggregation pass. It requires:
    — `createSU2Lattice`, `linkBase`, `wrap`, and the sweep/plaquette routines
    currently assume a single cubic `L`; introduce `(Lx, Ly, Lt)`. The existing
    cubic path must stay bit-for-bit unchanged (assert `Lx=Ly=Lt` reproduces v0–v5);
-2. a new ensemble generator entry `scripts/yang-mills-phase2-v6-finite-t-ensemble.mjs`
-   + the v6 aggregation runner;
+2. a new finite-T runner entry `scripts/yang-mills-phase2-v6-finite-t-polyakov.mjs`
+   that performs the pilot, generation, and v6 aggregation in one locked
+   invocation;
 3. the pilot β scan, then the frozen generation + audit.
+
+Locked invocation:
+
+```powershell
+npm run yang-mills:phase2:v6:finite-t:polyakov
+```
+
+Pilot guard: if the pilot susceptibility peak lands on either boundary of the
+locked pilot grid, the runner stops before ensemble generation as
+`Z beta_peak_unbracketed`; no beta slate is frozen and no Stage 1/Stage 2 score
+is admitted.
+
+As of the v6a amendment, the locked pilot settings are 800 burn-in sweeps, 96
+measurements, thinning 4, grid `{6.0, 6.3, 6.55, 6.8, 7.1, 7.4, 7.7, 8.0}`,
+and selection metric `order_suscept_abs_mean_P`.
 
 ## 6. Anti-scope-creep
 

@@ -1,0 +1,156 @@
+{
+  "frozenAt": "2026-05-31T20:12:31.422Z",
+  "status": "admitted",
+  "primaryTarget": "abs_mean_P",
+  "selectionRule": "highest mean-over-beta ICC among candidates admitted in all beta values; tie-break lowest mean leakage CV-R2",
+  "admittedTargets": [
+    {
+      "target": "abs_mean_P",
+      "meanIcc": 0.9648663257457363,
+      "meanLeakageCvR2": -0.33218603236525884,
+      "perBeta": {
+        "6.3": {
+          "beta": 6.3,
+          "validCount": 32,
+          "flaggedCount": 0,
+          "flaggedIds": [],
+          "undefinedFraction": 0,
+          "undefinedStatus": false,
+          "icc": 0.9660830742883498,
+          "agreement": 0.8125,
+          "leakageCvR2": -0.18631863035954277,
+          "powered": true,
+          "disjoint": true,
+          "admitted": true
+        },
+        "6.55": {
+          "beta": 6.55,
+          "validCount": 32,
+          "flaggedCount": 0,
+          "flaggedIds": [],
+          "undefinedFraction": 0,
+          "undefinedStatus": false,
+          "icc": 0.9557774091895069,
+          "agreement": 0.75,
+          "leakageCvR2": -0.6018151310632511,
+          "powered": true,
+          "disjoint": true,
+          "admitted": true
+        },
+        "6.8": {
+          "beta": 6.8,
+          "validCount": 32,
+          "flaggedCount": 0,
+          "flaggedIds": [],
+          "undefinedFraction": 0,
+          "undefinedStatus": false,
+          "icc": 0.9727384937593518,
+          "agreement": 0.8125,
+          "leakageCvR2": -0.20842433567298269,
+          "powered": true,
+          "disjoint": true,
+          "admitted": true
+        }
+      }
+    },
+    {
+      "target": "mean_abs_P",
+      "meanIcc": 0.878629088075935,
+      "meanLeakageCvR2": -0.45150521065292515,
+      "perBeta": {
+        "6.3": {
+          "beta": 6.3,
+          "validCount": 32,
+          "flaggedCount": 0,
+          "flaggedIds": [],
+          "undefinedFraction": 0,
+          "undefinedStatus": false,
+          "icc": 0.8817502037024152,
+          "agreement": 0.8125,
+          "leakageCvR2": -0.1795178474244763,
+          "powered": true,
+          "disjoint": true,
+          "admitted": true
+        },
+        "6.55": {
+          "beta": 6.55,
+          "validCount": 32,
+          "flaggedCount": 0,
+          "flaggedIds": [],
+          "undefinedFraction": 0,
+          "undefinedStatus": false,
+          "icc": 0.8201520526502856,
+          "agreement": 0.625,
+          "leakageCvR2": -0.8750362379574819,
+          "powered": true,
+          "disjoint": true,
+          "admitted": true
+        },
+        "6.8": {
+          "beta": 6.8,
+          "validCount": 32,
+          "flaggedCount": 0,
+          "flaggedIds": [],
+          "undefinedFraction": 0,
+          "undefinedStatus": false,
+          "icc": 0.933985007875104,
+          "agreement": 0.875,
+          "leakageCvR2": -0.2999615465768173,
+          "powered": true,
+          "disjoint": true,
+          "admitted": true
+        }
+      }
+    },
+    {
+      "target": "chi_P",
+      "meanIcc": 0.8345342293590198,
+      "meanLeakageCvR2": -0.45268658824074626,
+      "perBeta": {
+        "6.3": {
+          "beta": 6.3,
+          "validCount": 32,
+          "flaggedCount": 0,
+          "flaggedIds": [],
+          "undefinedFraction": 0,
+          "undefinedStatus": false,
+          "icc": 0.8211555367840784,
+          "agreement": 0.71875,
+          "leakageCvR2": -0.5822695624697161,
+          "powered": true,
+          "disjoint": true,
+          "admitted": true
+        },
+        "6.55": {
+          "beta": 6.55,
+          "validCount": 32,
+          "flaggedCount": 0,
+          "flaggedIds": [],
+          "undefinedFraction": 0,
+          "undefinedStatus": false,
+          "icc": 0.8561549350882418,
+          "agreement": 0.59375,
+          "leakageCvR2": -0.36170053226291765,
+          "powered": true,
+          "disjoint": true,
+          "admitted": true
+        },
+        "6.8": {
+          "beta": 6.8,
+          "validCount": 32,
+          "flaggedCount": 0,
+          "flaggedIds": [],
+          "undefinedFraction": 0,
+          "undefinedStatus": false,
+          "icc": 0.8262922162047389,
+          "agreement": 0.71875,
+          "leakageCvR2": -0.41408966998960506,
+          "powered": true,
+          "disjoint": true,
+          "admitted": true
+        }
+      }
+    }
+  ],
+  "rejectedTargets": []
+}

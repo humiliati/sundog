@@ -1,0 +1,11 @@
+{
+  "aggregation/manifest.json": "1d8e397f24452eaebabbc549a373b8d987c4c9faf4f7f0c29d2360202d03d759",
+  "aggregation/summary.json": "458f0c18b89574b03bf4a8d01046c9f271db402db2fc9a82dce9b24331adab44",
+  "pilot_beta_scan/beta6p0_polyakov_series.csv": "314ffa0084c5fe2752db70a6c0bf2b55ce3950d31dadd9f866a5683a309e44fc",
+  "pilot_beta_scan/beta6p3_polyakov_series.csv": "33163a9c886fcf3a135b49e22bfc099ffb157d680f729e9236345f8428f4591f",
+  "pilot_beta_scan/beta6p55_polyakov_series.csv": "07f612e58762485da68c8f7a62242d7625ecde17a53cfad48be3800064629514",
+  "pilot_beta_scan/beta6p8_polyakov_series.csv": "3b79413ab9c4c8930c88c138fd9813e1ea39f48057b4c0325cfbeedfde712174",
+  "pilot_beta_scan/beta7p1_polyakov_series.csv": "f8c37de1dd8680d95c686040fb7a5187f67ef803bc5f75aed294fc2cb69149ff",
+  "pilot_beta_scan/frozen_beta_slate.json": "d2d587d556b1c7049ee4b1fc05f537c233a6ad621c41fb63ac64bd1b61006dd6",
+  "pilot_beta_scan/pilot_beta_scan.csv": "47f40373ebbf6e72410aa429f6c1881604478196ae3a3a69eaab974dbce3d063"
+}

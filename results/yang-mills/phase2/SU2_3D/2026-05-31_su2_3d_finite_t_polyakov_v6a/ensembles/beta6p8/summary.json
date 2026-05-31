@@ -1,0 +1,56 @@
+{
+  "branch": "P1-A ensemble_health_pass",
+  "reason": "all finite-T ensemble health thresholds pass",
+  "beta": 6.8,
+  "betaIndex": 2,
+  "pilot": {
+    "tauInt": 0.7312919806346335,
+    "window": 5,
+    "meanPlaquette": 0.8468476508221282,
+    "variancePlaquette": 0.000013485189205832805,
+    "thinningTauRatio": 43.758171629654136
+  },
+  "orientation": {
+    "meanPlaquette": {
+      "xy": 0.8464462849594109,
+      "xz": 0.8469584637895256,
+      "yz": 0.8471382037174475
+    },
+    "variancePlaquette": {
+      "xy": 0.00003085615672876886,
+      "xz": 0.00002818556445179078,
+      "yz": 0.00002850463026842978
+    },
+    "relativeSpreadRecordOnlyFiniteT": 0.0008167719918666636
+  },
+  "measurements": {
+    "retained": 32
+  },
+  "heldout": {
+    "gammaHeldEpsilonFloor": 1e-10,
+    "clampCount": 0
+  },
+  "polyakov": {
+    "temporalMu": 2,
+    "sampleCountPerConfig": 144,
+    "meanAbsMeanP": 0.39176106308126707,
+    "meanMeanAbsP": 0.493795190146861,
+    "meanChiP": 0.14180798522507884
+  },
+  "heatbath": {
+    "linkUpdates": 6110208,
+    "fallbackCount": 0,
+    "fallbackFraction": 0,
+    "rejectionAttempts": 24496805,
+    "thresholdFallbackFraction": 0.001
+  },
+  "linkUnitarityMaxFrobenius": 7.850462293418876e-16,
+  "thresholds": {
+    "wallClockSeconds": 600,
+    "tauIntMax": 16,
+    "thinningTauRatioMin": 2,
+    "heatbathFallbackFractionMax": 0.001,
+    "unitarityFrobeniusResidualMax": 1e-10
+  },
+  "wallClockSeconds": 60.29016609999997
+}

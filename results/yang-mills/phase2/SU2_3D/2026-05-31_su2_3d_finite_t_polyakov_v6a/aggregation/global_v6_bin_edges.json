@@ -1,0 +1,682 @@
+{
+  "frozenAt": "2026-05-31T20:06:14.670Z",
+  "convention": "global_tertile_linear",
+  "target": "abs_mean_P",
+  "lowEdge": 0.3366097235334555,
+  "highEdge": 0.4684348275068654,
+  "spread": 0.6062797005352304,
+  "assignments": [
+    {
+      "id": "beta6.3_config0",
+      "beta": 6.3,
+      "configIdx": 0,
+      "value": 0.5521593649038228,
+      "bin": 3
+    },
+    {
+      "id": "beta6.3_config1",
+      "beta": 6.3,
+      "configIdx": 1,
+      "value": 0.42546624092905816,
+      "bin": 2
+    },
+    {
+      "id": "beta6.3_config2",
+      "beta": 6.3,
+      "configIdx": 2,
+      "value": 0.46374531626516724,
+      "bin": 2
+    },
+    {
+      "id": "beta6.3_config3",
+      "beta": 6.3,
+      "configIdx": 3,
+      "value": 0.08592575692327536,
+      "bin": 1
+    },
+    {
+      "id": "beta6.3_config4",
+      "beta": 6.3,
+      "configIdx": 4,
+      "value": 0.4932131386694078,
+      "bin": 3
+    },
+    {
+      "id": "beta6.3_config5",
+      "beta": 6.3,
+      "configIdx": 5,
+      "value": 0.3258434840053622,
+      "bin": 1
+    },
+    {
+      "id": "beta6.3_config6",
+      "beta": 6.3,
+      "configIdx": 6,
+      "value": 0.48370753666088995,
+      "bin": 3
+    },
+    {
+      "id": "beta6.3_config7",
+      "beta": 6.3,
+      "configIdx": 7,
+      "value": 0.1651901716636733,
+      "bin": 1
+    },
+    {
+      "id": "beta6.3_config8",
+      "beta": 6.3,
+      "configIdx": 8,
+      "value": 0.5403924271567377,
+      "bin": 3
+    },
+    {
+      "id": "beta6.3_config9",
+      "beta": 6.3,
+      "configIdx": 9,
+      "value": 0.5475068907483349,
+      "bin": 3
+    },
+    {
+      "id": "beta6.3_config10",
+      "beta": 6.3,
+      "configIdx": 10,
+      "value": 0.2632180697125992,
+      "bin": 1
+    },
+    {
+      "id": "beta6.3_config11",
+      "beta": 6.3,
+      "configIdx": 11,
+      "value": 0.5365994689092044,
+      "bin": 3
+    },
+    {
+      "id": "beta6.3_config12",
+      "beta": 6.3,
+      "configIdx": 12,
+      "value": 0.3373448954780494,
+      "bin": 2
+    },
+    {
+      "id": "beta6.3_config13",
+      "beta": 6.3,
+      "configIdx": 13,
+      "value": 0.48707248419203325,
+      "bin": 3
+    },
+    {
+      "id": "beta6.3_config14",
+      "beta": 6.3,
+      "configIdx": 14,
+      "value": 0.19835596226053637,
+      "bin": 1
+    },
+    {
+      "id": "beta6.3_config15",
+      "beta": 6.3,
+      "configIdx": 15,
+      "value": 0.2386015069518518,
+      "bin": 1
+    },
+    {
+      "id": "beta6.3_config16",
+      "beta": 6.3,
+      "configIdx": 16,
+      "value": 0.47229162763810734,
+      "bin": 3
+    },
+    {
+      "id": "beta6.3_config17",
+      "beta": 6.3,
+      "configIdx": 17,
+      "value": 0.40527089334660665,
+      "bin": 2
+    },
+    {
+      "id": "beta6.3_config18",
+      "beta": 6.3,
+      "configIdx": 18,
+      "value": 0.5279682658552608,
+      "bin": 3
+    },
+    {
+      "id": "beta6.3_config19",
+      "beta": 6.3,
+      "configIdx": 19,
+      "value": 0.5328182555553435,
+      "bin": 3
+    },
+    {
+      "id": "beta6.3_config20",
+      "beta": 6.3,
+      "configIdx": 20,
+      "value": 0.5013728965775879,
+      "bin": 3
+    },
+    {
+      "id": "beta6.3_config21",
+      "beta": 6.3,
+      "configIdx": 21,
+      "value": 0.4323129225350515,
+      "bin": 2
+    },
+    {
+      "id": "beta6.3_config22",
+      "beta": 6.3,
+      "configIdx": 22,
+      "value": 0.4272484744828273,
+      "bin": 2
+    },
+    {
+      "id": "beta6.3_config23",
+      "beta": 6.3,
+      "configIdx": 23,
+      "value": 0.31445045507227753,
+      "bin": 1
+    },
+    {
+      "id": "beta6.3_config24",
+      "beta": 6.3,
+      "configIdx": 24,
+      "value": 0.5071350300316967,
+      "bin": 3
+    },
+    {
+      "id": "beta6.3_config25",
+      "beta": 6.3,
+      "configIdx": 25,
+      "value": 0.3516916700926902,
+      "bin": 2
+    },
+    {
+      "id": "beta6.3_config26",
+      "beta": 6.3,
+      "configIdx": 26,
+      "value": 0.42721126573106016,
+      "bin": 2
+    },
+    {
+      "id": "beta6.3_config27",
+      "beta": 6.3,
+      "configIdx": 27,
+      "value": 0.4638462476634991,
+      "bin": 2
+    },
+    {
+      "id": "beta6.3_config28",
+      "beta": 6.3,
+      "configIdx": 28,
+      "value": 0.5001467479916921,
+      "bin": 3
+    },
+    {
+      "id": "beta6.3_config29",
+      "beta": 6.3,
+      "configIdx": 29,
+      "value": 0.207726083944785,
+      "bin": 1
+    },
+    {
+      "id": "beta6.3_config30",
+      "beta": 6.3,
+      "configIdx": 30,
+      "value": 0.27444106331007334,
+      "bin": 1
+    },
+    {
+      "id": "beta6.3_config31",
+      "beta": 6.3,
+      "configIdx": 31,
+      "value": 0.1851510820525004,
+      "bin": 1
+    },
+    {
+      "id": "beta6.55_config0",
+      "beta": 6.55,
+      "configIdx": 0,
+      "value": 0.3307249346580775,
+      "bin": 1
+    },
+    {
+      "id": "beta6.55_config1",
+      "beta": 6.55,
+      "configIdx": 1,
+      "value": 0.37569463811464837,
+      "bin": 2
+    },
+    {
+      "id": "beta6.55_config2",
+      "beta": 6.55,
+      "configIdx": 2,
+      "value": 0.42015569623337923,
+      "bin": 2
+    },
+    {
+      "id": "beta6.55_config3",
+      "beta": 6.55,
+      "configIdx": 3,
+      "value": 0.33513937964426765,
+      "bin": 1
+    },
+    {
+      "id": "beta6.55_config4",
+      "beta": 6.55,
+      "configIdx": 4,
+      "value": 0.404161271371583,
+      "bin": 2
+    },
+    {
+      "id": "beta6.55_config5",
+      "beta": 6.55,
+      "configIdx": 5,
+      "value": 0.3313120628246492,
+      "bin": 1
+    },
+    {
+      "id": "beta6.55_config6",
+      "beta": 6.55,
+      "configIdx": 6,
+      "value": 0.44861321282636624,
+      "bin": 2
+    },
+    {
+      "id": "beta6.55_config7",
+      "beta": 6.55,
+      "configIdx": 7,
+      "value": 0.3685576542224214,
+      "bin": 2
+    },
+    {
+      "id": "beta6.55_config8",
+      "beta": 6.55,
+      "configIdx": 8,
+      "value": 0.049223143041749365,
+      "bin": 1
+    },
+    {
+      "id": "beta6.55_config9",
+      "beta": 6.55,
+      "configIdx": 9,
+      "value": 0.46650642744124443,
+      "bin": 2
+    },
+    {
+      "id": "beta6.55_config10",
+      "beta": 6.55,
+      "configIdx": 10,
+      "value": 0.5636943502828725,
+      "bin": 3
+    },
+    {
+      "id": "beta6.55_config11",
+      "beta": 6.55,
+      "configIdx": 11,
+      "value": 0.22260758480837362,
+      "bin": 1
+    },
+    {
+      "id": "beta6.55_config12",
+      "beta": 6.55,
+      "configIdx": 12,
+      "value": 0.375405179232467,
+      "bin": 2
+    },
+    {
+      "id": "beta6.55_config13",
+      "beta": 6.55,
+      "configIdx": 13,
+      "value": 0.3756595898718283,
+      "bin": 2
+    },
+    {
+      "id": "beta6.55_config14",
+      "beta": 6.55,
+      "configIdx": 14,
+      "value": 0.3572462611721708,
+      "bin": 2
+    },
+    {
+      "id": "beta6.55_config15",
+      "beta": 6.55,
+      "configIdx": 15,
+      "value": 0.3519344273007459,
+      "bin": 2
+    },
+    {
+      "id": "beta6.55_config16",
+      "beta": 6.55,
+      "configIdx": 16,
+      "value": 0.5172282748193211,
+      "bin": 3
+    },
+    {
+      "id": "beta6.55_config17",
+      "beta": 6.55,
+      "configIdx": 17,
+      "value": 0.32060800477257057,
+      "bin": 1
+    },
+    {
+      "id": "beta6.55_config18",
+      "beta": 6.55,
+      "configIdx": 18,
+      "value": 0.28835696492576046,
+      "bin": 1
+    },
+    {
+      "id": "beta6.55_config19",
+      "beta": 6.55,
+      "configIdx": 19,
+      "value": 0.3584512692595962,
+      "bin": 2
+    },
+    {
+      "id": "beta6.55_config20",
+      "beta": 6.55,
+      "configIdx": 20,
+      "value": 0.4297327670838006,
+      "bin": 2
+    },
+    {
+      "id": "beta6.55_config21",
+      "beta": 6.55,
+      "configIdx": 21,
+      "value": 0.30383209943475564,
+      "bin": 1
+    },
+    {
+      "id": "beta6.55_config22",
+      "beta": 6.55,
+      "configIdx": 22,
+      "value": 0.4765729999626538,
+      "bin": 3
+    },
+    {
+      "id": "beta6.55_config23",
+      "beta": 6.55,
+      "configIdx": 23,
+      "value": 0.23377191680112835,
+      "bin": 1
+    },
+    {
+      "id": "beta6.55_config24",
+      "beta": 6.55,
+      "configIdx": 24,
+      "value": 0.08879340971858857,
+      "bin": 1
+    },
+    {
+      "id": "beta6.55_config25",
+      "beta": 6.55,
+      "configIdx": 25,
+      "value": 0.12218999276151966,
+      "bin": 1
+    },
+    {
+      "id": "beta6.55_config26",
+      "beta": 6.55,
+      "configIdx": 26,
+      "value": 0.5265640372866432,
+      "bin": 3
+    },
+    {
+      "id": "beta6.55_config27",
+      "beta": 6.55,
+      "configIdx": 27,
+      "value": 0.4206522230615244,
+      "bin": 2
+    },
+    {
+      "id": "beta6.55_config28",
+      "beta": 6.55,
+      "configIdx": 28,
+      "value": 0.5017447369711603,
+      "bin": 3
+    },
+    {
+      "id": "beta6.55_config29",
+      "beta": 6.55,
+      "configIdx": 29,
+      "value": 0.502128776655238,
+      "bin": 3
+    },
+    {
+      "id": "beta6.55_config30",
+      "beta": 6.55,
+      "configIdx": 30,
+      "value": 0.48243957688977457,
+      "bin": 3
+    },
+    {
+      "id": "beta6.55_config31",
+      "beta": 6.55,
+      "configIdx": 31,
+      "value": 0.5654222302986681,
+      "bin": 3
+    },
+    {
+      "id": "beta6.8_config0",
+      "beta": 6.8,
+      "configIdx": 0,
+      "value": 0.5774369706042279,
+      "bin": 3
+    },
+    {
+      "id": "beta6.8_config1",
+      "beta": 6.8,
+      "configIdx": 1,
+      "value": 0.3545130965285234,
+      "bin": 2
+    },
+    {
+      "id": "beta6.8_config2",
+      "beta": 6.8,
+      "configIdx": 2,
+      "value": 0.45176390604776134,
+      "bin": 2
+    },
+    {
+      "id": "beta6.8_config3",
+      "beta": 6.8,
+      "configIdx": 3,
+      "value": 0.36617632541021583,
+      "bin": 2
+    },
+    {
+      "id": "beta6.8_config4",
+      "beta": 6.8,
+      "configIdx": 4,
+      "value": 0.5550120482622285,
+      "bin": 3
+    },
+    {
+      "id": "beta6.8_config5",
+      "beta": 6.8,
+      "configIdx": 5,
+      "value": 0.5665183076451586,
+      "bin": 3
+    },
+    {
+      "id": "beta6.8_config6",
+      "beta": 6.8,
+      "configIdx": 6,
+      "value": 0.3350051080146637,
+      "bin": 1
+    },
+    {
+      "id": "beta6.8_config7",
+      "beta": 6.8,
+      "configIdx": 7,
+      "value": 0.025793186416403595,
+      "bin": 1
+    },
+    {
+      "id": "beta6.8_config8",
+      "beta": 6.8,
+      "configIdx": 8,
+      "value": 0.20810295367426834,
+      "bin": 1
+    },
+    {
+      "id": "beta6.8_config9",
+      "beta": 6.8,
+      "configIdx": 9,
+      "value": 0.632072886951634,
+      "bin": 3
+    },
+    {
+      "id": "beta6.8_config10",
+      "beta": 6.8,
+      "configIdx": 10,
+      "value": 0.3940920168493516,
+      "bin": 2
+    },
+    {
+      "id": "beta6.8_config11",
+      "beta": 6.8,
+      "configIdx": 11,
+      "value": 0.25258667842872123,
+      "bin": 1
+    },
+    {
+      "id": "beta6.8_config12",
+      "beta": 6.8,
+      "configIdx": 12,
+      "value": 0.32950378804778935,
+      "bin": 1
+    },
+    {
+      "id": "beta6.8_config13",
+      "beta": 6.8,
+      "configIdx": 13,
+      "value": 0.4838050570114498,
+      "bin": 3
+    },
+    {
+      "id": "beta6.8_config14",
+      "beta": 6.8,
+      "configIdx": 14,
+      "value": 0.4145275441687876,
+      "bin": 2
+    },
+    {
+      "id": "beta6.8_config15",
+      "beta": 6.8,
+      "configIdx": 15,
+      "value": 0.13093709840610834,
+      "bin": 1
+    },
+    {
+      "id": "beta6.8_config16",
+      "beta": 6.8,
+      "configIdx": 16,
+      "value": 0.44882900444447077,
+      "bin": 2
+    },
+    {
+      "id": "beta6.8_config17",
+      "beta": 6.8,
+      "configIdx": 17,
+      "value": 0.38941288953016784,
+      "bin": 2
+    },
+    {
+      "id": "beta6.8_config18",
+      "beta": 6.8,
+      "configIdx": 18,
+      "value": 0.5346118711114937,
+      "bin": 3
+    },
+    {
+      "id": "beta6.8_config19",
+      "beta": 6.8,
+      "configIdx": 19,
+      "value": 0.4616697436475598,
+      "bin": 2
+    },
+    {
+      "id": "beta6.8_config20",
+      "beta": 6.8,
+      "configIdx": 20,
+      "value": 0.11460955766394895,
+      "bin": 1
+    },
+    {
+      "id": "beta6.8_config21",
+      "beta": 6.8,
+      "configIdx": 21,
+      "value": 0.44167671527793156,
+      "bin": 2
+    },
+    {
+      "id": "beta6.8_config22",
+      "beta": 6.8,
+      "configIdx": 22,
+      "value": 0.5128690467916789,
+      "bin": 3
+    },
+    {
+      "id": "beta6.8_config23",
+      "beta": 6.8,
+      "configIdx": 23,
+      "value": 0.20685611996239453,
+      "bin": 1
+    },
+    {
+      "id": "beta6.8_config24",
+      "beta": 6.8,
+      "configIdx": 24,
+      "value": 0.4785328635682592,
+      "bin": 3
+    },
+    {
+      "id": "beta6.8_config25",
+      "beta": 6.8,
+      "configIdx": 25,
+      "value": 0.3203579591257857,
+      "bin": 1
+    },
+    {
+      "id": "beta6.8_config26",
+      "beta": 6.8,
+      "configIdx": 26,
+      "value": 0.24081298787780023,
+      "bin": 1
+    },
+    {
+      "id": "beta6.8_config27",
+      "beta": 6.8,
+      "configIdx": 27,
+      "value": 0.2130777489473684,
+      "bin": 1
+    },
+    {
+      "id": "beta6.8_config28",
+      "beta": 6.8,
+      "configIdx": 28,
+      "value": 0.6063128586168202,
+      "bin": 3
+    },
+    {
+      "id": "beta6.8_config29",
+      "beta": 6.8,
+      "configIdx": 29,
+      "value": 0.5215238600712757,
+      "bin": 3
+    },
+    {
+      "id": "beta6.8_config30",
+      "beta": 6.8,
+      "configIdx": 30,
+      "value": 0.39168874260667247,
+      "bin": 2
+    },
+    {
+      "id": "beta6.8_config31",
+      "beta": 6.8,
+      "configIdx": 31,
+      "value": 0.5756650768896212,
+      "bin": 3
+    }
+  ]
+}

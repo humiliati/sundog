@@ -1,0 +1,95 @@
+{
+  "branch": "Z beta_peak_unbracketed",
+  "reason": "pilot Polyakov susceptibility peak landed on the boundary of the locked grid",
+  "phaseVersion": "v6",
+  "rankLocalityScored": false,
+  "betaPilot": {
+    "frozenAt": "2026-05-31T19:37:47.117Z",
+    "literatureAnchor": {
+      "betaC": 6.53661,
+      "betaCUncertainty": 0.00013,
+      "source": "Edwards-von Smekal 2009 arXiv:0908.4030",
+      "convention": "beta=4/g^2 a"
+    },
+    "pilotGrid": [
+      6,
+      6.3,
+      6.55,
+      6.8,
+      7.1
+    ],
+    "pilotScan": {
+      "burnIn": 600,
+      "measurements": 64,
+      "thinning": 4,
+      "selectionMetric": "mean_chi_P"
+    },
+    "rows": [
+      {
+        "beta": 6,
+        "betaKey": "6.0",
+        "meanAbsMeanP": 0.3452888408719906,
+        "meanMeanAbsP": 0.4745367795302112,
+        "meanChiP": 0.16483096892288862,
+        "varianceAbsMeanP": 0.014876592687673846,
+        "varianceMeanAbsP": 0.002448684667733765,
+        "meanPlaquette": 0.8255288883831902,
+        "heatbathFallbackFraction": 0,
+        "heatbathLinkUpdates": 1479168
+      },
+      {
+        "beta": 6.3,
+        "betaKey": "6.3",
+        "meanAbsMeanP": 0.37277212958529726,
+        "meanMeanAbsP": 0.47750417824631897,
+        "meanChiP": 0.14766270897885575,
+        "varianceAbsMeanP": 0.016675731155392958,
+        "varianceMeanAbsP": 0.003344574535419611,
+        "meanPlaquette": 0.8341063478298484,
+        "heatbathFallbackFraction": 0,
+        "heatbathLinkUpdates": 1479168
+      },
+      {
+        "beta": 6.55,
+        "betaKey": "6.55",
+        "meanAbsMeanP": 0.38596800367738016,
+        "meanMeanAbsP": 0.4899349653537845,
+        "meanChiP": 0.1469991832876346,
+        "varianceAbsMeanP": 0.019531658794795008,
+        "varianceMeanAbsP": 0.004453360975220986,
+        "meanPlaquette": 0.8403076686405578,
+        "heatbathFallbackFraction": 0,
+        "heatbathLinkUpdates": 1479168
+      },
+      {
+        "beta": 6.8,
+        "betaKey": "6.8",
+        "meanAbsMeanP": 0.42057527973738845,
+        "meanMeanAbsP": 0.5012307461069243,
+        "meanChiP": 0.13177364128129226,
+        "varianceAbsMeanP": 0.017154054015153623,
+        "varianceMeanAbsP": 0.004722733241457354,
+        "meanPlaquette": 0.8468331638500779,
+        "heatbathFallbackFraction": 0,
+        "heatbathLinkUpdates": 1479168
+      },
+      {
+        "beta": 7.1,
+        "betaKey": "7.1",
+        "meanAbsMeanP": 0.4413364069972983,
+        "meanMeanAbsP": 0.5188395710055952,
+        "meanChiP": 0.12382622990799898,
+        "varianceAbsMeanP": 0.024682753713614353,
+        "varianceMeanAbsP": 0.006126895549900322,
+        "meanPlaquette": 0.8531080188374861,
+        "heatbathFallbackFraction": 0,
+        "heatbathLinkUpdates": 1479168
+      }
+    ],
+    "peakIndex": 0,
+    "peakBracketed": false,
+    "frozenBetaSlate": [],
+    "wallClockSeconds": 52.6534628
+  },
+  "wallClockSeconds": 52.6612873
+}
