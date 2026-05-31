@@ -18,7 +18,7 @@
 ## Why this lane exists (the measured mandate)
 
 The cross-substrate failure map
-([`../threebody/CROSS_SUBSTRATE_NOTES.md`](../threebody/CROSS_SUBSTRATE_NOTES.md))
+([`../CROSS_SUBSTRATE_NOTES.md`](../CROSS_SUBSTRATE_NOTES.md))
 established, by measurement, that the Sundog regime-2 split has **two axes** —
 *body-resistance* (the shadow cannot reconstruct the state; the real target)
 and *shadow-irreducibility* (the shadow cannot be simplified) — and that

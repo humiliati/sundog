@@ -338,6 +338,6 @@ saved, so re-measuring this run under a new metric is instant.
 ## 8. Cross-references
 
 - [`LANE_CHARTER.md`](LANE_CHARTER.md) — the lane mission + the measured mandate.
-- [`../threebody/CROSS_SUBSTRATE_NOTES.md`](../threebody/CROSS_SUBSTRATE_NOTES.md) — the two-axis body-resistance framing + the three control-trained marginals this gate extends (and explains, via §0).
+- [`../CROSS_SUBSTRATE_NOTES.md`](../CROSS_SUBSTRATE_NOTES.md) — the two-axis body-resistance framing + the three control-trained marginals this gate extends (and explains, via §0).
 - [`../proof/PDE_C2_SHELL_DIMENSIONALITY_PROBE.md`](../proof/PDE_C2_SHELL_DIMENSIONALITY_PROBE.md) — the third marginal + the Path-A-vs-B fork this lane resolves toward B.
 - [`../proof/PDE_C1_PROPOSITION.md`](../proof/PDE_C1_PROPOSITION.md) — the C1 measure + the "marginal in every physical norm" ceiling this lane tries to beat.
