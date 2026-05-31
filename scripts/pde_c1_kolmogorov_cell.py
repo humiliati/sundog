@@ -55,6 +55,8 @@ VERDICT_BEARING_PRESETS = {
     "lock_v6",
     "lock_v7_g200",
     "lock_v7_g300",
+    "lock_disc_g200",
+    "lock_disc_g300",
 }
 
 
@@ -126,6 +128,8 @@ def parse_args() -> argparse.Namespace:
             "lock_v6",
             "lock_v7_g200",
             "lock_v7_g300",
+            "lock_disc_g200",
+            "lock_disc_g300",
         ],
         default="smoke",
     )
@@ -148,6 +152,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--burnin-steps", type=int)
     parser.add_argument("--sample-interval-steps", type=int)
     parser.add_argument("--lookahead-steps", type=int)
+    parser.add_argument("--calibration-sample-count", type=int)
+    parser.add_argument("--calibration-gap-steps", type=int)
     parser.add_argument(
         "--objective",
         choices=["overshoot-burnin", "portable-quantile"],
@@ -363,6 +369,21 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         objective_quantile = 0.70
         calibration_sample_count = 50_000
         calibration_gap_steps = 5_000
+    elif args.preset in ("lock_disc_g200", "lock_disc_g300"):
+        # Objective-overlap discriminator
+        # (PDE_C1_OBJECTIVE_OVERLAP_DISCRIMINATOR.md): the v7 portable-quantile
+        # setup, but objective_observable = the 6-member band/dissipation slate
+        # scored in one shared integration pass.
+        burnin_steps = 100_000
+        sample_count = 50_000
+        kf = 2
+        grashof = 200.0 if args.preset == "lock_disc_g200" else 300.0
+        k_signature = 3
+        objective = "portable-quantile"
+        objective_quantile = 0.70
+        calibration_sample_count = 50_000
+        calibration_gap_steps = 5_000
+        objective_observable = "discriminator_slate"
     else:
         # Smoke is intentionally not the registered cell. It exists to validate
         # the integrator, binning, and receipt plumbing under the repo's
@@ -384,6 +405,8 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         "sample_interval_steps": args.sample_interval_steps,
         "lookahead_steps": args.lookahead_steps,
         "objective": args.objective,
+        "calibration_sample_count": getattr(args, "calibration_sample_count", None),
+        "calibration_gap_steps": getattr(args, "calibration_gap_steps", None),
     }
     if any(value is not None for value in overrides.values()) and not args.allow_unregistered_overrides:
         raise SystemExit("Manual overrides require --allow-unregistered-overrides; override runs are smoke-only.")
@@ -398,6 +421,10 @@ def build_config(args: argparse.Namespace) -> RunConfig:
             lookahead_steps = args.lookahead_steps
         if args.objective is not None:
             objective = args.objective
+        if getattr(args, "calibration_sample_count", None) is not None:
+            calibration_sample_count = args.calibration_sample_count
+        if getattr(args, "calibration_gap_steps", None) is not None:
+            calibration_gap_steps = args.calibration_gap_steps
 
     return RunConfig(
         preset=args.preset,
@@ -458,6 +485,40 @@ class KolmogorovStepper:
         self.forcing_hat[0, 0] = 0.0
         self.low_indices = select_low_modes(wave, cfg.k_signature, cfg.forcing_wavenumber)
         self.high_indices = select_high_modes(wave, cfg.n_modes, self.dealias_mask, self.low_indices)
+        # Top-shell = highest-|k| quartile of the high modes (the dissipation
+        # range, where state-determination is weakest). Spec:
+        # PDE_C1_OBJECTIVE_OVERLAP_DISCRIMINATOR.md.
+        if self.high_indices:
+            _hk2 = np.array([float(self.kx[ix, iy]) ** 2 + float(self.ky[ix, iy]) ** 2 for ix, iy in self.high_indices])
+            _thr = float(np.quantile(_hk2, 0.75))
+            self.top_shell_indices = [ij for ij, k2v in zip(self.high_indices, _hk2) if k2v >= _thr]
+        else:
+            self.top_shell_indices = []
+        # Vectorized index / wavenumber arrays for the discriminator observables,
+        # so the per-step evaluation over the ~211 high modes is numpy fancy
+        # indexing rather than a Python loop (keeps the slate run FFT-bound).
+        def _ixiy(indices):
+            if not indices:
+                return np.empty(0, dtype=np.intp), np.empty(0, dtype=np.intp)
+            return (
+                np.array([i for i, _ in indices], dtype=np.intp),
+                np.array([j for _, j in indices], dtype=np.intp),
+            )
+        self._high_ix, self._high_iy = _ixiy(self.high_indices)
+        self._all_ix, self._all_iy = _ixiy(self.low_indices + self.high_indices)
+        self._top_ix, self._top_iy = _ixiy(self.top_shell_indices)
+        self._high_k2 = (
+            self.kx[self._high_ix, self._high_iy].astype(np.float64) ** 2
+            + self.ky[self._high_ix, self._high_iy].astype(np.float64) ** 2
+        )
+        self._all_k2 = (
+            self.kx[self._all_ix, self._all_iy].astype(np.float64) ** 2
+            + self.ky[self._all_ix, self._all_iy].astype(np.float64) ** 2
+        )
+        self._top_k2 = (
+            self.kx[self._top_ix, self._top_iy].astype(np.float64) ** 2
+            + self.ky[self._top_ix, self._top_iy].astype(np.float64) ** 2
+        )
         # Low-pass mask for the MZ energy-budget decomposition: True only at the
         # signature low modes and their conjugates (so the low-passed field is a
         # real-valued band projection). Spec: PDE_C1_MZ_ENERGY_BUDGET.md.
@@ -537,6 +598,37 @@ class KolmogorovStepper:
             amp = omega_hat[ix, iy] / scale
             total += float((amp * amp.conjugate()).real)
         return total
+
+    def high_energy(self, omega_hat: np.ndarray) -> float:
+        """High-band (Q_K) velocity energy ‖Q_K u‖² = Sum_high |omega_hat/scale|²/|k|²;
+        mirror of low_energy over the complementary modes. Discriminator E_high."""
+        scale = float(self.cfg.grid_size * self.cfg.grid_size)
+        amp = omega_hat[self._high_ix, self._high_iy] / scale
+        return float(np.sum((amp * amp.conjugate()).real / self._high_k2))
+
+    def high_enstrophy(self, omega_hat: np.ndarray) -> float:
+        """High-band enstrophy Sum_high |omega_hat/scale|²; mirror of low_enstrophy
+        over the complementary modes. Discriminator objective Z_high."""
+        scale = float(self.cfg.grid_size * self.cfg.grid_size)
+        amp = omega_hat[self._high_ix, self._high_iy] / scale
+        return float(np.sum((amp * amp.conjugate()).real))
+
+    def palinstrophy(self, omega_hat: np.ndarray) -> float:
+        """k²-weighted enstrophy Sum_all |k|²·|omega_hat/scale|² over the resolved
+        modes (enstrophy-dissipation proxy); weights the dissipation range.
+        Discriminator objective palinstrophy."""
+        scale = float(self.cfg.grid_size * self.cfg.grid_size)
+        amp = omega_hat[self._all_ix, self._all_iy] / scale
+        return float(np.sum(self._all_k2 * (amp * amp.conjugate()).real))
+
+    def top_shell_energy(self, omega_hat: np.ndarray) -> float:
+        """Velocity energy in the highest-|k| quartile of the high modes (the
+        under-determined dissipation range). Discriminator objective top_shell."""
+        if self._top_ix.size == 0:
+            return 0.0
+        scale = float(self.cfg.grid_size * self.cfg.grid_size)
+        amp = omega_hat[self._top_ix, self._top_iy] / scale
+        return float(np.sum((amp * amp.conjugate()).real / self._top_k2))
 
     def energy_budget(self, omega_hat: np.ndarray) -> dict:
         """Mori-Zwanzig decomposition of the low-band energy tendency.
@@ -634,6 +726,130 @@ def select_high_modes(
     return [(ix, iy) for _, _, ix, iy in modes]
 
 
+def held_out_r2(signatures: np.ndarray, target: np.ndarray, seed: int) -> tuple[float, float]:
+    """Held-out R² of a flexible regressor predicting `target` from the signature
+    (block 70/30 split) plus a permuted-target negative control. Reused from the
+    MZ slaving machinery (aggregate_mz_budget). R²→1 means the target is a
+    function of Phi_K. Returns (r2, r2_permuted)."""
+    from sklearn.ensemble import HistGradientBoostingRegressor
+
+    n = int(len(target))
+    if n < 5:
+        return float("nan"), float("nan")
+    ntr = max(2, int(0.7 * n))
+    x_tr, x_te = signatures[:ntr], signatures[ntr:]
+
+    def _r2(y: np.ndarray) -> float:
+        y_tr, y_te = y[:ntr], y[ntr:]
+        if y_te.size < 2 or float(np.var(y_te)) <= 0.0:
+            return float("nan")
+        model = HistGradientBoostingRegressor(max_iter=200, random_state=0)
+        model.fit(x_tr, y_tr)
+        pred = model.predict(x_te)
+        ss_res = float(np.sum((y_te - pred) ** 2))
+        ss_tot = float(np.sum((y_te - np.mean(y_te)) ** 2))
+        return float(1.0 - ss_res / (ss_tot + 1e-300))
+
+    rng = np.random.default_rng(seed)
+    return _r2(target), _r2(target[rng.permutation(n)])
+
+
+DISCRIMINATOR_SLATE_NAMES = ("E_low", "Z_low", "E_high", "Z_high", "palinstrophy", "top_shell")
+
+
+def score_discriminator_slate(
+    energy_slate: np.ndarray,
+    calib_starts: list,
+    adj_starts: list,
+    look: int,
+    sample_signatures: np.ndarray,
+    cfg: RunConfig,
+) -> dict:
+    """Score the 6-objective band/dissipation slate (PDE_C1_OBJECTIVE_OVERLAP_
+    DISCRIMINATOR.md). Per objective: held-out look-ahead-max quantile label, its
+    kNN control-sufficiency a_mm, its Phi_K-predictability R², and the portability
+    power gate. Then the tracking statistic Spearman corr(a_mm, 1-R²) over the
+    powered objectives. The slate columns are in DISCRIMINATOR_SLATE_NAMES order."""
+
+    def _lam(starts: list, col: int) -> np.ndarray:
+        return np.array(
+            [float(np.max(energy_slate[s : s + look + 1, col])) for s in starts],
+            dtype=np.float64,
+        )
+
+    rows: list[dict] = []
+    for col, name in enumerate(DISCRIMINATOR_SLATE_NAMES):
+        m_adj = _lam(adj_starts, col)
+        if calib_starts:
+            e_max = float(np.quantile(_lam(calib_starts, col), cfg.objective_quantile))
+        else:
+            e_max = float(np.quantile(m_adj, cfg.objective_quantile))
+        actions = (m_adj > e_max).astype(np.int8)
+        damp_fraction = float(np.mean(actions))
+        powered = 0.20 <= damp_fraction <= 0.40
+        eps = 0.05 * math.sqrt(max(0.0, 2.0 * e_max))
+        knn, _, _, _ = aggregate_knn_sweep(sample_signatures, actions, eps, cfg)
+        r2_obj, r2_perm = held_out_r2(sample_signatures, m_adj, cfg.random_seed + 17 + col)
+        rows.append(
+            {
+                "objective": name,
+                "e_max": e_max,
+                "damp_fraction": damp_fraction,
+                "powered": bool(powered),
+                "a_mm": float(knn["mean_minority_intercept"]),
+                "knn_verdict": knn["verdict"],
+                "r2_objective_given_phiK": r2_obj,
+                "r2_permuted_control": r2_perm,
+                "estimator_ok": bool(r2_perm == r2_perm and r2_perm < 0.10),
+            }
+        )
+
+    powered_rows = [
+        r for r in rows
+        if r["powered"] and r["r2_objective_given_phiK"] == r["r2_objective_given_phiK"]
+    ]
+    tracking = float("nan")
+    if len(powered_rows) >= 3:
+        from scipy.stats import spearmanr
+
+        a_mm_arr = np.array([r["a_mm"] for r in powered_rows], dtype=np.float64)
+        inv_r2 = np.array([1.0 - r["r2_objective_given_phiK"] for r in powered_rows], dtype=np.float64)
+        rho = spearmanr(a_mm_arr, inv_r2).correlation
+        tracking = float(rho) if rho == rho else float("nan")
+
+    n_powered = sum(1 for r in rows if r["powered"])
+    interpretable = cfg.preset in VERDICT_BEARING_PRESETS
+    A_MM_POS = 0.005
+    if not interpretable:
+        verdict, verdict_label = "SMOKE_ONLY", ""
+    elif n_powered <= 1:
+        verdict, verdict_label = "PDE-C1-DISC-UNDERPOWERED", "no_powered_high_mode_objective"
+    elif tracking == tracking and tracking >= 0.70:
+        verdict, verdict_label = "PDE-C1-DISC-CONFIRM", "control_sufficiency_tracks_predictability"
+    elif tracking == tracking and all(r["a_mm"] <= A_MM_POS for r in powered_rows):
+        verdict, verdict_label = "PDE-C1-DISC-REFUTE", "control_sufficient_even_where_unpredictable"
+    else:
+        verdict, verdict_label = "PDE-C1-DISC-INCONCLUSIVE", "tracking_in_ambiguous_band"
+
+    anchor = next((r for r in rows if r["objective"] == "E_low"), None)
+    anchor_ok = bool(
+        anchor is not None
+        and anchor["powered"]
+        and anchor["a_mm"] <= A_MM_POS
+        and anchor["r2_objective_given_phiK"] == anchor["r2_objective_given_phiK"]
+        and anchor["r2_objective_given_phiK"] >= 0.5
+    )
+    return {
+        "verdict": verdict,
+        "verdict_label": verdict_label,
+        "interpretable": interpretable,
+        "tracking_spearman_a_mm_vs_inv_r2": tracking,
+        "powered_objective_count": n_powered,
+        "anchor_e_low_ok": anchor_ok,
+        "slate_rows": rows,
+    }
+
+
 def run_cell(cfg: RunConfig) -> dict:
     stepper = KolmogorovStepper(cfg)
     omega_hat = stepper.initial_state()
@@ -678,9 +894,27 @@ def run_cell(cfg: RunConfig) -> dict:
 
     started = time.perf_counter()
     progress_stride = max(1, total_steps // 10)
-    observable = stepper.low_enstrophy if cfg.objective_observable == "enstrophy" else stepper.low_energy
+    slate = cfg.objective_observable == "discriminator_slate"
+    if slate:
+        slate_observables = [
+            stepper.low_energy,
+            stepper.low_enstrophy,
+            stepper.high_energy,
+            stepper.high_enstrophy,
+            stepper.palinstrophy,
+            stepper.top_shell_energy,
+        ]
+        energy_by_step_slate = np.empty((total_steps + 1, len(slate_observables)), dtype=np.float64)
+        observable = stepper.low_energy
+    else:
+        observable = stepper.low_enstrophy if cfg.objective_observable == "enstrophy" else stepper.low_energy
     for step in range(total_steps + 1):
-        energy = observable(omega_hat)
+        if slate:
+            _vals = [obs(omega_hat) for obs in slate_observables]
+            energy_by_step_slate[step, :] = _vals
+            energy = _vals[0]
+        else:
+            energy = observable(omega_hat)
         energy_by_step[step] = energy
         if step <= burn:
             sig = stepper.signature(omega_hat)
@@ -710,6 +944,30 @@ def run_cell(cfg: RunConfig) -> dict:
             [float(np.max(energy_by_step[s : s + look + 1])) for s in starts],
             dtype=np.float64,
         )
+
+    if slate:
+        slate_result = score_discriminator_slate(
+            energy_by_step_slate, calib_starts, adj_starts, look, sample_signatures, cfg
+        )
+        slate_result.update(
+            {
+                "adjudicator": "discriminator-slate",
+                "objective": cfg.objective,
+                "objective_observable": "discriminator_slate",
+                "objective_quantile": cfg.objective_quantile,
+                "calibration_sample_count": cfg.calibration_sample_count,
+                "low_modes": [
+                    {"kx": int(stepper.kx[ix, iy]), "ky": int(stepper.ky[ix, iy])}
+                    for ix, iy in stepper.low_indices
+                ],
+                "high_mode_count": len(stepper.high_indices),
+                "top_shell_mode_count": len(stepper.top_shell_indices),
+                "elapsed_seconds": time.perf_counter() - started,
+                "total_steps": total_steps,
+                "steps_per_second": total_steps / max(1e-9, time.perf_counter() - started),
+            }
+        )
+        return slate_result
 
     burnin_array = np.asarray(burnin_energies)
     if portable:
@@ -1860,7 +2118,9 @@ def write_outputs(out_dir: Path, cfg: RunConfig, result: dict, write_samples: bo
         },
     }
     (out_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
-    if cfg.adjudicator == "knn-sweep":
+    if cfg.objective_observable == "discriminator_slate":
+        write_csv(out_dir / "discriminator-slate.csv", result.get("slate_rows", []))
+    elif cfg.adjudicator == "knn-sweep":
         write_csv(out_dir / "knn-sweep.csv", result.get("knn_sweep_rows", []))
     elif cfg.adjudicator == "knn":
         write_csv(out_dir / "knn-radius-histogram.csv", result.get("knn_histogram", []))
@@ -1873,6 +2133,45 @@ def write_outputs(out_dir: Path, cfg: RunConfig, result: dict, write_samples: bo
         if write_samples or result["sample_rows"]:
             write_csv(out_dir / "sample-actions.csv", result["sample_rows"])
     write_receipt(out_dir / "PDE_C1_KOLMOGOROV_RESULTS.md", manifest)
+
+
+def write_receipt_discriminator_slate(path: Path, manifest: dict) -> None:
+    r = manifest["result"]
+    c = manifest["config"]
+    rows = r.get("slate_rows", [])
+    lines = [
+        "# PDE C1 Objective-Overlap Discriminator Receipt",
+        "",
+        f"**Status:** {r['verdict']} ({r.get('verdict_label', '')})",
+        f"**Preset:** `{c['preset']}`",
+        f"**Interpretable:** `{r.get('interpretable')}`",
+        f"**Grashof:** `{c.get('grashof')}`",
+        "",
+        f"- tracking Spearman corr(a_mm, 1-R²): `{r.get('tracking_spearman_a_mm_vs_inv_r2')}`",
+        f"- powered objective count: `{r.get('powered_objective_count')}`",
+        f"- anchor E_low ok: `{r.get('anchor_e_low_ok')}`",
+        "",
+        "## Per-objective slate (predictability vs control-sufficiency)",
+        "",
+        "| objective | damp | powered | a_mm | kNN verdict | R²(M\\|Φ_K) | R²(perm) | est_ok |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- |",
+    ]
+    for row in rows:
+        lines.append(
+            "| {objective} | {damp:.4f} | {powered} | {a_mm:.5f} | {knn} | "
+            "{r2:.4f} | {r2p:.4f} | {est} |".format(
+                objective=row["objective"],
+                damp=row["damp_fraction"],
+                powered=row["powered"],
+                a_mm=row["a_mm"],
+                knn=row["knn_verdict"],
+                r2=row["r2_objective_given_phiK"],
+                r2p=row["r2_permuted_control"],
+                est=row["estimator_ok"],
+            )
+        )
+    lines += ["", "Spec: `docs/proof/PDE_C1_OBJECTIVE_OVERLAP_DISCRIMINATOR.md`.", ""]
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def write_receipt(path: Path, manifest: dict) -> None:
@@ -1892,6 +2191,9 @@ def write_receipt(path: Path, manifest: dict) -> None:
         return
     if c.get("adjudicator") == "state-recon":
         write_receipt_state_recon(path, manifest)
+        return
+    if c.get("objective_observable") == "discriminator_slate":
+        write_receipt_discriminator_slate(path, manifest)
         return
     lines = [
         "# PDE C1 Kolmogorov v0 Receipt",
