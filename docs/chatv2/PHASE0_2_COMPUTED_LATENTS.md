@@ -148,6 +148,50 @@ Same boundary as Phase 0: no real LLM, no ledger, no multi-turn, no public
 surface, no promotion. It hardens the *toy* gate; a positive result earns the
 move to a real-model substrate (Phase 1), still review-gated.
 
+## Result (2026-05-30) — first de-confounded SHARP (low-`H`); high-`H` blocked by a learnability wall
+
+Ran `--mode full --stage all --latent computed` (pair-XOR; ~3.5 h;
+`results/chatv2/phase02-full/`). The §4 pre-check passed at every `H` (input-probe
+0.498–0.516 ≈ chance). **Verdict: `SHARP`, `H* = 2`** — the portfolio's first
+de-confounded body-resistance read.
+
+| `H` | learned? (`eval_loss` vs 0.693 = chance) | `d_dec` | `leak` | `body_carry` gen / twin | status |
+| --- | --- | --- | --- | --- | --- |
+| 2 | **yes** (0.599) | 2.0 / 2 | 0.48 | **0.97 / 0.65** | **SHARP** |
+| 4 | **yes** (0.608) | 3.9 / 4 | 0.54 | **0.84 / 0.57** | **SHARP** |
+| 8 | **no** (0.693 = log 2) | 7.0\* | 0.51 | 0.52 / 0.52 | UNLEARNED |
+| 16 | **no** (0.693 = log 2) | 12.6\* | 0.51 | 0.51 / 0.50 | UNLEARNED |
+
+**Where it is genuinely SHARP (`H = 2, 4`).** The generative model learns the
+*computed* latent (`eval_loss` below the chance line, toward the 0.558 floor); the
+body is full-rank (`d_dec` 2.0 / 3.9); it **resists** (`leak ≈ chance` — the z₁
+shadow is state-insufficient for the rest); and the objective-driven contrast is
+clean and strong (`body_carry` gen 0.97 / 0.84 vs twin 0.65 / 0.57). The **twin
+floor near chance** is the de-confound working: control-only training does not
+build the non-decision state, where in the Phase-0 (bias) toy it passively did
+(~0.85 floor). This is the state-insufficient-yet-control-sufficient split,
+objective-driven, on a non-trivial substrate — the thing the four prior
+substrates could not show.
+
+**Honest catch (`H = 8, 16`) — undertrained, NOT marginal.** `eval_loss = 0.693
+= log 2 = pure chance`: the d=128 / 2500-step model failed to learn the pair-XOR
+aggregation at high `H` (even z₁ alone collapses to 0.53), early-stopping because
+the loss never left random. These are **F3′ (a learnability wall), uninformative**
+— and the `d_dec` 7.0 / 12.6 there (\*) is **noise-rank** (effective rank of
+chance-level read-out directions), **not** a high-dim body; it is not cited as one.
+
+**Disposition.** Body-resistance is **proven, de-confounded, at low
+dimensionality (2–4 dims)** — a genuine first for the portfolio — but the
+genuinely high-dimensional resisting body (the real target) remains **unproven,
+blocked by learnability, not refuted.** Not promotable (low-dim only; one toy).
+→ **focused `H=8` probe** with the reserved D5 capacity bump (`d_model`→192,
+`max_steps`→6000) + a *signal* bump (larger δ / more pairs so the same nonlinear
+latent is easier to estimate; the XOR stays input-undecodable, so the de-confound
+holds), and a curriculum (warm-start from saved low-`H` weights) if it still
+grok-cliffs. **Methodology fix landed:** an `H` whose `eval_loss ≈ chance` is now
+flagged **UNLEARNED**, never silently MARGINAL — "couldn't train" and "no
+resistance" must not be conflated.
+
 ## 9. Cross-references
 
 - [`PHASE0_MINIMUM_FALSIFIABLE.md`](PHASE0_MINIMUM_FALSIFIABLE.md) — Phase 0 + Amendment 1 (the result this refines).
