@@ -1,12 +1,29 @@
-# v0.13a liao2021 Adapter + Leakage Preflight Form Draft
+# v0.13a liao2021 Adapter + Leakage Preflight Form Lock
 
-Status: **DRAFTED 2026-05-31; pending operator lock review.** No adapter, parser,
-or preflight runner has been written; no liao2021 row has been integrated; no
-`velocity_fraction` has been computed. This document locks the two contracts that
-must pass BEFORE v0.13 may profile or rate-probe the Li/Liao 2021 non-hierarchical
-table: (1) an **expansion-only D5 adapter** and (2) a **cross-ansatz leakage bound**.
-Tolerances marked `[PROPOSED]` are the only operator decisions; everything else is
-inherited from v0.7/v0.12/v0.13.
+Status: **OPERATOR LOCK 2026-05-31.** No adapter, parser, or preflight runner has
+been written; no liao2021 row has been integrated; no `velocity_fraction` has been
+computed. This document locks the two contracts that must pass BEFORE v0.13 may
+profile or rate-probe the Li/Liao 2021 non-hierarchical table: (1) an
+**expansion-only D5 adapter** and (2) a **cross-ansatz leakage bound**.
+
+Reviewed for self-consistency, non-circularity, and integrity:
+
+- **Expansion-only boundary is locked.** The only new source-specific code is the
+  row parser, the row-to-state expansion, and a thin explicit-state integration
+  wrapper whose sole job is to feed that state to the inherited Newtonian RHS and
+  variational machinery. No equation, solver, monodromy, gamma, vf definition, or
+  gate logic may be reimplemented.
+- **Parity check is vf-free.** The frame-invariance check compares only monodromy
+  eigenvalue multisets and gate residuals. It must not call
+  `velocity_fraction_and_z_fraction`, and no `velocity_fraction` / `zone_index`
+  field may appear in the preflight receipt.
+- **Canonical leakage comparison is implementable.** The scale normalization now
+  gives explicit formulas for mass-normalized length, time, energy, angular
+  momentum, and period. Near-zero comparisons use a symmetric relative tolerance
+  denominator, so `|L| ~= 0` cannot make the leakage test numerically undefined.
+- **All proposed tolerances are locked as written.** `tol_parity = 1e-8`,
+  `tol_mass = 1e-6`, and `tol_E = tol_L = tol_T = 1e-4`; the inherited leakage
+  gate remains `0.05`.
 
 ## Frame
 
@@ -74,7 +91,6 @@ expand_liao2021_state(row)      source row -> (masses, x[3,3], v[3,3]) for the
 `scripts.v07a_velocity_fraction_audit` / v0.12:**
 
 ```text
-the DOP853 solve_ivp orbit + variational path  (integrate_orbit solver body)
 compute_monodromy_vectorized                    (324-dim variational monodromy)
 select_gamma_1                                  (largest-real-part + tie-break cascade)
 velocity_fraction_and_z_fraction                (vf definition; CoM + mass-weighted norm)
@@ -83,22 +99,35 @@ RTOL = ATOL = 1e-12,  MAX_STEP_FRACTION = 0.02
 SYMPLECTICITY_GATE = RECIPROCAL_PAIR_GATE = 1e-4
 ```
 
-The adapter changes ONLY the IC expansion. The integrator, monodromy, gamma
-selection, vf definition, and gates are the same objects v0.12 ran on supp-A.
+The adapter changes ONLY the IC expansion. Because the v0.7 `integrate_orbit(row)`
+function calls the mirrored-ansatz `expand_initial_state(row)`, liao2021 may use a
+thin explicit-state wrapper. That wrapper may only:
+
+```text
+accept (masses, x0, v0, period) from expand_liao2021_state
+CoM-center exactly as registered
+call the same Newtonian rhs_factory / DOP853 solve_ivp path
+emit an IntegratedOrbit-compatible object for compute_monodromy_vectorized
+```
+
+It may not modify the equations, method, tolerances, max-step convention,
+variational monodromy, gamma selection, vf definition, or gates.
 
 **Parity verification (pre-registered; firewall-clean, no vf recorded):**
 
 ```text
-P1  code-inheritance identity assert: the adapter module's references to the seven
-    frozen symbols above are `is`-identical to the v07a objects (no shadowing,
-    no re-implementation). Fails -> ABORT.
+P1  code-inheritance identity assert: the adapter module's references to the frozen
+    D5 symbols above are `is`-identical to the v07a objects (no shadowing, no
+    re-implementation). The explicit-state wrapper is separately audited by P2.
+    Fails -> ABORT.
 P2  frame-invariance: for K_PARITY = 6 liao2021 probe rows (deterministic uniform,
     seed 20260523), apply each pre-registered isometry to the initial configuration
-    and run the full pipeline. Assert the monodromy eigenvalue multiset, the
-    symplecticity residual, and the reciprocal-pair residual are invariant:
+    and run ONLY the orbit-integration + monodromy + gate path. Assert the monodromy
+    eigenvalue multiset, the symplecticity residual, and the reciprocal-pair
+    residual are invariant:
       rotations  SO(2) by {0, 37, 90, 211} degrees in the orbit plane
       translation by a fixed offset (absorbed by CoM-centering)
-    tolerance  tol_parity = 1e-8 relative   [PROPOSED]
+    tolerance  tol_parity = 1e-8 relative
     (vf is a rotation/translation-invariant scalar by construction once P1 holds,
      so it is NOT computed here -- the preflight stays vf-free.)
 ```
@@ -121,6 +150,25 @@ G = 1,   total mass  sum(m_i) = 1,   moment of inertia  I0 = sum m_i |r_i - R_co
 (G=1 + sum m = 1 fixes the mass scale; I0 = 1 fixes the length scale; both together
 fix the time scale.) In these canonical units E, |L|, and T are pure numbers.
 
+Implementation formulas:
+
+```text
+M        = sum_i m_i
+mu_i     = m_i / M
+R_com    = sum_i mu_i r_i
+I_mu     = sum_i mu_i |r_i - R_com|^2
+ell      = sqrt(I_mu)
+tau      = sqrt(ell^3 / M)                 # original time units per canonical time
+
+mass*    = sort(mu_i)
+E*       = E * ell / M^2
+|L|*     = |L| / (M^(3/2) * sqrt(ell))
+T*       = T / tau = T * sqrt(M / ell^3)
+```
+
+If `M <= 0`, `I_mu <= 0`, a period is missing, or any invariant is non-finite, the
+canonical reconciliation fails and leakage is declared unbounded.
+
 **Identity key (canonical units):**
 
 ```text
@@ -138,10 +186,13 @@ slice, match against supp-A/B rows of the same mass-tuple on (E*, |L|*, T*) with
 tolerances. A liao2021 row is a leak iff mass-tuple AND all three invariants match.
 
 ```text
-tol_mass = 1e-6  (relative, mass-equality + m3-grid match)   [PROPOSED]
-tol_E    = 1e-4  (relative, canonical energy)                [PROPOSED]
-tol_L    = 1e-4  (relative, canonical |L|)                   [PROPOSED]
-tol_T    = 1e-4  (relative, canonical period)               [PROPOSED]
+tol_mass = 1e-6  (relative, mass-equality + m3-grid match)
+tol_E    = 1e-4  (relative, canonical energy)
+tol_L    = 1e-4  (relative, canonical |L|)
+tol_T    = 1e-4  (relative, canonical period)
+
+relative comparator:
+  abs(a - b) <= tol * max(1, abs(a), abs(b))
 
 leakage_fraction = (#liao2021 rows that leak) / (#liao2021 rows after eligibility)
 leakage gate     = leakage_fraction <= 0.05   (inherited v0.13 overlap gate)
@@ -211,7 +262,9 @@ results/isotrophy/k-facet-v13a-liao2021-preflight/
 ```
 
 No receipt in this chapter contains `velocity_fraction`, `zone_index`, or a per-row
-stability-conditioned feasibility field.
+stability-conditioned feasibility field. `parity_rows.csv` may identify row indices,
+mass keys, periods, isometry names, eigenvalue summary residuals, and gate residuals;
+it may not include source stability labels.
 
 ## Claim Boundary
 
