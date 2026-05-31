@@ -118,6 +118,16 @@ Filed receipts:
   green, `capacity_threshold = not_estimated`. This is not a wall-time claim
   and not a complexity-theoretic result.
 
+- [`2026-05-31_phase2_mesa_bridge_v0.md`](2026-05-31_phase2_mesa_bridge_v0.md):
+  first Phase 2 mesa-bridge execution; verdict = **named quarantine**. The
+  implementation reads Phase 4 per-seed raw trial logs and keeps the bridge
+  reward-blind, but the registered raw-recompute gate fails because Small-tier
+  source manifests record `trial_logs_saved=false`. Medium raw-log cells do
+  recompute; fixed-attractor false accepts = 0, capacity-breach false accepts =
+  0, mixed-objective laundering = 0, and the same-artifact-tier op-count ratio
+  passes at 0.734877. Not bounded-positive: raw provenance and signature accept
+  floor fail for the registered v0 population.
+
 Receipt filenames should use:
 
 `YYYY-MM-DD_phase-or-probe_short-slug.md`

@@ -63,12 +63,12 @@
   <text x="775.0" y="355" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" fill="#684811" text-anchor="middle">4 PROBES, 1 BOUNDED NULL</text>
   <text x="674" y="392" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#40505C">YM-P2-NEG-A across slate</text>
   <text x="674" y="408" font-family="Courier New, monospace" font-size="10" fill="#1A3A52">no mass-gap claim</text>
-  <g filter="url(#cardShadow)"><rect x="910" y="290" width="230" height="130" rx="10" fill="#FFFFFF" stroke="#B53A2C" stroke-width="1.5"/></g>
+  <g filter="url(#cardShadow)"><rect x="910" y="290" width="230" height="130" rx="10" fill="#FFFFFF" stroke="#2F7D4F" stroke-width="1.5"/></g>
   <text x="924" y="320" font-family="Georgia, serif" font-size="16" font-weight="700" fill="#1A3A52">P-vs-NP</text>
-  <rect x="924" y="340" width="202" height="22" rx="11" fill="#FFFFFF" stroke="#B53A2C" stroke-width="1"/>
-  <text x="1025.0" y="355" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" fill="#7A1F14" text-anchor="middle">SAFETY GREEN, COST HOLD</text>
-  <text x="924" y="392" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#40505C">v0-v5, 0 false accepts</text>
-  <text x="924" y="408" font-family="Courier New, monospace" font-size="10" fill="#1A3A52">2 required reruns</text>
+  <rect x="924" y="340" width="202" height="22" rx="11" fill="#FFFFFF" stroke="#2F7D4F" stroke-width="1"/>
+  <text x="1025.0" y="355" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" fill="#214B36" text-anchor="middle">OP-COUNT POSITIVE</text>
+  <text x="924" y="392" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#40505C">v0-v6, 0 false accepts</text>
+  <text x="924" y="408" font-family="Courier New, monospace" font-size="10" fill="#1A3A52">op-count positive</text>
   <g filter="url(#cardShadow)"><rect x="660" y="440" width="230" height="95" rx="10" fill="#FFFFFF" stroke="#64748B" stroke-width="1.5"/></g>
   <text x="674" y="470" font-family="Georgia, serif" font-size="16" font-weight="700" fill="#1A3A52">ARC-AGI</text>
   <rect x="674" y="486" width="202" height="22" rx="11" fill="#EDF2F7" stroke="#64748B" stroke-width="1"/>

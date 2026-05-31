@@ -40,10 +40,16 @@ Phase specs:
   reproducible cost signal while keeping wall-time diagnostic-only.
 - [`PHASE2_MESA_BRIDGE.md`](PHASE2_MESA_BRIDGE.md) - Phase 2 mesa
   verification bridge spec / charter (opened 2026-05-31). Carries forward
-  the v6 claim boundary; maps the mesa Phase 4 causal interventions
-  (3 of 5 executed) to verifier-failure tests; uses the Phase 5 Large-tier
-  reward-proxy emergence as the capacity-breach falsifier. No v0 execution
-  slate frozen yet.
+  the v6 claim boundary and maps mesa intervention evidence to verifier-failure
+  tests. The frozen v0 slate below supersedes its initial "no slate frozen"
+  status.
+- [`PHASE2_MESA_BRIDGE_V0_SLATE.md`](PHASE2_MESA_BRIDGE_V0_SLATE.md) -
+  frozen first mesa-bridge execution slate. Re-reads the current mesa Phase 4
+  and Phase 5 artifacts from disk, gates only a reward-blind bridge-smoke, and
+  uses the measured L-Mixed breach thresholds as the capacity-breach falsifier.
+  Certificates must recompute from per-seed raw trial logs, and the op-count
+  comparator must be a same-artifact-tier raw-trace audit rather than a full
+  mesa battery regeneration.
 
 Templates:
 
@@ -60,7 +66,8 @@ Result convention:
 Receipts:
 
 - [`receipts/README.md`](receipts/README.md) - receipt index, including the
-  Phase 1 v0-v5 named-quarantine receipts and the v6 op-count positive receipt.
+  Phase 1 v0-v5 named-quarantine receipts, the v6 op-count positive receipt,
+  and the Phase 2 v0 mesa-bridge named quarantine.
 
 Current state:
 
@@ -118,5 +125,17 @@ Current state:
   pass.
 - Phase 2 mesa verification bridge opened: 2026-05-31. Spec/charter
   [`PHASE2_MESA_BRIDGE.md`](PHASE2_MESA_BRIDGE.md) filed; carries forward the
-  v6 claim boundary. No v0 slate frozen and nothing run; next step is to
-  freeze `PHASE2_MESA_BRIDGE_V0_SLATE.md`.
+  v6 claim boundary.
+- Phase 2 mesa bridge v0 slate frozen: 2026-05-31. Slate
+  [`PHASE2_MESA_BRIDGE_V0_SLATE.md`](PHASE2_MESA_BRIDGE_V0_SLATE.md) locks
+  source artifacts, verifier-access rules, mesa label mapping, op-count
+  accounting, and pre-named falsifiers.
+- Phase 2 mesa bridge v0 executed: 2026-05-31. Verdict = named quarantine.
+  The bridge implementation recomputes from per-seed raw trial logs where they
+  exist, keeps reward-blind access, catches the registered fixed-attractor /
+  capacity-breach / mixed-objective falsifiers, and passes the same-artifact
+  op-count comparator (`0.734877`). It cannot promote because 7/15 registered
+  cells lack raw trial logs (`trial_logs_saved=false` for Small-tier source
+  manifests), leaving raw recomputation, integrity, and the 3/4 signature
+  accept floor failed. Next step is a Phase 2 v1 slate: raw-logged Small rerun
+  or explicitly Medium-only bridge.

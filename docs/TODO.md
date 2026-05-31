@@ -74,14 +74,15 @@ source of truth.
 - **ARC Phase 3E relative-locality hold** — rank-neighbor certificate
   proposal after absolute fibers stayed sparse on the expanded 108-task
   register.
+- **P-vs-NP Phase 2 mesa bridge** - Phase 2 v0 named-quarantined on raw-log
+  provenance; next move is a v1 slate choosing raw-logged Small rerun vs
+  Medium-only bridge.
 
 ### `operator-blocked` — needs a human artifact, review, or measurement
 
 - **Structural-Failure Cut 3** — admission check held open; reopening
   requires H0 angular calibration, corpus records, baselines, edit
   operators, and renewed admission before any execution claim.
-- **P-vs-NP Phase 1 v5** — provisional cost-adjudication hold on the toy
-  verifier cost receipt.
 
 ### `compute-blocked` — the next result needs a long run
 
@@ -433,34 +434,44 @@ Next actions:
 5. Keep the gallery/card language at "draft finite-lattice certificate lane"
    until Phase 0 exists.
 
-### P-vs-NP Phase 1 v5 Cost Receipt
+### P-vs-NP Phase 1 v6 Op-Count Receipt
 
 Sources:
 [`SUNDOG_V_P_V_NP.md`](SUNDOG_V_P_V_NP.md),
 [`pvnp/README.md`](pvnp/README.md),
-[`pvnp/PHASE1_V5_SLATE.md`](pvnp/PHASE1_V5_SLATE.md),
+[`pvnp/PHASE1_V6_SLATE.md`](pvnp/PHASE1_V6_SLATE.md),
+[`pvnp/PHASE2_MESA_BRIDGE_V0_SLATE.md`](pvnp/PHASE2_MESA_BRIDGE_V0_SLATE.md),
 [`pvnp/receipts/README.md`](pvnp/receipts/README.md).
 
-Status: `operator-blocked`, cost-unadjudicated.
+Status: `phase2-v0-named-quarantine`, v6 op-count positive.
 
 Current state:
 
-Phase 1 v0-v5 produced a useful chain of verifier-quarantine receipts. v5 is
-provisional: safety-complete, cost-unadjudicated. The earlier stable cost claim
-was withdrawn after incompatible reruns and `environments.jsonl` hash drift.
+Phase 1 v0-v6 produced a useful chain of verifier receipts. v5 is a corrected
+named quarantine: safety-complete, wall-time cost unadjudicated. v6 is bounded
+positive under the registered op-count protocol: `C_total_signature_ops /
+C_rollout_ops = 0.948587 <= 1.0`, with wall-time diagnostic-only. Phase 2 v0
+is implemented and filed as named quarantine: raw-log recomputation fails for
+Small-tier cells whose manifests record `trial_logs_saved=false`, while Medium
+cells show the intended reward-blind bridge behavior.
 
 Blocker:
 
-The next move is not a Phase 2 escalation. v5 must be rerun twice on a quiescent
-machine, and determinism must be fixed first if the environment hash drifts.
+The next move is not another Phase 1 cost repair. Phase 1's claim boundary is
+now fixed. Phase 2's immediate blocker is provenance shape: the registered v0
+population needs per-seed raw logs, and the Small-tier artifacts do not have
+them.
 
 Next actions:
 
-1. Rerun v5 twice on a quiescent machine with the receipt's exact invocation.
-2. Compare `environments.jsonl` hashes and median-of-3 cost reports.
-3. If hashes drift, fix determinism before interpreting cost.
-4. If hashes hold, finalize or void the provisional v5 receipt.
-5. Open v6 or Phase 2 only after the v5 receipt is no longer provisional.
+1. Open a Phase 2 v1 slate.
+2. Choose the v1 shape before execution: raw-logged Small rerun, or explicitly
+   Medium-only bridge.
+3. Carry forward the v6 boundary verbatim: op-count positive, wall-time
+   diagnostic-only, no complexity-theoretic claim.
+4. Do not use the v3/v5 favorable wall-time samples as evidence.
+5. Treat `capacity_threshold = not_estimated` as still open for any larger
+   attacker or domain expansion.
 
 ### ARC Phase 3E Relative-Locality Hold
 

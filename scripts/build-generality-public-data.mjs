@@ -119,30 +119,32 @@ const projects = [
     shortName: "P-vs-NP",
     fullName: "Bounded alignment-verification verifier chain",
     category: "math-ledger",
-    status: "cost-hold",
+    status: "draft-handoff",
     transferQuestion:
       "Can a compact signature behave like a cheaper certificate for a bounded alignment-verification problem?",
     currentRead:
-      "The v0-v5 chain closed multiple safety holes, but v5 is still cost-unadjudicated after environment-hash drift.",
+      "The v0-v6 chain is safety-complete and v6 op-count positive; Phase 2 v0 named-quarantined on raw-log provenance.",
     blocker:
-      "Two quiescent v5 reruns are required before v6 or Phase 2 can be interpreted.",
+      "Wall-time remains diagnostic-only; the claim is op-count bounded, not machine-time cheap.",
     nextAction:
-      "Rerun v5 twice, compare environment hashes and median cost, then finalize or void the provisional receipt.",
+      "Open a Phase 2 v1 slate: raw-logged Small rerun or explicitly Medium-only bridge.",
     publicBoundary:
       "No complexity-class result, polynomial certificate, or P-vs-NP progress is claimed.",
-    chartHeadline: "safety green; cost unresolved",
+    chartHeadline: "op-count positive; wall-time diagnostic",
     metrics: [
-      { label: "phase receipts", value: 6, unit: "v0-v5" },
-      { label: "v5 false accepts", value: 0, unit: "items" },
-      { label: "required reruns", value: 2, unit: "runs" },
+      { label: "filed receipts", value: 8, unit: "incl p2v0" },
+      { label: "v6 false accepts", value: 0, unit: "items" },
+      { label: "p2 raw gaps", value: 7, unit: "cells" },
     ],
     sources: [
       "docs/SUNDOG_V_P_V_NP.md",
       "docs/pvnp/README.md",
-      "docs/pvnp/PHASE1_V5_SLATE.md",
+      "docs/pvnp/PHASE1_V6_SLATE.md",
+      "docs/pvnp/PHASE2_MESA_BRIDGE_V0_SLATE.md",
+      "docs/pvnp/receipts/2026-05-31_phase2_mesa_bridge_v0.md",
       "docs/pvnp/receipts/README.md",
     ],
-    svgFocus: ["status-card", "receipt-chain", "cost-hold"],
+    svgFocus: ["status-card", "receipt-chain", "op-count-positive"],
   },
   {
     id: "yang_mills",
