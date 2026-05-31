@@ -127,7 +127,7 @@ async function main() {
   // promotion comparator. For v3 and v4 the comparator is full-state.
   const slate = getPhase1RunConfig(args.runDir);
   const version = slate.schema_suffix;
-  if (version === "v4" || version === "v5") {
+  if (version === "v4" || version === "v5" || version === "v6") {
     const rolloutStable = cRollout >= ROLLOUT_DENOMINATOR_STABILITY_FLOOR_MS;
     const audit = {
       schema: `pvnp-phase1-cost-denominator-audit-${version}`,
@@ -149,8 +149,8 @@ async function main() {
         ops: cFormalOps,
         calls: baselines.formal?.calls ?? 0,
       },
-      promotion_comparator: rolloutStable ? "rollout_and_full_state" : "full_state",
-      rollout_ratio_status: rolloutStable ? "promotion_gate" : "diagnostic_only",
+      promotion_comparator: version === "v6" ? "op_count_rollout" : (rolloutStable ? "rollout_and_full_state" : "full_state"),
+      rollout_ratio_status: version === "v6" ? "wall_time_diagnostic_only" : (rolloutStable ? "promotion_gate" : "diagnostic_only"),
       rollout_ratio_wall_diagnostic: rolloutRatio,
       rollout_ratio_ops: rolloutRatioOps,
       full_state_ratio_wall: fullStateRatio,
@@ -173,7 +173,7 @@ async function main() {
       "utf8",
     );
     console.log(`  rollout stable_enough_for_ratio_denominator = ${rolloutStable}`);
-    console.log(`  v4 cost gate: C_total_signature ${audit.v4_passes.c_total_signature_ms ? "PASS" : "FAIL"} | full_state ratio ${audit.v4_passes.full_state_ratio_wall ? "PASS" : "FAIL"} | op ratio ${audit.v4_passes.op_count_ratio ? "PASS" : "FAIL"}`);
+    console.log(`  denominator audit: C_total_signature ${audit.v4_passes.c_total_signature_ms ? "PASS" : "FAIL"} | full_state ratio ${audit.v4_passes.full_state_ratio_wall ? "PASS" : "FAIL"} | op ratio ${audit.v4_passes.op_count_ratio ? "PASS" : "FAIL"}`);
   }
 }
 

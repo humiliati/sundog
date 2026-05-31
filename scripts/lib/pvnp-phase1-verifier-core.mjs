@@ -18,18 +18,20 @@ import {
   SIGNATURE_SCHEMA_V3,
   SIGNATURE_SCHEMA_V4,
   SIGNATURE_SCHEMA_V5,
+  SIGNATURE_SCHEMA_V6,
   TRANSFORM_VERSION_V1,
   TRANSFORM_VERSION_V2,
   TRANSFORM_VERSION_V3,
   TRANSFORM_VERSION_V4,
   TRANSFORM_VERSION_V5,
+  TRANSFORM_VERSION_V6,
 } from "./pvnp-phase1-signature-core.mjs";
 import { cacheKey, lookupOrCompute, recordPreIntegrityShortCircuit } from "./pvnp-phase1-cache.mjs";
 
 const SIGNATURE_SCHEMA = "pvnp-phase1-sigma-v0";
-const SOURCE_BOUND_SCHEMAS = new Set([SIGNATURE_SCHEMA_V1, SIGNATURE_SCHEMA_V2, SIGNATURE_SCHEMA_V3, SIGNATURE_SCHEMA_V4, SIGNATURE_SCHEMA_V5]);
-const SENSOR_DEMOTED_SCHEMAS = new Set([SIGNATURE_SCHEMA_V3, SIGNATURE_SCHEMA_V4, SIGNATURE_SCHEMA_V5]);
-const COVERAGE_REMOVED_SCHEMAS = new Set([SIGNATURE_SCHEMA_V2, SIGNATURE_SCHEMA_V3, SIGNATURE_SCHEMA_V4, SIGNATURE_SCHEMA_V5]);
+const SOURCE_BOUND_SCHEMAS = new Set([SIGNATURE_SCHEMA_V1, SIGNATURE_SCHEMA_V2, SIGNATURE_SCHEMA_V3, SIGNATURE_SCHEMA_V4, SIGNATURE_SCHEMA_V5, SIGNATURE_SCHEMA_V6]);
+const SENSOR_DEMOTED_SCHEMAS = new Set([SIGNATURE_SCHEMA_V3, SIGNATURE_SCHEMA_V4, SIGNATURE_SCHEMA_V5, SIGNATURE_SCHEMA_V6]);
+const COVERAGE_REMOVED_SCHEMAS = new Set([SIGNATURE_SCHEMA_V2, SIGNATURE_SCHEMA_V3, SIGNATURE_SCHEMA_V4, SIGNATURE_SCHEMA_V5, SIGNATURE_SCHEMA_V6]);
 const RECOMPUTED_FIELDS_CACHE = new Map();
 
 // v0 promise parameters (matches docs/pvnp/PHASE1_V0_SLATE.md and
@@ -73,7 +75,9 @@ function certificateIntegritySourceBound(sigma, expectedTraceId, traceCommitment
   let version;
   let expectedSchema;
   let expectedTransform;
-  if (sigma.schema === SIGNATURE_SCHEMA_V5) {
+  if (sigma.schema === SIGNATURE_SCHEMA_V6) {
+    version = "v6"; expectedSchema = SIGNATURE_SCHEMA_V6; expectedTransform = TRANSFORM_VERSION_V6;
+  } else if (sigma.schema === SIGNATURE_SCHEMA_V5) {
     version = "v5"; expectedSchema = SIGNATURE_SCHEMA_V5; expectedTransform = TRANSFORM_VERSION_V5;
   } else if (sigma.schema === SIGNATURE_SCHEMA_V4) {
     version = "v4"; expectedSchema = SIGNATURE_SCHEMA_V4; expectedTransform = TRANSFORM_VERSION_V4;
@@ -98,10 +102,10 @@ function certificateIntegritySourceBound(sigma, expectedTraceId, traceCommitment
     "trajectory_envelope", "margin_lower_bound",
     "cost_signature", "limitations",
   ];
-  const commonRequired = (version === "v3" || version === "v4" || version === "v5")
+  const commonRequired = (version === "v3" || version === "v4" || version === "v5" || version === "v6")
     ? [...commonRequiredBase, "sensor_diagnostics_v3"]
     : [...commonRequiredBase, "sensor_health_v1"];
-  const versionRequired = (version === "v5" || version === "v4" || version === "v3" || version === "v2")
+  const versionRequired = (version === "v6" || version === "v5" || version === "v4" || version === "v3" || version === "v2")
     ? ["invariance_checks_v2", "geometry_promise_signal_v2"]
     : ["coverage_digest", "invariance_checks_v1", "geometry_promise_signal"];
   const required = [...commonRequired, ...versionRequired];

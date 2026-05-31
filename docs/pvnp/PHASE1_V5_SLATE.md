@@ -1,7 +1,7 @@
 # Phase 1 v5 Cost-Closure Slate
 
-Status: queued after the v4 named quarantine. No v5 implementation receipt has
-been filed.
+Status: frozen after execution. The corrected receipt is filed as named
+quarantine: safety-complete, wall-time cost unadjudicated.
 
 Date opened: 2026-05-28
 

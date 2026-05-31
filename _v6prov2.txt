@@ -1,0 +1,6 @@
+first_env=pvnp-v6-cal-0001
+actual_sha16=a033a3cfab5f9264
+manifest_sha16=a033a3cfab5f9264
+hash_match=true
+sig_schema=pvnp-phase1-sigma-v6
+v5_dir_exists=true

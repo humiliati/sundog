@@ -148,9 +148,9 @@ async function main() {
   const outDir = path.resolve(REPO_ROOT, args.runDir);
   const slate = getPhase1RunConfig(args.runDir);
   const version = slate.schema_suffix;
-  const sourceBound = version === "v1" || version === "v2" || version === "v3" || version === "v4" || version === "v5";
-  const isV4 = version === "v4" || version === "v5";
-  const usesCache = version === "v3" || version === "v4" || version === "v5";
+  const sourceBound = version === "v1" || version === "v2" || version === "v3" || version === "v4" || version === "v5" || version === "v6";
+  const isV4 = version === "v4" || version === "v5" || version === "v6";
+  const usesCache = version === "v3" || version === "v4" || version === "v5" || version === "v6";
   await mkdir(outDir, { recursive: true });
 
   // v3/v4 attach to the verifier+ablation shared source-hash cache. By the

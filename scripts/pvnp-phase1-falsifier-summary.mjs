@@ -38,6 +38,14 @@ async function readCsvIfExists(p) {
   }
 }
 
+async function readJsonIfExists(p) {
+  try { return JSON.parse(await readFile(p, "utf8")); }
+  catch (err) {
+    if (err.code === "ENOENT") return null;
+    throw err;
+  }
+}
+
 function counts(rows, key) {
   const m = new Map();
   for (const r of rows) {
@@ -220,6 +228,15 @@ async function main() {
   }
   falsifierLines.push(`  - \`C_total_signature / C_rollout\` = ${cRollout > 0 ? (cTotalSig / cRollout).toFixed(4) : "n/a"} (wall_ms)`);
   falsifierLines.push(`  - \`C_total_signature / C_full_state\` = ${cFullState > 0 ? (cTotalSig / cFullState).toFixed(4) : "n/a"} (wall_ms)`);
+  if (version === "v6") {
+    const opGate = await readJsonIfExists(path.join(outDir, "op_count_cost_gate_report.json"));
+    if (opGate) {
+      falsifierLines.push(`  - v6 wall-time status: diagnostic-only.`);
+      falsifierLines.push(`  - v6 op-count gate: \`C_total_signature_ops / C_rollout_ops\` = ${opGate.ratios.rollout_op_ratio.toFixed(4)}; cost repair ${opGate.cost_repair_passed ? "passed" : "failed"}.`);
+    } else {
+      falsifierLines.push(`  - **TRIGGERED**: v6 op-count gate report missing.`);
+    }
+  }
 
   // Boundary absence: do falsifier-split envs reliably quarantine?
   falsifierLines.push(``);

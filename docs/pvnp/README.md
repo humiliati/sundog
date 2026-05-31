@@ -35,6 +35,15 @@ Phase specs:
 - [`PHASE1_V5_SLATE.md`](PHASE1_V5_SLATE.md) - cost-closure slate opened
   after the v4 cost-only quarantine, focused on short-circuit instrumentation
   overhead and median-of-3 cost promotion.
+- [`PHASE1_V6_SLATE.md`](PHASE1_V6_SLATE.md) - op-count cost slate opened
+  after the corrected v5 named quarantine, focused on using the only
+  reproducible cost signal while keeping wall-time diagnostic-only.
+- [`PHASE2_MESA_BRIDGE.md`](PHASE2_MESA_BRIDGE.md) - Phase 2 mesa
+  verification bridge spec / charter (opened 2026-05-31). Carries forward
+  the v6 claim boundary; maps the mesa Phase 4 causal interventions
+  (3 of 5 executed) to verifier-failure tests; uses the Phase 5 Large-tier
+  reward-proxy emergence as the capacity-breach falsifier. No v0 execution
+  slate frozen yet.
 
 Templates:
 
@@ -51,7 +60,7 @@ Result convention:
 Receipts:
 
 - [`receipts/README.md`](receipts/README.md) - receipt index, including the
-  Phase 1 v0-v4 named-quarantine receipts and the v5 provisional receipt.
+  Phase 1 v0-v5 named-quarantine receipts and the v6 op-count positive receipt.
 
 Current state:
 
@@ -83,8 +92,31 @@ Current state:
   pass, but absolute wall-time and full-state-ratio cost gates miss by a small
   margin.
 - Phase 1 v5 cost-closure slate opened: 2026-05-28.
-- Phase 1 v5 harness executed: 2026-05-28. Receipt is PROVISIONAL:
-  safety-complete, cost-unadjudicated. The earlier stable cost claim is
-  withdrawn after incompatible v5 reruns and `environments.jsonl` hash drift.
-  Before v6 or Phase 2, rerun v5 twice on a quiescent machine and finalize or
-  void the receipt.
+- Phase 1 v5 harness executed: 2026-05-28. Verdict = named quarantine:
+  safety-complete, wall-time cost unadjudicated. The earlier stable cost claim
+  is withdrawn after artifact re-check: four clean full-harness invocations
+  span `C_total_signature` 890 / 2192 / 2242 / 3185 ms, while the on-disk
+  `cost_multirun_report.json` shows 2569 / 2091 / 2242 ms and
+  `cost_repair_passed=false`. Determinism is confirmed by two fresh
+  byte-identical v5 environment generations (`5549b4c4e8b7`; first env
+  `pvnp-v5-cal-0001`). The stable cost signal is the op-count ratio 0.9487,
+  which became the pre-registered v6 cost gate.
+- Phase 1 v6 op-count cost slate opened: 2026-05-31. v6 keeps the v5 safety
+  gates frozen, demotes wall-time to diagnostic-only, and gates cost on
+  `C_total_signature_ops / C_rollout_ops <= 1.0`.
+- Phase 1 v6 harness executed: 2026-05-31. Verdict = bounded positive under
+  the registered v6 op-count protocol; wall-time remains diagnostic-only.
+  Cost gate passed (`527297 / 555876 = 0.948587 <= 1.0`), cache reuse was 100%,
+  short-circuit audit passed, privilege audit was green, and safety gates stayed
+  clean (0/2304 false accepts, 0/453 field spoofs, 0/453 source spoofs, 5/5
+  integrity probes, 0/768 OOP accepts, `capacity_threshold = not_estimated`).
+  Independent disk re-verification 2026-05-31 confirmed all of the above and
+  flagged one conservative op-count imprecision (numerator counts 2496
+  signature calls incl. 64 calibration envs x 3 policies vs 2304 measurement
+  rollout calls) that makes the reported ratio slightly higher than the clean
+  measurement-only ~0.879 — directionally conservative, does not change the
+  pass.
+- Phase 2 mesa verification bridge opened: 2026-05-31. Spec/charter
+  [`PHASE2_MESA_BRIDGE.md`](PHASE2_MESA_BRIDGE.md) filed; carries forward the
+  v6 claim boundary. No v0 slate frozen and nothing run; next step is to
+  freeze `PHASE2_MESA_BRIDGE_V0_SLATE.md`.
