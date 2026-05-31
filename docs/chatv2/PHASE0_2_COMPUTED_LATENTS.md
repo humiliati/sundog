@@ -196,4 +196,4 @@ resistance" must not be conflated.
 
 - [`PHASE0_MINIMUM_FALSIFIABLE.md`](PHASE0_MINIMUM_FALSIFIABLE.md) — Phase 0 + Amendment 1 (the result this refines).
 - [`LANE_CHARTER.md`](LANE_CHARTER.md) — lane mission + the three-marginal mandate.
-- [`../threebody/CROSS_SUBSTRATE_NOTES.md`](../threebody/CROSS_SUBSTRATE_NOTES.md) — body-resistance axis; chatv2 is the first non-flatly-marginal entry.
+- [`../CROSS_SUBSTRATE_NOTES.md`](../CROSS_SUBSTRATE_NOTES.md) — body-resistance axis; chatv2 is the first non-flatly-marginal entry.
