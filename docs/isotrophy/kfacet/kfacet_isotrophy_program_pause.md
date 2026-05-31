@@ -434,7 +434,7 @@ independence) that v0.6a and v0.7a' did not pre-register.
 ### 6. Cross-substrate transfer test (HIGH EFFORT)
 
 **Status**: cross-substrate notes exist at
-`docs/threebody/CROSS_SUBSTRATE_NOTES.md` sections 6-7.
+`docs/CROSS_SUBSTRATE_NOTES.md` sections 6-7.
 
 **Hypothesis**: the v0.7a' velocity-fraction shadow is substrate-
 specific to supp-B; applying the same mechanism to a different
@@ -536,7 +536,7 @@ sequential audits on the v0.7a' analyzable subset.
   mass-marginal held-out null / conditional diagnostic.
 - `kfacet_v11_m3_conditional_vf_rank_form.md` -- v0.11 within-m3
   conditional rank pass.
-- `docs/threebody/CROSS_SUBSTRATE_NOTES.md` -- cross-substrate
+- `docs/CROSS_SUBSTRATE_NOTES.md` -- cross-substrate
   framing (avenue 6).
 - `docs/isotrophy/sundog_v_isotrophy.md` -- full chapter-by-chapter dated log.
 

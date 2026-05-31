@@ -19,7 +19,7 @@ Companions:
 - `kfacet_v03h_writeup.md` (v0.3 closure + projection-language framing).
 - `kfacet_v03_gamma_crossm3_preregistration.md` (II sentinel + symmetry
   probe that produced the original O_434 misclassification).
-- `docs/threebody/CROSS_SUBSTRATE_NOTES.md` §6-§7 (projection vocabulary).
+- `docs/CROSS_SUBSTRATE_NOTES.md` §6-§7 (projection vocabulary).
 
 ## One-Line Read
 

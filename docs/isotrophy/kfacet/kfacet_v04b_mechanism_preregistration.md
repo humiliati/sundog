@@ -12,7 +12,7 @@ Companions:
 - `kfacet_v04a0_o434_anatomy.md` (methodology pre-mortem for gauge
   classifier).
 - `kfacet_v03h_writeup.md` (v0.3 closure + projection-language framing).
-- `docs/threebody/CROSS_SUBSTRATE_NOTES.md` §6-§7 (projection vocabulary).
+- `docs/CROSS_SUBSTRATE_NOTES.md` §6-§7 (projection vocabulary).
 
 ## Retirement (Landed, 2026-05-23)
 

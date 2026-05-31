@@ -2,7 +2,7 @@
 
 > **Cross-substrate failure-map entry:** NUMERICAL WALL (fixed-dt RK4 blows up
 > integrating the intermittent bursts the task is about) — see
-> [`../threebody/CROSS_SUBSTRATE_NOTES.md`](../threebody/CROSS_SUBSTRATE_NOTES.md)
+> [`../CROSS_SUBSTRATE_NOTES.md`](../CROSS_SUBSTRATE_NOTES.md)
 > "Cross-Substrate Generality Failure Map".
 
 > **Design proposal for sign-off**, filed 2026-05-29. Re-pose of

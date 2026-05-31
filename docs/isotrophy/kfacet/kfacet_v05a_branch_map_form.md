@@ -306,7 +306,7 @@ results/isotrophy/k-facet-v05a-branch-map/manifest.json      (after audit)
 - `kfacet_v04_writeup.md` -- v0.4 structural-negative chapter close (opens v0.5)
 - `kfacet_v04b_gamma3prime_form.md` -- prior baseline (falsified Z_2 shadow)
 - `kfacet_v04a_domain_map_preregistration.md` -- catalog source manifest
-- `docs/threebody/CROSS_SUBSTRATE_NOTES.md` sections 6-7 -- projection-language
+- `docs/CROSS_SUBSTRATE_NOTES.md` sections 6-7 -- projection-language
   framing (body / shadow / projection-limit vocabulary)
 
 ---

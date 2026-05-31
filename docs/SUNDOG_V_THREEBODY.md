@@ -1478,7 +1478,7 @@ mass-conditional predictor or new-mechanism work under the locked discipline.
 ### Cross-Substrate Hand-Offs
 
 The Threebody project now has a Mesa/Geometry-style crossover note at
-[`docs/threebody/CROSS_SUBSTRATE_NOTES.md`](threebody/CROSS_SUBSTRATE_NOTES.md).
+[`docs/CROSS_SUBSTRATE_NOTES.md`](CROSS_SUBSTRATE_NOTES.md).
 It translates Mesa's entangled-substrate discipline and Geometry's
 HaloSim-oracle discipline into candidate Threebody phases: mechanism
 decomposition/action coupling, forward-oracle precision lock, and spatial/3D
@@ -1829,6 +1829,6 @@ Current Phase 9 implementation:
   explanation, not a claim upgrade. See
   [`docs/threebody/PHASE18_RESULTS.md`](threebody/PHASE18_RESULTS.md).
 - Next work: move to the cross-substrate follow-ups in
-  [`docs/threebody/CROSS_SUBSTRATE_NOTES.md`](threebody/CROSS_SUBSTRATE_NOTES.md).
+  [`docs/CROSS_SUBSTRATE_NOTES.md`](CROSS_SUBSTRATE_NOTES.md).
 
 **Interactive demonstration**: [threebody.html](../threebody.html)

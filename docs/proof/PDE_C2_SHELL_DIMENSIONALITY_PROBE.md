@@ -2,7 +2,7 @@
 
 > 2026-05-29. A **cheap de-risking probe** before committing to the adaptive
 > integrator (Path A) vs a high-dim RL/LLM substrate (Path B) for a sharp
-> *body-resistance* control-regime-2 (per `threebody/CROSS_SUBSTRATE_NOTES.md`
+> *body-resistance* control-regime-2 (per `CROSS_SUBSTRATE_NOTES.md`
 > body-resistance note + the Mesa FVE falsification). Question: **does the
 > Sabra shell model have a genuinely high-dimensional body that a low-shell
 > shadow fails to reconstruct?** No integrator needed — runs inside the
@@ -95,5 +95,5 @@ substrate's dimensionality without the integrator.
 
 ## Cross-references
 
-- [`../threebody/CROSS_SUBSTRATE_NOTES.md`](../threebody/CROSS_SUBSTRATE_NOTES.md) — the body-resistance axis + the Mesa falsification this de-risks.
+- [`../CROSS_SUBSTRATE_NOTES.md`](../CROSS_SUBSTRATE_NOTES.md) — the body-resistance axis + the Mesa falsification this de-risks.
 - [`PDE_C2_CELLSET_SABRA_v1.md`](PDE_C2_CELLSET_SABRA_v1.md) — the C2 numerical wall; the adaptive integrator is gated on this probe.

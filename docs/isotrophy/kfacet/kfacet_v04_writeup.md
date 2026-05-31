@@ -6,7 +6,7 @@ Canonical sources: `kfacet_v04a_domain_map_preregistration.md`,
 `kfacet_v04b_gamma3_form.md` (retired baseline),
 `kfacet_v04b_gamma3prime_form.md` (falsified baseline),
 `kfacet_v04b_mechanism_preregistration.md`, and
-[`../../threebody/CROSS_SUBSTRATE_NOTES.md`](../../threebody/CROSS_SUBSTRATE_NOTES.md)
+[`../../CROSS_SUBSTRATE_NOTES.md`](../../CROSS_SUBSTRATE_NOTES.md)
 sections 6-7 (projection-language framing for the v0.3 -> v0.4 transition).
 Companion (closed v0.3 chapter): `kfacet_v03h_writeup.md`.
 
