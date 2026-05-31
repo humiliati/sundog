@@ -117,13 +117,21 @@ export function qUnitarityFrobeniusResidual(q) {
 // State layout: links[((mu * L^3 + (x * L + y) * L + z) * 4) + component].
 // mu = 0 is +x, mu = 1 is +y, mu = 2 is +z.
 export function createSU2Lattice(L, seed) {
-  const links = new Float64Array(3 * L * L * L * 4);
+  return createSU2LatticeAsym(L, L, L, seed);
+}
+
+// Asymmetric (Lx, Ly, Lz) lattice. With Lx === Ly === Lz this reduces
+// bit-for-bit to the old cubic createSU2Lattice (identical RNG draw order and
+// link layout). Lz is the short / temporal axis for the finite-T (v6) cells.
+export function createSU2LatticeAsym(Lx, Ly, Lz, seed) {
+  const links = new Float64Array(3 * Lx * Ly * Lz * 4);
   const rng = mulberry32(seed >>> 0);
-  const state = { L, links };
+  const cubic = Lx === Ly && Ly === Lz;
+  const state = { L: cubic ? Lx : undefined, Lx, Ly, Lz, links };
   for (let mu = 0; mu < 3; mu++) {
-    for (let x = 0; x < L; x++) {
-      for (let y = 0; y < L; y++) {
-        for (let z = 0; z < L; z++) {
+    for (let x = 0; x < Lx; x++) {
+      for (let y = 0; y < Ly; y++) {
+        for (let z = 0; z < Lz; z++) {
           setLink(state, mu, x, y, z, haarQuaternion(rng));
         }
       }
@@ -133,15 +141,21 @@ export function createSU2Lattice(L, seed) {
 }
 
 export function cloneSU2Lattice(state) {
-  return { L: state.L, links: new Float64Array(state.links) };
+  return {
+    L: state.L,
+    Lx: state.Lx,
+    Ly: state.Ly,
+    Lz: state.Lz,
+    links: new Float64Array(state.links),
+  };
 }
 
 function wrap(i, L) {
   return ((i % L) + L) % L;
 }
 
-function linkBase(L, mu, x, y, z) {
-  return (mu * L * L * L + (wrap(x, L) * L + wrap(y, L)) * L + wrap(z, L)) * 4;
+function linkBase(Lx, Ly, Lz, mu, x, y, z) {
+  return (mu * Lx * Ly * Lz + (wrap(x, Lx) * Ly + wrap(y, Ly)) * Lz + wrap(z, Lz)) * 4;
 }
 
 function dirX(mu) {
@@ -157,7 +171,7 @@ function dirZ(mu) {
 }
 
 export function getLink(state, mu, x, y, z) {
-  const b = linkBase(state.L, mu, x, y, z);
+  const b = linkBase(state.Lx, state.Ly, state.Lz, mu, x, y, z);
   return [
     state.links[b],
     state.links[b + 1],
@@ -168,7 +182,7 @@ export function getLink(state, mu, x, y, z) {
 
 function setLink(state, mu, x, y, z, q) {
   const n = qNormalize(q);
-  const b = linkBase(state.L, mu, x, y, z);
+  const b = linkBase(state.Lx, state.Ly, state.Lz, mu, x, y, z);
   state.links[b] = n[0];
   state.links[b + 1] = n[1];
   state.links[b + 2] = n[2];
@@ -210,18 +224,18 @@ const ORIENTATIONS = Object.freeze([
 ]);
 
 export function meanPlaquetteByOrientation(state) {
-  const L = state.L;
+  const { Lx, Ly, Lz } = state;
   const out = {};
   for (const [name, mu, nu] of ORIENTATIONS) {
     let sum = 0;
-    for (let x = 0; x < L; x++) {
-      for (let y = 0; y < L; y++) {
-        for (let z = 0; z < L; z++) {
+    for (let x = 0; x < Lx; x++) {
+      for (let y = 0; y < Ly; y++) {
+        for (let z = 0; z < Lz; z++) {
           sum += plaquetteQuaternion(state, x, y, z, mu, nu)[0];
         }
       }
     }
-    out[name] = sum / (L * L * L);
+    out[name] = sum / (Lx * Ly * Lz);
   }
   return out;
 }
@@ -294,14 +308,14 @@ function wilsonLoopTraceHalfInPlane(state, x, y, z, mu, nu, nMu, nNu) {
 }
 
 function loopMeanVar(state, nA, nB) {
-  const L = state.L;
+  const { Lx, Ly, Lz } = state;
   let n = 0;
   let sum = 0;
   let sumSq = 0;
   const accumulate = (mu, nu, a, b) => {
-    for (let x = 0; x < L; x++) {
-      for (let y = 0; y < L; y++) {
-        for (let z = 0; z < L; z++) {
+    for (let x = 0; x < Lx; x++) {
+      for (let y = 0; y < Ly; y++) {
+        for (let z = 0; z < Lz; z++) {
           const v = wilsonLoopTraceHalfInPlane(state, x, y, z, mu, nu, a, b);
           sum += v;
           sumSq += v * v;
@@ -348,6 +362,99 @@ export function computeHeldoutV1(state) {
     W33_mean: W33.mean,
     W33_var: W33.variance,
   };
+}
+
+function polyakovCoordinate(mu, t, transverseA, transverseB) {
+  if (mu === 0) return [t, transverseA, transverseB];
+  if (mu === 1) return [transverseA, t, transverseB];
+  if (mu === 2) return [transverseA, transverseB, t];
+  throw new Error(`invalid Polyakov direction ${mu}`);
+}
+
+export function polyakovLoop(state, mu, transverseA, transverseB) {
+  const Lmu = mu === 0 ? state.Lx : mu === 1 ? state.Ly : state.Lz;
+  let acc = [1, 0, 0, 0];
+  for (let t = 0; t < Lmu; t++) {
+    const [x, y, z] = polyakovCoordinate(mu, t, transverseA, transverseB);
+    acc = qMul(acc, getLink(state, mu, x, y, z));
+  }
+  return acc;
+}
+
+export function polyakovLoopTraceHalf(state, mu, transverseA, transverseB) {
+  return polyakovLoop(state, mu, transverseA, transverseB)[0];
+}
+
+function finishPolyakovValues(values) {
+  let sum = 0;
+  let sumAbs = 0;
+  let sumSq = 0;
+  for (const v of values) {
+    sum += v;
+    sumAbs += Math.abs(v);
+    sumSq += v * v;
+  }
+  const meanValue = sum / values.length;
+  return {
+    n: values.length,
+    mean_P: meanValue,
+    abs_mean_P: Math.abs(meanValue),
+    mean_abs_P: sumAbs / values.length,
+    chi_P: Math.max(0, sumSq / values.length - meanValue * meanValue),
+  };
+}
+
+function averagePolyakovSummaries(byDirection, halfKey) {
+  const summaries = byDirection.map((d) => d[halfKey]);
+  const scale = 1 / summaries.length;
+  return {
+    n: summaries.reduce((acc, s) => acc + s.n, 0),
+    mean_P: summaries.reduce((acc, s) => acc + s.mean_P, 0) * scale,
+    abs_mean_P: summaries.reduce((acc, s) => acc + s.abs_mean_P, 0) * scale,
+    mean_abs_P: summaries.reduce((acc, s) => acc + s.mean_abs_P, 0) * scale,
+    chi_P: summaries.reduce((acc, s) => acc + s.chi_P, 0) * scale,
+  };
+}
+
+function polyakovDirectionSummaries(state, mu) {
+  // Transverse extents for wrap-direction mu (see polyakovCoordinate):
+  // mu=0 -> (Ly, Lz); mu=1 -> (Lx, Lz); mu=2 -> (Lx, Ly).
+  const LA = mu === 0 ? state.Ly : state.Lx;
+  const LB = mu === 2 ? state.Ly : state.Lz;
+  const full = [];
+  const halfA = [];
+  const halfB = [];
+  for (let a = 0; a < LA; a++) {
+    for (let b = 0; b < LB; b++) {
+      const v = polyakovLoopTraceHalf(state, mu, a, b);
+      full.push(v);
+      (((a + b) & 1) === 0 ? halfA : halfB).push(v);
+    }
+  }
+  return {
+    direction: mu,
+    full: finishPolyakovValues(full),
+    halfA: finishPolyakovValues(halfA),
+    halfB: finishPolyakovValues(halfB),
+  };
+}
+
+export function computePolyakovV4(state) {
+  const byDirection = [0, 1, 2].map((mu) => polyakovDirectionSummaries(state, mu));
+  return {
+    full: averagePolyakovSummaries(byDirection, "full"),
+    halfA: averagePolyakovSummaries(byDirection, "halfA"),
+    halfB: averagePolyakovSummaries(byDirection, "halfB"),
+    byDirection,
+  };
+}
+
+// Finite-temperature Polyakov target: wrap ONLY the temporal direction (the
+// short axis) and summarize over the transverse spatial sites. For the v6
+// 12 x 12 x 4 cell the temporal direction is mu = 2 (z = Lz = N_t).
+export function computePolyakovFiniteT(state, temporalMu) {
+  const d = polyakovDirectionSummaries(state, temporalMu);
+  return { full: d.full, halfA: d.halfA, halfB: d.halfB, byDirection: [d] };
 }
 
 export function computeRawMatrixVector(state) {
@@ -443,11 +550,11 @@ export function overrelaxLinkUpdate(state, mu, x, y, z) {
 }
 
 export function combinedSweep(state, beta, overrelaxPerHeatbath, rng, stats) {
-  const L = state.L;
+  const { Lx, Ly, Lz } = state;
   for (let mu = 0; mu < 3; mu++) {
-    for (let x = 0; x < L; x++) {
-      for (let y = 0; y < L; y++) {
-        for (let z = 0; z < L; z++) {
+    for (let x = 0; x < Lx; x++) {
+      for (let y = 0; y < Ly; y++) {
+        for (let z = 0; z < Lz; z++) {
           heatbathLinkUpdate(state, mu, x, y, z, beta, rng, stats);
         }
       }
@@ -455,9 +562,9 @@ export function combinedSweep(state, beta, overrelaxPerHeatbath, rng, stats) {
   }
   for (let k = 0; k < overrelaxPerHeatbath; k++) {
     for (let mu = 0; mu < 3; mu++) {
-      for (let x = 0; x < L; x++) {
-        for (let y = 0; y < L; y++) {
-          for (let z = 0; z < L; z++) {
+      for (let x = 0; x < Lx; x++) {
+        for (let y = 0; y < Ly; y++) {
+          for (let z = 0; z < Lz; z++) {
             overrelaxLinkUpdate(state, mu, x, y, z);
           }
         }
@@ -491,21 +598,42 @@ export function identityGaugeQuaternions(L) {
   return gauges;
 }
 
-function getGauge(gauges, L, x, y, z) {
-  const b = ((wrap(x, L) * L + wrap(y, L)) * L + wrap(z, L)) * 4;
+// Random gauge field on an asymmetric (Lx, Ly, Lz) lattice; layout matches the
+// generalized getGauge. For Lx===Ly===Lz the cubic randomGaugeQuaternions(L)
+// produces an identical field, so the cubic gauge-invariance controls are
+// bit-for-bit unchanged.
+export function randomGaugeQuaternionsAsym(Lx, Ly, Lz, rng) {
+  const gauges = new Float64Array(Lx * Ly * Lz * 4);
+  for (let x = 0; x < Lx; x++) {
+    for (let y = 0; y < Ly; y++) {
+      for (let z = 0; z < Lz; z++) {
+        const q = haarQuaternion(rng);
+        const b = ((x * Ly + y) * Lz + z) * 4;
+        gauges[b] = q[0];
+        gauges[b + 1] = q[1];
+        gauges[b + 2] = q[2];
+        gauges[b + 3] = q[3];
+      }
+    }
+  }
+  return gauges;
+}
+
+function getGauge(gauges, Lx, Ly, Lz, x, y, z) {
+  const b = ((wrap(x, Lx) * Ly + wrap(y, Ly)) * Lz + wrap(z, Lz)) * 4;
   return [gauges[b], gauges[b + 1], gauges[b + 2], gauges[b + 3]];
 }
 
 export function applySU2GaugeTransform(state, gauges) {
-  const L = state.L;
-  const out = { L, links: new Float64Array(state.links.length) };
+  const { L, Lx, Ly, Lz } = state;
+  const out = { L, Lx, Ly, Lz, links: new Float64Array(state.links.length) };
   for (let mu = 0; mu < 3; mu++) {
     const mx = dirX(mu), my = dirY(mu), mz = dirZ(mu);
-    for (let x = 0; x < L; x++) {
-      for (let y = 0; y < L; y++) {
-        for (let z = 0; z < L; z++) {
-          const left = getGauge(gauges, L, x, y, z);
-          const right = qConj(getGauge(gauges, L, x + mx, y + my, z + mz));
+    for (let x = 0; x < Lx; x++) {
+      for (let y = 0; y < Ly; y++) {
+        for (let z = 0; z < Lz; z++) {
+          const left = getGauge(gauges, Lx, Ly, Lz, x, y, z);
+          const right = qConj(getGauge(gauges, Lx, Ly, Lz, x + mx, y + my, z + mz));
           const transformed = qMul(qMul(left, getLink(state, mu, x, y, z)), right);
           setLink(out, mu, x, y, z, transformed);
         }

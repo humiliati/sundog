@@ -86,3 +86,10 @@ the [receipt template](../RECEIPT_TEMPLATE.md).
   disjoint in all three beta values; `gamma_held` correctly failed the
   power self-validation. Quarantine-class, not a `NEG-A`; Stage 2 was not
   scored.
+- [`2026-05-31_SU2_3D_phase2_v5_polyakov_underpowered.md`](2026-05-31_SU2_3D_phase2_v5_polyakov_underpowered.md)
+  - `YM-P2-UNDERPOWERED no_powered_target_in_envelope` for the symmetric
+  Polyakov v5 audit. All candidates (`abs_mean_P`, `mean_abs_P`, `chi_P`)
+  were disjoint, but none was powered in all three beta values; `gamma_held`
+  correctly failed the power self-validation and Polyakov gauge residual max
+  was `1.6653345369377348e-16`. Quarantine-class, not a `NEG-A`; Stage 2 was
+  not scored. The registered continuation is finite-temperature v6.

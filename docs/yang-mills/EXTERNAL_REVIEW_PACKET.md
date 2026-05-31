@@ -5,12 +5,14 @@
 > it easy for a reviewer to say "yes, this null is correctly characterized,"
 > "no, this overstates X," or "you missed standard issue Y."
 
-> **2026-05-31 status addendum:** this packet was drafted before the v4
-> powered-target audit. The v4 receipt landed
-> `YM-P2-UNDERPOWERED no_powered_target_in_envelope`: no candidate target in
-> the 12^3 envelope was both powered and disjoint, and Stage 2 was not scored.
-> Do not send this packet as-is; update the ask from "four-probe bounded null"
-> to "four uninformative nulls plus an underpowered-envelope audit" if external
+> **2026-05-31 status addendum:** this packet was drafted before the v4/v5
+> powered-target audits. Both receipts landed
+> `YM-P2-UNDERPOWERED no_powered_target_in_envelope`: v4 found no powered
+> Wilson-loop target in the 12^3 envelope, and v5 found the symmetric
+> Polyakov targets disjoint but underpowered. Stage 2 was not scored in either
+> audit. Do not send this packet as-is; update the ask from "four-probe bounded
+> null" to "four prior nulls plus two underpowered-envelope audits, with v6
+> finite-temperature Polyakov as the only registered continuation" if external
 > review is still pursued.
 
 **Date:** 2026-05-29

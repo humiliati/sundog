@@ -1,0 +1,29 @@
+{
+  "branch": "YM-P2-UNDERPOWERED no_powered_target_in_envelope",
+  "reason": "no candidate target is powered and disjoint in all three beta values",
+  "phaseVersion": "v5",
+  "rankLocalityScored": false,
+  "poweredTargetAudit": {
+    "path": "aggregation/target_power_audit.csv",
+    "candidatePool": [
+      "abs_mean_P",
+      "mean_abs_P",
+      "chi_P"
+    ],
+    "priorTargetsReportedNotAdmissible": [
+      "gamma_held"
+    ],
+    "admittedCandidateCount": 0,
+    "primaryTarget": null,
+    "gammaHeldPoweredAllBetas": false
+  },
+  "integrity": {
+    "polyakovGaugeResidualMax": 1.6653345369377348e-16,
+    "polyakovGaugeResidualByTarget": {
+      "abs_mean_P": 5.551115123125783e-17,
+      "mean_abs_P": 1.6653345369377348e-16,
+      "chi_P": 1.1102230246251565e-16
+    }
+  },
+  "wallClockSeconds": 2.3039848000000003
+}
