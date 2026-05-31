@@ -25,7 +25,7 @@
     <meta property="og:image:alt" content="Navier-Stokes C1 card: the regime-generality witness gallery card with G=200 and G=300 stats.">
     <meta property="og:url" content="https://sundog.cc/navierstokes">
     <meta property="article:published_time" content="2026-05-30T00:00:00Z">
-    <meta property="article:modified_time" content="2026-05-30T00:00:00Z">
+    <meta property="article:modified_time" content="2026-05-31T00:00:00Z">
     <meta property="article:section" content="Research">
     <meta property="article:tag" content="Navier-Stokes">
     <meta property="article:tag" content="Kolmogorov flow">
@@ -47,7 +47,7 @@
       "description": "The complete Reading-2 regime-2 witness for a Kolmogorov-flow C1 cell now replicates at a second Grashof regime (G=200 and G=300) under a portable objective, dimension-robust and composed at matching epsilon_K. 942,834 unique witness pairs at G=300. Review-gated; not a Clay-problem-adjacent claim, not a Navier-Stokes existence or smoothness claim.",
       "image": "https://sundog.cc/og/navierstokes.png",
       "datePublished": "2026-05-30",
-      "dateModified": "2026-05-30",
+      "dateModified": "2026-05-31",
       "inLanguage": "en",
       "isAccessibleForFree": true,
       "author": {
@@ -481,7 +481,7 @@
 
     <main>
         <section class="nse-hero">
-            <p class="eyebrow">High-Stakes Generality · Navier-Stokes C1 · 2026-05-30</p>
+            <p class="eyebrow">High-Stakes Generality · Navier-Stokes C1 · 2026-05-31</p>
             <h1>A regime-2 witness now holds at two Grashof points.</h1>
             <p class="lede">
                 The Coarse-Graining Postulate 1 reading of a Kolmogorov-flow C1
@@ -500,6 +500,7 @@
                 <span>Regime-Generality v1 · 2026-05-30</span>
                 <span class="pass">PDE-C1-RG-POS at G=200 and G=300</span>
                 <span class="pass">Twin-state certified, 942,834 pairs</span>
+                <span class="pass">near-determination stress test: survived</span>
                 <span class="review">review-gated: external PDE reviewer open</span>
                 <span class="open">C1 unpromoted</span>
             </div>
@@ -751,6 +752,61 @@
             </div>
         </section>
 
+        <section class="nse-section" aria-label="Adversarial robustness — near-determination stress test">
+            <div class="nse-card">
+                <p class="eyebrow">Adversarial Robustness · 2026-05-31 · we tried to demote it</p>
+                <h2>Is the shadow only deciding because it nearly rebuilds the body? We pre-registered a probe to find out &mdash; and it survived.</h2>
+                <p>
+                    The honest limitation above invites the sharpest objection a
+                    reviewer can raise: if the signature reconstructs ~99% of the
+                    energy-carrying state, then "control-sufficient" might just be
+                    "near-determining" wearing a different hat &mdash; the shadow
+                    decides only because it almost <em>is</em> the body. So we
+                    pre-registered a probe designed to <strong>demote</strong> our
+                    own result, with the verdict fixed both ways before it ran.
+                </p>
+                <p>
+                    The test: does control-sufficiency simply <em>track</em> how
+                    predictable an objective is from the signature, across a slate
+                    of six objectives spanning the resolved band down into the
+                    dissipation range? If it did, the separation would be a
+                    closed-subspace artifact. It does <strong>not</strong>. The
+                    signature predicts <em>every</em> objective well &mdash;
+                    fraction-of-variance <code>0.76</code> to <code>1.00</code>,
+                    including the high band and the dissipation range &mdash; yet
+                    control-sufficiency does <strong>not</strong> track that
+                    predictability (rank correlation <code>&minus;0.75</code> and
+                    <code>&minus;1.0</code>, the opposite of the demotion
+                    hypothesis). The decision-observability split is not the
+                    near-determination in disguise.
+                </p>
+                <div class="load-bearing-quote">
+                    We built a probe that could have demolished the result,
+                    pre-registered what each outcome would mean, and ran it. It
+                    came back <em>for</em> the witness. That is the posture this
+                    page wants for review: the most likely objection, tested in
+                    the open before a reviewer has to raise it.
+                </div>
+                <p>
+                    <strong>And the page flags the one loose thread first.</strong>
+                    The slate also surfaced an unexpected, still-open puzzle: a
+                    dissipation-weighted objective (<code>palinstrophy</code>) the
+                    signature predicts <em>perfectly</em> yet is not
+                    control-sufficient for &mdash; predictable but not
+                    controllable, the reverse of the usual story. We do not yet
+                    know whether that is a real phenomenon or a burst artifact; it
+                    is logged as an open thread, not smoothed over. This is
+                    <strong>robustness, not promotion</strong>: it strengthens the
+                    framing for review; it does not move C1's status.
+                </p>
+                <p>
+                    Detail in the
+                    <a href="docs/proof/PDE_C1_OBJECTIVE_OVERLAP_DISCRIMINATOR.md">objective-overlap
+                    discriminator (pre-registration + result &sect;12)</a>.
+                </p>
+            </div>
+        </section>
+
         <section class="nse-section" aria-label="Hypothesis tested and re-aimed">
             <div class="nse-card">
                 <p class="eyebrow">Hypothesis · tested · falsified · re-aimed</p>
@@ -855,7 +911,12 @@
                     (the cell set, integrator self-test, and verdict-rule completeness
                     are all locked before interpretation). <strong>(c) is open and
                     review-gated</strong>: an external PDE reviewer pass on Front-A
-                    is the next promotion step. Final (d) close is coupled to (c). The
+                    is the next promotion step. The reviewer-facing packet now
+                    arrives with the most likely objection &mdash; whether the
+                    split is merely near-determination &mdash; already tested in
+                    the open (see Adversarial Robustness, above), so the ask is a
+                    focused sanity check, not an open investigation. Final (d)
+                    close is coupled to (c). The
                     full twin-state lock receipt and proxy-faithfulness items remain
                     open as part of (c).
                 </p>
@@ -920,6 +981,7 @@
                 <a href="docs/proof/PDE_C1_PROPOSITION.md">PDE C1 Proposition — definitions, claim ledger, glossary</a>
                 <a href="docs/proof/PDE_C1_MZ_ENERGY_BUDGET.md">MZ Energy-Budget Diagnostic — the coupling-slaving mechanism</a>
                 <a href="docs/proof/PDE_C1_SEPARATION_STATEMENT.md">Separation Statement — observability framing (§7)</a>
+                <a href="docs/proof/PDE_C1_OBJECTIVE_OVERLAP_DISCRIMINATOR.md">Objective-Overlap Discriminator — the near-determination stress test</a>
                 <a href="docs/SUNDOG_V_NAVIERSTOKES.md">Sundog · Navier-Stokes Ledger</a>
                 <a href="docs/NAVIERSTOKES_LITPASS_MEMO.md">NSE Lit-Pass Memo (prior-art spine)</a>
                 <a href="docs/proof/PDE_C1_REGIME_GENERALITY_v1.md">PDE C1 Regime-Generality v1 (sign-off disposition)</a>

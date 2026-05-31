@@ -222,6 +222,18 @@ Also useful:
   POSITIVE at `G = 200`); and the adjudicator overturned its **own** first
   mechanical reading on a pre-registered convergence check, so the
   pipeline is not tuned to a desired answer.
+- **Adversarial robustness (2026-05-31), pre-empting the likely first
+  objection ("isn't this just near-determination?"):** we pre-registered and
+  ran a probe designed to *demote* the result — testing whether
+  control-sufficiency is merely `Φ_K` near-determining the whole state, so the
+  objective is "controlled" only because it is predictable. It did **not**
+  reduce to that. Across a 6-objective band/dissipation slate, `Φ_K` predicts
+  every objective well (`R² 0.76–1.00`, including the high-band and dissipation
+  range) yet control-sufficiency does **not** track predictability (Spearman
+  `−0.75 / −1.0`), so the separation is not a closed-subspace artifact. One
+  open puzzle is flagged honestly — a predictable-but-not-control-sufficient
+  dissipation objective (`palinstrophy`). Detail:
+  `PDE_C1_OBJECTIVE_OVERLAP_DISCRIMINATOR.md`.
 - Do **not** soften the scope clauses to make the result sound bigger.
   The two-point / `k_f`-fixed / single-objective-family / finite-Galerkin
   caveats are load-bearing and a reviewer flagging them as missing would
