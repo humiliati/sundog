@@ -182,6 +182,7 @@
     "isotrophy:v13:profile": "python scripts/v13_external_target_search.py profile",
     "isotrophy:v13:probe": "python scripts/v13_external_target_search.py probe",
     "isotrophy:v13:select": "python scripts/v13_external_target_search.py select",
+    "isotrophy:v13a:preflight": "python scripts/v13a_liao2021_preflight.py",
     "deploy": "npm run build && node scripts/deploy-pages.mjs",
     "faraday:phase4": "node scripts/faraday-phase4-battery.mjs",
     "arc:phase0:inventory": "node scripts/arc-phase0-inventory.mjs",
