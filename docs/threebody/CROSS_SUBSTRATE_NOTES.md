@@ -46,10 +46,13 @@ theme-matching.
   Resume needs an adaptive/stiff integrator (the shared C1-high-G / C2 build).
   -> [`../proof/PDE_C2_CELLSET_SABRA_v1.md`](../proof/PDE_C2_CELLSET_SABRA_v1.md).
 - **Yang-Mills (SU(2) 3D, Phase 2) - BOUNDED NULL (shadow carries no separating
-  structure on the cell).** Four consecutive `YM-P2-NEG-A` (bare / smeared /
-  correlator signatures x held-out coupling, plus spatial variance) all within
-  +-0.04 of chance: the gauge-invariant signature does not rank the coupling
-  here. Bounded cell-local null, lane PAUSED; external-review packet drafted.
+  structure on the cell).** Five `YM-P2-NEG-A` reads now span the original
+  bare / smeared / correlator signatures against held-out coupling/spatial
+  variance plus the amended finite-T Polyakov target. The v4/v5 powered-target
+  audits were underpowered and the first v6 pilot was an unbracketed-grid void,
+  but v6a supplied the missing powered+disjoint target and still scored at or
+  below controls. Bounded cell-local null, lane PAUSED; external-review packet
+  needs the v6a addendum before send.
   -> [`../SUNDOG_V_YANG_MILLS.md`](../SUNDOG_V_YANG_MILLS.md),
   [`../yang-mills/receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md`](../yang-mills/receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md).
 - **Riemann (Path i) - VACUOUS (rigidity trivially satisfied).** The
@@ -391,6 +394,33 @@ construction* — high-dim RL / LLM agents (high-dim observations or model
 states) — which is the structural property all three measured substrates
 lack.** Measured detail: `sundog/docs/proof/PDE_C1_NONMARGINAL_PROBE.md`,
 `PDE_C1_PROPOSITION.md`, `PDE_C2_SHELL_DIMENSIONALITY_PROBE.md`.
+
+**The prediction tested (2026-05-30): first de-confounded *control* regime-2 —
+on an LLM-like substrate, at low dimensionality.** The "where it would live"
+claim above was built and probed in the new `chatv2` lane
+(`sundog/docs/chatv2/`): a from-scratch transformer trained generatively on a
+synthetic `H`-latent channel task, with the C1/Mesa fingerprint ported to its
+residual stream. Two methodology catches came first and both matter for reading
+the result: (i) the initial run looked *marginal* but was a **variance-masking
+artifact** — transformer "massive-activation" outlier features hid the latent
+code from the variance metrics (`eff_dim ≈ 1.6` while 16 latents were linearly
+decodable); an information-basis re-measurement (`d_dec`, leak, body_carry)
+overturned it. (ii) The first computed-latent substrate failed a **mandatory
+linear-input-probe pre-check** (the latents were passively input-decodable — the
+same confound that makes the result trivial); a pair-XOR latent (provably not
+linearly decodable) fixed it. **With both controlled, the generative body is
+state-insufficient-yet-control-sufficient with a clean *objective-driven*
+contrast: the control-only twin fails to build the non-decision state
+(`body_carry` ≈ chance) where generative training builds it (~0.9) — SHARP at
+`H = 2, 4`.** This is the **first sharp control regime-2 in the portfolio** — the
+thing C1 / Mesa / shell could not show. **Honest bounds:** it holds only at *low*
+dimensionality (2–4); the genuinely high-dimensional regime (`H ≥ 8`) is **blocked
+by a learnability wall** (the small model fails to learn the pair-XOR aggregation
+— `eval_loss ≈ chance`, an *undertraining* F3′, **not** marginality), so a
+*high-dim* resisting body is still **unproven, not refuted**; it is a synthetic
+toy, not a real LLM; and it is **unpromoted**. Detail:
+`sundog/docs/chatv2/PHASE0_2_COMPUTED_LATENTS.md` (+ `PHASE0_MINIMUM_FALSIFIABLE.md`
+Amendment 1).
 
 ### 6.4 The math-or-Buddha epistemic stance
 

@@ -218,20 +218,20 @@
       "category": "math-ledger",
       "status": "review-gated",
       "transferQuestion": "Can a compact gauge-invariant signature preserve finite-lattice observable structure beyond controls?",
-      "currentRead": "Four pre-registered probes (3 signature vocabs x 2 target classes) on SU(2) 3D 12^3 all landed YM-P2-NEG-A; bounded-null synthesis filed.",
-      "blocker": "External lattice-gauge-theorist sanity check before any public claim beyond bounded-null discipline.",
-      "nextAction": "Send the external-review email, record the response; any reopened probe requires fresh external scientific motivation and a new dated preregistration.",
+      "currentRead": "Escalated from four uninformative Wilson-target nulls to a powered, disjoint finite-T Polyakov order-parameter test - the compact signature still showed no rank-locality. An informative bounded null.",
+      "blocker": "External lattice-gauge-theorist sanity check: is the powered finite-T test sound, and is the null expected on gauge-theory grounds?",
+      "nextAction": "Send the re-pointed external-review packet to a lattice gauge theorist; any reopened probe requires fresh external scientific motivation and a new dated preregistration.",
       "publicBoundary": "No Yang-Mills existence, mass-gap, confinement, continuum-limit, or Clay-problem claim is licensed.",
-      "chartHeadline": "4 probes, 1 bounded null",
-      "pageHeadline": "Four pre-registered probes, one bounded cell-local null on SU(2) 3D 12^3 - lattice-gauge review packet drafted.",
+      "chartHeadline": "powered test, informative null",
+      "pageHeadline": "An audit-first escalation to a powered, disjoint finite-temperature Polyakov order-parameter test on SU(2) 2+1D - the small-loop signature still showed no rank-locality beyond controls.",
       "metrics": [
         {
-          "label": "phase 2 probes",
-          "value": 4,
-          "unit": "probes"
+          "label": "target power (ICC)",
+          "value": 0.965,
+          "unit": "fraction"
         },
         {
-          "label": "bounded nulls",
+          "label": "informative null",
           "value": 1,
           "unit": "synthesis"
         },
@@ -245,15 +245,16 @@
         "docs/SUNDOG_V_YANG_MILLS.md",
         "docs/YANG_MILLS_LITPASS_MEMO.md",
         "docs/prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md",
-        "docs/prereg/yang-mills/P0_AMENDMENT_2026-05-29_ape_smearing.md",
-        "docs/yang-mills/receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md",
+        "docs/prereg/yang-mills/P0_AMENDMENT_2026-05-31_polyakov.md",
+        "docs/yang-mills/receipts/2026-05-31_SU2_3D_phase2_informative_null_synthesis.md",
+        "docs/yang-mills/receipts/2026-05-31_SU2_3D_phase2_v6a_finite_t_polyakov_neg_a.md",
         "docs/yang-mills/EXTERNAL_REVIEW_PACKET.md",
         "docs/yang-mills/EXTERNAL_REVIEW_EMAIL_DRAFT.md"
       ],
       "svgFocus": [
         "status-card",
         "review-gate",
-        "bounded-null-count"
+        "powered-informative-null"
       ]
     },
     {
