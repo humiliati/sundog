@@ -91,7 +91,13 @@ pass, privilege audit green, 0/2304 false accepts, 0/453 each spoof channel,
 5/5 integrity probes, 0/768 OOP accepts, `capacity_threshold =
 not_estimated`. Wall-time remains **diagnostic-only** (`C_total_signature =
 1247.66 ms`, rollout ratio 1603x, full-state ratio 133.65x); the v6 positive
-does not reinstate any withdrawn wall-time claim.
+does not reinstate any withdrawn wall-time claim. Phase 2 mesa bridge v0 then
+executed as a **named quarantine**: the raw-log bridge implementation works on
+available Medium cells and passes the same-artifact op-count comparator
+(0.734877), but the registered raw-recompute gate fails because Small-tier
+source manifests have `trial_logs_saved=false`; signature accept floor is 2/4
+against a required 3/4. Fixed-attractor false accepts, capacity-breach false
+accepts, and mixed-objective laundering are all 0.
 No complexity-theoretic result claimed. This document is a research bridge from
 Sundog mesa, ARC, Faraday, and signature-sufficiency work into the language of
 verification hardness, certificates, reductions, promise envelopes, and
@@ -424,13 +430,20 @@ Spec draft:
 
 Goal: connect the toy verifier to the mesa lane.
 
+Status: spec/charter opened, v0 execution slate frozen, and v0 executed as a
+named quarantine; see
+[`pvnp/PHASE2_MESA_BRIDGE.md`](pvnp/PHASE2_MESA_BRIDGE.md) and
+[`pvnp/PHASE2_MESA_BRIDGE_V0_SLATE.md`](pvnp/PHASE2_MESA_BRIDGE_V0_SLATE.md).
+The next step is a v1 slate for either raw-logged Small reruns or an explicit
+Medium-only bridge.
+
 Deliverables:
 
 - Map each mesa controller family to a policy-verification object:
   HC-Signature, L-Signature, L-Reward, L-Mixed, Oracle.
 - Define what a verifier must detect:
   - proxy collapse;
-  - reward-channel dependence;
+  - signature-signal-control vs fixed-attractor control;
   - decoy-field capture;
   - sensor-tier degradation;
   - high-capacity inversion.
@@ -641,8 +654,11 @@ baselines, reproduced metrics, and archived artifacts.
   opened after the corrected v5 named quarantine; v6 earned the
   bounded-positive receipt.
 - [`pvnp/PHASE2_MESA_BRIDGE.md`](pvnp/PHASE2_MESA_BRIDGE.md): Phase 2 mesa
-  verification bridge spec / charter (opened 2026-05-31; no v0 slate frozen
-  yet).
+  verification bridge spec / charter (opened 2026-05-31).
+- [`pvnp/PHASE2_MESA_BRIDGE_V0_SLATE.md`](pvnp/PHASE2_MESA_BRIDGE_V0_SLATE.md):
+  frozen first mesa-bridge execution slate.
+- [`pvnp/receipts/2026-05-31_phase2_mesa_bridge_v0.md`](pvnp/receipts/2026-05-31_phase2_mesa_bridge_v0.md):
+  Phase 2 v0 named-quarantine receipt.
 - [`pvnp/RECEIPT_TEMPLATE.md`](pvnp/RECEIPT_TEMPLATE.md): receipt template
   for phase and probe results.
 - [`pvnp/receipts/README.md`](pvnp/receipts/README.md): receipt index —

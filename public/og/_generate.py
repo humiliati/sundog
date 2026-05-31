@@ -332,7 +332,7 @@ def viz_generality_matrix() -> str:
         (660, 140, 230, 130, "Navier-Stokes C1",  "942,834 WITNESS PAIRS",  "#FFF4D6", "#B8831E", "#684811", True),
         (910, 140, 230, 130, "Riemann",           "3 LANES, 3 BOUNDED NULLS", "#FFFFFF", "#B8831E", "#684811", False),
         (660, 290, 230, 130, "Yang-Mills",        "4 PROBES, 1 BOUNDED NULL", "#FFFFFF", "#B8831E", "#684811", False),
-        (910, 290, 230, 130, "P-vs-NP",           "SAFETY GREEN, COST HOLD",  "#FFFFFF", "#B53A2C", "#7A1F14", False),
+        (910, 290, 230, 130, "P-vs-NP",           "OP-COUNT POSITIVE",        "#FFFFFF", "#2F7D4F", "#214B36", False),
         (660, 440, 230, 95,  "ARC-AGI",           "PHASE 3E DESIGN HOLD",     "#EDF2F7", "#64748B", "#37465A", False),
         (910, 440, 230, 95,  "Three-Body 15C",    "COMPUTE-BLOCKED",          "#EDF2F7", "#64748B", "#37465A", False),
     ]
@@ -352,7 +352,7 @@ def viz_generality_matrix() -> str:
                 "Navier-Stokes C1": ["Reading-2 witness G=200+300", "deep dive at /navierstokes"],
                 "Riemann":          ["no structural-zero edge", "external review filed"],
                 "Yang-Mills":       ["YM-P2-NEG-A across slate", "no mass-gap claim"],
-                "P-vs-NP":          ["v0-v5, 0 false accepts", "2 required reruns"],
+                "P-vs-NP":          ["v0-v6, 0 false accepts", "op-count positive"],
             }.get(label, ["", ""])
             parts.append(f'<text x="{x + 14}" y="{y + 102}" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#40505C">{note[0]}</text>')
             parts.append(f'<text x="{x + 14}" y="{y + 118}" font-family="Courier New, monospace" font-size="10" fill="#1A3A52">{note[1]}</text>')
@@ -481,17 +481,34 @@ def render(name: str) -> pathlib.Path:
     )
     svg_path = OUT_DIR / cfg["filename"].replace(".png", ".svg")
     png_path = OUT_DIR / cfg["filename"]
-    svg_path.write_text(svg)
+    svg_path.write_text(svg, encoding="utf-8")
     # CairoSVG rasterize (ImageMagick was compiled --without-rsvg, so its
     # internal MSVG parser fails on stop-opacity / fill-opacity, producing
-    # solid-colour backgrounds. CairoSVG is a real SVG renderer.)
-    import cairosvg
-    cairosvg.svg2png(
-        bytestring=svg.encode("utf-8"),
-        write_to=str(png_path),
-        output_width=1200,
-        output_height=630,
-    )
+    # solid-colour backgrounds. If CairoSVG is absent, fall back to the repo's
+    # local sharp install.
+    try:
+        import cairosvg
+        cairosvg.svg2png(
+            bytestring=svg.encode("utf-8"),
+            write_to=str(png_path),
+            output_width=1200,
+            output_height=630,
+        )
+    except ModuleNotFoundError:
+        subprocess.run(
+            [
+                "node",
+                "-e",
+                (
+                    "const sharp=require('sharp');"
+                    "sharp(process.argv[1]).resize(1200,630).png().toFile(process.argv[2])"
+                    ".catch(e=>{console.error(e);process.exit(1)})"
+                ),
+                str(svg_path),
+                str(png_path),
+            ],
+            check=True,
+        )
     return png_path
 
 

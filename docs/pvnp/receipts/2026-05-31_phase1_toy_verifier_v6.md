@@ -67,6 +67,12 @@ the v6 slate.
 | Short-circuit instrumentation | pass | pass | pass |
 | Wall-time status | diagnostic-only | diagnostic-only | pass |
 
+Population-matching footnote: the reported numerator counts 2496 signature
+calls, including 64 calibration environments x 3 policies, while the rollout
+denominator counts 2304 measurement calls. This mismatch is conservative: it
+inflates the reported 0.948587 ratio; the measurement-only recomputation is
+approximately 0.879 and remains below the registered <= 1.0 gate.
+
 Diagnostic wall-time values:
 
 | Quantity | Observed |
