@@ -128,6 +128,17 @@ Filed receipts:
   passes at 0.734877. Not bounded-positive: raw provenance and signature accept
   floor fail for the registered v0 population.
 
+- [`2026-05-31_phase2_mesa_bridge_v1.md`](2026-05-31_phase2_mesa_bridge_v1.md):
+  Phase 2 provenance-repair execution; verdict = **bounded positive under the
+  frozen v1 mesa-bridge contract**. The run regenerates the missing Small raw
+  logs, preserves the original 15-cell v0 population, recomputes 15/15 cells
+  from per-seed raw logs, accepts 4/4 signature cells, and closes the registered
+  fixed-attractor, capacity-breach, and mixed-objective falsifiers. The
+  same-artifact raw-trace op-count ratio passes at 0.73760368; wall-time remains
+  diagnostic-only. Boundary: local reward-blind bridge receipt only, not
+  general mesa verification, wall-time cheapness, body-resistance, or P-vs-NP
+  progress.
+
 Receipt filenames should use:
 
 `YYYY-MM-DD_phase-or-probe_short-slug.md`
