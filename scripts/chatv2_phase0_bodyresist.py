@@ -375,18 +375,22 @@ def measure_stage(cfg, out, precheck=None):
         t = np.load(bdir / f"H{H}_twin.npz", allow_pickle=True)
         gfp = fingerprint(g["bodies"], g["z"], cfg)
         tfp = fingerprint(t["bodies"], t["z"], cfg)
+        gmeta = json.loads(str(g["meta"]))
+        # UNLEARNED guard: an H whose gen never left chance is not a body-resistance
+        # read at all (F3'), not a "marginal" -- never conflate the two.
+        learned = gmeta["eval_loss"] < float(np.log(2.0)) - 0.02
         bc_ok = (H > 1 and gfp["body_carry"] >= cfg.body_carry_min
                  and (gfp["body_carry"] - tfp["body_carry"]) >= cfg.body_carry_gap_min)
-        sharp = bool(gfp["d_dec"] >= cfg.d_dec_frac_min * H
+        sharp = bool(learned and gfp["d_dec"] >= cfg.d_dec_frac_min * H
                      and gfp["z1_acc"] >= cfg.z1_ctrl_min
                      and gfp["cross_latent_leak"] <= cfg.leak_max and bc_ok)
-        records.append({"H": H, "generative": gfp, "twin": tfp,
-                        "gen_train": json.loads(str(g["meta"])),
-                        "twin_train": json.loads(str(t["meta"])), "sharp": sharp})
-        print(f"[H={H:>2}] gen: d_dec={gfp['d_dec']:.1f}/{H} z1={gfp['z1_acc']:.2f} "
+        status = "UNLEARNED" if not learned else ("SHARP" if sharp else "MARGINAL")
+        records.append({"H": H, "generative": gfp, "twin": tfp, "gen_train": gmeta,
+                        "twin_train": json.loads(str(t["meta"])),
+                        "sharp": sharp, "learned": learned, "status": status})
+        print(f"[H={H:>2}] {status:<9} gen: d_dec={gfp['d_dec']:.1f}/{H} z1={gfp['z1_acc']:.2f} "
               f"leak={gfp['cross_latent_leak']:.2f} body_carry={gfp['body_carry']:.2f} "
-              f"(twin {tfp['body_carry']:.2f}) | outlier(carry={gfp['outlier_carries_latents']:.2f} "
-              f"survive={gfp['latents_survive_outlier_removal']:.2f}) | SHARP={sharp}", flush=True)
+              f"(twin {tfp['body_carry']:.2f}) eval_loss={gmeta['eval_loss']:.3f}", flush=True)
     sharp_Hs = [r["H"] for r in records if r["sharp"]]
     H_star = min(sharp_Hs) if sharp_Hs else None
     verdict = "SHARP" if H_star is not None else "MARGINAL"
@@ -431,6 +435,11 @@ def main():
     ap.add_argument("--stage", choices=["train", "measure", "all"], default="all")
     ap.add_argument("--latent", choices=["bias", "computed"], default=None)
     ap.add_argument("--window", type=int, default=None)
+    ap.add_argument("--h-sweep", default=None, help="comma-sep H values, e.g. 8 or 2,4,8")
+    ap.add_argument("--d-model", type=int, default=None)
+    ap.add_argument("--max-steps", type=int, default=None)
+    ap.add_argument("--delta", type=float, default=None)
+    ap.add_argument("--bits-per-channel", type=int, default=None)
     ap.add_argument("--out", default=None)
     ap.add_argument("--seed", type=int, default=0)
     args = ap.parse_args()
@@ -440,6 +449,16 @@ def main():
         cfg.latent = args.latent
     if args.window:
         cfg.window = args.window
+    if args.h_sweep:
+        cfg.h_sweep = [int(x) for x in args.h_sweep.split(",")]
+    if args.d_model:
+        cfg.d_model = args.d_model
+    if args.max_steps:
+        cfg.max_steps = args.max_steps
+    if args.delta is not None:
+        cfg.delta = args.delta
+    if args.bits_per_channel:
+        cfg.bits_per_channel = args.bits_per_channel
     torch.set_num_threads(4)
     out = pathlib.Path(args.out) if args.out else pathlib.Path(f"results/chatv2/phase0-{args.mode}")
     run(cfg, out)
