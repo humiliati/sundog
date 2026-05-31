@@ -145,6 +145,7 @@ pin it down:
 | robustness — **N axis** | **DEMONSTRATED** (N=16→24) | all 3 clauses persist, ~identical numbers despite `Q_K` 422→1070 DOF ([`PDE_C1_ROBUSTNESS_WAVE.md`](PDE_C1_ROBUSTNESS_WAVE.md)); N=32 trend pending |
 | robustness — **K-window** | **DEMONSTRATED** (`K∈{2,3,4}`) | all clauses hold at K=2/3/4; window has no upper bracket reached (twins abundant at K=4) |
 | robustness — **objective family** | **DEMONSTRATED** (energy + enstrophy) | clause (ii) POSITIVE under a `Z_low` enstrophy trigger, `D_witness=0.035` |
+| robustness — **objective-overlap (near-determination stress test)** | **DEMONSTRATED** | (ii) does **not** reduce to `Φ_K`-predictability: across a 6-objective band/dissipation slate, control-sufficiency does not track `R²(M\|Φ_K)` (Spearman −0.75 / −1.0) and `Φ_K` predicts *every* objective 0.76–1.00 (incl. high-band + dissipation) — so the separation is not a closed-subspace / AIM artifact. ([`PDE_C1_OBJECTIVE_OVERLAP_DISCRIMINATOR.md`](PDE_C1_OBJECTIVE_OVERLAP_DISCRIMINATOR.md)). Honest open thread: a predictable-but-not-control-sufficient dissipation objective (`palinstrophy`). |
 | robustness — projection, N=32 trend, `m_det` upper bracket | **OPEN** | registered follow-ons (un-run) |
 
 ## 7. Glossary to accepted PDE / control language
