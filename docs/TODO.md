@@ -75,8 +75,8 @@ source of truth.
   proposal after absolute fibers stayed sparse on the expanded 108-task
   register.
 - **P-vs-NP Phase 2 mesa bridge** - Phase 2 v0 named-quarantined on raw-log
-  provenance; next move is a v1 slate choosing raw-logged Small rerun vs
-  Medium-only bridge.
+  provenance; v1 slate is frozen for implementation with raw-logged Small
+  reruns.
 
 ### `operator-blocked` — needs a human artifact, review, or measurement
 
@@ -464,9 +464,9 @@ them.
 
 Next actions:
 
-1. Open a Phase 2 v1 slate.
-2. Choose the v1 shape before execution: raw-logged Small rerun, or explicitly
-   Medium-only bridge.
+1. Implement the frozen Phase 2 v1 bridge reader and npm wiring.
+2. Run the raw-logged Small rerun under the frozen v1 contract, inline if the
+   current timing remains under the repo's approximately 10-minute rule.
 3. Carry forward the v6 boundary verbatim: op-count positive, wall-time
    diagnostic-only, no complexity-theoretic claim.
 4. Do not use the v3/v5 favorable wall-time samples as evidence.
