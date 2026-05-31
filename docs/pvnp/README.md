@@ -52,8 +52,11 @@ Phase specs:
   mesa battery regeneration.
 - [`PHASE2_MESA_BRIDGE_V1_SLATE.md`](PHASE2_MESA_BRIDGE_V1_SLATE.md) -
   frozen provenance-repair slate after the v0 named quarantine. Chooses
-  raw-logged Small reruns over Medium-only downscope; post-freeze
-  implementation is next.
+  raw-logged Small reruns over Medium-only downscope.
+- [`PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md`](PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md) -
+  opened capacity-relative one-wayness slate after the Phase 2 v1 bounded
+  positive. Registers the attacker/capacity battery for review before any
+  execution.
 
 Templates:
 
@@ -71,7 +74,8 @@ Receipts:
 
 - [`receipts/README.md`](receipts/README.md) - receipt index, including the
   Phase 1 v0-v5 named-quarantine receipts, the v6 op-count positive receipt,
-  and the Phase 2 v0 mesa-bridge named quarantine.
+  the Phase 2 v0 mesa-bridge named quarantine, and the Phase 2 v1
+  mesa-bridge bounded-positive receipt.
 
 Current state:
 
@@ -146,4 +150,17 @@ Current state:
   [`PHASE2_MESA_BRIDGE_V1_SLATE.md`](PHASE2_MESA_BRIDGE_V1_SLATE.md) selects
   the raw-logged Small rerun repair, preserves the v0 population and
   thresholds, records full-size timing probes, and stages exact Phase 4 rerun
-  commands. No v1 execution has run.
+  commands.
+- Phase 2 mesa bridge v1 executed: 2026-05-31. Verdict = bounded positive
+  under the frozen v1 mesa-bridge contract. The run regenerates 6/6 Small raw
+  policy batteries, preserves the original 15-cell population, recomputes
+  15/15 cells from per-seed raw logs, accepts 4/4 signature cells, closes the
+  registered fixed-attractor / capacity-breach / mixed-objective falsifiers,
+  and passes the same-artifact raw-trace op-count comparator (`0.73760368`).
+  Wall-time remains diagnostic-only; the result is not mesa-general,
+  body-resistance, wall-time-cheap, or P-vs-NP evidence.
+- Phase 3 capacity-relative one-wayness v0 slate opened for review:
+  2026-05-31. The slate carries forward the v1 caveats as registered Phase 3
+  design constraints: Small-tier near-threshold fragility, signature-only vs
+  full-bridge separation, and conservative objective-conflict flag overfire.
+  No attacker execution has run; freeze review is next.
