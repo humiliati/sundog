@@ -1,0 +1,148 @@
+{
+  "lane": "chatv2",
+  "phase": "0.2",
+  "verdict": "MARGINAL",
+  "H_star": null,
+  "precheck": {
+    "1": 0.5175000000000001,
+    "2": 0.5125
+  },
+  "cfg": {
+    "mode": "smoke",
+    "stage": "all",
+    "latent": "computed",
+    "window": 2,
+    "h_sweep": [
+      1,
+      2
+    ],
+    "bits_per_channel": 12,
+    "delta": 0.35,
+    "d_model": 64,
+    "n_layers": 2,
+    "n_heads": 4,
+    "lr": 0.0003,
+    "batch": 128,
+    "eval_batch": 512,
+    "max_steps": 400,
+    "eval_every": 100,
+    "patience": 4,
+    "n_fingerprint": 800,
+    "k_outlier": 2,
+    "seed": 0,
+    "d_dec_frac_min": 0.5,
+    "z1_ctrl_min": 0.7,
+    "leak_max": 0.58,
+    "body_carry_min": 0.7,
+    "body_carry_gap_min": 0.2,
+    "precheck_max": 0.6
+  },
+  "records": [
+    {
+      "H": 1,
+      "generative": {
+        "body_layer": 2,
+        "zr_by_layer": [
+          0.5,
+          0.855,
+          0.926
+        ],
+        "d_dec": 1.0,
+        "eff_dim_raw": 2.01,
+        "eff_dim_robust": 3.336,
+        "z1_acc": 0.9263,
+        "z_recover_mean": 0.9263,
+        "body_carry": NaN,
+        "z_recover_each": [
+          0.9263
+        ],
+        "cross_latent_leak": NaN,
+        "outlier_carries_latents": 0.5012,
+        "latents_survive_outlier_removal": 0.9225
+      },
+      "twin": {
+        "body_layer": 2,
+        "zr_by_layer": [
+          0.5,
+          0.846,
+          0.964
+        ],
+        "d_dec": 1.0,
+        "eff_dim_raw": 1.958,
+        "eff_dim_robust": 4.436,
+        "z1_acc": 0.9637,
+        "z_recover_mean": 0.9637,
+        "body_carry": NaN,
+        "z_recover_each": [
+          0.9637
+        ],
+        "cross_latent_leak": NaN,
+        "outlier_carries_latents": 0.9637,
+        "latents_survive_outlier_removal": 0.5025
+      },
+      "gen_train": {
+        "eval_loss": 0.6045739650726318,
+        "bayes_floor": 0.557928134182968,
+        "steps": 400
+      },
+      "twin_train": {
+        "train_acc_z1": 0.9453125
+      },
+      "sharp": false
+    },
+    {
+      "H": 2,
+      "generative": {
+        "body_layer": 2,
+        "zr_by_layer": [
+          0.507,
+          0.709,
+          0.772
+        ],
+        "d_dec": 1.984,
+        "eff_dim_raw": 1.409,
+        "eff_dim_robust": 4.509,
+        "z1_acc": 0.7538,
+        "z_recover_mean": 0.7725,
+        "body_carry": 0.7913,
+        "z_recover_each": [
+          0.7538,
+          0.7913
+        ],
+        "cross_latent_leak": 0.5825,
+        "outlier_carries_latents": 0.5188,
+        "latents_survive_outlier_removal": 0.7675
+      },
+      "twin": {
+        "body_layer": 2,
+        "zr_by_layer": [
+          0.507,
+          0.745,
+          0.781
+        ],
+        "d_dec": 1.942,
+        "eff_dim_raw": 1.843,
+        "eff_dim_robust": 3.678,
+        "z1_acc": 0.9475,
+        "z_recover_mean": 0.7806,
+        "body_carry": 0.6138,
+        "z_recover_each": [
+          0.9475,
+          0.6138
+        ],
+        "cross_latent_leak": 0.5375,
+        "outlier_carries_latents": 0.73,
+        "latents_survive_outlier_removal": 0.5675
+      },
+      "gen_train": {
+        "eval_loss": 0.6836683750152588,
+        "bayes_floor": 0.557928134182968,
+        "steps": 400
+      },
+      "twin_train": {
+        "train_acc_z1": 0.953125
+      },
+      "sharp": false
+    }
+  ]
+}
