@@ -1,0 +1,92 @@
+{
+  "Q5_plaquette_in_family": {
+    "beta_2.0": {
+      "observed_W11": 0.45709,
+      "bessel_benchmark_I2_over_I1": 0.43313,
+      "observed_minus_benchmark": 0.02396,
+      "in_family": true
+    },
+    "beta_2.4": {
+      "observed_W11": 0.52875,
+      "bessel_benchmark_I2_over_I1": 0.49351,
+      "observed_minus_benchmark": 0.03523,
+      "in_family": true
+    },
+    "beta_2.8": {
+      "observed_W11": 0.59671,
+      "bessel_benchmark_I2_over_I1": 0.5451,
+      "observed_minus_benchmark": 0.05161,
+      "in_family": false
+    }
+  },
+  "Q1_disjointness_and_target_validity": {
+    "beta_2.0": {
+      "n": 32,
+      "clamp_fraction": 0.344,
+      "gamma_clamped_mean": 4.11,
+      "gamma_unclamped_mean": 0.387,
+      "LEAKAGE_max_abs_corr_sig_vs_gamma": 0.251,
+      "LEAKAGE_cv_r2_gamma_on_signature": -0.858,
+      "LEAKAGE_adj_r2_gamma_on_signature": -0.094,
+      "VALIDITY_r2_gamma_on_clamp_indicator": 0.992,
+      "VALIDITY_r2_gamma_on_W33": 0.613,
+      "VALIDITY_corr_gamma_W33": -0.783,
+      "W33_ensemble_mean": 0.00312,
+      "W33_ensemble_sd": 0.00814,
+      "W33_signal_tstat_vs_zero": 2.17,
+      "W33_per_config_SNR": 0.384,
+      "clamp_fraction_by_gamma_tertile": {
+        "0": 0.0,
+        "1": 0.0,
+        "2": 1.0
+      }
+    },
+    "beta_2.4": {
+      "n": 32,
+      "clamp_fraction": 0.219,
+      "gamma_clamped_mean": 4.294,
+      "gamma_unclamped_mean": 0.557,
+      "LEAKAGE_max_abs_corr_sig_vs_gamma": 0.384,
+      "LEAKAGE_cv_r2_gamma_on_signature": -0.428,
+      "LEAKAGE_adj_r2_gamma_on_signature": 0.092,
+      "VALIDITY_r2_gamma_on_clamp_indicator": 0.982,
+      "VALIDITY_r2_gamma_on_W33": 0.54,
+      "VALIDITY_corr_gamma_W33": -0.735,
+      "W33_ensemble_mean": 0.00491,
+      "W33_ensemble_sd": 0.00621,
+      "W33_signal_tstat_vs_zero": 4.48,
+      "W33_per_config_SNR": 0.792,
+      "clamp_fraction_by_gamma_tertile": {
+        "0": 0.0,
+        "1": 0.0,
+        "2": 0.636
+      }
+    },
+    "beta_2.8": {
+      "n": 32,
+      "clamp_fraction": 0.062,
+      "gamma_clamped_mean": 4.394,
+      "gamma_unclamped_mean": 0.438,
+      "LEAKAGE_max_abs_corr_sig_vs_gamma": 0.29,
+      "LEAKAGE_cv_r2_gamma_on_signature": -0.85,
+      "LEAKAGE_adj_r2_gamma_on_signature": -0.156,
+      "VALIDITY_r2_gamma_on_clamp_indicator": 0.991,
+      "VALIDITY_r2_gamma_on_W33": 0.44,
+      "VALIDITY_corr_gamma_W33": -0.663,
+      "W33_ensemble_mean": 0.01556,
+      "W33_ensemble_sd": 0.00781,
+      "W33_signal_tstat_vs_zero": 11.28,
+      "W33_per_config_SNR": 1.994,
+      "clamp_fraction_by_gamma_tertile": {
+        "0": 0.0,
+        "1": 0.0,
+        "2": 0.182
+      }
+    },
+    "pooled_within_beta_demeaned": {
+      "n": 96,
+      "LEAKAGE_cv_r2_gamma_on_signature": -0.208,
+      "LEAKAGE_adj_r2_gamma_on_signature": -0.028
+    }
+  }
+}
