@@ -213,6 +213,72 @@ Implemented in `scripts/chatv2_phase0_bodyresist.py`; command
   one of F1–F4 (re-scope / re-pick, per the named disposition). **No public
   surface; no promotion.**
 
+## 9. Amendment 1 (2026-05-30) — variance-masking artifact → information-basis re-measurement
+
+**What the first full run did.** Completed (5 `H` × {gen, twin}, ~3.8 h under
+CPU contention) and printed `MARGINAL / H*=None`. **That verdict is a
+measurement artifact, not a result** — caught by an internal contradiction:
+at `H=16` the generative model reports `eff_dim ≈ 1.6`, yet **all 16 independent
+latents are linearly decodable from that same body** (`z_recover` 0.78–0.95,
+mean 0.85). You cannot read 16 independent bits out of a 1.6-dimensional
+representation. So `eff_dim` (variance participation ratio) was not measuring the
+body's intrinsic dimensionality.
+
+**Root cause.** Three of the four fingerprint measures are **variance-based**
+(`eff_dim` = PR, `k_control` = top-variance-PC sweep, `FVE` = top-variance-PC
+targets). They are dominated by a few very-high-variance residual-stream
+directions ("massive activations" / outlier features) and mask the genuinely
+high-dimensional latent code, which lives in lower-variance directions that the
+variance-agnostic logistic probes (`z_recover`) read fine. `FVE` even went
+non-monotonic across `H` (0.71 → 0.15 → 0.76 → 0.002), confirming it was reading
+the wrong subspace. The variance-basis assumption held for C1's Fourier modes
+and Mesa's tiny net (variance ≈ information there); it **breaks on an LLM-like
+body**.
+
+**Clean signal already visible** (variance-agnostic, trustworthy): the
+generative body carries **all** `H` latents, and the **control-only twin carries
+only `z_1`** — at `H=16`, gen reads the other latents at ~0.86 while the twin
+reads them at ~0.64 (≈ chance). Same data, same architecture: training objective
+drives what the body carries. The body-resistance *mechanism* the lane bet on
+showed up — just not through the masked metrics.
+
+**The outlier directions are NOT assumed to be nuisance** (owner's
+atmospheric-medium hypothesis: the high-variance feature may be the medium that
+makes the latent "sundog" visible — in the agent's senses circuit the way ice
+crystals are in the sky — not contamination). The amendment therefore
+*characterizes* them rather than discarding them, asking which of three they are:
+- **the sundog** — the outlier directions themselves carry the latents;
+- **the parhelion's atmosphere** — latents collapse when the outliers are removed
+  (load-bearing medium);
+- **separate weather** — latents survive outlier removal (independent structure).
+
+**New information-basis fingerprint** (replaces the masked measures; `z_recover`
+retained):
+- `d_dec` — **decodable dimensionality** = effective rank (singular-value
+  participation ratio) of the stacked per-latent linear-readout directions
+  `W = [w_1…w_H]`. Faithful high-dim code → `d_dec → H`; collapsed/entangled →
+  `d_dec ≪ H`. *This is the un-masked replacement for `eff_dim`.*
+- `eff_dim_robust` — variance PR **after projecting out the top-`k` outlier
+  directions** (demonstrates the masking: expect `eff_dim_raw ≈ 1.6` →
+  `eff_dim_robust` large).
+- `cross_latent_leak` — predict the *other* latents from the **1-D `z_1`
+  shadow**; ≈ chance (0.5) ⇒ state-insufficient (**body resists**), > chance ⇒
+  entangled (marginal). *This is the un-masked replacement for `FVE`.*
+- `outlier_carries_latents` / `latents_survive_outlier_removal` — the three-way
+  sundog/atmosphere/weather test above.
+
+**Revised sharpness verdict (per `H`, generative):** SHARP iff
+`d_dec ≥ H/2` (latent code high-dim and growing) ∧ `z1_acc ≥ 0.70`
+(control-sufficient) ∧ `cross_latent_leak ≤ 0.58` (resists) ∧
+`d_dec ≥ 1.5 · twin_d_dec` (objective-driven contrast). `H*` = smallest passing
+`H`.
+
+**Build change:** train and measure are **decoupled** — the train stage saves
+extracted bodies to `results/chatv2/phase0-full/bodies/*.npz`, so every future
+re-measurement is instant (no retrain). Command:
+`python scripts/chatv2_phase0_bodyresist.py --mode full --stage all`
+(then `--stage measure` to re-judge from saved bodies).
+
 ## 8. Cross-references
 
 - [`LANE_CHARTER.md`](LANE_CHARTER.md) — the lane mission + the measured mandate.
