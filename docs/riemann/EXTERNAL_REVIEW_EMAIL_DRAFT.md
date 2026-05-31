@@ -1,5 +1,15 @@
 # External Review Email Draft
 
+> **SUPERSEDED (2026-05-30) — do not send as-is.** The three questions this email
+> asks have been resolved in-house: Q1 by a sine-kernel/GUE control (observed `D`
+> is a z=−0.85 draw), Q2 by proof (an identity), Q3 by a window/unfolding sweep
+> (null persists and deepens to 100k), and the residual representation-sector
+> question by the Path-(ii) triple desk pre-check. See
+> [`EXTERNAL_REVIEW_PACKET.md`](EXTERNAL_REVIEW_PACKET.md) ("Review Questions —
+> Resolved In-House") and the closure receipts. This draft is retained as a record
+> of the original ask; the framing no longer depends on review, so any future
+> outreach would be a finished-result share, not a request for adjudication.
+
 ## Short Version
 
 **Subject:** Quick sanity check request: bounded-null read on Riemann zero statistics
