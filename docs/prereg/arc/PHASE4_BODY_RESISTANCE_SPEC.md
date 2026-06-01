@@ -274,3 +274,84 @@ node scripts/arc-phase4-body-resistance.mjs `
 
 (`SUNDOG_PYTHON` may pin the interpreter; the runner refuses a dirty worktree
 unless `--allow-dirty`, so the freeze marker is committed before the binding run.)
+
+---
+
+## Amendment 2 — Binding Verdict (2026-06-01 PT)
+
+**Branch: `arc_body_inconclusive` — directionally non-marginal, below the frozen
+high-dim bar at this register.**
+
+Binding run: `gitCommit 1892CBD4` (the Amendment-1 freeze commit; ARC subtree
+clean — the manifest `gitDirty=true` reflects only concurrent **non-ARC** sibling
+lanes, not any ARC-lane file), `runnerSha256 5CA151E1…` (matches the frozen
+runner), `splitMode sha256_expansion`, `registerHash 1EA51F10…`, `dataDirHash
+73347BCD…`. `U_all = 491` contexts (val_lodo 118 / val_pttest 37 / test_lodo 259 /
+pttest 77), 156 held out.
+
+### Measured (frozen estimators, read once)
+
+| measure | value | marginal-substrate reference |
+| --- | --- | --- |
+| body participation ratio (PR) | **9.15** | Mesa `net.7` ≈ 2.0; NSE-C1 ≈ low; Sabra ≈ 1.7 |
+| top-1 energy fraction | 0.287 | marginal substrates: one mode dominates |
+| energy ranks 90 / 95 / 99 % | 96 / 159 / 293 | of ≤ 490 |
+| matched-dim `FVE(body | top-28 PCA)` (held-out) | **0.659** | Mesa: 5-D reconstructs ≈ 0.97–0.99 |
+| `FVE(body | top-k PCA)` curve | k=1→0.299, 10→0.575, 28→0.659, 50→0.702, 100→0.749, 200→0.789 | — |
+| `FVE(body | metadata 28d)` (baseline, caveat 2) | 0.399 | — |
+| `FVE(body | signature_palette 4124d)` (baseline, caveat 2) | 0.431 | — |
+| PR / sample bound | 0.019 (not saturated) | guard 0.90 |
+| per-lane PR | 6.55 / 5.99 / 8.70 / 7.90 | each lane individually ≫ marginal |
+
+### Why inconclusive (the frozen gate, not retuned)
+
+- `PR 9.15` sits **between** `PR_MARGINAL_MAX 5.0` and `PR_HIGH_MIN 20.0`: it
+  clearly clears the marginal band (not `arc_body_marginal`) but does **not** reach
+  the pre-registered 10×-marginal high-dim bar (not `arc_body_high_dim`).
+- The matched-dim FVE clause *is* satisfied for high-dim (0.659 ≤ 0.90 ceiling; and
+  no `k`-dim summary through k=200 reconstructs the body past 0.79) — but the gate
+  is an **AND**, and the PR clause fails. So the verdict falls through to
+  inconclusive. **The thresholds are not retuned after seeing the spectrum** (that
+  would be the p-hack the freeze marker exists to prevent).
+
+### What this does / does not establish
+
+- **Does:** ARC's raw-grid body is the **least-marginal substrate measured to date**
+  — PR ≈ 4.6× the three control substrates, no dominant mode (top-1 energy 0.287),
+  and **reconstruction-resistant**: a 28-dim summary recovers only 66 % and even a
+  200-dim summary only 79 % of the held-out body (cf. Mesa `net.7`, where a 5-D
+  shadow reconstructs ≈ 0.97–0.99). On the *reconstruction* axis the ARC body does
+  resist low-dim collapse. So the portfolio updates from "three-for-three marginal"
+  to "three **control** substrates marginal; the ARC **computational** body is
+  materially more dimensional, but below the frozen high-dim bar at 491 contexts."
+- **Does not:** clear the high-dim threshold, so it is **not** a claim that ARC is a
+  high-dim body; and it is **not** a control-regime-2 witness, Blackwell
+  sufficiency, ARC solve, or any public-evaluation / Kaggle claim (Phase 6 only).
+- **Sample-limited (caveat 3), direction noted:** 99 % of body energy needs 293 of
+  ≤ 490 components — a broad spectrum whose PR is plausibly an **under**-estimate of
+  the population PR at a larger register. The sample bound caps PR, so the
+  shortfall-from-20 points toward "register too small to clear the bar," not toward
+  "marginal." This is recorded as a direction, **not** a verdict.
+
+### Honest next move (if reopened)
+
+A frozen **Phase 4 v2** could test whether PR clears the (unchanged) `PR_HIGH_MIN =
+20` bar on a **larger context register** (more registered training tasks → more
+contexts → a less sample-limited PR), with the per-lane PR + the matched-dim curve
+as the same frozen readouts. The bar stays 20; only the sample size grows. This is
+the disciplined escalation — never lowering the threshold to the observed 9.15.
+
+### Public language (inconclusive — addition to the spec list)
+
+Allowed:
+
+> "ARC Phase 4 (body-resistance) returned **inconclusive but directionally
+> non-marginal**: the raw-grid body's participation ratio (≈ 9.1) is several times
+> the three marginal control substrates' (≈ 2), with no dominant mode and a
+> reconstruction-resistant spectrum (a 28-dim summary recovers only ~66 %), but it
+> does not clear the pre-registered 10×-marginal high-dim threshold at the
+> 491-context register. It is the least-marginal substrate measured; it is not a
+> high-dim claim, a control witness, an ARC solve, or any eval/Kaggle result."
+
+Still forbidden: reading 9.15 as high-dim by lowering the bar; any control-witness /
+Blackwell / solve / eval / Kaggle claim.

@@ -295,6 +295,28 @@ Checked **2026-05-28** against:
   certificates + seven floors + the v1 verdict stand. Lifting the rate would need a
   different solver class (learned ranker, richer object-centric primitives, or an
   LM proposer) under its own spec.
+- [`PHASE4_BODY_RESISTANCE_SPEC.md`](PHASE4_BODY_RESISTANCE_SPEC.md) -- Phase 4
+  body-resistance / low-dimensional-collapse probe (the roadmap's "5D collapse
+  check"), sharpened by the cross-substrate body-resistance axis. Ports the C1/Mesa
+  participation-ratio + `FVE(body|shadow)` estimators to ARC (`torch.linalg`):
+  does the raw-grid body collapse to low dimension like the three marginal control
+  substrates (Mesa `net.7` PR≈2, NSE-C1 FVE≈0.99, Sabra eff-rank≈1.7), or is it a
+  genuinely high-dim *computational* body? **Binding verdict (Amendment 2, pinned
+  `1892CBD4`, runnerSha256 `5CA151E1`, `sha256_expansion`, U_all=491, inline):
+  `arc_body_inconclusive` — directionally non-marginal.** Body PR **9.15** (≈4.6×
+  the marginal substrates), no dominant mode (top-1 energy 0.287), energy ranks
+  96/159/293, and **reconstruction-resistant** (held-out matched-dim
+  `FVE(body|top-28 PCA)` only **0.659**; even top-200 PCA reaches just 0.79 — cf.
+  Mesa's 5-D shadow reconstructing ≈0.97–0.99). It clears the marginal band but
+  does **not** reach the pre-registered 10×-marginal high-dim bar (`PR_HIGH_MIN=20`)
+  at 491 contexts; the threshold is **not** retuned. The portfolio updates from
+  "three-for-three marginal" to "three *control* substrates marginal; the ARC
+  *computational* body is materially more dimensional but below the high-dim bar at
+  this register" — sample-limited (99% energy needs 293 of ≤490 modes), so the
+  shortfall points toward "register too small," not "marginal." Read-off
+  dimensionality only — not a control witness, Blackwell sufficiency, ARC solve, or
+  eval/Kaggle claim. Disciplined escalation = a frozen Phase 4 v2 on a larger
+  context register (bar stays 20).
 - [`EVAL_BLIND_SELECTION.md`](EVAL_BLIND_SELECTION.md) -- stub pattern for
   future Phase 1+ evaluation-blind register rows (no manual grid inspection,
   selection by preregistered metadata/hash rule).
