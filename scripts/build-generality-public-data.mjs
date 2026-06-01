@@ -123,11 +123,11 @@ const projects = [
     transferQuestion:
       "Can a compact signature behave like a cheaper certificate for a bounded alignment-verification problem?",
     currentRead:
-      "The v0-v6 chain is safety-complete and v6 op-count positive; Phase 2 v1 earned a bounded-positive mesa bridge receipt.",
+      "The v0-v6 chain is safety-complete and v6 op-count positive; Phase 2 v1 earned a bounded-positive mesa bridge receipt; Phase 3 is frozen before attacker execution.",
     blocker:
       "Wall-time remains diagnostic-only, and capacity-relative one-wayness is not estimated.",
     nextAction:
-      "Freeze Phase 3 one-wayness slate before attacker runs.",
+      "Implement frozen Phase 3 one-wayness harness before attacker runs.",
     publicBoundary:
       "No complexity-class result, polynomial certificate, or P-vs-NP progress is claimed.",
     chartHeadline: "op-count positive; wall-time diagnostic",
