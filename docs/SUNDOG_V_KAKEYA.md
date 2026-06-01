@@ -20,8 +20,14 @@ clears its `KAK-FRONT-A-VACUOUS` self-check on the body-resistance placement and
 the claim-boundary fences). The Phase-2 tiny finite-field workbench spec is
 filed at
 [`kakeya/PHASE2_TINY_FINITE_FIELD_WORKBENCH_SPEC.md`](kakeya/PHASE2_TINY_FINITE_FIELD_WORKBENCH_SPEC.md).
-Public copy, executable probe, and site-page entry are still pending. This file
-is a target-selection and claim-boundary scaffold opened from
+The Phase-3 workbench is built as an **internal, non-deployed** artifact under the
+repo-root `kakeya/` dir (`workbench.html` + `kakeya-core.js` + `kakeya-workbench.js`);
+`npm run kakeya:test` passes all spec-§9 acceptance checks (33/33 across
+`q ∈ {5, 7, 11}`). It is deliberately outside the site build (vite only scans
+root-level `.html`), so it carries no `site-pages.json` entry and is not launched;
+open it via `npm run dev` → `/kakeya/workbench.html` for the §11.5 visual QA.
+Public copy, a real `kakeya.html` page, and a site-page entry are still pending.
+This file is a target-selection and claim-boundary scaffold opened from
 [`SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md`](SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md).
 
 This is not a claim to progress on the Kakeya conjecture, the Kakeya maximal
