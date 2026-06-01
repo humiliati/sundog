@@ -54,3 +54,11 @@ for (const artifact of publicChatArtifacts) {
   await mkdir(dirname(target), { recursive: true });
   await cp(join(sourceChat, artifact), target);
 }
+
+// Unlinked Kakeya reviewer surface (review-only; not in nav or sitemap). Deploy
+// the interactive workbench/gallery + their modules so the /kakeya landing's
+// links resolve in dist. No public inbound path until external sign-off.
+const sourceKakeya = join(root, "kakeya");
+const targetKakeya = join(dist, "kakeya");
+await rm(targetKakeya, { recursive: true, force: true });
+await copyPublicDocs(sourceKakeya, targetKakeya);

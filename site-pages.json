@@ -136,6 +136,11 @@
       "entry": "generality.html",
       "kind": "evidence-page",
       "publicLaunchIntent": "Public High-Stakes Generality umbrella: transfer-test matrix across six lanes — Navier-Stokes C1 (review-gated witness, strongest current lane, deep dive at /navierstokes), Riemann (3 lanes 3 bounded nulls, review-gated), Yang-Mills (4 probes 1 bounded null, review-gated), P-vs-NP (safety green / cost-hold), ARC-AGI (execution-hold after sparse absolute fibers and oracle-leakage findings), and Three-Body Phase 15C (running, 6/12 shards logged). Carries the asymmetric framing explicitly — NSE has its own page, the other five are honest cards on the matrix. Links the generality layer back to /h-of-x, /geometry, /alignment, /legend, and /repo-map as the site route from first equation to harder transfer tests. Not a Clay-problem claims page; not a theorem-claims page. Bespoke OG card lives at public/og/generality.png."
+    },
+    {
+      "entry": "kakeya.html",
+      "kind": "math",
+      "publicLaunchIntent": "REVIEW-ONLY reviewer surface, NOT a public launch. Finite-field Kakeya reader + tiny F_q^2 workbench + body-resistance framing; Sundog claims NO Kakeya result, no finite-field->Euclidean transfer, nothing about open n>=4, and explicitly fences it as NOT a regime-2/control-sufficiency witness. Deployed unlinked at /kakeya with a visible NOT PEER REVIEWED banner and noindex; NO public inbound path from index/legend/nav and excluded from the sitemap until an external finite-field-incidence sanity check clears it (Bucket 1 + sign-off). Interactive surfaces at /kakeya/workbench.html and /kakeya/gallery.html are also unlinked. Packet: docs/kakeya/EXTERNAL_REVIEW_PACKET.md."
     }
   ]
 }
