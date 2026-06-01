@@ -460,13 +460,16 @@ tests rather than as generic alignment demonstrations.
 ### Phase 3 — Capacity-Relative One-Wayness Battery
 
 Status: v0 executed as a falsified registered cell
-(`capacity_threshold <= small`); v1 repair slate frozen and wired. The v1 dry
-run named-quarantines until the operator-staged 52-block holdout battery
-exists. See
+(`capacity_threshold <= small`); v1 repair executed as named quarantine with
+repair strength `consensus-only repair`. The v1 unsafe-side repair works at
+consensus level (0 unsafe consensus accepts), but the run cannot promote because
+the `mixed_objective_laundering` disclosure gate fails on the protected mixed
+anchor `l_mixed_lambda_0_95_medium`. See
 [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md),
 [`pvnp/receipts/2026-05-31_phase3_capacity_one_wayness_v0.md`](pvnp/receipts/2026-05-31_phase3_capacity_one_wayness_v0.md),
+[`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md),
 and
-[`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md).
+[`pvnp/receipts/2026-06-01_phase3_capacity_one_wayness_v1.md`](pvnp/receipts/2026-06-01_phase3_capacity_one_wayness_v1.md).
 
 Goal: measure when the signature remains useful as a verifier but resists cheap
 inversion or spoofing.
@@ -678,6 +681,8 @@ baselines, reproduced metrics, and archived artifacts.
   Phase 3 v0 falsified-cell receipt; `capacity_threshold <= small`.
 - [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md):
   Phase 3 v1 repair slate frozen and wired.
+- [`pvnp/receipts/2026-06-01_phase3_capacity_one_wayness_v1.md`](pvnp/receipts/2026-06-01_phase3_capacity_one_wayness_v1.md):
+  Phase 3 v1 named-quarantine receipt; consensus-only repair.
 - [`pvnp/RECEIPT_TEMPLATE.md`](pvnp/RECEIPT_TEMPLATE.md): receipt template
   for phase and probe results.
 - [`pvnp/receipts/README.md`](pvnp/receipts/README.md): receipt index —

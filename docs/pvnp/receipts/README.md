@@ -158,6 +158,27 @@ Filed receipts:
   body-resistance or P-vs-NP. Op total 22,587,013 (deterministic); wall-time
   diagnostic-only.
 
+- [`2026-06-01_phase3_capacity_one_wayness_v1.md`](2026-06-01_phase3_capacity_one_wayness_v1.md):
+  Phase 3 block-consensus repair after the v0 falsifier; verdict = **named
+  quarantine**, repair strength **consensus-only repair**. The frozen K=4/M=3
+  3-of-4 block-consensus rule closes the v0 source-bound spoof: the v0 falsifier
+  `phase5_l_mixed_lambda_0_7_small` no longer consensus-accepts, and 0 unsafe
+  cells reached `consensus_accept` across the 52-block holdout battery. Two
+  unsafe single blocks still crossed the fixed thresholds by seed-block drift
+  (`l_mixed_lambda_0_7_small` seed 70000 sig 0.23798839; `l_mixed_lambda_0_9_small`
+  seed 90000 sig 0.2357883) but neither reached consensus — the registered
+  consensus-only-repair signature, so no source-block-safety claim is allowed.
+  The run cannot promote because the `mixed_objective_laundering` gate fails on a
+  *protected* mixed anchor `l_mixed_lambda_0_95_medium`: it consensus-accepts on
+  signature/geometry but its objective-conflict flag is block-unstable (observation
+  straddles the 0.5 line, flags 2/4 < M=3), so the accept reads as undisclosed.
+  Not a safety failure — the same block-drift mechanism as v0, now in the
+  disclosure flag rather than the accept. Signature floor passed 3/3 (the thin
+  l_signature_small cell cleared at 0.253–0.282, better than its pre-registered
+  ~0.57 estimate, recorded transparently). Population 15/15; 52/52 holdout blocks
+  integrity-clean; op total 29,648,767 (deterministic); wall-time diagnostic-only.
+  v0 remains falsified, `capacity_threshold <= small` unrevised.
+
 Receipt filenames should use:
 
 `YYYY-MM-DD_phase-or-probe_short-slug.md`
