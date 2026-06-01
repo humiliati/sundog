@@ -1016,9 +1016,25 @@ Phase 7 must not use sourced or topological examples to broaden the closed
 Phase 3 Branch A claim. It also must not treat electric-current source terms as
 Faraday failures unless `dF != 0` is actually present.
 
-Execution has not started. The future result receipt target is
-`docs/faraday/FARADAY_PHASE7_BOUNDARY.md`; public copy changes wait until that receipt
-lands.
+Execution landed 2026-05-31. Receipt:
+[`FARADAY_PHASE7_BOUNDARY.md`](FARADAY_PHASE7_BOUNDARY.md); support battery
+`npm run faraday:phase7`. All three registered cases landed in their
+pre-registered branches; no `C7` bounded failure.
+
+| Case | Domain | Branch | Survivor |
+| --- | --- | --- | --- |
+| Electric-source control | `J^mu != 0`, `dF = 0` | A7-clean-control | `R_F(S) = 0` |
+| Magnetic source | registered `dF = K_m` | B7-magnetic-source | `Q_m` (magnetic flux) |
+| Topology (Aharonov-Bohm) | `H^1 != 0`, `F = 0` on loop | B7-topology | `oint A = Phi` |
+
+Case 3 is the headline: the loop-holonomy tier is state-insufficient yet
+control-sufficient (the AB phase), the two operator tiers diverging by exactly
+the `H^1` period `Phi` - an exact, topological regime-2 separation. This promotes
+the cross-substrate Aharonov-Bohm row
+([`../CROSS_SUBSTRATE_NOTES.md`](../CROSS_SUBSTRATE_NOTES.md) §8.2) from
+HYPOTHESIZED to earned. Phase 7 sharpens the boundary around Branch A; it does not
+change the Branch A claim. No public copy changed; `faraday.html` is held for
+explicit go-ahead.
 
 ## Inspection Trail
 
@@ -1067,3 +1083,8 @@ lands.
 - 2026-05-26 - Phase 7 opened as a source / topology boundary audit. Spec
   registered in [`FARADAY_PHASE7_SPEC.md`](FARADAY_PHASE7_SPEC.md); execution
   and the future `FARADAY_PHASE7_BOUNDARY.md` receipt remain pending.
+- 2026-05-31 - Phase 7 executed and landed in
+  [`FARADAY_PHASE7_BOUNDARY.md`](FARADAY_PHASE7_BOUNDARY.md): A7-clean-control
+  (electric source, `R_F = 0`), B7-magnetic-source (named `Q_m`), B7-topology
+  (Aharonov-Bohm, `oint A = Phi`, exact regime-2 separation). Support battery
+  `npm run faraday:phase7`. No public copy changed.

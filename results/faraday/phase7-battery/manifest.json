@@ -1,0 +1,35 @@
+{
+  "experiment": "faraday-phase7-boundary",
+  "note": "Numeric support only; hand derivation is authoritative.",
+  "cases": {
+    "case1": {
+      "branch": "A7-clean-control",
+      "sample": [
+        0.7,
+        -0.4,
+        0.3,
+        0.6
+      ],
+      "faradayResidual_R_F": 0,
+      "electricCurrent_Jmag": 2.055085823737812,
+      "chargeDensity_divE": 0,
+      "magneticDivergence_divB": 0
+    },
+    "case2": {
+      "branch": "B7-magnetic-source",
+      "magneticChargeDensity_divB": 2.9999999999946736,
+      "closedSurfaceFlux_oint_BdA": 12.566499808107295,
+      "registered_Q_m": 12.566370614359172,
+      "faradayLoopResidual": 0
+    },
+    "case3": {
+      "branch": "B7-topology",
+      "solenoidRadius_a": 1,
+      "loopRadius_r0": 2,
+      "registered_Phi": 6.283185307179586,
+      "pointTier_F_on_loop": 1.6214474207743024e-11,
+      "loopTier_holonomy_oint_A": 6.283185307179335,
+      "separation_gap": 6.28318530716312
+    }
+  }
+}
