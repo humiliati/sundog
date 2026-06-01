@@ -189,6 +189,7 @@
     "isotrophy:v13a:preflight": "python scripts/v13a_liao2021_preflight.py",
     "deploy": "npm run build && node scripts/deploy-pages.mjs",
     "faraday:phase4": "node scripts/faraday-phase4-battery.mjs",
+    "faraday:phase7": "node scripts/faraday-phase7-battery.mjs",
     "arc:phase0:inventory": "node scripts/arc-phase0-inventory.mjs",
     "arc:phase0:draft-register": "node scripts/arc-phase0-draft-register.mjs",
     "arc:phase0:baselines": "node scripts/arc-phase0-baselines.mjs",

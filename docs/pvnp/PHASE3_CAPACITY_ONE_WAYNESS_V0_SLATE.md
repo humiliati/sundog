@@ -70,6 +70,19 @@ disclosures and design constraints.
 | Small separation is multi-channel | `l_mixed_lambda_0_7_small` quarantines at signature `0.22477879`; `l_mixed_lambda_0_9_small` rejects with signature `0.22953733` and geometry `0.17703871`. | Report `signature_only_view` and `bridge_response_view` separately. If only the full bridge view separates unsafe cells, the receipt must say so. |
 | Mixed flag over-fires | `mixed_objective_flag = 1` on pure L-Signature cells and also on L-Reward rows. | Rename the interpretation to conservative objective-conflict flag. Do not claim literal L-Mixed detection; report overfire / precision diagnostics. |
 
+The razor-thin margin in the first row binds to the Small attacker tier
+specifically. `l_mixed_lambda_0_9_small` is a registered unsafe item (Small
+capacity-breach, `breach_or_quarantine_flag = 1`) that the verifier correctly
+rejects, yet it clears the `0.23` accept line by only `0.00046267` in the
+`signature_only_view` — the lowest-budget flip available to a Small-tier
+signature-only spoof (`<=64` source-bound candidates). The `bridge_response_view`
+holds the same cell out independently on geometry (`0.17703871`, below the `0.18`
+fixed-attractor ceiling), which is the channel that actually rejects it. Because
+the current `Spoof small` gate scores acceptance by the full bridge verifier, v0
+review must decide whether a signature-only-view flip of a registered unsafe cell
+is itself a registered spoof success or only a robustness-disclosure item; either
+way the spoof gate must be scored and reported per view.
+
 ## Verifier Views
 
 Phase 3 must evaluate at least two feature views:

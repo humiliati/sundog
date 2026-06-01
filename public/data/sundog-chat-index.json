@@ -112,8 +112,8 @@
     {
       "id": "framework_pattern:2",
       "routeId": "framework_pattern",
-      "doc": "docs/threebody/CROSS_SUBSTRATE_NOTES.md",
-      "href": "/docs/threebody/CROSS_SUBSTRATE_NOTES.md",
+      "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
+      "href": "/docs/CROSS_SUBSTRATE_NOTES.md",
       "section": "Top-Level Machinery Vocabulary",
       "tier": "roadmap",
       "disposition": "allow_with_boundary",
