@@ -582,9 +582,9 @@
     </header>
 
     <div class="draft-banner" role="status">
-        <strong>RECEIPT CLOSED</strong> · Phases 1-7 signed · Branch A clean zero
-        + Phase 7 boundary audit (A7 / B7 / B7-topology) · registered
-        classical-vacuum domain
+        <strong>RECEIPT CLOSED</strong> · Phases 1-8 signed · Branch A clean zero
+        + Phase 7 boundary audit + Phase 8 Maxwell completion (A8 / B8) ·
+        registered classical-vacuum domain
     </div>
 
     <main>
@@ -612,9 +612,10 @@
             </p>
 
             <div class="status-ribbon" aria-label="Status">
-                <span class="pass">Phases 1-7 closed · Branch A</span>
+                <span class="pass">Phases 1-8 closed · Branch A</span>
                 <span class="pass">Phase 4 battery 5/5</span>
                 <span class="pass">Phase 7 boundary audit · A7 / B7 / B7-topology</span>
+                <span class="pass">Phase 8 Maxwell completion · A8 / B8</span>
                 <span>Class A metadata + sitemap</span>
                 <span class="prereg">pre-registered predicate</span>
                 <span>𝒫<sub>shadow</sub> = two-tier coordinate plaquette holonomy</span>
@@ -1176,6 +1177,78 @@
         </section>
 
         <!-- ============================================================
+             PHASE 8 — INHOMOGENEOUS (SOURCED) MAXWELL
+             ============================================================ -->
+        <section class="far-section" aria-label="Phase 8 inhomogeneous sourced Maxwell">
+            <div class="far-card">
+                <p class="eyebrow">The Completion · VII · Phase 8</p>
+                <h2>The other half of Maxwell — and why Aharonov–Bohm was the only sharp witness.</h2>
+                <p>
+                    Faraday is the <em>homogeneous</em> half (<em>dF = 0</em>, an
+                    identity). Phase 8 turns to the <em>inhomogeneous</em> half
+                    <em>d&#8902;F = J</em> — the sourced, metric-bearing side —
+                    through a <em>dual</em> shadow
+                    <em>𝒫<sub>shadow</sub><sup>dual</sup> = ∮&#8902;F</em>. Three
+                    registered cases, hand-derived and mirrored by a seconds-scale
+                    battery (<code>npm run faraday:phase8</code>), landed exactly
+                    where pre-registered.
+                </p>
+                <div class="outcomes-grid">
+                    <div class="outcome zero-out">
+                        <span class="pill">A8 · Gauss</span>
+                        <h3>The dual of the monopole</h3>
+                        <p>
+                            The dual shadow recovers Gauss's law:
+                            <em>∮&#8902;F = Q<sub>enc</sub></em>. Electric charge
+                            lives in <em>d&#8902;F = J</em> exactly where magnetic
+                            charge broke <em>dF = 0</em> in Phase 7 — the Hodge star
+                            <em>&#8902;</em> is the swap, and the place the
+                            <strong>metric</strong> finally enters.
+                        </p>
+                    </div>
+                    <div class="outcome zero-out">
+                        <span class="pill">A8 · Ampère–Maxwell</span>
+                        <h3>Displacement current closes the loop</h3>
+                        <p>
+                            With a time-varying field the dual shadow returns
+                            <em>∮B·d𝓁 = I<sub>enc</sub> + d/dt Φ<sub>E</sub></em> —
+                            conduction plus the distinctively-Maxwell displacement
+                            current. The battery matches to thirteen digits.
+                        </p>
+                    </div>
+                    <div class="outcome quarantine">
+                        <span class="pill">B8 · Hodge split ★</span>
+                        <h3>No new sharp separation</h3>
+                        <p>
+                            On a topological domain the field splits into a
+                            <em>sourced</em> piece (determined by its charge) and a
+                            <em>harmonic</em> piece (= the Phase 7 Aharonov–Bohm
+                            flux). The dual shadow reads the charge; the loop shadow
+                            reads the flux — orthogonal sectors.
+                        </p>
+                    </div>
+                </div>
+                <div class="load-bearing-quote">
+                    The whole classical field is (sources, boundary, harmonic
+                    periods). All of the shadow's <em>exact</em> regime-2 content
+                    lives in the harmonic periods — which is <em>why</em>
+                    Aharonov–Bohm (Phase 7) was the unique sharp witness. Maxwell
+                    adds no new one.
+                </div>
+                <p style="font-family: var(--sd-font-data); font-size: 0.82rem; color: #6A7680;">
+                    Phase 8 receipt:
+                    <a href="docs/faraday/FARADAY_PHASE8_BOUNDARY.md">docs/faraday/FARADAY_PHASE8_BOUNDARY.md</a>
+                    · branches A8-dual-closure / B8-harmonic-survivor · support
+                    battery <code>npm run faraday:phase8</code>. The dual-shadow
+                    closure recovers the integral form of the inhomogeneous law —
+                    it is <em>not</em> a re-derivation of Maxwell. Static /
+                    given-source domain; free radiation, retarded dynamics, and
+                    curved spacetime are named deferrals.
+                </p>
+            </div>
+        </section>
+
+        <!-- ============================================================
              GENERALITY CONTEXT
              ============================================================ -->
         <section class="far-section" aria-label="Generality context">
@@ -1223,11 +1296,12 @@
                 <div class="not-card">
                     <h3>Not a derivation of Maxwell.</h3>
                     <p>
-                        Phase 3 asks one specific question &mdash; does a
-                        local shadow projection suffice for the integral
-                        form of Faraday's law in the classical vacuum
-                        case? &mdash; not whether the full Maxwell system
-                        re-derives from shadow primitives.
+                        Phase 8 closed the sourced side too &mdash; the dual
+                        shadow <em>∮&#8902;F = Q<sub>enc</sub></em> recovers Gauss
+                        and Ampère–Maxwell &mdash; but closure recovers the
+                        <em>integral form</em> of an already-given law. It is not
+                        a re-derivation of the Maxwell system from shadow
+                        primitives.
                     </p>
                 </div>
                 <div class="not-card">
@@ -1247,11 +1321,12 @@
             <p class="eyebrow">Inspection Trail</p>
             <div class="source-list">
                 <a href="docs/faraday/SUNDOG_V_FARADAY.md">Sundog &middot; Shadow Faraday Zero-Out Roadmap v0.1</a>
-                <a href="docs/faraday/SHADOW_FARADAY.md">Phase 1&ndash;5 Ledger &middot; receipts catalog, chapter close</a>
+                <a href="docs/faraday/SHADOW_FARADAY.md">Phase 1&ndash;8 Ledger &middot; receipts catalog, chapter close</a>
                 <a href="docs/faraday/SHADOW_FARADAY.md#phase-5-chapter-close">Phase 5 Chapter Close &middot; limitations, extensions, fidelity audit</a>
                 <a href="docs/faraday/FARADAY_PHASE3_DERIVATIONS.md">Phase 3 Derivation Receipt &middot; Branch A structural zero</a>
                 <a href="docs/faraday/FARADAY_PHASE4_VERIFICATION.md">Phase 4 Verification Receipt &middot; 5/5 support battery</a>
                 <a href="docs/faraday/FARADAY_PHASE7_BOUNDARY.md">Phase 7 Boundary Audit &middot; A7 / B7 / Aharonov&ndash;Bohm topology</a>
+                <a href="docs/faraday/FARADAY_PHASE8_BOUNDARY.md">Phase 8 Maxwell Completion &middot; A8 dual-closure / B8 Hodge localization</a>
                 <a href="/generality">High-Stakes Generality &middot; transfer-test matrix</a>
                 <a href="/safety-method">Safety-method bridge essay &middot; the AI-safety translation</a>
                 <a href="/isotrophy">Isotrophy K_facet v0.3h &middot; precedent for the receipt discipline</a>

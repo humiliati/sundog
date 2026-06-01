@@ -64,8 +64,9 @@ theme-matching.
   variance plus the amended finite-T Polyakov target. The v4/v5 powered-target
   audits were underpowered and the first v6 pilot was an unbracketed-grid void,
   but v6a supplied the missing powered+disjoint target and still scored at or
-  below controls. Bounded cell-local null, lane PAUSED; external-review packet
-  needs the v6a addendum before send.
+  below controls. Bounded cell-local null, lane PAUSED at the informative endpoint;
+  external-review packet re-pointed to the powered-null story and now carries the
+  §8.3 abelian-boundary explanation (Q2 / Faraday bridge note).
   -> [`SUNDOG_V_YANG_MILLS.md`](SUNDOG_V_YANG_MILLS.md),
   [`yang-mills/receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase2_bounded_null_synthesis.md).
 - **Riemann (Path i) - VACUOUS (rigidity trivially satisfied).** The
@@ -717,8 +718,10 @@ becomes genuinely harder to separate. So **Faraday-clean and YM-bounded-null are
 the abelian and non-abelian ends of the same operator** - and the EM side supplies
 an *algebraic* reason for the YM upper limit: the very thing that made EM a
 freebie (linearity + exact-form holonomy) is exactly what the non-abelian case
-lacks. A short companion note would make this the first cross-substrate result
-that *explains a portfolio null from an adjacent success*. ->
+lacks. This is now written up as the
+[Faraday -> Yang-Mills bridge note](yang-mills/2026-05-31_faraday_abelian_bridge_note.md) -
+the first cross-substrate result that *explains a portfolio null from an adjacent
+success* - and is folded into the YM external-review packet's Q2. ->
 [`SUNDOG_V_YANG_MILLS.md`](SUNDOG_V_YANG_MILLS.md).
 
 ### 8.4 Homogeneous / inhomogeneous = topology / metric - where Maxwell-proper lives [PRE-REGISTERED PREDICTION]

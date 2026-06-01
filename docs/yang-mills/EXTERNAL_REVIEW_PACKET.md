@@ -143,15 +143,25 @@ powered finite-T Polyakov test); 4–7 carry over the original audit, recontextu
    label for a rank-locality test? Is the `N_t=4` crossover cell a defensible
    choice, or is there a better-conditioned finite-T geometry?
 
-2. **Is the null expected or surprising on gauge-theory grounds?** Is there a
-   *known* reason a small-loop gauge-invariant signature (`{W11,W12,W13,W22}`
-   mean/var) would carry **no** within-β rank-locality of the Polyakov order
-   parameter — e.g. a center-symmetry argument, or the Polyakov loop being a
-   genuinely non-local (temporal-wrap) object that small local loops cannot
-   resolve config-to-config? If the null is the *expected* outcome, is it still
-   a clean confirmation that the apparatus correctly reports "no structure," or
-   does it mean the test was uninformative for a different reason than the v0–v3
-   nulls were?
+2. **Is the null expected or surprising on gauge-theory grounds — and is our
+   abelian-boundary explanation sound?** We now bring a candidate answer rather
+   than asking cold. From the portfolio's clean abelian substrate (Shadow
+   Faraday) we argue the null is **expected**: the same Wilson-loop operator that
+   closes Faraday induction as a freebie — because `dF = 0` is linear and the
+   holonomy of an exact form vanishes — loses exactly that freebie non-abelianly,
+   where the Bianchi identity `DF = dF + A∧F = 0` drags the connection into the
+   covariant derivative; and the abelian Aharonov-Bohm boundary shows the *local*
+   field tier (`F`) is control-blind to global/topological content while only the
+   *global* loop (`∮A`) suffices — the exact analog of a *local* small-loop
+   signature failing to carry the *global* (temporal-wrap) Polyakov target. This
+   is laid out in the [Faraday → Yang-Mills bridge
+   note](2026-05-31_faraday_abelian_bridge_note.md), resting on the earned Shadow
+   Faraday Phase 7 / Phase 8 receipts. **Is this bridge sound as gauge theory**, or
+   does it over-reach — is there a center-symmetry or locality subtlety it misses,
+   or a reason a compact non-abelian signature *should* still carry the order
+   parameter that we are not seeing? If the null is genuinely the expected outcome,
+   is it nonetheless a clean confirmation that the apparatus reports "no structure"
+   correctly (distinct from the v0–v3 nulls, whose targets were merely unpowered)?
 
 3. **Is the powered-target audit methodology sound?** Before scoring, each
    target had to clear power (split-half `ICC ≥ 0.50` ∧ tertile agreement
@@ -329,6 +339,10 @@ Primary:
 
 - [`receipts/2026-05-31_SU2_3D_phase2_informative_null_synthesis.md`](receipts/2026-05-31_SU2_3D_phase2_informative_null_synthesis.md)
   - capstone informative-null synthesis; the load-bearing statement under review.
+- [`2026-05-31_faraday_abelian_bridge_note.md`](2026-05-31_faraday_abelian_bridge_note.md)
+  - the abelian-boundary explanation behind Q2: why the same Wilson operator that
+  closes Faraday induction is bounded-null non-abelianly (rests on the earned
+  Shadow Faraday Phase 7 / Phase 8 receipts).
 - [`receipts/2026-05-31_SU2_3D_phase2_v6a_finite_t_polyakov_neg_a.md`](receipts/2026-05-31_SU2_3D_phase2_v6a_finite_t_polyakov_neg_a.md)
   - the powered finite-T Polyakov probe: pilot, Stage-1 powered-target audit,
   Stage-2 scores.
