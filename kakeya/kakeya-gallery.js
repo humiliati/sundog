@@ -79,6 +79,9 @@ function panelSVG(q, body, { size = 150, animate = false, hit = false } = {}) {
     }
   }
   const fanY = size + 30, fanCx = size / 2, R = size / 2 - 6, n = q + 1;
+  const stepMs = Math.round(380 / (q + 1));
+  const coveredCount = bits.reduce((a, b) => a + b, 0);
+  const missingDelay = animate && coveredCount > 0 ? (coveredCount - 1) * stepMs + 420 : 0;
   let vis = "", hits = "", coveredIdx = 0;
   for (let i = 0; i < n; i++) {
     const theta = Math.PI - (Math.PI * (i + 0.5)) / n;
@@ -86,10 +89,19 @@ function panelSVG(q, body, { size = 150, animate = false, hit = false } = {}) {
     const ey = (fanY - R * Math.sin(theta)).toFixed(1);
     const covered = bits[i] === 1;
     const label = dirs[i].label === "inf" ? "∞" : dirs[i].label;
-    const cls = "ray" + (animate && covered ? " anim" : "");
-    const delay = animate && covered ? ` style="animation-delay:${coveredIdx * 70}ms"` : "";
-    if (covered) coveredIdx++;
-    vis += `<line class="${cls}"${delay} x1="${fanCx}" y1="${fanY}" x2="${ex}" y2="${ey}" stroke="${covered ? C.green : C.faint}" stroke-width="${covered ? 2.4 : 1.2}" stroke-linecap="round" pointer-events="none"/>`;
+    let cls, styleAttr = "", dashAttr = "";
+    if (animate && covered) {
+      cls = "ray anim";
+      styleAttr = ` style="animation-delay:${coveredIdx * stepMs}ms"`;
+      dashAttr = ` stroke-dasharray="${R}" stroke-dashoffset="${R}"`;
+      coveredIdx++;
+    } else if (animate && !covered) {
+      cls = "ray miss-anim";
+      styleAttr = missingDelay > 0 ? ` style="animation-delay:${missingDelay}ms"` : "";
+    } else {
+      cls = "ray";
+    }
+    vis += `<line class="${cls}"${styleAttr}${dashAttr} x1="${fanCx}" y1="${fanY}" x2="${ex}" y2="${ey}" stroke="${covered ? C.green : C.faint}" stroke-width="${covered ? 2.4 : 1.2}" stroke-linecap="round" pointer-events="none"/>`;
     if (hit) {
       let di = "";
       if (covered) { const w = K.witnessLine(dirs[i], q, body); if (w) di = ` data-int="${w.intercept}"`; }
@@ -275,7 +287,13 @@ function init() {
   renderGallery();
   setupTooltips();
   const replay = $("btn-replay");
-  if (replay) replay.addEventListener("click", () => { if (selectedEntry) renderStage(selectedEntry); });
+  if (replay) replay.addEventListener("click", () => {
+    if (selectedEntry) {
+      $("stage-visual").innerHTML = "";
+      $("stage-visual").offsetHeight; // force reflow to restart CSS animations
+      renderStage(selectedEntry);
+    }
+  });
   const exportBtn = $("btn-export-png");
   if (exportBtn) exportBtn.addEventListener("click", exportPng);
   const headline = GALLERY.find((e) => e.id === "greedy-7") || GALLERY[0];
