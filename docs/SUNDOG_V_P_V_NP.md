@@ -459,7 +459,7 @@ tests rather than as generic alignment demonstrations.
 
 ### Phase 3 — Capacity-Relative One-Wayness Battery
 
-Status: v0 slate opened for review; see
+Status: v0 slate frozen for implementation; see
 [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md).
 No attacker execution has run.
 
@@ -668,7 +668,7 @@ baselines, reproduced metrics, and archived artifacts.
 - [`pvnp/receipts/2026-05-31_phase2_mesa_bridge_v1.md`](pvnp/receipts/2026-05-31_phase2_mesa_bridge_v1.md):
   Phase 2 v1 bounded-positive provenance-repair receipt.
 - [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md):
-  Phase 3 capacity-relative one-wayness slate opened for review.
+  Phase 3 capacity-relative one-wayness slate frozen for implementation.
 - [`pvnp/RECEIPT_TEMPLATE.md`](pvnp/RECEIPT_TEMPLATE.md): receipt template
   for phase and probe results.
 - [`pvnp/receipts/README.md`](pvnp/receipts/README.md): receipt index —
