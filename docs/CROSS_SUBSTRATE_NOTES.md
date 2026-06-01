@@ -82,8 +82,9 @@ theme-matching.
   fail). The projection is control-useful yet bounded out of promotion by its
   cost envelope. -> [`SUNDOG_V_P_V_NP.md`](SUNDOG_V_P_V_NP.md).
 - **ARC-AGI - CONVERGENCE-TO-NULL on the signature *shadow*; CAPABILITY-FLOOR on
-  the *body*; a high-dim body-resistance candidate (probe pending, 2026-05-29
-  refresh).** The earlier "Phase 3 converged, reopen with a different framing" was
+  the *body*; body-resistance probe ran 2026-06-01 -> the least-marginal substrate
+  measured, but below the high-dim bar at this register.** The earlier "Phase 3
+  converged, reopen with a different framing" was
   acted on. (i) The **Phase 3E certificate program** ran the reframing and closed
   *four* negatives on the `signature_palette` shadow's geometry: no exact/near
   fiber collision, sparse fibers at 36 **and** 108 tasks, an oracle leakage
@@ -94,19 +95,29 @@ theme-matching.
   exact-match (v1: 2 distinct held-out tasks/lane; v2 replicated, bounded ~3%; the
   learned-ranker E3 is built + byte-verified but ~48 h compute-paused). So the
   shadow does not *organize* the body, yet the body is modestly *solvable* by
-  search over it. (iii) The open **body-resistance** reading is the live refresh:
-  ARC is a genuinely high-dimensional *computational* body (grids up to
-  30x30x10) - exactly the "high-dim RL/LLM-agent" gap §8 names as missing from the
-  *control* column, where NSE-C1, Mesa, and the shell are all three-for-three
-  marginal. The C1/Mesa **participation-ratio + `FVE(body|shadow)`** estimators
-  port directly (this is ARC roadmap **Phase 4**, the "5D / low-dim collapse
-  check"). The certificate negatives are *suggestive* that the shadow under-
-  determines the body, but the direct body-intrinsic-dimensionality measurement
-  has not been run; a naive `FVE(grid|signature_palette)` is trivially low (coarse
-  summary) and is only a baseline - the meaningful reading is the body's effective
-  rank vs a matched-dim shadow. -> [`SUNDOG_V_ARC.md`](SUNDOG_V_ARC.md),
-  [`prereg/arc/README.md`](prereg/arc/README.md), Phase 4 body-resistance probe
-  (pending spec).
+  search over it. (iii) The **body-resistance** probe (ARC roadmap **Phase 4**, the
+  "5D / low-dim collapse check") **ran 2026-06-01** with the C1/Mesa
+  participation-ratio + `FVE(body|shadow)` estimators ported to ARC (verdict
+  **`arc_body_inconclusive`**, pinned `1892CBD4`, U_all=491): the raw-grid body has
+  **PR 9.15** - the **least-marginal substrate measured** (≈4.6x the control column,
+  where NSE-C1 FVE≈0.99, Mesa `net.7` PR≈2.0, and the shell eff-rank≈1.7 are all
+  three-for-three marginal), no dominant mode (top-1 energy 0.287), and is
+  **reconstruction-resistant** (held-out matched-dim `FVE(body|top-28 PCA)` only
+  **0.659**; even top-200 PCA reaches just 0.79 - vs Mesa's 5-D shadow at ≈0.97-0.99).
+  So on the reconstruction axis the ARC body *does* resist low-dim collapse - but
+  PR 9.15 sits **below** the pre-registered 10x-marginal high-dim bar (`PR_HIGH_MIN=
+  20`) at this 491-context register, so the verdict is inconclusive, **not** a
+  high-dim claim, and the threshold is **not** retuned. The shortfall is
+  sample-limited (99% body energy needs 293 of ≤490 modes; PR likely
+  under-estimates the population value), so it points toward "register too small,"
+  not "marginal." Net: the *control* column stays three-for-three marginal; the ARC
+  *computational* body is the first that is materially more dimensional, though
+  still short of the bar. (The naive `FVE(grid|signature_palette)`=0.43 is a coarse
+  baseline only, per the spec's caveat 2.) Disciplined reopen = a frozen Phase 4 v2
+  on a larger context register (bar stays 20). -> [`SUNDOG_V_ARC.md`](SUNDOG_V_ARC.md),
+  [`prereg/arc/README.md`](prereg/arc/README.md),
+  [`prereg/arc/PHASE4_BODY_RESISTANCE_SPEC.md`](prereg/arc/PHASE4_BODY_RESISTANCE_SPEC.md)
+  (Amendment 2).
 - **Isotrophy - CONDITIONAL (rigid only after naming the held-fixed
   coordinate).** The velocity-fraction shadow ranks stability only *within*
   fixed `m3` strata; it fails as a mass-marginal held-out predictor. Already
@@ -485,7 +496,16 @@ genuinely body-resisting substrates (cap-set, unit-distance) are read-off, not
 control. **Where it would live: a substrate that is high-dimensional *by
 construction* — high-dim RL / LLM agents (high-dim observations or model
 states) — which is the structural property all three measured substrates
-lack.** Measured detail: `sundog/docs/proof/PDE_C1_NONMARGINAL_PROBE.md`,
+lack.** First data point on that gap (2026-06-01): the **ARC Phase 4
+body-resistance probe** (`prereg/arc/PHASE4_BODY_RESISTANCE_SPEC.md`, Amendment 2)
+measured the raw-grid *computational* body's read-off dimensionality at **PR 9.15**
+— materially above the three marginal controls (≈ 2) and reconstruction-resistant
+(top-28 PCA recovers only 0.66), yet **below** the pre-registered 10×-marginal
+high-dim bar at the 491-context register (verdict `arc_body_inconclusive`,
+sample-limited). It is the least-marginal substrate measured, but (a) it is still a
+**read-off** body, not the *control*-sufficient low-dim shadow this gap names, and
+(b) it has not cleared the high-dim threshold — so the control regime-2 frontier
+stays open. Measured detail: `sundog/docs/proof/PDE_C1_NONMARGINAL_PROBE.md`,
 `PDE_C1_PROPOSITION.md`, `PDE_C2_SHELL_DIMENSIONALITY_PROBE.md`.
 
 **The prediction tested (2026-05-30 → 31): first de-confounded *control* regime-2 —
