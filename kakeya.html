@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="description" content="Kakeya finite-field reader and workbench — reviewer surface. A boundary-correctness check, not a result. NOT PEER REVIEWED.">
+    <title>Kakeya Finite-Field Reader — review surface (NOT PEER REVIEWED)</title>
+    <link rel="stylesheet" href="/css/sundog-theme.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        main { max-width: 880px; margin: 0 auto; padding: 1.5rem 1.5rem 4rem; }
+        .npr-banner {
+            position: sticky; top: 0; z-index: 50;
+            background: repeating-linear-gradient(135deg, rgba(181,58,44,0.14) 0 12px, rgba(181,58,44,0.07) 12px 24px);
+            border-bottom: 2px solid rgba(181,58,44,0.55);
+            color: #B53A2C; font-family: var(--sd-font-data, ui-monospace, monospace);
+            font-size: 0.8rem; font-weight: 800; letter-spacing: 0.1em;
+            text-align: center; padding: 0.6rem 1rem; text-transform: uppercase;
+        }
+        h1 { color: var(--primary-dark, #1A3A52); font-family: var(--sd-font-display, Georgia, serif); font-size: clamp(1.8rem, 5vw, 2.4rem); line-height: 1.1; margin: 1.5rem 0 0.6rem; }
+        .lede { color: #40505C; font-size: 1.12rem; line-height: 1.7; }
+        h2 { color: var(--primary-dark, #1A3A52); font-size: 1.3rem; margin: 2.2rem 0 0.6rem; }
+        p { color: #40505C; line-height: 1.7; }
+        .card { border: 1px solid var(--line, #d8e0e4); border-radius: 8px; padding: 1.1rem 1.25rem; margin: 1rem 0; background: #fff; }
+        .card.warn { border-color: rgba(181,58,44,0.4); background: rgba(181,58,44,0.03); }
+        .card.ok { border-color: rgba(46,125,90,0.4); background: rgba(46,125,90,0.03); }
+        ul { line-height: 1.7; color: #40505C; }
+        a { color: var(--primary-mid, #2C5F7F); font-weight: 700; }
+        code { background: rgba(244,196,48,0.12); padding: 0.1rem 0.35rem; border-radius: 3px; font-size: 0.95em; }
+        .btn-row { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 1rem 0; }
+        .btn-row a { border: 1px solid var(--line, #d8e0e4); border-radius: 999px; padding: 0.55rem 1rem; text-decoration: none; background: #fff; }
+        .fine { font-family: var(--sd-font-data, ui-monospace, monospace); font-size: 0.8rem; color: #6A7680; }
+        .forbidden li { color: #B53A2C; }
+        .allowed li { color: #2E7D5A; }
+    </style>
+</head>
+<body>
+    <div class="npr-banner" role="status">NOT PEER REVIEWED · reviewer surface · Sundog claims no Kakeya result</div>
+    <main>
+        <p class="fine">Sundog · external-review surface · unlinked · no public inbound path</p>
+        <h1>Kakeya finite-field reader &amp; workbench</h1>
+        <p class="lede">A boundary-correctness review surface, not a result. We built a plain-language <em>reader</em> of Dvir's 2008 finite-field Kakeya theorem in a "body / shadow" vocabulary, a tiny <code>F_q²</code> workbench, and a graphic that places Kakeya at the exact-maximal end of a cross-substrate "body-resistance" axis. The ask to a reviewer is narrow: <strong>does the explainer teach the right boundary, or does any of it overreach?</strong></p>
+
+        <div class="card warn">
+            <strong>What this is NOT.</strong>
+            <ul>
+                <li>Not a Kakeya result — Sundog has none.</li>
+                <li>Not a finite-field → Euclidean transfer, and nothing about the open Euclidean problem.</li>
+                <li>Not a claim that Wang–Zahl's 2025 <code>R³</code> result bears on open <code>n ≥ 4</code>.</li>
+                <li>Not a "regime-2 / control-sufficiency" witness — explicitly fenced (see Q3).</li>
+            </ul>
+        </div>
+
+        <h2>The artifact</h2>
+        <ul>
+            <li><strong>Reader</strong> — Dvir's theorem (every Kakeya set in <code>F_q^n</code> has <code>≥ C_n q^n</code> points) walked in body/shadow vocabulary: the complete direction-shadow forces a low-degree polynomial certificate to vanish everywhere — contradiction.</li>
+            <li><strong>Tiny <code>F_q²</code> workbench</strong> (<code>q ∈ {5, 7, 11}</code>) — toggle points, watch direction coverage; the lesson is that direction-completeness forces a constant fraction of the plane, not a vanishing set.</li>
+            <li><strong>Body-resistance gallery</strong> — the cross-substrate placement graphic.</li>
+        </ul>
+        <div class="btn-row">
+            <a href="kakeya/workbench.html">Open the F_q² workbench →</a>
+            <a href="kakeya/gallery.html">Open the body-resistance gallery →</a>
+        </div>
+
+        <h2>The review ask (five questions)</h2>
+        <p>Full text in the <a href="docs/kakeya/EXTERNAL_REVIEW_PACKET.md">external review packet</a>; the headline three:</p>
+        <ul>
+            <li><strong>Q1 — exposition fidelity.</strong> Is the body/shadow retelling of Dvir faithful, and is the displayed floor <code>C(q+1, 2)</code> the right <em>proof</em> bound to show (and clearly not the exact planar minimum)?</li>
+            <li><strong>Q2 — boundary discipline.</strong> Are the four registers kept separate — finite-field (Dvir) / Euclidean <code>R³</code> (Wang–Zahl) / open <code>n ≥ 4</code> / toy — and is the <em>set</em>-vs-<em>maximal-function</em> distinction handled right?</li>
+            <li><strong>Q3 — the body-resistance fence (the one we most want challenged).</strong> We read Kakeya as <em>body-resistance</em> and explicitly deny it is a "control-sufficiency / regime-2" separation, because the direction-shadow is control-sufficient only trivially (it <em>is</em> the direction). Is that fence correct and strong enough?</li>
+        </ul>
+
+        <h2>Claim-language discipline (binding on this page)</h2>
+        <div class="card ok allowed">
+            <strong>Allowed:</strong>
+            <ul>
+                <li>"Sundog is drafting a finite-field-first Kakeya reader and workbench."</li>
+                <li>"The workbench teaches the boundary between finite-field, toy, and Euclidean claims."</li>
+                <li>"Kakeya is being used as a body-resistance anchor in a reader frame."</li>
+            </ul>
+        </div>
+        <div class="card warn forbidden">
+            <strong>Forbidden:</strong>
+            <ul>
+                <li>"Sundog has a Kakeya result."</li>
+                <li>"Finite-field Kakeya is evidence for the Euclidean conjecture."</li>
+                <li>"Wang–Zahl's <code>R³</code> result transfers to open <code>n ≥ 4</code>."</li>
+                <li>"The workbench demonstrates a dimension lower bound."</li>
+                <li>"Kakeya is a regime-2 / control-sufficiency witness."</li>
+            </ul>
+        </div>
+
+        <h2>Inspection trail</h2>
+        <ul>
+            <li><a href="docs/KAKEYA_FINITE_FIELD_READER.md">Finite-field reader</a> — §4 Dvir walkthrough, §5 body-resistance placement, §6 fences.</li>
+            <li><a href="docs/KAKEYA_LITPASS_MEMO.md">Lit-pass memo</a> — citation spine + forbidden-claims list.</li>
+            <li><a href="docs/kakeya/EXTERNAL_REVIEW_PACKET.md">External review packet</a> — the five questions, time budget, packet hygiene.</li>
+            <li><a href="docs/SUNDOG_V_KAKEYA.md">Lane ledger</a> — status, claim boundary, body-resistance bridge.</li>
+        </ul>
+
+        <p class="fine">Reviewer-only surface. Unlinked, <code>noindex</code>, no public inbound path. Reviewer-only sharing of this page is not a public launch.</p>
+    </main>
+</body>
+</html>

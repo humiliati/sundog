@@ -1,6 +1,61 @@
 # v0.14 liao2021 Sampled Zone Transfer Form Draft
 
-Status: **OPERATOR LOCK 2026-06-01.** Runner implementation began after lock
+## Result (2026-06-01)
+
+**Verdict: `sample_transfer_undecidable_coverage`.** The coverage gate fired exactly
+as locked — BOTH sub-gates fail:
+
+```text
+primary_mass_cells   = 7   < 10   (FAIL)
+primary_success_rows = 560 < 800  (FAIL)
+```
+
+**Blocking condition (the licensed reading).** Of the 16 registered sorted-mass
+quantile cells, **9 contained zero stable orbits** and were report-only; only 7
+cleared the `N_success>=40 AND S>=4 AND U>=4` primary criterion. liao2021's
+non-hierarchical population is both overwhelmingly **unstable** (stable orbits
+concentrate in the high-`qA` corner of mass space — qA3 cells) and overwhelmingly
+**zone-2 / velocity-heavy** (most cells are 64–80 of 80 rows in zone 2; two primary
+cells, qA3_qB2 and qA3_qB3, are pure zone-2). A within-cell stable-vs-unstable
+conditional comparison simply cannot be hosted in most registered cells. Per the
+locked claim boundary, **no transfer reading is licensed** — the supp-B coarse zone
+signal is neither confirmed nor refuted on liao2021 by this test.
+
+**Report-only diagnostics (NOT a transfer reading; recorded per Output Contract):**
+
+```text
+attrition_fraction  = 0.0133  Wilson95 [0.0083, 0.0212]   (clean; no supp-A wall)
+zone_change_fraction= 0.0135  Wilson95 [0.0084, 0.0215]   (band_A 2.0%, band_B 1.5%, outside 1.3%)
+AUC_cond            = 0.5239  (J_cond 3668 / D_cond 7001, 7 primary cells, 560 rows)
+p_perm              = 0.00503 (100k within-cell S/U permutation, seed 20260523)
+sample              = 1280 requested -> 1263 success (1 integration_blocked, 16 sanity_failed)
+```
+
+The AUC/p above are pinned to 0.5 by structure in 2 of the 7 primary cells
+(pure-zone-2 -> mechanically 0.5) and the p sits at the permutation discreteness
+ceiling (observed AUC == null max; 502 of 100k ties, 0 strictly exceed). These are
+diagnostics only and do not promote.
+
+**Independent verification.** A standalone brute-force recompute from
+`per_row_sample.csv` (re-derive zone from recorded vf with the frozen {0.25,0.50}
+cutpoints, re-pair S/U within each cell, re-pool) reproduced AUC_cond 0.523925153549493,
+J_cond 3668.0, D_cond 7001, 7 primary cells, 560 rows **bit-for-bit**, with **0 zone
+re-derivation mismatches** (the runner's `zone_index` column is faithful to the v0.11
+rule). Receipt + verifier: `results/isotrophy/k-facet-v14-liao2021-sampled-transfer/`
+(`manifest.json`, `per_cell_rank.csv`, `permutation_summary.json`,
+`_v14_independent_check.{py,json}`). git_commit df699390.
+
+**Next-chapter boundary (unchanged).** Per the locked tree, only a PASS justifies a
+larger liao2021 chapter; an undecidable result does not. A future attempt must re-lock
+the design to defeat the coverage problem — e.g. **outcome-balanced or stability-
+stratified cell construction** so cells are guaranteed to host both classes, or a
+**stable-orbit-targeted draw** within mass cells (signal-blind on vf, balanced on the
+stability label). v0.14 remains the honest first transfer test, not the final claim.
+
+---
+
+Status: **OPERATOR LOCK 2026-06-01; VERDICT LANDED `sample_transfer_undecidable_coverage`.**
+Runner implementation began after lock
 (`scripts/v14_liao2021_sampled_transfer.py`), but no registered v0.14 sample has
 been drawn, no transfer statistic computed, and no v0.14 D5 rows integrated as a
 measurement receipt at implementation time. This document locks the first sampled
