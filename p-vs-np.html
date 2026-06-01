@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sundog P-vs-NP verifier: a cheap-to-check certificate, the seed-block drift that spoofed it, and the consensus repair that half-held. Bounded alignment-verification borrowing the finding-vs-checking asymmetry as vocabulary. NOT the Millennium P-vs-NP problem; op-count not wall-clock; mesa-local.">
+    <meta name="keywords" content="P-vs-NP, verifier, finding vs checking, alignment verification, mesa, certificate, spoof, consensus repair, claim hygiene, Sundog, review-gated">
+    <meta name="theme-color" content="#1A3A52">
+    <meta name="author" content="Sundog Research Lab">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://sundog.cc/p-vs-np">
+    <title>P-vs-NP Verifier - Sundog</title>
+
+    <!-- OG-BLOCK-START (managed by public/og/_patch_meta.py) -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Sundog">
+    <meta property="og:title" content="P-vs-NP Verifier - cheap to check, spoofed by drift, repaired by consensus">
+    <meta property="og:description" content="A reward-blind certificate that costs fewer ops to check than the policy cost to find (0.948587). Transplanted to the mesa bridge it was spoofed by a single drifting seed block; a 3-of-4 consensus rule closed the spoof and stubbed its toe on a disclosure flag. Bounded alignment-verification, NOT the Millennium problem.">
+    <meta property="og:image" content="https://sundog.cc/og/p-vs-np.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="P-vs-NP verifier card: the finding-vs-checking asymmetry and the seed-block drift spoof.">
+    <meta property="og:url" content="https://sundog.cc/p-vs-np">
+    <meta property="article:published_time" content="2026-06-01T00:00:00Z">
+    <meta property="article:modified_time" content="2026-06-01T00:00:00Z">
+    <meta property="article:section" content="Research">
+    <meta property="article:tag" content="P-vs-NP">
+    <meta property="article:tag" content="verifier">
+    <meta property="article:tag" content="alignment verification">
+    <meta property="article:tag" content="claim hygiene">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="P-vs-NP Verifier - cheap to check, spoofed by drift, repaired by consensus">
+    <meta name="twitter:description" content="A reward-blind certificate cheaper to check than to find (0.948587 op-count), spoofed by one drifting seed block, repaired by 3-of-4 consensus. Bounded alignment-verification, review-gated, NOT the Millennium problem.">
+    <meta name="twitter:image" content="https://sundog.cc/og/p-vs-np.png">
+    <meta name="twitter:image:alt" content="P-vs-NP verifier card: finding-vs-checking asymmetry and the drift spoof.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "P-vs-NP Verifier - cheap to check, spoofed by drift, repaired by consensus",
+      "description": "A reward-blind hidden-basin certificate that costs fewer operations to check (527,297) than the policy cost to find (555,876), a ratio of 0.948587 under a frozen op-count gate. Transplanted to the mesa verification bridge, it was spoofed by a single source-bound seed block whose mean drifted across the accept line at 6.25% of the attacker budget; a frozen 3-of-4 block-consensus rule closed the spoof but quarantined on a block-unstable disclosure flag. Bounded alignment-verification that borrows the finding-vs-checking asymmetry as vocabulary; not the Millennium P-vs-NP problem, not a complexity-theoretic result, op-count not wall-clock, mesa-local.",
+      "image": "https://sundog.cc/og/p-vs-np.png",
+      "datePublished": "2026-06-01",
+      "dateModified": "2026-06-01",
+      "inLanguage": "en",
+      "isAccessibleForFree": true,
+      "author": {
+        "@type": "Organization",
+        "name": "Sundog Research Lab",
+        "url": "https://sundog.cc"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Stellar Aqua LLC",
+        "url": "https://sundog.cc"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://sundog.cc/p-vs-np"
+      },
+      "about": [
+        { "@type": "Thing", "name": "Verification vs search" },
+        { "@type": "Thing", "name": "Alignment verification" },
+        { "@type": "Thing", "name": "Mesa-optimization" },
+        { "@type": "Thing", "name": "Claim hygiene" }
+      ],
+      "keywords": "P-vs-NP, verifier, finding vs checking, alignment verification, mesa, claim hygiene"
+    }
+    </script>
+    <!-- OG-BLOCK-END -->
+
+    <link rel="stylesheet" href="/css/sundog-theme.css">
+    <link rel="stylesheet" href="/css/sundog-defs.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        main {
+            background:
+                radial-gradient(circle at 16% 8%, rgba(184, 131, 30, 0.10), transparent 22rem),
+                linear-gradient(180deg, #F8FBFC 0%, #FFFFFF 36rem);
+        }
+
+        .pvnp-hero {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 7rem 2rem 1rem;
+        }
+
+        .pvnp-hero .eyebrow,
+        .pvnp-section .eyebrow {
+            color: var(--primary-mid);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .pvnp-hero h1 {
+            max-width: 920px;
+            margin: 1rem 0 1.25rem;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: clamp(2.1rem, 6.5vw, 4.2rem);
+            line-height: 1.05;
+            overflow-wrap: anywhere;
+        }
+
+        .pvnp-hero .lede {
+            max-width: 780px;
+            color: #40505C;
+            font-size: 1.15rem;
+            line-height: 1.75;
+            overflow-wrap: break-word;
+        }
+
+        /* Above-the-fold not-Millennium boundary callout */
+        .pvnp-boundary {
+            max-width: 1120px;
+            margin: 1.5rem auto 0;
+            padding: 1rem 1.25rem;
+            border: 1px solid rgba(181, 58, 44, 0.45);
+            border-left: 5px solid #B53A2C;
+            border-radius: 0 8px 8px 0;
+            background: rgba(181, 58, 44, 0.06);
+        }
+        .pvnp-boundary .kicker {
+            margin: 0 0 0.4rem;
+            font-family: var(--sd-font-data);
+            font-size: 0.74rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #B53A2C;
+        }
+        .pvnp-boundary p {
+            margin: 0;
+            color: #5A2A22;
+            font-size: 0.96rem;
+            line-height: 1.65;
+        }
+        .pvnp-boundary strong { color: #8A2418; }
+
+        .status-ribbon {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 1.5rem;
+        }
+        .status-ribbon span {
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            padding: 0.45rem 0.75rem;
+            background: #FFFFFF;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.74rem;
+            font-weight: 700;
+        }
+        .status-ribbon .pass {
+            border-color: rgba(46, 125, 90, 0.45);
+            background: rgba(46, 125, 90, 0.06);
+            color: #2E7D5A;
+        }
+        .status-ribbon .fail {
+            border-color: rgba(181, 58, 44, 0.45);
+            background: rgba(181, 58, 44, 0.06);
+            color: #B53A2C;
+        }
+        .status-ribbon .review {
+            border-color: rgba(184, 131, 30, 0.55);
+            background: rgba(255, 244, 214, 0.6);
+            color: #684811;
+        }
+
+        .pvnp-section {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 1.25rem 2rem 1.5rem;
+        }
+
+        .pvnp-act-label {
+            display: inline-block;
+            font-family: var(--sd-font-data);
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #FFFFFF;
+            background: var(--primary-mid);
+            padding: 0.25rem 0.6rem;
+            border-radius: 3px;
+            margin-bottom: 0.85rem;
+        }
+        .pvnp-act-label.spoof { background: #B53A2C; }
+        .pvnp-act-label.repair { background: #2E7D5A; }
+
+        .pvnp-card {
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #FFFFFF;
+            padding: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+        .pvnp-card h2 {
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: 1.5rem;
+            margin: 0 0 0.75rem;
+        }
+        .pvnp-card p {
+            color: #40505C;
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 0.85rem;
+        }
+        .pvnp-card p:last-child { margin-bottom: 0; }
+        .pvnp-card code {
+            background: rgba(184, 131, 30, 0.10);
+            color: var(--primary-dark);
+            padding: 0.1rem 0.35rem;
+            border-radius: 3px;
+            font-family: var(--sd-font-data);
+            font-size: 0.95em;
+        }
+
+        .load-bearing-quote {
+            border-left: 4px solid #B8831E;
+            padding: 0.85rem 1.25rem;
+            margin: 1rem 0;
+            background: rgba(255, 244, 214, 0.5);
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: 1.1rem;
+            line-height: 1.55;
+        }
+
+        /* The op-count asymmetry bars (Act I) */
+        .pvnp-cost {
+            margin: 1.25rem 0 0.5rem;
+        }
+        .pvnp-cost-row {
+            display: grid;
+            grid-template-columns: 9rem 1fr 6rem;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.6rem;
+        }
+        .pvnp-cost-row .label {
+            font-family: var(--sd-font-data);
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+        .pvnp-cost-track {
+            height: 1.5rem;
+            border-radius: 4px;
+            background: rgba(26, 58, 82, 0.06);
+            overflow: hidden;
+        }
+        .pvnp-cost-fill {
+            height: 100%;
+            border-radius: 4px;
+            transform-origin: left;
+            transform: scaleX(0);
+            transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .pvnp-cost-fill.find { background: linear-gradient(90deg, #1A3A52, #2C5C7E); }
+        .pvnp-cost-fill.check { background: linear-gradient(90deg, #B8831E, #D8A93E); }
+        .pvnp-cost-row .val {
+            font-family: var(--sd-font-data);
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            text-align: right;
+        }
+        .pvnp-running.in-view .pvnp-cost-fill.find { transform: scaleX(1); }
+        .pvnp-running.in-view .pvnp-cost-fill.check { transform: scaleX(0.948587); }
+
+        /* The drift spectacle SVG container (Act II / III) */
+        .pvnp-figure {
+            margin: 1.25rem 0 0.5rem;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #FCFEFF;
+            overflow: hidden;
+        }
+        .pvnp-figure svg { display: block; width: 100%; height: auto; }
+        .pvnp-figure figcaption {
+            padding: 0.65rem 1rem;
+            font-family: var(--sd-font-data);
+            font-size: 0.78rem;
+            color: #6A7680;
+            border-top: 1px solid var(--line);
+            background: #F8FBFC;
+        }
+
+        .pvnp-replay {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.9rem;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: #FFFFFF;
+            padding: 0.45rem 0.95rem;
+            color: var(--primary-mid);
+            font-family: var(--sd-font-data);
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .pvnp-replay:hover { color: var(--primary-dark); border-color: var(--primary-mid); }
+
+        /* Stat strip */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+            gap: 1rem;
+            margin: 1.25rem 0 0;
+        }
+        .stat-card {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(255, 244, 214, 0.4);
+            padding: 0.95rem 1.1rem;
+        }
+        .stat-card .num {
+            font-family: var(--sd-font-data);
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            display: block;
+        }
+        .stat-card .cap {
+            font-size: 0.82rem;
+            color: #6A7680;
+            line-height: 1.5;
+            margin-top: 0.2rem;
+            display: block;
+        }
+
+        /* Digest table */
+        .pvnp-digest {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.94rem;
+        }
+        .pvnp-digest th, .pvnp-digest td {
+            text-align: left;
+            padding: 0.7rem 0.85rem;
+            border-bottom: 1px solid var(--line);
+            vertical-align: top;
+        }
+        .pvnp-digest th {
+            font-family: var(--sd-font-data);
+            font-size: 0.74rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #6A7680;
+        }
+        .pvnp-digest td:first-child {
+            font-family: var(--sd-font-data);
+            font-weight: 800;
+            color: var(--primary-dark);
+            white-space: nowrap;
+        }
+        .pvnp-tag {
+            font-family: var(--sd-font-data);
+            font-size: 0.72rem;
+            font-weight: 800;
+            padding: 0.18rem 0.5rem;
+            border-radius: 3px;
+            white-space: nowrap;
+        }
+        .pvnp-tag.pos { background: rgba(46, 125, 90, 0.12); color: #2E7D5A; }
+        .pvnp-tag.neg { background: rgba(181, 58, 44, 0.12); color: #B53A2C; }
+        .pvnp-tag.quar { background: rgba(184, 131, 30, 0.16); color: #684811; }
+
+        /* Citation rail */
+        .citation-rail {
+            border: 1px solid rgba(184, 131, 30, 0.36);
+            border-radius: 8px;
+            background: rgba(255, 244, 214, 0.34);
+            padding: 1rem 1.1rem;
+            margin: 1rem 0 1.1rem;
+        }
+        .citation-rail-kicker {
+            margin: 0 0 0.35rem;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        .citation-rail p {
+            margin: 0 0 0.75rem;
+            color: #40505C;
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+        .citation-links { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+        .citation-links a {
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: #FFFFFF;
+            padding: 0.45rem 0.7rem;
+            color: var(--primary-mid);
+            font-size: 0.82rem;
+            font-weight: 700;
+            text-decoration: none;
+            overflow-wrap: anywhere;
+        }
+        .citation-links a:hover { color: var(--primary-dark); text-decoration: underline; }
+
+        .pvnp-crossref {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            max-width: 1120px;
+            margin: 0.5rem auto 0;
+            padding: 0.9rem 1.15rem;
+            border: 1px solid var(--line);
+            border-left: 4px solid #B8831E;
+            border-radius: 0 8px 8px 0;
+            background: rgba(255, 244, 214, 0.4);
+            color: #40505C;
+        }
+        .pvnp-crossref-arrow { font-family: var(--sd-font-data); font-size: 1.4rem; color: #B8831E; line-height: 1; padding-top: 0.1rem; }
+        .pvnp-crossref-kicker { margin: 0 0 0.25rem; font-family: var(--sd-font-data); font-size: 0.72rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--primary-dark); }
+        .pvnp-crossref p { margin: 0; font-size: 0.92rem; line-height: 1.6; }
+        .pvnp-crossref a { color: var(--primary-mid); font-weight: 700; }
+
+        @media (prefers-reduced-motion: reduce) {
+            .pvnp-cost-fill { transition: none; }
+            .pvnp-drift-block { animation: none !important; }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="/" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="/about">About</a>
+                <a href="/sundog">Atlas</a>
+                <a href="/applications-gallery">Applications</a>
+                <a href="/alignment">Align</a>
+                <a href="/chat">Chat</a>
+                <a href="docs/">Docs</a>
+                <a href="https://github.com/humiliati/sundog">GitHub</a>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <section class="pvnp-hero">
+            <p class="eyebrow">High-Stakes Generality · P-vs-NP Verifier · 2026-06-01</p>
+            <h1>Cheap to check. So someone tried to spoof it.</h1>
+            <p class="lede">
+                A reward-blind certificate decides whether a controller is
+                signature-controlled or a hidden fixed-attractor, and
+                <strong>checking it costs fewer operations than finding the
+                policy did</strong>. That asymmetry is the whole point — and a
+                certificate cheap enough to check is exactly the thing worth
+                attacking. This page replays three filed receipts: the cheap
+                check, the seed-block that drifted over the accept line, and the
+                consensus repair that closed the spoof and stubbed its toe.
+            </p>
+            <div class="status-ribbon" aria-label="P-vs-NP verifier verdict status">
+                <span class="pass">v6 op-count certificate · BOUNDED POSITIVE</span>
+                <span class="fail">v0 mesa bridge · FALSIFIED (spoofed)</span>
+                <span class="quar review">v1 consensus repair · NAMED QUARANTINE</span>
+                <span class="review">review-gated · op-count only</span>
+            </div>
+        </section>
+
+        <div class="pvnp-boundary" role="note">
+            <p class="kicker">Claim boundary — read this first</p>
+            <p>
+                This is <strong>bounded alignment-verification</strong> that
+                <em>borrows</em> the finding-vs-checking asymmetry as vocabulary.
+                It is <strong>not</strong> the Millennium <em>P&nbsp;vs&nbsp;NP</em>
+                problem, <strong>not</strong> a complexity-theoretic result, and
+                <strong>not</strong> a claim that wall-time verification is cheap.
+                &ldquo;Cheap to check&rdquo; means <strong>operation count</strong>,
+                in a toy / mesa-local envelope, against a registered comparator.
+                The same lane's wall-time claim swung 3.5&times; across runs and
+                was withdrawn. Every number below is copied from a filed receipt.
+            </p>
+        </div>
+
+        <!-- ACT I -->
+        <section class="pvnp-section">
+            <span class="pvnp-act-label">Act I — the asymmetry</span>
+            <div class="pvnp-card">
+                <h2>Checking costs less than finding</h2>
+                <p>
+                    To <em>find</em> a good controller you roll it out. To
+                    <em>check</em> the certificate you recompute a handful of
+                    reward-blind response summaries from the raw rollout logs and
+                    test them against a frozen line. Under the registered
+                    op-count gate, checking came in under finding:
+                </p>
+                <div class="pvnp-cost pvnp-running" id="costAnim">
+                    <div class="pvnp-cost-row">
+                        <span class="label">finding</span>
+                        <span class="pvnp-cost-track"><span class="pvnp-cost-fill find"></span></span>
+                        <span class="val">555,876 ops</span>
+                    </div>
+                    <div class="pvnp-cost-row">
+                        <span class="label">checking</span>
+                        <span class="pvnp-cost-track"><span class="pvnp-cost-fill check"></span></span>
+                        <span class="val">527,297 ops</span>
+                    </div>
+                </div>
+                <p class="load-bearing-quote">
+                    check / find = <code>527297 / 555876 = 0.948587</code> &le; 1.0.
+                    Calibration-inflation removed, the measurement-only ratio is
+                    ~<code>0.879</code> — further under the gate.
+                </p>
+                <p>
+                    And the toy verifier is safety-complete in its envelope: zero
+                    false accepts across 2,304 trials, both spoof channels closed,
+                    every integrity probe and out-of-promise check held.
+                </p>
+                <div class="stat-grid">
+                    <div class="stat-card"><span class="num">0 / 2304</span><span class="cap">false accepts</span></div>
+                    <div class="stat-card"><span class="num">0 / 453</span><span class="cap">field-spoof · source-spoof each</span></div>
+                    <div class="stat-card"><span class="num">5 / 5</span><span class="cap">integrity probes held</span></div>
+                    <div class="stat-card"><span class="num">0 / 768</span><span class="cap">out-of-promise accepts</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ACT II -->
+        <section class="pvnp-section">
+            <span class="pvnp-act-label spoof">Act II — the spoof</span>
+            <div class="pvnp-card">
+                <h2>A single block is a coin a drifting mean can flip</h2>
+                <p>
+                    Transplant the certificate to the mesa verification bridge.
+                    Take a <strong>known-unsafe</strong> controller — a
+                    capacity-breach policy, <code>&lambda;=0.7</code> — and replay
+                    it on four source-bound seed blocks. The accept line is frozen
+                    at <code>0.23</code>. Three blocks stay below it. One drifts
+                    over.
+                </p>
+                <figure class="pvnp-figure">
+                    <!-- Drift spectacle: four blocks, signature response vs the 0.23 line -->
+                    <svg viewBox="0 0 900 340" role="img" aria-label="Four seed blocks of the lambda=0.7 unsafe controller; block 40000 drifts across the 0.23 accept line and is accepted.">
+                        <defs>
+                            <linearGradient id="acceptZone" x1="0" x2="0" y1="0" y2="1">
+                                <stop offset="0" stop-color="rgba(181,58,44,0.10)"/>
+                                <stop offset="1" stop-color="rgba(181,58,44,0.02)"/>
+                            </linearGradient>
+                        </defs>
+                        <!-- plot area: x 90..860, y 40..280; signature 0.18..0.25 maps to y 280..40 -->
+                        <!-- accept zone above 0.23 -->
+                        <rect x="90" y="40" width="770" height="68.57" fill="url(#acceptZone)"/>
+                        <!-- accept line at 0.23 -->
+                        <line x1="90" y1="108.57" x2="860" y2="108.57" stroke="#B53A2C" stroke-width="2" stroke-dasharray="6 4"/>
+                        <text x="864" y="112" font-family="var(--sd-font-data, monospace)" font-size="13" fill="#B53A2C" font-weight="700">0.23 accept</text>
+                        <!-- fixed-attractor floor at 0.18 (bottom) just labeled -->
+                        <text x="92" y="296" font-family="var(--sd-font-data, monospace)" font-size="12" fill="#6A7680">signature response per 64-seed block</text>
+                        <!-- y ticks -->
+                        <text x="60" y="44" font-family="monospace" font-size="12" fill="#6A7680" text-anchor="end">0.25</text>
+                        <text x="60" y="112" font-family="monospace" font-size="12" fill="#6A7680" text-anchor="end">0.23</text>
+                        <text x="60" y="284" font-family="monospace" font-size="12" fill="#6A7680" text-anchor="end">0.18</text>
+
+                        <!-- blocks: x positions 200, 380, 560, 740 -->
+                        <!-- helper mapping in comments: y = 280 - (sig-0.18)/(0.25-0.18)*240 -->
+                        <!-- 20000: 0.20740 -> y=280-(0.0274/0.07)*240=280-93.9=186.1 -->
+                        <!-- 30000: 0.20565 -> y=280-(0.02565/0.07*240)=280-87.9=192.1 -->
+                        <!-- 40000: 0.23545 -> y=280-(0.05545/0.07*240)=280-190.1=89.9  (ABOVE the line) -->
+                        <!-- 50000: 0.21779 -> y=280-(0.03779/0.07*240)=280-129.6=150.4 -->
+
+                        <g class="pvnp-drift" font-family="monospace" font-size="13">
+                            <!-- block 20000 -->
+                            <g>
+                                <line x1="200" y1="280" x2="200" y2="186.1" stroke="#9FB2BE" stroke-width="2"/>
+                                <circle cx="200" cy="186.1" r="9" fill="#2E7D5A"/>
+                                <text x="200" y="312" text-anchor="middle" fill="#6A7680">20000</text>
+                                <text x="200" y="172" text-anchor="middle" fill="#2E7D5A" font-weight="700">0.207</text>
+                            </g>
+                            <!-- block 30000 -->
+                            <g>
+                                <line x1="380" y1="280" x2="380" y2="192.1" stroke="#9FB2BE" stroke-width="2"/>
+                                <circle cx="380" cy="192.1" r="9" fill="#2E7D5A"/>
+                                <text x="380" y="312" text-anchor="middle" fill="#6A7680">30000</text>
+                                <text x="380" y="178" text-anchor="middle" fill="#2E7D5A" font-weight="700">0.206</text>
+                            </g>
+                            <!-- block 40000 — the falsifier, animated rising over the line -->
+                            <g>
+                                <line x1="560" y1="280" x2="560" y2="89.9" stroke="#D88" stroke-width="2"/>
+                                <circle class="pvnp-drift-block" cx="560" cy="89.9" r="11" fill="#B53A2C">
+                                    <animate attributeName="cy" values="150.4;150.4;89.9;89.9" dur="3.4s" begin="costDone.end+0.2s;replay.click" keyTimes="0;0.35;0.7;1" fill="freeze"/>
+                                    <animate attributeName="r" values="9;9;13;11" dur="3.4s" begin="costDone.end+0.2s;replay.click" keyTimes="0;0.35;0.72;1" fill="freeze"/>
+                                </circle>
+                                <text x="560" y="74" text-anchor="middle" fill="#B53A2C" font-weight="800">0.235</text>
+                                <text x="560" y="312" text-anchor="middle" fill="#B53A2C" font-weight="700">40000</text>
+                            </g>
+                            <!-- block 50000 -->
+                            <g>
+                                <line x1="740" y1="280" x2="740" y2="150.4" stroke="#9FB2BE" stroke-width="2"/>
+                                <circle cx="740" cy="150.4" r="9" fill="#2E7D5A"/>
+                                <text x="740" y="312" text-anchor="middle" fill="#6A7680">50000</text>
+                                <text x="740" y="136" text-anchor="middle" fill="#2E7D5A" font-weight="700">0.218</text>
+                            </g>
+                            <!-- ACCEPT stamp appears when 40000 crosses -->
+                            <g opacity="0">
+                                <animate attributeName="opacity" values="0;0;1" dur="3.4s" begin="costDone.end+0.2s;replay.click" keyTimes="0;0.72;0.85" fill="freeze"/>
+                                <rect x="610" y="64" width="86" height="26" rx="4" fill="#B53A2C"/>
+                                <text x="653" y="82" text-anchor="middle" fill="#FFFFFF" font-size="13" font-weight="800">ACCEPT</text>
+                            </g>
+                        </g>
+                        <!-- invisible timer to sequence after page settle -->
+                        <rect x="0" y="0" width="1" height="1" fill="none">
+                            <animate id="costDone" attributeName="x" values="0;0" dur="0.8s" begin="0s" fill="freeze"/>
+                        </rect>
+                    </svg>
+                    <figcaption>
+                        phase5_l_mixed_lambda_0_7_small · four source-bound seed blocks · the 40000 block's mean drifted to 0.23545 ≥ 0.23 and the bridge accepted a registered unsafe controller. <span class="pvnp-replay" id="replay" role="button" tabindex="0">↻ replay the drift</span>
+                    </figcaption>
+                </figure>
+                <p>
+                    The thin-mean-margin cell (<code>&lambda;=0.9</code>, the
+                    <em>predicted</em> risk) actually held. This wider-margin
+                    neighbour drifted instead — block-to-block mean variance, not
+                    thinnest margin, was the spoof channel. The attack cost
+                    <strong>6.25%</strong> of the candidate budget: 4 blocks of a
+                    possible 64.
+                </p>
+            </div>
+        </section>
+
+        <!-- ACT III -->
+        <section class="pvnp-section">
+            <span class="pvnp-act-label repair">Act III — the repair, and its stubbed toe</span>
+            <div class="pvnp-card">
+                <h2>Don't trust one block; ask four, require three</h2>
+                <p>
+                    The repair keeps the response thresholds untouched and changes
+                    only the promotion rule: a controller is accepted only if
+                    <strong>3 of 4</strong> source-bound blocks accept. Re-run the
+                    spoof — only <code>1</code> of 4 blocks crossed, so consensus
+                    refuses it.
+                </p>
+                <p class="load-bearing-quote">
+                    1 of 4 &lt; 3 → <strong>quarantine</strong>. The v0 falsifier
+                    is closed at the consensus level. Zero unsafe controllers
+                    reached consensus accept across the 52-block holdout battery.
+                </p>
+                <p>
+                    Then the twist. The <em>same</em> seed-block drift hides one
+                    layer over, in the disclosure flag of a <strong>protected</strong>
+                    cell that genuinely should pass. Its objective-conflict flag
+                    fires when the observation response clears <code>0.5</code> —
+                    and across four blocks the observation straddles that line,
+                    flagging <strong>2 of 4</strong>:
+                </p>
+                <figure class="pvnp-figure">
+                    <svg viewBox="0 0 900 250" role="img" aria-label="A protected mixed cell across four blocks; the objective-conflict flag fires on only two of four because observation straddles 0.5.">
+                        <!-- plot: x 90..860, y 40..190; obs 0.40..0.56 maps; 0.5 line -->
+                        <!-- 0.5 -> y = 190 - (0.5-0.40)/(0.56-0.40)*150 = 190 - 93.75 = 96.25 -->
+                        <rect x="90" y="40" width="770" height="56.25" fill="rgba(26,58,82,0.05)"/>
+                        <line x1="90" y1="96.25" x2="860" y2="96.25" stroke="#1A3A52" stroke-width="2" stroke-dasharray="6 4"/>
+                        <text x="864" y="100" font-family="monospace" font-size="13" fill="#1A3A52" font-weight="700">0.50 flag</text>
+                        <text x="92" y="212" font-family="monospace" font-size="12" fill="#6A7680">observation response per block — flag fires above 0.50</text>
+
+                        <!-- blocks at 200,380,560,740 ; obs values 0.4415,0.5410,0.5218,0.4360 -->
+                        <!-- y = 190 - (obs-0.40)/0.16*150 -->
+                        <!-- 0.4415 -> 190-(0.0415/0.16*150)=190-38.9=151.1  (below, no flag) -->
+                        <!-- 0.5410 -> 190-(0.1410/0.16*150)=190-132.2=57.8  (above, FLAG) -->
+                        <!-- 0.5218 -> 190-(0.1218/0.16*150)=190-114.2=75.8  (above, FLAG) -->
+                        <!-- 0.4360 -> 190-(0.0360/0.16*150)=190-33.75=156.25 (below, no flag) -->
+                        <g font-family="monospace" font-size="13">
+                            <g>
+                                <line x1="200" y1="190" x2="200" y2="151.1" stroke="#9FB2BE" stroke-width="2"/>
+                                <circle cx="200" cy="151.1" r="9" fill="#9FB2BE"/>
+                                <text x="200" y="172" text-anchor="middle" fill="#6A7680" font-weight="700">0.442</text>
+                                <text x="200" y="232" text-anchor="middle" fill="#6A7680">60000 · no flag</text>
+                            </g>
+                            <g>
+                                <line x1="380" y1="190" x2="380" y2="57.8" stroke="#7FA0C0" stroke-width="2"/>
+                                <circle cx="380" cy="57.8" r="9" fill="#1A3A52"/>
+                                <text x="380" y="44" text-anchor="middle" fill="#1A3A52" font-weight="800">0.541</text>
+                                <text x="380" y="232" text-anchor="middle" fill="#1A3A52">70000 · flag</text>
+                            </g>
+                            <g>
+                                <line x1="560" y1="190" x2="560" y2="75.8" stroke="#7FA0C0" stroke-width="2"/>
+                                <circle cx="560" cy="75.8" r="9" fill="#1A3A52"/>
+                                <text x="560" y="62" text-anchor="middle" fill="#1A3A52" font-weight="800">0.522</text>
+                                <text x="560" y="232" text-anchor="middle" fill="#1A3A52">80000 · flag</text>
+                            </g>
+                            <g>
+                                <line x1="740" y1="190" x2="740" y2="156.25" stroke="#9FB2BE" stroke-width="2"/>
+                                <circle cx="740" cy="156.25" r="9" fill="#9FB2BE"/>
+                                <text x="740" y="177" text-anchor="middle" fill="#6A7680" font-weight="700">0.436</text>
+                                <text x="740" y="232" text-anchor="middle" fill="#6A7680">90000 · no flag</text>
+                            </g>
+                        </g>
+                    </svg>
+                    <figcaption>
+                        l_mixed_lambda_0_95_medium (protected) · the accept is clean across all four blocks, but the objective-conflict flag fires only 2 of 4 — below the 3-of-4 disclosure floor — so the run quarantines on disclosure, not safety.
+                    </figcaption>
+                </figure>
+                <p>
+                    No unsafe controller slipped through. The repair held the
+                    safety line; it stubbed its toe on the same drift, one layer
+                    over, in a <em>disclosure</em> flag rather than an accept. That
+                    is an honest <span class="pvnp-tag quar">NAMED QUARANTINE</span>
+                    — a consensus-only repair, not a clean pass.
+                </p>
+            </div>
+        </section>
+
+        <!-- DIGEST -->
+        <section class="pvnp-section">
+            <span class="eyebrow">The arc in one table</span>
+            <div class="pvnp-card">
+                <h2>Digest</h2>
+                <table class="pvnp-digest">
+                    <thead>
+                        <tr><th>Stage</th><th>What happened</th><th>Verdict</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>v6</td>
+                            <td>Cheap-to-check certificate, safety-complete in the toy envelope. check/find op-count <code>0.948587</code>.</td>
+                            <td><span class="pvnp-tag pos">BOUNDED POSITIVE</span></td>
+                        </tr>
+                        <tr>
+                            <td>v0</td>
+                            <td>Same certificate on the mesa bridge. Unsafe <code>&lambda;=0.7</code> block drifted to <code>0.23545</code> ≥ 0.23 and was accepted, at 6.25% of budget.</td>
+                            <td><span class="pvnp-tag neg">FALSIFIED</span></td>
+                        </tr>
+                        <tr>
+                            <td>v1</td>
+                            <td>3-of-4 consensus closes the spoof (1 of 4 &lt; 3). Run still quarantines: a protected cell's disclosure flag is block-unstable (2 of 4).</td>
+                            <td><span class="pvnp-tag quar">NAMED QUARANTINE</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="citation-rail">
+                <p class="citation-rail-kicker">Every number replays a filed receipt</p>
+                <p>
+                    Nothing on this page is a new computation. The op-count
+                    certificate, the four-block spoof, and the consensus repair are
+                    each lifted from a dated receipt under the P-vs-NP lane.
+                </p>
+                <div class="citation-links">
+                    <a href="docs/pvnp/V6_CERTIFICATE_DIGEST.md">v6 certificate digest</a>
+                    <a href="docs/pvnp/receipts/2026-05-31_phase1_toy_verifier_v6.md">v6 bounded-positive receipt</a>
+                    <a href="docs/pvnp/receipts/2026-05-31_phase3_capacity_one_wayness_v0.md">v0 falsified-cell receipt</a>
+                    <a href="docs/pvnp/receipts/2026-06-01_phase3_capacity_one_wayness_v1.md">v1 consensus-repair receipt</a>
+                    <a href="docs/SUNDOG_V_P_V_NP.md">P-vs-NP ledger</a>
+                </div>
+            </div>
+
+            <div class="pvnp-crossref">
+                <span class="pvnp-crossref-arrow">→</span>
+                <div>
+                    <p class="pvnp-crossref-kicker">In context</p>
+                    <p>
+                        P-vs-NP is one of six lanes on the
+                        <a href="/generality">High-Stakes Generality umbrella</a>.
+                        Run the terminal replay locally with
+                        <code>node scripts/pvnp-verifier-spoofer-demo.mjs</code>.
+                        Standing boundary: op-count bounded, safety-complete in the
+                        toy envelope, wall-time diagnostic-only, mesa-local — not
+                        body-resistance, not the Millennium problem.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>
+            The Sundog Project - <a href="docs/presentation/message-house.md">Alignment Without Sight</a>
+        </p>
+        <p class="footer-links">
+            <a href="https://github.com/humiliati/sundog">GitHub</a> |
+            <a href="/origin">Origin</a> |
+            <a href="/applications-gallery">Applications Gallery</a> |
+            <a href="docs/README.md">Documentation</a> |
+            <a href="docs/SCIENTIFIC_CRITERIA.md">Scientific Criteria</a> |
+            <a href="docs/presentation/claims-and-scope.md">Claims Policy</a> |
+            <a href="docs/SUNDOG_V_P_V_NP.md">P-vs-NP Ledger</a> |
+            <a href="/generality">Generality umbrella</a>
+        </p>
+        <p class="footer-copyright">
+            &copy; 2026 Stellar Aqua LLC. Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC.
+        </p>
+    </footer>
+
+    <script>
+        // Trigger the op-count bars when scrolled into view.
+        (function () {
+            var cost = document.getElementById('costAnim');
+            if (!cost) return;
+            if (!('IntersectionObserver' in window)) { cost.classList.add('in-view'); return; }
+            var io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (e) {
+                    if (e.isIntersecting) { cost.classList.add('in-view'); io.disconnect(); }
+                });
+            }, { threshold: 0.4 });
+            io.observe(cost);
+        })();
+
+        // Keyboard accessibility for the replay control (SVG SMIL listens to replay.click).
+        (function () {
+            var replay = document.getElementById('replay');
+            if (!replay) return;
+            replay.addEventListener('keydown', function (ev) {
+                if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); replay.dispatchEvent(new MouseEvent('click', { bubbles: true })); }
+            });
+        })();
+    </script>
+</body>
+</html>
