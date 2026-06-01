@@ -66,6 +66,14 @@ class Cfg:
     n_fingerprint: int = 3000
     k_outlier: int = 2
     seed: int = 0
+    # curriculum / grok-aware training
+    curriculum: bool = False         # each H warm-starts from the previous H's checkpoint
+    warm_start: str = ""             # explicit gen checkpoint to warm-start the first H
+    pos_h: int = 0                   # size the positional embedding for this H (0 = max(h_sweep));
+                                     # fix across a curriculum so checkpoints transfer
+    min_steps: int = 0               # no early-stop before this many steps (grok flat phase)
+    twin_patience: int = 3           # twin early-stops on z_1 acc plateau
+    save_ckpt: bool = True
     # sharpness thresholds
     d_dec_frac_min: float = 0.5
     z1_ctrl_min: float = 0.70
@@ -76,7 +84,7 @@ class Cfg:
 
     @property
     def max_len(self) -> int:
-        return self.bits_per_channel * max(self.h_sweep)
+        return self.bits_per_channel * (self.pos_h if self.pos_h else max(self.h_sweep))
 
 
 def smoke_cfg() -> Cfg:
@@ -182,10 +190,13 @@ class TwinHead(nn.Module):
 # --------------------------------------------------------------------------- #
 # training
 # --------------------------------------------------------------------------- #
-def train_generative(H, cfg, device, seed):
+def train_generative(H, cfg, device, seed, warm_start=None):
     torch.manual_seed(seed)
     rng = np.random.default_rng(seed)
     model = TinyGPT(2, cfg.d_model, cfg.n_layers, cfg.n_heads, cfg.max_len).to(device)
+    if warm_start:
+        model.load_state_dict(torch.load(warm_start, map_location=device))
+        print(f"[H={H}] warm-started gen from {warm_start}", flush=True)
     opt = torch.optim.AdamW(model.parameters(), lr=cfg.lr, weight_decay=0.01)
     eb, _ = gen_batch(H, cfg.eval_batch, cfg, np.random.default_rng(seed + 999))
     et = torch.tensor(eb, device=device)
@@ -206,7 +217,8 @@ def train_generative(H, cfg, device, seed):
                 best, bad = el, 0
             else:
                 bad += 1
-                if bad >= cfg.patience:
+                # grok-aware: never quit during the flat pre-grok phase
+                if bad >= cfg.patience and steps >= cfg.min_steps:
                     break
     p = 0.5 + cfg.delta
     bayes_pred = -(p * np.log(p) + (1 - p) * np.log(1 - p))
@@ -221,17 +233,30 @@ def train_twin(H, cfg, device, seed):
     backbone = TinyGPT(2, cfg.d_model, cfg.n_layers, cfg.n_heads, cfg.max_len).to(device)
     twin = TwinHead(backbone, cfg.d_model).to(device)
     opt = torch.optim.AdamW(twin.parameters(), lr=cfg.lr, weight_decay=0.01)
-    acc = 0.0
+    eb, ez = gen_batch(H, cfg.eval_batch, cfg, np.random.default_rng(seed + 888))
+    et = torch.tensor(eb, device=device)
+    ey = torch.tensor(ez[:, 0], dtype=torch.float32, device=device)
+    best_acc, bad, steps = 0.0, 0, 0
     for step in range(cfg.max_steps):
         bits, z = gen_batch(H, cfg.batch, cfg, rng)
         idx = torch.tensor(bits, device=device)
         y = torch.tensor(z[:, 0], dtype=torch.float32, device=device)
-        z1 = twin(idx)
-        loss = F.binary_cross_entropy_with_logits(z1, y)
+        loss = F.binary_cross_entropy_with_logits(twin(idx), y)
         opt.zero_grad(); loss.backward(); opt.step()
-        if (step + 1) % cfg.eval_every == 0:
-            acc = float(((z1.detach() > 0).float() == y).float().mean())
-    return twin, {"train_acc_z1": acc}
+        steps = step + 1
+        if steps % cfg.eval_every == 0:
+            twin.eval()
+            with torch.no_grad():
+                acc = float(((twin(et) > 0).float() == ey).float().mean())
+            twin.train()
+            # twin learns z_1 fast and does not grok -> early-stop freely (no min_steps)
+            if acc > best_acc + 1e-3:
+                best_acc, bad = acc, 0
+            else:
+                bad += 1
+                if bad >= cfg.twin_patience:
+                    break
+    return twin, {"train_acc_z1": float(best_acc), "steps": steps}
 
 
 def extract_body(model, H, cfg, device, seed):
@@ -350,47 +375,65 @@ def input_probe_precheck(cfg):
 # stages
 # --------------------------------------------------------------------------- #
 def train_stage(cfg, out, device):
-    bdir = out / "bodies"
-    bdir.mkdir(parents=True, exist_ok=True)
+    bdir = out / "bodies"; bdir.mkdir(parents=True, exist_ok=True)
+    cdir = out / "ckpt"; cdir.mkdir(parents=True, exist_ok=True)
+    chance = float(np.log(2.0))
+    prev_ckpt = cfg.warm_start or None
     for H in cfg.h_sweep:
         hs = cfg.seed + 1000 * H
         t = time.time()
-        print(f"[H={H}] training generative (L={cfg.bits_per_channel*H})...", flush=True)
-        gen, gmeta = train_generative(H, cfg, device, hs)
+        ws = prev_ckpt if cfg.curriculum else (cfg.warm_start or None)
+        print(f"[H={H}] training generative (L={cfg.bits_per_channel*H})"
+              f"{' [warm]' if ws else ''}...", flush=True)
+        gen, gmeta = train_generative(H, cfg, device, hs, warm_start=ws)
         gb, gz = extract_body(gen, H, cfg, device, hs)
         np.savez(bdir / f"H{H}_gen.npz", bodies=gb, z=gz, meta=json.dumps(gmeta))
+        learned = gmeta["eval_loss"] < chance - 0.02
+        if cfg.save_ckpt:
+            torch.save(gen.state_dict(), cdir / f"H{H}_gen.pt")
+            if learned:
+                prev_ckpt = str(cdir / f"H{H}_gen.pt")   # curriculum warm-starts from last LEARNED rung
         print(f"[H={H}] gen saved: eval_loss={gmeta['eval_loss']:.4f} vs bayes "
-              f"{gmeta['bayes_floor']:.4f} ({gmeta['steps']} steps); twin...", flush=True)
-        twin, tmeta = train_twin(H, cfg, device, hs)
-        tb, tz = extract_body(twin, H, cfg, device, hs)
-        np.savez(bdir / f"H{H}_twin.npz", bodies=tb, z=tz, meta=json.dumps(tmeta))
-        print(f"[H={H}] twin saved. ({round(time.time()-t,1)}s)", flush=True)
+              f"{gmeta['bayes_floor']:.4f} ({gmeta['steps']} steps) learned={learned}", flush=True)
+        if learned:
+            twin, tmeta = train_twin(H, cfg, device, hs)
+            tb, tz = extract_body(twin, H, cfg, device, hs)
+            np.savez(bdir / f"H{H}_twin.npz", bodies=tb, z=tz, meta=json.dumps(tmeta))
+            print(f"[H={H}] twin saved ({tmeta['steps']} steps). ({round(time.time()-t,1)}s)", flush=True)
+        else:
+            print(f"[H={H}] gen UNLEARNED -> skipping twin (no contrast vs an unlearned gen). "
+                  f"({round(time.time()-t,1)}s)", flush=True)
 
 
 def measure_stage(cfg, out, precheck=None):
     bdir = out / "bodies"
     records = []
+    chance = float(np.log(2.0))
     for H in cfg.h_sweep:
         g = np.load(bdir / f"H{H}_gen.npz", allow_pickle=True)
-        t = np.load(bdir / f"H{H}_twin.npz", allow_pickle=True)
         gfp = fingerprint(g["bodies"], g["z"], cfg)
-        tfp = fingerprint(t["bodies"], t["z"], cfg)
         gmeta = json.loads(str(g["meta"]))
         # UNLEARNED guard: an H whose gen never left chance is not a body-resistance
         # read at all (F3'), not a "marginal" -- never conflate the two.
-        learned = gmeta["eval_loss"] < float(np.log(2.0)) - 0.02
-        bc_ok = (H > 1 and gfp["body_carry"] >= cfg.body_carry_min
-                 and (gfp["body_carry"] - tfp["body_carry"]) >= cfg.body_carry_gap_min)
+        learned = gmeta["eval_loss"] < chance - 0.02
+        tpath = bdir / f"H{H}_twin.npz"
+        if tpath.exists():
+            t = np.load(tpath, allow_pickle=True)
+            tfp, tmeta = fingerprint(t["bodies"], t["z"], cfg), json.loads(str(t["meta"]))
+        else:
+            tfp, tmeta = None, None                 # gen UNLEARNED -> twin was skipped
+        tbc = tfp["body_carry"] if tfp else float("nan")
+        bc_ok = (tfp is not None and H > 1 and gfp["body_carry"] >= cfg.body_carry_min
+                 and (gfp["body_carry"] - tbc) >= cfg.body_carry_gap_min)
         sharp = bool(learned and gfp["d_dec"] >= cfg.d_dec_frac_min * H
                      and gfp["z1_acc"] >= cfg.z1_ctrl_min
                      and gfp["cross_latent_leak"] <= cfg.leak_max and bc_ok)
         status = "UNLEARNED" if not learned else ("SHARP" if sharp else "MARGINAL")
         records.append({"H": H, "generative": gfp, "twin": tfp, "gen_train": gmeta,
-                        "twin_train": json.loads(str(t["meta"])),
-                        "sharp": sharp, "learned": learned, "status": status})
+                        "twin_train": tmeta, "sharp": sharp, "learned": learned, "status": status})
         print(f"[H={H:>2}] {status:<9} gen: d_dec={gfp['d_dec']:.1f}/{H} z1={gfp['z1_acc']:.2f} "
               f"leak={gfp['cross_latent_leak']:.2f} body_carry={gfp['body_carry']:.2f} "
-              f"(twin {tfp['body_carry']:.2f}) eval_loss={gmeta['eval_loss']:.3f}", flush=True)
+              f"(twin {(f'{tbc:.2f}' if tfp else 'skip')}) eval_loss={gmeta['eval_loss']:.3f}", flush=True)
     sharp_Hs = [r["H"] for r in records if r["sharp"]]
     H_star = min(sharp_Hs) if sharp_Hs else None
     verdict = "SHARP" if H_star is not None else "MARGINAL"
@@ -440,6 +483,11 @@ def main():
     ap.add_argument("--max-steps", type=int, default=None)
     ap.add_argument("--delta", type=float, default=None)
     ap.add_argument("--bits-per-channel", type=int, default=None)
+    ap.add_argument("--curriculum", action="store_true", help="each H warm-starts from prev H ckpt")
+    ap.add_argument("--warm-start", default=None, help="gen checkpoint to warm-start the first H")
+    ap.add_argument("--pos-h", type=int, default=None, help="size pos-emb for this H (fix across curriculum)")
+    ap.add_argument("--min-steps", type=int, default=None, help="no early-stop before this (grok floor)")
+    ap.add_argument("--patience", type=int, default=None)
     ap.add_argument("--out", default=None)
     ap.add_argument("--seed", type=int, default=0)
     args = ap.parse_args()
@@ -459,6 +507,16 @@ def main():
         cfg.delta = args.delta
     if args.bits_per_channel:
         cfg.bits_per_channel = args.bits_per_channel
+    if args.curriculum:
+        cfg.curriculum = True
+    if args.warm_start:
+        cfg.warm_start = args.warm_start
+    if args.pos_h:
+        cfg.pos_h = args.pos_h
+    if args.min_steps is not None:
+        cfg.min_steps = args.min_steps
+    if args.patience:
+        cfg.patience = args.patience
     torch.set_num_threads(4)
     out = pathlib.Path(args.out) if args.out else pathlib.Path(f"results/chatv2/phase0-{args.mode}")
     run(cfg, out)

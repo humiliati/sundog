@@ -227,6 +227,41 @@ LLM-scale; unpromoted. **Scaling run (`H=16`, winning config) launched** to test
 whether `d_dec` keeps growing and the separation survives to the top of the toy's
 range.
 
+### H=16 scaling — inconclusive (early-stop artifact); curriculum built and tabled (2026-05-31)
+
+The `H=16` scaling run returned `UNLEARNED` (`eval_loss = 0.693 = chance`) — but
+it is **not** a marginality read. The generative model **early-stopped at 1250
+steps** (vs H=8's 5500), flat at chance throughout. Pair-XOR is a parity-family
+task, and those *grok* (long flat loss, then sudden learning); `patience=4` killed
+it during the flat pre-grok phase. The UNLEARNED guard flagged it correctly (the
+`d_dec=13.3` is noise-rank, not a real body) and did not conflate "couldn't train"
+with "no resistance." A real inefficiency also surfaced: ~7 of the 8.7 h was the
+**twin grinding 6000 steps against an already-quit gen**.
+
+**Resolution — the curriculum (built + smoke-validated 2026-05-31, run tabled).**
+Warm-start `H=16` from the `H=8` model that already learned the pair-XOR circuit,
+to bypass the grok flat phase. Harness changes that landed:
+- gen **checkpointing** + **warm-start** (cross-`H` `state_dict` transfer; shapes
+  shared by fixing `--pos-h` across the curriculum — validated `(384,64)` load);
+- **grok-aware early-stop** (`--min-steps` floor + raised `--patience`, so a flat
+  pre-grok phase can't trigger a premature quit);
+- **twin efficiency** — early-stop on the z₁ plateau, and **skip the twin entirely
+  when the gen is UNLEARNED** (kills the ~7 h waste).
+
+Tabled command (needs a ~7–8 h CPU window the box won't sleep through):
+
+```
+python scripts/chatv2_phase0_bodyresist.py --mode full --stage all --latent computed \
+  --curriculum --h-sweep 8,16 --pos-h 16 --d-model 192 --delta 0.45 \
+  --bits-per-channel 24 --max-steps 6000 --min-steps 3000 --patience 10 \
+  --out results/chatv2/phase02-curriculum
+```
+
+It trains `H=8` cold under the grok-aware floor → checkpoints it → warm-starts
+`H=16` from it. A learned-and-still-SHARP `H=16` would complete the dimensional-
+axis scaling curve (`d_dec` 2 → 4 → 7 → ~14, sharp throughout); a learned-but-
+MARGINAL `H=16` would be the first *honest* upper edge of the toy's sharp regime.
+
 ## 9. Cross-references
 
 - [`PHASE0_MINIMUM_FALSIFIABLE.md`](PHASE0_MINIMUM_FALSIFIABLE.md) — Phase 0 + Amendment 1 (the result this refines).
