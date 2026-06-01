@@ -252,6 +252,44 @@ hooks by name.
 
 ---
 
+## Phase 8: Inhomogeneous (Sourced) Maxwell — Dual-Shadow Closure
+
+**Objective**: Complete the Maxwell picture. Phase 3 closed the homogeneous half
+`dF = 0` (Bianchi, metric-free); Phase 7 bounded it and found the lone exact
+regime-2 in the harmonic / Aharonov-Bohm sector. Phase 8 audits the inhomogeneous
+half `d*F = J` — the metric-and-source side — through a dual-shadow operator and
+locates the shadow's regime-2 content.
+
+**Spec receipt**: [`FARADAY_PHASE8_SPEC.md`](FARADAY_PHASE8_SPEC.md).
+
+**Character (signed off 2026-05-31)**: structural completion + tiny battery;
+static / given-source closure (displacement current in; free radiation, retarded
+Green's function, and curved spacetime are named deferrals).
+
+**Registered cases**:
+1. Electrostatic Gauss closure (`rho != 0`): `oint *F = Q_enc`.
+2. Ampere-Maxwell closure with displacement current (`J != 0`, time-varying `E`).
+3. Hodge-split localization: field = sourced (determined by `Q`) (+) harmonic
+   (= Phase 7 AB); no new regime-2.
+
+**Load-bearing corrections**:
+- The Hodge star `*` (hence the metric) enters here and only here; the homogeneous
+  side was metric-free.
+- "Closure" = the dual shadow recovers the integral form of the inhomogeneous law,
+  not a re-derivation of Maxwell.
+- Determinacy: by the uniqueness theorem the sourced field is fixed by (sources,
+  boundary, harmonic periods); the sourced sector furnishes no new sharp regime-2.
+
+**Outcome branches**: A8-dual-closure / B8-harmonic-survivor / C8-bounded-failure.
+Pre-registered landing A8 + B8. Body-resistance verdict: four-for-four marginal,
+disaggregated (sourced EM is *determined*, not low-dim-dynamical like NSE-C1).
+
+**Receipts to produce**: future `docs/faraday/FARADAY_PHASE8_BOUNDARY.md` +
+optional `npm run faraday:phase8` battery. Update the ledger, this roadmap, and
+`CROSS_SUBSTRATE_NOTES.md` §8.4 only after the receipt lands; public copy held.
+
+---
+
 ## Overall Timeline (Minimal / Scrappy)
 
 - **Phase 1–2**: 1–2 days (mostly notation + operator definition)
@@ -366,10 +404,35 @@ Branch A result and the open Phase 7 cases through the projection /
 body-resistance vocabulary. Two tagged claims: Faraday closure = zero
 body-resistance *by identity* (the Bianchi half of Maxwell) [PROVED, = Phase 3];
 and the Aharonov-Bohm case (Phase 7 case 3) is pre-registered as the portfolio's
-first *exact, topological* regime-2 separation [HYPOTHESIZED - earned only by the
-Phase 7 boundary receipt]. This is framing/interpretation, not a new Faraday
-result: no public copy changes, and the Phase 7 execution +
-`FARADAY_PHASE7_BOUNDARY.md` receipt remain pending.
+first *exact, topological* regime-2 separation [EARNED 2026-05-31 by the Phase 7
+boundary receipt - see below]. This is framing/interpretation, not a new Faraday
+result; no public copy changes.
+
+**Progress note (2026-05-31, Phase 7 landed)**: The source / topology boundary
+audit executed against the locked spec and landed all three registered cases in
+their pre-registered branches (no `C7` bounded failure). Receipt:
+[`FARADAY_PHASE7_BOUNDARY.md`](FARADAY_PHASE7_BOUNDARY.md); support battery
+`npm run faraday:phase7`. (1) Electric-source control -> **A7-clean-control**,
+`R_F = 0` (electric sources are invisible to Faraday; narrow Bianchi sense, not a
+full-Maxwell claim). (2) Magnetic source -> **B7-magnetic-source**, named survivor
+`Q_m`. (3) Aharonov-Bohm topology -> **B7-topology**: `F = 0` on the loop yet
+`oint A = Phi`, the two operator tiers diverging by exactly the `H^1` period - an
+exact regime-2 separation (loop tier state-insufficient yet control-sufficient).
+Phase 7 sharpens the boundary around Branch A; it does not change the Branch A
+claim. Public `faraday.html` copy is held for explicit go-ahead + gated deploy.
+
+**Progress note (2026-05-31, Phase 7 public copy landed + Phase 8 opened)**: The
+Phase 7 result is now in public source copy (go-ahead given): `/faraday` carries a
+"The Boundary · VI · Phase 7" section (A7 / B7 / B7-topology, Aharonov-Bohm as the
+headline) and `/h-of-x` carries a Faraday evidence card; both are source edits
+behind a gated build/deploy. Phase 8 is now spec-registered as the inhomogeneous
+(sourced) Maxwell completion in
+[`FARADAY_PHASE8_SPEC.md`](FARADAY_PHASE8_SPEC.md): a metric-dependent dual shadow
+`P_shadow^dual = oint *F` tested for closure of `d*F = J` (Gauss / Ampere-Maxwell),
+scoped to static / given-source domains with a tiny battery. Pre-registered
+landing A8 (dual-closure) + B8 (the only regime-2 is Phase 7's harmonic /
+Aharonov-Bohm sector — Maxwell adds no new sharp separation). Execution not
+started; receipt target `docs/faraday/FARADAY_PHASE8_BOUNDARY.md`.
 
 This keeps the Sundog standard: traceable, falsifiable, receipt-driven, and public. The final artifact is both a mathematical result **and** a clean public page that demonstrates the method. 
 
