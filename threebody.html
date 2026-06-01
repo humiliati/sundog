@@ -159,7 +159,35 @@
             z-index: 15;
             max-height: calc(100vh - 100px);
             backdrop-filter: blur(12px);
+            overflow-y: auto;
         }
+
+        /* Collapsible header — lets the fixed desktop panel get out of the way of
+           the right column instead of covering it. On narrow screens the panel is
+           position:static (below), so collapse there just saves vertical space. */
+        .controls-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 0.15rem 0 0.4rem;
+            margin: 0 0 0.5rem;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(26, 58, 82, 0.12);
+            cursor: pointer;
+            color: var(--primary-dark, #1A3A52);
+            font-family: inherit;
+            font-size: 1.05rem;
+            font-weight: 700;
+            text-align: left;
+        }
+        .controls-caret { font-size: 0.8em; transition: transform 0.2s ease; }
+        .controls-panel.is-collapsed { width: auto; max-height: none; }
+        .controls-panel.is-collapsed > :not(.controls-toggle) { display: none; }
+        .controls-panel.is-collapsed .controls-toggle { margin-bottom: 0; border-bottom: none; }
+        .controls-panel.is-collapsed .controls-caret { transform: rotate(-90deg); }
 
         /* Page-local: section base / section h2 / section p defaults live in sundog-theme.css */
 
@@ -1349,7 +1377,21 @@
 
     <!-- Interactive Controls -->
     <div class="controls-panel sd-control-panel">
-        <h3>Simulation Controls</h3>
+        <button type="button" class="controls-toggle" aria-expanded="true" aria-label="Toggle simulation controls">
+            <span>Simulation Controls</span>
+            <span class="controls-caret" aria-hidden="true">▾</span>
+        </button>
+        <script>
+          (function () {
+            var panel = document.querySelector('.controls-panel');
+            var toggle = panel && panel.querySelector('.controls-toggle');
+            if (!toggle) return;
+            toggle.addEventListener('click', function () {
+              var collapsed = panel.classList.toggle('is-collapsed');
+              toggle.setAttribute('aria-expanded', String(!collapsed));
+            });
+          })();
+        </script>
 
         <div class="control-group sd-control-group">
             <button id="btn-play-pause">Pause</button>
