@@ -23,10 +23,12 @@ filed at
 The Phase-3 workbench is built as an **internal, non-deployed** artifact under the
 repo-root `kakeya/` dir (`workbench.html` + `kakeya-core.js` + `kakeya-workbench.js`);
 `npm run kakeya:test` passes all spec-§9 acceptance checks (33/33 across
-`q ∈ {5, 7, 11}`). It is deliberately outside the site build (vite only scans
-root-level `.html`), so it carries no `site-pages.json` entry and is not launched;
-open it via `npm run dev` → `/kakeya/workbench.html` for the §11.5 visual QA.
-Public copy, a real `kakeya.html` page, and a site-page entry are still pending.
+`q ∈ {5, 7, 11}`), and
+[`kakeya/PHASE3_WORKBENCH_QA.md`](kakeya/PHASE3_WORKBENCH_QA.md) records the
+desktop/mobile visual QA pass. It is deliberately outside the site build (vite
+only scans root-level `.html`), so it carries no `site-pages.json` entry and is
+not launched. Public copy, a real `kakeya.html` page, and a site-page entry are
+still pending.
 This file is a target-selection and claim-boundary scaffold opened from
 [`SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md`](SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md).
 
@@ -347,9 +349,10 @@ shadow export that omits point membership and witness intercept lists.
 Goal: implement the finite-field workbench and optional needle-field spectacle
 with claim-boundary labels baked into the interface.
 
-Exit criterion: local visual QA plus a page-copy audit. No public launch until
-Bucket 1 SEO/social requirements are explicitly handled if a page is added to
-`site-pages.json`.
+Internal exit criterion: **met** for the finite-field workbench core and UI; see
+[`kakeya/PHASE3_WORKBENCH_QA.md`](kakeya/PHASE3_WORKBENCH_QA.md). Public launch
+exit criterion: page-copy audit, external sanity check, and Bucket 1 SEO/social
+requirements if a page is added to `site-pages.json`.
 
 ### Phase 4 - External Sanity Check
 
@@ -425,6 +428,8 @@ Forbidden:
   claim-boundary fences, not on the standard proof retelling.
 - [`kakeya/PHASE2_TINY_FINITE_FIELD_WORKBENCH_SPEC.md`](kakeya/PHASE2_TINY_FINITE_FIELD_WORKBENCH_SPEC.md)
   - Phase-2 pre-implementation lock for the tiny prime-field workbench.
+- [`kakeya/PHASE3_WORKBENCH_QA.md`](kakeya/PHASE3_WORKBENCH_QA.md) - internal
+  Phase-3 QA pass for the non-deployed workbench.
 - [`SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md`](SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md)
   - target-selection matrix that promoted Kakeya as the strongest next public
   spectacle candidate.
