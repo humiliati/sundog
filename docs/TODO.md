@@ -445,8 +445,8 @@ Sources:
 [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md),
 [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md).
 
-Status: `phase3-v1-repair-slate-opened-for-review`, v6 and Phase 2 v1
-bounded positive; Phase 3 v0 falsified registered cell.
+Status: `phase3-v1-repair-frozen-wired`, v6 and Phase 2 v1 bounded positive;
+Phase 3 v0 falsified registered cell.
 
 Current state:
 
@@ -458,21 +458,26 @@ is filed as named quarantine, and Phase 2 v1 closes the raw-log provenance gap
 as a bounded positive under the frozen mesa-bridge contract. Phase 3 v0 executed
 as a falsified registered cell (`capacity_threshold <= small`): a source-bound
 seed block of `phase5_l_mixed_lambda_0_7_small` crossed the bridge accept rule.
-Phase 3 v1 is opened for review as a block-stability repair draft.
+Phase 3 v1 is frozen and wired as a block-consensus repair harness. The dry run
+correctly named-quarantines with 0/52 holdout blocks present and confirms the
+v0 falsifier no longer consensus-accepts under the v1 rule.
 
 Blocker:
 
 The next move is not another Phase 1 cost repair or Phase 2 provenance repair.
-Those claim boundaries are fixed. The remaining open question is whether the
-v0 spoof failure can be repaired by a pre-registered block-stability verifier
-without erasing the v0 falsifier or collapsing the signature accept floor.
+Those claim boundaries are fixed. The remaining open question is empirical:
+run the operator-staged 52-block Phase 3 v1 holdout battery, then rerun the v1
+harness to see whether the frozen block-consensus verifier repairs the v0 spoof
+without erasing the falsifier or collapsing the signature accept floor.
 
 Next actions:
 
-1. Review the Phase 3 v1 repair slate.
-2. Verify the proposed 13-source holdout battery paths and freeze exact
-   PowerShell commands.
-3. Run a capped timing probe and apply the approximately 10-minute rule.
+1. Run the staged holdout commands written by
+   `npm run pvnp:phase3:capacity-one-wayness:v1` to
+   `results/pvnp/phase3-capacity-one-wayness-v1/holdout_commands.ps1`.
+2. Rerun `npm run pvnp:phase3:capacity-one-wayness:v1` and review the verdict.
+3. If the verdict is positive or falsified, write the durable receipt under
+   `docs/pvnp/receipts/`; if it remains quarantined, record the exact gate.
 4. Carry forward the v6 boundary verbatim: op-count positive, wall-time
    diagnostic-only, no complexity-theoretic claim.
 5. Do not use the v3/v5 favorable wall-time samples as evidence.
