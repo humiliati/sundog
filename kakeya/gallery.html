@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<!--
+  Kakeya reward graphic — body-resistance continuum + finite-field gallery.
+  INTERNAL Phase-3 / Front-A asset. Like kakeya/workbench.html it lives in the
+  non-root /kakeya/ dir so the vite build never picks it up, carries no
+  site-pages.json entry, and is not launched. Open via npm run dev ->
+  /kakeya/gallery.html for QA. Promotion into the eventual public kakeya.html is
+  the launch step, gated on external review.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Kakeya Body-Resistance Gallery (internal)</title>
+  <style>
+    :root {
+      --navy: #1a3a52; --navy-mid: #2d5575; --gold: #b8831e; --gold-soft: #f4c43022;
+      --ink: #213040; --line: #d7e0e7; --bg: #f8fbfc; --covered: #2f7d4f; --near: #b8831e;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--ink); background: var(--bg); line-height: 1.55; }
+    main { max-width: 1080px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+    .internal-tag { display: inline-block; font-size: 0.72rem; font-weight: 700; color: var(--navy-mid); border: 1px solid var(--line); border-radius: 999px; padding: 0.1rem 0.6rem; margin-bottom: 0.6rem; }
+    .eyebrow { color: var(--gold); font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; font-size: 0.72rem; }
+    h1 { color: var(--navy); font-size: clamp(1.6rem, 4vw, 2.4rem); margin: 0.3rem 0 0.4rem; }
+    .lede { color: #40505c; max-width: 64ch; }
+    .warning { border: 1px solid var(--gold); background: var(--gold-soft); border-radius: 8px; padding: 0.85rem 1rem; margin: 1.25rem 0; color: #5d4310; font-size: 0.92rem; }
+    .hero { border: 1px solid var(--line); border-radius: 12px; background: #fff; padding: 1.25rem 1.4rem; margin: 1.5rem 0; }
+    #continuum { overflow-x: auto; }
+    #continuum svg { min-width: 760px; }
+    .hero .cap { font-size: 0.84rem; color: #6b7b88; margin-top: 0.6rem; max-width: 70ch; }
+    .stage { display: grid; grid-template-columns: 250px 1fr; gap: 1.75rem; align-items: start; border: 1px solid var(--line); border-radius: 12px; background: #fff; padding: 1.4rem; margin-bottom: 1.5rem; }
+    @media (max-width: 720px) {
+      .stage { grid-template-columns: 1fr; }
+      #continuum { margin-inline: -0.15rem; padding-bottom: 0.35rem; }
+    }
+    .stage-visual { display: flex; justify-content: center; }
+    .stage h2 { font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--navy); margin: 0 0 0.2rem; }
+    #stage-title { font-size: 1.15rem; color: var(--navy); margin: 0.2rem 0 0.3rem; }
+    #stage-note { font-size: 0.9rem; color: #40505c; margin: 0 0 0.9rem; }
+    .fact { display: flex; justify-content: space-between; gap: 1rem; font-size: 0.86rem; padding: 0.2rem 0; border-bottom: 1px dotted var(--line); }
+    .fact span { color: #6b7b88; }
+    .verdict { margin-top: 0.8rem; font-weight: 800; font-size: 0.95rem; padding: 0.45rem 0.7rem; border-radius: 6px; text-align: center; display: inline-block; }
+    .verdict.v-complete { background: #2f7d4f18; color: var(--covered); }
+    .verdict.v-near { background: #b8831e18; color: var(--near); }
+    .verdict.v-empty { background: #eef2f5; color: #6b7b88; }
+    .grid-title { font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--navy); margin: 1.5rem 0 0.8rem; }
+    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; }
+    .gcard { border: 1px solid var(--line); border-radius: 10px; background: #fff; padding: 0.7rem; cursor: pointer; text-align: left; font: inherit; transition: border-color 0.1s, box-shadow 0.1s; }
+    .gcard:hover { border-color: var(--navy-mid); }
+    .gcard.selected { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold-soft); }
+    .gcard-svg { display: flex; justify-content: center; }
+    .gcard-meta { margin-top: 0.5rem; display: flex; flex-direction: column; }
+    .gcard-meta strong { color: var(--navy); font-size: 0.9rem; }
+    .gcard-meta span { color: #6b7b88; font-size: 0.76rem; }
+    .legend-row { display: flex; gap: 1.25rem; flex-wrap: wrap; font-size: 0.8rem; color: #6b7b88; margin-top: 0.9rem; }
+    .swatch { display: inline-block; width: 0.7rem; height: 0.7rem; border-radius: 50%; vertical-align: -1px; margin-right: 0.3rem; }
+    footer { margin-top: 2.25rem; font-size: 0.78rem; color: #6b7b88; max-width: 72ch; }
+    footer a { color: var(--navy-mid); }
+    .stage-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.9rem; }
+    .stage-actions button { font: inherit; font-size: 0.82rem; border: 1px solid var(--line); background: #fff; color: var(--ink); border-radius: 6px; padding: 0.4rem 0.75rem; cursor: pointer; }
+    .stage-actions button:hover { border-color: var(--navy-mid); }
+    .stage-actions .primary { background: var(--navy); color: #fff; border-color: var(--navy); }
+    @keyframes rayIn { from { opacity: 0; } to { opacity: 1; } }
+    .ray { opacity: 1; }
+    .ray.anim { opacity: 0; animation: rayIn 0.34s ease forwards; }
+    @media (prefers-reduced-motion: reduce) { .ray.anim { opacity: 1; animation: none; } }
+    .kak-tooltip { position: fixed; z-index: 50; max-width: 260px; background: #0f2233; color: #eaf2f8; font-size: 0.78rem; line-height: 1.35; padding: 0.4rem 0.6rem; border-radius: 6px; pointer-events: none; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22); }
+    .kak-tooltip[hidden] { display: none; }
+  </style>
+</head>
+<body>
+  <main>
+    <span class="internal-tag">internal · Front-A reward graphic · not launched</span>
+    <p class="eyebrow">Sundog × Kakeya · body-resistance</p>
+    <h1>The Body-Resistance Gallery</h1>
+    <p class="lede">
+      Kakeya is the <strong>exact-maximal</strong> pole of the body-resistance axis the
+      Sundog portfolio runs — the opposite end from Faraday's exact-zero. Below: where it
+      sits on that axis, then a gallery of <strong>finite-field</strong> instances where the
+      lossy direction shadow is complete yet the body cannot shrink below a constant fraction.
+    </p>
+
+    <div class="warning">
+      This is a finite-field reader graphic around known mathematics (Dvir, 2008). It is not
+      Euclidean Kakeya evidence, not a maximal-function result, and not a regime-2 claim — it
+      reads body resistance only.
+    </div>
+
+    <div class="hero">
+      <div id="continuum"></div>
+      <p class="cap">
+        Faraday's plaquette-holonomy shadow rebuilds the body by the Bianchi identity (resistance
+        zero, by theorem); the marginal substrates sit near zero by low dimension; Aharonov–Bohm is
+        an exact topological witness; Kakeya is the exact-maximal pole — a complete direction shadow
+        forces a constant fraction of the whole space, while reconstructing none of it.
+      </p>
+    </div>
+
+    <section class="stage">
+      <div>
+        <h2>Selected instance</h2>
+        <div id="stage-visual" class="stage-visual"></div>
+        <div class="legend-row">
+          <span><span class="swatch" style="background:#1a3a52"></span>selected point (body)</span>
+          <span><span class="swatch" style="background:#2f7d4f"></span>covered direction</span>
+          <span><span class="swatch" style="background:#c9d4dc"></span>missing direction</span>
+        </div>
+      </div>
+      <div>
+        <h3 id="stage-title"></h3>
+        <p id="stage-note"></p>
+        <div id="stage-facts"></div>
+        <div style="margin-top:0.8rem"><span id="stage-verdict" class="verdict"></span></div>
+        <div class="stage-actions">
+          <button id="btn-replay" type="button">↻ Replay reveal</button>
+          <button id="btn-export-png" class="primary" type="button">↓ Download share card (PNG)</button>
+        </div>
+      </div>
+    </section>
+
+    <p class="grid-title">Finite-field instances — click to inspect</p>
+    <div id="gallery-grid" class="gallery-grid"></div>
+
+    <footer>
+      The fan below each grid is a <em>schematic</em> of the q+1 projective directions (lit when
+      a full line in that direction sits inside the body) — not literal Euclidean angles.
+      Mathematics: Dvir (2008). Reading / placement: docs/SUNDOG_V_KAKEYA.md,
+      docs/KAKEYA_FINITE_FIELD_READER.md, docs/CROSS_SUBSTRATE_NOTES.md §8. Sundog reads and
+      places; it does not prove. Body-resistance reading only — not a regime-2 separation.
+    </footer>
+  </main>
+  <div id="kak-tooltip" class="kak-tooltip" hidden></div>
+  <script type="module" src="./kakeya-gallery.js"></script>
+</body>
+</html>

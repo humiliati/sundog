@@ -16,9 +16,11 @@ desktop and mobile widths with the required warning, body/shadow separation,
 and no console errors.
 
 This does **not** launch Kakeya publicly. There is still no root `kakeya.html`,
-no `site-pages.json` entry, and no public claim. The next gate remains external
-incidence/combinatorics sanity review plus page-copy and SEO/social readiness
-if a public page is later added.
+no `site-pages.json` entry, and no public claim. A future live but unlinked
+`kakeya.html` may be used as a review surface only with a visible
+`NOT PEER REVIEWED` banner; public inbound links and launch claims remain gated
+on external incidence/combinatorics sanity review plus page-copy and SEO/social
+readiness if a public page is later added.
 
 ## Commands Run
 
@@ -89,4 +91,4 @@ Per the Phase 2 spec, Phase 3 may be considered internally complete when:
 5. screenshot or local QA records desktop/mobile visibility without overlap -
    **pass via this note**.
 
-Public launch remains blocked on the separately named public gates.
+Public promotion remains blocked on the separately named public gates.

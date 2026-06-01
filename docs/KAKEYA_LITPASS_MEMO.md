@@ -72,7 +72,9 @@ Targeted searches covered six fronts:
 Preference was given to arXiv records, journal or publisher pages, official
 repository pages, and author-hosted/expository material by domain experts.
 This is a starter lit pass, not a comprehensive Kakeya survey; external
-incidence-geometry review remains required before a public page launch.
+incidence-geometry review remains required before public inbound links,
+external promotion, or treating a Kakeya page's launch intent as satisfied. An
+unlinked `NOT PEER REVIEWED` page may exist as a reviewer surface.
 
 ## Primary Anchors
 
@@ -174,9 +176,12 @@ separate:
 2. **Toy grid / pixel model:** a visualization, not the theorem.
 3. **Euclidean boundary:** open `n >= 4` and non-transfer explicitly labeled.
 
-The first public artifact should be Front A: a reader/boundary page. Front B
-visuals should wait for a tiny finite-field workbench spec with direction
-conventions, baselines, UI labels, and falsifiers pre-registered.
+The first public-facing artifact should be Front A: a reader/boundary page. The
+current review-surface exception is narrow: a live but unlinked `kakeya.html`
+may be sent to reviewers if it carries a visible `NOT PEER REVIEWED` banner and
+has no obvious public inbound path. That does not clear public promotion. Front
+B visuals remain admissible only behind the finite-field workbench spec with
+direction conventions, baselines, UI labels, and falsifiers pre-registered.
 
 ## Local Corrections From This Pass
 
@@ -266,8 +271,10 @@ The Kakeya ledger should now use this order:
 4. **Workbench spec before implementation.** Phase 2 now freezes field size,
    dimension, direction convention, line convention, displayed signature,
    baselines, and falsifiers before writing UI.
-5. **External review before public launch.** Ask a combinatorics/incidence or
-   analysis reviewer whether the reader teaches the right boundary.
+5. **External review before public linking/promotion.** Ask a
+   combinatorics/incidence or analysis reviewer whether the reader teaches the
+   right boundary. An unlinked `NOT PEER REVIEWED` review surface can exist
+   before this clears; a public launch claim cannot.
 
 ## Follow-Up Ratchets
 
@@ -278,4 +285,6 @@ The Kakeya ledger should now use this order:
   public framing, demote it to an internal vocabulary note and keep the public
   page finite-field-first.
 - If a new Kakeya page is added to `site-pages.json`, it must clear Bucket 1 in
-  `docs/site/SEO_AND_SOCIAL_READINESS_ROADMAP.md` before external sharing.
+  `docs/site/SEO_AND_SOCIAL_READINESS_ROADMAP.md` before external sharing or any
+  `publicLaunchIntent` claim. Reviewer-only sharing of an unlinked page must use
+  the `NOT PEER REVIEWED` banner.

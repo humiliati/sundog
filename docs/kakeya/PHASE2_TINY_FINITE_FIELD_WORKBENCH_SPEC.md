@@ -316,11 +316,15 @@ Phase 3 may be considered internally complete only when:
 5. a screenshot or local QA note records that the grid, direction list, theorem
    card, and warning are visible without overlap at desktop and mobile widths.
 
-Public launch remains separately blocked on:
+Public promotion remains separately blocked on:
 
 - external incidence/combinatorics sanity review;
 - `kakeya.html` page copy audit against the reader fences;
 - Bucket 1 SEO/social readiness if a page is added to `site-pages.json`.
+
+An unlinked live `kakeya.html` may be used as a review surface before this gate
+clears only if it carries a visible `NOT PEER REVIEWED` banner and has no obvious
+public inbound links.
 
 ## 12. Implementation Notes
 
