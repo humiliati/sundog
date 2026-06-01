@@ -460,7 +460,9 @@ tests rather than as generic alignment demonstrations.
 ### Phase 3 — Capacity-Relative One-Wayness Battery
 
 Status: v0 executed as a falsified registered cell
-(`capacity_threshold <= small`); v1 repair slate opened for review. See
+(`capacity_threshold <= small`); v1 repair slate frozen and wired. The v1 dry
+run named-quarantines until the operator-staged 52-block holdout battery
+exists. See
 [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md),
 [`pvnp/receipts/2026-05-31_phase3_capacity_one_wayness_v0.md`](pvnp/receipts/2026-05-31_phase3_capacity_one_wayness_v0.md),
 and
@@ -675,7 +677,7 @@ baselines, reproduced metrics, and archived artifacts.
 - [`pvnp/receipts/2026-05-31_phase3_capacity_one_wayness_v0.md`](pvnp/receipts/2026-05-31_phase3_capacity_one_wayness_v0.md):
   Phase 3 v0 falsified-cell receipt; `capacity_threshold <= small`.
 - [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md):
-  Phase 3 v1 repair slate opened for review.
+  Phase 3 v1 repair slate frozen and wired.
 - [`pvnp/RECEIPT_TEMPLATE.md`](pvnp/RECEIPT_TEMPLATE.md): receipt template
   for phase and probe results.
 - [`pvnp/receipts/README.md`](pvnp/receipts/README.md): receipt index —
