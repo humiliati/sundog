@@ -176,3 +176,101 @@ Forbidden:
 - any public-evaluation or Kaggle claim;
 - tuning the PR multiple, sample fraction, FVE ceiling, ridge penalty, or split
   after seeing the body spectrum.
+
+---
+
+## Amendment 1 — Freeze Marker (2026-06-01 PT)
+
+Status: **EXECUTION ADMITTED; TOOLING FROZEN.** Tooling, thresholds, leak
+receipt, smoke fingerprint, and timing are pinned below. Nothing here is tuned
+to ARC output (the binding run has not been read at freeze time).
+
+### Frozen tooling
+
+| component | path | sha256 |
+| --- | --- | --- |
+| runner | `docs/prereg/arc/phase4_body_resistance.py` | `5ca151e11f654ac4fef1fadb60ce1b766c3ed7ea9ff9c23822049c421e639149` |
+| wrapper | `scripts/arc-phase4-body-resistance.mjs` | `de6514e570f6258073bca3a47ef32f3f85b2c1e510871f9ea652054a5b1c5d1a` |
+| representations (imported, unmodified) | `docs/prereg/arc/phase3d_mask_target_v3.py` | `9f6b4ba7931a08f0a7d971e8758a04c63840b3bb92433d41b89b523955415329` |
+| loaders/IO (imported, unmodified) | `docs/prereg/arc/phase3_branch_e_program_search.py` | `036ea6a99d5b3d23845ecab3cbaf2370e9b88f42f39c6c7d717e1db62946d32a` |
+
+npm: `arc:phase4:body-resistance`. Result path (gitignored):
+`results/arc/phase4-body-resistance/`. All linear algebra is `torch.linalg`
+(numpy is not installed). Body = `raw_grid_onehot` (9900-dim); low-dim shadow =
+`metadata_vector` (28-dim); coarse baseline shadow = `feature_vector(...,
+signature_palette_edit_mask_v3)` (4124-dim nominal — caveat 2). All inherited
+byte-for-byte from the Phase 3E runners.
+
+### Frozen thresholds (calibrated only to the marginal substrates, never to ARC)
+
+```text
+PR_HIGH_MIN              = 20.0     # >= 10x the marginal-substrate PR ~ 2 (Mesa net.7 / C1 / Sabra)
+PR_MARGINAL_MAX          = 5.0      # ~ 2.5x the marginal band
+FVE_RECON_CEILING        = 0.90     # high_dim requires matched-dim FVE <= this
+FVE_MARGINAL_MIN         = 0.95     # marginal if matched-dim FVE >= this (marginal substrates ~ 0.99)
+PR_BOUND_SATURATION_MAX  = 0.90     # PR/bound above this -> inconclusive (sample-saturated)
+RIDGE_LAMBDA             = 1.0
+SHADOW_DIM_K             = 28       # matched-dim PCA cut (see operationalization note)
+heldout split            = sha256(instance_id) % 10 < 3   (~30% held out)
+ENERGY_LEVELS            = [0.90, 0.95, 0.99]
+PCA_K_GRID               = [1, 2, 5, 10, 28, 50, 100, 200]
+```
+
+Adjudication (frozen): **inconclusive** if `PR / min(n_features, n_contexts-1) >
+0.90` (sample-saturated guard fires first); else **high_dim** if `PR >= 20.0`
+**and** matched-dim `FVE(body | top-28 PCA) <= 0.90`; else **marginal** if `PR <=
+5.0` **or** matched-dim `FVE >= 0.95`; else **inconclusive**.
+
+### Two pre-registration operationalizations (decided before reading ARC output)
+
+1. **`SHADOW_DIM_K = 28`, anchored to the low-dim metadata shadow.** The spec body
+   text (Frozen Inputs) names the matched-dim cut `k = dim(signature_palette)`. The
+   `signature_palette` vector's *nominal* dimension is 4124, but that is a sparse
+   SHA-bucket hash embedding of low-information object signatures; its top-`k` PCA
+   at `k = 4124` over `<= 491` contexts is a degenerate **full-rank** reconstruction
+   (`FVE = 1` by construction, rank `<= n-1`), which would make the matched-dim test
+   vacuous. The cut is therefore anchored to the **genuine low-dim shadow's
+   dimension** — the 28-dim `metadata_vector` (palette/shape/density), the direct
+   analogue of the 5-D Mesa shadow and the low-Fourier C1 shadow. `k = 28` asks the
+   fair question "can the body's *own* optimal 28-dim linear summary reconstruct it,
+   and does it beat the hand-built 28-dim metadata shadow?" The full `PCA_K_GRID`
+   curve (through `k = 200`) is reported regardless, so nothing is hidden.
+2. **Sample-bound clause operationalized as a strict saturation guard.** The branch
+   table lists `... or sample-bound dominates -> inconclusive` (caveat 3). This is
+   frozen as: if `PR` exceeds 90% of its sample/feature bound `min(n_features,
+   n_contexts-1)`, the covariance is near-isotropic at this register size and the
+   reading is unreliable -> `inconclusive`. The guard only **removes** high-dim
+   verdicts (makes high_dim *harder*), never adds them; `PR / bound` is reported.
+
+### Leak receipt + smoke fingerprint
+
+- `npm run arc:phase0:leak-check`: **0 fail / 0 warn**; register 36 training / 0
+  evaluation-blind / 0 evaluation; 26 ARC scripts scanned for eval literals (incl.
+  the new `arc-phase4-body-resistance.mjs`); no Kaggle scaffolding.
+- `py_compile`: clean. Dry-run (`--dry-run --allow-dirty`) wrote all **10**
+  artifacts (`manifest.json`, `split.csv`, `body_spectrum.csv`, `shadow_fve.csv`,
+  `matched_dim_fve_curve.csv`, `per_lane_dimensionality.csv`,
+  `phase4_body_resistance_receipt.json`, `branch_adjudication.md`, `commands.md`,
+  `hashes.json`).
+
+### Timing
+
+Pure spectral + ridge measurement over `U_all` (~491 contexts): one centered SVD
+of a `~491 x 9900` matrix, two ridge solves (`28-` and `4124-`dim shadows), and an
+8-point PCA reconstruction curve. No model training — expected **well under the
+ten-minute rule**, so the binding run executes **inline** on a clean worktree (no
+shard/stage needed).
+
+### Staged binding command
+
+```powershell
+cd C:\Users\hughe\Dev\sundog
+node scripts/arc-phase4-body-resistance.mjs `
+  --data-dir "$env:USERPROFILE\Datasets\ARC-AGI-2\data" `
+  --register docs/prereg/arc/P0_TASK_REGISTER_EXPANDED_FOR_FIBERS.csv `
+  --split-mode sha256_expansion `
+  --out results/arc/phase4-body-resistance
+```
+
+(`SUNDOG_PYTHON` may pin the interpreter; the runner refuses a dirty worktree
+unless `--allow-dirty`, so the freeze marker is committed before the binding run.)
