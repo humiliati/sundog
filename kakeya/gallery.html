@@ -62,10 +62,15 @@
     .stage-actions button { font: inherit; font-size: 0.82rem; border: 1px solid var(--line); background: #fff; color: var(--ink); border-radius: 6px; padding: 0.4rem 0.75rem; cursor: pointer; }
     .stage-actions button:hover { border-color: var(--navy-mid); }
     .stage-actions .primary { background: var(--navy); color: #fff; border-color: var(--navy); }
-    @keyframes rayIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes rayDraw { to { stroke-dashoffset: 0; } }
+    @keyframes rayFade { from { opacity: 0; } to { opacity: 1; } }
     .ray { opacity: 1; }
-    .ray.anim { opacity: 0; animation: rayIn 0.34s ease forwards; }
-    @media (prefers-reduced-motion: reduce) { .ray.anim { opacity: 1; animation: none; } }
+    .ray.anim { animation: rayDraw 0.34s ease forwards; }
+    .ray.miss-anim { opacity: 0; animation: rayFade 0.22s ease forwards; }
+    @media (prefers-reduced-motion: reduce) { .ray.anim { animation: none; stroke-dashoffset: 0; } .ray.miss-anim { opacity: 1; animation: none; } }
+    .fan-cap { font-size: 0.76rem; color: #6b7b88; margin: 0.3rem 0 0.6rem; text-align: center; }
+    .fan-cap .covered-label { color: var(--covered); }
+    .fan-cap .faint-label { color: #c9d4dc; }
     .kak-tooltip { position: fixed; z-index: 50; max-width: 260px; background: #0f2233; color: #eaf2f8; font-size: 0.78rem; line-height: 1.35; padding: 0.4rem 0.6rem; border-radius: 6px; pointer-events: none; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22); }
     .kak-tooltip[hidden] { display: none; }
   </style>
@@ -102,6 +107,7 @@
       <div>
         <h2>Selected instance</h2>
         <div id="stage-visual" class="stage-visual"></div>
+        <p class="fan-cap">↑ direction fan: <span class="covered-label">●</span> covered &nbsp;<span class="faint-label">●</span> missing</p>
         <div class="legend-row">
           <span><span class="swatch" style="background:#1a3a52"></span>selected point (body)</span>
           <span><span class="swatch" style="background:#2f7d4f"></span>covered direction</span>
