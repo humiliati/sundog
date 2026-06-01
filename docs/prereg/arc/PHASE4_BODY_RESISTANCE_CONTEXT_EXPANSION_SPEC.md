@@ -287,3 +287,97 @@ node scripts/arc-phase4-body-resistance-context-expansion.mjs `
 (The runner refuses a dirty worktree unless `--allow-dirty`, so the freeze marker is
 committed before the binding run; the manifest `gitDirty` flag reflects only
 concurrent non-ARC sibling lanes.)
+
+---
+
+## Amendment 2 — Binding Verdict (2026-06-01 PT)
+
+**Branch: `arc_body_inconclusive_expanded` — and the v1 "sample-limited"
+hypothesis is now falsified: the body PR plateaus at ≈ 11, robustly below the
+unchanged high-dim bar.**
+
+Binding run: `gitCommit 64F8C0DD` (the Amendment-1 freeze commit; ARC subtree clean
+— manifest `gitDirty=true` is sibling-lane-only), `runnerSha256 C831CC38…`,
+`v1RunnerSha256 5CA151E1…` (= the v1 freeze hash → thresholds carried unchanged),
+`dataDirHash B306BBA3…`. **1000 valid public-training tasks, 0 excluded; n_contexts
+= 4308** (`train_lodo 3232` / `pttest 1076`; 1277 held out) — an **8.8×** larger,
+spectrum-blind universe than v1's 491.
+
+### Measured (frozen estimators, read once)
+
+| measure | v2 (4308 ctx) | v1 (491 ctx) | marginal controls |
+| --- | ---: | ---: | --- |
+| body participation ratio | **11.38** | 9.15 | ≈ 2 |
+| top-1 energy fraction | 0.268 | 0.287 | one mode dominates |
+| energy ranks 90/95/99 % | 409 / 719 / 1428 | 96 / 159 / 293 | — |
+| matched-dim `FVE(body\|top-28 PCA)` | **0.644** | 0.659 | Mesa 5-D ≈ 0.97–0.99 |
+| top-200 PCA held-out FVE | 0.763 | 0.789 | — |
+| PR / sample bound | 0.0026 (not saturated) | 0.019 | guard 0.90 |
+| per-lane PR (pttest / train_lodo) | 11.40 / 11.36 | — | — |
+| `FVE(body\|metadata 28d)` / `(signature 4124d)` (baselines) | 0.460 / 0.493 | 0.399 / 0.431 | — |
+
+### Prefix PR sweep — the decisive diagnostic
+
+| n | 491 | 750 | 1000 | 1500 | 2000 | 3000 | 4308 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| PR | 10.76 | 10.92 | 10.72 | 11.31 | 10.97 | 11.25 | **11.38** |
+
+PR is **flat at ≈ 11** across an 8.8× increase in contexts (and `PR/bound` falls
+0.022 → 0.0026, so this is nowhere near the saturation guard). The 90/95/99 % energy
+*ranks* grow with sampling (96/159/293 → 409/719/1428), but the eigenvalue-weighted
+*effective* dimensionality does not: the spectrum has a **stable shape with a
+lengthening low-energy tail**, not a sample-starved spectrum that would inflate PR
+toward 20 as `n` grows. The two independent construction lanes agree to within 0.04
+(11.40 vs 11.36), so PR ≈ 11 is not a lane artifact.
+
+### Adjudication (frozen gate, table order; not retuned)
+
+`PR/bound 0.0026 ≤ 0.90` (not saturated) → `high_dim_expanded` requires `PR ≥ 20.0`,
+but `11.38 < 20.0` → fails. `marginal_expanded` requires `PR ≤ 5.0` (no) or matched
+`FVE ≥ 0.95` (no, 0.644) → fails. Not saturated. → **`arc_body_inconclusive_expanded`**.
+
+### What this resolves
+
+- **The v1 open question is answered.** v1 left open whether `PR 9.15 < 20` was a
+  sampling artifact of the 491-context register. The spectrum-blind 8.8× expansion
+  shows it is **not**: PR settles at ≈ 11, robustly between the marginal band (≤ 5)
+  and the high-dim bar (≥ 20), and the body stays **reconstruction-resistant** at
+  scale (no `k`-dim summary through k = 200 exceeds 0.76). ARC's raw-grid body is a
+  **stable intermediate** — solidly more dimensional than the three marginal control
+  substrates (≈ 5.7×), but it is **not** a ≥ 20-PR high-dimensional body even over
+  the entire public-training corpus.
+- **Portfolio reading (sharpened from v1):** the *control* column stays
+  three-for-three marginal; the ARC *computational* body is materially more
+  dimensional than any of them, but the reopen establishes this is its **converged**
+  value, not an under-sample. The genuinely high-dim ≥ 20 body the cross-substrate
+  program wants is still not in the portfolio; ARC at public-training scale does not
+  supply it.
+
+### What this does NOT establish
+
+Not a high-dim claim (the bar was not cleared and was **not** retuned to 11), not a
+control-regime-2 witness, Blackwell sufficiency, ARC solve, public-evaluation result,
+or Kaggle claim. Read-off body dimensionality only.
+
+### Honest next move (if reopened again)
+
+The two admissible escalations both stay off the frozen bar: (a) a **different body
+encoding** that exposes more structure than the 30×30×11 one-hot (e.g. an
+object-centric or pair-relational body) under its own spec — testing whether the
+*representation*, not the sample, caps PR at 11; or (b) accept the converged
+intermediate reading and look outside ARC for a ≥ 20-PR computational body (high-dim
+RL / LLM residual streams, per `CROSS_SUBSTRATE_NOTES.md` §6.3). Lowering
+`PR_HIGH_MIN` remains forbidden.
+
+### Public language (inconclusive-expanded)
+
+Allowed:
+
+> "Expanding the ARC body-resistance probe to the full 1000-task public-training
+> corpus (4308 spectrum-blind contexts, 8.8× v1) shows the raw-grid body's
+> participation ratio **plateaus at ≈ 11** — robustly several times the marginal
+> control substrates (≈ 2) and reconstruction-resistant, but it does **not** clear
+> the unchanged 10×-marginal high-dim bar, and the plateau falsifies the idea that
+> v1 was merely sample-limited. ARC's body is a stable intermediate, not a high-dim
+> body. Read-off dimensionality only — not a control witness, Blackwell sufficiency,
+> ARC solve, or eval/Kaggle claim."
