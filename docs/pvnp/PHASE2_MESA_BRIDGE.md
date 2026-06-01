@@ -178,11 +178,11 @@ Phase 2 fails, and must say so, if any of:
 
 ## Next Allowed Step
 
-Phase 3 is opened for review in
+Phase 3 is frozen for implementation in
 [`PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md`](PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md).
 The v1 bridge closed the v0 provenance gap, but it did not estimate
-`capacity_threshold` or test cheap inversion/spoof resistance. Freeze the
-Phase 3 attacker/capacity battery before any execution.
+`capacity_threshold` or test cheap inversion/spoof resistance. The Phase 3
+attacker/capacity battery is now frozen before execution.
 
 ## Cross-References
 
@@ -194,7 +194,7 @@ Phase 3 attacker/capacity battery before any execution.
 - [`receipts/2026-05-31_phase2_mesa_bridge_v1.md`](receipts/2026-05-31_phase2_mesa_bridge_v1.md):
   bounded-positive v1 provenance-repair receipt.
 - [`PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md`](PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md):
-  opened Phase 3 capacity-relative one-wayness slate.
+  frozen Phase 3 capacity-relative one-wayness slate.
 - [`receipts/2026-05-31_phase1_toy_verifier_v6.md`](receipts/2026-05-31_phase1_toy_verifier_v6.md):
   the bounded-positive Phase 1 receipt that authorized opening Phase 2.
 - [`../SUNDOG_V_MESA.md`](../SUNDOG_V_MESA.md): mesa lane roadmap.

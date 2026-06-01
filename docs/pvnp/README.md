@@ -54,9 +54,9 @@ Phase specs:
   frozen provenance-repair slate after the v0 named quarantine. Chooses
   raw-logged Small reruns over Medium-only downscope.
 - [`PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md`](PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md) -
-  opened capacity-relative one-wayness slate after the Phase 2 v1 bounded
-  positive. Registers the attacker/capacity battery for review before any
-  execution.
+  frozen capacity-relative one-wayness slate after the Phase 2 v1 bounded
+  positive. Registers the attacker/capacity battery and source-bound
+  seed-extension plan before any execution.
 
 Templates:
 
@@ -159,8 +159,12 @@ Current state:
   and passes the same-artifact raw-trace op-count comparator (`0.73760368`).
   Wall-time remains diagnostic-only; the result is not mesa-general,
   body-resistance, wall-time-cheap, or P-vs-NP evidence.
-- Phase 3 capacity-relative one-wayness v0 slate opened for review:
-  2026-05-31. The slate carries forward the v1 caveats as registered Phase 3
-  design constraints: Small-tier near-threshold fragility, signature-only vs
-  full-bridge separation, and conservative objective-conflict flag overfire.
-  No attacker execution has run; freeze review is next.
+- Phase 3 capacity-relative one-wayness v0 slate frozen for implementation:
+  2026-05-31 local / 2026-06-01 UTC. The slate carries forward the v1 caveats
+  as registered Phase 3 design constraints: Small-tier near-threshold
+  fragility, signature-only vs full-bridge separation, and conservative
+  objective-conflict flag overfire. It also aligns with the updated
+  cross-substrate note: mesa remains marginal on dimensional body-resistance,
+  AB is the earned exact topological regime-2 witness, and Phase 3 is only a
+  mesa-local inversion/spoof capacity battery. No attacker execution has run;
+  post-freeze implementation is next.
