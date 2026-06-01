@@ -249,6 +249,8 @@
     "pvnp:phase2:mesa-bridge:v0": "node scripts/pvnp-phase2-mesa-bridge-v0.mjs",
     "pvnp:phase2:mesa-bridge:v1:small-raw": "node scripts/pvnp-phase2-mesa-bridge-v1-small-raw.mjs",
     "pvnp:phase2:mesa-bridge:v1": "node scripts/pvnp-phase2-mesa-bridge-v1.mjs",
+    "pvnp:phase3:seed-extension": "node scripts/pvnp-phase3-seed-extension.mjs",
+    "pvnp:phase3:capacity-one-wayness:v0": "node scripts/pvnp-phase3-capacity-one-wayness-v0.mjs",
     "pvnp:phase1:envs": "node scripts/pvnp-phase1-generate-environments.mjs",
     "pvnp:phase1:policies": "node scripts/pvnp-phase1-policies.mjs",
     "pvnp:phase1:mlp-train": "python -m training.pvnp.train_mlp_policy",
