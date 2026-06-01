@@ -5,13 +5,49 @@
 > not a referee report, not an endorsement. The whole virtue of this ask
 > is brevity; keep it that way. Placeholders in `[brackets]`.
 
+## Send Prep (staged 2026-06-01)
+
+**Status: send-ready once the two owner items below are filled.** The sender
+signature is pre-filled as **Jeffery Hughes Jr.** across all three versions —
+confirm, or adjust to the form you prefer (e.g. add "Stellar Aqua LLC / Sundog
+Research Lab").
+
+**Which version to send:** the **Recommended Outreach Version** for a general PDE
+analyst; switch to the **Technical Short Version** if the reviewer is a
+determining-modes / data-assimilation specialist (it leads with the
+determining-modes framing they will recognize fastest).
+
+**Owner-fill before send — the only blockers:**
+
+1. **`[Name]` — the reviewer.** One named person; this is a 1:1 ask. Best fit: a
+   PDE analyst fluent in 2D NSE / determining modes / data assimilation / observer
+   theory (full fit list under "Reviewer Fit" below).
+2. **`[link]` — the packet.** Point to the four files (all verified present), as a
+   GitHub folder link or a single PDF bundle:
+   - `docs/proof/PDE_C1_REGIME_GENERALITY_v1.md`
+   - `docs/proof/PDE_C1_KNN_CONVERGENCE_CHECK.md`
+   - `docs/proof/PDE_C1_TWIN_STATE_CERTIFICATE.md`
+   - `docs/SUNDOG_V_NAVIERSTOKES.md`
+   Optional add if the reviewer asks "isn't this just near-determination?":
+   `docs/proof/PDE_C1_OBJECTIVE_OVERLAP_DISCRIMINATOR.md` (the adversarial
+   near-determination pre-empt).
+3. **Tailor the specialty phrase** `[PDE / determining modes / data assimilation /
+   numerical NSE]` in the opening line to the chosen reviewer (delete the others).
+4. **`[1-2 weeks]`** — timeline; the default is fine.
+
+**Do not** soften the scope clauses (two-point Grashof / `k_f`-fixed /
+single-objective-family / finite-Galerkin) to make the result sound bigger: per
+the sender notes below, a reviewer flagging a missing caveat is a worse outcome
+than one confirming a conservative framing. **A negative reply is the most
+valuable outcome.**
+
 ## Recommended Outreach Version
 
 **Subject:** Technical framing check request: finite-Galerkin NSE signature/control result
 
 Hi [Name],
 
-I am [your name], working on Sundog, an independent research project about
+I am Jeffery Hughes Jr., working on Sundog, an independent research project about
 coarse-grained signatures for control. We have been testing whether a compact
 observation can be useful for a registered control action even when it does not
 reconstruct the full state. I am reaching out because your work around
@@ -64,7 +100,7 @@ use this language because Z" are all useful outcomes. Email comments are
 perfect; I would also be happy to do a short call if that is easier.
 
 Thanks,
-[Your name]
+Jeffery Hughes Jr.
 
 ## Technical Short Version
 
@@ -128,7 +164,7 @@ fiber-sufficient because Z." A negative answer is the most valuable
 outcome — the goal is to prevent overclaiming.
 
 Thanks,
-[Your name]
+Jeffery Hughes Jr.
 
 ## Slightly Warmer Version
 
@@ -173,7 +209,7 @@ negative one is useful.
 Packet: [link or attachment]
 
 Thanks,
-[Your name]
+Jeffery Hughes Jr.
 
 ## Follow-Up If They Say Yes
 

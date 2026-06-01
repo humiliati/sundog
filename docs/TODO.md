@@ -41,10 +41,17 @@ source of truth.
 
 ### `review-gated` — waiting for an outside reader
 
+**→ Consolidated dispatch surface: [`REVIEW_TRACKER.md`](REVIEW_TRACKER.md)** —
+every lane's open review questions, reviewer community, owner-fill checklist, and
+what each clears, in one place. Quick state (2026-06-01): four lanes drafted and
+unsent — Navier-Stokes C1 (email staged), Hodge (email staged), Kakeya,
+Yang-Mills; Riemann resolved in-house (off the gating list).
+
 - **Riemann bounded-null synthesis** — three-lane null with named substrate
-  causes; external-review packet at
+  causes; **framing resolved in-house 2026-05-30** (sine-kernel control + parity
+  proof + window sweep + desk pre-check), so external review no longer gates the
+  framing — only the publish decision remains. Record:
   [`riemann/EXTERNAL_REVIEW_PACKET.md`](riemann/EXTERNAL_REVIEW_PACKET.md).
-  Public surface blocked on review return.
 
 ### `internal-resource` — paused for capacity reasons, not artifact gaps
 
@@ -59,24 +66,27 @@ source of truth.
   decision 2026-05-29. Not blocked on a missing artifact; the program
   chose to spend cycles elsewhere.
 
-### `review-gated` + draft handoff — review surface not yet built
+### `review-gated` — packet sent, awaiting reply
 
-- **Yang-Mills Phase 0 handoff** — draft finite-lattice gauge-invariant
-  certificate lane. No lit-pass, preregistration, runner, receipt,
-  mass-gap claim, or Clay-problem claim is live. The next move is the
-  handoff itself; until then this is `design-blocked, draft-handoff`.
+- **Yang-Mills informative powered null** — Phases 1–2 complete (instrumentation +
+  the powered finite-T Polyakov null); external-review packet **sent to Dr. Biagio
+  Lucini (LinkedIn DM, 2026-06-01), awaiting reply**. Tracked in
+  [`REVIEW_TRACKER.md`](REVIEW_TRACKER.md). *(Supersedes the prior "Phase 0 handoff
+  / no lit-pass" entry — the lane advanced well past that.)*
 
 ### `design-blocked` — sharper spec needed before execution
 
-- **Navier-Stokes C1 regime-generality wall** — `G = 300` regime-generality
-  attempt hit objective vacuity rather than fiber-locality. Next move is a
-  portable-objective design decision.
+- **Navier-Stokes C1 regime-generality** — the portable-objective design decision
+  is resolved (held-out look-ahead-max quantile; two-regime separation). Now
+  **review-gated, email staged** (see [`REVIEW_TRACKER.md`](REVIEW_TRACKER.md)); no
+  longer design-blocked.
 - **ARC Phase 3E relative-locality hold** — rank-neighbor certificate
   proposal after absolute fibers stayed sparse on the expanded 108-task
   register.
-- **P-vs-NP Phase 2 mesa bridge** - Phase 2 v0 named-quarantined on raw-log
-  provenance; v1 provenance repair executed as a bounded-positive
-  mesa-bridge receipt. Capacity threshold remains not estimated.
+- **P-vs-NP Phase 3 capacity one-wayness** - Phase 2 mesa bridge closed (v1
+  bounded-positive); Phase 3 v0 falsified the registered cell, and v1
+  block-consensus repair landed a named quarantine (2026-06-01). Capacity threshold
+  remains not estimated.
 
 ### `operator-blocked` — needs a human artifact, review, or measurement
 

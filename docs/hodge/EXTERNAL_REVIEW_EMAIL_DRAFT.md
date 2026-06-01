@@ -10,6 +10,40 @@
 > body/shadow reading of the Hodge conjecture faithful and free of category
 > error, or is it just standard exposition?"
 
+## Send Prep (staged 2026-06-01)
+
+**Status: send-ready once the owner items below are filled.** The sender signature
+is pre-filled as **Jeffery Hughes Jr.** in both versions — confirm, or adjust to
+the form you prefer.
+
+**Which version to send:** the **Short Version** for a reviewer you don't know well
+(cold, maximally brief); the **Slightly Warmer Version** if you have a prior
+relationship. Both ask the same three load-bearing questions (translation fidelity
+· category error · vacuity); the packet carries the full six.
+
+**Owner-fill before send — the only blockers:**
+
+1. **`[Name]` — the reviewer.** A 1:1 ask to an algebraic geometer / Hodge-theory
+   reader (ideally familiar with algebraic cycles, the cycle class map, or
+   variations of Hodge structure). Fill in the salutation.
+2. **`[link or attachment to docs/hodge/EXTERNAL_REVIEW_PACKET.md]`.** A PDF
+   rendering is acceptable (the packet was designed for that). The packet links the
+   artifacts under review (all verified present):
+   - `docs/HODGE_READER_NOTE.md` (Phase 1 reader)
+   - `docs/HODGE_PHASE2_BRIDGE_NOTE.md` (Phase 2 bridge)
+   - `docs/hodge/PHASE3_KNOWN_EXAMPLE_GALLERY_SPEC.md` (Phase 3 gallery spec)
+   - context: `docs/HODGE_LITPASS_MEMO.md`, `docs/SUNDOG_V_HODGE.md`
+3. **`[reviewer specialty signal]`** in the "Decline" follow-up — tailor to the
+   reviewer (e.g. "experience with Hodge theory / algebraic cycles").
+
+**Reading-only discipline (do not soften):** this lane makes no Hodge claim. Keep
+the subject line to one of the two registered options, and confirm the forbidden
+phrases are absent (see the Owner Fill-In Checklist at the bottom). The most
+valuable reply is a negative one — "standard exposition, file the null" or
+"category error at X."
+
+---
+
 ## Short Version
 
 **Subject:** Quick sanity check: a body/shadow *reader* note on the Hodge
@@ -54,7 +88,7 @@ most useful answer might even be "this is standard, it adds nothing — don't
 publish it."
 
 Thanks,
-[Your name]
+Jeffery Hughes Jr.
 
 ## Slightly Warmer Version
 
@@ -97,7 +131,7 @@ questions. No endorsement requested; even "this is fine as a reader but don't
 make it public, because X" would be extremely helpful.
 
 Thanks,
-[Your name]
+Jeffery Hughes Jr.
 
 ## Follow-Up If They Say Yes
 
@@ -143,7 +177,7 @@ Before sending either version, verify:
 - [ ] `[link or attachment to docs/hodge/EXTERNAL_REVIEW_PACKET.md]` points to a
       stable URL or has the packet attached (a PDF rendering is acceptable; the
       packet was designed for that).
-- [ ] `[Your name]` filled in the sign-off.
+- [x] `[Your name]` filled in the sign-off (pre-filled: Jeffery Hughes Jr.).
 - [ ] Subject line matches one of the two registered options above (do not
       freelance it into public-page-style language — the packet hygiene rule
       forbids that).
