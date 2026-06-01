@@ -65,7 +65,7 @@
     @keyframes rayDraw { to { stroke-dashoffset: 0; } }
     @keyframes rayFade { from { opacity: 0; } to { opacity: 1; } }
     .ray { opacity: 1; }
-    .ray.anim { animation: rayDraw 0.34s ease forwards; }
+    .ray.anim { animation: rayDraw 0.34s ease forwards; } /* 0.34s = RAY_DRAW_MS in kakeya-gallery.js */
     .ray.miss-anim { opacity: 0; animation: rayFade 0.22s ease forwards; }
     @media (prefers-reduced-motion: reduce) { .ray.anim { animation: none; stroke-dashoffset: 0; } .ray.miss-anim { opacity: 1; animation: none; } }
     .fan-cap { font-size: 0.76rem; color: #6b7b88; margin: 0.3rem 0 0.6rem; text-align: center; }
