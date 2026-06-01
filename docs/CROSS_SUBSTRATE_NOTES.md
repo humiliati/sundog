@@ -102,14 +102,14 @@ theme-matching.
   *marginal* failures (NSE-C1, Mesa, shell) only approach numerically.
   -> [`SUNDOG_V_FARADAY.md`](SUNDOG_V_FARADAY.md),
   [`faraday/SHADOW_FARADAY.md`](faraday/SHADOW_FARADAY.md).
-- **Aharonov-Bohm / EM topology - EXACT-SEPARATION (topological), HYPOTHESIZED.**
+- **Aharonov-Bohm / EM topology - EXACT-SEPARATION (topological), EARNED 2026-05-31.**
   The same operator's loop tier on a non-contractible patch (`H^1 != 0`):
   state-insufficient (one flux number cannot rebuild the interior field) yet
   control-sufficient (it fixes the AB phase), *exactly*, with the gap an `H^1`
   invariant - while the local `F` tier goes control-blind. The portfolio's first
-  *exact* regime-2 candidate, on a **topological** (not dimensional) resistance
-  axis (§8.2). Pre-registered as the expected landing of Phase 7 case 3; not yet
-  earned by a receipt. -> [`faraday/FARADAY_PHASE7_SPEC.md`](faraday/FARADAY_PHASE7_SPEC.md).
+  *exact* regime-2 witness, on a **topological** (not dimensional) resistance
+  axis (§8.2). Landed as Phase 7 case 3 (B7-topology).
+  -> [`faraday/FARADAY_PHASE7_BOUNDARY.md`](faraday/FARADAY_PHASE7_BOUNDARY.md).
 
 **Failure-mode taxonomy.** Eight distinct ways a cross-substrate generalization
 *fails*: *marginal* (body doesn't resist), *numerical* (shadow unmeasurable),
@@ -363,7 +363,7 @@ discarded.
 | Isotrophy | `S3` symmetry orbit of a 3-body choreography; supplementary-B stability catalog | residual `Z2` generators surviving `S3 -> Z2` mass perturbation; Floquet velocity-fraction conditioned on `m3` |
 | Navier-Stokes (C1) | 2D Kolmogorov attractor state (finite-Galerkin, 440 real DOF) | low-Fourier signature `Phi_K` (K=3, 18-dim) - **but the body barely resists**: read-off `FVE(body\|shadow) ~ 0.997` (energy) / `0.993` (enstrophy), a near-invertible projection, so the regime-2 separation is **marginal**; genuine under-determination (`R^2 ~ 0.71` per-DOF) sits only in physically-negligible dissipation-range modes |
 | Faraday / EM (homogeneous) | EM field history on a contractible patch (smooth `A`, `dF = 0`) | plaquette holonomy `∮A = ∫F` - **zero body-resistance *by identity***: closure is the Bianchi identity `dF = d(dA) = 0`, so the shadow reconstructs the body exactly. The exact-zero anchor of the axis (§8.1) |
-| Aharonov-Bohm / EM (topological) [HYPOTHESIZED] | EM field config on a non-contractible patch (`H^1 != 0`) | loop holonomy `∮A = Φ` - **exact *topological* body-resistance**: one flux number is state-insufficient (cannot rebuild interior `B`) yet control-sufficient (fixes the AB phase); local `F` is control-blind. Portfolio's first *exact* regime-2 candidate; pre-register, earn via Phase 7 case 3 (§8.2) |
+| Aharonov-Bohm / EM (topological) [EARNED] | EM field config on a non-contractible patch (`H^1 != 0`) | loop holonomy `∮A = Φ` - **exact *topological* body-resistance**: one flux number is state-insufficient (cannot rebuild interior `B`) yet control-sufficient (fixes the AB phase); local `F` is control-blind. Portfolio's first *exact* regime-2 witness; earned by Phase 7 case 3 (§8.2) |
 
 The columns are the same operator. The substrate-specificity in row
 3-5 is what bounds the operating envelope; the cross-substrate
@@ -637,10 +637,11 @@ into the middle of work whose own language is already load-bearing.
 
 ## 8. Faraday / Maxwell: the exact anatomy of body-resistance
 
-*(2026-05-31. Framing, not evidence - same posture as §6: this section reads the
-closed Faraday Branch A result and the open Phase 7 boundary cases through the
-projection / body-resistance vocabulary. It pre-registers exactly one new
-empirical claim, tagged HYPOTHESIZED below; it does not assert it.)*
+*(2026-05-31. Framing layer over receipts - same posture as §6: this section reads
+the closed Faraday Branch A result and the now-closed Phase 7 boundary cases
+through the projection / body-resistance vocabulary. Its one empirical claim - the
+Aharonov-Bohm regime-2 separation - was pre-registered and is now earned by the
+Phase 7 case 3 receipt; the rest is framing, tagged inline.)*
 
 Faraday is the portfolio's only clean structural-zero substrate, and it earns a
 place here because *why* it succeeded states the §6.3 body-resistance lesson as an
@@ -666,7 +667,7 @@ identity. A clean zero on an identity is a correctness check on the operator
 loop) - it is not a regime-2 separation, because there was never a resisting body
 to separate from.
 
-### 8.2 Aharonov-Bohm = exact *topological* body-resistance [HYPOTHESIZED - pre-registered; earn via Phase 7 case 3]
+### 8.2 Aharonov-Bohm = exact *topological* body-resistance [EARNED 2026-05-31 - Phase 7 case 3 receipt]
 
 The same operator's *other* tier produces the opposite corner. On a
 non-contractible patch (`H^1 != 0`), take the loop-holonomy tier
@@ -691,12 +692,12 @@ chatv2 result.
 Honest bounds. The resisting body is "small" - one integer per `H^1` generator,
 not a high-dimensional state - so AB does **not** close the open frontier of §6.3
 (a high-dimensional *control* body on a real substrate); it is a different *kind*
-of resistance, not a bigger one. And it is **not yet earned**: this is the
-pre-registered expected landing of
-[`faraday/FARADAY_PHASE7_SPEC.md`](faraday/FARADAY_PHASE7_SPEC.md) case 3
-(topological quarantine), where the two-tier divergence equals an `H^1` invariant.
-The Phase 7 hand-calc earns it as a receipt before any stronger language; until
-then this stays HYPOTHESIZED.
+of resistance, not a bigger one. It is now **earned**: the pre-registered Phase 7
+case 3 ([`faraday/FARADAY_PHASE7_SPEC.md`](faraday/FARADAY_PHASE7_SPEC.md)) landed
+as **B7-topology** in
+[`faraday/FARADAY_PHASE7_BOUNDARY.md`](faraday/FARADAY_PHASE7_BOUNDARY.md) on
+2026-05-31: `F = 0` on the loop, `oint A = Phi`, the two-tier divergence equal to
+the `H^1` invariant `Phi` (numeric mirror `npm run faraday:phase7`).
 
 Corollary it pins down. AB is the *exact boundary* of the Faraday headline.
 "Local gauge-invariant shadow suffices for Faraday induction" is true (Branch A)
@@ -728,8 +729,14 @@ That is the only side where a *control* regime-2 could be non-trivial - and the
 §6.3 three-for-three pattern gives a pre-registered prediction: **likely
 marginal**, because classical sourced EM on a patch is nearly fixed by its sources
 (the retarded map `J -> F` is essentially invertible modulo homogeneous
-solutions). Worth a future Phase 8 takeoff gate, entered expecting marginal and
-treating a marginal landing as the publishable consistency result, not a surprise.
+solutions). The Phase 8 takeoff gate is now registered
+([`faraday/FARADAY_PHASE8_SPEC.md`](faraday/FARADAY_PHASE8_SPEC.md), 2026-05-31),
+which sharpens the prediction: the sourced sector is *determined* by its sources
+(uniqueness theorem) so it furnishes no new sharp regime-2, and the Hodge
+decomposition localizes ALL exact regime-2 content to the harmonic sector -
+exactly the Phase 7 Aharonov-Bohm witness. So Maxwell-proper is expected to add no
+new sharp separation (A8 + B8): a four-for-four-marginal consistency result
+entered by design, disaggregated (determinacy, not low-dim dynamics).
 (Phase 7 already corrected the common error here: ordinary electric sources live
 on the `d*F = J` side and leave `dF = 0` intact - that correction *is* the
 Faraday/Maxwell boundary, stated.)
@@ -751,9 +758,10 @@ sundog the program is named for. That last is flavor, not a claim.
 
 - **Does:** add Faraday (identity-success) and Aharonov-Bohm (exact-separation)
   to the failure map and the §6.3 table; name the *topological* resistance axis
-  as distinct from the *dimensional* one; pre-register the AB regime-2 claim.
-- **Does not:** earn the AB claim (Phase 7 case 3 owes the receipt); assert any
-  Maxwell-proper result (that is a future Phase 8); or change any public Faraday
-  copy. The Faraday lane's public claim remains the registered Branch A clean
-  structural zero on the classical-vacuum, magnetically-clean, contractible
-  domain.
+  as distinct from the *dimensional* one; and carry the AB regime-2 claim, earned
+  by Phase 7 case 3 ([`faraday/FARADAY_PHASE7_BOUNDARY.md`](faraday/FARADAY_PHASE7_BOUNDARY.md),
+  2026-05-31).
+- **Does not:** assert any Maxwell-proper result (that is a future Phase 8); or
+  change any public Faraday copy. The Faraday lane's public claim remains the
+  registered Branch A clean structural zero on the classical-vacuum,
+  magnetically-clean, contractible domain.
