@@ -26,3 +26,4 @@ under the internal anniversary catch-all.
 - v0.12: [external frozen transfer draft](kfacet_v12_external_frozen_transfer_form.md)
 - v0.13: [external target search draft](kfacet_v13_external_target_search_form.md)
 - v0.13a: [liao2021 adapter + leakage preflight lock](kfacet_v13a_liao2021_adapter_leakage_preflight_form.md)
+- v0.14: [liao2021 sampled zone transfer draft](kfacet_v14_liao2021_sampled_transfer_form.md)

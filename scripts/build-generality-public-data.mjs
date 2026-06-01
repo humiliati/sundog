@@ -123,18 +123,18 @@ const projects = [
     transferQuestion:
       "Can a compact signature behave like a cheaper certificate for a bounded alignment-verification problem?",
     currentRead:
-      "The v0-v6 chain is safety-complete and v6 op-count positive; Phase 2 v1 earned a bounded-positive mesa bridge receipt; Phase 3 is frozen before attacker execution.",
+      "The v0-v6 chain is safety-complete and v6 op-count positive; Phase 2 v1 earned a bounded-positive mesa bridge receipt; Phase 3 v0 falsified at small capacity.",
     blocker:
-      "Wall-time remains diagnostic-only, and capacity-relative one-wayness is not estimated.",
+      "A source-bound small-tier spoof crossed the bridge accept rule; v1 repair is only a draft.",
     nextAction:
-      "Implement frozen Phase 3 one-wayness harness before attacker runs.",
+      "Review and freeze Phase 3 v1 block-stability repair slate.",
     publicBoundary:
       "No complexity-class result, polynomial certificate, or P-vs-NP progress is claimed.",
     chartHeadline: "op-count positive; wall-time diagnostic",
     metrics: [
-      { label: "filed receipts", value: 9, unit: "incl p2v1" },
+      { label: "filed receipts", value: 10, unit: "incl p3v0" },
       { label: "v6 false accepts", value: 0, unit: "items" },
-      { label: "p2 raw gaps", value: 0, unit: "cells" },
+      { label: "p3 threshold", value: 1, unit: "<= small" },
     ],
     sources: [
       "docs/SUNDOG_V_P_V_NP.md",
@@ -143,8 +143,10 @@ const projects = [
       "docs/pvnp/PHASE2_MESA_BRIDGE_V0_SLATE.md",
       "docs/pvnp/PHASE2_MESA_BRIDGE_V1_SLATE.md",
       "docs/pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md",
+      "docs/pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md",
       "docs/pvnp/receipts/2026-05-31_phase2_mesa_bridge_v0.md",
       "docs/pvnp/receipts/2026-05-31_phase2_mesa_bridge_v1.md",
+      "docs/pvnp/receipts/2026-05-31_phase3_capacity_one_wayness_v0.md",
       "docs/pvnp/receipts/README.md",
     ],
     svgFocus: ["status-card", "receipt-chain", "op-count-positive"],
