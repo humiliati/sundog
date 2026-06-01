@@ -93,7 +93,12 @@ confirmation that the apparatus correctly reports "no structure," rather than a
 discovery. Whether this null is surprising or textbook is exactly the question
 the re-pointed external-review packet (Q2) asks a lattice gauge theorist. The
 synthesis does not pre-judge it; it claims only that the null is credible because
-the target was powered and disjoint.
+the target was powered and disjoint. An internally-derived *candidate* answer now
+exists — the [Faraday → Yang-Mills bridge note](../2026-05-31_faraday_abelian_bridge_note.md)
+argues the null is **expected**, from the abelian boundary of the same Wilson
+operator (the freebie of linearity + exact-form holonomy that the non-abelian case
+lacks; earned Shadow Faraday Phase 7 / Phase 8). That is a framing argument, not a
+theorem; the packet's Q2 puts it to the reviewer to validate or refute.
 
 ## Disposition — PAUSE at the informative endpoint
 
