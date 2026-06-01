@@ -1,9 +1,43 @@
 # v0.13b Frame-Zone Stability Audit Form Lock
 
-Status: **OPERATOR LOCK 2026-05-31** (per the operator's v0.13b specification). A tiny,
-locked diagnostic -- not a transfer step. It measures the EXACT frame-zone-change
+Status: **OPERATOR LOCK 2026-05-31; VERDICT LANDED `coarse_zone_rule_frame_stable_enough_to_test`.**
+A tiny, locked diagnostic -- not a transfer step. It measures the EXACT frame-zone-change
 fraction so the v0.13a frame-sensitivity finding can be priced precisely, rather than
 proxied by the |dvf| severity buckets.
+
+## Result (2026-05-31)
+
+**Verdict: `coarse_zone_rule_frame_stable_enough_to_test`.** Both locked bars cleared.
+
+```text
+supp-B    exact zone-change fraction = 4.35%  (2/46, Wilson95 [1.2%, 14.5%])  <= 0.15 bar
+          -> v0.11 remains VALID with a MODEST frame caveat.
+liao2021  pooled exact zone-change fraction ~= 1.3%  (10/789 across the n=200 + the
+          pre-registered n=600 expansion; n=600 alone 3/599 = 0.5%, Wilson95
+          [0.17%, 1.46%]; n=200 7/190 = 3.7%)  <= 0.05 bar
+          -> cross-ansatz testing is NOT blocked by frame fragility.
+```
+
+Receipts: `results/isotrophy/k-facet-v13b-frame-zone-stability/` (supp-B + liao2021
+n=50) and `.../liao2021_n600/` (the n=600 expansion).
+
+**Fragility is localized, not uniform.** All 10 liao2021 zone-changers across both
+samples fall in two narrow mass-ordered catalog bands (orbit index ~74.7k-84.7k and
+~109.8k-116.6k); zero zone-changes anywhere else in 135,445 rows. The n=200/n=600
+disagreement (3.7% vs 0.5%) is this heterogeneity showing through small samples, not a
+bug -- some mass-tuple regions have near-degenerate dominant Floquet directions
+(frame-fragile vf) while the rest are frame-robust. **This argues for stratified
+frame-stability diagnostics in the eventual transfer readback** -- the catalog-wide
+~1.3% does not guarantee every `m3` stratum is frame-robust; a stratum overlapping the
+fragile bands must be checked per-stratum.
+
+**Honest object (restated):** not "dominant-direction velocity-fraction is a frame-
+invariant geometric quantity" (v0.13a refuted that), but "a coarse, frame-dependent
+projection (the v0.11 zone) whose registered bins are empirically frame-stable under the
+tested frame changes -- on average and on the v0.11 domain, with frame-fragility
+localized to identifiable mass regions." v0.11's within-supp-B statistics are unchanged;
+only the feature's geometric interpretation is downgraded from invariant to
+coarse-frame-stable.
 
 ## Frame
 
