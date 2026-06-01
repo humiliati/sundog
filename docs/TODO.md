@@ -444,8 +444,8 @@ Sources:
 [`pvnp/receipts/README.md`](pvnp/receipts/README.md),
 [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md).
 
-Status: `phase3-v0-slate-opened-for-review`, v6 and Phase 2 v1 bounded
-positive.
+Status: `phase3-v0-slate-frozen-for-implementation`, v6 and Phase 2 v1
+bounded positive.
 
 Current state:
 
@@ -455,7 +455,8 @@ positive under the registered op-count protocol: `C_total_signature_ops /
 C_rollout_ops = 0.948587 <= 1.0`, with wall-time diagnostic-only. Phase 2 v0
 is filed as named quarantine, and Phase 2 v1 closes the raw-log provenance gap
 as a bounded positive under the frozen mesa-bridge contract. Phase 3 v0 is now
-opened for review to register attacker capacity, inversion, and spoof tests.
+frozen for implementation to register attacker capacity, inversion, and spoof
+tests before any execution.
 
 Blocker:
 
@@ -466,14 +467,13 @@ attacker battery.
 
 Next actions:
 
-1. Review and freeze the Phase 3 capacity-relative one-wayness v0 slate.
-2. Decide whether v0 runs seed-extension batteries or named-quarantines spoof
-   search as unfaithful.
-3. Freeze the attacker/capacity battery before any execution.
-4. Carry forward the v6 boundary verbatim: op-count positive, wall-time
+1. Implement the frozen Phase 3 capacity-relative one-wayness v0 harness.
+2. Run or operator-stage the frozen seed-extension command block according to
+   the approximately 10-minute rule.
+3. Carry forward the v6 boundary verbatim: op-count positive, wall-time
    diagnostic-only, no complexity-theoretic claim.
-5. Do not use the v3/v5 favorable wall-time samples as evidence.
-6. Treat `capacity_threshold = not_estimated` as still open for any larger
+4. Do not use the v3/v5 favorable wall-time samples as evidence.
+5. Treat `capacity_threshold = not_estimated` as still open for any larger
    attacker or domain expansion.
 
 ### ARC Phase 3E Relative-Locality Hold
