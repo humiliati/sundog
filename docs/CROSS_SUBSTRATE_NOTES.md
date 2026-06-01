@@ -263,10 +263,27 @@ it: the frozen rule taken to supplementary-A landed
 `external_transfer_blocked_by_attrition` (unbiased uniform probe attrition `0.3433`,
 Wilson95 `[0.2919, 0.3987]` above the 0.20 gate) -- the frozen D5 measurement is
 numerically intractable on ~1/3 of supp-A, a measurement-feasibility wall rather
-than a falsification. v0.13 (form locked, runner in progress) opens a signal-blind
-search for a tractable, independent external target. So the cross-substrate lesson
-sharpens: a real within-stratum signal can be blocked from external confirmation by
-the *measurement's* numerical reach, not only by the data.
+than a falsification. v0.13's signal-blind target search then returned an
+independent-target landscape negative (every Tier-3 external catalog fails a hard gate
+-- equal-mass, restricted substrate, or too small), leaving only Tier-2 Li/Liao 2021
+(unequal-mass, 135,445 rows) as schema-viable. Pricing that transfer surfaced the
+deepest finding of the arc: cross-ansatz overlap is empirically zero (leakage 0.0), but
+the velocity-fraction FEATURE is frame-relative -- `select_gamma_1`'s largest-real-part
+direction pick flips under a coordinate rotation for most orbits (vf is frame-invariant
+for only ~22-44% across the two catalogs). The adapter is provably correct (clean orbits
+give vf invariant to 1e-8); it is the MEASUREMENT that is frame-sensitive. v0.13b then
+priced this at the registered-zone level: the coarse v0.11 zone (the rule's actual
+input) is frame-stable on the v0.11 domain itself (supp-B zone-change `4.35%`, Wilson95
+upper `14.5% <= 0.15` bar -- a MODEST caveat), and marginal cross-ansatz (liao2021
+`~3.5%`, CI-decisive `n=600` run pending 2026-05-31).
+
+So the cross-substrate lesson sharpens twice: (1) a real within-stratum signal can be
+blocked from external confirmation by the *measurement's* numerical reach, not only by
+the data; and (2) a derived feature built on eigenvector SELECTION can be frame-relative
+even when its registered coarse binning is robust -- so the honest theorem-facing object
+is "a coarse, frame-dependent projection whose registered bins are empirically
+frame-stable," NOT "a frame-invariant geometric quantity." Any substrate whose feature
+is an argmax-selected direction (not just isotrophy) inherits this caveat.
 
 Question: can Sundog make a non-tautological first-principles prediction over
 an external three-body catalog, before writing another controller sweep?
@@ -590,6 +607,25 @@ step is therefore not another same-table statistic; it is either an external
 catalog transfer, a freshly registered mass-conditional predictor, or a new
 mechanism that explains why the velocity-fraction shadow is conditional on
 `m3`.
+
+Post-v0.13 update: the external-catalog step was taken, and it produced isotrophy's
+THIRD projection lesson. v0.12 took the conditional rule to same-paper supplementary-A
+and hit `external_transfer_blocked_by_attrition` (the frozen D5 measurement is
+numerically intractable on ~1/3 of the target -- a feasibility wall, not a
+falsification). v0.13's signal-blind search found only a Tier-2 (same-lineage Li/Liao
+2021) schema-viable target; the v0.13a/b preflight on it surfaced the sharpest lesson of
+the program: the projection's FEATURE (dominant-direction velocity-fraction) is itself
+frame-relative -- `select_gamma_1`'s largest-real-part argmax flips under a coordinate
+rotation for the majority of orbits -- yet its registered coarse zone bins are
+frame-stable on the v0.11 domain (supp-B zone-change `4.35% <= 0.15`) and marginal
+cross-ansatz (liao2021 `~3.5%`, CI-decisive run pending). The honest theorem-facing
+object downgrades from "a frame-invariant geometric quantity" to "a coarse,
+frame-dependent projection whose registered bins are empirically frame-stable." This is
+the most transferable caveat isotrophy has produced: **any projection whose shadow is an
+argmax-selected direction** (Mesa `net.7` directions, NSE control shadows, any
+eigenvector-keyed feature) **should be frame-audited before its bins are read as
+geometry** -- a rotation/translation invariance check on the registered statistic, cheap
+relative to the claim it protects.
 
 ### 7.3 Threebody
 
