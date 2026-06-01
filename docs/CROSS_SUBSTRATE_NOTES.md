@@ -449,8 +449,8 @@ states) — which is the structural property all three measured substrates
 lack.** Measured detail: `sundog/docs/proof/PDE_C1_NONMARGINAL_PROBE.md`,
 `PDE_C1_PROPOSITION.md`, `PDE_C2_SHELL_DIMENSIONALITY_PROBE.md`.
 
-**The prediction tested (2026-05-30): first de-confounded *control* regime-2 —
-on an LLM-like substrate, at low dimensionality.** The "where it would live"
+**The prediction tested (2026-05-30 → 31): first de-confounded *control* regime-2 —
+on an LLM-like substrate, now sharp at `d_dec ≈ 7`.** The "where it would live"
 claim above was built and probed in the new `chatv2` lane
 (`sundog/docs/chatv2/`): a from-scratch transformer trained generatively on a
 synthetic `H`-latent channel task, with the C1/Mesa fingerprint ported to its
@@ -467,12 +467,20 @@ state-insufficient-yet-control-sufficient with a clean *objective-driven*
 contrast: the control-only twin fails to build the non-decision state
 (`body_carry` ≈ chance) where generative training builds it (~0.9) — SHARP at
 `H = 2, 4`.** This is the **first sharp control regime-2 in the portfolio** — the
-thing C1 / Mesa / shell could not show. **Honest bounds:** it holds only at *low*
-dimensionality (2–4); the genuinely high-dimensional regime (`H ≥ 8`) is **blocked
-by a learnability wall** (the small model fails to learn the pair-XOR aggregation
-— `eval_loss ≈ chance`, an *undertraining* F3′, **not** marginality), so a
-*high-dim* resisting body is still **unproven, not refuted**; it is a synthetic
-toy, not a real LLM; and it is **unpromoted**. Detail:
+thing C1 / Mesa / shell could not show — first seen at `H = 2, 4`. **The
+learnability wall then cracked (2026-05-31, `H=8` probe):** a capacity bump
+(`d_model`→192) + signal bump (δ→0.45, de-confound intact — pre-check 0.505) let
+the model *learn* at `H=8` (`eval_loss` 0.497 ≪ 0.693 chance), and the separation
+**held SHARP** — `d_dec = 7.2/8` (a *real* ~7-dim body, **not** the noise-rank of
+the undertrained run), `leak = 0.50` exact chance (resists), `z1 = 0.94`
+(control-sufficient), `body_carry` gen 0.77 vs **twin 0.51 ≈ chance** (the
+objective builds the whole state; control-only builds none). So `H ≥ 8` was an
+*undertraining* wall (F3′), **not** marginality — and chatv2 is now the
+**highest-dimensional sharp resisting body in the portfolio** (`d_dec ≈ 7`, vs
+NSE-C1 marginal / Mesa ~2 / shell ~1.7). **Honest bounds:** synthetic toy, one
+`H` / one seed, δ=0.45 a strong signal (latent easy to estimate once learned);
+`d_dec ≈ 7` is "higher-dim", not LLM-scale; an `H=16` scaling run is testing
+whether it survives to the top of the toy range; **unpromoted**. Detail:
 `sundog/docs/chatv2/PHASE0_2_COMPUTED_LATENTS.md` (+ `PHASE0_MINIMUM_FALSIFIABLE.md`
 Amendment 1).
 
@@ -487,9 +495,11 @@ independent of dimension - AB's body is low-dimensional but resists *exactly*,
 because the obstruction is cohomological, not dimensional. So "the body resists
 its shadow" can mean *too big to reconstruct* (dimensional) or *globally
 under-determined by local data* (topological). The portfolio's only **exact**
-regime-2 candidate (AB) lives on the topological axis; every dimensional-axis
-*control* substrate so far is marginal (NSE-C1, Mesa, shell) or toy/low-dim
-(chatv2). See §8 for the full Faraday/Maxwell reading.
+regime-2 (AB) lives on the topological axis. On the dimensional axis the measured
+*control* substrates are marginal (NSE-C1, Mesa, shell) — **except chatv2, now
+empirically *sharp* (de-confounded, `d_dec ≈ 7`): the first dimensional-axis
+separation, though a synthetic toy rather than an exact result like AB.** See §8
+for the full Faraday/Maxwell reading.
 
 ### 6.4 The math-or-Buddha epistemic stance
 
@@ -724,8 +734,8 @@ That is a regime-2 separation (state-insufficient yet control-sufficient) that i
 **sharp and exact**, and it resists along a **topological / cohomological** axis,
 not the dimensional axis of §6.3. It would be the first *exact* (non-marginal,
 non-learnability-walled) regime-2 point anywhere in the portfolio - the clean
-opposite corner from the three marginal control substrates and the toy/low-dim
-chatv2 result.
+opposite corner from the three marginal control substrates and the chatv2
+dimensional-axis sharp-at-`d_dec≈7` result (toy, but de-confounded).
 
 Honest bounds. The resisting body is "small" - one integer per `H^1` generator,
 not a high-dimensional state - so AB does **not** close the open frontier of §6.3
