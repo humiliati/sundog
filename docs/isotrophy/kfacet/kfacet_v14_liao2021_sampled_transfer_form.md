@@ -1,9 +1,10 @@
 # v0.14 liao2021 Sampled Zone Transfer Form Draft
 
-Status: **OPERATOR LOCK 2026-06-01.** No v0.14 runner has been written, no sample
-drawn, no transfer statistic computed, and no v0.14 D5 rows integrated at lock time.
-This document locks the first sampled transfer test from supp-B to the Tier-2 Li/Liao
-2021 non-hierarchical catalog.
+Status: **OPERATOR LOCK 2026-06-01.** Runner implementation began after lock
+(`scripts/v14_liao2021_sampled_transfer.py`), but no registered v0.14 sample has
+been drawn, no transfer statistic computed, and no v0.14 D5 rows integrated as a
+measurement receipt at implementation time. This document locks the first sampled
+transfer test from supp-B to the Tier-2 Li/Liao 2021 non-hierarchical catalog.
 
 Reviewed for self-consistency, non-circularity, and integrity:
 
@@ -187,12 +188,15 @@ seconds_per_row = 6.4
 Projected v0.14 sample cost:
 
 ```text
-1280 rows single-threaded ~= 2.3 hours
-16 shards x 80 rows       ~= 8.5 minutes per shard, plus overhead
+1280 rows base D5 only    ~= 2.3 hours
+16 shards x 80 rows       ~= 8.5 minutes per shard, plus overhead, for base D5 only
+frame-zone audit          ~= up to 4 additional D5-equivalent passes per successful row
 ```
 
-The full 1280-row sample must not be run inline by an agent as one command. The
-intended execution is 16 shard commands plus a merge/analyze step. If any single
+The implemented shard runner is faithful to the full frame-zone audit, so practical
+shard wall-clock can approach roughly 5x the base-only estimate (still staged, not
+inline). The full 1280-row sample must not be run inline by an agent as one command.
+The intended execution is 16 shard commands plus a merge/analyze step. If any single
 shard is projected over the repository inline budget, stage it for the operator
 instead of running it.
 
@@ -435,6 +439,10 @@ Expected additive runner:
 scripts/v14_liao2021_sampled_transfer.py
 ```
 
+Implementation note: if the promoted tracked target file is absent locally, the
+runner may use the existing `_staging` copy only when its SHA-256 matches the v0.13a
+`download_sha256` receipt. A different file aborts before sampling.
+
 Expected command shapes:
 
 ```powershell
@@ -457,6 +465,15 @@ python scripts/v14_liao2021_sampled_transfer.py analyze `
   --out results/isotrophy/k-facet-v14-liao2021-sampled-transfer `
   --permutations 100000 `
   --seed 20260523
+```
+
+Convenience npm aliases mirror these commands:
+
+```powershell
+npm run isotrophy:v14:prepare
+npm run isotrophy:v14:shard -- --shard-index 0 --shard-count 16
+npm run isotrophy:v14:merge
+npm run isotrophy:v14:analyze
 ```
 
 The 16 shard commands may be run concurrently by the operator. A future runner
