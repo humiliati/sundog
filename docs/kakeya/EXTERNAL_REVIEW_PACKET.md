@@ -39,6 +39,23 @@ the reader framing, body-resistance placement, and public-claim fences.
 - screenshots of the workbench/gallery plus the share-card PNG, so the reviewer
   does not need to run an internal dev server.
 
+**Review Surface — Links (staged 2026-06-01).** Concrete values for the bullets
+above; the owner finalizes the deploy + push, then confirms these resolve.
+
+- **Review page (unlinked, `NOT PEER REVIEWED` + `noindex`):**
+  `https://sundog.cc/kakeya` (source `kakeya.html`, drafted). Interactive surfaces:
+  `https://sundog.cc/kakeya/workbench.html` and `…/kakeya/gallery.html`.
+- **GitHub commit permalinks** — base
+  `https://github.com/humiliati/sundog/blob/ba3d54719b87526c6dd5c9fe70e4c81926bc5ada/`,
+  then append: `docs/KAKEYA_FINITE_FIELD_READER.md` · `docs/KAKEYA_LITPASS_MEMO.md`
+  · `docs/kakeya/PHASE2_TINY_FINITE_FIELD_WORKBENCH_SPEC.md` ·
+  `kakeya/kakeya-core.js` · `kakeya/workbench.html` · `kakeya/gallery.html` ·
+  `docs/kakeya/EXTERNAL_REVIEW_PACKET.md`. **Owner must `git push` HEAD first** —
+  `ba3d547` is not yet on `origin`; if more commits land before the push, swap in
+  the final pushed SHA.
+- **Screenshots / share card:** owner to attach; `public/og/kakeya.png` is not yet
+  generated.
+
 Until external review clears, `kakeya.html` may link outward to related Sundog
 pages, but no obvious public inbound links should point to it from `index.html`,
 `legend.html`, topic nav, or launch/social copy.
