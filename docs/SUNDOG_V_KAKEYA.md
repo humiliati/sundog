@@ -11,9 +11,17 @@ Short version:
 > body is visually tiny but direction-complete, what shadow certifies the
 > hidden incidence structure, and where does that certificate stop transferring?
 
-Status: Scaffold outline. Literature pass is pending and must land before any
-technical claim, public copy, executable probe, or site-page entry. This file is
-only a target-selection and claim-boundary scaffold opened from
+Status: Scaffold + lit-pass anchors landed (2026-05-31); the real-hook gate is
+adjudicated, and the starter
+[`KAKEYA_LITPASS_MEMO.md`](KAKEYA_LITPASS_MEMO.md) was filed 2026-06-01, and the
+Phase-1 Front-A reader
+[`KAKEYA_FINITE_FIELD_READER.md`](KAKEYA_FINITE_FIELD_READER.md) is drafted (it
+clears its `KAK-FRONT-A-VACUOUS` self-check on the body-resistance placement and
+the claim-boundary fences). The Phase-2 tiny finite-field workbench spec is
+filed at
+[`kakeya/PHASE2_TINY_FINITE_FIELD_WORKBENCH_SPEC.md`](kakeya/PHASE2_TINY_FINITE_FIELD_WORKBENCH_SPEC.md).
+Public copy, executable probe, and site-page entry are still pending. This file
+is a target-selection and claim-boundary scaffold opened from
 [`SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md`](SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md).
 
 This is not a claim to progress on the Kakeya conjecture, the Kakeya maximal
@@ -30,6 +38,10 @@ This document explicitly does **not** claim:
 - an improvement to any Kakeya, restriction, or incidence bound;
 - a new proof of the finite-field Kakeya theorem;
 - transfer from finite fields to Euclidean sets;
+- transfer of the 2025 Wang–Zahl resolution of *3D* Euclidean Kakeya to the open
+  `n ≥ 4` case, to finite fields, or to any Sundog claim;
+- a regime-2 / control-sufficiency separation on Kakeya — the body-resistance
+  bridge below is the *state* half only (see the honest fence);
 - evidence that a visual needle-field workbench says anything about the open
   problem.
 
@@ -44,6 +56,66 @@ What this scaffold may stage, after the literature pass:
 - a candidate public spectacle that rhymes with `Pressure Mines`, `Cap-set`,
   and the body-resistance vocabulary in
   [`CROSS_SUBSTRATE_NOTES.md`](CROSS_SUBSTRATE_NOTES.md).
+
+## Lit-Pass Anchors and the Body-Resistance Bridge (2026-05-31)
+
+Lit-pass anchors are identified and the starter
+[`KAKEYA_LITPASS_MEMO.md`](KAKEYA_LITPASS_MEMO.md) is filed. The gate on a
+*real intellectual hook* — prioritized before any page or graphics — has been
+adjudicated.
+
+**Recent landscape.**
+
+- **Wang–Zahl (2025)** resolved the Euclidean Kakeya conjecture *in three
+  dimensions*: every Kakeya set in `R³` has Hausdorff and Minkowski dimension 3
+  ([arXiv:2502.17655](https://arxiv.org/abs/2502.17655)). `n ≥ 4` remains open.
+  The lane reads the resolved 3D result, the open `n ≥ 4`, and the finite-field
+  theorem as three *separate* registers; laundering one into another is the hard
+  stop (failure mode 2).
+- **Dvir (2008)** — finite-field Kakeya by the polynomial method, the root of the
+  method that later cracked cap-set; the finite-field workbench substrate.
+- **math-inc/KakeyaFiniteFields** — a *complete Lean 4 autoformalization* of
+  Dvir's theorem, produced by Math Inc.'s "Gauss" agent from a LaTeX blueprint
+  ([github](https://github.com/math-inc/KakeyaFiniteFields)). The Front-A evaluator
+  exhibit: AI-produced, machine-verified math — the same epistemic object the
+  cap-set lane is built to read. (No license stated → read/cite/audit, not copy.)
+
+**The body-resistance bridge — the real hook, gate cleared (bounded).**
+Polson–Zantedeschi (2026), ["Kakeya Conjecture and Conditional Kolmogorov
+Complexity"](https://arxiv.org/abs/2603.25611), independently reconstruct the
+Sundog body/shadow decomposition in algorithmic-information terms and apply it to
+Kakeya:
+
+- the **fiber label** = the line *direction* = the lossy **shadow**;
+- their chain rule `K(x↾r) = K(z↾r) + K(u↾r | z) + O(log r)` (Prop. 1) is the
+  body/shadow split made exact — direction + along-fiber residual;
+- **"informationally incompressible at ambient dimension"** is maximal
+  **body-resistance**: the direction-shadow cannot compress the set below full
+  dimension (= the Kakeya conjecture), via the Lutz point-to-set principle;
+- the **adaptive-fibering obstruction** (§5.2) — body-resistance is exact only when
+  the shadow is *identifiable*; a point on many fibers lets an adversary pick the
+  max-compression direction — is precisely why `n ≥ 4` is open while `R³`
+  (sticky/Lipschitz) is not.
+
+So **Kakeya is the exact-*maximal* body-resistance anchor** — the opposite pole
+from Faraday's exact-*zero* anchor (Bianchi) on the axis the
+[`CROSS_SUBSTRATE_NOTES.md`](CROSS_SUBSTRATE_NOTES.md) failure map already runs.
+A genuine, non-manufactured spine for the lane.
+
+**Honest fence (binding).** This is a **body-resistance** bridge, **not** a
+regime-2 / Reading-2 separation. The Polson–Zantedeschi framework has *no
+control-sufficiency notion* — it is reconstruction description length throughout.
+The direction-shadow is "control-sufficient for the direction" only *trivially*
+(it *is* the direction), not the non-trivial "lossy shadow predicts a *different*
+objective" that the real regime-2 substrates (NSE C1, Aharonov–Bohm) have.
+Claiming a Kakeya regime-2 is forbidden overreach. Sundog supplies the
+body-resistance *reading* and the cross-substrate placement; the mathematics is
+Wang–Zahl / Dvir / Lutz / Polson–Zantedeschi — no Sundog-original theorem.
+
+**Framing decision.** Front A (reader/workbench page + graphics) is justified on
+*this* body-resistance spine — the Faraday-zero ↔ Kakeya-maximal continuum is a
+real visual — not on a manufactured regime-2. Abstract vocabulary parallels are
+tracked at [`/legend`](../legend.html).
 
 ## Why Kakeya Fits Sundog
 
@@ -186,13 +258,16 @@ Working hook:
 
 - **Front:** A/B bridge.
 - **Cost:** Low to medium.
-- **Artifact:** a browser or script-backed toy where a user selects points in
-  `F_q^2` or `F_q^3`, sees which directions are covered by full lines, and
-  compares size against simple baselines.
+- **Artifact:** spec filed at
+  [`kakeya/PHASE2_TINY_FINITE_FIELD_WORKBENCH_SPEC.md`](kakeya/PHASE2_TINY_FINITE_FIELD_WORKBENCH_SPEC.md).
+  The first implementation target is prime-field `F_q^2` only (`q in {5, 7,
+  11}`): a user selects points, sees which directions are covered by full
+  lines, and compares size against simple teaching baselines.
 - **Attacks failure modes:** 3, 4.
 - **Pre-registered negative:** if the direction shadow is only a disguised copy
   of the point set, or if the UI makes size lower bounds look like empirical
-  discoveries, file `KAK-WORKBENCH-MISCALIBRATED`.
+  discoveries, file `KAK-SHADOW-REENCODING` or
+  `KAK-WORKBENCH-MISCALIBRATED`.
 
 ### Candidate 3 - Needle-Field Spectacle
 
@@ -228,9 +303,10 @@ Working hook:
 
 ### Phase 0 - Literature Pass and Domain Lock
 
-Goal: produce `KAKEYA_LITPASS_MEMO.md` before any technical or public move.
+Goal: keep [`KAKEYA_LITPASS_MEMO.md`](KAKEYA_LITPASS_MEMO.md) as the
+citation/domain lock before any technical or public move.
 
-The memo must lock:
+The starter memo now locks:
 
 - canonical problem statements and variants;
 - finite-field theorem statement and proof references;
@@ -239,7 +315,9 @@ The memo must lock:
 - which examples are safe for a public visual;
 - external-review path.
 
-Exit criterion: claim boundary and candidate ranking updated in this file.
+Starter exit criterion: memo filed and linked here. Public-promotion exit
+criterion: claim boundary and candidate ranking updated after the reader draft
+and an external sanity-check path.
 
 ### Phase 1 - Reader Note
 
@@ -251,10 +329,12 @@ Euclidean progress.
 ### Phase 2 - Tiny Workbench Spec
 
 Goal: pre-register the finite-field toy model, direction convention, baselines,
-UI labels, and falsifiers before implementation.
+UI labels, and falsifiers before implementation. Filed at
+[`kakeya/PHASE2_TINY_FINITE_FIELD_WORKBENCH_SPEC.md`](kakeya/PHASE2_TINY_FINITE_FIELD_WORKBENCH_SPEC.md).
 
 Exit criterion: no hidden equivalence between the direction shadow and full
-body reconstruction.
+body reconstruction. The spec requires many-to-one shadow collisions and a
+shadow export that omits point membership and witness intercept lists.
 
 ### Phase 3 - Browser Workbench
 
@@ -275,7 +355,8 @@ named boundary/null and keep it internal.
 
 ## Lit-Pass Checklist
 
-The future `KAKEYA_LITPASS_MEMO.md` should answer:
+The filed starter [`KAKEYA_LITPASS_MEMO.md`](KAKEYA_LITPASS_MEMO.md) answers
+these at a first-pass level. Before any public page, recheck:
 
 - Which Kakeya variant is the primary Sundog target?
 - What is the exact finite-field statement, with dimension and field-size
@@ -331,6 +412,13 @@ Forbidden:
 
 ## Cross-References
 
+- [`KAKEYA_LITPASS_MEMO.md`](KAKEYA_LITPASS_MEMO.md) - 2026-06-01 starter
+  citation spine and claim-boundary lock for the Kakeya lane.
+- [`KAKEYA_FINITE_FIELD_READER.md`](KAKEYA_FINITE_FIELD_READER.md) - Phase-1
+  Front-A reader; clears `KAK-FRONT-A-VACUOUS` on body-resistance placement and
+  claim-boundary fences, not on the standard proof retelling.
+- [`kakeya/PHASE2_TINY_FINITE_FIELD_WORKBENCH_SPEC.md`](kakeya/PHASE2_TINY_FINITE_FIELD_WORKBENCH_SPEC.md)
+  - Phase-2 pre-implementation lock for the tiny prime-field workbench.
 - [`SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md`](SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md)
   - target-selection matrix that promoted Kakeya as the strongest next public
   spectacle candidate.
@@ -340,4 +428,3 @@ Forbidden:
   anti-perfect-information framing.
 - [`CROSS_SUBSTRATE_NOTES.md`](CROSS_SUBSTRATE_NOTES.md) - body-resistance and
   failure-mode vocabulary.
-
