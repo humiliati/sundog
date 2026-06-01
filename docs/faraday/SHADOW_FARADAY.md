@@ -1036,6 +1036,30 @@ HYPOTHESIZED to earned. Phase 7 sharpens the boundary around Branch A; it does n
 change the Branch A claim. No public copy changed; `faraday.html` is held for
 explicit go-ahead.
 
+## Phase 8: Inhomogeneous (Sourced) Maxwell
+
+Opened + executed 2026-05-31. Spec:
+[`FARADAY_PHASE8_SPEC.md`](FARADAY_PHASE8_SPEC.md); receipt:
+[`FARADAY_PHASE8_BOUNDARY.md`](FARADAY_PHASE8_BOUNDARY.md); battery
+`npm run faraday:phase8`. The inhomogeneous half `d*F = J` closes through a
+metric-dependent dual shadow, and the Hodge decomposition localizes all exact
+regime-2 content to the harmonic / Aharonov-Bohm sector. Pre-registered A8 + B8
+landed; no `C8` bounded failure.
+
+| Case | Domain | Branch | Result |
+| --- | --- | --- | --- |
+| Electrostatic Gauss | `rho != 0` | A8-dual-closure | `oint *F = Q_enc` (electric dual of the Phase 7 monopole; `div E = 3`, flux `= 4 pi`) |
+| Ampere-Maxwell + displacement | `J`, time-varying `E` | A8-dual-closure | `oint B.dl = I_enc + d/dt flux_E` (match to 13 digits) |
+| Hodge-split localization | `H^1 != 0`, source + flux | B8-harmonic-survivor | dual-shadow reads `q`, loop-shadow reads `Phi`; orthogonal sectors; no new regime-2 |
+
+The structural spine: the metric (Hodge star `*`) enters here and only here, where
+the homogeneous side was metric-free. Determinacy verdict: by the uniqueness
+theorem the sourced field is fixed by (sources, boundary, harmonic periods) — the
+sourced sector is determined, not resisting. Body-resistance four-for-four
+marginal, disaggregated (determinacy, not low-dim dynamics). This earns
+[`../CROSS_SUBSTRATE_NOTES.md`](../CROSS_SUBSTRATE_NOTES.md) §8.4 and adds the §6.3
+sourced-EM row. No public copy changed beyond the already-landed Phase 7 section.
+
 ## Inspection Trail
 
 - 2026-05-25 - `faraday.html` filed as a noindex draft staging page.
@@ -1088,3 +1112,9 @@ explicit go-ahead.
   (electric source, `R_F = 0`), B7-magnetic-source (named `Q_m`), B7-topology
   (Aharonov-Bohm, `oint A = Phi`, exact regime-2 separation). Support battery
   `npm run faraday:phase7`. No public copy changed.
+- 2026-05-31 - Phase 8 spec-registered and executed in
+  [`FARADAY_PHASE8_BOUNDARY.md`](FARADAY_PHASE8_BOUNDARY.md): A8-dual-closure
+  (Gauss + displacement-current Ampere-Maxwell via `oint *F = Q_enc`) and
+  B8-harmonic-survivor (Hodge split localizes all exact regime-2 to the AB
+  sector). Battery `npm run faraday:phase8`. Maxwell-proper adds no new sharp
+  separation; completes the Faraday/Maxwell arc.

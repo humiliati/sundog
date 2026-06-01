@@ -284,9 +284,15 @@ Green's function, and curved spacetime are named deferrals).
 Pre-registered landing A8 + B8. Body-resistance verdict: four-for-four marginal,
 disaggregated (sourced EM is *determined*, not low-dim-dynamical like NSE-C1).
 
-**Receipts to produce**: future `docs/faraday/FARADAY_PHASE8_BOUNDARY.md` +
-optional `npm run faraday:phase8` battery. Update the ledger, this roadmap, and
-`CROSS_SUBSTRATE_NOTES.md` §8.4 only after the receipt lands; public copy held.
+**Result (2026-05-31)**: landed A8 + B8 in
+[`FARADAY_PHASE8_BOUNDARY.md`](FARADAY_PHASE8_BOUNDARY.md) (battery
+`npm run faraday:phase8`). The dual shadow `oint *F = Q_enc` closes Gauss (Case 1,
+the electric dual of the Phase 7 monopole) and Ampere-Maxwell including the
+displacement current (Case 2, match to 13 digits); the Hodge split (Case 3)
+localizes all exact regime-2 to the harmonic / Aharonov-Bohm sector — Maxwell adds
+no new sharp separation. Body-resistance four-for-four marginal, disaggregated
+(determined, not low-dim dynamics). Ledger + `CROSS_SUBSTRATE_NOTES.md` §8.4 + §6.3
+updated; public copy held.
 
 ---
 
@@ -431,8 +437,10 @@ behind a gated build/deploy. Phase 8 is now spec-registered as the inhomogeneous
 `P_shadow^dual = oint *F` tested for closure of `d*F = J` (Gauss / Ampere-Maxwell),
 scoped to static / given-source domains with a tiny battery. Pre-registered
 landing A8 (dual-closure) + B8 (the only regime-2 is Phase 7's harmonic /
-Aharonov-Bohm sector — Maxwell adds no new sharp separation). Execution not
-started; receipt target `docs/faraday/FARADAY_PHASE8_BOUNDARY.md`.
+Aharonov-Bohm sector — Maxwell adds no new sharp separation). Executed and landed
+the same day (A8 + B8); receipt
+[`FARADAY_PHASE8_BOUNDARY.md`](FARADAY_PHASE8_BOUNDARY.md), battery
+`npm run faraday:phase8`. See the Phase 8 Result above.
 
 This keeps the Sundog standard: traceable, falsifiable, receipt-driven, and public. The final artifact is both a mathematical result **and** a clean public page that demonstrates the method. 
 

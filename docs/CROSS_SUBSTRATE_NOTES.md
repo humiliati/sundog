@@ -364,6 +364,7 @@ discarded.
 | Navier-Stokes (C1) | 2D Kolmogorov attractor state (finite-Galerkin, 440 real DOF) | low-Fourier signature `Phi_K` (K=3, 18-dim) - **but the body barely resists**: read-off `FVE(body\|shadow) ~ 0.997` (energy) / `0.993` (enstrophy), a near-invertible projection, so the regime-2 separation is **marginal**; genuine under-determination (`R^2 ~ 0.71` per-DOF) sits only in physically-negligible dissipation-range modes |
 | Faraday / EM (homogeneous) | EM field history on a contractible patch (smooth `A`, `dF = 0`) | plaquette holonomy `∮A = ∫F` - **zero body-resistance *by identity***: closure is the Bianchi identity `dF = d(dA) = 0`, so the shadow reconstructs the body exactly. The exact-zero anchor of the axis (§8.1) |
 | Aharonov-Bohm / EM (topological) [EARNED] | EM field config on a non-contractible patch (`H^1 != 0`) | loop holonomy `∮A = Φ` - **exact *topological* body-resistance**: one flux number is state-insufficient (cannot rebuild interior `B`) yet control-sufficient (fixes the AB phase); local `F` is control-blind. Portfolio's first *exact* regime-2 witness; earned by Phase 7 case 3 (§8.2) |
+| Sourced EM / Maxwell (inhomogeneous) [EARNED] | full sourced field on a patch | dual-shadow `∮*F = Q_enc` (Gauss / Ampere-Maxwell) - **determined, not resisting**: by the uniqueness theorem the field is fixed by (sources, boundary, harmonic periods); the low-dim shadow is a lossy Gauss summary with no sharp objective-free regime-2. All exact regime-2 is the harmonic/AB sector above. Marginal by *determinacy* (Phase 8, §8.4) |
 
 The columns are the same operator. The substrate-specificity in row
 3-5 is what bounds the operating envelope; the cross-substrate
@@ -729,14 +730,17 @@ That is the only side where a *control* regime-2 could be non-trivial - and the
 §6.3 three-for-three pattern gives a pre-registered prediction: **likely
 marginal**, because classical sourced EM on a patch is nearly fixed by its sources
 (the retarded map `J -> F` is essentially invertible modulo homogeneous
-solutions). The Phase 8 takeoff gate is now registered
-([`faraday/FARADAY_PHASE8_SPEC.md`](faraday/FARADAY_PHASE8_SPEC.md), 2026-05-31),
-which sharpens the prediction: the sourced sector is *determined* by its sources
-(uniqueness theorem) so it furnishes no new sharp regime-2, and the Hodge
-decomposition localizes ALL exact regime-2 content to the harmonic sector -
-exactly the Phase 7 Aharonov-Bohm witness. So Maxwell-proper is expected to add no
-new sharp separation (A8 + B8): a four-for-four-marginal consistency result
-entered by design, disaggregated (determinacy, not low-dim dynamics).
+solutions). Phase 8 executed and landed
+([`faraday/FARADAY_PHASE8_BOUNDARY.md`](faraday/FARADAY_PHASE8_BOUNDARY.md),
+2026-05-31), earning the sharpened verdict: the sourced sector is *determined* by
+its sources (uniqueness theorem) so it furnishes no new sharp regime-2, and the
+Hodge decomposition localizes ALL exact regime-2 content to the harmonic sector -
+exactly the Phase 7 Aharonov-Bohm witness. So Maxwell-proper adds **no new sharp
+separation** (A8 + B8): a four-for-four-marginal result, disaggregated
+(determinacy, not low-dim dynamics) - which is *why* Aharonov-Bohm was the unique
+exact witness. The dual-shadow closure `oint *F = Q_enc` recovers Gauss and
+Ampere-Maxwell (incl. displacement current); the metric (Hodge `*`) enters here and
+only here.
 (Phase 7 already corrected the common error here: ordinary electric sources live
 on the `d*F = J` side and leave `dF = 0` intact - that correction *is* the
 Faraday/Maxwell boundary, stated.)

@@ -8,7 +8,8 @@ Canonical documents for the Shadow Faraday Zero-Out line live here.
 - [Phase 4 verification](FARADAY_PHASE4_VERIFICATION.md): support battery and falsifier checks.
 - [Phase 7 spec](FARADAY_PHASE7_SPEC.md): source/topology boundary audit (opened after the closed clean-domain result).
 - [Phase 7 boundary receipt](FARADAY_PHASE7_BOUNDARY.md): A7 electric-source / B7 magnetic-source / B7 Aharonov–Bohm topology — the exact regime-2 witness.
-- [Phase 8 spec](FARADAY_PHASE8_SPEC.md): inhomogeneous (sourced) Maxwell — dual-shadow closure & Hodge localization (registered, execution pending).
+- [Phase 8 spec](FARADAY_PHASE8_SPEC.md): inhomogeneous (sourced) Maxwell — dual-shadow closure & Hodge localization.
+- [Phase 8 boundary receipt](FARADAY_PHASE8_BOUNDARY.md): A8 dual-closure (Gauss + displacement-current Ampère–Maxwell) / B8 Hodge localization — Maxwell adds no new regime-2.
 
 Older root-level `docs/FARADAY_*` and `docs/SHADOW_FARADAY*` paths are kept as
 compatibility pointers only.
