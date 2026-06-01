@@ -9,6 +9,14 @@
 
 import * as K from "./kakeya-core.js";
 
+// Animation timing constants.
+// STAGGER_TOTAL_MS: window over which covered-ray draws start (spread across q+1 slots).
+// RAY_DRAW_MS: per-ray stroke-draw duration — must match CSS `rayDraw` animation (0.34s).
+// MISSING_GAP_MS: grace period after the last covered ray finishes before missing rays fade in.
+const STAGGER_TOTAL_MS = 380;
+const RAY_DRAW_MS = 340;
+const MISSING_GAP_MS = 80;
+
 const C = {
   navy: "#1a3a52",
   navyMid: "#2d5575",
@@ -79,9 +87,9 @@ function panelSVG(q, body, { size = 150, animate = false, hit = false } = {}) {
     }
   }
   const fanY = size + 30, fanCx = size / 2, R = size / 2 - 6, n = q + 1;
-  const stepMs = Math.round(380 / (q + 1));
+  const stepMs = Math.round(STAGGER_TOTAL_MS / (q + 1));
   const coveredCount = bits.reduce((a, b) => a + b, 0);
-  const missingDelay = animate && coveredCount > 0 ? (coveredCount - 1) * stepMs + 420 : 0;
+  const missingDelay = animate && coveredCount > 0 ? (coveredCount - 1) * stepMs + RAY_DRAW_MS + MISSING_GAP_MS : 0;
   let vis = "", hits = "", coveredIdx = 0;
   for (let i = 0; i < n; i++) {
     const theta = Math.PI - (Math.PI * (i + 0.5)) / n;
