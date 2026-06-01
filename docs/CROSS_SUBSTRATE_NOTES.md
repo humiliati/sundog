@@ -81,11 +81,32 @@ theme-matching.
   gate** never clears (cap not_estimated; rollout ratio / absolute wall-time
   fail). The projection is control-useful yet bounded out of promotion by its
   cost envelope. -> [`SUNDOG_V_P_V_NP.md`](SUNDOG_V_P_V_NP.md).
-- **ARC-AGI - CONVERGENCE-TO-NULL (needs a reframing, not another sweep).**
-  Phase 3 converged deterministically across three task-hardness receipts;
-  Branch C selected, lane PAUSED. Reopening requires a different framing
-  (stochastic per-task, Pass-C threshold revision, or a new framing) - not more
-  cells of the same shape. -> [`SUNDOG_V_ARC.md`](SUNDOG_V_ARC.md).
+- **ARC-AGI - CONVERGENCE-TO-NULL on the signature *shadow*; CAPABILITY-FLOOR on
+  the *body*; a high-dim body-resistance candidate (probe pending, 2026-05-29
+  refresh).** The earlier "Phase 3 converged, reopen with a different framing" was
+  acted on. (i) The **Phase 3E certificate program** ran the reframing and closed
+  *four* negatives on the `signature_palette` shadow's geometry: no exact/near
+  fiber collision, sparse fibers at 36 **and** 108 tasks, an oracle leakage
+  regression at scale, and a rank-locality negative (palette tied with
+  `metadata_only`, *below* `raw_grid`, 28.5% hard-incompatible). (ii) Separately,
+  **Branch E** (deterministic program search over the task **body**, not the
+  shadow) cleared a modest capability floor - the lane's first non-zero
+  exact-match (v1: 2 distinct held-out tasks/lane; v2 replicated, bounded ~3%; the
+  learned-ranker E3 is built + byte-verified but ~48 h compute-paused). So the
+  shadow does not *organize* the body, yet the body is modestly *solvable* by
+  search over it. (iii) The open **body-resistance** reading is the live refresh:
+  ARC is a genuinely high-dimensional *computational* body (grids up to
+  30x30x10) - exactly the "high-dim RL/LLM-agent" gap §8 names as missing from the
+  *control* column, where NSE-C1, Mesa, and the shell are all three-for-three
+  marginal. The C1/Mesa **participation-ratio + `FVE(body|shadow)`** estimators
+  port directly (this is ARC roadmap **Phase 4**, the "5D / low-dim collapse
+  check"). The certificate negatives are *suggestive* that the shadow under-
+  determines the body, but the direct body-intrinsic-dimensionality measurement
+  has not been run; a naive `FVE(grid|signature_palette)` is trivially low (coarse
+  summary) and is only a baseline - the meaningful reading is the body's effective
+  rank vs a matched-dim shadow. -> [`SUNDOG_V_ARC.md`](SUNDOG_V_ARC.md),
+  [`prereg/arc/README.md`](prereg/arc/README.md), Phase 4 body-resistance probe
+  (pending spec).
 - **Isotrophy - CONDITIONAL (rigid only after naming the held-fixed
   coordinate).** The velocity-fraction shadow ranks stability only *within*
   fixed `m3` strata; it fails as a mass-marginal held-out predictor. Already
@@ -274,16 +295,34 @@ for only ~22-44% across the two catalogs). The adapter is provably correct (clea
 give vf invariant to 1e-8); it is the MEASUREMENT that is frame-sensitive. v0.13b then
 priced this at the registered-zone level: the coarse v0.11 zone (the rule's actual
 input) is frame-stable on the v0.11 domain itself (supp-B zone-change `4.35%`, Wilson95
-upper `14.5% <= 0.15` bar -- a MODEST caveat), and marginal cross-ansatz (liao2021
-`~3.5%`, CI-decisive `n=600` run pending 2026-05-31).
+upper `14.5% <= 0.15` bar -- a MODEST caveat), and frame-stable enough cross-ansatz
+(liao2021 pooled `~1.3%`, the `n=600` expansion `0.5%`; verdict
+`coarse_zone_rule_frame_stable_enough_to_test`, fragility localized to two narrow mass
+bands), clearing the transfer test to run.
 
-So the cross-substrate lesson sharpens twice: (1) a real within-stratum signal can be
-blocked from external confirmation by the *measurement's* numerical reach, not only by
-the data; and (2) a derived feature built on eigenvector SELECTION can be frame-relative
+v0.14 then ran that test: a registered 1280-row sample (16 sorted-mass quantile cells x
+80) from liao2021 under the frozen v0.11 within-cell conditional-AUC rule. It landed
+`sample_transfer_undecidable_coverage` -- only 7 of 16 cells cleared the locked
+`S>=4, U>=4, N>=40` primary bar (560 of a required 800 rows), because liao2021's
+non-hierarchical population is overwhelmingly unstable AND overwhelmingly velocity-heavy
+(9 cells held zero stable orbits; two evaluable cells were pure zone 2). Inputs were
+otherwise clean (attrition `1.33%`, frame zone-change `1.35%`). Per the locked claim
+boundary NO transfer reading is licensed: the supp-B conditional signal is neither
+confirmed nor refuted on liao2021 -- the obstruction was the target's outcome x feature
+geometry, not measurement feasibility (v0.12) or frame fragility (v0.13b).
+
+So the cross-substrate lesson sharpens three times: (1) a real within-stratum signal can
+be blocked from external confirmation by the *measurement's* numerical reach, not only by
+the data; (2) a derived feature built on eigenvector SELECTION can be frame-relative
 even when its registered coarse binning is robust -- so the honest theorem-facing object
 is "a coarse, frame-dependent projection whose registered bins are empirically
-frame-stable," NOT "a frame-invariant geometric quantity." Any substrate whose feature
-is an argmax-selected direction (not just isotrophy) inherits this caveat.
+frame-stable," NOT "a frame-invariant geometric quantity"; and (3) even with a clean
+feature and a feasible measurement, external confirmation can still be blocked by the
+*target population's outcome geometry* -- liao2021 is too one-sided in both stability
+outcome and feature zone to host the within-stratum comparison the rule needs (v0.14
+`sample_transfer_undecidable_coverage`). Any substrate whose feature is an
+argmax-selected direction (not just isotrophy) inherits the (2) caveat; any conditional
+transfer target must clear the (1) and (3) pre-conditions before its statistic is read.
 
 Question: can Sundog make a non-tautological first-principles prediction over
 an external three-body catalog, before writing another controller sweep?
@@ -627,8 +666,9 @@ falsification). v0.13's signal-blind search found only a Tier-2 (same-lineage Li
 the program: the projection's FEATURE (dominant-direction velocity-fraction) is itself
 frame-relative -- `select_gamma_1`'s largest-real-part argmax flips under a coordinate
 rotation for the majority of orbits -- yet its registered coarse zone bins are
-frame-stable on the v0.11 domain (supp-B zone-change `4.35% <= 0.15`) and marginal
-cross-ansatz (liao2021 `~3.5%`, CI-decisive run pending). The honest theorem-facing
+frame-stable on the v0.11 domain (supp-B zone-change `4.35% <= 0.15`) and frame-stable
+enough cross-ansatz (liao2021 pooled `~1.3%`; verdict
+`coarse_zone_rule_frame_stable_enough_to_test`). The honest theorem-facing
 object downgrades from "a frame-invariant geometric quantity" to "a coarse,
 frame-dependent projection whose registered bins are empirically frame-stable." This is
 the most transferable caveat isotrophy has produced: **any projection whose shadow is an
@@ -636,6 +676,21 @@ argmax-selected direction** (Mesa `net.7` directions, NSE control shadows, any
 eigenvector-keyed feature) **should be frame-audited before its bins are read as
 geometry** -- a rotation/translation invariance check on the registered statistic, cheap
 relative to the claim it protects.
+
+Post-v0.14 update: the cleared transfer test then ran and produced isotrophy's FOURTH
+projection lesson. v0.14 drew a registered 1280-row liao2021 sample (16 sorted-mass
+quantile cells) under the frozen v0.11 within-cell conditional-AUC rule and landed
+`sample_transfer_undecidable_coverage` -- only 7 of 16 cells could host a stable-vs-
+unstable comparison (560 of a required 800 rows), because the non-hierarchical catalog
+is overwhelmingly unstable and overwhelmingly velocity-heavy. No transfer reading is
+licensed (neither confirmed nor refuted). The lesson generalizes the body/shadow frame:
+**a projection rigid on its home substrate can be confirmation-blocked on a new one by
+the target's outcome x feature geometry alone** -- before any statistic is read, a
+candidate transfer target must be checked for *joint coverage* of both the outcome
+classes and the feature bins inside each conditioning cell, or the conditional test is
+structurally undecidable. v0.12 (measurement reach), v0.13b (feature frame-stability),
+and v0.14 (target coverage) are three distinct pre-conditions a conditional projection
+must clear before an external catalog can confirm it.
 
 ### 7.3 Threebody
 
