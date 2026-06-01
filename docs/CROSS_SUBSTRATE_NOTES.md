@@ -82,8 +82,9 @@ theme-matching.
   fail). The projection is control-useful yet bounded out of promotion by its
   cost envelope. -> [`SUNDOG_V_P_V_NP.md`](SUNDOG_V_P_V_NP.md).
 - **ARC-AGI - CONVERGENCE-TO-NULL on the signature *shadow*; CAPABILITY-FLOOR on
-  the *body*; body-resistance probe ran 2026-06-01 -> the least-marginal substrate
-  measured, but below the high-dim bar at this register.** The earlier "Phase 3
+  the *body*; body-resistance probe + v2 expansion ran 2026-06-01 -> the
+  least-marginal substrate measured, but PR plateaus at ~11 (NOT sample-limited),
+  robustly below the high-dim bar.** The earlier "Phase 3
   converged, reopen with a different framing" was
   acted on. (i) The **Phase 3E certificate program** ran the reframing and closed
   *four* negatives on the `signature_palette` shadow's geometry: no exact/near
@@ -107,16 +108,25 @@ theme-matching.
   So on the reconstruction axis the ARC body *does* resist low-dim collapse - but
   PR 9.15 sits **below** the pre-registered 10x-marginal high-dim bar (`PR_HIGH_MIN=
   20`) at this 491-context register, so the verdict is inconclusive, **not** a
-  high-dim claim, and the threshold is **not** retuned. The shortfall is
-  sample-limited (99% body energy needs 293 of ≤490 modes; PR likely
-  under-estimates the population value), so it points toward "register too small,"
-  not "marginal." Net: the *control* column stays three-for-three marginal; the ARC
-  *computational* body is the first that is materially more dimensional, though
-  still short of the bar. (The naive `FVE(grid|signature_palette)`=0.43 is a coarse
-  baseline only, per the spec's caveat 2.) Disciplined reopen = a frozen Phase 4 v2
-  on a larger context register (bar stays 20). -> [`SUNDOG_V_ARC.md`](SUNDOG_V_ARC.md),
+  high-dim claim, and the threshold is **not** retuned. v1 left open whether the
+  shortfall was sample-limited (491 contexts). **v2
+  (`PHASE4_BODY_RESISTANCE_CONTEXT_EXPANSION_SPEC.md`, pinned `64F8C0DD`)
+  FALSIFIED that:** a spectrum-blind 8.8x expansion to all 1000 public-training tasks
+  (4308 contexts) shows PR **plateaus at 11.38** (prefix sweep 10.76->11.38 over
+  n=491..4308; `PR/bound` 0.0026, far from saturation; both construction lanes agree
+  11.40/11.36; matched-dim FVE(top-28) 0.644, top-200 only 0.76) - the energy *ranks*
+  grow with sampling (96/159/293 -> 409/719/1428) but the eigenvalue-weighted
+  *effective* dimensionality does not. So the ARC body is a **stable intermediate**:
+  ~5.7x the marginal controls but a **converged** PR~11, **not** a >=20-PR high-dim
+  body even over the whole corpus, and not an under-sample. Net: the *control* column
+  stays three-for-three marginal; the ARC *computational* body is the first that is
+  materially more dimensional, but its converged value is still short of the bar. (The
+  naive `FVE(grid|signature_palette)` 0.43/0.49 is a coarse baseline only.) Next
+  admissible escalation = a different (object-centric / pair-relational) body encoding
+  under its own spec, or look outside ARC for a >=20-PR computational body; lowering
+  the bar stays forbidden. -> [`SUNDOG_V_ARC.md`](SUNDOG_V_ARC.md),
   [`prereg/arc/README.md`](prereg/arc/README.md),
-  [`prereg/arc/PHASE4_BODY_RESISTANCE_SPEC.md`](prereg/arc/PHASE4_BODY_RESISTANCE_SPEC.md)
+  [`prereg/arc/PHASE4_BODY_RESISTANCE_CONTEXT_EXPANSION_SPEC.md`](prereg/arc/PHASE4_BODY_RESISTANCE_CONTEXT_EXPANSION_SPEC.md)
   (Amendment 2).
 - **Isotrophy - CONDITIONAL (rigid only after naming the held-fixed
   coordinate).** The velocity-fraction shadow ranks stability only *within*
@@ -497,16 +507,23 @@ control. **Where it would live: a substrate that is high-dimensional *by
 construction* — high-dim RL / LLM agents (high-dim observations or model
 states) — which is the structural property all three measured substrates
 lack.** First data point on that gap (2026-06-01): the **ARC Phase 4
-body-resistance probe** (`prereg/arc/PHASE4_BODY_RESISTANCE_SPEC.md`, Amendment 2)
-measured the raw-grid *computational* body's read-off dimensionality at **PR 9.15**
-— materially above the three marginal controls (≈ 2) and reconstruction-resistant
-(top-28 PCA recovers only 0.66), yet **below** the pre-registered 10×-marginal
-high-dim bar at the 491-context register (verdict `arc_body_inconclusive`,
-sample-limited). It is the least-marginal substrate measured, but (a) it is still a
-**read-off** body, not the *control*-sufficient low-dim shadow this gap names, and
-(b) it has not cleared the high-dim threshold — so the control regime-2 frontier
-stays open. Measured detail: `sundog/docs/proof/PDE_C1_NONMARGINAL_PROBE.md`,
-`PDE_C1_PROPOSITION.md`, `PDE_C2_SHELL_DIMENSIONALITY_PROBE.md`.
+body-resistance probe** (`prereg/arc/PHASE4_BODY_RESISTANCE_SPEC.md` v1 +
+`PHASE4_BODY_RESISTANCE_CONTEXT_EXPANSION_SPEC.md` v2) measured the raw-grid
+*computational* body's read-off dimensionality. v1 (491 contexts) read **PR 9.15** —
+materially above the three marginal controls (≈ 2) and reconstruction-resistant
+(top-28 PCA recovers only 0.66) — yet **below** the pre-registered 10×-marginal
+high-dim bar (verdict `arc_body_inconclusive`). The disciplined v2 reopen then tested
+whether that shortfall was sample-limited: a spectrum-blind 8.8× expansion to all
+1000 public-training tasks (**4308 contexts**) shows **PR plateaus at 11.38**
+(prefix-stable 10.76→11.38 over n=491..4308; both lanes 11.40/11.36), so the
+shortfall is its **converged** value, not an under-sample — `arc_body_inconclusive_expanded`.
+The ARC body is thus a **stable intermediate**: the least-marginal substrate measured
+(≈ 5.7× the controls), but (a) still a **read-off** body, not the *control*-sufficient
+low-dim shadow this gap names, and (b) a converged PR ≈ 11 that does **not** reach the
+≥ 20 high-dim threshold — so the control regime-2 frontier stays open, and ARC at
+public-training scale does not supply the high-dim body either. Measured detail:
+`sundog/docs/proof/PDE_C1_NONMARGINAL_PROBE.md`, `PDE_C1_PROPOSITION.md`,
+`PDE_C2_SHELL_DIMENSIONALITY_PROBE.md`.
 
 **The prediction tested (2026-05-30 → 31): first de-confounded *control* regime-2 —
 on an LLM-like substrate, now sharp at `d_dec ≈ 7`.** The "where it would live"

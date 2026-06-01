@@ -317,6 +317,28 @@ Checked **2026-05-28** against:
   dimensionality only — not a control witness, Blackwell sufficiency, ARC solve, or
   eval/Kaggle claim. Disciplined escalation = a frozen Phase 4 v2 on a larger
   context register (bar stays 20).
+- [`PHASE4_BODY_RESISTANCE_CONTEXT_EXPANSION_SPEC.md`](PHASE4_BODY_RESISTANCE_CONTEXT_EXPANSION_SPEC.md)
+  -- Phase 4 **v2**, the disciplined reopen of v1's inconclusive: a spectrum-blind
+  sample-size test of the **unchanged** v1 bar (`PR_HIGH_MIN=20`) over the full
+  public-training corpus. Estimators + thresholds carried from v1 by *importing* its
+  runner (v1 hash `5CA151E1` pinned); only the all-training loader (all 1000 tasks ->
+  `train_lodo` + `pttest`) and the 4-branch `*_expanded` adjudication are new.
+  **Binding verdict (Amendment 2, pinned `64F8C0DD`, runnerSha256 `C831CC38`,
+  U_all_expanded=4308 contexts, inline ~180s): `arc_body_inconclusive_expanded` --
+  and the v1 "sample-limited" hypothesis is falsified.** Across an 8.8x larger
+  universe the body PR **plateaus at 11.38** (prefix sweep 10.76->11.38 over n=491..
+  4308; `PR/bound` 0.0026, nowhere near saturation; both lanes agree 11.40/11.36).
+  The 90/95/99% energy *ranks* grow with sampling (96/159/293 -> 409/719/1428) but
+  the eigenvalue-weighted *effective* dimensionality does not -- a stable spectral
+  shape with a lengthening low-energy tail. The body stays reconstruction-resistant
+  at scale (matched-dim FVE(top-28 PCA) 0.644; top-200 only 0.763). So ARC's raw-grid
+  body is a **stable intermediate** -- ~5.7x the marginal control substrates but
+  **not** a >=20-PR high-dim body even over the entire corpus; the shortfall is its
+  converged value, not an under-sample. Threshold **not** retuned to 11. Read-off
+  dimensionality only -- not a control witness, Blackwell sufficiency, ARC solve, or
+  eval/Kaggle claim. Next admissible escalation = a different (object-centric /
+  pair-relational) body encoding under its own spec, or look outside ARC for a
+  >=20-PR computational body; lowering the bar stays forbidden.
 - [`EVAL_BLIND_SELECTION.md`](EVAL_BLIND_SELECTION.md) -- stub pattern for
   future Phase 1+ evaluation-blind register rows (no manual grid inspection,
   selection by preregistered metadata/hash rule).
