@@ -1,0 +1,29 @@
+{
+  "experiment": "faraday-phase8-boundary",
+  "note": "Numeric support only; hand derivation is authoritative.",
+  "cases": {
+    "case1": {
+      "branch": "A8-dual-closure",
+      "chargeDensity_divE": 2.9999999999946736,
+      "gaussFlux_oint_EdA": 12.566499808107295,
+      "registered_Q": 12.566370614359172,
+      "note": "dual of the Phase 7 magnetic monopole - electric charge lives in d*F = J, the normal inhomogeneous side"
+    },
+    "case2": {
+      "branch": "A8-dual-closure",
+      "conductionCurrent_J": 2.775668583865354e-12,
+      "loop_oint_Bdl": 12.56637061435867,
+      "displacementCurrent_ddt_fluxE": 12.566370614359172,
+      "match_residual": 5.027089855502709e-13
+    },
+    "case3": {
+      "branch": "B8-harmonic-survivor",
+      "dualShadow_chargeFlux_oint_EdA": 12.566499808107295,
+      "loopShadow_holonomy_oint_A": 6.283185307179335,
+      "registered_q": 12.566370614359172,
+      "registered_Phi": 6.283185307179586,
+      "decoupled": "charge has no vector potential (oint A_charge = 0); AB has no E-field (oint.oint E_AB.dA = 0) - the two shadows read orthogonal Hodge sectors",
+      "regime2_location": "harmonic (AB) only; the sourced sector is determined -> no new regime-2"
+    }
+  }
+}
