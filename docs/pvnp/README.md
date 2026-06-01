@@ -196,3 +196,17 @@ Current state:
   correctly named-quarantines with 0/52 holdout blocks present, while the v0
   falsifier regression no longer consensus-accepts. The 52-block holdout
   battery remains operator-staged under the repository's runtime rule.
+- Phase 3 capacity-relative one-wayness v1 executed: 2026-06-01. Verdict =
+  **named quarantine**, repair strength **consensus-only repair**. The 52-block
+  holdout battery was generated (`scripts/pvnp-phase3-v1-holdout.mjs`, 52/52
+  integrity-clean) and scored by the consensus harness. The repair works on the
+  unsafe side: the v0 falsifier no longer consensus-accepts and 0 unsafe cells
+  reach `consensus_accept`; two unsafe single blocks still cross by seed-block
+  drift (`l_mixed_lambda_0_7_small` seed 70000, `l_mixed_lambda_0_9_small` seed
+  90000) but neither reaches 3-of-4, the registered consensus-only signature.
+  The run cannot promote because the mixed-objective-laundering gate fails on the
+  protected anchor `l_mixed_lambda_0_95_medium`, whose objective-conflict flag is
+  block-unstable (2/4 < M=3) — the same drift mechanism as v0, now in the
+  disclosure flag. Signature floor passed 3/3. v0 stays falsified;
+  `capacity_threshold <= small` unrevised. Receipt:
+  [`receipts/2026-06-01_phase3_capacity_one_wayness_v1.md`](receipts/2026-06-01_phase3_capacity_one_wayness_v1.md).
