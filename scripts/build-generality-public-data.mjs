@@ -123,16 +123,16 @@ const projects = [
     transferQuestion:
       "Can a compact signature behave like a cheaper certificate for a bounded alignment-verification problem?",
     currentRead:
-      "The v0-v6 chain is safety-complete and v6 op-count positive; Phase 2 v1 earned a bounded-positive mesa bridge receipt; Phase 3 v0 falsified at small capacity, and Phase 3 v1 is frozen and wired.",
+      "The v0-v6 chain is safety-complete and v6 op-count positive; Phase 2 v1 earned a bounded-positive mesa bridge receipt; Phase 3 v0 falsified at small capacity; Phase 3 v1 named-quarantined as a consensus-only repair.",
     blocker:
-      "The v1 repair needs the operator-staged 52-block holdout battery before it can adjudicate the frozen consensus verifier.",
+      "The v1 consensus rule closes unsafe promotion, but the mixed-objective disclosure flag inherits block-drift on a protected anchor.",
     nextAction:
-      "Run the Phase 3 v1 holdout commands, then rerun the v1 harness and receipt the outcome.",
+      "Decide whether to open a Phase 3 v2 slate for disclosure-flag consensus.",
     publicBoundary:
       "No complexity-class result, polynomial certificate, or P-vs-NP progress is claimed.",
     chartHeadline: "op-count positive; wall-time diagnostic",
     metrics: [
-      { label: "filed receipts", value: 10, unit: "incl p3v0" },
+      { label: "filed receipts", value: 11, unit: "incl p3v1" },
       { label: "v6 false accepts", value: 0, unit: "items" },
       { label: "p3 threshold", value: 1, unit: "<= small" },
     ],
