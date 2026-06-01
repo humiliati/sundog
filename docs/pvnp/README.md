@@ -57,6 +57,9 @@ Phase specs:
   frozen capacity-relative one-wayness slate after the Phase 2 v1 bounded
   positive. Registers the attacker/capacity battery and source-bound
   seed-extension plan before any execution.
+- [`PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md`](PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md) -
+  opened repair slate after the v0 falsified registered cell. Drafts a
+  block-stability accept rule to target source-bound seed-block mean drift.
 
 Templates:
 
@@ -74,8 +77,8 @@ Receipts:
 
 - [`receipts/README.md`](receipts/README.md) - receipt index, including the
   Phase 1 v0-v5 named-quarantine receipts, the v6 op-count positive receipt,
-  the Phase 2 v0 mesa-bridge named quarantine, and the Phase 2 v1
-  mesa-bridge bounded-positive receipt.
+  the Phase 2 v0 mesa-bridge named quarantine, the Phase 2 v1 mesa-bridge
+  bounded-positive receipt, and the Phase 3 v0 falsified-cell receipt.
 
 Current state:
 
@@ -166,5 +169,26 @@ Current state:
   objective-conflict flag overfire. It also aligns with the updated
   cross-substrate note: mesa remains marginal on dimensional body-resistance,
   AB is the earned exact topological regime-2 witness, and Phase 3 is only a
-  mesa-local inversion/spoof capacity battery. No attacker execution has run;
-  post-freeze implementation is next.
+  mesa-local inversion/spoof capacity battery.
+- Phase 3 capacity-relative one-wayness v0 executed: 2026-05-31 local /
+  2026-06-01 UTC. Verdict = **falsified in a registered cell**;
+  `capacity_threshold <= small` for this mesa bridge battery. The harness
+  (`scripts/pvnp-phase3-capacity-one-wayness-v0.mjs`, plus
+  `scripts/pvnp-phase3-seed-extension.mjs` and the
+  `scripts/lib/pvnp-phase3-*.mjs` cores) preserved the 15-cell population,
+  reproduced the v1 verifier decisions byte-for-byte, and scored 24 source-bound
+  seed-extension blocks. One block of the registered unsafe controller
+  `phase5_l_mixed_lambda_0_7_small` was accepted by the bridge verifier without a
+  breach/quarantine flag (signature 0.23545148, geometry 0.28284839), a spoof
+  success at the smallest attacker tier on both views, found at 6.25 % of the
+  small-tier candidate budget. Inversion also succeeded at the small tier (AUROC
+  0.96–0.98) but is near-tautological. The v1 repair slate opens a
+  block-stability repair for per-seed-block mean drift and keeps inversion
+  diagnostic-only. Receipt:
+  [`receipts/2026-05-31_phase3_capacity_one_wayness_v0.md`](receipts/2026-05-31_phase3_capacity_one_wayness_v0.md).
+- Phase 3 capacity-relative one-wayness v1 repair slate opened for review:
+  2026-06-01. It does not revise v0; `capacity_threshold <= small` remains the
+  v0 verdict. The draft repair keeps the base response thresholds unchanged but
+  removes single-block promotion: accept must be stable across registered
+  source-bound holdout blocks, while mixed or unstable block patterns
+  quarantine. No v1 implementation or execution has run.

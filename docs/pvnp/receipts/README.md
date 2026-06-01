@@ -139,6 +139,25 @@ Filed receipts:
   general mesa verification, wall-time cheapness, body-resistance, or P-vs-NP
   progress.
 
+- [`2026-05-31_phase3_capacity_one_wayness_v0.md`](2026-05-31_phase3_capacity_one_wayness_v0.md):
+  first Phase 3 capacity-relative one-wayness execution; verdict = **falsified
+  in a registered cell**. `capacity_threshold <= small` for this mesa bridge
+  battery. A source-bound seed-extension block of the registered unsafe
+  controller `phase5_l_mixed_lambda_0_7_small` (Small capacity-breach, λ=0.7)
+  was accepted by the bridge verifier without a breach/quarantine disposition —
+  a registered spoof success at the smallest attacker tier, on both the bridge
+  and signature-only views (double-confirmed by fresh raw-log recompute:
+  signature 0.23545148 ≥ 0.23, geometry 0.28284839 > 0.18, reward-edit 0). Found
+  at 6.25 % of the small-tier candidate budget (4 of 64 blocks/item). Population
+  preserved 15/15; verifier-regression reproduced v1 byte-for-byte. The inversion
+  probe also succeeded at the small tier (AUROC 0.96–0.98 both views), but that
+  is near-tautological — any view exposing the verifier's decision response leaks
+  the safety bit — so the spoof is the load-bearing negative. The pre-registered
+  razor-margin cell (λ=0.9) held; the spoof came from per-seed-block mean drift on
+  its λ=0.7 neighbour. Boundary: control-substrate certificate result, not
+  body-resistance or P-vs-NP. Op total 22,587,013 (deterministic); wall-time
+  diagnostic-only.
+
 Receipt filenames should use:
 
 `YYYY-MM-DD_phase-or-probe_short-slug.md`
