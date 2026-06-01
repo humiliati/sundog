@@ -14,9 +14,18 @@ Short version:
 Status: Scaffold outline opened 2026-06-01 while
 [`SUNDOG_V_KAKEYA.md`](SUNDOG_V_KAKEYA.md) waits behind its external-review
 gate. Starter literature pass filed at
-[`HODGE_LITPASS_MEMO.md`](HODGE_LITPASS_MEMO.md). No technical claim, public
-copy, executable probe, or site-page entry is live. This file remains a
-target-selection and claim-boundary scaffold opened from
+[`HODGE_LITPASS_MEMO.md`](HODGE_LITPASS_MEMO.md); a Phase 1 Front-A reader draft
+is filed at [`HODGE_READER_NOTE.md`](HODGE_READER_NOTE.md) (internal,
+unpromoted), Phase 2 bridge drafting is opened at
+[`HODGE_PHASE2_BRIDGE_NOTE.md`](HODGE_PHASE2_BRIDGE_NOTE.md), and a Phase 3
+known-example gallery is pre-registered at
+[`hodge/PHASE3_KNOWN_EXAMPLE_GALLERY_SPEC.md`](hodge/PHASE3_KNOWN_EXAMPLE_GALLERY_SPEC.md). No technical
+claim, public copy, executable probe, or site-page entry is live. An
+external-review packet and email cover-letter are staged at
+[`hodge/EXTERNAL_REVIEW_PACKET.md`](hodge/EXTERNAL_REVIEW_PACKET.md) and
+[`hodge/EXTERNAL_REVIEW_EMAIL_DRAFT.md`](hodge/EXTERNAL_REVIEW_EMAIL_DRAFT.md)
+(owner-fill, pending send). This file
+remains a target-selection and claim-boundary scaffold opened from
 [`SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md`](SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md).
 
 This is not a claim to progress on the Hodge conjecture, algebraic cycles,
@@ -261,18 +270,39 @@ Goal: write Candidate 1 as a bounded Front-A artifact.
 Exit criterion: the note survives `HODGE-FRONT-A-VACUOUS` and category-error
 checks.
 
+Status (2026-06-01): drafted at [`HODGE_READER_NOTE.md`](HODGE_READER_NOTE.md);
+provisionally clears the §7 internal red-team / vacuity check and the §3
+category-error guard (the register ladder). Internal/unpromoted, pending
+external review (Phase 5).
+
 ### Phase 2 - Bridge Note
 
 Goal: write Candidate 2, linking Hodge vocabulary to Faraday Phase 8 and AB
 without claiming transfer.
 
-Exit criterion: the bridge teaches why the analogy is limited.
+Exit criterion: the bridge teaches why the analogy is limited, names
+`HODGE-PHYSICS-TRANSFER`, and does not license a method, probe, public page, or
+evidence claim.
+
+Status (2026-06-01): opened and drafted at
+[`HODGE_PHASE2_BRIDGE_NOTE.md`](HODGE_PHASE2_BRIDGE_NOTE.md). Provisionally
+passes the one-line compression test: vocabulary and caution transfer; method,
+evidence, and algebraic-cycle construction do not.
 
 ### Phase 3 - Known-Example Gallery Spec
 
 Goal: pre-register examples, labels, and failure modes before any visual work.
 
 Exit criterion: every example has a "what this does not imply" field.
+
+Status (2026-06-01): pre-registered at
+[`hodge/PHASE3_KNOWN_EXAMPLE_GALLERY_SPEC.md`](hodge/PHASE3_KNOWN_EXAMPLE_GALLERY_SPEC.md)
+- tiered roster (projective space / curve / divisors via Lefschetz `(1,1)` /
+surface / threefold codim-2), each row carrying body, shadow, "known because",
+and "does not imply"; abelian-variety, K3, product, and cubic-fourfold cases
+deferred as subtle/special; the general/open fourfold codim-2 case and all
+integral/Kähler claims are hard-excluded from the known roster. Spec only - no
+visual; Phase 4 decides rendering; external review gates promotion.
 
 ### Phase 4 - Visual / Public Artifact Decision
 
@@ -289,6 +319,12 @@ reader note and examples preserve the right boundary.
 
 Exit criterion: either promote to public educational artifact or file the
 named boundary/null and keep it internal.
+
+Status (2026-06-01): reviewer packet + email cover-letter staged at
+[`hodge/EXTERNAL_REVIEW_PACKET.md`](hodge/EXTERNAL_REVIEW_PACKET.md) and
+[`hodge/EXTERNAL_REVIEW_EMAIL_DRAFT.md`](hodge/EXTERNAL_REVIEW_EMAIL_DRAFT.md)
+(six reviewer questions; owner fills `[Name]` / `[link]` / `[Your name]` before
+sending). Not yet sent.
 
 ## Lit-Pass Checklist
 
@@ -349,6 +385,19 @@ Forbidden:
 
 ## Cross-References
 
+- [`HODGE_READER_NOTE.md`](HODGE_READER_NOTE.md) - Phase 1 Front-A reader /
+  boundary note (body/shadow register ladder + existence-pole placement).
+- [`HODGE_PHASE2_BRIDGE_NOTE.md`](HODGE_PHASE2_BRIDGE_NOTE.md) - Phase 2
+  Faraday / Aharonov-Bohm / Hodge bridge note; vocabulary and caution only.
+- [`hodge/PHASE3_KNOWN_EXAMPLE_GALLERY_SPEC.md`](hodge/PHASE3_KNOWN_EXAMPLE_GALLERY_SPEC.md)
+  - Phase 3 known-example gallery pre-registration (roster, labels, falsifiers;
+  spec only, no visual).
+- [`hodge/EXTERNAL_REVIEW_PACKET.md`](hodge/EXTERNAL_REVIEW_PACKET.md) - Phase 5
+  reviewer packet (six questions; reading-only claim-boundary ask).
+- [`hodge/EXTERNAL_REVIEW_EMAIL_DRAFT.md`](hodge/EXTERNAL_REVIEW_EMAIL_DRAFT.md)
+  - Phase 5 email cover-letter (owner-fill placeholders).
+- [`HODGE_LITPASS_MEMO.md`](HODGE_LITPASS_MEMO.md) - Phase 0 citation spine and
+  claim-boundary record.
 - [`SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md`](SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md)
   - target-selection matrix that named Hodge as the cleanest conceptual
   continuation from Faraday / AB.

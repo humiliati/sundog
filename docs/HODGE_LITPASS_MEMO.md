@@ -12,7 +12,11 @@ time-stamped: "not locked in this pass," not "does not exist."
 **Citation check (2026-06-01):** all eight Primary Anchors resolved and were
 verified by title/author/arXiv-ID; corrections from that check are folded into
 the Primary Anchors table, Track B, and the Follow-Up Ratchets below.
-**Surfaces:** `docs/SUNDOG_V_HODGE.md`,
+**Surfaces:** `docs/SUNDOG_V_HODGE.md`, `docs/HODGE_READER_NOTE.md` (Phase 1
+reader), `docs/HODGE_PHASE2_BRIDGE_NOTE.md` (Phase 2 bridge),
+`docs/hodge/PHASE3_KNOWN_EXAMPLE_GALLERY_SPEC.md` (Phase 3 gallery spec),
+`docs/hodge/EXTERNAL_REVIEW_PACKET.md`,
+`docs/hodge/EXTERNAL_REVIEW_EMAIL_DRAFT.md`,
 `docs/SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md`, and the internal Faraday /
 cross-substrate docs. No public page, `site-pages.json` entry, executable probe,
 or public launch claim is live.
@@ -133,8 +137,9 @@ Potential gallery categories, pending expert review:
    with Hodge index or Neron-Severi details in first public copy.
 4. **Threefold degree-4 rational classes:** plausible but needs careful
    statement; integral variants must be fenced.
-5. **Abelian varieties / K3 / cubic fourfolds:** defer. They are too subtle for
-   the first gallery unless the lit pass is expanded.
+5. **Abelian varieties / K3 / cubic fourfolds:** defer. They are too subtle or
+   too special for the first gallery unless the lit pass is expanded; do not
+   blur special fourfold results with the general dimension-four boundary.
 
 Gallery rule:
 
@@ -250,9 +255,9 @@ should wait for a known-example gallery spec with labels and falsifiers.
 
 | Rank | Candidate | Disposition | Why |
 | --- | --- | --- | --- |
-| 1 | Hodge reader / boundary note | Promote to Phase 1 after this memo is linked. | Cleanest use of the body/shadow spine; lowest overclaim risk if fenced. |
-| 2 | Faraday / AB / Hodge bridge note | Promote as companion or section of Phase 1. | Explains why this lane is opening now and why transfer is forbidden. |
-| 3 | Known-example gallery spec | Stage after reader draft. | Useful public pedagogy only if every row is labeled as known/non-evidential. |
+| 1 | Hodge reader / boundary note | Drafted (Phase 1) at `HODGE_READER_NOTE.md`; provisionally clears its internal red-team / vacuity self-check. | Cleanest use of the body/shadow spine; lowest overclaim risk if fenced. |
+| 2 | Faraday / AB / Hodge bridge note | Phase 2 opened and drafted at `HODGE_PHASE2_BRIDGE_NOTE.md`; bounded companion remains in `HODGE_READER_NOTE.md` §5b. | Explains why this lane is opening now and why transfer is forbidden. |
+| 3 | Known-example gallery spec | Pre-registered (Phase 3) at `hodge/PHASE3_KNOWN_EXAMPLE_GALLERY_SPEC.md`; spec only, no visual. | Useful public pedagogy only if every row is labeled as known/non-evidential. |
 | 4 | Tate / finite-field cousin scoping | Hold. | Interesting sibling, but likely muddies the first Hodge boundary. |
 | 5 | Public visual concept | Hold. | High category-error risk until examples and labels are frozen. |
 
@@ -322,6 +327,12 @@ reader to answer:
 1. Does the body/shadow translation preserve the rational Hodge statement?
 2. Does the Faraday/AB bridge create a category error?
 3. Are the known examples safe and correctly labeled for non-specialists?
+
+A reviewer packet and email cover-letter implementing this path are staged at
+`docs/hodge/EXTERNAL_REVIEW_PACKET.md` and
+`docs/hodge/EXTERNAL_REVIEW_EMAIL_DRAFT.md` (owner fills `[Name]` / `[link]` /
+`[Your name]` before sending); the packet expands these three questions into six
+and adds the existence-pole-placement check.
 
 Until that review path is satisfied, Hodge remains an internal reader lane.
 
