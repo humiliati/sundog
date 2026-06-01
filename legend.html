@@ -804,6 +804,21 @@
                     <p>A lane whose witness is in hand but whose promotion criteria are not all met. Public copy carries this badge to refuse collapsing a witness into a theorem-facing claim. NSE C1 remains UNPROMOTED until criterion (c) closes.</p>
                     <div class="status-line"><span class="mini-chip">term</span><span class="mini-chip">NSE C1 status</span></div>
                 </article>
+                <article class="phenomenon-card" id="gen-body-resistance" data-status="method">
+                    <h3>Body-resistance (the axis)</h3>
+                    <p>How much a <em>body</em> (full state) resists reconstruction from its <em>shadow</em> (a lossy projection) &mdash; the axis the <a href="docs/CROSS_SUBSTRATE_NOTES.md#cross-substrate-generality-failure-map">cross-substrate map</a> is organized around. Two exact poles bound it: <strong>Faraday</strong> (resistance <em>zero</em> by the Bianchi identity &mdash; the shadow reconstructs the body) and <strong>Kakeya</strong> (resistance <em>maximal</em> &mdash; the direction-shadow cannot compress the set below full dimension). The marginal substrates (NSE C1, Mesa, shell) sit between, near-zero by low dimension.</p>
+                    <div class="status-line"><span class="mini-chip">term</span><span class="mini-chip">Faraday-zero &harr; Kakeya-maximal</span></div>
+                </article>
+                <article class="phenomenon-card" id="gen-kakeya-bridge" data-status="method">
+                    <h3>Kakeya bridge (body-resistance, not regime-2)</h3>
+                    <p>The Kakeya conjecture read on the body-resistance axis: the line <em>direction</em> is the fiber-label / shadow; "informationally incompressible at ambient dimension" is maximal body-resistance. Polson&ndash;Zantedeschi (2026) formalize this via conditional Kolmogorov complexity and the Lutz point-to-set principle &mdash; the same body/shadow split Sundog uses, reached independently. <strong>Honest fence:</strong> this is the <em>body-resistance</em> half only. That framework has no control-sufficiency notion, so Kakeya is <em>not</em> a <a href="#gen-reading-2-witness">Reading-2 / regime-2</a> witness &mdash; its direction-shadow is "sufficient for the direction" only trivially (it <em>is</em> the direction).</p>
+                    <div class="status-line"><span class="mini-chip">term</span><span class="mini-chip">body-resistance only</span></div>
+                </article>
+                <article class="phenomenon-card" id="gen-adaptive-fibering" data-status="method">
+                    <h3>Adaptive-fibering obstruction</h3>
+                    <p>Body-resistance is exact only when the shadow is <em>identifiable</em> &mdash; each body maps to one shadow-label. When a point lies on many fibers (many directions through one point), an adversarial oracle can pick whichever direction minimizes description length, undermining the clean split. This identifiability boundary is why Kakeya is resolved in <code>R&sup3;</code> (Wang&ndash;Zahl; sticky/Lipschitz neutralizes it) yet open for <code>n &ge; 4</code>.</p>
+                    <div class="status-line"><span class="mini-chip">term</span><span class="mini-chip">why n&ge;4 is open</span></div>
+                </article>
             </div>
         </section>
 

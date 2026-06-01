@@ -442,10 +442,11 @@ Sources:
 [`pvnp/PHASE1_V6_SLATE.md`](pvnp/PHASE1_V6_SLATE.md),
 [`pvnp/PHASE2_MESA_BRIDGE_V0_SLATE.md`](pvnp/PHASE2_MESA_BRIDGE_V0_SLATE.md),
 [`pvnp/receipts/README.md`](pvnp/receipts/README.md),
-[`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md).
+[`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md),
+[`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md).
 
-Status: `phase3-v0-slate-frozen-for-implementation`, v6 and Phase 2 v1
-bounded positive.
+Status: `phase3-v1-repair-slate-opened-for-review`, v6 and Phase 2 v1
+bounded positive; Phase 3 v0 falsified registered cell.
 
 Current state:
 
@@ -454,27 +455,29 @@ named quarantine: safety-complete, wall-time cost unadjudicated. v6 is bounded
 positive under the registered op-count protocol: `C_total_signature_ops /
 C_rollout_ops = 0.948587 <= 1.0`, with wall-time diagnostic-only. Phase 2 v0
 is filed as named quarantine, and Phase 2 v1 closes the raw-log provenance gap
-as a bounded positive under the frozen mesa-bridge contract. Phase 3 v0 is now
-frozen for implementation to register attacker capacity, inversion, and spoof
-tests before any execution.
+as a bounded positive under the frozen mesa-bridge contract. Phase 3 v0 executed
+as a falsified registered cell (`capacity_threshold <= small`): a source-bound
+seed block of `phase5_l_mixed_lambda_0_7_small` crossed the bridge accept rule.
+Phase 3 v1 is opened for review as a block-stability repair draft.
 
 Blocker:
 
 The next move is not another Phase 1 cost repair or Phase 2 provenance repair.
-Those claim boundaries are fixed. The remaining open question is
-capacity-relative one-wayness / spoof resistance under a frozen Phase 3
-attacker battery.
+Those claim boundaries are fixed. The remaining open question is whether the
+v0 spoof failure can be repaired by a pre-registered block-stability verifier
+without erasing the v0 falsifier or collapsing the signature accept floor.
 
 Next actions:
 
-1. Implement the frozen Phase 3 capacity-relative one-wayness v0 harness.
-2. Run or operator-stage the frozen seed-extension command block according to
-   the approximately 10-minute rule.
-3. Carry forward the v6 boundary verbatim: op-count positive, wall-time
+1. Review the Phase 3 v1 repair slate.
+2. Verify the proposed 13-source holdout battery paths and freeze exact
+   PowerShell commands.
+3. Run a capped timing probe and apply the approximately 10-minute rule.
+4. Carry forward the v6 boundary verbatim: op-count positive, wall-time
    diagnostic-only, no complexity-theoretic claim.
-4. Do not use the v3/v5 favorable wall-time samples as evidence.
-5. Treat `capacity_threshold = not_estimated` as still open for any larger
-   attacker or domain expansion.
+5. Do not use the v3/v5 favorable wall-time samples as evidence.
+6. Keep `capacity_threshold <= small` attached to the v0 verifier; v1 can only
+   earn a new local threshold under a new frozen repair protocol.
 
 ### ARC Phase 3E Relative-Locality Hold
 
