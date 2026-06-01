@@ -242,6 +242,7 @@
     "arc:phase3:branch-e3-learned-ranker:shard": "node scripts/arc-phase3-branch-e3-learned-ranker.mjs --shard-aux",
     "arc:phase3:branch-e3-learned-ranker:merge": "node scripts/arc-phase3-branch-e3-learned-ranker.mjs --merge",
     "arc:phase4:body-resistance": "node scripts/arc-phase4-body-resistance.mjs",
+    "arc:phase4:body-resistance:context-expansion": "node scripts/arc-phase4-body-resistance-context-expansion.mjs",
     "cf:auth": "node scripts/check-cloudflare-auth.mjs",
     "cf:inspect": "node scripts/inspect-cloudflare.mjs",
     "cf:pages": "node scripts/cloudflare-pages-project.mjs",
