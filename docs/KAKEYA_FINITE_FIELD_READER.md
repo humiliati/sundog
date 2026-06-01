@@ -8,7 +8,9 @@
   [`KAKEYA_LITPASS_MEMO.md`](KAKEYA_LITPASS_MEMO.md)
 - Status: internal reader draft. No public page, `site-pages.json` entry, or
   executable probe is live. This note is the source the eventual `kakeya.html`
-  reader page would draw from, after the vacuity check below and external review.
+  reader page would draw from. An unlinked `NOT PEER REVIEWED` page may be used
+  as the external-review surface; public inbound links and launch claims remain
+  blocked until review.
 
 > Every direction is present. The body almost vanishes.
 
@@ -167,7 +169,8 @@ before:
    shadow does not secretly store the body;
 2. the `kakeya.html` reader page + the Faraday-zero ↔ Kakeya-maximal
    body-resistance-continuum graphic;
-3. external incidence/combinatorics review before any public launch.
+3. external incidence/combinatorics review before any public inbound linking,
+   external promotion, or public launch claim.
 
 Exit criterion for Phase 1: this note survives the §7 vacuity check (it does) and
 implies no Euclidean progress (it does not).

@@ -25,10 +25,23 @@ repo-root `kakeya/` dir (`workbench.html` + `kakeya-core.js` + `kakeya-workbench
 `npm run kakeya:test` passes all spec-§9 acceptance checks (33/33 across
 `q ∈ {5, 7, 11}`), and
 [`kakeya/PHASE3_WORKBENCH_QA.md`](kakeya/PHASE3_WORKBENCH_QA.md) records the
-desktop/mobile visual QA pass. It is deliberately outside the site build (vite
-only scans root-level `.html`), so it carries no `site-pages.json` entry and is
-not launched. Public copy, a real `kakeya.html` page, and a site-page entry are
-still pending.
+desktop/mobile visual QA pass. The **Front-A reward graphic** is started in the
+same internal `kakeya/` dir (`gallery.html` + `kakeya-gallery.js`): a
+body-resistance continuum (Faraday-zero ↔ Kakeya-maximal, with the marginal and
+Aharonov–Bohm markers) plus a gallery of finite-field instances (each a body in
+`F_q²` paired with its lossy direction-shadow fan, generated from the verified
+core; render QA recorded in
+[`kakeya/PHASE3_GALLERY_QA.md`](kakeya/PHASE3_GALLERY_QA.md)). It mirrors the
+threebody isotrophy-gallery style and carries the same fences (finite-field,
+body-resistance only). It is
+deliberately outside the site build (vite only scans root-level `.html`), so it
+carries no `site-pages.json` entry and is not launched. Public copy, a real
+`kakeya.html` page, and a site-page entry are still pending.
+The review-gate interpretation is now narrower: an unlinked `kakeya.html`
+review surface may go live with a visible `NOT PEER REVIEWED` banner so a
+specialist has something concrete to inspect, but public inbound links,
+external promotion, and any `publicLaunchIntent` claim remain gated on the
+external sanity check plus SEO/social readiness.
 This file is a target-selection and claim-boundary scaffold opened from
 [`SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md`](SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md).
 
@@ -352,15 +365,20 @@ with claim-boundary labels baked into the interface.
 Internal exit criterion: **met** for the finite-field workbench core and UI; see
 [`kakeya/PHASE3_WORKBENCH_QA.md`](kakeya/PHASE3_WORKBENCH_QA.md). Public launch
 exit criterion: page-copy audit, external sanity check, and Bucket 1 SEO/social
-requirements if a page is added to `site-pages.json`.
+requirements if a page is added to `site-pages.json`. An unlinked
+`NOT PEER REVIEWED` page may be used as a review surface before this gate clears,
+but it is not public promotion.
 
 ### Phase 4 - External Sanity Check
 
 Goal: ask a combinatorics/incidence-geometry reviewer whether the reader note
 and workbench teach the right boundary.
 
-Exit criterion: either promote to public educational workbench or file the
-named boundary/null and keep it internal.
+Packet: [`kakeya/EXTERNAL_REVIEW_PACKET.md`](kakeya/EXTERNAL_REVIEW_PACKET.md).
+
+Exit criterion: either promote to public educational workbench/public inbound
+links or file the named boundary/null and keep the live page, if any, as an
+unlinked `NOT PEER REVIEWED` review surface.
 
 ## Lit-Pass Checklist
 
@@ -430,6 +448,12 @@ Forbidden:
   - Phase-2 pre-implementation lock for the tiny prime-field workbench.
 - [`kakeya/PHASE3_WORKBENCH_QA.md`](kakeya/PHASE3_WORKBENCH_QA.md) - internal
   Phase-3 QA pass for the non-deployed workbench.
+- [`kakeya/PHASE3_GALLERY_QA.md`](kakeya/PHASE3_GALLERY_QA.md) - internal
+  render QA pass for the body-resistance reward graphic and finite-field
+  instance gallery.
+- [`kakeya/EXTERNAL_REVIEW_PACKET.md`](kakeya/EXTERNAL_REVIEW_PACKET.md) -
+  owner-pending external-review ask; frames Kakeya as a boundary/pedagogy review,
+  not a result-review packet.
 - [`SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md`](SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md)
   - target-selection matrix that promoted Kakeya as the strongest next public
   spectacle candidate.
