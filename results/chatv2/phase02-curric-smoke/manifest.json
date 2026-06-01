@@ -1,0 +1,118 @@
+{
+  "lane": "chatv2",
+  "phase": "0.2",
+  "verdict": "MARGINAL",
+  "H_star": null,
+  "precheck": {
+    "2": 0.5125,
+    "4": 0.4996875
+  },
+  "cfg": {
+    "mode": "smoke",
+    "stage": "all",
+    "latent": "computed",
+    "window": 2,
+    "h_sweep": [
+      2,
+      4
+    ],
+    "bits_per_channel": 12,
+    "delta": 0.35,
+    "d_model": 64,
+    "n_layers": 2,
+    "n_heads": 4,
+    "lr": 0.0003,
+    "batch": 128,
+    "eval_batch": 512,
+    "max_steps": 400,
+    "eval_every": 100,
+    "patience": 4,
+    "n_fingerprint": 800,
+    "k_outlier": 2,
+    "seed": 0,
+    "curriculum": true,
+    "warm_start": "",
+    "pos_h": 4,
+    "min_steps": 0,
+    "twin_patience": 3,
+    "save_ckpt": true,
+    "d_dec_frac_min": 0.5,
+    "z1_ctrl_min": 0.7,
+    "leak_max": 0.58,
+    "body_carry_min": 0.7,
+    "body_carry_gap_min": 0.2,
+    "precheck_max": 0.6
+  },
+  "records": [
+    {
+      "H": 2,
+      "generative": {
+        "body_layer": 2,
+        "zr_by_layer": [
+          0.507,
+          0.599,
+          0.628
+        ],
+        "d_dec": 1.991,
+        "eff_dim_raw": 1.237,
+        "eff_dim_robust": 5.164,
+        "z1_acc": 0.545,
+        "z_recover_mean": 0.6281,
+        "body_carry": 0.7112,
+        "z_recover_each": [
+          0.545,
+          0.7112
+        ],
+        "cross_latent_leak": 0.5862,
+        "outlier_carries_latents": 0.4931,
+        "latents_survive_outlier_removal": 0.6213
+      },
+      "twin": null,
+      "gen_train": {
+        "eval_loss": 0.6926229596138,
+        "bayes_floor": 0.557928134182968,
+        "steps": 400
+      },
+      "twin_train": null,
+      "sharp": false,
+      "learned": false,
+      "status": "UNLEARNED"
+    },
+    {
+      "H": 4,
+      "generative": {
+        "body_layer": 2,
+        "zr_by_layer": [
+          0.515,
+          0.513,
+          0.517
+        ],
+        "d_dec": 3.284,
+        "eff_dim_raw": 1.088,
+        "eff_dim_robust": 5.213,
+        "z1_acc": 0.505,
+        "z_recover_mean": 0.5169,
+        "body_carry": 0.5208,
+        "z_recover_each": [
+          0.505,
+          0.5075,
+          0.4938,
+          0.5613
+        ],
+        "cross_latent_leak": 0.525,
+        "outlier_carries_latents": 0.5169,
+        "latents_survive_outlier_removal": 0.5253
+      },
+      "twin": null,
+      "gen_train": {
+        "eval_loss": 0.6930475234985352,
+        "bayes_floor": 0.557928134182968,
+        "steps": 400
+      },
+      "twin_train": null,
+      "sharp": false,
+      "learned": false,
+      "status": "UNLEARNED"
+    }
+  ]
+}
