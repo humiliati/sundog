@@ -1,10 +1,33 @@
 # v0.14 liao2021 Sampled Zone Transfer Form Draft
 
-Status: **DRAFTED 2026-06-01; pending operator lock review.** No v0.14 runner has
-been written, no sample has been drawn, no liao2021 transfer statistic has been
-computed, and no v0.14 D5 rows have been integrated at draft time. This document
-proposes the first sampled transfer test from supp-B to the Tier-2 Li/Liao 2021
-non-hierarchical catalog.
+Status: **OPERATOR LOCK 2026-06-01.** No v0.14 runner has been written, no sample
+drawn, no transfer statistic computed, and no v0.14 D5 rows integrated at lock time.
+This document locks the first sampled transfer test from supp-B to the Tier-2 Li/Liao
+2021 non-hierarchical catalog.
+
+Reviewed for self-consistency, non-circularity, and integrity:
+
+- **Conditioning-design break disclosed + locked pre-sample.** v0.14 conditions on
+  sorted-mass quantile cells (not m3 strata) because liao2021 fixes m3=1 and varies
+  (m1,m2); the Integrity Caveat names this a real design choice, not a mechanical
+  replay. Cells are mass-only, deterministic-tie, signal-blind. The vf-zone feature,
+  the {0.25,0.50} cutpoints, the within-cell conditional-AUC statistic, and the D5
+  pipeline stay FROZEN from v0.11/v0.13a -- only the conditioning variable changes,
+  forced by the target. The claim is scoped to "conditional within-mass-cell," not
+  "the identical rule."
+- **Signal-blind sample** (mass-stratified, outcome-blind, seed 20260523); the
+  forbidden-list bans cutpoint changes, raw-vf scoring, classifier training, post-hoc
+  cell tuning, dropping frame-fragile rows, Tier-3 promotion, and v0.10b rewriting.
+- **Anti-overclaim:** the `AUC_cond >= 0.55` effect floor + graded verdicts
+  (clean / warning / directional-weak / fail) stop a large sample from turning a tiny
+  effect into a claim; the frame diagnostic reports bands A/B WITHOUT dropping
+  frame-fragile rows from the primary statistic (the v0.13b discipline).
+- Honest Tier-2 (near-the-source) claim boundary; runtime sharded (16 x 80).
+
+Adjustment at lock (one): added a target-SHA-256-match assertion -- v0.14 must score
+the EXACT file the v0.13a / v0.13b / feasibility gates were measured on (the v0.13a
+manifest `download_sha256`); a different or updated file silently invalidates every
+preflight gate.
 
 ## Frame
 
@@ -99,6 +122,11 @@ leakage fraction:        0.0
 v0.13b verdict:          coarse_zone_rule_frame_stable_enough_to_test
 D5 feasibility attrition: <= 0.10
 D5 feasibility Wilson hi: <= 0.20
+target SHA-256:          == download_sha256 in the v0.13a preflight manifest
+                         (results/isotrophy/k-facet-v13a-liao2021-preflight/manifest.json)
+                         -- v0.14 must score the EXACT file the leakage / frame /
+                         feasibility gates were measured on; a different or updated
+                         file invalidates every preflight gate.
 ```
 
 Any mismatch aborts.
