@@ -59,7 +59,7 @@ Phase specs:
   seed-extension plan before any execution.
 - [`PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md`](PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md) -
   opened repair slate after the v0 falsified registered cell. Drafts a
-  block-stability accept rule to target source-bound seed-block mean drift.
+  block-consensus accept rule to target source-bound seed-block mean drift.
 
 Templates:
 
@@ -183,12 +183,16 @@ Current state:
   success at the smallest attacker tier on both views, found at 6.25 % of the
   small-tier candidate budget. Inversion also succeeded at the small tier (AUROC
   0.96–0.98) but is near-tautological. The v1 repair slate opens a
-  block-stability repair for per-seed-block mean drift and keeps inversion
+  block-consensus repair for per-seed-block mean drift and keeps inversion
   diagnostic-only. Receipt:
   [`receipts/2026-05-31_phase3_capacity_one_wayness_v0.md`](receipts/2026-05-31_phase3_capacity_one_wayness_v0.md).
-- Phase 3 capacity-relative one-wayness v1 repair slate opened for review:
+- Phase 3 capacity-relative one-wayness v1 repair slate frozen and wired:
   2026-06-01. It does not revise v0; `capacity_threshold <= small` remains the
-  v0 verdict. The draft repair keeps the base response thresholds unchanged but
-  removes single-block promotion: accept must be stable across registered
-  source-bound holdout blocks, while mixed or unstable block patterns
-  quarantine. No v1 implementation or execution has run.
+  v0 verdict. The repair keeps the base response thresholds unchanged but
+  removes single-block promotion: accept requires 3-of-4 source-bound holdout
+  blocks, while mixed or unstable block patterns quarantine. The harness is
+  `scripts/pvnp-phase3-capacity-one-wayness-v1.mjs`, exposed as
+  `npm run pvnp:phase3:capacity-one-wayness:v1`. The pre-holdout dry run
+  correctly named-quarantines with 0/52 holdout blocks present, while the v0
+  falsifier regression no longer consensus-accepts. The 52-block holdout
+  battery remains operator-staged under the repository's runtime rule.

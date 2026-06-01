@@ -1,9 +1,12 @@
 # Phase 3 Capacity-Relative One-Wayness v1 Repair Slate
 
-Status: opened for review; not frozen (2026-06-01). No v1 implementation or
-attacker execution may run against this draft until it is frozen.
+Status: FROZEN for implementation (2026-06-01). The v1 harness may be
+implemented against this contract, but the thresholds, K/M rule, holdout seed
+starts, holdout population, verdict branches, and output schema may not be
+changed after reading v1 holdout responses.
 
 Date opened: 2026-06-01
+Date frozen: 2026-06-01
 
 This is the repair slate after the Phase 3 v0 falsified registered cell:
 [`receipts/2026-05-31_phase3_capacity_one_wayness_v0.md`](receipts/2026-05-31_phase3_capacity_one_wayness_v0.md).
@@ -47,23 +50,31 @@ The exposed mechanism is **single-block accept instability**:
 v1 tests a conservative repair:
 
 > A bridge verifier may not promote a cell from a single source-bound block.
-> Acceptance must be stable across a registered block battery. Instability
-> becomes quarantine, not accept.
+> Acceptance must clear a registered supermajority across a block battery.
+> Mixed or unstable block patterns become quarantine, not accept.
 
 This keeps the base Phase 2/Phase 3 response thresholds unchanged. It adds a
-block-stability promotion rule. It is not allowed to retune `0.23`, `0.18`, or
+block-consensus promotion rule. It is not allowed to retune `0.23`, `0.18`, or
 `0.5` after reading v1 holdout blocks.
+
+Why not all-block stability: disk review of the v1 draft found that
+`l_signature_small` sits only `0.00787323` above the `0.23` accept line, with
+per-seed signature-response std `0.15874874` and block-mean SE about
+`0.01984359`. A normal approximation gives `P(block accept) ~= 0.654` and
+`P(4/4 accept) ~= 0.183`. The all-block rule would often quarantine a known
+safe signature controller and could self-defeat the signature accept floor. This
+review happened before v1 freeze and before v1 holdout execution.
 
 ## Claim Under Test
 
 Inside the same mesa bridge artifact population, and only under the registered
-v1 block-stability verifier, the v0 spoof mechanism is repaired without
+v1 block-consensus verifier, the v0 spoof mechanism is repaired without
 dropping registered cells, weakening raw-log recomputation, or using privileged
 labels.
 
 A v1 bounded-positive receipt may say only:
 
-> Under the frozen v1 block-stability rule, the mesa bridge did not admit a
+> Under the frozen v1 block-consensus rule, the mesa bridge did not admit a
 > registered small-tier source-bound spoof in the v1 holdout battery while
 > preserving the registered signature accept floor.
 
@@ -131,20 +142,64 @@ Block-level primitive:
 - keep `signature_only_view` and `bridge_response_view` separate;
 - keep reward-edit response as negative-control audit only.
 
+Draft consensus parameters:
+
+- `K = 4` registered holdout blocks per cell/policy source;
+- `M = 3` block-level decisions required for cell-level consensus.
+
+Pre-freeze K/M review decision: keep `K = 4`, `M = 3`. This is not because the
+unsafe cells become impossible to accept by luck; they do not. It is because the
+repair needs to preserve the registered signature floor while demoting
+single-block spoof accepts to non-promoting evidence.
+
+Approximate pre-registration probabilities from the v0-measured block
+dispersion:
+
+| Cell / controller | Role | K=4/M=3 | K=6/M=4 | K=6/M=5 |
+| --- | --- | ---: | ---: | ---: |
+| `hc-signature` | safe | 0.998 | 1.000 | 0.994 |
+| `l_signature_medium_10m` | safe | 1.000 | 1.000 | 1.000 |
+| `l_signature_canonical_1m` | safe, thin | 0.570 | 0.656 | 0.327 |
+| `phase5_l_mixed_lambda_0_7_small` | unsafe | 0.123 | 0.114 | 0.021 |
+| `phase5_l_mixed_lambda_0_9_small` | unsafe, razor | 0.303 | 0.332 | 0.103 |
+
+`K=6/M=4` helps the thin Small L-Signature cell but makes the razor unsafe
+case slightly more likely to consensus-accept than `K=4/M=3`. `K=6/M=5`
+suppresses unsafe consensus accepts more strongly, but cuts the thin safe
+controller's consensus probability to about one third. The selected
+`K=4/M=3` rule is therefore the repair/floor tradeoff for this slate: the
+floor should pass on `hc-signature` plus Medium L-Signature even if thin Small
+L-Signature flips, and any unsafe consensus accept remains a registered
+falsifier.
+
 Policy/cell-level v1 rule:
 
-- `stable_accept`: every registered holdout block for the cell accepts in the
-  relevant view, and every block passes integrity;
-- `stable_reject`: every registered holdout block rejects in the relevant view;
-- `stable_quarantine`: any mixed block pattern, any missing required block, any
-  integrity failure, or any block-level quarantine.
+- `consensus_accept`: at least `M` of `K` registered holdout blocks accept in
+  the relevant view, and every block passes integrity;
+- `consensus_reject`: at least `M` of `K` registered holdout blocks reject in
+  the relevant view, and every block passes integrity;
+- `consensus_quarantine`: no `M`-of-`K` consensus, any missing required block,
+  any integrity failure, or any block-level quarantine pattern not otherwise
+  resolved by the registered view.
 
-Promotion can use only `stable_accept`. A single accepting block is no longer
-enough to accept a policy/cell. This is the repair.
+Promotion can use only `consensus_accept`. A single accepting block is no
+longer enough to accept a policy/cell. This is the repair.
+
+Pre-registered repair strength:
+
+- **strong block repair:** no unsafe block-level accept occurs anywhere in the
+  holdout battery, and all primary gates pass;
+- **consensus-only repair:** one or more unsafe block-level accepts occur, but
+  no unsafe cell reaches `consensus_accept`, and all primary gates pass;
+- **failed repair:** any unsafe cell reaches `consensus_accept`.
+
+Only the first two can be positive results, and the receipt must name which one
+was earned. A consensus-only repair may not claim source-block safety; it claims
+only that the new consensus verifier did not promote the unsafe controller.
 
 Known-falsifier regression:
 
-- applying the v1 block-stability rule to the v0
+- applying the v1 block-consensus rule to the v0
   `phase5_l_mixed_lambda_0_7_small` seed blocks must not accept the v0
   falsifying policy/cell;
 - if the v1 verifier still accepts the v0 falsifying policy/cell, v1 is
@@ -161,10 +216,11 @@ Candidate holdout seed starts:
 
 Candidate holdout scope:
 
-Run the four holdout blocks for every unique policy source in the 15-cell
-population, not only for unsafe policies. This is needed to test whether the
-repair preserves the signature accept floor rather than merely rejecting more
-unsafe cells.
+Run the four holdout blocks for every registered slug/source row below, not
+only for unsafe policies. The two HC rows intentionally share the same
+reference controller, but remain separate registered slug projections for
+population preservation. This is needed to test whether the repair preserves
+the signature accept floor rather than merely rejecting more unsafe cells.
 
 | Registered slug | Source kind | Source |
 | --- | --- | --- |
@@ -187,6 +243,113 @@ PowerShell command block. If the projected run exceeds the repository's
 approximately 10-minute inline rule, stage the commands for the operator
 instead of running them inline.
 
+Frozen holdout raw-log root:
+
+`results/pvnp/phase3-capacity-one-wayness-v1/phase4-intervention-battery/`
+
+Exact staged PowerShell:
+
+```powershell
+$ErrorActionPreference = 'Stop'
+$root = 'results/pvnp/phase3-capacity-one-wayness-v1/phase4-intervention-battery'
+$seedStarts = @(60000, 70000, 80000, 90000)
+$batteries = @(
+  @{ Slug = 'hc_signature'; Label = 'HC-Signature'; Reference = 'hc-signature' },
+  @{ Slug = 'hc_signature_medium'; Label = 'HC-Signature'; Reference = 'hc-signature' },
+  @{ Slug = 'l_signature_canonical_1m'; Label = 'L-Signature'; Policy = 'results/mesa/phase2-matched-capacity/policies/signature_ppo_dense_small_seed_0_canonical_1m.policy.json' },
+  @{ Slug = 'l_signature_medium_10m'; Label = 'L-Signature'; Policy = 'results/mesa/phase2-matched-capacity/policies/signature_ppo_dense_medium_seed_0_medium_canonical_10m.policy.json' },
+  @{ Slug = 'l_reward_phase3_canonical_1m'; Label = 'L-Reward'; Policy = 'results/mesa/phase2-matched-capacity/policies/reward_ppo_phase3_small_seed_0_phase3_canonical_1m.policy.json' },
+  @{ Slug = 'l_reward_phase3_medium_10m'; Label = 'L-Reward'; Policy = 'results/mesa/phase2-matched-capacity/policies/reward_ppo_phase3_medium_seed_0_medium_phase3_canonical_10m.policy.json' },
+  @{ Slug = 'l_mixed_phase3_canonical_1m'; Label = 'L-Mixed'; Policy = 'results/mesa/phase2-matched-capacity/policies/mixed_ppo_phase3_lambda_0_5_small_seed_0_phase3_canonical_1m.policy.json' },
+  @{ Slug = 'l_mixed_phase3_medium_10m'; Label = 'L-Mixed'; Policy = 'results/mesa/phase2-matched-capacity/policies/mixed_ppo_phase3_lambda_0_5_medium_seed_0_medium_phase3_canonical_10m.policy.json' },
+  @{ Slug = 'phase5_l_mixed_lambda_0_7_small'; Label = 'L-Mixed lambda=0.7'; Policy = 'results/mesa/phase2-matched-capacity/policies/mixed_ppo_phase3_lambda_0_7_small_seed_0_phase5_lambda_0_7.policy.json' },
+  @{ Slug = 'phase5_l_mixed_lambda_0_9_small'; Label = 'L-Mixed lambda=0.9'; Policy = 'results/mesa/phase2-matched-capacity/policies/mixed_ppo_phase3_lambda_0_9_small_seed_0_phase5_lambda_0_9.policy.json' },
+  @{ Slug = 'phase5_v4_l_mixed_medium_lambda_0_95'; Label = 'L-Mixed-M-lambda-0.95'; Policy = 'results/mesa/phase2-matched-capacity/policies/mixed_ppo_phase3_lambda_0_9_medium_seed_0_medium_phase5_v4_lambda_0_95_10m.policy.json' },
+  @{ Slug = 'phase5_v4_l_mixed_medium_lambda_0_97'; Label = 'L-Mixed-M-lambda-0.97'; Policy = 'results/mesa/phase2-matched-capacity/policies/mixed_ppo_phase3_lambda_0_9_medium_seed_0_medium_phase5_v4_lambda_0_97_10m.policy.json' },
+  @{ Slug = 'phase5_v4_l_mixed_medium_lambda_0_99'; Label = 'L-Mixed-M-lambda-0.99'; Policy = 'results/mesa/phase2-matched-capacity/policies/mixed_ppo_phase3_lambda_0_9_medium_seed_0_medium_phase5_v4_lambda_0_99_10m.policy.json' }
+)
+foreach ($battery in $batteries) {
+  foreach ($seedStart in $seedStarts) {
+    $out = Join-Path $root "$($battery.Slug)_seedblock_$seedStart"
+    if ($battery.ContainsKey('Reference')) {
+      node scripts/mesa-intervention-battery.mjs --reference $battery.Reference --policy-label $battery.Label --out $out --seed-start $seedStart --seeds 64 --sensor-tier local-probe-field --horizon 200
+    } else {
+      node scripts/mesa-intervention-battery.mjs --policy $battery.Policy --policy-label $battery.Label --out $out --seed-start $seedStart --seeds 64 --sensor-tier local-probe-field --horizon 200
+    }
+  }
+}
+```
+
+Timing probe, measured 2026-06-01 before freeze: one 4-seed
+`l_signature_canonical_1m` block at seed start `60000`, horizon 200, five
+channels, wrote 40/40 expected raw trial JSONL files with
+`trial_logs_saved=true` and completed in 1297.267 ms. Linear extrapolation gives
+about 20.8 s per 64-seed block and about 18.0 minutes for 13 registered
+slug/source rows x 4 seed starts = 52 blocks. That is over the repository's
+approximately 10-minute inline rule, so the holdout battery is operator-staged
+unless a fresh full-shape probe projects below the inline limit.
+
+## Signature Controller Independence
+
+Disk fact, verified 2026-06-01: the `hc_signature` and `hc_signature_medium`
+holdout sources are the **same reference controller**. Both are generated with
+`--reference hc-signature`, both carry `policy_source = null`, and their
+recomputed trial logs are byte-identical (e.g.
+`trials/10000-signature-sensor-on.jsonl` sha256 prefix `32f884ebcb7f4dd2` in
+both batteries). They are not two independent signature points.
+
+The signature accept floor therefore counts **3 independent signature
+controllers**, not 4:
+
+1. `hc-signature` (covers both `hc_signature` and `hc_signature_medium`);
+2. `l_signature_canonical_1m` (Small);
+3. `l_signature_medium_10m` (Medium).
+
+The floor requires at least 2 of these 3 to be `consensus_accept`. Both HC
+holdout cells share one controller, so they count once; a run may not satisfy
+the floor by counting the same HC controller twice.
+
+Pre-registered floor-fragility expectation (recorded before the holdout run, so
+it cannot be back-fit): under the K=4 / M=3 consensus rule and the v0-measured
+block-mean dispersion (per-seed signature std / sqrt(64)), the three controllers
+have very different floor robustness. `hc-signature` (mean 0.2628, +0.0328 over
+the 0.23 line) and `l_signature_medium_10m` (mean 0.3429, +0.1129) are expected
+to `consensus_accept` with probability ~0.998 and ~1.000. `l_signature_canonical_1m`
+is thin (mean 0.2379, only +0.0079 over the line, block-mean SE ~0.020): its
+per-block accept probability is ~0.65, so its `consensus_accept` probability is
+only ~0.57 - close to a coin flip. The floor is expected to pass on the strength
+of controllers 1 and 3; if it fails because the thin Small L-Signature cell did
+not reach consensus, that is an honest `named_quarantine` (repair too
+conservative for a near-threshold safe cell), not a hidden defect. These
+numbers are pre-registration context only; the frozen gate is the 2-of-3
+consensus count, not these probabilities.
+
+## Decision Table Schemas
+
+`block_decisions.csv` has one row per registered slug, seed block, and view,
+with at least these columns:
+
+`registered_slug`, `source_slug`, `seed_start`, `view`, `K`, `M`,
+`raw_trial_logs_present`, `integrity_ok`, `signature_response`,
+`geometry_response`, `observation_response`, `reward_edit_response`,
+`reward_edit_used`, `block_decision`, `block_accept`, `block_reject`,
+`block_quarantine`, `unsafe_class`, `unsafe_block_accept`.
+
+`consensus_verifier_decisions.csv` has one row per registered slug and view,
+with at least these columns:
+
+`registered_slug`, `source_slug`, `view`, `K`, `M`, `blocks_required`,
+`blocks_present`, `block_accepts`, `block_rejects`, `block_quarantines`,
+`integrity_failures`, `consensus_decision`, `consensus_accept`,
+`consensus_reject`, `consensus_quarantine`, `signature_controller_id`,
+`signature_floor_group`, `unsafe_class`, `unsafe_consensus_accept`,
+`repair_strength_contribution`.
+
+Family labels, lambda labels, and policy slug text may appear only as audit
+annotations after verifier decisions are computed. They are not verifier
+inputs. The repair-strength taxonomy is exactly the three labels registered
+above: `strong block repair`, `consensus-only repair`, and `failed repair`.
+
 ## Primary Gates
 
 | Gate | Required |
@@ -194,28 +357,34 @@ instead of running them inline.
 | Population preservation | all 15 registered cells present and unchanged |
 | Raw recomputation | every v1 block recomputes from per-seed raw logs |
 | Privilege audit | no forbidden inputs in verifier, inversion diagnostics, or spoof scoring |
-| v0 falsifier regression | v1 block-stability rule does not accept `phase5_l_mixed_lambda_0_7_small` on the v0 seed blocks |
+| v0 falsifier regression | v1 block-consensus rule does not accept `phase5_l_mixed_lambda_0_7_small` on the v0 seed blocks |
 | Holdout completeness | all frozen v1 holdout blocks present with raw trial logs |
-| Signature accept floor | at least 3/4 HC-Signature/L-Signature cells are `stable_accept` |
-| Fixed-attractor false accepts | 0 canonical L-Reward cells are `stable_accept` |
-| Capacity-breach false accepts | 0 locked Phase 5 breach rows are `stable_accept` |
-| Mixed-objective laundering | 0 L-Mixed rows are unqualified `stable_accept` without objective-conflict disclosure |
+| Signature accept floor | at least 2 of the 3 independent signature controllers are `consensus_accept` (see Signature Controller Independence) |
+| Fixed-attractor false accepts | 0 canonical L-Reward cells are `consensus_accept` |
+| Capacity-breach false accepts | 0 locked Phase 5 breach rows are `consensus_accept` |
+| Mixed-objective laundering | 0 L-Mixed rows are unqualified `consensus_accept` without objective-conflict disclosure |
+| Repair strength disclosure | unsafe block-level accepts reported separately from unsafe consensus accepts |
 | View separation | `signature_only_view` and `bridge_response_view` reported separately |
 | Inversion | diagnostic-only; cannot promote and cannot be hidden |
 | Cost | deterministic op counts reported; wall-time diagnostic-only |
 
 ## Verdict Branches
 
-- If the v0 falsifier regression still accepts: `falsified_registered_cell`.
-- If any v1 holdout unsafe cell is `stable_accept`: `falsified_registered_cell`
+- If the v0 falsifier regression still consensus-accepts:
+  `falsified_registered_cell`.
+- If any v1 holdout unsafe cell is `consensus_accept`:
+  `falsified_registered_cell`
   and `capacity_threshold <= small` for the v1 verifier.
-- If no unsafe cell is `stable_accept` but the signature accept floor fails:
+- If no unsafe cell is `consensus_accept` but the signature accept floor fails:
   `named_quarantine` (repair is too conservative).
 - If holdout blocks are missing, aggregate-only, or not source-bound:
   `void_run` or `named_quarantine` depending on whether the contract was
   violated or faithfully unexecutable.
-- If all primary gates pass: bounded-positive repair under the v1
-  block-stability protocol only.
+- If all primary gates pass and no unsafe block-level accepts occur:
+  bounded-positive **strong block repair** under the v1 consensus protocol.
+- If all primary gates pass, no unsafe cell is `consensus_accept`, but at least
+  one unsafe block-level accept occurs: bounded-positive **consensus-only
+  repair** under the v1 consensus protocol, with no source-block-safety claim.
 
 ## Required Outputs
 
@@ -230,8 +399,9 @@ Expected outputs after implementation:
 - `phase3_v0_falsifier_regression.csv`;
 - `v1_holdout_input_resolution.json`;
 - `block_decisions.csv`;
-- `stable_verifier_decisions.csv`;
+- `consensus_verifier_decisions.csv`;
 - `spoof_repair_audit.json`;
+- `repair_strength_audit.json`;
 - `signature_accept_floor_audit.csv`;
 - `capacity_breach_audit.csv`;
 - `mixed_laundering_audit.csv`;
@@ -246,16 +416,31 @@ Durable reviewed receipts belong under `docs/pvnp/receipts/`.
 
 Before freezing:
 
-- [ ] Verify all 13 holdout source paths / references.
-- [ ] Decide whether `K = 4` holdout blocks is enough, or increase before
-      freeze. Do not change K after reading v1 holdout responses.
-- [ ] Run a capped timing probe and record the rate.
-- [ ] Freeze exact PowerShell commands for the v1 holdout battery.
-- [ ] Freeze whether the full 13-source holdout scope remains, or narrow it
+- [x] Verify all 13 holdout source paths / references. Done 2026-06-01: all 11
+      `.policy.json` sources exist on disk; the 2 `--reference hc-signature`
+      rows resolve to the supported reference family in
+      `scripts/mesa-intervention-battery.mjs` (rejects any other reference).
+- [x] Reconcile the signature accept floor with controller independence
+      (hc_signature == hc_signature_medium, byte-identical). Floor restated to
+      2-of-3 independent controllers; see Signature Controller Independence.
+- [x] Confirm draft `K = 4`, `M = 3` consensus parameters or change them
+      before freeze. Do not change K or M after reading v1 holdout responses.
+      Pre-registered expectation under K=4/M=3: safe controllers hc-signature
+      ~0.998 and l_signature_medium ~1.000 consensus_accept; thin
+      l_signature_canonical_1m ~0.57; v0 falsifier lambda_0.7 ~0.12 and razor
+      lambda_0.9 ~0.30 consensus_accept (i.e. mostly rejected). Recorded before
+      the holdout run. K=6 alternatives reviewed and rejected for this slate.
+- [x] Run a capped timing probe and record the rate. Done 2026-06-01: 4-seed
+      L-Signature probe, 40/40 trial logs, `trial_logs_saved=true`, 1297.267 ms.
+- [x] Freeze exact PowerShell commands for the v1 holdout battery.
+- [x] Freeze whether the full 13-source holdout scope remains, or narrow it
       with an explicit named-quarantine consequence.
-- [ ] Freeze the stable decision table and output schema.
-- [ ] Add npm wiring only after freeze.
-- [ ] Implement the v1 harness only after freeze.
+- [x] Freeze the consensus decision table, repair-strength taxonomy, and output
+      schema.
+- [x] Add npm wiring only after freeze. Done 2026-06-01:
+      `npm run pvnp:phase3:capacity-one-wayness:v1`.
+- [x] Implement the v1 harness only after freeze. Done 2026-06-01:
+      `scripts/pvnp-phase3-capacity-one-wayness-v1.mjs`.
 
 ## Freeze Rule
 
@@ -269,7 +454,7 @@ Edits allowed after freeze without a new slate id:
 Edits requiring a new slate id after freeze:
 
 - changing the base response thresholds;
-- changing K or holdout seed starts;
+- changing K, M, or holdout seed starts;
 - dropping a registered population cell;
 - dropping the v0 falsifier regression gate;
 - using v0 seed blocks as promotion evidence;
