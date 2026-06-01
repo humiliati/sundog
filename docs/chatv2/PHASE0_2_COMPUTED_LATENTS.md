@@ -192,6 +192,41 @@ grok-cliffs. **Methodology fix landed:** an `H` whose `eval_loss ≈ chance` is 
 flagged **UNLEARNED**, never silently MARGINAL — "couldn't train" and "no
 resistance" must not be conflated.
 
+### H=8 probe (2026-05-31) — the wall cracks, and the separation holds at higher dimensionality
+
+The reserved D5 capacity bump (`d_model`→192, `max_steps`→6000) plus a signal bump
+(δ→0.45, 12 pairs/channel — the XOR stays input-undecodable, pre-check **0.505 ≈
+chance**) was run on `H=8` alone (`results/chatv2/phase02-probe-h8/`, ~5.3 h):
+
+| metric (chance baseline) | original full run | **H=8 probe** |
+| --- | --- | --- |
+| `eval_loss` (0.693 = chance) | 0.693 → **UNLEARNED** | **0.497** (learned; floor 0.446) |
+| `d_dec` | 7.0\* (noise-rank) | **7.2 / 8** (real) |
+| `z1_acc` | 0.53 | **0.94** |
+| `leak` (0.50 = chance) | 0.51 | **0.50** (exact chance — resists) |
+| `body_carry` gen / twin | 0.52 / 0.52 | **0.77 / 0.51** |
+| status | UNLEARNED | **SHARP** |
+
+**The high-`H` wall was capacity/signal, not marginality.** With the model now
+genuinely learning (`eval_loss` 0.497 ≪ 0.693), `d_dec = 7.2` is a **real
+~7-dimensional body** (not the original run's chance-level noise-rank); it
+**resists** (`leak` exactly chance — the z₁ shadow carries nothing about the other
+7 latents); it is control-sufficient (`z1`=0.94); and the objective-driven
+contrast is clean and strong — the generative model carries the non-decision
+state at 0.77 while the **control-only twin sits at 0.51 ≈ chance, building *none*
+of it** (gap 0.26). The twin floor at exact chance is the de-confound holding
+airtight at `d=192 / δ=0.45`.
+
+**This is the highest-dimensional sharp resisting body in the portfolio**
+(`d_dec≈7`, where NSE-C1 is marginal, Mesa ~2, shell ~1.7, chatv2-low-`H` 2–4) —
+the **dimensional-axis** counterpart to the topological-axis exact Aharonov-Bohm
+separation (empirical/toy here, not proven-exact). **Honest bounds:** synthetic
+toy; one `H`, one seed; δ=0.45 is a strong signal (de-confound intact, but the
+latent is easy to estimate once learned); `d_dec≈7` is "higher-dim", not
+LLM-scale; unpromoted. **Scaling run (`H=16`, winning config) launched** to test
+whether `d_dec` keeps growing and the separation survives to the top of the toy's
+range.
+
 ## 9. Cross-references
 
 - [`PHASE0_MINIMUM_FALSIFIABLE.md`](PHASE0_MINIMUM_FALSIFIABLE.md) — Phase 0 + Amendment 1 (the result this refines).
