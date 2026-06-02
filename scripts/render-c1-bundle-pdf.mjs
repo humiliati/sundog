@@ -72,7 +72,59 @@ const CSS = `
   /* keep section dividers from orphaning their heading */
   h2, h3 { break-after: avoid; }
   table, pre, blockquote { break-inside: avoid; }
+
+  /* closing page. NOTE: break-before:page directly on this flex/centered
+     section makes Chrome's headless print path DROP the flowed prose after the
+     graphic (verified 2026-06-02). Use a zero-height spacer with break-before
+     instead, and keep the section itself together. */
+  .c1-pagebreak { break-before: page; height: 0; }
+  .c1-closing { text-align: center; padding-top: 0.4in; break-inside: avoid; }
+  .c1-closing svg { width: 320px; height: auto; display: block; margin: 0 auto 0.5em; }
+  .closing-cap {
+    font-family: "Consolas","DejaVu Sans Mono",monospace; font-size: 8pt;
+    letter-spacing: 0.08em; text-transform: uppercase; color: #6A7680; margin: 0 0 1.4em;
+  }
+  .c1-closing h3 { font-size: 15pt; color: #1A3A52; border: none; margin: 0.2em 0 0.6em; text-align: center; }
+  .closing-body { text-align: left; max-width: 5.4in; margin: 0 auto; }
+  .closing-body blockquote {
+    border-left: 3px solid #B8831E; background: rgba(255,244,214,0.45);
+    font-size: 10pt; line-height: 1.6;
+  }
+  /* the signature line is the last <p><em>…</em></p>; center + italicize it */
+  .closing-body > p:last-child { text-align: center; margin-top: 1.5em; color: #40505C; }
 `;
+
+// On-brand halo graphic for the closing page. The geometry encodes the result:
+// the bright central sun is the full hidden state; the highlighted right-hand
+// parhelion is Phi_K — a partial-but-readable projection on the 22-degree ring.
+const HALO_SVG = `
+<svg viewBox="0 0 400 230" role="img" aria-label="A sundog halo: central sun with the 22-degree ring and two parhelia; the right parhelion is highlighted as the readable low-band projection.">
+  <defs>
+    <radialGradient id="sun" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fff4b2"/><stop offset="45%" stop-color="#f4c430"/><stop offset="100%" stop-color="#b97812"/>
+    </radialGradient>
+    <radialGradient id="dog" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fff8d8"/><stop offset="55%" stop-color="#f6cf52"/><stop offset="100%" stop-color="#caa233" stop-opacity="0.15"/>
+    </radialGradient>
+  </defs>
+  <!-- 22-degree halo ring -->
+  <circle cx="200" cy="115" r="92" fill="none" stroke="#1A3A52" stroke-width="1.4" stroke-opacity="0.5" stroke-dasharray="2 4"/>
+  <!-- parhelic circle (horizontal) -->
+  <line x1="40" y1="115" x2="360" y2="115" stroke="#1A3A52" stroke-width="0.8" stroke-opacity="0.28"/>
+  <!-- central sun = full hidden state -->
+  <circle cx="200" cy="115" r="17" fill="url(#sun)"/>
+  <!-- left parhelion (faint) -->
+  <circle cx="108" cy="115" r="8" fill="url(#dog)" opacity="0.55"/>
+  <!-- right parhelion = Phi_K, highlighted -->
+  <circle cx="292" cy="115" r="11" fill="url(#dog)"/>
+  <circle cx="292" cy="115" r="11" fill="none" stroke="#B8831E" stroke-width="1.2"/>
+  <line x1="292" y1="104" x2="292" y2="70" stroke="#B8831E" stroke-width="0.8" stroke-opacity="0.6"/>
+  <text x="292" y="62" text-anchor="middle" font-family="Consolas,monospace" font-size="11" fill="#684811" font-weight="700">&#934;_K</text>
+  <text x="200" y="150" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#40505C">full state</text>
+</svg>`;
+
+const CLOSING_HTML = `${HALO_SVG}
+  <p class="closing-cap">read the shadow &middot; test the boundary</p>`;
 
 function main() {
   if (!existsSync(SRC)) {
@@ -80,7 +132,21 @@ function main() {
   }
   const mdText = readFileSync(SRC, "utf8");
   const md = new MarkdownIt({ html: false, linkify: true, typographer: false });
-  const bodyHtml = md.render(mdText);
+  let bodyHtml = md.render(mdText);
+
+  // Upgrade the closing page: swap the escaped sentinel paragraph for the
+  // on-brand halo graphic, and wrap the whole closing section (graphic + the
+  // thank-you prose that follows it, to end of document) in one styled section
+  // so the page-break and centered layout apply. markdown-it (html:false)
+  // renders the sentinel as an escaped <p>, so we target that exact string.
+  // The closing is the LAST content in the bundle, so opening the wrapper at the
+  // sentinel and closing it at end-of-body yields balanced markup.
+  const SENTINEL = "<p>&lt;!-- PDF_CLOSING_GRAPHIC --&gt;</p>";
+  if (!bodyHtml.includes(SENTINEL)) {
+    throw new Error("closing sentinel not found in rendered HTML; rebuild the bundle (build-c1-review-bundle.mjs) before rendering");
+  }
+  bodyHtml = bodyHtml.replace(SENTINEL, `<div class="c1-pagebreak"></div><section class="c1-closing">${CLOSING_HTML}<div class="closing-body">`);
+  bodyHtml = bodyHtml + "</div></section>";
 
   const html = `<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8">

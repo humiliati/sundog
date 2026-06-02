@@ -1278,3 +1278,28 @@ Each section above is a verbatim copy of an on-disk artifact. Hashes:
 Regenerate with `node scripts/build-c1-review-bundle.mjs`. If a hash here
 does not match a fresh read of the file, the bundle is stale — rebuild before
 sending.
+
+
+==============================================================================
+## [ CLOSING ]
+==============================================================================
+
+<!-- PDF_CLOSING_GRAPHIC -->
+
+### Thank you for reading to the end.
+
+That is the whole packet. The ask was narrow on purpose: not endorsement,
+not a Navier–Stokes claim — just a framing check from someone who knows where
+the honest boundary of this problem sits. If the language is too strong, the
+most useful thing you can tell us is exactly which phrase to weaken and why.
+A negative answer is the most valuable outcome we could get.
+
+> **One last note, for a cover-to-cover read.** A sundog — the bright parhelion
+> beside the sun that gives this lab its name — is the sky's own `Φ_K`: a
+> low-information projection of an enormous hidden state (every ice crystal,
+> every ray) that is nonetheless *enough to read the sun's altitude*, yet never
+> enough to reconstruct the whole sky. State-insufficient, decision-sufficient.
+> That is the separation this packet is asking you to check — and the reason we
+> went looking for it in a 2D Navier–Stokes attractor in the first place.
+
+*— Jeffery Hughes Jr., Sundog*
