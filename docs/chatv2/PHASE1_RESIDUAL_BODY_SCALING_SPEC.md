@@ -123,6 +123,49 @@ Before Phase 1 can freeze, classify the active Phase 0.2 `H=16` curriculum run:
 
 This prevents Phase 1 from papering over an unresolved midstream result.
 
+### 4.1 Read-back result (2026-06-01) — `H=16 learned but MARGINAL`
+
+The `phase02-curriculum` run (`results/chatv2/phase02-curriculum/`) completed:
+
+| `H` | learned? | `d_dec` | `z1_acc` | `leak` | `body_carry` gen / twin | status |
+| --- | --- | --- | --- | --- | --- | --- |
+| 8 | yes (`eval_loss` 0.501) | 6.8/8 | 0.61 | 0.52 | 0.72 / 0.53 | MARGINAL |
+| 16 | yes (`eval_loss` 0.566) | 13.7/16 | 0.61 | 0.53 | 0.61 / 0.51 | MARGINAL |
+
+**Classification: row 2 — `H=16` learned but MARGINAL** → per §4, *diagnose the
+high-H upper edge before attempting `H=32`*; per §12, *rewrite Phase 1 around this
+fact* (the next rung is **not** licensed yet).
+
+Two findings sharpen the diagnosis and reshape the immediate move:
+
+1. **The warm-start worked (a real win).** `H=16` *learned* (`eval_loss` 0.566 ≪
+   0.693), where the cold scaling run was `UNLEARNED`. So the high-H wall was
+   **optimization (grokking), not capacity** — and `d_dec=13.7` is a *real*
+   high-dim body (not noise-rank), still resisting (`leak`≈chance). The
+   body-resistance **core scales**: `d_dec` 6.8 → 13.7, resisting at both.
+
+2. **Gate E is empirically live — the SHARP claim is seed-sensitive.** The
+   curriculum's `H=8` is MARGINAL (`z1_acc`=0.61) where the standalone probe's
+   `H=8` was SHARP (`z1_acc`=0.94) — *same seed*, but `--pos-h` shifted init.
+   Robust across both draws: high-`d_dec` + `leak`≈chance (the resisting body).
+   Not robust: the SHARP verdict (control-sufficiency `z1_acc` + the
+   `body_carry` gap). **The "first dimensional-axis SHARP" headline was one
+   favorable draw.**
+
+3. **Read-position confound (red-team flag).** The decision `z_1` = channel 0 =
+   the *oldest* channel (the final read token belongs to channel `H-1`), so
+   `z1_acc` partly measures whether the learned solution maintains *all* channel
+   states globally vs just-in-time — an init-dependent property. Part of the
+   "seed sensitivity" may be a **read-position lottery**, not a body-resistance
+   property.
+
+**Reframed immediate move (supersedes §5's `H=32` jump for now):** a
+**seed-stability + read-position diagnostic at the known rung `H=8`** — establish
+the SHARP-vs-MARGINAL *distribution* across frozen seeds (Gate E applied where the
+claim was actually made), and disentangle the read-position confound, *before*
+spending budget on `H=32` / `d_dec≥20`. `H=32` re-enters only if `H=8` SHARP
+proves seed-robust.
+
 ## 5. Proposed scaling cell
 
 Primary sweep after Phase 0.2 read-back:
@@ -363,3 +406,50 @@ the `H=16` read-back is SHARP, galvanize it into the main chatv2 lane as the
 natural Phase 1 scaling gate. If `H=16` is learned-but-marginal or unlearned,
 rewrite Phase 1 around that fact rather than pretending the next rung is already
 licensed.
+
+## 13. Amendment A — DRAFT (the seed-stability cell, staged 2026-06-01)
+
+> **Status: DRAFT, pending sign-off.** Per §12 this is not binding until red
+> signs the cell is not a metric swap, blue signs it is feasible to stage, and
+> audit signs the receipt schema. It supersedes §5's `H=32` jump *for now* per
+> the §4.1 read-back (`H=16` learned-but-MARGINAL → seed-stability + read-position
+> diagnostic at the known rung **before** `d_dec≥20` / `H=32`).
+
+**Owner decisions (2026-06-01):** *fix the readout first* + *3 seeds, `H=8`*.
+
+**Frozen cell.** `H=8`, computed pair-XOR, **fair readout** (each latent read at
+its channel's freshest token position — `_lastpos`; a readout-fairness fix,
+validated as a pure position change: identical thresholds, ~+0.05 on `z1_acc`,
+and it does **not** rescue the marginal draw → the seed-sensitivity is genuine).
+Model `d_model=192`, `δ=0.45`, `bits_per_channel=24`, `max_steps=6000`, grok-aware
+`min_steps=3000` / `patience=10`. Seeds **{0, 1, 2}**. Runner:
+`scripts/chatv2_phase0_bodyresist.py` (gen-checkpointing + skip-twin-if-unlearned
++ UNLEARNED guard already in). Out: `results/chatv2/phase1-seedstab/seed<S>/`.
+
+**Gate E (binding for this cell):** ≥ ⌈2·3/3⌉ = **2 of 3** seeds in the same
+branch, adjudicated by `scripts/chatv2_phase1_adjudicate.py` (reuses the harness
+status + the `d_dec≥20` Gate-D split). Likely branches here:
+`phase1_highH_marginal` (`z1<0.70`) vs `phase1_scaling_sharp_below_bar` (SHARP but
+`d_dec<20`); a 3-way split → `phase1_seed_unstable`.
+
+**Staged commands** (one per seed — each ~3–5 h CPU; run when the box is free and
+won't sleep; saved bodies/checkpoints make any interrupted seed a cheap relaunch):
+
+```powershell
+# repeat with --seed 0, --seed 1, --seed 2
+python scripts/chatv2_phase0_bodyresist.py --mode full --stage all --latent computed `
+  --fair-readout --h-sweep 8 --d-model 192 --delta 0.45 --bits-per-channel 24 `
+  --max-steps 6000 --min-steps 3000 --patience 10 --seed 0 `
+  --out results/chatv2/phase1-seedstab/seed0
+
+# adjudicate after all three land
+python scripts/chatv2_phase1_adjudicate.py `
+  --glob "results/chatv2/phase1-seedstab/seed*/manifest.json" --H 8 `
+  --out results/chatv2/phase1-seedstab/branch_adjudication.json
+```
+
+**Read-out.** ≥2/3 SHARP → the `H=8` positive is seed-robust → `H=16` / `H=32`
+scaling (§5) re-opens. ≥2/3 MARGINAL → the headline SHARP was a favorable draw;
+the robust claim stays "high-dim body that resists + scales," and Phase 1 is
+rewritten around the upper edge (§12). 3-way unstable → report the instability
+honestly; do **not** cherry-pick the sharp seed.
