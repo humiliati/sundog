@@ -1,9 +1,11 @@
 # K_facet Isotrophy Program Pause (2026-05-24)
 
 Status: **PAUSED 2026-05-24** at end-of-v0.9, then **ADVANCED off-pause
-2026-05-29/30** with the v0.10 frontier pair (v0.10a + v0.10b), the
-v0.11 conditional-rank close, the v0.12 external-transfer test, and the
-v0.13 target-search (form locked, runner in progress).
+2026-05-29 -> 2026-06-02** with the v0.10 frontier pair (v0.10a + v0.10b), the
+v0.11 conditional-rank close, and the v0.12 -> v0.16 external-transfer arc, which
+reached a **clean Tier-2 external PASS at v0.16** (`tail_resolved_transfer_passes_clean`,
+AUC_cond 0.647, p 1e-5): the velocity-fraction signal transfers to an independent
+catalog once read as a continuous tail-resolved score rather than the coarse v0.11 zone.
 The chain ran from v0.3 (December 2025 / January 2026, pre-anniversary)
 through v0.9 (May 2026) as seven sequential pre-registered chapters with
 seven distinct chapter-close types and one load-bearing in-sample positive
@@ -31,9 +33,27 @@ conditional-positive sequence**:
   the whole CI above the locked 0.20 block gate. NOT a falsification: the frozen
   v0.7 D5 measurement is numerically intractable on ~1/3 of supp-A. The ~2.5 h
   probe spared the projected 6.7-day full run.
-- **v0.13 (the target search):** opened to find an independent, low-leakage,
-  D5-tractable external catalog where the frozen rule COULD be tested, under a
-  signal-blind firewall (form locked 2026-05-30; runner in progress).
+- **v0.13 (the target search):** a signal-blind search returned an independent-target
+  landscape negative -- only Tier-2 Li/Liao 2021 (135,445 non-hierarchical orbits, same
+  lineage) was schema-viable. v0.13a bounded cross-ansatz leakage at 0.0 but found the
+  raw dominant-direction vf FEATURE frame-relative; v0.13b priced the coarse v0.11 ZONE
+  as frame-stable enough to test (supp-B 4.35%, liao2021 pooled ~1.3%).
+- **v0.14 (coverage-undecidable):** the frozen coarse-zone rule on a 1280-row sampled
+  liao2021 draw landed `sample_transfer_undecidable_coverage` -- only 7/16 mass cells
+  could host a within-cell stable-vs-unstable comparison (liao2021 is overwhelmingly
+  unstable and zone-2-saturated).
+- **v0.15 (directional-weak):** an outcome-balanced 80/80 case-control draw over the 7
+  stable-support cells defeated the coverage wall but landed
+  `stable_support_transfer_directional_weak` (AUC_cond 0.5125, p 3e-4): direction
+  transfers and is significant, but the coarse zone is saturated (98.4% zone-2) so the
+  effect sits below the 0.55 floor -- the binning, not the projection, is the bottleneck.
+- **v0.16 (the external PASS):** a tail-resolved continuous 4-frame ensemble-median vf
+  score on a fresh doubly-held-out 80/80 draw landed
+  `tail_resolved_transfer_passes_clean` (AUC_cond 0.647, p 1e-5, attrition 0, frame
+  gate clean). On the SAME rows the coarse zone reads 0.510 -- direct proof the binning
+  was the bottleneck. Pooled and mass-cell-heterogeneous (5 of 7 cells in-direction, 2
+  reversed; leave-one-out 0.593 still clears the floor), Tier-2 and bounded, not
+  theorem-facing.
 
 The mature, falsifiable claim is **"yes, but only after conditioning"**:
 velocity-fraction stratifies three-body stability, but as a function of the
@@ -43,11 +63,13 @@ the held-out chapter localized the signal rather than killing it.
 
 The program remains **paused at the lab-bandwidth level**, not retired. The
 within-m_3 conditional rung that v0.10b motivated is closed (v0.11); the
-external-catalog rung is now ACTIVE -- v0.12 tried the nearest target (supp-A) and
-hit a D5-attrition wall, and v0.13 is the signal-blind search for a tractable
-independent target. Remaining reopening axes beyond the target search: a
-mass-conditional predictor or new-mechanism work, not another rephrasing of the
-same table.
+external-catalog rung is now **CONFIRMED at Tier-2** -- v0.12's supp-A D5-attrition
+wall and v0.13's landscape-negative left Li/Liao 2021 as the only viable target, and
+the v0.14 (undecidable) -> v0.15 (directional-weak) -> v0.16 (clean PASS) arc carried
+it to a held-out external confirmation of the continuous velocity-fraction projection.
+Remaining axes: the v0.16 mass-cell heterogeneity (which regions carry the transfer,
+why two reverse), a larger supported-region or multi-feature chapter, or new-mechanism
+work -- not another rephrasing of the same table.
 
 Audience: paper-side writers, future coding agents, isotrophy-
 program lab initiates, anyone who wants to know what's left.
@@ -158,12 +180,38 @@ v0.12:  external transfer of the frozen v0.11 rule to same-paper
         hypothesis. The ~2.5 h probe spared the projected 6.7-day run.
 
 v0.13:  external target-search chapter (pre-feature source selection).
-        Status: form LOCKED 2026-05-30, runner in progress. Inventory +
-        leakage/source-quality gates + signal-blind D5 feasibility probes
-        to find and lock an independent (Tier 2/3), low-leakage,
-        D5-tractable external catalog where the frozen rule COULD be
-        tested. Four-layer anti-target-shopping firewall; a target lock is
-        permission to DRAFT a transfer, not to run or interpret one.
+        Outcome: independent-target landscape NEGATIVE -- every Tier-3 catalog
+        failed a hard gate (equal-mass / restricted / too small); only Tier-2
+        Li/Liao 2021 (135,445 non-hierarchical orbits, same lineage) was
+        schema-viable. Four-layer anti-target-shopping firewall held.
+
+v0.13a: liao2021 adapter + cross-ansatz leakage preflight. Leakage bounded at
+        0.0 (expansion-only adapter), BUT the raw dominant-direction vf FEATURE
+        is frame-relative (select_gamma_1 argmax flips under rotation). The
+        coarse v0.11 ZONE, not raw vf, is the transferable object.
+
+v0.13b: frame-zone stability audit. coarse_zone_rule_frame_stable_enough_to_test
+        (supp-B zone-change 4.35%, liao2021 pooled ~1.3%; fragility localized to
+        two mass bands). Cleared the coarse zone for transfer.
+
+v0.14:  sampled coarse-zone transfer (1280 rows, 16 mass cells).
+        sample_transfer_undecidable_coverage -- only 7/16 cells hosted both
+        stability classes (liao2021 is overwhelmingly unstable + zone-2-saturated);
+        coverage gate (>=10 cells / >=800 rows) not met. No transfer read licensed.
+
+v0.15:  stable-support case-control transfer (7 cells x 80 S + 80 U, v0.14-held-out).
+        Coverage wall defeated (7/7 primary, 0 attrition) ->
+        stable_support_transfer_directional_weak (AUC_cond 0.5125, p 3e-4). Direction
+        transfers + significant, but the coarse zone is saturated so the effect is
+        below the 0.55 floor. Diagnosis: the binning, not the projection.
+
+v0.16:  tail-resolved transfer (4-frame ensemble-median continuous vf, fresh
+        double-holdout 80/80). tail_resolved_transfer_passes_clean: AUC_cond 0.647,
+        p 1e-5, attrition 0, frame-spread gate clean. SAME-rows coarse zone reads
+        0.510 -> the coarse binning was the bottleneck; the continuous projection
+        transfers. First clean external (Tier-2, held-out) confirmation. Pooled +
+        mass-cell-heterogeneous (5/7 in-direction, 2 reversed; leave-one-out 0.593);
+        Tier-2, bounded, not theorem-facing.
 ```
 
 ## The Load-Bearing Findings
@@ -219,17 +267,25 @@ conditional profile, bounded by an external-transfer null):
    held-out chapter LOCALIZED the signal rather than killing it, and v0.11
    registered that localization under the exact conditional rank gate.
 
-   **The external-transfer boundary (v0.12 / v0.13).** The conditional positive is,
-   so far, supp-B-internal. v0.12 took the frozen rule to the nearest external
-   catalog (same-paper supplementary-A) and hit
-   `external_transfer_blocked_by_attrition`: an unbiased uniform probe read attrition
-   0.3433 (Wilson95 [0.2919, 0.3987] -- the whole CI above the locked 0.20 gate),
-   because the frozen v0.7 D5 measurement cannot integrate ~1/3 of supp-A. That is a
-   measurement-feasibility limit, NOT a falsification of the velocity-fraction
-   hypothesis. v0.13 (form locked, runner in progress) is the signal-blind search for
-   an independent, low-leakage, D5-tractable catalog that could host a genuine
-   external test. Until one is found, the conditional positive stands as a supp-B
-   result without external confirmation.
+   **The external-transfer arc (v0.12 -> v0.16): from supp-B-internal to a clean Tier-2
+   PASS.** v0.12 took the frozen rule to same-paper supplementary-A and hit
+   `external_transfer_blocked_by_attrition` (uniform probe attrition 0.3433, the whole
+   CI above the 0.20 gate; a measurement-feasibility limit, not a falsification).
+   v0.13's signal-blind search found only Tier-2 Li/Liao 2021 viable; v0.13a bounded
+   leakage at 0.0 but exposed raw vf as frame-relative; v0.13b certified the coarse
+   v0.11 zone as frame-stable enough to test. The transfer then ran in three rungs on
+   liao2021: v0.14 `undecidable_coverage` (only 7/16 cells hostable), v0.15
+   `directional_weak` (AUC_cond 0.5125, p 3e-4 -- direction transfers but the coarse
+   zone is 98.4% saturated, below the 0.55 floor), and v0.16
+   `tail_resolved_transfer_passes_clean` (**AUC_cond 0.647, p 1e-5**) once the feature
+   was read as a continuous 4-frame ensemble-median vf rather than the coarse zone. On
+   the SAME held-out rows the coarse zone reads 0.510 -- direct proof the binning, not
+   the projection, was the bottleneck. **The conditional positive now has a held-out
+   external (Tier-2) confirmation of the underlying velocity-fraction projection** --
+   pooled and mass-cell-heterogeneous (5 of 7 cells in-direction, two reversed;
+   leave-one-out 0.593 still clears the floor), bounded to Tier-2 / stable-support /
+   not theorem-facing. The coarse v0.11 zone FORM does not transfer (v0.15); its
+   continuous tail-resolved relative does (v0.16).
 
 3. **The methodology surface**. The chain produced and locked
    a comprehensive set of pre-registration discipline tools that

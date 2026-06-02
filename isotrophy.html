@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Sundog Isotrophy audit chain, v0.3 through v0.12: v0.3h's structural-zero receipts, the v0.7 velocity-fraction positive, v0.10b's mass-marginal held-out null, v0.11's within-m3 conditional-rank pass, and v0.12's external-transfer block on supplementary-A (numerical feasibility, not a falsification).">
+    <meta name="description" content="Sundog Isotrophy audit chain, v0.3 through v0.16: v0.3h's structural-zero receipts, the v0.11 conditional-rank pass, and v0.16's bounded Tier-2 external confirmation of a tail-resolved velocity-fraction signal.">
     <meta name="keywords" content="K_facet, isotrophy, choreography, three-body, structural zero, audit chain, Floquet velocity fraction, Sundog, claim hygiene, quarantine, Golod-Shafarevich">
     <meta name="theme-color" content="#1A3A52">
     <meta name="author" content="Sundog Research Lab">
@@ -12,20 +12,20 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="manifest" href="/site.webmanifest">
     <link rel="canonical" href="https://sundog.cc/isotrophy">
-    <title>Isotrophy Audit Chain v0.3-v0.12 &mdash; Sundog</title>
+    <title>Isotrophy Audit Chain v0.3-v0.16 &mdash; Sundog</title>
 
     <!-- OG-BLOCK-START (managed by public/og/_patch_meta.py) -->
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Sundog">
-    <meta property="og:title" content="Isotrophy Audit Chain: structural zeros and conditional rank">
-    <meta property="og:description" content="From v0.3h's structural-zero receipts to v0.11's within-m3 conditional-rank pass: velocity-fraction stratifies stability only after conditioning, not as a mass-marginal held-out predictor.">
+    <meta property="og:title" content="Isotrophy Audit Chain: structural zeros and external transfer">
+    <meta property="og:description" content="From v0.3h's structural-zero receipts to v0.16's bounded Tier-2 external confirmation: tail-resolved velocity-fraction transfers as a conditional stability-rank signal.">
     <meta property="og:image" content="https://sundog.cc/og/isotrophy.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="Isotrophy K_facet card: a doctor's-office bead-maze with 20 gold beads on a sweeping wire (structural-zero receipts) and O_617 isolated on its own dashed-red side loop with a quarantine ring.">
     <meta property="og:url" content="https://sundog.cc/isotrophy">
     <meta property="article:published_time" content="2026-05-22T00:00:00Z">
-    <meta property="article:modified_time" content="2026-05-30T00:00:00Z">
+    <meta property="article:modified_time" content="2026-06-02T00:00:00Z">
     <meta property="article:section" content="Research">
     <meta property="article:tag" content="K_facet">
     <meta property="article:tag" content="isotrophy">
@@ -34,8 +34,8 @@
     <meta property="article:tag" content="claim hygiene">
 
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Isotrophy Audit Chain: structural zeros and conditional rank">
-    <meta name="twitter:description" content="Velocity-fraction stratifies stability within fixed mass-ratio strata; it does not survive as a mass-marginal held-out predictor.">
+    <meta name="twitter:title" content="Isotrophy Audit Chain: structural zeros and external transfer">
+    <meta name="twitter:description" content="Tail-resolved velocity-fraction now transfers to a Tier-2 external catalog as a bounded conditional rank signal.">
     <meta name="twitter:image" content="https://sundog.cc/og/isotrophy.png">
     <meta name="twitter:image:alt" content="Isotrophy K_facet card: a doctor's bead-maze with 20 gold beads (structural-zero receipts) and O_617 isolated on a side loop with a dashed-red quarantine ring.">
 
@@ -43,11 +43,11 @@
     {
       "@context": "https://schema.org",
       "@type": "TechArticle",
-      "headline": "Isotrophy Audit Chain v0.3-v0.12",
-      "description": "A pre-registered isotrophy audit chain: v0.3h's structural-zero receipts plus one O_617 quarantine, and a velocity-fraction signal that passes within fixed mass-ratio strata, fails as a mass-marginal held-out predictor, and does not yet transfer to an external catalog (v0.12 blocked on numerical attrition, not falsified).",
+      "headline": "Isotrophy Audit Chain v0.3-v0.16",
+      "description": "A pre-registered isotrophy audit chain: v0.3h's structural-zero receipts plus one O_617 quarantine, and a velocity-fraction signal that passes within fixed mass-ratio strata and transfers to a Tier-2 external catalog only after tail-resolved continuous scoring.",
       "image": "https://sundog.cc/og/isotrophy.png",
       "datePublished": "2026-05-22",
-      "dateModified": "2026-05-30",
+      "dateModified": "2026-06-02",
       "inLanguage": "en",
       "isAccessibleForFree": true,
       "author": {
@@ -421,7 +421,7 @@
 
     <main>
         <section class="iso-hero">
-            <p class="eyebrow">Isotrophy · K_facet · v0.3-v0.12</p>
+            <p class="eyebrow">Isotrophy · K_facet · v0.3-v0.16</p>
             <h1>The audit chain catches itself working.</h1>
             <p class="lede">
                 Twenty <a class="sd-def" href="/legend#kfacet-structural-zero-receipt" data-def-anchor="left" data-def="A row earns one when c_i = d_i = 0 by construction — not by tolerance, not by post-hoc pruning. The named artifact class.">structural-zero receipts</a> and one <a class="sd-def" href="/legend#kfacet-quarantine" data-def="A row held back from being counted for or against the prediction, with a specific representation-level reason given. O_617 is the sole quarantine in v0.3h.">named quarantine</a>. A
@@ -443,16 +443,17 @@
             </div>
             <p class="lede">
                 That v0.3h result became the first chapter of a
-                pre-registered program that now runs through v0.12. The
+                pre-registered program that now runs through v0.16. The
                 later chain sharpened the Floquet velocity-fraction finding:
                 it stratifies stability inside fixed mass-ratio strata
                 (<code>AUC_cond = 0.6783</code>, exact <code>p = 2.046e-7</code>)
                 but fails as a mass-marginal held-out predictor
                 (<code>AUC = 0.4125</code>). The honest shape is conditional,
-                not universal &mdash; and v0.12 found it does not yet leave home:
-                taking the frozen rule to an external catalog was blocked by the
-                measurement itself (D5 attrition <code>0.3433</code>), not by the
-                data.
+                not universal. The external-transfer arc then split the
+                instrument from the signal: the coarse v0.11 zone form did not
+                transfer cleanly, but the continuous tail-resolved score did
+                (<code>AUC_cond = 0.647</code>, <code>p = 1e-5</code>) on a
+                fresh Tier-2 liao2021 stable-support sample.
             </p>
             <div class="status-ribbon" aria-label="Isotrophy conditional rank profile">
                 <span>v0.7 restricted positive</span>
@@ -460,7 +461,8 @@
                 <span>AUC_cond = 0.6783</span>
                 <span>exact p = 2.046e-7</span>
                 <span>mass-marginal held-out null preserved</span>
-                <span>v0.12 external transfer blocked (numerical)</span>
+                <span class="pass">v0.16 Tier-2 external pass</span>
+                <span>AUC_cond = 0.647</span>
             </div>
 
             <aside class="iso-crossref" aria-label="Where the 21 strict rows came from">
@@ -531,11 +533,13 @@
                 <h2>From structural zeros to a conditional stability signal.</h2>
                 <p>
                     v0.3h is the bead-maze pillar. The full isotrophy program
-                    continued through v0.11, asking whether progressively richer
+                    continued through v0.16, asking whether progressively richer
                     projections of the Li &amp; Liao piano-trio catalog carry
                     stability information. The chain now has a sharper boundary:
                     velocity-fraction ranks stability inside fixed mass-ratio
-                    bins, but not across the catalog marginally.
+                    bins, fails as a mass-marginal score, and transfers externally
+                    only after the saturated coarse zone is replaced by a
+                    tail-resolved continuous score.
                 </p>
                 <div class="stage-list">
                     <div class="stage-card">
@@ -613,7 +617,7 @@
                         </p>
                     </div>
                     <div class="stage-card">
-                        <h3><span class="num">v0.12</span> External transfer blocked</h3>
+                        <h3><span class="num">v0.12</span> Supplementary-A blocked</h3>
                         <p>
                             Taking the frozen rule to supplementary-A, an unbiased
                             uniform probe read attrition 0.3433 (Wilson95
@@ -623,6 +627,34 @@
                             signal-blind search for a tractable external target.
                         </p>
                     </div>
+                    <div class="stage-card">
+                        <h3><span class="num">v0.13</span> Tractable target found</h3>
+                        <p>
+                            The search locks liao2021 as a leakage-clean Tier-2
+                            target. Frame-zone stability and the D5 feasibility
+                            probe clear: the transfer question can be asked on a
+                            fresh external stable-support sample.
+                        </p>
+                    </div>
+                    <div class="stage-card">
+                        <h3><span class="num">v0.14-v0.15</span> Coverage wall, then saturation</h3>
+                        <p>
+                            v0.14 is undecidable because the target's outcome x
+                            feature geometry lacks enough support. v0.15 defeats
+                            coverage but lands directional-weak: the coarse
+                            three-zone feature is almost saturated in liao2021.
+                        </p>
+                    </div>
+                    <div class="stage-card">
+                        <h3><span class="num">v0.16</span> Tail-resolved transfer pass</h3>
+                        <p>
+                            On 1,120 fresh doubly-held-out rows, the continuous
+                            four-frame velocity-fraction score clears the external
+                            floor: AUC_cond = 0.647, p = 1e-5, zero attrition.
+                            The pass is Tier-2, stable-support, pooled, and
+                            heterogeneous by mass cell.
+                        </p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -630,7 +662,7 @@
         <section class="iso-section" aria-label="Load-bearing positive">
             <div class="iso-card">
                 <p class="eyebrow">The Stability Signal</p>
-                <h2>Floquet direction composition stratifies stability after conditioning on mass ratio.</h2>
+                <h2>Floquet direction composition stratifies stability after conditioning and tail resolution.</h2>
                 <p>
                     The v0.7a' result opened the substantive positive in the chain.
                     It uses the velocity fraction of the largest-real-part
@@ -645,6 +677,10 @@
                     the frozen velocity-fraction zone order ranks stable rows
                     above unstable rows on the locked 229-row primary domain
                     (AUC_cond = 0.6783; exact p = 2.046e-7).
+                    v0.16 then gives the bounded external confirmation: on
+                    liao2021 stable-support rows, the continuous tail-resolved
+                    velocity-fraction score transfers at AUC_cond = 0.647,
+                    p = 1e-5.
                 </div>
                 <p>
                     The caveats carry the result. This is not catalog-wide:
@@ -653,19 +689,21 @@
                     mass-marginal held-out predictor: v0.10b tested that directly
                     and failed at AUC = 0.4125. It is not the U-shape mechanism:
                     v0.9 showed that the physical-zone pattern is
-                    monotone-increasing rather than a true U. And it is not yet
-                    externally confirmed: v0.12 took the frozen rule to
-                    supplementary-A and was blocked by D5 attrition (0.34) &mdash;
-                    a numerical-feasibility wall on the nearest catalog, not a
-                    falsification &mdash; with v0.13 opening a signal-blind search
-                    for a tractable external target.
+                    monotone-increasing rather than a true U. And the external
+                    confirmation is bounded: supplementary-A was blocked by D5
+                    attrition, the coarse v0.11 zone form stayed saturated and
+                    sub-threshold on liao2021, and the v0.16 pass holds only for
+                    the continuous tail-resolved score on a Tier-2 stable-support
+                    sample.
                 </p>
                 <p>
                     The durable public claim is narrower and better: this is the
                     first non-branch-aligned low-dimensional signal in the
-                    isotrophy chain, now localized. On the analyzable subset,
-                    Floquet velocity-fraction stratifies stability within
-                    mass-ratio strata, not as a single global score.
+                    isotrophy chain, now localized and externally probed. Floquet
+                    velocity-fraction stratifies stability within mass-ratio
+                    strata, not as a single global score; read continuously in the
+                    tail, it transfers to the liao2021 target as a pooled but
+                    mass-cell-heterogeneous rank signal.
                 </p>
             </div>
         </section>
@@ -796,12 +834,21 @@
                     </p>
                 </div>
                 <div class="not-card">
+                    <h3>Not a universal external transfer claim.</h3>
+                    <p>
+                        v0.16 confirms the tail-resolved continuous score on a
+                        Tier-2 liao2021 stable-support sample. It does not
+                        confirm the coarse zone rule, the full catalog, a
+                        Tier-3 independent target, or a uniform per-cell law.
+                    </p>
+                </div>
+                <div class="not-card">
                     <h3>Not a retired program.</h3>
                     <p>
-                        The isotrophy program reopened through v0.10/v0.11 and is
-                        paused again at the lab-bandwidth level. The next honest
-                        upgrade is external-catalog transfer, a fresh
-                        mass-conditional predictor, or a new mechanism chapter.
+                        The isotrophy program reopened through v0.16 and earned
+                        its first bounded external confirmation. The next honest
+                        upgrade is a fresh heterogeneity replication, a larger
+                        supported-region chapter, or a separate mechanism chapter.
                     </p>
                 </div>
             </div>
@@ -819,6 +866,9 @@
                 <a href="docs/isotrophy/kfacet/kfacet_v10a_jt_trend_form.md">v0.10a ordered-trend form + receipt</a>
                 <a href="docs/isotrophy/kfacet/kfacet_v10b_monotone_vf_heldout_predictor_form.md">v0.10b mass-marginal held-out null</a>
                 <a href="docs/isotrophy/kfacet/kfacet_v11_m3_conditional_vf_rank_form.md">v0.11 within-m3 conditional rank pass</a>
+                <a href="docs/isotrophy/kfacet/kfacet_v12_external_frozen_transfer_form.md">v0.12 supplementary-A attrition block</a>
+                <a href="docs/isotrophy/kfacet/kfacet_v13_external_target_search_form.md">v0.13 external target search</a>
+                <a href="docs/isotrophy/kfacet/kfacet_v16_liao2021_tail_resolved_transfer_form.md">v0.16 tail-resolved Tier-2 external pass</a>
                 <a href="docs/isotrophy/kfacet/kfacet_v03h_o617_deep_dive.md">O_617 deep dive</a>
                 <a href="docs/isotrophy/kfacet/kfacet-runner-spec.md">Runner spec</a>
                 <a href="docs/SUNDOG_V_THREEBODY.md">Three-Body Roadmap</a>

@@ -1456,7 +1456,7 @@ finding preserved. Chapter close at
 `docs/isotrophy/kfacet/kfacet_v09_writeup.md`.
 
 **Isotrophy program PAUSED 2026-05-24 at end-of-v0.9, then advanced
-off-pause through v0.10-v0.13 on 2026-05-29/30.** Pause/frontier
+off-pause through v0.10-v0.16 on 2026-05-29 -> 2026-06-02.** Pause/frontier
 document at `docs/isotrophy/kfacet/kfacet_isotrophy_program_pause.md`.
 The live conditional profile is: v0.10a registers the monotone vf ->
 stability trend in-sample (`p = 7.304e-3`), v0.10b preserves the
@@ -1464,16 +1464,21 @@ mass-marginal held-out null (`AUC = 0.4125 <= 0.5`), and v0.11
 registers the within-m_3 conditional rank signal (`AUC_cond = 0.6783`,
 exact `p = 2.046e-7`). This remains a conditional catalog signal, not
 a theorem-facing promotion and not a v0.3h K_facet structural-null
-revision. The external-catalog rung is now active: v0.12 took the frozen
-rule to same-paper supplementary-A and landed
-`external_transfer_blocked_by_attrition` (unbiased uniform probe attrition
-`0.3433`, Wilson95 `[0.2919, 0.3987]`, the whole CI above the 0.20 block
-gate -- the frozen v0.7 D5 measurement is numerically intractable on ~1/3 of
-supp-A, a feasibility limit, not a falsification), and v0.13 (form locked,
-runner in progress) is the signal-blind search for an independent,
-low-leakage, D5-tractable external target. The program remains paused at the
-lab-bandwidth level; remaining reopening beyond the target search is a
-mass-conditional predictor or new-mechanism work under the locked discipline.
+revision. The external-catalog rung then RESOLVED to a clean Tier-2 PASS:
+v0.12 hit `external_transfer_blocked_by_attrition` on supp-A (a D5 feasibility
+limit, not a falsification); v0.13's signal-blind search left only Tier-2
+Li/Liao 2021 viable; v0.13a/b bounded leakage at 0.0 and certified the coarse
+zone frame-stable; then v0.14 landed `undecidable_coverage`, v0.15
+`directional_weak` (`AUC_cond = 0.5125` -- the coarse zone is 98.4% saturated in
+liao2021), and **v0.16 `tail_resolved_transfer_passes_clean`** (`AUC_cond = 0.647`,
+`p = 1e-5`) once the feature was read as a continuous 4-frame ensemble-median vf
+rather than the coarse zone (the coarse zone on the same held-out rows reads
+`0.510`). This is the program's first held-out external (Tier-2) confirmation that
+the velocity-fraction projection transfers across the ansatz boundary -- pooled,
+mass-cell-heterogeneous (5 of 7 cells in-direction, two reversed), bounded to
+Tier-2, not theorem-facing. The program remains paused at the lab-bandwidth level;
+remaining reopening is the v0.16 mass-cell heterogeneity (v0.17, scoping), a larger
+supported-region chapter, or new-mechanism work under the locked discipline.
 
 ### Cross-Substrate Hand-Offs
 
