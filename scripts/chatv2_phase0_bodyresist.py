@@ -74,6 +74,9 @@ class Cfg:
     min_steps: int = 0               # no early-stop before this many steps (grok flat phase)
     twin_patience: int = 3           # twin early-stops on z_1 acc plateau
     save_ckpt: bool = True
+    fair_readout: bool = False       # read each latent at its channel's freshest (last) position
+                                     # instead of the global final position (computed layout only) --
+                                     # a readout-FAIRNESS fix, not a threshold/metric change
     # sharpness thresholds
     d_dec_frac_min: float = 0.5
     z1_ctrl_min: float = 0.70
@@ -259,6 +262,13 @@ def train_twin(H, cfg, device, seed):
     return twin, {"train_acc_z1": float(best_acc), "steps": steps}
 
 
+def _lastpos(H, bpc):
+    """Computed pair-XOR layout: P=bpc//2 pairs/channel; channel i's last token is at
+    2*((P-1)*H + i) + 1. Gives each latent its freshest read position (channel H-1 -> final token)."""
+    P = max(1, bpc // 2)
+    return [2 * ((P - 1) * H + i) + 1 for i in range(H)]
+
+
 def extract_body(model, H, cfg, device, seed):
     rng = np.random.default_rng(seed + 123)
     bits, z = gen_batch(H, cfg.n_fingerprint, cfg, rng)
@@ -266,7 +276,12 @@ def extract_body(model, H, cfg, device, seed):
     model.eval()
     with torch.no_grad():
         _, hiddens = model(idx, return_hidden=True)
-    bodies = np.stack([h[:, -1, :].cpu().numpy() for h in hiddens], axis=1)
+    if cfg.fair_readout:
+        pos = _lastpos(H, cfg.bits_per_channel)        # H per-channel freshest positions
+        bodies = np.stack([np.stack([h[:, p, :].cpu().numpy() for p in pos], axis=1)
+                           for h in hiddens], axis=1)   # (N, layers, H, d)
+    else:
+        bodies = np.stack([h[:, -1, :].cpu().numpy() for h in hiddens], axis=1)  # (N, layers, d)
     return bodies, z
 
 
@@ -332,27 +347,55 @@ def outlier_analysis(X, z, k_outlier):
 
 
 def fingerprint(bodies, z, cfg):
-    L = bodies.shape[1]
-    zr_layers = [z_recover(bodies[:, l, :], z)[0] for l in range(L)]
+    """bodies (N, layers, d) = global final-position body; or (N, layers, H, d) =
+    per-latent freshest-position views (fair_readout). Each latent i is read from
+    view(l, i); for the non-fair body that view is the same final body for all i,
+    so behavior is identical to before. Corroborating variance/outlier reads use
+    the final-token view (= channel H-1's freshest position)."""
+    fair = bodies.ndim == 4
+    Ln, H = bodies.shape[1], z.shape[1]
+
+    def view(l, i):
+        return bodies[:, l, i, :] if fair else bodies[:, l, :]
+
+    zr_layers = [float(np.nanmean([_cv(_std(view(l, i)), z[:, i]) for i in range(H)]))
+                 for l in range(Ln)]
     lstar = int(np.nanargmax(zr_layers))
-    X = bodies[:, lstar, :]
-    W, accs = latent_readout_dirs(X, z)
-    carry, survive = outlier_analysis(X, z, cfg.k_outlier)
-    Xs = _std(X)
-    V = PCA(n_components=cfg.k_outlier).fit(Xs).components_
-    ed_rob = _pr(PCA().fit(Xs - (Xs @ V.T) @ V).explained_variance_)
-    body_carry = float(np.nanmean(accs[1:])) if len(accs) > 1 else float("nan")
+
+    W, accs = [], []
+    for i in range(H):
+        Xi = _std(view(lstar, i))
+        if len(np.unique(z[:, i])) < 2:
+            W.append(np.zeros(Xi.shape[1])); accs.append(float("nan")); continue
+        lr = LogisticRegression(max_iter=1000).fit(Xi, z[:, i])
+        w = lr.coef_.ravel()
+        W.append(w / (np.linalg.norm(w) + 1e-12)); accs.append(_cv(Xi, z[:, i]))
+    W = np.array(W)
+
+    X0 = _std(view(lstar, 0))
+    if len(np.unique(z[:, 0])) > 1 and H > 1:
+        s = (X0 @ LogisticRegression(max_iter=1000).fit(X0, z[:, 0]).coef_.ravel())[:, None]
+        leak = float(np.nanmean([_cv(s, z[:, j]) for j in range(1, H)]))
+    else:
+        leak = float("nan")
+    body_carry = float(np.nanmean(accs[1:])) if H > 1 else float("nan")
+
+    Xf = _std(view(lstar, H - 1))                          # final-token view for variance/outlier
+    Vk = PCA(n_components=min(cfg.k_outlier, Xf.shape[1])).fit(Xf).components_
+    ed_rob = _pr(PCA().fit(Xf - (Xf @ Vk.T) @ Vk).explained_variance_)
+    carry, survive = outlier_analysis(view(lstar, H - 1), z, cfg.k_outlier)
     return {
+        "fair_readout": fair,
         "body_layer": lstar,
         "zr_by_layer": [round(v, 3) for v in zr_layers],
         "d_dec": round(decodable_dim(W), 3),
-        "eff_dim_raw": round(_pr(PCA().fit(Xs).explained_variance_), 3),
+        "eff_dim_raw": round(_pr(PCA().fit(Xf).explained_variance_), 3),
         "eff_dim_robust": round(ed_rob, 3),
         "z1_acc": round(accs[0], 4),
         "z_recover_mean": round(float(np.nanmean(accs)), 4),
         "body_carry": round(body_carry, 4),
         "z_recover_each": [round(a, 4) for a in accs],
-        "cross_latent_leak": round(cross_latent_leak(X, z, 0), 4),
+        "cross_latent_leak": round(leak, 4),
         "outlier_carries_latents": round(carry, 4),
         "latents_survive_outlier_removal": round(survive, 4),
     }
@@ -488,6 +531,7 @@ def main():
     ap.add_argument("--pos-h", type=int, default=None, help="size pos-emb for this H (fix across curriculum)")
     ap.add_argument("--min-steps", type=int, default=None, help="no early-stop before this (grok floor)")
     ap.add_argument("--patience", type=int, default=None)
+    ap.add_argument("--fair-readout", action="store_true", help="read each latent at its channel's freshest position")
     ap.add_argument("--out", default=None)
     ap.add_argument("--seed", type=int, default=0)
     args = ap.parse_args()
@@ -517,6 +561,8 @@ def main():
         cfg.min_steps = args.min_steps
     if args.patience:
         cfg.patience = args.patience
+    if args.fair_readout:
+        cfg.fair_readout = True
     torch.set_num_threads(4)
     out = pathlib.Path(args.out) if args.out else pathlib.Path(f"results/chatv2/phase0-{args.mode}")
     run(cfg, out)
