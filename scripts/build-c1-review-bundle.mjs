@@ -141,6 +141,33 @@ function main() {
   ].join("\n");
   parts.push(footer);
 
+  // Closing page. The PDF renderer replaces the sentinel below with an on-brand
+  // halo graphic; in plain markdown the text conclusion stands on its own.
+  const closing = [
+    `\n\n${"=".repeat(78)}\n## [ CLOSING ]\n${"=".repeat(78)}\n`,
+    "<!-- PDF_CLOSING_GRAPHIC -->",
+    "",
+    "### Thank you for reading to the end.",
+    "",
+    "That is the whole packet. The ask was narrow on purpose: not endorsement,",
+    "not a Navier–Stokes claim — just a framing check from someone who knows where",
+    "the honest boundary of this problem sits. If the language is too strong, the",
+    "most useful thing you can tell us is exactly which phrase to weaken and why.",
+    "A negative answer is the most valuable outcome we could get.",
+    "",
+    "> **One last note, for a cover-to-cover read.** A sundog — the bright parhelion",
+    "> beside the sun that gives this lab its name — is the sky's own `Φ_K`: a",
+    "> low-information projection of an enormous hidden state (every ice crystal,",
+    "> every ray) that is nonetheless *enough to read the sun's altitude*, yet never",
+    "> enough to reconstruct the whole sky. State-insufficient, decision-sufficient.",
+    "> That is the separation this packet is asking you to check — and the reason we",
+    "> went looking for it in a 2D Navier–Stokes attractor in the first place.",
+    "",
+    "*— Jeffery Hughes Jr., Sundog*",
+    "",
+  ].join("\n");
+  parts.push(closing);
+
   const assembled = parts.join("");
   mkdirSync(path.resolve(REPO, "internal/outreach"), { recursive: true });
   writeFileSync(path.resolve(REPO, OUT), assembled, "utf8");
