@@ -1,9 +1,23 @@
 # v0.17 liao2021 Tail-Resolved Heterogeneity Replication Form
 
-Status: **OPERATOR LOCK 2026-06-02.** No v0.17 runner has been
-written, no v0.17 sample drawn, no v0.17 D5 rows integrated, and no v0.17 statistic
-computed. This form promotes the v0.17 scope memo (Option A) to a lockable
-pre-registration. It is a fresh-row REPLICATION of v0.16, not a new feature search.
+Status: **OPERATOR LOCK 2026-06-02; RUNNER IMPLEMENTED + PREPARED 2026-06-02.**
+The v0.17 runner now exists and `prepare` has drawn the locked 1,120-row
+triple-holdout sample. No v0.17 D5 shards have been run, no merge has occurred,
+and no v0.17 statistic has been computed. This form promotes the v0.17 scope memo
+(Option A) to a lockable pre-registration. It is a fresh-row REPLICATION of v0.16,
+not a new feature search.
+
+Prepared receipt:
+
+```text
+command:      npm run isotrophy:v17:prepare
+out:          results/isotrophy/k-facet-v17-liao2021-heterogeneity/
+supported:    7/7 locked cells
+sample:       1120 rows (80 S + 80 U per cell)
+holdout:      excluded 3520 prior sample rows (v0.14 + v0.15 + v0.16)
+overlap:      v17 vs v14/v15/v16 = 0 / 0 / 0
+status:       tail_resolved_heterogeneity_prepared_not_measured
+```
 
 Lock-review adjustments folded in (2026-06-02):
 
