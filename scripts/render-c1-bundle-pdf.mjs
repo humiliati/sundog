@@ -1,0 +1,124 @@
+#!/usr/bin/env node
+// scripts/render-c1-bundle-pdf.mjs
+//
+// Render internal/outreach/PDE_C1_REVIEW_BUNDLE.md to a print-quality PDF for
+// emailing to a reviewer. Path: markdown-it -> styled print HTML -> headless
+// Chrome --print-to-pdf. Chrome's font stack handles the Unicode-heavy content
+// (Phi_K, epsilon_K, delta_H, R^2, mu, ->, <=, etc.) with no glyph boxes.
+//
+// Output: internal/outreach/PDE_C1_REVIEW_BUNDLE.pdf
+//
+// This is a render-only convenience; it does not modify the bundle. Re-run after
+// `node scripts/build-c1-review-bundle.mjs` if the bundle changes.
+
+import { readFileSync, writeFileSync, existsSync, mkdtempSync, rmSync, statSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { tmpdir } from "node:os";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { createRequire } from "node:module";
+
+const require = createRequire(import.meta.url);
+const MarkdownIt = require("markdown-it");
+
+const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const SRC = path.resolve(REPO, "internal/outreach/PDE_C1_REVIEW_BUNDLE.md");
+const OUT = path.resolve(REPO, "internal/outreach/PDE_C1_REVIEW_BUNDLE.pdf");
+
+const CHROME_CANDIDATES = [
+  "C:/Program Files/Google/Chrome/Application/chrome.exe",
+  "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe",
+  "C:/Program Files/Microsoft/Edge/Application/msedge.exe",
+  "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
+];
+
+function findChrome() {
+  for (const c of CHROME_CANDIDATES) if (existsSync(c)) return c;
+  throw new Error("No Chrome/Edge found for headless PDF rendering");
+}
+
+const CSS = `
+  @page { size: Letter; margin: 0.9in 0.85in; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    font-family: "Georgia", "Cambria", "Times New Roman", serif;
+    font-size: 10.5pt; line-height: 1.5; color: #1a1a1a; max-width: 100%;
+  }
+  h1 { font-size: 19pt; line-height: 1.15; margin: 0 0 0.3em; color: #1A3A52; }
+  h2 { font-size: 14pt; margin: 1.1em 0 0.35em; color: #1A3A52; border-bottom: 1px solid #ccd; padding-bottom: 0.15em; }
+  h3 { font-size: 11.5pt; margin: 0.9em 0 0.3em; color: #244; }
+  h4 { font-size: 10.5pt; margin: 0.8em 0 0.25em; color: #355; }
+  p { margin: 0.45em 0; }
+  code, kbd {
+    font-family: "Consolas", "DejaVu Sans Mono", "Courier New", monospace;
+    font-size: 9pt; background: #f3f4f6; padding: 0.05em 0.3em; border-radius: 3px;
+  }
+  pre {
+    background: #f6f8fa; border: 1px solid #e1e4e8; border-radius: 5px;
+    padding: 0.7em 0.9em; overflow-x: auto; font-size: 8.6pt; line-height: 1.4;
+    white-space: pre-wrap; word-break: break-word;
+  }
+  pre code { background: none; padding: 0; font-size: inherit; }
+  blockquote {
+    margin: 0.6em 0; padding: 0.3em 0 0.3em 1em; border-left: 3px solid #B8831E;
+    background: rgba(255,244,214,0.4); color: #40403a;
+  }
+  table { border-collapse: collapse; margin: 0.7em 0; font-size: 9pt; width: 100%; }
+  th, td { border: 1px solid #ccd; padding: 0.35em 0.55em; text-align: left; vertical-align: top; }
+  th { background: #eef2f5; font-weight: 700; }
+  hr { border: none; border-top: 2px solid #1A3A52; margin: 1.4em 0 0.8em; }
+  a { color: #1A3A52; text-decoration: none; }
+  strong { color: #111; }
+  /* keep section dividers from orphaning their heading */
+  h2, h3 { break-after: avoid; }
+  table, pre, blockquote { break-inside: avoid; }
+`;
+
+function main() {
+  if (!existsSync(SRC)) {
+    throw new Error(`Bundle not found: ${SRC}. Run scripts/build-c1-review-bundle.mjs first.`);
+  }
+  const mdText = readFileSync(SRC, "utf8");
+  const md = new MarkdownIt({ html: false, linkify: true, typographer: false });
+  const bodyHtml = md.render(mdText);
+
+  const html = `<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<title>PDE C1 Finite-Galerkin Separation — Review Bundle</title>
+<style>${CSS}</style></head>
+<body>${bodyHtml}</body></html>`;
+
+  const tmp = mkdtempSync(path.join(tmpdir(), "c1pdf-"));
+  const htmlPath = path.join(tmp, "bundle.html");
+  writeFileSync(htmlPath, html, "utf8");
+
+  const chrome = findChrome();
+  // headless print-to-pdf. file:// URL so relative nothing is needed.
+  const fileUrl = "file:///" + htmlPath.replaceAll("\\", "/");
+  try {
+    execFileSync(chrome, [
+      "--headless",
+      "--disable-gpu",
+      "--no-pdf-header-footer",
+      `--print-to-pdf=${OUT}`,
+      fileUrl,
+    ], { stdio: ["ignore", "pipe", "pipe"], timeout: 120000 });
+  } catch (err) {
+    // Older Chrome rejects --no-pdf-header-footer; retry without it.
+    execFileSync(chrome, [
+      "--headless",
+      "--disable-gpu",
+      `--print-to-pdf=${OUT}`,
+      fileUrl,
+    ], { stdio: ["ignore", "pipe", "pipe"], timeout: 120000 });
+  } finally {
+    rmSync(tmp, { recursive: true, force: true });
+  }
+
+  if (!existsSync(OUT)) throw new Error("Chrome did not produce the PDF");
+  const kb = Math.round(statSync(OUT).size / 1024);
+  console.log(`PDF written: ${path.relative(REPO, OUT).replaceAll("\\", "/")} (${kb} KB)`);
+  console.log(`renderer: ${path.basename(chrome)}`);
+}
+
+main();
