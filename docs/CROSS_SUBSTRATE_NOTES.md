@@ -345,6 +345,22 @@ outcome and feature zone to host the within-stratum comparison the rule needs (v
 argmax-selected direction (not just isotrophy) inherits the (2) caveat; any conditional
 transfer target must clear the (1) and (3) pre-conditions before its statistic is read.
 
+v0.15 and v0.16 then RESOLVED the (3) obstruction and added a fourth sharpening. v0.15
+defeated the coverage wall with an outcome-balanced 80/80 case-control draw over the 7
+stable-support cells -- but landed `directional_weak` (AUC_cond 0.5125, p 3e-4): the
+direction transferred and was significant, yet the coarse {0.25,0.50} zone is 98.4%
+saturated in liao2021's stable-support region, so the binning discarded almost all the
+information and the effect sat below the 0.55 floor. v0.16 then read the SAME projection
+as a continuous 4-frame ensemble-median vf (a new tail-resolved, frame-aggregate feature
+on fresh doubly-held-out rows) and PASSED clean: `AUC_cond 0.647, p 1e-5`, while the
+coarse zone on those same rows reads 0.510. So (4): even a real, frame-stable,
+coverage-satisfied projection can be throttled by FEATURE GRANULARITY -- a binning that
+saturates in the target population hides a signal the continuous form recovers. The net
+result is the program's first held-out external (Tier-2) confirmation: the
+velocity-fraction PROJECTION transfers across the ansatz boundary, even though its coarse
+v0.11 FORM does not (pooled and mass-cell-heterogeneous -- 5 of 7 cells in-direction, two
+reversed -- so a transfer claim, not a uniform law).
+
 Question: can Sundog make a non-tautological first-principles prediction over
 an external three-body catalog, before writing another controller sweep?
 
@@ -525,8 +541,8 @@ public-training scale does not supply the high-dim body either. Measured detail:
 `sundog/docs/proof/PDE_C1_NONMARGINAL_PROBE.md`, `PDE_C1_PROPOSITION.md`,
 `PDE_C2_SHELL_DIMENSIONALITY_PROBE.md`.
 
-**The prediction tested (2026-05-30 → 31): first de-confounded *control* regime-2 —
-on an LLM-like substrate, now sharp at `d_dec ≈ 7`.** The "where it would live"
+**The prediction tested (2026-05-30 → 06-01): a de-confounded, high-dim *control*
+body that resists and *scales* — but a seed-sensitive SHARP.** The "where it would live"
 claim above was built and probed in the new `chatv2` lane
 (`sundog/docs/chatv2/`): a from-scratch transformer trained generatively on a
 synthetic `H`-latent channel task, with the C1/Mesa fingerprint ported to its
@@ -542,23 +558,30 @@ linearly decodable) fixed it. **With both controlled, the generative body is
 state-insufficient-yet-control-sufficient with a clean *objective-driven*
 contrast: the control-only twin fails to build the non-decision state
 (`body_carry` ≈ chance) where generative training builds it (~0.9) — SHARP at
-`H = 2, 4`.** This is the **first sharp control regime-2 in the portfolio** — the
-thing C1 / Mesa / shell could not show — first seen at `H = 2, 4`. **The
-learnability wall then cracked (2026-05-31, `H=8` probe):** a capacity bump
-(`d_model`→192) + signal bump (δ→0.45, de-confound intact — pre-check 0.505) let
-the model *learn* at `H=8` (`eval_loss` 0.497 ≪ 0.693 chance), and the separation
-**held SHARP** — `d_dec = 7.2/8` (a *real* ~7-dim body, **not** the noise-rank of
-the undertrained run), `leak = 0.50` exact chance (resists), `z1 = 0.94`
-(control-sufficient), `body_carry` gen 0.77 vs **twin 0.51 ≈ chance** (the
-objective builds the whole state; control-only builds none). So `H ≥ 8` was an
-*undertraining* wall (F3′), **not** marginality — and chatv2 is now the
-**highest-dimensional sharp resisting body in the portfolio** (`d_dec ≈ 7`, vs
-NSE-C1 marginal / Mesa ~2 / shell ~1.7). **Honest bounds:** synthetic toy, one
-`H` / one seed, δ=0.45 a strong signal (latent easy to estimate once learned);
-`d_dec ≈ 7` is "higher-dim", not LLM-scale; an `H=16` scaling run is testing
-whether it survives to the top of the toy range; **unpromoted**. Detail:
-`sundog/docs/chatv2/PHASE0_2_COMPUTED_LATENTS.md` (+ `PHASE0_MINIMUM_FALSIFIABLE.md`
-Amendment 1).
+`H = 2, 4`.** This was first seen, SHARP, at `H = 2, 4`, and a standalone `H=8`
+probe hit SHARP at `d_dec≈7` (`z1_acc`=0.94). **Scaling, then the honest tempering
+(2026-05-31 → 06-01):**
+
+- A capacity + signal bump (`d_model`→192, δ→0.45, de-confound intact at pre-check
+  0.50) got the model *learning* at `H=8`, and an `H=8→16` warm-start curriculum
+  got it learning at `H=16` too — so the high-`H` wall was **optimization
+  (grokking), not capacity**. The **resisting body scales**: `d_dec` 6.8 (`H=8`)
+  → 13.7 (`H=16`), `leak`≈chance at both. *This is the robust finding.*
+- **But the full SHARP verdict is seed-sensitive.** The curriculum's `H=8`
+  (same seed, different init via `--pos-h`) came back MARGINAL (`z1_acc`=0.61),
+  as did its `H=16`. A read-position fairness fix (read each latent where its
+  channel is freshest) lifts `z1_acc` only ~+0.05 (0.61→0.66) — so the marginal
+  is **genuine solution-quality variance, not a read-position artifact.** The
+  earlier "first dimensional-axis SHARP" headline was **one favorable draw.**
+
+**Robust across draws:** a high-dimensional control body that resists (`d_dec`
+large, `leak`≈chance) and **scales** with `H` — the closest any control substrate
+has come. **Not robust:** the SHARP verdict (control-sufficiency `z1_acc` + the
+objective contrast). **A 3-seed `H=8` seed-stability test (frozen, fair readout,
+Gate E) is staged to measure the SHARP pass-rate before any `d_dec≥20` / `H=32`
+claim** (`chatv2/PHASE1_RESIDUAL_BODY_SCALING_SPEC.md` §4.1 read-back). Synthetic
+toy; **unpromoted**. Detail: `sundog/docs/chatv2/PHASE0_2_COMPUTED_LATENTS.md`
+(+ `PHASE0_MINIMUM_FALSIFIABLE.md` Amendment 1).
 
 **Resistance has (at least) two axes (2026-05-31, Faraday addition).** The
 body-resistance discussion above is *dimensional* - `dim(body) >> dim(shadow)`,
@@ -572,10 +595,12 @@ because the obstruction is cohomological, not dimensional. So "the body resists
 its shadow" can mean *too big to reconstruct* (dimensional) or *globally
 under-determined by local data* (topological). The portfolio's only **exact**
 regime-2 (AB) lives on the topological axis. On the dimensional axis the measured
-*control* substrates are marginal (NSE-C1, Mesa, shell) — **except chatv2, now
-empirically *sharp* (de-confounded, `d_dec ≈ 7`): the first dimensional-axis
-separation, though a synthetic toy rather than an exact result like AB.** See §8
-for the full Faraday/Maxwell reading.
+*control* substrates are marginal (NSE-C1, Mesa, shell). **chatv2 shows a
+de-confounded high-dim body that resists and *scales* (`d_dec` 7→14) — the closest
+any control substrate has come — but the full SHARP verdict is seed-sensitive (one
+draw sharp, one marginal; under a 3-seed test), so it is not yet a robust
+dimensional-axis separation, and a synthetic toy regardless.** See §8 for the full
+Faraday/Maxwell reading.
 
 ### 6.4 The math-or-Buddha epistemic stance
 
@@ -729,6 +754,23 @@ structurally undecidable. v0.12 (measurement reach), v0.13b (feature frame-stabi
 and v0.14 (target coverage) are three distinct pre-conditions a conditional projection
 must clear before an external catalog can confirm it.
 
+Post-v0.16 update: the cleared-but-saturated path then resolved into the program's
+strongest cross-substrate result -- isotrophy's FIFTH projection lesson. v0.15 defeated
+v0.14's coverage wall (outcome-balanced 80/80 case-control over the 7 stable-support
+cells) but landed `directional_weak`: the coarse zone is feature-SATURATED in the target
+(98.4% one zone), so the binning hid the signal below the floor. v0.16 read the same
+projection as a continuous 4-frame ensemble-median vf on fresh doubly-held-out rows and
+**passed clean (AUC_cond 0.647, p 1e-5)**, with the coarse zone on those same rows at
+0.510. So a fourth transfer pre-condition joins (measurement reach / feature
+frame-stability / target coverage): **feature granularity matched to the target
+distribution** -- a projection that is frame-stable, coverage-satisfied, and
+measurement-feasible can still need the right feature RESOLUTION to express its signal
+externally, because a coarse bin that saturates in the target throws the signal away
+while the continuous form recovers it. This is the program's first held-out external
+(Tier-2) confirmation that the velocity-fraction projection transfers across the ansatz
+boundary -- pooled, mass-cell-heterogeneous (5 of 7 cells in-direction, two reversed),
+Tier-2 and bounded, not theorem-facing.
+
 ### 7.3 Threebody
 
 Phase 18 revises this row. The accelerometer / tidal proxy was a useful scaffold
@@ -827,7 +869,8 @@ That is a regime-2 separation (state-insufficient yet control-sufficient) that i
 not the dimensional axis of §6.3. It would be the first *exact* (non-marginal,
 non-learnability-walled) regime-2 point anywhere in the portfolio - the clean
 opposite corner from the three marginal control substrates and the chatv2
-dimensional-axis sharp-at-`d_dec≈7` result (toy, but de-confounded).
+dimensional-axis result (a de-confounded high-dim body that resists and scales,
+`d_dec` 7→14 — but a seed-sensitive SHARP under a 3-seed test; toy).
 
 Honest bounds. The resisting body is "small" - one integer per `H^1` generator,
 not a high-dimensional state - so AB does **not** close the open frontier of §6.3
