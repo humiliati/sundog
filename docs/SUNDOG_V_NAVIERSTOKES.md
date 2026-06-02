@@ -390,7 +390,9 @@ burst-robustness, then the cell (design-for-sign-off, not a patch). C1
 remains the strong, defensible NSE result; C2 is an honest, well-
 characterized open problem.
 The C1 reviewer-outreach draft is staged at
-[`proof/PDE_C1_EXTERNAL_REVIEW_EMAIL_DRAFT.md`](proof/PDE_C1_EXTERNAL_REVIEW_EMAIL_DRAFT.md)
+[`proof/PDE_C1_EXTERNAL_REVIEW_EMAIL_DRAFT.md`](proof/PDE_C1_EXTERNAL_REVIEW_EMAIL_DRAFT.md),
+and the assembled reviewer packet (Riemann/Yang-Mills shape) at
+[`proof/PDE_C1_EXTERNAL_REVIEW_PACKET.md`](proof/PDE_C1_EXTERNAL_REVIEW_PACKET.md)
 (criterion-(c) prep).
 
 **C1 desk-first hardening wave 2026-05-29 (toward finite-Galerkin
