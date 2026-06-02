@@ -32,6 +32,12 @@ Related docs:
 - [`lattice/LITPASS_MEMO.md`](lattice/LITPASS_MEMO.md) - Phase -1 verified citation
   spine (Cousot 1977; HRM / TRM; SATNet / RRN / NeuroSAT; D3PM; Massive
   Activations), peer-review shortlist, and lane-specific pre-registered negatives.
+- [`lattice/PHASE3_B1_INTERNAL_BODY_FINGERPRINT.md`](lattice/PHASE3_B1_INTERNAL_BODY_FINGERPRINT.md)
+  - Phase 3 B1 companion design memo: where the body lives across layers/iterations
+  and whether it is wider than the elimination decision.
+- [`lattice/PHASE4_B3_SOUNDNESS_FRONTIER.md`](lattice/PHASE4_B3_SOUNDNESS_FRONTIER.md)
+  - Phase 4 B3 companion design memo: the false-elimination vs progress/abstention
+  frontier the LDT loss already encodes.
 - [`chatv2/LANE_CHARTER.md`](chatv2/LANE_CHARTER.md) - sibling residual-body
   lane and the variance-PR masking lesson this lane inherits.
 - [`CROSS_SUBSTRATE_NOTES.md`](CROSS_SUBSTRATE_NOTES.md) - body-resistance axis
@@ -251,6 +257,9 @@ Promotion implication:
 
 ### Phase 3 - B1 Internal-Body Fingerprint
 
+Companion design memo: [`lattice/PHASE3_B1_INTERNAL_BODY_FINGERPRINT.md`](lattice/PHASE3_B1_INTERNAL_BODY_FINGERPRINT.md)
+(filed 2026-06-02; explanatory not headline; execution gated on Phase 1 + Phase 2).
+
 Goal: separate the twin-state headline from a broader body-resistance profile.
 
 Question:
@@ -276,6 +285,10 @@ Disposition:
   does not rescue promotion.
 
 ### Phase 4 - B3 Learned-Soundness Frontier
+
+Companion design memo: [`lattice/PHASE4_B3_SOUNDNESS_FRONTIER.md`](lattice/PHASE4_B3_SOUNDNESS_FRONTIER.md)
+(filed 2026-06-02; inference-time sweep primary, lambda_cls retraining gated;
+execution gated on Phase 1 + Phase 2).
 
 Goal: characterize the tradeoff the paper-facing loss already encodes:
 false-eliminations vs abstention/missed-conflicts.
