@@ -1,6 +1,56 @@
 # v0.15 liao2021 Stable-Support Transfer Form Draft
 
-Status: **OPERATOR LOCK 2026-06-01.** Reviewed for self-consistency, non-circularity,
+## Result (2026-06-01)
+
+**Verdict: `stable_support_transfer_directional_weak`.** The coverage wall is defeated
+and the test was decidable; the signal direction transfers and is permutation-significant,
+but the effect size sits below the pre-registered 0.55 external-transfer floor.
+
+```text
+coverage           7/7 supported cells primary, 1120 primary rows   (>= 6 / >= 900)
+attrition          0.0000  Wilson95 [0.0000, 0.0034]   (zero; stable-support region integrates cleanly)
+frame-zone change  0.0170  Wilson95 [0.0109, 0.0263]   (band_A 0.0%, band_B 3.8%, outside 1.7%)
+AUC_cond           0.5125  (J_cond 22960.5 / D_cond 44800)
+p_perm             0.00033 (100k within-cell S/U permutation, seed 20260523)
+```
+
+**Mechanism (the licensed reading + why it is weak).** liao2021's stable-support region
+is **zone-2-saturated**: every supported cell has 154-160 of 160 sampled orbits in the
+velocity-heavy zone (one cell, qA3_qB3, is pure zone-2 -> `zone_degenerate`, contributing
+exactly 0.5 under the locked retain-not-drop rule). The coarse {0.25,0.50} zone feature
+therefore has almost no variance to discriminate on. Where the few low-zone orbits DO
+appear they are disproportionately unstable -- the v0.11 direction (stable rows occupy
+higher zones) -- so the pooled AUC is a real, consistent, significant 0.5125, but tiny
+next to supp-B's internal 0.678. This is NOT the v0.14 discreteness artifact: the
+balanced 80/80 design produced a smooth null (observed 0.51251 < null max 0.51433; null
+mean 0.50000; 32 of 100k permutations >= observed). Per-cell AUC tracks zone spread
+exactly -- the two cells with the most low-zone orbits (qA3_qB0 with 6, AUC 0.5375;
+qA3_qB2 with 4, AUC 0.5250) carry the signal; the near-saturated cells sit at ~0.500-0.506.
+
+**Allowed claim (locked):** "The stable-support liao2021 test detected a directional trace
+below the pre-registered external-transfer effect floor." No PASS-level transfer claim is
+licensed; the supp-B effect size does not reproduce externally.
+
+**Independent verification.** A standalone brute-force recompute from `per_row_sample.csv`
+(re-derive zone from recorded vf with the frozen cutpoints, apply the locked
+N>=120/S>=50/U>=50 primary rule, re-pair S/U within each cell, re-pool) reproduced
+AUC_cond 0.5125111607142857, J_cond 22960.5, D_cond 44800, 7 primary cells, 1120 rows
+BIT-FOR-BIT, with 0 zone re-derivation mismatches. Receipt + verifiers:
+`results/isotrophy/k-facet-v15-liao2021-stable-support-transfer/` (`manifest.json`,
+`per_cell_rank.csv`, `permutation_summary.json`, `_independent_check.{py,json}`,
+`_census_verify.{py,json}`, `_sample_verify.{py,json}`). git_commit d7045c2a.
+
+**Next-chapter boundary.** Per the locked tree, `directional_weak` is neither a PASS (does
+not justify a larger supported-region chapter) nor a `fails` (does not auto-close the
+liao2021 path). The diagnosis is specific: the coarse 3-zone projection saturates where
+vf -> 1, which is most of liao2021's stable-support region. Any continuation must register
+a feature with resolution inside the velocity-heavy band (e.g. a finer or continuous vf
+statistic) -- a new feature and a fresh pre-registration, not a v0.15 re-read.
+
+---
+
+Status: **OPERATOR LOCK 2026-06-01; VERDICT LANDED `stable_support_transfer_directional_weak` 2026-06-01.**
+Reviewed for self-consistency, non-circularity,
 and integrity. The source-support census was independently reproduced from the source
 file with v0.14's own `build_mass_cells` (0 mismatches; 7 supported cells; the 80/80
 case-control draw is feasible in every supported cell after v0.14 exclusion -- smallest
