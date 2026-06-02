@@ -1,8 +1,76 @@
 # v0.16 liao2021 Tail-Resolved Transfer Form Draft
 
-Status: **DRAFT FOR OPERATOR LOCK REVIEW 2026-06-01.** No v0.16 runner has been
-written, no v0.16 sample drawn, no v0.16 D5 rows integrated, and no v0.16 transfer
-statistic computed. This form drafts the feature-resolution follow-up to v0.15.
+## Result (2026-06-02)
+
+**Verdict: `tail_resolved_transfer_passes_clean`.** The first clean external (Tier-2,
+fresh doubly-held-out, outcome-balanced) confirmation in the arc -- the tail-resolved
+continuous score clears the 0.55 floor where the coarse zone could not.
+
+```text
+coverage           7/7 supported cells primary, 1120 rows
+attrition          0.0000  Wilson95 [0.0000, 0.0034]   (conservative all-4-frame rule, zero loss)
+frame-spread gate  median 0.00036, p90 0.0184  -> CLEAN (bounds 0.10 / 0.50)
+AUC_cond           0.6470  (J_cond 28985 / D_cond 44800)
+p_perm             1.0e-5  (100k within-cell score permutation; 0 of 100k >= observed; null mean 0.500, max 0.582)
+```
+
+**The clean triangulation (same 1120 rows, same direction).** The report-only coarse
+zone AUC on these exact rows is `0.510` (saturated, ~chance) -- reproducing v0.15's
+coarse-zone result -- while the continuous tail-resolved score is `0.647`. The only
+difference is binning vs continuous: the coarse {0.25,0.50} zone WAS discarding the
+signal, demonstrated directly on one row set. v0.16's hypothesis is confirmed.
+
+**Honest texture -- the effect is real but mass-cell-heterogeneous.** Per-cell AUC
+ranges 0.43-0.97:
+
+```text
+qA0_qB0 0.972  qA3_qB3 0.745  qA3_qB1 0.696  qA3_qB2 0.639  qA1_qB0 0.575   (v0.11 direction)
+qA2_qB1 0.432  qA3_qB0 0.470                                                (direction reversed)
+```
+
+The v0.11 direction (stable -> higher vf) holds strongly in 5 of 7 cells and reverses in
+2. The pooled effect is significant against the within-cell permutation null (which
+respects cell structure), so it is not a pooling artifact -- but it is NOT a uniform
+per-cell law. Leave-one-out robustness: dropping the strongest cell (qA0_qB0) still gives
+pooled AUC 0.593 > 0.55, so the pass is not a single-cell artifact. The qA0_qB0
+separation (S median vf 0.9965 vs U 0.9904) is far above DOP853 numerical noise, not an
+integration artifact.
+
+**Ensemble vs single-frame.** The secondary single-frame `vf_0` AUC is 0.636, within
+~0.01 of the 4-frame ensemble 0.647 -- as the pre-lock frame-spread preview predicted
+(ensemble approx single-frame for ~90% of orbits). The frame ensemble bought a little
+robustness on the fragile tail; the headline lever was continuous-vs-coarse
+(0.51 -> 0.65), not ensemble-vs-single-frame.
+
+**Allowed claim (locked):** a tail-resolved 4-frame ensemble velocity-fraction score
+transfers as a Tier-2 within-cell stability-ranking signal on fresh held-out liao2021
+stable-support rows; the underlying velocity-fraction projection carries external
+stability information that its coarse-zone v0.11 form does not (v0.15). Does NOT claim
+the coarse zone transfers, full-catalog transfer, prevalence, Tier-3 / independent
+confirmation, or theorem-facing status.
+
+**Independent verification.** A standalone brute-force pair-count recompute (#(S>U) +
+0.5 ties, independent of the runner's midrank path) reproduced AUC_cond
+0.6469866071428572, J 28985, D 44800, the secondary vf_0 AUC 0.635546875, the zone AUC
+0.50984375, and all seven per-cell AUCs BIT-FOR-BIT, with 0 zone_index_vf0 re-derivation
+mismatches. Receipt + verifiers:
+`results/isotrophy/k-facet-v16-liao2021-tail-resolved-transfer/` (`manifest.json`,
+`per_cell_rank.csv`, `permutation_summary.json`, `coarse_zone_relationship.csv`,
+`_independent_check.{py,json}`, `_sample_verify.{py,json}`). git_commit 4bc2b7a7.
+
+**Next-chapter boundary.** Per the locked tree, a PASS may justify a larger
+supported-region or multi-feature liao2021 chapter (which must re-lock scope / sharding /
+attrition / frame / floor / claim). The mass-cell heterogeneity is the natural next
+question: which mass regions carry the transfer and why two reverse. PASS does not
+promote beyond Tier-2 or make isotrophy theorem-facing.
+
+---
+
+Status: **OPERATOR LOCK 2026-06-01; VERDICT LANDED `tail_resolved_transfer_passes_clean` 2026-06-02.**
+No v0.16 runner had been written, no v0.16
+sample drawn, no v0.16 D5 rows integrated, and no v0.16 transfer statistic computed
+at lock time. Runner implementation began after lock. This form locks the
+feature-resolution follow-up to v0.15.
 
 Decision adjustments before lock:
 
@@ -11,6 +79,10 @@ frame stability:        generous frame-spread gate on the four ensemble frames
 ensemble-frame failure: conservative -- any missing ensemble frame counts as attrition
 zone/score relation:    report-only diagnostic, never a verdict gate
 ```
+
+Pre-lock frame-spread preview (marginal only, no stability split, v0.15 rows) found
+the proposed gate clean by a wide margin: median spread 0.0003 and p90 0.0205 against
+clean bounds 0.10 / 0.50. This informed no score threshold and no stability read.
 
 ## Frame
 
@@ -396,6 +468,48 @@ tail_resolved_transfer_fails
 ```
 
 ## Required Outputs
+
+Expected additive runner:
+
+```text
+scripts/v16_liao2021_tail_resolved_transfer.py
+```
+
+Expected command shape:
+
+```powershell
+python scripts/v16_liao2021_tail_resolved_transfer.py prepare `
+  --target docs/isotrophy/external_targets/liao2021_nonhierarchical.txt `
+  --v14 results/isotrophy/k-facet-v14-liao2021-sampled-transfer `
+  --v15 results/isotrophy/k-facet-v15-liao2021-stable-support-transfer `
+  --out results/isotrophy/k-facet-v16-liao2021-tail-resolved-transfer `
+  --stable-per-cell 80 `
+  --unstable-per-cell 80 `
+  --seed 20260523
+
+python scripts/v16_liao2021_tail_resolved_transfer.py shard `
+  --out results/isotrophy/k-facet-v16-liao2021-tail-resolved-transfer `
+  --shard-index 0 `
+  --shard-count 14
+
+python scripts/v16_liao2021_tail_resolved_transfer.py merge `
+  --out results/isotrophy/k-facet-v16-liao2021-tail-resolved-transfer `
+  --shard-count 14
+
+python scripts/v16_liao2021_tail_resolved_transfer.py analyze `
+  --out results/isotrophy/k-facet-v16-liao2021-tail-resolved-transfer `
+  --permutations 100000 `
+  --seed 20260523
+```
+
+Convenience npm aliases mirror the locked command shape:
+
+```powershell
+npm run isotrophy:v16:prepare
+npm run isotrophy:v16:shard -- --shard-index 0 --shard-count 14
+npm run isotrophy:v16:merge
+npm run isotrophy:v16:analyze
+```
 
 ```text
 results/isotrophy/k-facet-v16-liao2021-tail-resolved-transfer/
