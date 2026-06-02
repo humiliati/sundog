@@ -6,11 +6,16 @@ open, who can answer it, what the owner must do to send, and what clears when it
 lands*. The source of truth for the questions is each lane's packet (linked
 below); this doc is the dispatch / decision surface, not a re-statement.
 
-**Last updated:** 2026-06-01.
+**Last updated:** 2026-06-02.
 
 **Status legend:** `DRAFTED` (packet ready, not sent) · `SENT` (awaiting reply) ·
 `RETURNED` (verdict in) · `RESOLVED-IN-HOUSE` (no external review needed) ·
 `CLOSED`.
+
+> **Synthetic pre-review feedback is logged but does NOT change any lane status.**
+> See [Pre-review synthesis feedback](#pre-review-synthesis-feedback-not-external-review).
+> The qwen/wolfram synthesis is not a human domain expert; a lane only moves to
+> `RETURNED` on a real external reply. Those notes are *noted, not acted on*.
 
 ## At a glance
 
@@ -69,11 +74,19 @@ work is load-bearing in two pending reviews.
   objective-overlap discriminator (`proof/PDE_C1_OBJECTIVE_OVERLAP_DISCRIMINATOR.md`)
   shows control-sufficiency does *not* track predictability (Spearman −0.75 / −1.0).
   One honest open puzzle: palinstrophy (predictable but not control-sufficient).
-- **Owner-fill:** `[Name]` (reviewer), `[link]` (packet), tailor the
-  specialty phrase, timeline; signature pre-filled. **Email staged →**
+- **Owner-fill (only blockers):** `[Name]` (reviewer) and the specialty phrase —
+  both human calls. **`[link]` is now solved:** attach the self-contained bundle
+  `internal/outreach/PDE_C1_REVIEW_BUNDLE.md` (58 KB, the 4 primary docs + 3 run
+  receipts inlined, 7 provenance hashes verified vs disk 2026-06-02; rebuild with
+  `node scripts/build-c1-review-bundle.mjs`, render to PDF if a single file is
+  preferred). **Email staged →**
   [`proof/PDE_C1_EXTERNAL_REVIEW_EMAIL_DRAFT.md`](proof/PDE_C1_EXTERNAL_REVIEW_EMAIL_DRAFT.md)
-  ▸ "Send Prep".
-- **Packet:** `proof/PDE_C1_REGIME_GENERALITY_v1.md`,
+  ▸ "Send Prep". Every headline figure in the packet verified against the run
+  receipts 2026-06-02 (942,834 pairs, δ_H 0.0111, ε_K 0.0664, a_mm −0.00079/+0.00058,
+  damp 0.3003/0.2688 — all match).
+- **Packet:** bundle above, or individually
+  `proof/PDE_C1_SEPARATION_STATEMENT.md` (primary),
+  `proof/PDE_C1_REGIME_GENERALITY_v1.md`,
   `proof/PDE_C1_KNN_CONVERGENCE_CHECK.md`,
   `proof/PDE_C1_TWIN_STATE_CERTIFICATE.md`,
   [`SUNDOG_V_NAVIERSTOKES.md`](SUNDOG_V_NAVIERSTOKES.md).
@@ -150,6 +163,32 @@ work is load-bearing in two pending reviews.
 - **Packet:** [`riemann/EXTERNAL_REVIEW_PACKET.md`](riemann/EXTERNAL_REVIEW_PACKET.md)
   (retained as a finished record), [`SUNDOG_V_RIEMANN.md`](SUNDOG_V_RIEMANN.md).
 - **Action:** **none for framing** — off the "waiting" list.
+
+## Pre-review synthesis feedback (NOT external review)
+
+> **What this is.** A synthesis of self-run model passes (Hyperbolic/Qwen +
+> Wolfram Alpha), 2026-06-02. **It is not a human domain expert and does not
+> satisfy any lane's review gate.** Logged here so it becomes the *first*
+> review-feedback note for comparison once a real reply lands, and so the
+> portfolio has a baseline of what a strong LLM reader flagged. **Standing
+> instruction: noted, not acted on.** No artifact is edited on the strength of
+> these quotes; they convert to action only if a human reviewer echoes them.
+
+| # | Quote (verbatim) | Lane it maps to | If actioned, touches | Status |
+| --- | --- | --- | --- | --- |
+| 1 | "Safe with edits — strengthen the body-resistance algorithmic-information disclaimers to prevent conflation with regime-2 sufficiency, but the core boundary discipline is mathematically sound." | NSE-C1 (+ portfolio body-resistance framing) | the body-resistance / regime-2 fence wording in the separation statement §7 and `CROSS_SUBSTRATE_NOTES.md` | noted, not acted on |
+| 2 | "The v6a null is the expected/textbook outcome because local Wilson loops cannot resolve the non-local Polyakov order parameter; it confirms the apparatus reports 'no structure' correctly but is not surprising — say so in the synthesis." | Yang-Mills (this is exactly its load-bearing call (b)) | the informative-null synthesis framing in the YM packet | noted, not acted on |
+| 3 | "NSE framing seems conservative / basically right." | NSE-C1 (the desired Q4 answer) | nothing — this is the target verdict, recorded as the synthetic baseline | noted, not acted on |
+
+**Why hold rather than act:** quote 1 *recommends an edit* and quote 2 *recommends
+a synthesis addition*. Acting on a synthetic reader's edits before the human
+review would (a) contaminate the very framing the human is being asked to judge,
+and (b) collapse the value of logging "what the LLM said vs what the expert said."
+These are pre-registered here precisely so the human reply can be diffed against
+them. The team also signalled these can seed our **own** first review-feedback
+note — i.e. when we send, we may *disclose* "an LLM synthesis pass already
+suggested strengthening the body-resistance disclaimer; do you agree?" as an
+honest prompt, without having silently pre-applied it.
 
 ## Send log
 
