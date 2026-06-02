@@ -493,7 +493,7 @@ class rather than more deterministic primitives.
 
 ### Phase 4 — 5D / Low-Dimensional Collapse Check
 
-Status (2026-06-01): the Phase 4 body-resistance probe is filed at
+Status (2026-06-01): the Phase 4 body-resistance v1 probe is filed at
 [`prereg/arc/PHASE4_BODY_RESISTANCE_SPEC.md`](prereg/arc/PHASE4_BODY_RESISTANCE_SPEC.md)
 with binding verdict **`arc_body_inconclusive`**. The C1/Mesa
 participation-ratio + `FVE(body|shadow)` estimators were ported to ARC over
@@ -502,9 +502,16 @@ non-marginal: PR **9.15** (about 4.6x the marginal control column), no dominant
 mode (top-1 energy 0.287), energy ranks 90/95/99% = 96/159/293, and
 matched-dim held-out `FVE(body|top-28 PCA)` = **0.659**. The frozen high-dim
 gate did not fire because PR 9.15 is below the preregistered `PR_HIGH_MIN = 20`
-bar, even though the reconstruction-resistance clause passed. The honest
-reading is sample-limited inconclusive: ARC is the least-marginal substrate
-measured so far, but not a high-dimensional-body claim at this register size.
+bar, even though the reconstruction-resistance clause passed. Phase 4 v2 then
+ran the spectrum-blind context expansion over all 1000 public-training tasks
+(`U_all = 4308`) with the unchanged bar and returned
+**`arc_body_inconclusive_expanded`**: body PR plateaus at **11.38**
+(prefix sweep 10.76 -> 11.38; `PR/bound = 0.0026`; train_lodo 11.36 and pttest
+11.40 agree), while matched-dim FVE remains reconstruction-resistant
+(`top-28 = 0.644`, top-200 = 0.763). This falsifies the v1 sample-limit
+hypothesis. ARC is the least-marginal substrate measured so far and a stable
+intermediate, but not a `PR >= 20` high-dimensional body at public-training
+scale.
 
 Goal: measure whether shadow coupling induces collapse toward a
 low-dimensional invariant structure analogous to the mesa 5D result.
