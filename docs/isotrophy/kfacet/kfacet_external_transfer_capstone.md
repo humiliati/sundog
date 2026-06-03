@@ -1,7 +1,7 @@
 # K_facet External Transfer Capstone
 
-Status: **CONSOLIDATED 2026-06-03; UPDATED THROUGH v0.19.** This is a paper-side
-synthesis of the v0.11 -> v0.19 external-transfer and reliability-mechanism arc.
+Status: **CONSOLIDATED 2026-06-03; UPDATED THROUGH v0.20.** This is a paper-side
+synthesis of the v0.11 -> v0.20 external-transfer and reliability-mechanism arc.
 It adds no new statistic, no new sample, and no new claim beyond the locked chapter
 receipts.
 
@@ -46,10 +46,13 @@ then explains the otherwise puzzling per-cell heterogeneity.
 | v0.17 | fresh replication + heterogeneity | AUC_cond = 0.646875, p = 1e-5; heterogeneity rho = 1.0 |
 | v0.18 | reliability mechanism | AUC_cond = 0.620208, p = 1e-5; reliability rho = 0.5975, p = 0.00523 |
 | v0.19 | first-principles reliability mechanism | H1 pass: Spearman(re_gap, frame_spread) = -0.836, p = 1e-5; H2 median-gap bridge misses |
+| v0.20 | tail-aggregated direct bridge (confirmatory) | tail_gap_bridge_supported_confirmatory: Spearman(q10 tail gap, AUC_cell) = 0.882, p = 1e-5 (median 0.063 on the same cells) |
 
 The arc is complete because the result now has all four pieces: an internal
 conditional positive, an external transfer, a fresh replication, and a
-pre-registered mechanism for the replicated heterogeneity.
+pre-registered mechanism for the replicated heterogeneity -- and (v0.20) that
+mechanism bridges directly to per-cell transfer strength once read at the
+failure-matched aggregation.
 
 ## What Failed
 
@@ -96,17 +99,28 @@ bit-for-bit clean and the large-gap/high-spread falsifier nearly empty
 (15/2880). The locked verdict is still `spectral_gap_mechanism_partial` because
 the direct H2 bridge used a cell **median** gap summary and missed
 (`rho = 0.063`): the v0.18 AUC relationship lives in the frame-spread tail
-(`frame_p90`), and a median washes that tail out. So the honest synthesis is:
+(`frame_p90`), and a median washes that tail out.
+
+v0.20 tested that exact diagnosis as a confirmatory re-analysis on the same 18
+cells and the same AUC -- swapping the median for a pre-registered low-tail summary
+`tail_gap_reliability = log10(q10(re_gap))` -- and landed
+`tail_gap_bridge_supported_confirmatory`: the direct gap -> AUC bridge returns at full
+strength (`rho = 0.882`, `p = 1e-5`; leave-one-cell-out 0.863-0.922, so not one-cell-driven;
+coherence guard tail -> frame_reliability `rho = 0.707`). So the honest synthesis is:
 
 ```text
-spectral gap -> frame fragility (v0.19 H1, confirmed)
-frame fragility tail -> per-cell AUC reliability map (v0.18, confirmed)
-median spectral gap -> per-cell AUC (v0.19 H2, not confirmed)
+spectral gap -> frame fragility       (v0.19 H1, confirmed: rho = -0.836)
+frame fragility tail -> AUC map        (v0.18, confirmed via frame_p90)
+median spectral gap -> AUC             (v0.19 H2, missed: rho = 0.063)
+tail spectral gap -> AUC               (v0.20, confirmed: rho = 0.882)
 ```
 
-The mechanism is therefore answered at altitude 2: reliability varies because
-argmax-selected Floquet shadows become fragile near spectral degeneracy. The
-specific median aggregation did not carry that mechanism to AUC.
+The mechanism is therefore answered at altitude 2 and now bridges directly to AUC:
+reliability varies because argmax-selected Floquet shadows become fragile near spectral
+degeneracy, and that fragility maps to per-cell transfer strength when the gap is read at
+the failure-matched aggregation -- the low tail -- not the median. The median washed the
+mechanism out of view; it did not break the bridge. (v0.20 is confirmatory and bounded:
+same cells, no Tier-2 evidence upgrade.)
 
 ## Claim Boundary
 
@@ -148,7 +162,10 @@ distribution. v0.18 and v0.19 add the reliability lessons:
 ```text
 for eigenvector/argmax-selected shadows, per-region transfer strength can track
 instrument reliability, and instrument reliability can be predicted label-blind
-from the spectral gap that makes the selection well-posed.
+from the spectral gap that makes the selection well-posed -- read at the LOW TAIL
+of that gap across the region (the fragile sub-population), not a central summary,
+since the tail is the aggregation that carries the mechanism to transfer strength
+(v0.20: q10 tail rho = 0.882 where the median read 0.063).
 ```
 
 That lesson is exportable. It should be tested in new threads, not by stretching
@@ -174,5 +191,7 @@ Primary receipts:
 - `docs/isotrophy/kfacet/kfacet_v17_liao2021_heterogeneity_scope.md`
 - `docs/isotrophy/kfacet/kfacet_v18_liao2021_reliability_auc_form.md`
 - `docs/isotrophy/kfacet/kfacet_v19_spectral_gap_reliability_form.md`
+- `docs/isotrophy/kfacet/kfacet_v20_tail_gap_auc_bridge_form.md`
 - `results/isotrophy/k-facet-v18-liao2021-reliability-auc/manifest.json`
 - `results/isotrophy/k-facet-v19-spectral-gap-reliability/manifest.json`
+- `results/isotrophy/k-facet-v20-tail-gap-auc-bridge/manifest.json`

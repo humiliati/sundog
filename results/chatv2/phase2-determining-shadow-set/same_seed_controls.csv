@@ -1,0 +1,4 @@
+seed,perm_max_func,perm_ok,randdir_ok,controls_ok
+0,0.515,True,True,True
+1,0.5083,True,True,True
+2,0.5017,True,False,False

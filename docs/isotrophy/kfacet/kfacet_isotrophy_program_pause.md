@@ -2,9 +2,10 @@
 
 Status: **PAUSED 2026-05-24** at end-of-v0.9, then **ADVANCED off-pause
 2026-05-29 -> 2026-06-03** with the v0.10 frontier pair (v0.10a + v0.10b), the
-v0.11 conditional-rank close, and the v0.12 -> v0.19 external-transfer / reliability
+v0.11 conditional-rank close, and the v0.12 -> v0.20 external-transfer / reliability
 mechanism arc, which reached a **replicated and mechanistically explained Tier-2
-external PASS at v0.18, then explained frame-fragility at v0.19**:
+external PASS at v0.18, explained frame-fragility at v0.19, and bridged the spectral
+gap directly to AUC at v0.20**:
 the velocity-fraction signal transfers to an independent catalog once read as a
 continuous tail-resolved score rather than the coarse v0.11 zone, the per-cell
 heterogeneity repeats on fresh rows, and a fresh wider-cell reliability chapter
@@ -14,7 +15,11 @@ reversal guard `0` stable-decisive-negative cells). v0.19 then confirmed the
 first-principles H1 link from spectral near-degeneracy to frame-fragility
 (`rho(re_gap, frame_spread) = -0.836`, `p = 1e-5`, falsifier 15/2880), while
 preserving the procedural `spectral_gap_mechanism_partial` verdict because the
-direct per-cell median-gap H2 bridge to AUC missed.
+direct per-cell median-gap H2 bridge to AUC missed. v0.20 then closed that
+aggregation gap as a confirmatory re-analysis on the same 18 cells: a pre-registered
+q10 low-tail gap summary restored the direct gap -> AUC bridge
+(`tail_gap_bridge_supported_confirmatory`, `rho = 0.882`, `p = 1e-5`) -- the median
+washed the mechanism out of view, it did not break the bridge.
 The chain ran from v0.3 (December 2025 / January 2026, pre-anniversary)
 through v0.9 (May 2026) as seven sequential pre-registered chapters with
 seven distinct chapter-close types and one load-bearing in-sample positive
@@ -83,6 +88,14 @@ conditional-positive sequence**:
   (15/2880). H2's median `gap_reliability` -> AUC bridge misses (`rho = 0.063`),
   so the locked verdict stays partial. Interpretation: reliability is spectral
   near-degeneracy at the orbit level; median gap is the wrong cell aggregation.
+- **v0.20 (the tail-aggregated direct bridge):** a confirmatory re-analysis (no new
+  measurement) on the exact v0.18/v0.19 18 cells + AUC. Swapping v0.19's median gap for
+  a pre-registered q10 low-tail summary `log10(q10(re_gap))` landed
+  `tail_gap_bridge_supported_confirmatory`: the direct gap -> AUC bridge returns at full
+  strength (`rho = 0.882`, `p = 1e-5`; leave-one-cell-out 0.863-0.922; coherence guard
+  tail -> frame_reliability `rho = 0.707`). Confirms the v0.19 diagnosis exactly -- the
+  median was the wrong aggregation, not a missing mechanism. Bounded: same cells, not a
+  Tier-2 evidence upgrade.
 
 The mature, falsifiable claim is **"yes, but only after conditioning"**:
 velocity-fraction stratifies three-body stability, but as a function of the
@@ -96,9 +109,11 @@ external-catalog rung is now **CONFIRMED, replicated, and mechanism-explained at
 wall and v0.13's landscape-negative left Li/Liao 2021 as the only viable target, and
 the v0.14 (undecidable) -> v0.15 (directional-weak) -> v0.16 (clean PASS) -> v0.17
 (heterogeneity replication) -> v0.18 (reliability mechanism) -> v0.19
-(spectral-gap fragility mechanism) arc carried it to a held-out external confirmation
-of the continuous velocity-fraction projection plus a registered explanation of its
-per-cell heterogeneity and orbit-level frame fragility. Remaining axes: a larger
+(spectral-gap fragility mechanism) -> v0.20 (tail-gap direct bridge) arc carried it
+to a held-out external confirmation of the continuous velocity-fraction projection
+plus a registered explanation of its per-cell heterogeneity, its orbit-level frame
+fragility, and the direct spectral-gap -> AUC bridge under the failure-matched tail
+aggregation. Remaining axes: a larger
 supported-region or multi-feature chapter, or new-mechanism work -- not another
 rephrasing of the same table.
 
@@ -262,7 +277,7 @@ v0.18:  reliability-conditioned per-cell AUC chapter (fresh quadruple-holdout
 
 ## The Load-Bearing Findings
 
-After seven chapters plus the v0.10-v0.19 frontier-advance, three findings
+After seven chapters plus the v0.10-v0.20 frontier-advance, three findings
 carry the program's substantive output (the second is now a publishable
 conditional profile with a replicated and mechanism-explained Tier-2 external transfer):
 
@@ -313,7 +328,7 @@ conditional profile with a replicated and mechanism-explained Tier-2 external tr
    held-out chapter LOCALIZED the signal rather than killing it, and v0.11
    registered that localization under the exact conditional rank gate.
 
-   **The external-transfer arc (v0.12 -> v0.19): from supp-B-internal to a replicated,
+   **The external-transfer arc (v0.12 -> v0.20): from supp-B-internal to a replicated,
    mechanism-explained clean Tier-2 PASS.** v0.12 took the frozen rule to same-paper supplementary-A and hit
    `external_transfer_blocked_by_attrition` (uniform probe attrition 0.3433, the whole
    CI above the 0.20 gate; a measurement-feasibility limit, not a falsification).
@@ -337,10 +352,14 @@ conditional profile with a replicated and mechanism-explained Tier-2 external tr
    v0.19 then explained frame-fragility itself: exact v0.18 re-measure plus spectrum
    dump gave **rho(re_gap, frame_spread) = -0.836, p = 1e-5**, with a clean
    large-gap/high-spread falsifier, while the median-gap -> AUC H2 bridge missed
-   (**rho=0.063**). The coarse v0.11 zone FORM does not transfer (v0.15); its
+   (**rho=0.063**). v0.20 then closed that bridge as a confirmatory re-analysis on the
+   same cells: the pre-registered q10 low-tail gap reads **rho=0.882, p=1e-5**
+   (`tail_gap_bridge_supported_confirmatory`), so the median was the wrong aggregation,
+   not a missing mechanism. The coarse v0.11 zone FORM does not transfer (v0.15); its
    continuous tail-resolved relative does, replicates, and is now mechanistically
-   explained by frame reliability plus spectral near-degeneracy
-   (v0.16/v0.17/v0.18/v0.19). Bounded to Tier-2 / stable-support / not theorem-facing.
+   explained by frame reliability plus spectral near-degeneracy read at the
+   failure-matched tail (v0.16/v0.17/v0.18/v0.19/v0.20). Bounded to Tier-2 /
+   stable-support / not theorem-facing.
 
 3. **The methodology surface**. The chain produced and locked
    a comprehensive set of pre-registration discipline tools that
@@ -633,7 +652,7 @@ sequential audits on the v0.7a' analyzable subset.
 
 ## Doc Trail
 
-- `kfacet_external_transfer_capstone.md` -- consolidated v0.11-v0.19
+- `kfacet_external_transfer_capstone.md` -- consolidated v0.11-v0.20
   external-transfer capstone and claim boundary.
 - `kfacet_v03h_writeup.md` -- v0.3 chapter close.
 - `kfacet_v04_writeup.md` -- v0.4 chapter close.
@@ -670,13 +689,15 @@ sequential audits on the v0.7a' analyzable subset.
 - `kfacet_v19_spectral_gap_reliability_form.md` -- v0.19 first-principles
   reliability mechanism; H1 spectral-gap -> frame-fragility positive, H2 median
   gap -> AUC bridge not confirmed.
+- `kfacet_v20_tail_gap_auc_bridge_form.md` -- v0.20 confirmatory tail-gap bridge;
+  q10 low-tail gap -> AUC `rho = 0.882` (median 0.063 on the same cells).
 - `docs/CROSS_SUBSTRATE_NOTES.md` -- cross-substrate
   framing (avenue 6).
 - `docs/isotrophy/sundog_v_isotrophy.md` -- full chapter-by-chapter dated log.
 
 ---
 
-Isotrophy program paused at end-of-v0.9, then reopened through the v0.10-v0.19
+Isotrophy program paused at end-of-v0.9, then reopened through the v0.10-v0.20
 conditional/external-transfer frontier. The live result is now sharper:
 velocity-fraction is a real conditioned stability rank signal, externally
 confirmed, replicated, and mechanism-explained at Tier-2 when read as a
@@ -685,6 +706,9 @@ heterogeneity as a frame-reliability map under a registered label-blind test.
 v0.19 then explained frame-fragility itself as spectral near-degeneracy
 (`rho(re_gap, frame_spread) = -0.836`, `p = 1e-5`), while preserving the
 procedural `partial` label because the direct per-cell median-gap H2 bridge
-missed. The mechanism is strong at the orbit/reliability level; the median
-aggregation is not the AUC bridge.
+missed. v0.20 then closed that aggregation gap (confirmatory, same cells): a
+pre-registered q10 low-tail gap restored the direct gap -> AUC bridge
+(`rho = 0.882`, `p = 1e-5`, `tail_gap_bridge_supported_confirmatory`). The
+mechanism is strong at the orbit/reliability level and bridges directly to AUC at
+the failure-matched tail aggregation; the median simply washed it out of view.
 Reopening is invited; mechanism-laundering is not.

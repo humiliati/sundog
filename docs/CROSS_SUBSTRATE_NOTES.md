@@ -458,7 +458,7 @@ discarded.
 | Mesa controller | controller hidden state (`net.7`, 256-wide but **effectively ~2-dim** - a fn of 6-dim obs) | entangled `5D net.7` subspace - **sharp on irreducibility, marginal on body-resistance** (`FVE(net.7\|5D)~0.97`); see the body-resistance note below |
 | Geometry / HaloSim | full atmospheric optics | small set of halo generators / canonical implied circles |
 | Threebody | 18-dim full state | radius-gated inward reflex in the mapped near-escape pocket |
-| Isotrophy | `S3` symmetry orbit of a 3-body choreography; supplementary-B / Li-Liao 2021 stability catalogs | residual `Z2` generators surviving `S3 -> Z2` mass perturbation; Floquet velocity-fraction conditioned on mass strata; tail-resolved continuous vf with frame reliability explaining transfer heterogeneity |
+| Isotrophy | `S3` symmetry orbit of a 3-body choreography; supplementary-B / Li-Liao 2021 stability catalogs | residual `Z2` generators surviving `S3 -> Z2` mass perturbation; Floquet velocity-fraction conditioned on mass strata; tail-resolved continuous vf with frame reliability explaining transfer heterogeneity; spectral-gap LOW TAIL (`q10` Floquet Re-gap) as a label-blind a-priori reliability predictor (v0.19 fragility / v0.20 tail-bridge `rho = 0.882`) |
 | Navier-Stokes (C1) | 2D Kolmogorov attractor state (finite-Galerkin, 440 real DOF) | low-Fourier signature `Phi_K` (K=3, 18-dim) - **but the body barely resists**: read-off `FVE(body\|shadow) ~ 0.997` (energy) / `0.993` (enstrophy), a near-invertible projection, so the regime-2 separation is **marginal**; genuine under-determination (`R^2 ~ 0.71` per-DOF) sits only in physically-negligible dissipation-range modes |
 | Faraday / EM (homogeneous) | EM field history on a contractible patch (smooth `A`, `dF = 0`) | plaquette holonomy `∮A = ∫F` - **zero body-resistance *by identity***: closure is the Bianchi identity `dF = d(dA) = 0`, so the shadow reconstructs the body exactly. The exact-zero anchor of the axis (§8.1) |
 | Aharonov-Bohm / EM (topological) [EARNED] | EM field config on a non-contractible patch (`H^1 != 0`) | loop holonomy `∮A = Φ` - **exact *topological* body-resistance**: one flux number is state-insufficient (cannot rebuild interior `B`) yet control-sufficient (fixes the AB phase); local `F` is control-blind. Portfolio's first *exact* regime-2 witness; earned by Phase 7 case 3 (§8.2) |
@@ -815,6 +815,23 @@ near-degenerate. H2 missed because it used a per-cell **median** gap summary
 to the failure mode**. For chatv2 / Mesa / NSE, compute the eigengap or control-basis
 gap first as a label-blind reliability predictor, then decide whether the downstream
 claim is median-, tail-, or threshold-driven before collapsing a region to one number.
+
+Post-v0.20 update: that open question is now tested and answered -- TAIL. v0.20 is a
+confirmatory re-analysis (no new measurement) on the SAME 18 cells and SAME AUC: it swaps
+v0.19's per-cell **median** gap for a pre-registered **low-tail** summary
+`tail_gap_reliability = log10(q10(re_gap))` and lands `tail_gap_bridge_supported_confirmatory`.
+The direct spectral-gap -> AUC bridge the median missed (`rho = 0.063`) returns at full
+strength in the tail (`rho = 0.882`, `p = 1e-5`; leave-one-cell-out 0.863-0.922, so not
+one-cell-driven; the coherence guard tail -> frame_reliability `rho = 0.707` confirms the
+bridge runs through the reliability mechanism). The locked-primary q10 is the vindicated
+sweet spot of tail depth: the deeper q05 (`rho = 0.589`) drifts toward min-outlier noise,
+the shallower q20 (`rho = 0.360`) drifts back toward the median's wash-out. So the export
+sharpens to its operational form -- for an eigenvector/argmax-selected shadow, compute the
+selection spectral gap (Floquet Re-gap / LLM residual-stream eigengap / Mesa control-basis
+gap / NSE projection gap), then read its LOW TAIL across the region (the fragile
+sub-population, not a central summary) as the label-blind a-priori reliability predictor.
+Bounded as registered: confirmatory, same cells, not an evidence upgrade -- what it earns is
+that v0.19's "partial" is now legible as a strong, direct, tail-aggregated spectral bridge.
 
 ### 7.3 Threebody
 
