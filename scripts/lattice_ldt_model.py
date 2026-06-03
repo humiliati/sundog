@@ -66,6 +66,7 @@ FFN_MULT = 4.0
 LAMBDA_CLS = 0.1
 THETA_CLS = 0.6
 SEQ_LEN = 1 + N2            # CLS + 81 cells
+DEFAULT_DATA_DIR = "docs/lattice/Soduko-Extreme"   # build-gate dataset (gitignored)
 
 
 # ============================================================================
@@ -121,15 +122,58 @@ def gen_sudoku(rng: torch.Generator, n_holes: int) -> tuple[list[list[int]], lis
     return puz, sol
 
 
-def load_dataset(data_dir: Path) -> tuple[list, list]:
-    """Sudoku-Extreme loader interface (build-gate). Expects puzzles+solutions as 81-char
-    strings (the HRM/TRM Sudoku-Extreme format: lines of `<puzzle81> <solution81>` or a
-    csv). NOT IMPLEMENTED against a present dataset — the dataset is not on disk; this is
-    the canonical hook. The build-gate run wires the real path here."""
-    raise SystemExit(
-        f"Sudoku-Extreme not found under {data_dir}. The build-gate REQUIRES the real "
-        f"dataset (HRM/TRM Sudoku-Extreme); synthetic puzzles are smoke-only and never "
-        f"produce a build_gate verdict. Obtain the dataset and wire load_dataset().")
+def _parse_grid(s: str) -> list[list[int]]:
+    cells = [0 if ch in "._0" else int(ch) for ch in s.strip()[:N2]]
+    return [cells[r * N:(r + 1) * N] for r in range(N)]
+
+
+def _valid_solution(g: list[list[int]]) -> bool:
+    """Each row/col/3x3-box is a permutation of 1..9 — doubles as a parser correctness check."""
+    need = set(range(1, N + 1))
+    if any(set(row) != need for row in g):
+        return False
+    if any({g[r][c] for r in range(N)} != need for c in range(N)):
+        return False
+    return all({g[r][c] for r in range(br, br + 3) for c in range(bc, bc + 3)} == need
+               for br in range(0, N, 3) for bc in range(0, N, 3))
+
+
+def _read_csv(path: Path, limit: int) -> list[tuple]:
+    """Stream `source,question,answer,rating`; -> [(puzzle 9x9, solution 9x9)]. limit=0 reads all."""
+    pairs = []
+    with path.open("r", encoding="utf-8") as fh:
+        fh.readline()                                          # header
+        for i, line in enumerate(fh):
+            if limit and i >= limit:
+                break
+            parts = line.rstrip("\n").split(",")
+            if len(parts) < 3 or len(parts[1]) != N2 or len(parts[2]) != N2:
+                continue
+            pairs.append((_parse_grid(parts[1]), _parse_grid(parts[2])))
+    return pairs
+
+
+def load_dataset(data_dir: Path, n_train: int = 1000, limit_test: int = 0,
+                 subset_seed: int = 0) -> tuple[list, list]:
+    """Parse Sudoku-Extreme CSVs -> (train_pairs, test_pairs). The paper's headline trains
+    on ~1K puzzles (Sudoku-Extreme's small-data point), so `n_train` caps the train subset.
+    The EXACT 1K subset is a build-gate alignment param (flag for the audit team): the CSV
+    is grouped by `source`, so 'first 1K' would be single-source-biased; default is a seeded
+    sample from a multi-source pool. n_train=0 reads all of train.csv (memory-heavy)."""
+    train_csv, test_csv = data_dir / "train.csv", data_dir / "test.csv"
+    if not train_csv.exists() or not test_csv.exists():
+        raise SystemExit(f"Sudoku-Extreme not found under {data_dir} (need train.csv + test.csv).")
+    if n_train:
+        pool = _read_csv(train_csv, max(n_train * 100, 100000))     # pool spans multiple sources
+        if len(pool) > n_train:
+            g = torch.Generator().manual_seed(subset_seed)
+            idx = torch.randperm(len(pool), generator=g)[:n_train].tolist()
+            train_pairs = [pool[i] for i in idx]
+        else:
+            train_pairs = pool
+    else:
+        train_pairs = _read_csv(train_csv, 0)
+    return train_pairs, _read_csv(test_csv, limit_test)
 
 
 def grids_to_tensors(pairs: list[tuple], device) -> tuple[torch.Tensor, torch.Tensor]:
@@ -296,6 +340,19 @@ def run_smoke(cfg: Cfg, device) -> dict:
     cap: dict = {}
     model(lat[:2], capture=cap)
     sr = solve_rate(model, pairs[:8], device, cfg)
+    # real-data resmoke: confirm load_dataset parses real Sudoku-Extreme + the model runs on it
+    real = {"checked": False, "note": "dataset not found at canonical path"}
+    ddir = Path(cfg.data_dir) if cfg.data_dir else Path(DEFAULT_DATA_DIR)
+    if (ddir / "test.csv").exists():
+        rp = _read_csv(ddir / "test.csv", 32)                    # 32 real test puzzles
+        rlat, rsol = grids_to_tensors(rp, device)
+        relim, _ = model(rlat)
+        rloss, _, _ = compute_loss(model, rlat, rsol, cfg, dev_rng)
+        valid = sum(_valid_solution(s) for _, s in rp)
+        clues = sum(1 for p, _ in rp for row in p for v in row if v) / max(1, len(rp))
+        real = {"checked": True, "n_loaded": len(rp), "valid_solutions": f"{valid}/{len(rp)}",
+                "parser_ok": bool(valid == len(rp)), "avg_clues": round(clues, 1),
+                "elim_shape": list(relim.shape), "loss": round(rloss.item(), 4)}
     return {
         "mode": "smoke", "param_count_full_config": pc,
         "param_count_in_budget": bool(6e5 <= pc <= 1.0e6),  # ~800K target
@@ -304,6 +361,7 @@ def run_smoke(cfg: Cfg, device) -> dict:
         "loss_decreased": bool(losses[-1] < losses[0]),
         "capture_grains": len(cap), "capture_grains_expected": cfg.n_iters * cfg.n_layers,
         "smoke_solve_rate": round(sr, 4), "device": str(device),
+        "real_data_check": real,
     }
 
 
@@ -314,7 +372,8 @@ def run_build_gate(cfg: Cfg, device) -> dict:
     set_determinism(cfg.seed)
     if not cfg.data_dir:
         raise SystemExit("--data-dir (Sudoku-Extreme root) required for build-gate.")
-    train_pairs, test_pairs = load_dataset(Path(cfg.data_dir))   # raises until wired
+    # n_train=1000 matches the paper's small-data Sudoku-Extreme regime; test load capped for memory
+    train_pairs, test_pairs = load_dataset(Path(cfg.data_dir), n_train=1000, limit_test=(cfg.max_eval or 10000))
     rng = torch.Generator(device=device).manual_seed(cfg.seed)
     model = LatticeDeductionTransformer(cfg).to(device)
     opt = torch.optim.AdamW(model.parameters(), lr=cfg.lr, weight_decay=cfg.weight_decay)
