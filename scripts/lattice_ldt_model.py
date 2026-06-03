@@ -210,17 +210,17 @@ def load_dataset(data_dir: Path, n_train: int = 1000, limit_test: int = 0,
 
 
 def grids_to_tensors(pairs: list[tuple], device) -> tuple[torch.Tensor, torch.Tensor]:
-    """(puzzle, solution) grids -> (lattice0 (B,81,9) clue-seeded ⊤, solution idx (B,81))."""
-    B = len(pairs)
-    lat = torch.ones(B, N2, DIGITS, device=device)        # ⊤ : all candidates open
-    sol = torch.zeros(B, N2, dtype=torch.long, device=device)
-    for b, (puz, s) in enumerate(pairs):
-        for r in range(N):
-            for c in range(N):
-                i = r * N + c
-                sol[b, i] = s[r][c] - 1
-                if puz[r][c] != 0:                          # clue → singleton candidate set
-                    lat[b, i].zero_(); lat[b, i, puz[r][c] - 1] = 1.0
+    """(puzzle, solution) grids -> (lattice0 (B,81,9) clue-seeded ⊤, solution idx (B,81)).
+    Vectorized: build (B,81) puzzle/solution tensors in one shot, then the lattice with tensor
+    ops (clue cells -> singleton, blanks -> all open) - no per-cell GPU scalar assignment."""
+    puz = torch.tensor([[v for row in p for v in row] for p, _ in pairs], dtype=torch.long, device=device)  # (B,81)
+    sln = torch.tensor([[v for row in s for v in row] for _, s in pairs], dtype=torch.long, device=device)  # (B,81)
+    sol = sln - 1                                                          # (B,81) 0..8
+    clue = (puz != 0)                                                      # (B,81)
+    clue_digit = (puz - 1).clamp(min=0)                                    # (B,81); 0 for blanks (unused)
+    lat = torch.ones(puz.shape[0], N2, DIGITS, device=device)             # ⊤ : all open
+    lat = torch.where(clue[:, :, None], torch.zeros_like(lat), lat)       # zero clue cells
+    lat = lat + F.one_hot(clue_digit, DIGITS).to(lat.dtype) * clue[:, :, None].to(lat.dtype)   # set clue digit
     return lat, sol
 
 
@@ -685,6 +685,7 @@ def main() -> int:
     ap.add_argument("--max-eval", type=int, default=0)
     ap.add_argument("--batch", type=int, default=64)
     ap.add_argument("--lr", type=float, default=1e-3)
+    ap.add_argument("--aug-factor", type=int, default=50, help="augmented pool = aug_factor x 1000")
     ap.add_argument("--resume", default="", help="latest or checkpoint path")
     ap.add_argument("--checkpoint-every", type=int, default=0)
     ap.add_argument("--log-every", type=int, default=100)
@@ -697,7 +698,7 @@ def main() -> int:
     ap.add_argument("--allow-dirty", action="store_true")
     a = ap.parse_args()
     cfg = Cfg(mode=a.mode, stage=a.stage, data_dir=a.data_dir, out=a.out, seed=a.seed,
-              max_steps=a.max_steps, max_eval=a.max_eval, batch=a.batch, lr=a.lr,
+              max_steps=a.max_steps, max_eval=a.max_eval, batch=a.batch, lr=a.lr, aug_factor=a.aug_factor,
               resume=a.resume, checkpoint_every=a.checkpoint_every, log_every=a.log_every,
               eval_every=a.eval_every, eval_sample=a.eval_sample, theta_drop=a.theta_drop,
               theta_cls=a.theta_cls, max_deduction_steps=a.max_deduction_steps,
