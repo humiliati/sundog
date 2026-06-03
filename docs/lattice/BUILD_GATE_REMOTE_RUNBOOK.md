@@ -15,13 +15,19 @@ scores it with the I5 rollout ([`PHASE1_I5_ROLLOUT_CONTRACT.md`](PHASE1_I5_ROLLO
 number is a B-layer result** ([`PROMOTE_GATE.md`](PROMOTE_GATE.md) R1).
 
 The model is tiny (**798,346 params, d=128**); the paper trains it in ~4 min on a
-B200. We *have* a local CUDA GPU, so offloading is **not** about compute we lack —
-it's about (a) freeing the local box for the wall-clock-long I2–I5 tuning loop, (b)
-running tuning attempts in parallel on cheap throwaway instances, (c) a faster GPU
-for the cap-bound rollout-eval. A single GPU is enough; **do not provision a
-cluster.** The runner is staged + checkpointed, so the **same commands run locally for
-an overnight checkpointed run** (often the cheaper default since we already have a
-CUDA GPU) — reach for remote only for speed or for running tuning attempts in parallel.
+B200. But it is a **weight-shared 16-iteration recurrence** = 64 sequential
+layer-applications/step firing ~1000+ tiny CUDA kernels — **launch-bound**, not
+compute-bound, so GPU *generation* matters far more than param count. The local box
+is a **GeForce GTX 1080** (Pascal, CUDA capability 6.1, 2016): measured **~1.07 s/step**
+(→ many hours per real run) AND **`torch.compile` is unavailable** on it (the Triton
+backend that fuses the recurrence into CUDA graphs needs CC ≥ 7.0 — measured: it
+raises "GTX 1080 too old"). So offload here *is* about compute we lack at practical
+speed: a CC ≥ 7.0 GPU (A100/H100/4090) gets both faster kernels *and* `--compile`
+(CUDA graphs collapse the per-launch overhead that dominates this model). A single
+GPU is enough; **do not provision a cluster.** The runner is staged + checkpointed and
+the same commands run locally — but the local GTX 1080 is impractically slow and
+can't `--compile`, so **remote (a CC ≥ 7.0 GPU) is the recommended path for any binding
+build-gate run**, not merely a speed convenience.
 
 ## 1. Sizing + cost (verify current pricing at sign-up)
 
@@ -35,9 +41,11 @@ Hyperbolic on-demand, hourly, no contract
 | A100 80 GB | ~$1.80 | **recommended** (throughput for rollout-eval) |
 | H100 SXM 80 GB | ~$3.20 | only for max eval speed |
 
-Our envelope: **~0.5–3 GPU-h per build-gate attempt**, **~5–20 GPU-h for the whole
-I2–I5 loop** → **≈ $3–10 (4090) / $10–36 (A100)**. VRAM is a non-issue (<10 MB
-weights; tiny activations). 1 GPU.
+All three are **CUDA capability ≥ 7.0** (4090 = 8.9, A100 = 8.0, H100 = 9.0) → all
+support `--compile`, the launch-bound recurrence's big win (the local CC-6.1 GTX 1080
+does not — see §0). Our envelope: **~0.5–3 GPU-h per build-gate attempt**, **~5–20
+GPU-h for the whole I2–I5 loop** → **≈ $3–10 (4090) / $10–36 (A100)**. VRAM is a
+non-issue (<10 MB weights; tiny activations). 1 GPU.
 
 ## 2. Provision (one-time setup + per-run rent)
 
@@ -114,21 +122,36 @@ deterministic continuation, not a restart.
 ```bash
 cd ~/sundog
 OUT=results/lattice/build-gate-sudoku-extreme
-# 1. TRAIN — checkpoint every 1000 steps; log every 100; cheap one-shot DIAGNOSTIC every 1000
+# 1. TRAIN — --aug-factor (symmetry-augmented pool; breaks 1K-set overfit) + --compile
+#    (CUDA graphs, CC>=7.0). Checkpoint every 1000; cheap one-shot DIAGNOSTIC every 1000.
+#    First --compile step is slow (~1-3 min compile warmup); steps then run fast.
 python scripts/lattice_ldt_model.py --mode build-gate --stage train \
-  --data-dir docs/lattice/Soduko-Extreme --out $OUT --seed 0 \
-  --max-steps 20000 --batch 64 --checkpoint-every 1000 --log-every 100 --eval-every 1000 --max-eval 1000
-
-# 2. RESUME / EXTEND if interrupted or undertrained (continues the exact RNG stream)
-python scripts/lattice_ldt_model.py --mode build-gate --stage train \
-  --data-dir docs/lattice/Soduko-Extreme --out $OUT --seed 0 --resume latest \
+  --data-dir docs/lattice/Soduko-Extreme --out $OUT --seed 0 --aug-factor 50 --compile \
   --max-steps 40000 --batch 64 --checkpoint-every 1000 --log-every 100 --eval-every 1000 --max-eval 1000
 
+# 2. RESUME / EXTEND if the diag one-shot is still climbing (continues the exact RNG stream)
+python scripts/lattice_ldt_model.py --mode build-gate --stage train \
+  --data-dir docs/lattice/Soduko-Extreme --out $OUT --seed 0 --resume latest --aug-factor 50 --compile \
+  --max-steps 80000 --batch 64 --checkpoint-every 1000 --log-every 100 --eval-every 1000 --max-eval 1000
+
 # 3. EVAL = the binding verdict (rollout-exact). Fail-fast at 1k first, then scale.
+#    No --compile here: the rollout's dynamic DFS doesn't benefit + can trigger recompiles.
 python scripts/lattice_ldt_model.py --mode build-gate --stage eval \
   --data-dir docs/lattice/Soduko-Extreme --out $OUT --seed 0 --resume latest --max-eval 1000
 # if promising (rollout_exact_rate near 1) -> re-run eval with --max-eval 10000 for the binding read
 ```
+
+- **Why `--aug-factor`:** the bare-1K train *overfits* — a step-14000 local checkpoint
+  scored `build_gate_partial` with **~31.5 false-eliminations/puzzle** on held-out test
+  (it memorized the 1000 puzzles but eliminates true solution digits on unseen ones →
+  unsound). `--aug-factor N` trains on an `N×1000` validity-preserving-symmetry pool
+  (digit-permute + band/within row+col permutes + transpose), the HRM/TRM fix for the
+  1K Sudoku-Extreme regime. Augmentation makes the task un-memorizable → expect to train
+  *longer* (more steps) than the bare run, watching `diag_one_shot_exact_rate` climb.
+- **Why `--compile`:** ~1000+ tiny kernels/step makes the model launch-bound;
+  `torch.compile(mode="reduce-overhead")` fuses the 16-iter recurrence into CUDA graphs
+  (CC ≥ 7.0 only). It falls back to eager with a logged `torch_compile_failed` if the
+  backend is unavailable, so the flag is always safe to pass.
 
 - **The verdict is the `--stage eval` `rollout_exact_rate`**, NOT the during-train
   `diag_one_shot_exact_rate` — that one-shot argmax is a cheap progress signal only

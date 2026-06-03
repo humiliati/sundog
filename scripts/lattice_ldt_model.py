@@ -87,6 +87,7 @@ class Cfg:
     max_steps: int = 6000
     conflict_corrupt_p: float = 0.25     # [I4]
     aug_factor: int = 50                 # augmented pool = aug_factor x 1000 (symmetry aug; breaks 1K overfit)
+    compile_model: bool = False          # torch.compile (reduce-overhead/CUDA graphs); needs GPU CC>=7.0 (A100/H100)
     # I5 rollout (contract: docs/lattice/PHASE1_I5_ROLLOUT_CONTRACT.md)
     theta_drop: float = 0.5              # eliminate when drop_conf = 1 - sigmoid(logit) >= theta_drop
     theta_cls: float = THETA_CLS         # conflict when sigmoid(conflict_logit) > theta_cls (0.6)
@@ -364,7 +365,7 @@ def _save_checkpoint(out: Path, model, opt, step: int, cfg: Cfg, rng, *, keep_st
         "rolloutVersion": ROLLOUT_VERSION,
         "step": step,
         "cfg": _cfg_json(cfg),
-        "model": model.state_dict(),
+        "model": getattr(model, "_orig_mod", model).state_dict(),   # unwrap torch.compile
         "optimizer": opt.state_dict(),
         "torch_rng_state": torch.get_rng_state(),
         "cuda_rng_state_all": torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None,
@@ -383,7 +384,7 @@ def _load_checkpoint(out: Path, resume: str, model, opt, rng, device) -> dict:
     if not path.exists():
         raise SystemExit(f"Checkpoint not found: {path}")
     ckpt = torch.load(path, map_location=device, weights_only=False)
-    model.load_state_dict(ckpt["model"])
+    getattr(model, "_orig_mod", model).load_state_dict(ckpt["model"])   # unwrap torch.compile
     opt.load_state_dict(ckpt["optimizer"])
     if ckpt.get("torch_rng_state") is not None:
         torch.set_rng_state(ckpt["torch_rng_state"].cpu())
@@ -619,6 +620,12 @@ def run_build_gate(cfg: Cfg, device, out: Path) -> dict:
     if cfg.resume:
         resume_info = _load_checkpoint(out, cfg.resume, model, opt, rng, device)
         start_step = resume_info["step"]
+    if cfg.compile_model:
+        try:
+            model = torch.compile(model, mode="reduce-overhead")   # CUDA graphs: kills launch overhead on CC>=7.0
+            print(json.dumps({"torch_compile": "reduce-overhead"}), flush=True)
+        except Exception as e:
+            print(json.dumps({"torch_compile_failed": str(e)[:200]}), flush=True)
     t0 = time.time()
     train_summary = None
     if cfg.stage in ("train", "all"):
@@ -686,6 +693,7 @@ def main() -> int:
     ap.add_argument("--batch", type=int, default=64)
     ap.add_argument("--lr", type=float, default=1e-3)
     ap.add_argument("--aug-factor", type=int, default=50, help="augmented pool = aug_factor x 1000")
+    ap.add_argument("--compile", action="store_true", help="torch.compile reduce-overhead; needs GPU CC>=7.0 (A100/H100)")
     ap.add_argument("--resume", default="", help="latest or checkpoint path")
     ap.add_argument("--checkpoint-every", type=int, default=0)
     ap.add_argument("--log-every", type=int, default=100)
@@ -699,6 +707,7 @@ def main() -> int:
     a = ap.parse_args()
     cfg = Cfg(mode=a.mode, stage=a.stage, data_dir=a.data_dir, out=a.out, seed=a.seed,
               max_steps=a.max_steps, max_eval=a.max_eval, batch=a.batch, lr=a.lr, aug_factor=a.aug_factor,
+              compile_model=a.compile,
               resume=a.resume, checkpoint_every=a.checkpoint_every, log_every=a.log_every,
               eval_every=a.eval_every, eval_sample=a.eval_sample, theta_drop=a.theta_drop,
               theta_cls=a.theta_cls, max_deduction_steps=a.max_deduction_steps,
