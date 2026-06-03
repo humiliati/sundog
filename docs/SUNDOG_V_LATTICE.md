@@ -228,33 +228,33 @@ Branch criteria:
 | `build_gate_fail` | cannot reproduce substrate | close or re-register |
 | `access_checkpoint_available` | authors or public release provide usable model | run an access/fidelity audit before Phase 0 |
 
-#### GPU on-ramp + harness inheritance (verified 2026-06-02)
+#### GPU on-ramp + what transfers from chatv2 (scoped 2026-06-03, handoff §0)
 
-The build-gate inherits the chatv2 measurement harness, made GPU-ready and
-CPU->GPU parity-smoked by the chatv2 R1-completion battery
-(`scripts/chatv2_phase0_bodyresist.py`, device-parameterized end-to-end -
-`device = cuda if available else cpu`, threaded through train/extract). **Ports:**
-the train/extract/measure decoupling, device threading, the information-basis
-`d_dec` fingerprint, and the baseline-ladder contrast decomposition
-(`architectural / incidental / objective_excess`). **New:** the LDT model itself - a
-lattice-domain transformer, not a tiny GPT on synthetic bits -
-`scripts/lattice_ldt_model.py`. The measurement scaffolding is reused; the model is
-rebuilt. Do **not** launch the 20+h lattice jobs until the on-ramp's CPU->GPU
-parity is confirmed by the chatv2 smoke (record the verified state, not an assumed
-one).
+The LDT does **not** reuse the chatv2 parity harness - it borrows chatv2's
+*methodology*, not its task
+([`chatv2/LATTICE_HANDOFF.md`](../chatv2/LATTICE_HANDOFF.md) §0). The LDT model
+(`scripts/lattice_ldt_model.py`) has its **own** GPU smoke, cleared 2026-06-03: param
+count **798,346** (≈800K - confirms the weight-shared-recurrence inference [I1]),
+correct elim/conflict shapes, expected capture-grains, loss decreases, on CUDA. **What
+transfers from chatv2:** (a) the information-basis `d_dec` fingerprint and the
+**de-confound discipline** - chatv2's "the latent must be input-*un*decodable, verified
+by a probe ≈ chance" maps onto the LDT's **input-lattice-linear baseline** (Phase 3 /
+B1 trap F4: the body is computed *from* the lattice, so credit only decode accuracy
+*above* an input-linear regression) - **non-negotiable**, and it lands at the
+B-phases, not the build-gate; (b) device-parameterized train/extract/measure
+decoupling. **What does NOT transfer:** the gen/twin objective contrast (the LDT is
+single-objective - B2 twin-fiber + B1 decision-extra replace it) and the warm-start /
+pos-capacity ladder (the LDT scales via weight-shared recurrence, not an H ladder; it
+would re-apply only to a future Sudoku-difficulty curriculum, attached to the
+recurrence/data, never the positional embedding).
 
-Build-gate guard inherited from chatv2 (the UNLEARNED / fresh-baseline contract,
-pinned implementation-grade in
-[`chatv2/LATTICE_HANDOFF.md`](../chatv2/LATTICE_HANDOFF.md)): no body/fiber number is
-read off a model that did not pass the build-gate; and in any contrast the **control
-baseline stays fresh** - warm-starting it would *contaminate* the comparison, not fix
-it (it injects the advantaged side's structure into the baseline) - while the
-curriculum'd side must **genuinely converge** (the UNLEARNED guard) or be skipped,
-with the curriculum **disclosed in scope**. A learnability or training-curriculum gap
-must never masquerade as a body-resistance signal. (The contract was produced by the
-chatv2 L2 gen/twin warm-start asymmetry the lattice audit raised; the lattice
-analogues are the build-gate's "reproduce 100% first" rule and the cross-decode guard
-- the input-undecodability pre-check chatv2 confirmed at arity-3 = 0.484 ≤ 0.60.)
+#### Build-gate guard
+
+No body/fiber number is read off a model that did not pass the build-gate (the
+**UNLEARNED rule**); a learnability gap must never masquerade as a body-resistance
+signal. The build-gate's own job is narrow - train on Sudoku-Extreme and **reproduce
+100%** before any B-layer number is interpreted; the de-confound discipline above is
+the measurement-side guard, "reproduce 100% first" is the build-gate-side guard.
 
 #### Audit-team handoff (taken at the build-gate)
 
