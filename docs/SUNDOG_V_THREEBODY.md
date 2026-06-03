@@ -1456,8 +1456,9 @@ finding preserved. Chapter close at
 `docs/isotrophy/kfacet/kfacet_v09_writeup.md`.
 
 **Isotrophy program PAUSED 2026-05-24 at end-of-v0.9, then advanced
-off-pause through v0.10-v0.17 on 2026-05-29 -> 2026-06-03.** Pause/frontier
-document at `docs/isotrophy/kfacet/kfacet_isotrophy_program_pause.md`.
+off-pause through v0.10-v0.18 on 2026-05-29 -> 2026-06-03.** Pause/frontier
+document at `docs/isotrophy/kfacet/kfacet_isotrophy_program_pause.md`; capstone
+synthesis at `docs/isotrophy/kfacet/kfacet_external_transfer_capstone.md`.
 The live conditional profile is: v0.10a registers the monotone vf ->
 stability trend in-sample (`p = 7.304e-3`), v0.10b preserves the
 mass-marginal held-out null (`AUC = 0.4125 <= 0.5`), and v0.11
@@ -1475,14 +1476,17 @@ liao2021), **v0.16 `tail_resolved_transfer_passes_clean`** (`AUC_cond = 0.647`,
 rather than the coarse zone (the coarse zone on the same held-out rows reads
 `0.510`), and **v0.17 `heterogeneous_transfer_replicates_clean`** on a fresh
 triple-holdout sample (`AUC_cond = 0.646875`, `p = 1e-5`, Spearman `rho = 1.0`,
-exact `p_rho = 1/5040`). This is the program's first replicated held-out external
-(Tier-2) confirmation that the velocity-fraction projection transfers across the
-ansatz boundary -- pooled, mass-cell-heterogeneous, bounded to Tier-2, not
-theorem-facing. Post-hoc anatomy suggests the sub-0.5 cells are a reliability map
-(one frame-fragile band and one near-null cell), not a competing physics; that "why"
-is descriptive, not a registered mechanism. The program remains paused at the
-lab-bandwidth level; remaining reopening is a wider reliability/mechanism chapter, a
-larger supported-region chapter, or new-mechanism work under the locked discipline.
+exact `p_rho = 1/5040`). **v0.18 then landed
+`reliability_drives_per_cell_auc_supported`** on a fresh wider 8 x 8
+quadruple-holdout sample (`AUC_cond = 0.620208`, `p = 1e-5`, frame-reliability
+`rho = 0.5975`, `p = 0.00523`, reversal guard 0 stable-decisive-negative cells).
+This is a replicated held-out external (Tier-2) confirmation that the
+velocity-fraction projection transfers across the ansatz boundary, with the
+per-cell heterogeneity now explained by a registered label-blind frame-reliability
+mechanism -- pooled, mass-cell-heterogeneous, bounded to Tier-2, not
+theorem-facing. The program remains paused at the
+lab-bandwidth level; remaining reopening is Tier-3 data, paper-side consolidation,
+or a separate cross-substrate reliability test under the locked discipline.
 
 ### Cross-Substrate Hand-Offs
 

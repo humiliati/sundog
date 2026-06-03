@@ -11,6 +11,7 @@ under the internal anniversary catch-all.
 - [O_617 bridge deep dive](kfacet_v03h_o617_deep_dive.md)
 - [v0.7 qualified-positive writeup](kfacet_v07_writeup.md)
 - [v0.9 structural-negative writeup](kfacet_v09_writeup.md)
+- [External transfer capstone](kfacet_external_transfer_capstone.md)
 
 ## Chapter Sequence
 
@@ -31,4 +32,4 @@ under the internal anniversary catch-all.
 - v0.15: [liao2021 stable-support transfer — directional_weak](kfacet_v15_liao2021_stable_support_transfer_form.md)
 - v0.16: [liao2021 tail-resolved transfer — passes_clean (Tier-2 external PASS)](kfacet_v16_liao2021_tail_resolved_transfer_form.md)
 - v0.17: [liao2021 heterogeneity replication -- heterogeneous_transfer_replicates_clean](kfacet_v17_liao2021_heterogeneity_scope.md)
-- v0.18: [liao2021 reliability-conditioned per-cell AUC -- prepared_not_measured](kfacet_v18_liao2021_reliability_auc_form.md)
+- v0.18: [liao2021 reliability-conditioned per-cell AUC -- reliability_drives_per_cell_auc_supported](kfacet_v18_liao2021_reliability_auc_form.md)

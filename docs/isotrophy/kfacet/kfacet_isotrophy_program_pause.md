@@ -1,13 +1,15 @@
 # K_facet Isotrophy Program Pause (2026-05-24)
 
 Status: **PAUSED 2026-05-24** at end-of-v0.9, then **ADVANCED off-pause
-2026-05-29 -> 2026-06-02** with the v0.10 frontier pair (v0.10a + v0.10b), the
-v0.11 conditional-rank close, and the v0.12 -> v0.17 external-transfer arc, which
-reached a **replicated clean Tier-2 external PASS at v0.17**
-(`heterogeneous_transfer_replicates_clean`, AUC_cond 0.646875, p 1e-5,
-rho=1.0, exact p_rho=1/5040): the velocity-fraction signal transfers to an independent
-catalog once read as a continuous tail-resolved score rather than the coarse v0.11 zone,
-and the seven-cell heterogeneity pattern repeats on fresh rows.
+2026-05-29 -> 2026-06-03** with the v0.10 frontier pair (v0.10a + v0.10b), the
+v0.11 conditional-rank close, and the v0.12 -> v0.18 external-transfer arc, which
+reached a **replicated and mechanistically explained Tier-2 external PASS at v0.18**:
+the velocity-fraction signal transfers to an independent catalog once read as a
+continuous tail-resolved score rather than the coarse v0.11 zone, the per-cell
+heterogeneity repeats on fresh rows, and a fresh wider-cell reliability chapter
+confirmed that label-blind frame reliability predicts per-cell AUC
+(`AUC_cond = 0.620208`, `p = 1e-5`, `rho = 0.5975`, `p_reliability = 0.00523`,
+reversal guard `0` stable-decisive-negative cells).
 The chain ran from v0.3 (December 2025 / January 2026, pre-anniversary)
 through v0.9 (May 2026) as seven sequential pre-registered chapters with
 seven distinct chapter-close types and one load-bearing in-sample positive
@@ -63,11 +65,12 @@ conditional-positive sequence**:
   repeated. Post-hoc anatomy reads the two sub-0.5 cells as the frame-fragile cell
   (`qA2_qB1`) and a near-null cell (`qA3_qB0`), not a competing physics. Reliability-map
   interpretation only; the registered claim is replicated heterogeneity.
-- **v0.18 (locked + prepared, not measured):** a fresh wider-cell reliability chapter now
-  asks whether per-cell AUC tracks label-blind frame reliability across an 8 x 8
-  sorted-mass grid, with v0.14-v0.17 rows excluded. The source/sample-only prepare
-  stage landed `reliability_auc_prepared_not_measured` (18 supported cells, 2880
-  rows, 4640 disjoint holdouts); no D5 shards or AUC statistics have run.
+- **v0.18 (the mechanism capstone):** a fresh quadruple-holdout 8 x 8 reliability
+  chapter landed `reliability_drives_per_cell_auc_supported` (18 cells, 2880 rows,
+  0 attrition). The pooled transfer replicated again (`AUC_cond = 0.620208`,
+  `p = 1e-5`), label-blind frame reliability predicted per-cell AUC (`rho = 0.5975`,
+  `p = 0.00523`), and the reversal guard found 0 stable-decisive-negative cells.
+  The post-hoc v0.17 reliability-map interpretation is now a registered finding.
 
 The mature, falsifiable claim is **"yes, but only after conditioning"**:
 velocity-fraction stratifies three-body stability, but as a function of the
@@ -77,13 +80,13 @@ the held-out chapter localized the signal rather than killing it.
 
 The program remains **paused at the lab-bandwidth level**, not retired. The
 within-m_3 conditional rung that v0.10b motivated is closed (v0.11); the
-external-catalog rung is now **CONFIRMED and replicated at Tier-2** -- v0.12's supp-A D5-attrition
+external-catalog rung is now **CONFIRMED, replicated, and mechanism-explained at Tier-2** -- v0.12's supp-A D5-attrition
 wall and v0.13's landscape-negative left Li/Liao 2021 as the only viable target, and
 the v0.14 (undecidable) -> v0.15 (directional-weak) -> v0.16 (clean PASS) -> v0.17
-(heterogeneity replication) arc carried it to a held-out external confirmation of the
-continuous velocity-fraction projection plus reproducible seven-cell structure.
-Remaining axes: execute the v0.18 wider-cell reliability/mechanism D5 shards, a
-larger supported-region or multi-feature chapter, or new-mechanism work -- not another
+(heterogeneity replication) -> v0.18 (reliability mechanism) arc carried it to a
+held-out external confirmation of the continuous velocity-fraction projection plus a
+registered explanation of its per-cell heterogeneity. Remaining axes: a larger
+supported-region or multi-feature chapter, or new-mechanism work -- not another
 rephrasing of the same table.
 
 Audience: paper-side writers, future coding agents, isotrophy-
@@ -236,19 +239,19 @@ v0.17:  tail-resolved heterogeneity replication (fresh triple-holdout 80/80).
         reliability map (qA2_qB1 frame-fragile, qA3_qB0 near-null), but that
         "why" is descriptive, not a registered mechanism.
 
-v0.18:  reliability-conditioned per-cell AUC chapter (LOCKED + PREPARED, not measured).
-        Fresh quadruple-holdout 8 x 8 sorted-mass grid, expected 18 supported
-        cells and 2880 rows. Prepare landed exactly (4640 disjoint holdouts);
-        no D5 shards/AUC statistics yet. Primary question: does label-blind
-        frame reliability predict per-cell AUC, with a guard against strong
-        frame-stable reversals?
+v0.18:  reliability-conditioned per-cell AUC chapter (fresh quadruple-holdout
+        8 x 8 sorted-mass grid, 18 cells, 2880 rows). Verdict:
+        reliability_drives_per_cell_auc_supported. Pooled AUC_cond 0.620208,
+        p 1e-5; label-blind frame reliability predicts per-cell AUC (rho
+        0.5975, p 0.00523); reversal guard passed with 0 stable-decisive-
+        negative cells. Mechanism capstone for the v0.16/v0.17 heterogeneity.
 ```
 
 ## The Load-Bearing Findings
 
-After seven chapters plus the v0.10-v0.17 frontier-advance, three findings
+After seven chapters plus the v0.10-v0.18 frontier-advance, three findings
 carry the program's substantive output (the second is now a publishable
-conditional profile with a replicated Tier-2 external transfer):
+conditional profile with a replicated and mechanism-explained Tier-2 external transfer):
 
 1. **The v0.7a' chi^2 = 16.43 positive**. On the 250-row analyzable
    supp-B subset (post v0.7a integration-attrition), the velocity-
@@ -297,8 +300,8 @@ conditional profile with a replicated Tier-2 external transfer):
    held-out chapter LOCALIZED the signal rather than killing it, and v0.11
    registered that localization under the exact conditional rank gate.
 
-   **The external-transfer arc (v0.12 -> v0.17): from supp-B-internal to a replicated
-   clean Tier-2 PASS.** v0.12 took the frozen rule to same-paper supplementary-A and hit
+   **The external-transfer arc (v0.12 -> v0.18): from supp-B-internal to a replicated,
+   mechanism-explained clean Tier-2 PASS.** v0.12 took the frozen rule to same-paper supplementary-A and hit
    `external_transfer_blocked_by_attrition` (uniform probe attrition 0.3433, the whole
    CI above the 0.20 gate; a measurement-feasibility limit, not a falsification).
    v0.13's signal-blind search found only Tier-2 Li/Liao 2021 viable; v0.13a bounded
@@ -314,10 +317,13 @@ conditional profile with a replicated Tier-2 external transfer):
    triple-held-out rows (**AUC_cond 0.646875, p 1e-5**) and reproduced the seven-cell
    heterogeneity exactly by rank (**rho=1.0, exact p_rho=1/5040**). **The conditional
    positive now has a replicated held-out external (Tier-2) confirmation of the
-   underlying velocity-fraction projection** -- pooled and mass-cell-heterogeneous,
-   bounded to Tier-2 / stable-support / not theorem-facing. The coarse v0.11 zone FORM
-   does not transfer (v0.15); its continuous tail-resolved relative does and replicates
-   (v0.16/v0.17).
+   underlying velocity-fraction projection** -- pooled and mass-cell-heterogeneous.
+   v0.18 then promoted the v0.17 reliability-map anatomy into a registered mechanism:
+   fresh 8 x 8 quadruple-holdout sample, **AUC_cond 0.620208, p 1e-5**,
+   frame-reliability **rho=0.5975, p=0.00523**, and 0 stable-decisive-negative cells.
+   The coarse v0.11 zone FORM does not transfer (v0.15); its continuous tail-resolved
+   relative does, replicates, and is now mechanistically explained by frame reliability
+   (v0.16/v0.17/v0.18). Bounded to Tier-2 / stable-support / not theorem-facing.
 
 3. **The methodology surface**. The chain produced and locked
    a comprehensive set of pre-registration discipline tools that
@@ -610,6 +616,8 @@ sequential audits on the v0.7a' analyzable subset.
 
 ## Doc Trail
 
+- `kfacet_external_transfer_capstone.md` -- consolidated v0.11-v0.18
+  external-transfer capstone and claim boundary.
 - `kfacet_v03h_writeup.md` -- v0.3 chapter close.
 - `kfacet_v04_writeup.md` -- v0.4 chapter close.
 - `kfacet_v05_writeup.md` -- v0.5 chapter close.
@@ -641,16 +649,17 @@ sequential audits on the v0.7a' analyzable subset.
 - `kfacet_v17_liao2021_heterogeneity_scope.md` -- v0.17 replicated
   heterogeneity.
 - `kfacet_v18_liao2021_reliability_auc_form.md` -- v0.18 wider-cell reliability
-  chapter, locked and prepared but not measured.
+  chapter; mechanism capstone positive.
 - `docs/CROSS_SUBSTRATE_NOTES.md` -- cross-substrate
   framing (avenue 6).
 - `docs/isotrophy/sundog_v_isotrophy.md` -- full chapter-by-chapter dated log.
 
 ---
 
-Isotrophy program paused at end-of-v0.9, then reopened through the v0.10-v0.17
+Isotrophy program paused at end-of-v0.9, then reopened through the v0.10-v0.18
 conditional/external-transfer frontier. The live result is now sharper:
 velocity-fraction is a real conditioned stability rank signal, externally
-confirmed and replicated at Tier-2 when read as a continuous tail-resolved score.
-v0.18 is the drafted mechanism/anatomy test for the reproduced per-cell
-heterogeneity. Reopening is invited; mechanism-laundering is not.
+confirmed, replicated, and mechanism-explained at Tier-2 when read as a
+continuous tail-resolved score. v0.18 confirmed the reproduced per-cell
+heterogeneity as a frame-reliability map under a registered label-blind test.
+Reopening is invited; mechanism-laundering is not.

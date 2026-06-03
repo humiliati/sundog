@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Sundog Isotrophy audit chain, v0.3 through v0.17: v0.3h's structural-zero receipts, the v0.11 conditional-rank pass, and v0.17's replicated Tier-2 external confirmation of a tail-resolved velocity-fraction signal.">
+    <meta name="description" content="Sundog Isotrophy audit chain, v0.3 through v0.18: v0.3h's structural-zero receipts, the v0.11 conditional-rank pass, v0.17's replicated Tier-2 external confirmation of a tail-resolved velocity-fraction signal, and v0.18's frame-reliability explanation of its per-cell heterogeneity.">
     <meta name="keywords" content="K_facet, isotrophy, choreography, three-body, structural zero, audit chain, Floquet velocity fraction, Sundog, claim hygiene, quarantine, Golod-Shafarevich">
     <meta name="theme-color" content="#1A3A52">
     <meta name="author" content="Sundog Research Lab">
@@ -12,13 +12,13 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="manifest" href="/site.webmanifest">
     <link rel="canonical" href="https://sundog.cc/isotrophy">
-    <title>Isotrophy Audit Chain v0.3-v0.17 &mdash; Sundog</title>
+    <title>Isotrophy Audit Chain v0.3-v0.18 &mdash; Sundog</title>
 
     <!-- OG-BLOCK-START (managed by public/og/_patch_meta.py) -->
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Sundog">
     <meta property="og:title" content="Isotrophy Audit Chain: structural zeros and external transfer">
-    <meta property="og:description" content="From v0.3h's structural-zero receipts to v0.17's replicated Tier-2 external confirmation: tail-resolved velocity-fraction transfers as a conditional stability-rank signal.">
+    <meta property="og:description" content="From v0.3h's structural-zero receipts to v0.18: tail-resolved velocity-fraction transfers and replicates on a Tier-2 external catalog, and frame reliability explains its per-cell heterogeneity.">
     <meta property="og:image" content="https://sundog.cc/og/isotrophy.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -35,7 +35,7 @@
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Isotrophy Audit Chain: structural zeros and external transfer">
-    <meta name="twitter:description" content="Tail-resolved velocity-fraction now transfers and replicates on a Tier-2 external catalog as a bounded conditional rank signal.">
+    <meta name="twitter:description" content="Tail-resolved velocity-fraction transfers and replicates on a Tier-2 external catalog as a bounded conditional rank signal; per-cell transfer strength tracks frame reliability.">
     <meta name="twitter:image" content="https://sundog.cc/og/isotrophy.png">
     <meta name="twitter:image:alt" content="Isotrophy K_facet card: a doctor's bead-maze with 20 gold beads (structural-zero receipts) and O_617 isolated on a side loop with a dashed-red quarantine ring.">
 
@@ -43,8 +43,8 @@
     {
       "@context": "https://schema.org",
       "@type": "TechArticle",
-      "headline": "Isotrophy Audit Chain v0.3-v0.17",
-      "description": "A pre-registered isotrophy audit chain: v0.3h's structural-zero receipts plus one O_617 quarantine, and a velocity-fraction signal that passes within fixed mass-ratio strata and replicates on a Tier-2 external catalog only after tail-resolved continuous scoring.",
+      "headline": "Isotrophy Audit Chain v0.3-v0.18",
+      "description": "A pre-registered isotrophy audit chain: v0.3h's structural-zero receipts plus one O_617 quarantine, and a velocity-fraction signal that passes within fixed mass-ratio strata, replicates on a Tier-2 external catalog only after tail-resolved continuous scoring, and whose per-cell heterogeneity is explained by label-blind frame reliability.",
       "image": "https://sundog.cc/og/isotrophy.png",
       "datePublished": "2026-05-22",
       "dateModified": "2026-06-03",
@@ -421,7 +421,7 @@
 
     <main>
         <section class="iso-hero">
-            <p class="eyebrow">Isotrophy · K_facet · v0.3-v0.17</p>
+            <p class="eyebrow">Isotrophy · K_facet · v0.3-v0.18</p>
             <h1>The audit chain catches itself working.</h1>
             <p class="lede">
                 Twenty <a class="sd-def" href="/legend#kfacet-structural-zero-receipt" data-def-anchor="left" data-def="A row earns one when c_i = d_i = 0 by construction — not by tolerance, not by post-hoc pruning. The named artifact class.">structural-zero receipts</a> and one <a class="sd-def" href="/legend#kfacet-quarantine" data-def="A row held back from being counted for or against the prediction, with a specific representation-level reason given. O_617 is the sole quarantine in v0.3h.">named quarantine</a>. A
@@ -443,7 +443,7 @@
             </div>
             <p class="lede">
                 That v0.3h result became the first chapter of a
-                pre-registered program that now runs through v0.17. The
+                pre-registered program that now runs through v0.18. The
                 later chain sharpened the Floquet velocity-fraction finding:
                 it stratifies stability inside fixed mass-ratio strata
                 (<code>AUC_cond = 0.6783</code>, exact <code>p = 2.046e-7</code>)
@@ -456,7 +456,11 @@
                 fresh Tier-2 liao2021 stable-support sample. A second fresh
                 triple-holdout sample then replicated both the pooled transfer
                 and the seven-cell heterogeneity ordering
-                (<code>rho = 1.0</code>, exact <code>p_rho = 1/5040</code>).
+                (<code>rho = 1.0</code>, exact <code>p_rho = 1/5040</code>). A
+                third fresh sample on a wider 8&times;8 grid then explained the
+                heterogeneity: label-blind frame reliability predicts per-cell
+                transfer strength (<code>rho = 0.60</code>, <code>p = 5e-3</code>),
+                and no frame-stable cell defies it.
             </p>
             <div class="status-ribbon" aria-label="Isotrophy conditional rank profile">
                 <span>v0.7 restricted positive</span>
@@ -467,6 +471,7 @@
                 <span class="pass">v0.16 Tier-2 external pass</span>
                 <span>AUC_cond = 0.647</span>
                 <span class="pass">v0.17 heterogeneity replicated</span>
+                <span class="pass">v0.18 reliability map confirmed</span>
             </div>
 
             <aside class="iso-crossref" aria-label="Where the 21 strict rows came from">
@@ -670,6 +675,18 @@
                             region, not a competing mechanism.
                         </p>
                     </div>
+                    <div class="stage-card">
+                        <h3><span class="num">v0.18</span> Reliability map confirmed</h3>
+                        <p>
+                            A fresh quadruple-holdout 8&times;8 grid (18 cells,
+                            2,880 rows) replicates the transfer a third time
+                            (AUC_cond = 0.620, p = 1e-5) and confirms the
+                            heterogeneity's cause: label-blind frame reliability
+                            predicts per-cell AUC (rho = 0.60, p = 5e-3), with no
+                            frame-stable cell defying it &mdash; an
+                            instrument-reliability map, not a competing law.
+                        </p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -852,20 +869,21 @@
                 <div class="not-card">
                     <h3>Not a universal external transfer claim.</h3>
                     <p>
-                        v0.16/v0.17 confirm the tail-resolved continuous score on
-                        Tier-2 liao2021 stable-support samples. They do not
-                        confirm the coarse zone rule, the full catalog, a
-                        Tier-3 independent target, or a uniform per-cell law.
+                        v0.16/v0.17/v0.18 confirm, replicate, and explain the
+                        tail-resolved continuous score on Tier-2 liao2021
+                        stable-support samples. They do not confirm the coarse
+                        zone rule, the full catalog, a Tier-3 independent
+                        target, or a uniform per-cell law.
                     </p>
                 </div>
                 <div class="not-card">
                     <h3>Not a retired program.</h3>
                     <p>
-                        The isotrophy program reopened through v0.17 and earned
-                        its first replicated bounded external confirmation. The
-                        next honest upgrade is a wider reliability/mechanism
-                        chapter, a larger supported-region chapter, or a separate
-                        mechanism chapter.
+                        The isotrophy program reopened through v0.18 and earned
+                        a replicated, mechanism-explained bounded external
+                        confirmation. The next honest upgrade is Tier-3 data,
+                        a paper-side consolidation, or a separate
+                        cross-substrate reliability test.
                     </p>
                 </div>
             </div>
@@ -877,6 +895,7 @@
                 <a href="docs/isotrophy/SUNDOG_V_ISOTROPHY_KFACET.md">Sundog · K_facet v0.3h Ledger</a>
                 <a href="docs/isotrophy/sundog_v_isotrophy.md">Isotrophy Workbench Roadmap</a>
                 <a href="docs/isotrophy/kfacet/kfacet_isotrophy_program_pause.md">Program pause + reopening avenues</a>
+                <a href="docs/isotrophy/kfacet/kfacet_external_transfer_capstone.md">External transfer capstone</a>
                 <a href="docs/isotrophy/kfacet/kfacet_v03h_writeup.md">v0.3h methodology + result writeup</a>
                 <a href="docs/isotrophy/kfacet/kfacet_v07_writeup.md">v0.7 qualified-positive writeup</a>
                 <a href="docs/isotrophy/kfacet/kfacet_v09_writeup.md">v0.9 structural-negative + meta-finding writeup</a>
@@ -887,6 +906,7 @@
                 <a href="docs/isotrophy/kfacet/kfacet_v13_external_target_search_form.md">v0.13 external target search</a>
                 <a href="docs/isotrophy/kfacet/kfacet_v16_liao2021_tail_resolved_transfer_form.md">v0.16 tail-resolved Tier-2 external pass</a>
                 <a href="docs/isotrophy/kfacet/kfacet_v17_liao2021_heterogeneity_scope.md">v0.17 heterogeneity replication</a>
+                <a href="docs/isotrophy/kfacet/kfacet_v18_liao2021_reliability_auc_form.md">v0.18 reliability map confirmation</a>
                 <a href="docs/isotrophy/kfacet/kfacet_v03h_o617_deep_dive.md">O_617 deep dive</a>
                 <a href="docs/isotrophy/kfacet/kfacet-runner-spec.md">Runner spec</a>
                 <a href="docs/SUNDOG_V_THREEBODY.md">Three-Body Roadmap</a>
