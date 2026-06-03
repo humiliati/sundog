@@ -270,6 +270,16 @@ also co-signs the external-refute invitation per
 The build-gate is not optional. A broken model would make every downstream
 measurement uninterpretable.
 
+#### I5 rollout contract
+
+The build-gate's solve metric is not the smoke's one-shot argmax. The iterative
+deduction/backtracking policy is specified separately in
+[`lattice/PHASE1_I5_ROLLOUT_CONTRACT.md`](lattice/PHASE1_I5_ROLLOUT_CONTRACT.md):
+candidate-keep logits are converted to elimination confidence, thresholded into
+answer-key-audited lattice updates, repeated until solve/stall/conflict, and only
+then scored. Any change to threshold semantics, branch order, caps, or hidden
+Sudoku propagation requires an amendment before a full build-gate run.
+
 ### Phase 2 - B2 Twin-State Execution
 
 Goal: run the frozen Phase 0 minimum cell against the admitted model.
