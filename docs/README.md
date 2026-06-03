@@ -83,6 +83,9 @@ code, experiments, prior theorem materials, and application bridges.
 - [Sundog Chat v2 ledger](SUNDOG_V_CHAT_V2.md): next-generation chat-library
   roadmap; staging surface set, audit-chain claim integration, and the
   Phase 13+ refresh plan.
+- [Allelopathy / determining-shadow-set roadmap](SUNDOG_V_ALLELOPATHY.md):
+  internal chatv2 sidecar for testing how many saved latent shadows constrain
+  the omitted residual body, plus a gated animated-SVG plan.
 - [Bayesian comparator ledger](SUNDOG_V_BAYES.md): cross-cutting Bayesian
   floor/comparator design — same-observation floor profiles, route-fidelity
   comparators, and the audit-chain integration across workbenches.
