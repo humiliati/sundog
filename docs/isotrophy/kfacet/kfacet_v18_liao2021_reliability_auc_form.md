@@ -1,6 +1,58 @@
 # v0.18 liao2021 Reliability-Conditioned Per-Cell AUC Form
 
-Status: **OPERATOR LOCK 2026-06-03; PREPARED, NOT MEASURED.** At lock time no
+## Result (2026-06-03)
+
+**Verdict: `reliability_drives_per_cell_auc_supported`** -- the top branch. On a fresh,
+wider 8x8 grid (18 cells, 2880 rows, quadruple holdout) the pooled transfer replicates a
+THIRD time, label-blind frame-reliability predicts per-cell AUC, and the reversal guard
+finds no frame-stable competing signal.
+
+```text
+pooled (3rd replication):  AUC_cond 0.620208 (J 71448 / D 115200), p_perm 1.0e-5,
+                           attrition 0.0000, 18/18 primary cells, 2880 rows
+reliability:               Spearman rho(-log10 frame_p90, AUC_cell) = 0.597523,
+                           MC p 0.00523 (522/100k >= observed)  -> >= 0.45 floor, <= 0.05
+reversal guard:            stable_decisive_negative_count = 0  -> passes
+frame_p90 across 18 cells: median 0.006, p75 0.048, p90 0.362, max 0.400 (real fragile tail)
+```
+
+**The reproducible heterogeneity IS an instrument-reliability map -- now confirmed, not
+hypothesized.** The v0.17 anatomy suggested it post-hoc; v0.18 promoted it to a
+pre-registered, label-blind test on fresh wider-grid rows and it passed: where the
+four-frame ensemble vf is frame-stable, the v0.11 direction holds (top cells qA2_qB1
+0.882, qA1_qB0 0.827 at frame_p90 ~0.003-0.006); where it is fragile, discrimination
+degrades and reverses (bottom cells qA4_qB2 0.265, qA5_qB2 0.362 at frame_p90 0.36-0.40).
+
+**The reversal guard's falsification test passed honestly.** The two strongest negatives
+(qA4_qB2 0.265, qA5_qB2 0.362) are exactly the two most frame-fragile cells -- explained
+by unreliability, not a counter-law. The only frame-STABLE sub-0.5 cell (qA6_qB1 AUC
+0.440, frame_p90 0.041) is NOT statistically decisive (p_reverse 0.097 > 0.05), so it
+does not constitute a stable competing signal. A frame-stable decisive-negative cell
+*could* have falsified the reliability story; none exists.
+
+**Independent verification.** A standalone brute-force pair-count pooled AUC + a
+hand-rolled rank/Pearson Spearman over recomputed per-cell frame_p90 (independent of the
+runner) reproduced AUC_cond 0.620208 and reliability rho 0.597523 BIT-FOR-BIT. Receipt +
+verifier: `results/isotrophy/k-facet-v18-liao2021-reliability-auc/` (`manifest.json`,
+`per_cell_auc.csv`, `frame_reliability_map.csv`, `reliability_auc_test.json`,
+`reversal_guard.json`, `_independent_check.{py,json}`).
+
+**Honest bounds.** The confirmed driver is FRAME-reliability specifically (the only
+non-circular, label-blind predictor); rho 0.60 is moderate-strong with real scatter, not
+a deterministic law. The pooled AUC 0.620 is below v0.16/v0.17's 4x4 0.647 because the
+8x8 conditioning is finer (expected; it still clears 0.55 at p 1e-5). Bounded as before:
+Tier-2 / Li-Liao lineage / stable-support / within-cell rank / tail-resolved continuous
+score / not coarse-zone / not full-catalog prevalence / not Tier-3 / not theorem-facing.
+This is an EXPLANATION of the reproducible v0.16/v0.17 heterogeneity, and it does not
+alter those receipts -- it accounts for them.
+
+**Arc capstone.** v0.11 internal conditional positive -> v0.16 first external PASS ->
+v0.17 replication + reproducible heterogeneity -> v0.18 the heterogeneity mechanism
+(a frame-reliability map) confirmed on a wider fresh grid with a passing reversal guard.
+
+---
+
+Status: **OPERATOR LOCK 2026-06-03; VERDICT LANDED `reliability_drives_per_cell_auc_supported` 2026-06-03.** At lock time no
 v0.18 runner had been written, no v0.18 sample had been drawn, no v0.18 D5 rows
 had been integrated, and no v0.18 AUC or reliability statistic had been
 computed. After lock, the runner was implemented and `npm run

@@ -1,0 +1,90 @@
+{
+  "lane": "chatv2",
+  "phase": "0.2",
+  "verdict": "MARGINAL",
+  "H_star": null,
+  "precheck": {
+    "8": 0.500375
+  },
+  "cfg": {
+    "mode": "full",
+    "stage": "all",
+    "latent": "computed",
+    "window": 2,
+    "h_sweep": [
+      8
+    ],
+    "bits_per_channel": 24,
+    "delta": 0.45,
+    "d_model": 256,
+    "n_layers": 3,
+    "n_heads": 4,
+    "lr": 0.0003,
+    "batch": 128,
+    "eval_batch": 512,
+    "max_steps": 12000,
+    "eval_every": 250,
+    "patience": 15,
+    "n_fingerprint": 3000,
+    "k_outlier": 2,
+    "seed": 0,
+    "curriculum": false,
+    "warm_start": "C:/Users/hughe/Dev/sundog/results/chatv2/phase1-r1/L2prep_d256_arity2/ckpt/H8_gen.pt",
+    "pos_h": 0,
+    "min_steps": 6000,
+    "twin_patience": 3,
+    "save_ckpt": true,
+    "fair_readout": true,
+    "arity": 3,
+    "d_dec_frac_min": 0.5,
+    "z1_ctrl_min": 0.7,
+    "leak_max": 0.58,
+    "body_carry_min": 0.7,
+    "body_carry_gap_min": 0.2,
+    "precheck_max": 0.6
+  },
+  "records": [
+    {
+      "H": 8,
+      "generative": {
+        "fair_readout": true,
+        "body_layer": 3,
+        "zr_by_layer": [
+          0.506,
+          0.5,
+          0.524,
+          0.536
+        ],
+        "d_dec": 7.768,
+        "eff_dim_raw": 2.134,
+        "eff_dim_robust": 5.05,
+        "z1_acc": 0.7367,
+        "z_recover_mean": 0.5359,
+        "body_carry": 0.5072,
+        "z_recover_each": [
+          0.7367,
+          0.5293,
+          0.5013,
+          0.51,
+          0.495,
+          0.5197,
+          0.501,
+          0.4943
+        ],
+        "cross_latent_leak": 0.5079,
+        "outlier_carries_latents": 0.5038,
+        "latents_survive_outlier_removal": 0.5331
+      },
+      "twin": null,
+      "gen_train": {
+        "eval_loss": 0.6931551098823547,
+        "bayes_floor": 0.445831211952909,
+        "steps": 6000
+      },
+      "twin_train": null,
+      "sharp": false,
+      "learned": false,
+      "status": "UNLEARNED"
+    }
+  ]
+}
