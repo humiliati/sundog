@@ -365,9 +365,10 @@ def _load_checkpoint(out: Path, resume: str, model, opt, rng, device) -> dict:
     if ckpt.get("torch_rng_state") is not None:
         torch.set_rng_state(ckpt["torch_rng_state"].cpu())
     if torch.cuda.is_available() and ckpt.get("cuda_rng_state_all") is not None:
-        torch.cuda.set_rng_state_all(ckpt["cuda_rng_state_all"])
+        # map_location=device moved these onto cuda; cuda RNG state must be CPU ByteTensors
+        torch.cuda.set_rng_state_all([s.cpu() for s in ckpt["cuda_rng_state_all"]])
     if ckpt.get("train_rng_state") is not None:
-        rng.set_state(ckpt["train_rng_state"])
+        rng.set_state(ckpt["train_rng_state"].cpu())
     return {"path": str(path), "step": int(ckpt.get("step", 0)),
             "rolloutVersion": ckpt.get("rolloutVersion")}
 
