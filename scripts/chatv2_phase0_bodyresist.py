@@ -78,6 +78,8 @@ class Cfg:
                                      # instead of the global final position (computed layout only) --
                                      # a readout-FAIRNESS fix, not a threshold/metric change
     arity: int = 2                   # computed-latent: k-tuple parity arity (2 = pair-XOR baseline)
+    m: int = 3                       # coupled-latent (Phase 7): hidden-source bit count (frozen)
+    p_noise: float = 0.25            # coupled-latent (Phase 7): per-latent coupling noise
     # sharpness thresholds
     d_dec_frac_min: float = 0.5
     z1_ctrl_min: float = 0.70
@@ -129,10 +131,40 @@ def _gen_computed(H, batch, bpc, delta, rng, arity=2):
     return bits, z
 
 
+_COUPLE_A = np.array([[0, 0, 1], [0, 1, 0], [1, 0, 0], [0, 1, 1],
+                      [1, 0, 1], [1, 1, 0], [1, 1, 1], [0, 0, 1]], dtype=np.int64)
+
+
+def _gen_coupled(H, batch, bpc, delta, rng, arity=2, m=3, p_noise=0.25):
+    """Phase 7: H state latents are NOISY PARITIES of a shared m-bit hidden source u:
+    z_i = (A_i . u mod 2) XOR x_i, x_i ~ Bernoulli(p_noise); A = the frozen coupling
+    graph (`_COUPLE_A`, m=3, H<=8). Each z_i is then parity-channel encoded EXACTLY as
+    _gen_computed (input-undecodable). Returns (bits, z, u) so the probe can target the
+    hidden source u (the closure functional). Coupling lives in how z is GENERATED (shared
+    u), not in the per-channel encoding -> the de-confound pre-check still applies per z_i."""
+    assert m == 3 and H <= 8, "coupled latent frozen at m=3, H<=8 (Phase 7 spec)"
+    A = _COUPLE_A[:H]
+    u = rng.integers(0, 2, size=(batch, m)).astype(np.int64)
+    sig = (u @ A.T) % 2                                          # (B, H) parity(u, A_i)
+    z = (sig ^ (rng.random((batch, H)) < p_noise).astype(np.int64)).astype(np.int64)
+    a = max(2, arity); P = max(1, bpc // a)
+    chan = np.arange(P * H) % H
+    px = (0.5 + delta * (2.0 * z - 1.0))[:, chan]
+    x = (rng.random((batch, P * H)) < px).astype(np.int64)
+    tup = rng.integers(0, 2, size=(batch, P * H, a)).astype(np.int64)
+    tup[:, :, a - 1] = (tup[:, :, :a - 1].sum(2) % 2) ^ x
+    return tup.reshape(batch, P * H * a), z, u
+
+
 def gen_batch(H, batch, cfg, rng):
     if cfg.latent == "bias":
-        return _gen_bias(H, batch, cfg.bits_per_channel, cfg.delta, rng)
-    return _gen_computed(H, batch, cfg.bits_per_channel, cfg.delta, rng, cfg.arity)
+        b, z = _gen_bias(H, batch, cfg.bits_per_channel, cfg.delta, rng)
+        return b, z, None
+    if cfg.latent == "coupled":
+        return _gen_coupled(H, batch, cfg.bits_per_channel, cfg.delta, rng,
+                            cfg.arity, cfg.m, cfg.p_noise)
+    b, z = _gen_computed(H, batch, cfg.bits_per_channel, cfg.delta, rng, cfg.arity)
+    return b, z, None
 
 
 # --------------------------------------------------------------------------- #
@@ -201,11 +233,11 @@ def train_generative(H, cfg, device, seed, warm_start=None):
         model.load_state_dict(torch.load(warm_start, map_location=device))
         print(f"[H={H}] warm-started gen from {warm_start}", flush=True)
     opt = torch.optim.AdamW(model.parameters(), lr=cfg.lr, weight_decay=0.01)
-    eb, _ = gen_batch(H, cfg.eval_batch, cfg, np.random.default_rng(seed + 999))
+    eb, _, _ = gen_batch(H, cfg.eval_batch, cfg, np.random.default_rng(seed + 999))
     et = torch.tensor(eb, device=device)
     best, bad, steps = float("inf"), 0, 0
     for step in range(cfg.max_steps):
-        bits, _ = gen_batch(H, cfg.batch, cfg, rng)
+        bits, _, _ = gen_batch(H, cfg.batch, cfg, rng)
         idx = torch.tensor(bits, device=device)
         loss = F.cross_entropy(model(idx)[:, :-1].reshape(-1, 2), idx[:, 1:].reshape(-1))
         opt.zero_grad(); loss.backward(); opt.step()
@@ -226,7 +258,7 @@ def train_generative(H, cfg, device, seed, warm_start=None):
     p = 0.5 + cfg.delta
     bayes_pred = -(p * np.log(p) + (1 - p) * np.log(1 - p))
     # computed: ~half the tokens (fair `u`) are unpredictable -> mixed floor
-    bayes = 0.5 * np.log(2.0) + 0.5 * bayes_pred if cfg.latent == "computed" else bayes_pred
+    bayes = 0.5 * np.log(2.0) + 0.5 * bayes_pred if cfg.latent in ("computed", "coupled") else bayes_pred
     return model, {"eval_loss": float(best), "bayes_floor": float(bayes), "steps": steps}
 
 
@@ -236,12 +268,12 @@ def train_twin(H, cfg, device, seed):
     backbone = TinyGPT(2, cfg.d_model, cfg.n_layers, cfg.n_heads, cfg.max_len).to(device)
     twin = TwinHead(backbone, cfg.d_model).to(device)
     opt = torch.optim.AdamW(twin.parameters(), lr=cfg.lr, weight_decay=0.01)
-    eb, ez = gen_batch(H, cfg.eval_batch, cfg, np.random.default_rng(seed + 888))
+    eb, ez, _ = gen_batch(H, cfg.eval_batch, cfg, np.random.default_rng(seed + 888))
     et = torch.tensor(eb, device=device)
     ey = torch.tensor(ez[:, 0], dtype=torch.float32, device=device)
     best_acc, bad, steps = 0.0, 0, 0
     for step in range(cfg.max_steps):
-        bits, z = gen_batch(H, cfg.batch, cfg, rng)
+        bits, z, _ = gen_batch(H, cfg.batch, cfg, rng)
         idx = torch.tensor(bits, device=device)
         y = torch.tensor(z[:, 0], dtype=torch.float32, device=device)
         loss = F.binary_cross_entropy_with_logits(twin(idx), y)
@@ -272,7 +304,7 @@ def _lastpos(H, bpc, arity=2):
 
 def extract_body(model, H, cfg, device, seed):
     rng = np.random.default_rng(seed + 123)
-    bits, z = gen_batch(H, cfg.n_fingerprint, cfg, rng)
+    bits, z, u = gen_batch(H, cfg.n_fingerprint, cfg, rng)
     idx = torch.tensor(bits, device=device)
     model.eval()
     with torch.no_grad():
@@ -283,7 +315,7 @@ def extract_body(model, H, cfg, device, seed):
                            for h in hiddens], axis=1)   # (N, layers, H, d)
     else:
         bodies = np.stack([h[:, -1, :].cpu().numpy() for h in hiddens], axis=1)  # (N, layers, d)
-    return bodies, z
+    return bodies, z, u
 
 
 # --------------------------------------------------------------------------- #
@@ -409,7 +441,7 @@ def input_probe_precheck(cfg):
     res = {}
     for H in cfg.h_sweep:
         rng = np.random.default_rng(cfg.seed + 555 + H)
-        bits, z = gen_batch(H, cfg.n_fingerprint, cfg, rng)
+        bits, z, _ = gen_batch(H, cfg.n_fingerprint, cfg, rng)
         X = bits.astype(float)
         res[H] = float(np.nanmean([_cv(X, z[:, i]) for i in range(H)]))
     return res
@@ -430,8 +462,8 @@ def train_stage(cfg, out, device):
         print(f"[H={H}] training generative (L={cfg.bits_per_channel*H})"
               f"{' [warm]' if ws else ''}...", flush=True)
         gen, gmeta = train_generative(H, cfg, device, hs, warm_start=ws)
-        gb, gz = extract_body(gen, H, cfg, device, hs)
-        np.savez(bdir / f"H{H}_gen.npz", bodies=gb, z=gz, meta=json.dumps(gmeta))
+        gb, gz, gu = extract_body(gen, H, cfg, device, hs)
+        np.savez(bdir / f"H{H}_gen.npz", bodies=gb, z=gz, u=gu, meta=json.dumps(gmeta))
         learned = gmeta["eval_loss"] < chance - 0.02
         if cfg.save_ckpt:
             torch.save(gen.state_dict(), cdir / f"H{H}_gen.pt")
@@ -441,8 +473,8 @@ def train_stage(cfg, out, device):
               f"{gmeta['bayes_floor']:.4f} ({gmeta['steps']} steps) learned={learned}", flush=True)
         if learned:
             twin, tmeta = train_twin(H, cfg, device, hs)
-            tb, tz = extract_body(twin, H, cfg, device, hs)
-            np.savez(bdir / f"H{H}_twin.npz", bodies=tb, z=tz, meta=json.dumps(tmeta))
+            tb, tz, tu = extract_body(twin, H, cfg, device, hs)
+            np.savez(bdir / f"H{H}_twin.npz", bodies=tb, z=tz, u=tu, meta=json.dumps(tmeta))
             print(f"[H={H}] twin saved ({tmeta['steps']} steps). ({round(time.time()-t,1)}s)", flush=True)
         else:
             print(f"[H={H}] gen UNLEARNED -> skipping twin (no contrast vs an unlearned gen). "
@@ -481,7 +513,8 @@ def measure_stage(cfg, out, precheck=None):
     sharp_Hs = [r["H"] for r in records if r["sharp"]]
     H_star = min(sharp_Hs) if sharp_Hs else None
     verdict = "SHARP" if H_star is not None else "MARGINAL"
-    manifest = {"lane": "chatv2", "phase": "0.2" if cfg.latent == "computed" else "0",
+    manifest = {"lane": "chatv2",
+                "phase": "7" if cfg.latent == "coupled" else "0.2" if cfg.latent == "computed" else "0",
                 "verdict": verdict, "H_star": H_star, "precheck": precheck,
                 "cfg": asdict(cfg), "records": records}
     (out / "manifest.json").write_text(json.dumps(manifest, indent=2))
@@ -496,7 +529,7 @@ def run(cfg, out):
           f"lr={cfg.lr} delta={cfg.delta} steps<={cfg.max_steps} fair={cfg.fair_readout}", flush=True)
     t0 = time.time()
     precheck = None
-    if cfg.latent == "computed":
+    if cfg.latent in ("computed", "coupled"):
         print("[precheck] linear input-probe (must be ~chance)...", flush=True)
         precheck = input_probe_precheck(cfg)
         for H, a in precheck.items():
@@ -520,7 +553,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--mode", choices=["smoke", "full"], default="full")
     ap.add_argument("--stage", choices=["train", "measure", "all"], default="all")
-    ap.add_argument("--latent", choices=["bias", "computed"], default=None)
+    ap.add_argument("--latent", choices=["bias", "computed", "coupled"], default=None)
     ap.add_argument("--window", type=int, default=None)
     ap.add_argument("--h-sweep", default=None, help="comma-sep H values, e.g. 8 or 2,4,8")
     ap.add_argument("--d-model", type=int, default=None)
@@ -534,6 +567,7 @@ def main():
     ap.add_argument("--patience", type=int, default=None)
     ap.add_argument("--fair-readout", action="store_true", help="read each latent at its channel's freshest position")
     ap.add_argument("--arity", type=int, default=None, help="computed-latent k-tuple parity arity (2=pair-XOR)")
+    ap.add_argument("--p-noise", type=float, default=None, help="coupled-latent per-latent coupling noise (Phase 7)")
     ap.add_argument("--n-layers", type=int, default=None)
     ap.add_argument("--n-heads", type=int, default=None)
     ap.add_argument("--lr", type=float, default=None)
@@ -570,6 +604,8 @@ def main():
         cfg.fair_readout = True
     if args.arity:
         cfg.arity = args.arity
+    if args.p_noise is not None:
+        cfg.p_noise = args.p_noise
     if args.n_layers:
         cfg.n_layers = args.n_layers
     if args.n_heads:
