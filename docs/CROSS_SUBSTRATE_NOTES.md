@@ -542,7 +542,7 @@ public-training scale does not supply the high-dim body either. Measured detail:
 `PDE_C2_SHELL_DIMENSIONALITY_PROBE.md`.
 
 **The prediction tested (2026-05-30 → 06-01): a de-confounded, high-dim *control*
-body that resists and *scales* — but a seed-sensitive SHARP.** The "where it would live"
+body that resists and *scales*, with a robust objective-driven (at-the-bar) contrast.** The "where it would live"
 claim above was built and probed in the new `chatv2` lane
 (`sundog/docs/chatv2/`): a from-scratch transformer trained generatively on a
 synthetic `H`-latent channel task, with the C1/Mesa fingerprint ported to its
@@ -576,12 +576,18 @@ probe hit SHARP at `d_dec≈7` (`z1_acc`=0.94). **Scaling, then the honest tempe
 
 **Robust across draws:** a high-dimensional control body that resists (`d_dec`
 large, `leak`≈chance) and **scales** with `H` — the closest any control substrate
-has come. **Not robust:** the SHARP verdict (control-sufficiency `z1_acc` + the
-objective contrast). **A 3-seed `H=8` seed-stability test (frozen, fair readout,
-Gate E) is staged to measure the SHARP pass-rate before any `d_dec≥20` / `H=32`
-claim** (`chatv2/PHASE1_RESIDUAL_BODY_SCALING_SPEC.md` §4.1 read-back). Synthetic
-toy; **unpromoted**. Detail: `sundog/docs/chatv2/PHASE0_2_COMPUTED_LATENTS.md`
-(+ `PHASE0_MINIMUM_FALSIFIABLE.md` Amendment 1).
+has come. **The 3-seed `H=8` seed-stability test ran (2026-06-01)** and resolved
+the scare: the body-resistance is **seed-robust** (high-dim / control-sufficient /
+resisting, tight across seeds — the earlier "sensitivity" was a `pos_h` *config*
+artifact, not seed variance), and a baseline-ladder decomposition shows the
+gen-vs-control contrast is a **robust objective-driven excess of `0.205 ± 0.022`**
+(~67% of the body's non-decision content is objective-driven; control training
+adds ≈0; ~0.09 is architectural / random-feature, a falsified-"twin incidentally
+computes" surprise). Gate E passes 2/3 (`phase1_scaling_sharp_below_bar`) — an
+*at-the-bar* SHARP whose underlying contrast is seed-stable. Still `d_dec ≈ 7.6
+< 20` (below the high-dim bar) and a synthetic toy; **unpromoted**. Detail:
+`chatv2/PHASE1_SEEDSTAB_RECEIPT.md` (+ `PHASE0_2_COMPUTED_LATENTS.md`,
+`PHASE0_MINIMUM_FALSIFIABLE.md` Amendment 1).
 
 **Resistance has (at least) two axes (2026-05-31, Faraday addition).** The
 body-resistance discussion above is *dimensional* - `dim(body) >> dim(shadow)`,
@@ -597,10 +603,11 @@ under-determined by local data* (topological). The portfolio's only **exact**
 regime-2 (AB) lives on the topological axis. On the dimensional axis the measured
 *control* substrates are marginal (NSE-C1, Mesa, shell). **chatv2 shows a
 de-confounded high-dim body that resists and *scales* (`d_dec` 7→14) — the closest
-any control substrate has come — but the full SHARP verdict is seed-sensitive (one
-draw sharp, one marginal; under a 3-seed test), so it is not yet a robust
-dimensional-axis separation, and a synthetic toy regardless.** See §8 for the full
-Faraday/Maxwell reading.
+any control substrate has come — with a **seed-robust** body-resistance and a
+robust objective-driven contrast (`0.205 ± 0.022` over 3 seeds), an *at-the-bar*
+SHARP (Gate E 2/3). Still `d_dec ≈ 7.6 < 20` and a synthetic toy, so a
+robust-but-below-bar dimensional-axis separation, not yet promotable.** See §8 for
+the full Faraday/Maxwell reading.
 
 ### 6.4 The math-or-Buddha epistemic stance
 
@@ -870,7 +877,8 @@ not the dimensional axis of §6.3. It would be the first *exact* (non-marginal,
 non-learnability-walled) regime-2 point anywhere in the portfolio - the clean
 opposite corner from the three marginal control substrates and the chatv2
 dimensional-axis result (a de-confounded high-dim body that resists and scales,
-`d_dec` 7→14 — but a seed-sensitive SHARP under a 3-seed test; toy).
+`d_dec` 7→14 — seed-robust, with a robust objective-driven contrast (0.205±0.022,
+3 seeds); an at-the-bar SHARP, still `d_dec<20`; toy).
 
 Honest bounds. The resisting body is "small" - one integer per `H^1` generator,
 not a high-dimensional state - so AB does **not** close the open frontier of §6.3

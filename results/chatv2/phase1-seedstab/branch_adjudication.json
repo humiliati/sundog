@@ -1,0 +1,53 @@
+{
+  "H": 8,
+  "bar": 20,
+  "n_seeds": 3,
+  "branch_counts": {
+    "phase1_scaling_sharp_below_bar": 2,
+    "phase1_highH_marginal": 1
+  },
+  "gateE_need": 2,
+  "gateE_pass": true,
+  "verdict": "phase1_scaling_sharp_below_bar",
+  "rows": [
+    {
+      "seed": 0,
+      "manifest": "C:/Users/hughe/Dev/sundog/results/chatv2/phase1-seedstab\\seed0\\manifest.json",
+      "branch": "phase1_scaling_sharp_below_bar",
+      "status": "SHARP",
+      "d_dec": 7.638,
+      "z1_acc": 0.84,
+      "leak": 0.5122,
+      "body_carry": 0.8286,
+      "twin_body_carry": 0.5983,
+      "eval_loss": 0.4972,
+      "fair_readout": true
+    },
+    {
+      "seed": 1,
+      "manifest": "C:/Users/hughe/Dev/sundog/results/chatv2/phase1-seedstab\\seed1\\manifest.json",
+      "branch": "phase1_scaling_sharp_below_bar",
+      "status": "SHARP",
+      "d_dec": 7.456,
+      "z1_acc": 0.8647,
+      "leak": 0.5191,
+      "body_carry": 0.8774,
+      "twin_body_carry": 0.67,
+      "eval_loss": 0.4938,
+      "fair_readout": true
+    },
+    {
+      "seed": 2,
+      "manifest": "C:/Users/hughe/Dev/sundog/results/chatv2/phase1-seedstab\\seed2\\manifest.json",
+      "branch": "phase1_highH_marginal",
+      "status": "MARGINAL",
+      "d_dec": 7.561,
+      "z1_acc": 0.8037,
+      "leak": 0.523,
+      "body_carry": 0.7314,
+      "twin_body_carry": 0.5554,
+      "eval_loss": 0.485,
+      "fair_readout": true
+    }
+  ]
+}

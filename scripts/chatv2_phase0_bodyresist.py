@@ -77,6 +77,7 @@ class Cfg:
     fair_readout: bool = False       # read each latent at its channel's freshest (last) position
                                      # instead of the global final position (computed layout only) --
                                      # a readout-FAIRNESS fix, not a threshold/metric change
+    arity: int = 2                   # computed-latent: k-tuple parity arity (2 = pair-XOR baseline)
     # sharpness thresholds
     d_dec_frac_min: float = 0.5
     z1_ctrl_min: float = 0.70
@@ -108,31 +109,30 @@ def _gen_bias(H, batch, bpc, delta, rng):
     return bits, z
 
 
-def _gen_computed(H, batch, bpc, delta, rng, window=None):
-    """Phase 0.2: per-channel latent z_i encoded in the XOR of independent bit-PAIRS.
-    Channel i emits P = bpc//2 pairs (u, v); each pair's XOR x = u^v is biased by z_i
-    (x ~ Bernoulli(0.5 +/- delta) by z_i), with u fair so neither u nor v alone
-    correlates with z_i (Cov(u,z)=Cov(v,z)=0) -> z_i is provably NOT linearly
-    input-decodable, and there is no recurrence to collapse it. Predicting v (given u
-    and the inferred z_i) forces the model to compute XOR(u,v) and aggregate -> z_i is
-    a maintained per-sequence latent (present at the final position). `window` unused."""
-    P = max(1, bpc // 2)
+def _gen_computed(H, batch, bpc, delta, rng, arity=2):
+    """Phase 0.2 / R1: per-channel latent z_i encoded in the PARITY of independent
+    k-tuples (k = arity). Channel i emits P = bpc//k tuples; the first k-1 bits are
+    fair and the last = (parity of the first k-1) XOR x, with x ~ Bernoulli(0.5 +/-
+    delta) by z_i, so each tuple's k-bit parity = x and NO bit or sub-tuple correlates
+    with z_i (input-undecodable). Predicting the last bit forces the model to compute
+    the k-parity and aggregate -> z_i is a maintained per-sequence latent. arity=2 is
+    bit-identical to the original pair-XOR; arity=3 is 3-bit parity (harder)."""
+    A = max(2, arity)
+    P = max(1, bpc // A)
     z = rng.integers(0, 2, size=(batch, H)).astype(np.int64)
     chan = np.arange(P * H) % H
-    px = (0.5 + delta * (2.0 * z - 1.0))[:, chan]            # (B, P*H) P(pair-xor = 1)
+    px = (0.5 + delta * (2.0 * z - 1.0))[:, chan]            # (B, P*H) P(tuple parity = 1)
     x = (rng.random((batch, P * H)) < px).astype(np.int64)
-    u = rng.integers(0, 2, size=(batch, P * H)).astype(np.int64)
-    v = u ^ x
-    bits = np.empty((batch, 2 * P * H), dtype=np.int64)
-    bits[:, 0::2] = u
-    bits[:, 1::2] = v
+    tup = rng.integers(0, 2, size=(batch, P * H, A)).astype(np.int64)
+    tup[:, :, A - 1] = (tup[:, :, :A - 1].sum(2) % 2) ^ x    # last bit -> tuple parity = x
+    bits = tup.reshape(batch, P * H * A)
     return bits, z
 
 
 def gen_batch(H, batch, cfg, rng):
     if cfg.latent == "bias":
         return _gen_bias(H, batch, cfg.bits_per_channel, cfg.delta, rng)
-    return _gen_computed(H, batch, cfg.bits_per_channel, cfg.delta, rng, cfg.window)
+    return _gen_computed(H, batch, cfg.bits_per_channel, cfg.delta, rng, cfg.arity)
 
 
 # --------------------------------------------------------------------------- #
@@ -262,11 +262,12 @@ def train_twin(H, cfg, device, seed):
     return twin, {"train_acc_z1": float(best_acc), "steps": steps}
 
 
-def _lastpos(H, bpc):
-    """Computed pair-XOR layout: P=bpc//2 pairs/channel; channel i's last token is at
-    2*((P-1)*H + i) + 1. Gives each latent its freshest read position (channel H-1 -> final token)."""
-    P = max(1, bpc // 2)
-    return [2 * ((P - 1) * H + i) + 1 for i in range(H)]
+def _lastpos(H, bpc, arity=2):
+    """Computed k-tuple layout (k=arity): P=bpc//k tuples/channel; channel i's last
+    token at k*((P-1)*H + i) + (k-1). Each latent's freshest read position."""
+    A = max(2, arity)
+    P = max(1, bpc // A)
+    return [A * ((P - 1) * H + i) + (A - 1) for i in range(H)]
 
 
 def extract_body(model, H, cfg, device, seed):
@@ -277,7 +278,7 @@ def extract_body(model, H, cfg, device, seed):
     with torch.no_grad():
         _, hiddens = model(idx, return_hidden=True)
     if cfg.fair_readout:
-        pos = _lastpos(H, cfg.bits_per_channel)        # H per-channel freshest positions
+        pos = _lastpos(H, cfg.bits_per_channel, cfg.arity)   # H per-channel freshest positions
         bodies = np.stack([np.stack([h[:, p, :].cpu().numpy() for p in pos], axis=1)
                            for h in hiddens], axis=1)   # (N, layers, H, d)
     else:
@@ -489,10 +490,10 @@ def measure_stage(cfg, out, precheck=None):
 
 
 def run(cfg, out):
-    device = torch.device("cpu")
-    print(f"[start] mode={cfg.mode} stage={cfg.stage} latent={cfg.latent} "
-          f"window={cfg.window} H={cfg.h_sweep} d_model={cfg.d_model} "
-          f"layers={cfg.n_layers} steps<={cfg.max_steps}", flush=True)
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")  # GPU when available (LATTICE)
+    print(f"[start] device={device} mode={cfg.mode} stage={cfg.stage} latent={cfg.latent} "
+          f"arity={cfg.arity} H={cfg.h_sweep} d_model={cfg.d_model}/{cfg.n_layers}L/{cfg.n_heads}H "
+          f"lr={cfg.lr} delta={cfg.delta} steps<={cfg.max_steps} fair={cfg.fair_readout}", flush=True)
     t0 = time.time()
     precheck = None
     if cfg.latent == "computed":
@@ -532,6 +533,10 @@ def main():
     ap.add_argument("--min-steps", type=int, default=None, help="no early-stop before this (grok floor)")
     ap.add_argument("--patience", type=int, default=None)
     ap.add_argument("--fair-readout", action="store_true", help="read each latent at its channel's freshest position")
+    ap.add_argument("--arity", type=int, default=None, help="computed-latent k-tuple parity arity (2=pair-XOR)")
+    ap.add_argument("--n-layers", type=int, default=None)
+    ap.add_argument("--n-heads", type=int, default=None)
+    ap.add_argument("--lr", type=float, default=None)
     ap.add_argument("--out", default=None)
     ap.add_argument("--seed", type=int, default=0)
     args = ap.parse_args()
@@ -563,6 +568,14 @@ def main():
         cfg.patience = args.patience
     if args.fair_readout:
         cfg.fair_readout = True
+    if args.arity:
+        cfg.arity = args.arity
+    if args.n_layers:
+        cfg.n_layers = args.n_layers
+    if args.n_heads:
+        cfg.n_heads = args.n_heads
+    if args.lr is not None:
+        cfg.lr = args.lr
     torch.set_num_threads(4)
     out = pathlib.Path(args.out) if args.out else pathlib.Path(f"results/chatv2/phase0-{args.mode}")
     run(cfg, out)
