@@ -14,7 +14,9 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "prepare": "node scripts/setup-githooks.mjs",
-    "prebuild": "node scripts/build-chat-index.mjs && node scripts/build-photometric-core-media.mjs && node scripts/build-balance-public-data.mjs && node scripts/build-mines-public-data.mjs && node scripts/build-mesa-public-data.mjs && node scripts/build-bayes-public-data.mjs && node scripts/build-mesa-public-media.mjs && node scripts/build-coarse-graining-public-media.mjs && node scripts/build-structural-boundary-data.mjs && node scripts/build-structural-boundary-svg.mjs && node scripts/build-generality-public-data.mjs && node scripts/build-generality-svg.mjs",
+    "prebuild": "node scripts/build-chat-index.mjs && node scripts/build-photometric-core-media.mjs && node scripts/build-balance-public-data.mjs && node scripts/build-mines-public-data.mjs && node scripts/build-mesa-public-data.mjs && node scripts/build-bayes-public-data.mjs && node scripts/build-mesa-public-media.mjs && node scripts/build-coarse-graining-public-media.mjs && node scripts/build-structural-boundary-data.mjs && node scripts/build-structural-boundary-svg.mjs && node scripts/build-generality-public-data.mjs && node scripts/build-generality-svg.mjs && node scripts/build-sitemap.mjs",
+    "seo:sitemap": "node scripts/build-sitemap.mjs",
+    "seo:sitemap:check": "node scripts/build-sitemap.mjs --check",
     "chat:index": "node scripts/build-chat-index.mjs",
     "chat:eval:static": "npm run chat:index && node chat/eval/score_static_router.mjs",
     "chat:eval:wild": "node chat/eval/score_wild_probe.mjs",

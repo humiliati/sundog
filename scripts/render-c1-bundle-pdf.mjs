@@ -22,8 +22,21 @@ const require = createRequire(import.meta.url);
 const MarkdownIt = require("markdown-it");
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const SRC = path.resolve(REPO, "internal/outreach/PDE_C1_REVIEW_BUNDLE.md");
-const OUT = path.resolve(REPO, "internal/outreach/PDE_C1_REVIEW_BUNDLE.pdf");
+
+// Reviewer-aware paths. `--reviewer=olson` renders the OLSON bundle variant;
+// default (generic) renders the canonical bundle. The reviewer flag only selects
+// which builder-produced .md to render — the body/provenance are identical across
+// variants; only the cover framing differs.
+function parseReviewer(argv) {
+  for (const a of argv) {
+    if (a.startsWith("--reviewer=")) return a.slice("--reviewer=".length).trim().toLowerCase();
+  }
+  return "generic";
+}
+const REVIEWER = parseReviewer(process.argv.slice(2));
+const SUFFIX = REVIEWER === "generic" ? "" : `_${REVIEWER.toUpperCase()}`;
+const SRC = path.resolve(REPO, `internal/outreach/PDE_C1_REVIEW_BUNDLE${SUFFIX}.md`);
+const OUT = path.resolve(REPO, `internal/outreach/PDE_C1_REVIEW_BUNDLE${SUFFIX}.pdf`);
 
 const CHROME_CANDIDATES = [
   "C:/Program Files/Google/Chrome/Application/chrome.exe",
