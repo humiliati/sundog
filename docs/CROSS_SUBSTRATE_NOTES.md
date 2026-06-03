@@ -128,10 +128,12 @@ theme-matching.
   [`prereg/arc/README.md`](prereg/arc/README.md),
   [`prereg/arc/PHASE4_BODY_RESISTANCE_CONTEXT_EXPANSION_SPEC.md`](prereg/arc/PHASE4_BODY_RESISTANCE_CONTEXT_EXPANSION_SPEC.md)
   (Amendment 2).
-- **Isotrophy - CONDITIONAL (rigid only after naming the held-fixed
-  coordinate).** The velocity-fraction shadow ranks stability only *within*
-  fixed `m3` strata; it fails as a mass-marginal held-out predictor. Already
-  documented at §7.2; listed here for the map.
+- **Isotrophy - CONDITIONAL + TIER-2 EXTERNAL (rigid after conditioning, then
+  reliability-explained).** The velocity-fraction shadow ranks stability only
+  *within* the right mass strata; it fails as a mass-marginal held-out predictor.
+  Read as a continuous tail-resolved score, it transfers to Li/Liao 2021 and its
+  per-cell heterogeneity is explained by frame reliability. Already documented
+  at §7.2; listed here for the map.
 - **Threebody - DEFLATIONARY (the projection is simpler than first claimed).**
   Phase 18 reduced "guarded TRACK / tidal sensing" to a radius-gated inward
   reflex - an over-attribution corrected, not a separation. Already at §7.3.
@@ -180,10 +182,12 @@ Mesa and Geometry both converged on field-shaped structure:
   guarded TRACK without tidal sensing or gradient steering, while lower-velocity
   and equal-mass boundaries still expose harms.
 - Isotrophy: a two-layer audit-chain result. K_facet v0.3h remains a structural
-  null / named-quarantine result on the strict G.2 catalog, while v0.11 registers
-  a separate conditional catalog signal: Floquet velocity-fraction ranks
-  stability within fixed `m3` strata but fails as a mass-marginal held-out
-  predictor.
+  null / named-quarantine result on the strict G.2 catalog, while the
+  velocity-fraction lane registers a separate conditional catalog signal:
+  Floquet velocity-fraction ranks stability within the right mass strata, fails
+  as a mass-marginal held-out predictor, then transfers to Li/Liao 2021 as a
+  continuous tail-resolved score with frame reliability explaining the per-cell
+  heterogeneity.
 
 The shared theorem posture is:
 
@@ -454,7 +458,7 @@ discarded.
 | Mesa controller | controller hidden state (`net.7`, 256-wide but **effectively ~2-dim** - a fn of 6-dim obs) | entangled `5D net.7` subspace - **sharp on irreducibility, marginal on body-resistance** (`FVE(net.7\|5D)~0.97`); see the body-resistance note below |
 | Geometry / HaloSim | full atmospheric optics | small set of halo generators / canonical implied circles |
 | Threebody | 18-dim full state | radius-gated inward reflex in the mapped near-escape pocket |
-| Isotrophy | `S3` symmetry orbit of a 3-body choreography; supplementary-B stability catalog | residual `Z2` generators surviving `S3 -> Z2` mass perturbation; Floquet velocity-fraction conditioned on `m3` |
+| Isotrophy | `S3` symmetry orbit of a 3-body choreography; supplementary-B / Li-Liao 2021 stability catalogs | residual `Z2` generators surviving `S3 -> Z2` mass perturbation; Floquet velocity-fraction conditioned on mass strata; tail-resolved continuous vf with frame reliability explaining transfer heterogeneity |
 | Navier-Stokes (C1) | 2D Kolmogorov attractor state (finite-Galerkin, 440 real DOF) | low-Fourier signature `Phi_K` (K=3, 18-dim) - **but the body barely resists**: read-off `FVE(body\|shadow) ~ 0.997` (energy) / `0.993` (enstrophy), a near-invertible projection, so the regime-2 separation is **marginal**; genuine under-determination (`R^2 ~ 0.71` per-DOF) sits only in physically-negligible dissipation-range modes |
 | Faraday / EM (homogeneous) | EM field history on a contractible patch (smooth `A`, `dF = 0`) | plaquette holonomy `∮A = ∫F` - **zero body-resistance *by identity***: closure is the Bianchi identity `dF = d(dA) = 0`, so the shadow reconstructs the body exactly. The exact-zero anchor of the axis (§8.1) |
 | Aharonov-Bohm / EM (topological) [EARNED] | EM field config on a non-contractible patch (`H^1 != 0`) | loop holonomy `∮A = Φ` - **exact *topological* body-resistance**: one flux number is state-insufficient (cannot rebuild interior `B`) yet control-sufficient (fixes the AB phase); local `F` is control-blind. Portfolio's first *exact* regime-2 witness; earned by Phase 7 case 3 (§8.2) |
@@ -782,6 +786,21 @@ confirmation that the velocity-fraction projection transfers across the ansatz b
 anatomy reads the heterogeneity as a reliability map: the main sub-0.5 cell is the
 localized frame-fragile band already flagged by v0.13b, and the other is near-null. That
 "why" is interpretation, not a registered mechanism.
+
+Post-v0.18 update: the reliability-map interpretation is now registered evidence, not
+only anatomy. v0.18 widened the liao2021 map to 18 fresh quadruple-held-out 8 x 8 cells
+and landed `reliability_drives_per_cell_auc_supported`: pooled AUC_cond 0.620208
+(`p = 1e-5`), label-blind frame reliability predicts per-cell AUC (`rho = 0.5975`,
+`p = 0.00523`), and the reversal guard found 0 frame-stable decisive-negative cells.
+The two decisive negative cells are exactly the frame-fragile cells; the frame-stable
+sub-0.5 cell is not statistically decisive (`p_reverse = 0.0968`). So isotrophy's SIXTH
+projection lesson is reliability-as-mechanism: for eigenvector/argmax-selected shadows,
+the heterogeneity of transfer can itself be governed by the reliability of the selected
+direction. This remains Tier-2 / stable-support / within-cell / tail-resolved continuous
+score / not theorem-facing, but the external-transfer arc is now confirmed, replicated,
+and mechanistically explained as far as the available Tier-2 target permits.
+The consolidated claim boundary lives at
+[`isotrophy/kfacet/kfacet_external_transfer_capstone.md`](isotrophy/kfacet/kfacet_external_transfer_capstone.md).
 
 ### 7.3 Threebody
 

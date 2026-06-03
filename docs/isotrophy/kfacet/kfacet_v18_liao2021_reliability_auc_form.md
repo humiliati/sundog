@@ -55,21 +55,20 @@ v0.17 replication + reproducible heterogeneity -> v0.18 the heterogeneity mechan
 Status: **OPERATOR LOCK 2026-06-03; VERDICT LANDED `reliability_drives_per_cell_auc_supported` 2026-06-03.** At lock time no
 v0.18 runner had been written, no v0.18 sample had been drawn, no v0.18 D5 rows
 had been integrated, and no v0.18 AUC or reliability statistic had been
-computed. After lock, the runner was implemented and `npm run
-isotrophy:v18:prepare` completed the source/sample-only stage:
-`reliability_auc_prepared_not_measured`.
+computed. After lock, the runner was implemented, prepared, sharded, merged,
+analyzed, and independently verified under the locked form.
 
-Prepared receipt:
+Execution receipts:
 
 ```text
-command:        npm run isotrophy:v18:prepare
+prepare:        npm run isotrophy:v18:prepare
+measurement:    16 staged shards, then merge + analyze
 out:            results/isotrophy/k-facet-v18-liao2021-reliability-auc/
 grid scan:      4x4=7, 5x5=10, 6x6=12, 7x7=16, 8x8=18,
                 10x10=24, 12x12=34, 16x16=46 (all matched lock)
 holdout:        v14+v15+v16+v17 = 4640 rows, disjoint
-supported:      18 cells
-sample:         2880 rows (80 S + 80 U per cell)
-next:           run the 16 staged D5 shards, then merge + analyze
+sample:         2880 rows (80 S + 80 U per cell), 0 attrition
+verdict:        reliability_drives_per_cell_auc_supported
 ```
 
 ## Frame
