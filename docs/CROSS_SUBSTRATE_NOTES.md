@@ -761,7 +761,7 @@ structurally undecidable. v0.12 (measurement reach), v0.13b (feature frame-stabi
 and v0.14 (target coverage) are three distinct pre-conditions a conditional projection
 must clear before an external catalog can confirm it.
 
-Post-v0.16 update: the cleared-but-saturated path then resolved into the program's
+Post-v0.17 update: the cleared-but-saturated path then resolved into the program's
 strongest cross-substrate result -- isotrophy's FIFTH projection lesson. v0.15 defeated
 v0.14's coverage wall (outcome-balanced 80/80 case-control over the 7 stable-support
 cells) but landed `directional_weak`: the coarse zone is feature-SATURATED in the target
@@ -773,10 +773,15 @@ frame-stability / target coverage): **feature granularity matched to the target
 distribution** -- a projection that is frame-stable, coverage-satisfied, and
 measurement-feasible can still need the right feature RESOLUTION to express its signal
 externally, because a coarse bin that saturates in the target throws the signal away
-while the continuous form recovers it. This is the program's first held-out external
-(Tier-2) confirmation that the velocity-fraction projection transfers across the ansatz
-boundary -- pooled, mass-cell-heterogeneous (5 of 7 cells in-direction, two reversed),
-Tier-2 and bounded, not theorem-facing.
+while the continuous form recovers it. v0.17 then repeated the continuous read on fresh
+triple-held-out rows and landed `heterogeneous_transfer_replicates_clean`
+(AUC_cond 0.646875, p 1e-5, exact Spearman rho=1.0, p_rho=1/5040 against the v0.16
+cell vector). This is the program's first replicated held-out external (Tier-2)
+confirmation that the velocity-fraction projection transfers across the ansatz boundary
+-- pooled, mass-cell-heterogeneous, Tier-2 and bounded, not theorem-facing. The post-hoc
+anatomy reads the heterogeneity as a reliability map: the main sub-0.5 cell is the
+localized frame-fragile band already flagged by v0.13b, and the other is near-null. That
+"why" is interpretation, not a registered mechanism.
 
 ### 7.3 Threebody
 

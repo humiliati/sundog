@@ -1,11 +1,79 @@
 # v0.17 liao2021 Tail-Resolved Heterogeneity Replication Form
 
-Status: **OPERATOR LOCK 2026-06-02; RUNNER IMPLEMENTED + PREPARED 2026-06-02.**
-The v0.17 runner now exists and `prepare` has drawn the locked 1,120-row
-triple-holdout sample. No v0.17 D5 shards have been run, no merge has occurred,
-and no v0.17 statistic has been computed. This form promotes the v0.17 scope memo
-(Option A) to a lockable pre-registration. It is a fresh-row REPLICATION of v0.16,
-not a new feature search.
+## Result (2026-06-02)
+
+**Verdict: `heterogeneous_transfer_replicates_clean`** -- the top of the tree. On fresh
+triple-held-out rows the Tier-2 tail-resolved transfer replicates AND its mass-cell
+heterogeneity reproduces.
+
+```text
+pooled replication: AUC_cond 0.646875 (J 28980 / D 44800)  vs v0.16 0.6469866  -> clears 0.55
+                    p_perm 1.0e-5   attrition 0.0000   frame-spread median 0.00037 p90 0.0256 (clean)
+heterogeneity:      Spearman rho 1.0  exact-perm p_rho 1/5040 = 0.000198 (only the correct
+                    pairing of 5040 reaches rho=1)  -> heterogeneity replicates
+```
+
+**The pooled transfer is not a v0.16 fluke.** A pre-registered replication on fresh rows
+(excluding all v0.14/v0.15/v0.16 orbits, 0/0/0 overlap) lands AUC_cond 0.646875 -- within
+0.0001 of v0.16's 0.6469866 -- at the permutation floor. The held-out external Tier-2
+transfer is confirmed twice.
+
+**The mass-cell heterogeneity is reproducible structure, not one-sample texture.** All
+seven fresh per-cell AUCs preserve v0.16's exact rank order (rho=1.0), and all seven
+preserve their direction relative to 0.5 -- including both sub-0.5 cells staying sub-0.5
+(`qA2_qB1` 0.432->0.453, `qA3_qB0` 0.470->0.474). The local pattern is real and
+reproducible. The fresh AUCs are genuinely different from v0.16 (max abs diff 0.031), so
+rho=1.0 is a true rank replication, not a re-read.
+
+**Honest bound (n=7):** rho=1.0 is a seven-point rank concordance; the exact-perm
+p=1/5040 is genuinely significant (a perfect ordering is unlikely by chance), but the
+claim is "reproducible seven-cell heterogeneity," not a mechanism. WHY `qA2_qB1` and
+`qA3_qB0` sit below 0.5 is the open question the non-gating anatomy sidecar opens.
+
+**Post-hoc anatomy (interpretation, not a registered mechanism).** Ordered by fresh
+v0.17 AUC, the sidecar reads the replicated pattern as an instrument-reliability map:
+
+```text
+cell        AUC    masses(a,b,c)      zone2  S_p50   U_p50   S-U     frame_p90
+qA2_qB1    0.453   .311 .327 .362     158    .9366   .9687  -0.0322   0.321
+qA3_qB0    0.474   .320 .325 .355     154    .9461   .9540  -0.0079   0.025
+qA1_qB0    0.563   .302 .325 .376     157    .9937   .9938  -0.0000   0.022
+qA3_qB2    0.653   .326 .333 .341     158    .9548   .9198  +0.0351   0.004
+qA3_qB1    0.700   .324 .330 .346     156    .9558   .9286  +0.0272   0.009
+qA3_qB3    0.744   .324 .336 .339     159    .9517   .8472  +0.1044   0.005
+qA0_qB0    0.941   .289 .327 .383     157    .9966   .9905  +0.0061   0.001
+```
+
+`qA2_qB1` is the frame-fragile cell: its frame-spread p90 is 0.321, over an order of
+magnitude above the well-calibrated cells and exactly the localized fragility already
+flagged by the v0.13b frame audit. `qA3_qB0` is closer to a near-null than to a competing
+physics: fresh AUC 0.474 with a median score gap of only -0.008. Everywhere the ensemble
+is frame-stable and the cell has score resolution, the v0.11 direction holds. Zone
+saturation is uniform (154-159/160 rows in zone 2), so the coarse zone is not the
+discriminator. This anatomy is coherent with the receipts, but it remains descriptive:
+confirming "reliability drives per-cell AUC" would require its own wider-cell chapter.
+
+**Independent verification.** A standalone brute-force pair-count pooled AUC + a
+hand-rolled rank/Pearson exact-permutation Spearman (independent of the runner's midrank
+path) reproduced AUC_cond 0.646875, J 28980, D 44800, rho 1.0, p_rho 1/5040 BIT-FOR-BIT,
+and confirmed the v0.17 vector differs from v0.16 (not a re-read). Receipt + verifier:
+`results/isotrophy/k-facet-v17-liao2021-heterogeneity/` (`manifest.json`,
+`per_cell_rank.csv`, `heterogeneity_replication.json`, `anatomy_sidecar.csv`,
+`_independent_check.{py,json}`).
+
+**Claim (locked):** the tail-resolved velocity-fraction projection transfers on fresh
+held-out liao2021 samples AND its mass-cell heterogeneity is reproducible enough to report
+as structure. Bounded: Tier-2 / Li-Liao lineage / stable-support region / within-cell rank
+signal / not coarse-zone / not full-catalog prevalence / not Tier-3 independent / not
+theorem-facing. The v0.16 pass stands; v0.17 strengthens it from a single external pass to
+a replicated one with reproducible per-cell structure.
+
+---
+
+Status: **OPERATOR LOCK 2026-06-02; VERDICT LANDED `heterogeneous_transfer_replicates_clean` 2026-06-02.**
+At lock time no v0.17 runner had been written, no v0.17 sample had been drawn, no v0.17
+D5 rows had been integrated, and no v0.17 statistic had been computed. The completed run
+followed the locked form: fresh-row REPLICATION of v0.16, not a new feature search.
 
 Prepared receipt:
 

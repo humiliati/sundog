@@ -1456,7 +1456,7 @@ finding preserved. Chapter close at
 `docs/isotrophy/kfacet/kfacet_v09_writeup.md`.
 
 **Isotrophy program PAUSED 2026-05-24 at end-of-v0.9, then advanced
-off-pause through v0.10-v0.16 on 2026-05-29 -> 2026-06-02.** Pause/frontier
+off-pause through v0.10-v0.17 on 2026-05-29 -> 2026-06-03.** Pause/frontier
 document at `docs/isotrophy/kfacet/kfacet_isotrophy_program_pause.md`.
 The live conditional profile is: v0.10a registers the monotone vf ->
 stability trend in-sample (`p = 7.304e-3`), v0.10b preserves the
@@ -1470,15 +1470,19 @@ limit, not a falsification); v0.13's signal-blind search left only Tier-2
 Li/Liao 2021 viable; v0.13a/b bounded leakage at 0.0 and certified the coarse
 zone frame-stable; then v0.14 landed `undecidable_coverage`, v0.15
 `directional_weak` (`AUC_cond = 0.5125` -- the coarse zone is 98.4% saturated in
-liao2021), and **v0.16 `tail_resolved_transfer_passes_clean`** (`AUC_cond = 0.647`,
+liao2021), **v0.16 `tail_resolved_transfer_passes_clean`** (`AUC_cond = 0.647`,
 `p = 1e-5`) once the feature was read as a continuous 4-frame ensemble-median vf
 rather than the coarse zone (the coarse zone on the same held-out rows reads
-`0.510`). This is the program's first held-out external (Tier-2) confirmation that
-the velocity-fraction projection transfers across the ansatz boundary -- pooled,
-mass-cell-heterogeneous (5 of 7 cells in-direction, two reversed), bounded to
-Tier-2, not theorem-facing. The program remains paused at the lab-bandwidth level;
-remaining reopening is the v0.16 mass-cell heterogeneity (v0.17, scoping), a larger
-supported-region chapter, or new-mechanism work under the locked discipline.
+`0.510`), and **v0.17 `heterogeneous_transfer_replicates_clean`** on a fresh
+triple-holdout sample (`AUC_cond = 0.646875`, `p = 1e-5`, Spearman `rho = 1.0`,
+exact `p_rho = 1/5040`). This is the program's first replicated held-out external
+(Tier-2) confirmation that the velocity-fraction projection transfers across the
+ansatz boundary -- pooled, mass-cell-heterogeneous, bounded to Tier-2, not
+theorem-facing. Post-hoc anatomy suggests the sub-0.5 cells are a reliability map
+(one frame-fragile band and one near-null cell), not a competing physics; that "why"
+is descriptive, not a registered mechanism. The program remains paused at the
+lab-bandwidth level; remaining reopening is a wider reliability/mechanism chapter, a
+larger supported-region chapter, or new-mechanism work under the locked discipline.
 
 ### Cross-Substrate Hand-Offs
 
