@@ -41,6 +41,10 @@ Related docs:
 - [`lattice/PROMOTE_GATE.md`](lattice/PROMOTE_GATE.md) - the canonical R0->R3 rung
   ladder, per-rung gates, do-not-claim ledger (ported from the chatv2 gate); §7
   points here.
+- [`lattice/BUILD_GATE_REMOTE_RUNBOOK.md`](lattice/BUILD_GATE_REMOTE_RUNBOOK.md) -
+  turnkey operator steps to run the Phase-1 build-gate on a rented GPU (Hyperbolic-
+  primary, vendor-generic): provision -> code@commit -> data head-slice -> pinned
+  env -> fail-fast run -> pull/adjudicate/commit verdict -> teardown.
 - [`chatv2/LANE_CHARTER.md`](chatv2/LANE_CHARTER.md) - sibling residual-body
   lane and the variance-PR masking lesson this lane inherits.
 - [`CROSS_SUBSTRATE_NOTES.md`](CROSS_SUBSTRATE_NOTES.md) - body-resistance axis
