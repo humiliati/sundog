@@ -92,10 +92,16 @@ class Cfg:
     max_search_nodes: int = 4096         # per-puzzle DFS node cap
     seed: int = 0
     mode: str = "smoke"                  # smoke | build-gate
+    stage: str = "all"                   # train | eval | all
     data_dir: Optional[str] = None       # Sudoku-Extreme root (build-gate)
     out: str = "results/lattice/build-gate-sudoku-extreme"
     allow_dirty: bool = False
     max_eval: int = 0                    # cap eval puzzles (0 = all)
+    resume: str = ""                     # "" | latest | checkpoint path
+    checkpoint_every: int = 0            # save every N train steps (0 = final only)
+    log_every: int = 100                 # train_log.jsonl cadence
+    eval_every: int = 0                  # cheap one-shot diagnostic cadence (0 = off)
+    eval_sample: int = 64                # first N test puzzles for eval_every diagnostic
 
 
 # ============================================================================
@@ -320,6 +326,57 @@ def param_count(model) -> int:
     return sum(p.numel() for p in model.parameters())
 
 
+def _cfg_json(cfg: Cfg) -> dict:
+    return {k: v for k, v in vars(cfg).items() if isinstance(v, (str, int, float, bool)) or v is None}
+
+
+def _checkpoint_path(out: Path, resume: str) -> Path:
+    if resume == "latest":
+        return out / "checkpoint_latest.pt"
+    return Path(resume)
+
+
+def _save_checkpoint(out: Path, model, opt, step: int, cfg: Cfg, rng, *, keep_step_copy: bool) -> Path:
+    ckpt = {
+        "rolloutVersion": ROLLOUT_VERSION,
+        "step": step,
+        "cfg": _cfg_json(cfg),
+        "model": model.state_dict(),
+        "optimizer": opt.state_dict(),
+        "torch_rng_state": torch.get_rng_state(),
+        "cuda_rng_state_all": torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None,
+        "train_rng_state": rng.get_state(),
+    }
+    latest = out / "checkpoint_latest.pt"
+    torch.save(ckpt, latest)
+    if keep_step_copy:
+        step_path = out / f"checkpoint_step_{step:08d}.pt"
+        torch.save(ckpt, step_path)
+    return latest
+
+
+def _load_checkpoint(out: Path, resume: str, model, opt, rng, device) -> dict:
+    path = _checkpoint_path(out, resume)
+    if not path.exists():
+        raise SystemExit(f"Checkpoint not found: {path}")
+    ckpt = torch.load(path, map_location=device, weights_only=False)
+    model.load_state_dict(ckpt["model"])
+    opt.load_state_dict(ckpt["optimizer"])
+    if ckpt.get("torch_rng_state") is not None:
+        torch.set_rng_state(ckpt["torch_rng_state"].cpu())
+    if torch.cuda.is_available() and ckpt.get("cuda_rng_state_all") is not None:
+        torch.cuda.set_rng_state_all(ckpt["cuda_rng_state_all"])
+    if ckpt.get("train_rng_state") is not None:
+        rng.set_state(ckpt["train_rng_state"])
+    return {"path": str(path), "step": int(ckpt.get("step", 0)),
+            "rolloutVersion": ckpt.get("rolloutVersion")}
+
+
+def _append_jsonl(path: Path, row: dict):
+    with path.open("a", encoding="utf-8") as fh:
+        fh.write(json.dumps(row) + "\n")
+
+
 # ============================================================================
 # I5 iterative-deduction rollout (contract: docs/lattice/PHASE1_I5_ROLLOUT_CONTRACT.md)
 # ============================================================================
@@ -533,36 +590,88 @@ def run_build_gate(cfg: Cfg, device, out: Path) -> dict:
     rng = torch.Generator(device=device).manual_seed(cfg.seed)
     model = LatticeDeductionTransformer(cfg).to(device)
     opt = torch.optim.AdamW(model.parameters(), lr=cfg.lr, weight_decay=cfg.weight_decay)
+    resume_info = None
+    start_step = 0
+    if cfg.resume:
+        resume_info = _load_checkpoint(out, cfg.resume, model, opt, rng, device)
+        start_step = resume_info["step"]
     t0 = time.time()
-    for step in range(cfg.max_steps):
-        idx = torch.randint(len(train_pairs), (cfg.batch,), generator=rng, device=device).tolist()
-        lat, sol = grids_to_tensors([train_pairs[i] for i in idx], device)
-        loss, _, _ = compute_loss(model, lat, sol, cfg, rng)
-        opt.zero_grad(); loss.backward(); opt.step()
+    train_summary = None
+    if cfg.stage in ("train", "all"):
+        model.train()
+        log_path = out / "train_log.jsonl"
+        last_loss = last_elim = last_conflict = None
+        for step0 in range(start_step, cfg.max_steps):
+            step = step0 + 1
+            idx = torch.randint(len(train_pairs), (cfg.batch,), generator=rng, device=device).tolist()
+            lat, sol = grids_to_tensors([train_pairs[i] for i in idx], device)
+            loss, elim_loss, conflict_loss = compute_loss(model, lat, sol, cfg, rng)
+            opt.zero_grad(); loss.backward(); opt.step()
+            last_loss, last_elim, last_conflict = float(loss.item()), float(elim_loss), float(conflict_loss)
+            if cfg.log_every and (step == 1 or step % cfg.log_every == 0 or step == cfg.max_steps):
+                row = {"step": step, "loss": round(last_loss, 6), "elim_loss": round(last_elim, 6),
+                       "conflict_loss": round(last_conflict, 6), "wall_s": round(time.time() - t0, 1)}
+                if cfg.eval_every and step % cfg.eval_every == 0:
+                    sample = test_pairs[: min(cfg.eval_sample, len(test_pairs))]
+                    row["diag_one_shot_exact_rate"] = round(solve_rate(model, sample, device, cfg), 5)
+                _append_jsonl(log_path, row)
+                print(json.dumps(row), flush=True)
+            if cfg.checkpoint_every and step % cfg.checkpoint_every == 0:
+                _save_checkpoint(out, model, opt, step, cfg, rng, keep_step_copy=True)
+        _save_checkpoint(out, model, opt, cfg.max_steps, cfg, rng, keep_step_copy=False)
+        train_summary = {"start_step": start_step, "end_step": cfg.max_steps,
+                         "last_loss": round(last_loss, 6) if last_loss is not None else None,
+                         "last_elim_loss": round(last_elim, 6) if last_elim is not None else None,
+                         "last_conflict_loss": round(last_conflict, 6) if last_conflict is not None else None,
+                         "checkpoint_latest": str(out / "checkpoint_latest.pt")}
+
+    if cfg.stage == "train":
+        return {"mode": "build-gate", "stage": "train", "branch": "build_gate_train_checkpointed",
+                "resume": resume_info, "train": train_summary, "wall_s": round(time.time() - t0, 1),
+                "n_train": len(train_pairs), "n_test_loaded": len(test_pairs)}
+
+    if cfg.stage == "eval" and not cfg.resume:
+        raise SystemExit("--stage eval requires --resume latest or --resume <checkpoint.pt>")
     one_shot = solve_rate(model, test_pairs, device, cfg)            # diagnostic only
     exact_rate, counts, diagnostics, per_puzzle = rollout_eval(model, test_pairs, device, cfg)
     branch = ("build_gate_pass" if exact_rate >= 0.999 else
               "build_gate_partial" if exact_rate > 0 else "build_gate_fail")
     (out / "rollout_per_puzzle.jsonl").write_text("\n".join(json.dumps(r) for r in per_puzzle), encoding="utf-8")
-    return {"mode": "build-gate", "rollout_exact_rate": round(exact_rate, 5), "branch": branch,
+    return {"mode": "build-gate", "stage": cfg.stage, "rollout_exact_rate": round(exact_rate, 5), "branch": branch,
             "one_shot_exact_rate": round(one_shot, 5), "stop_reason_counts": counts,
-            "diagnostics": diagnostics, "wall_s": round(time.time() - t0, 1),
+            "diagnostics": diagnostics, "resume": resume_info, "train": train_summary,
+            "wall_s": round(time.time() - t0, 1),
             "n_train": len(train_pairs), "n_test": len(test_pairs)}
 
 
 def main() -> int:
     ap = argparse.ArgumentParser(description="LDT build-gate model + trainer")
     ap.add_argument("--mode", choices=["smoke", "build-gate"], default="smoke")
+    ap.add_argument("--stage", choices=["train", "eval", "all"], default="all")
     ap.add_argument("--data-dir", default=None)
     ap.add_argument("--out", default="results/lattice/build-gate-sudoku-extreme")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--max-steps", type=int, default=6000)
+    ap.add_argument("--max-eval", type=int, default=0)
     ap.add_argument("--batch", type=int, default=64)
     ap.add_argument("--lr", type=float, default=1e-3)
+    ap.add_argument("--resume", default="", help="latest or checkpoint path")
+    ap.add_argument("--checkpoint-every", type=int, default=0)
+    ap.add_argument("--log-every", type=int, default=100)
+    ap.add_argument("--eval-every", type=int, default=0, help="cheap one-shot diagnostic cadence during train")
+    ap.add_argument("--eval-sample", type=int, default=64)
+    ap.add_argument("--theta-drop", type=float, default=0.5)
+    ap.add_argument("--theta-cls", type=float, default=THETA_CLS)
+    ap.add_argument("--max-deduction-steps", type=int, default=64)
+    ap.add_argument("--max-search-nodes", type=int, default=4096)
     ap.add_argument("--allow-dirty", action="store_true")
     a = ap.parse_args()
-    cfg = Cfg(mode=a.mode, data_dir=a.data_dir, out=a.out, seed=a.seed,
-              max_steps=a.max_steps, batch=a.batch, lr=a.lr, allow_dirty=a.allow_dirty)
+    cfg = Cfg(mode=a.mode, stage=a.stage, data_dir=a.data_dir, out=a.out, seed=a.seed,
+              max_steps=a.max_steps, max_eval=a.max_eval, batch=a.batch, lr=a.lr,
+              resume=a.resume, checkpoint_every=a.checkpoint_every, log_every=a.log_every,
+              eval_every=a.eval_every, eval_sample=a.eval_sample, theta_drop=a.theta_drop,
+              theta_cls=a.theta_cls, max_deduction_steps=a.max_deduction_steps,
+              max_search_nodes=a.max_search_nodes, allow_dirty=a.allow_dirty)
     if a.mode == "smoke":
         cfg = Cfg(mode="smoke", d_model=32, n_layers=1, n_iters=2, batch=16, seed=a.seed,
                   allow_dirty=True, out=a.out, data_dir=a.data_dir)
@@ -579,6 +688,8 @@ def main() -> int:
         "torch": torch.__version__, "python": sys.version.split()[0], "platform": platform.platform(),
         "arch": {"d_model": cfg.d_model, "n_layers": cfg.n_layers, "n_heads": cfg.n_heads,
                  "n_iters": cfg.n_iters, "lattice_dim": LATTICE_DIM, "lambda_cls": LAMBDA_CLS, "theta_cls": THETA_CLS},
+        "stage": cfg.stage, "seed": cfg.seed, "maxSteps": cfg.max_steps, "maxEval": cfg.max_eval,
+        "resume": cfg.resume, "checkpointEvery": cfg.checkpoint_every,
         "rolloutContract": "docs/lattice/PHASE1_I5_ROLLOUT_CONTRACT.md", "rolloutVersion": ROLLOUT_VERSION,
         "thetaDrop": cfg.theta_drop, "thetaCls": cfg.theta_cls, "logitSemantics": "candidate_keep_logit",
         "dropConfFormula": "1 - sigmoid(candidate_logit)",

@@ -19,7 +19,9 @@ B200. We *have* a local CUDA GPU, so offloading is **not** about compute we lack
 it's about (a) freeing the local box for the wall-clock-long I2–I5 tuning loop, (b)
 running tuning attempts in parallel on cheap throwaway instances, (c) a faster GPU
 for the cap-bound rollout-eval. A single GPU is enough; **do not provision a
-cluster.**
+cluster.** The runner is staged + checkpointed, so the **same commands run locally for
+an overnight checkpointed run** (often the cheaper default since we already have a
+CUDA GPU) — reach for remote only for speed or for running tuning attempts in parallel.
 
 ## 1. Sizing + cost (verify current pricing at sign-up)
 
@@ -102,24 +104,45 @@ python -c "import torch; print(torch.__version__, torch.cuda.is_available())"   
 numpy is **not** required (the runner is torch-only). Record the torch build —
 `manifest.torch` stamps it.
 
-## 6. Run (fail-fast, then scale)
+## 6. Run — staged train / resume / eval (checkpointed)
+
+The runner is **staged + checkpointed** so a long train survives interruption (spot
+or on-demand termination → resume from the last checkpoint). A checkpoint carries
+model + optimizer + step + config + torch/CUDA + train-RNG state, so resume is a
+deterministic continuation, not a restart.
 
 ```bash
 cd ~/sundog
-# FAIL-FAST first: small eval to get a fast read before the full 10k-puzzle eval
-python scripts/lattice_ldt_model.py --mode build-gate \
-  --data-dir docs/lattice/Soduko-Extreme \
-  --out results/lattice/build-gate-sudoku-extreme \
-  --max-eval 1000 --seed 0
+OUT=results/lattice/build-gate-sudoku-extreme
+# 1. TRAIN — checkpoint every 1000 steps; log every 100; cheap one-shot DIAGNOSTIC every 1000
+python scripts/lattice_ldt_model.py --mode build-gate --stage train \
+  --data-dir docs/lattice/Soduko-Extreme --out $OUT --seed 0 \
+  --max-steps 20000 --batch 64 --checkpoint-every 1000 --log-every 100 --eval-every 1000 --max-eval 1000
+
+# 2. RESUME / EXTEND if interrupted or undertrained (continues the exact RNG stream)
+python scripts/lattice_ldt_model.py --mode build-gate --stage train \
+  --data-dir docs/lattice/Soduko-Extreme --out $OUT --seed 0 --resume latest \
+  --max-steps 40000 --batch 64 --checkpoint-every 1000 --log-every 100 --eval-every 1000 --max-eval 1000
+
+# 3. EVAL = the binding verdict (rollout-exact). Fail-fast at 1k first, then scale.
+python scripts/lattice_ldt_model.py --mode build-gate --stage eval \
+  --data-dir docs/lattice/Soduko-Extreme --out $OUT --seed 0 --resume latest --max-eval 1000
+# if promising (rollout_exact_rate near 1) -> re-run eval with --max-eval 10000 for the binding read
 ```
-Watch the printed `result`: `branch`, `rollout_exact_rate`, `one_shot_exact_rate`,
-`stop_reason_counts`, `diagnostics`. **Red flag:** a high `node_cap_fraction` means
-the model is weak and the rollout is cap-bound (slow + not solving) — stop, the
-verdict is `build_gate_partial`/`fail`, don't burn time on the full 10k eval. If
-`--max-eval 1000` looks promising (`rollout_exact_rate` near 1), re-run with
-`--max-eval 10000` for the binding read. Frozen contract params (`theta_drop=0.5`,
-`theta_cls=0.6`, caps 64/4096) are in code + stamped in the manifest; **do not edit
-them on the instance** (contract §11 — changes are amendments).
+
+- **The verdict is the `--stage eval` `rollout_exact_rate`**, NOT the during-train
+  `diag_one_shot_exact_rate` — that one-shot argmax is a cheap progress signal only
+  (contract diagnostic). `--stage train` returns `build_gate_train_checkpointed` (no
+  verdict); `--stage all` does train→eval in one shot.
+- **Red flag during eval:** high `node_cap_fraction` = weak model, cap-bound rollout
+  (slow + not solving) → the verdict is `partial`/`fail`; stop, don't run the full 10k.
+- **DO NOT change `--max-search-nodes` / `--max-deduction-steps` from their defaults
+  (64 / 4096 = the frozen contract caps) for a binding run.** They are CLI-exposed for
+  smoke/diagnostics; lowering them to speed a slow eval changes the rollout *policy* and
+  is a **contract §11 amendment**, not an operator tweak — likewise `theta_drop=0.5` /
+  `theta_cls=0.6` (code-frozen). The runner stamps `thetaDrop`/`thetaCls`/
+  `maxDeductionStepsPerNode`/`maxSearchNodesPerPuzzle` in the manifest; **confirm they
+  read 0.5 / 0.6 / 64 / 4096 before believing any verdict.**
 
 ## 7. Pull the receipt + adjudicate + commit (locally)
 
@@ -143,10 +166,13 @@ doc (the lane convention — verdict committed, raw artifacts not):
 ## 8. Teardown (stop the meter)
 
 ```bash
+# if you intend to RESUME later, pull the checkpoint first — it lives only on the
+# instance (results/lattice/ is gitignored) and is lost on terminate:
+scp ubuntu@<ip>:~/sundog/$OUT/checkpoint_latest.pt ./results/lattice/build-gate-sudoku-extreme/
 hyperbolic terminate <instance-id>          # or destroy via the dashboard
 ```
 Hourly billing stops at termination. Nothing persists on the instance that isn't in
-the pulled receipt + the committed code.
+the pulled receipt + checkpoint + the committed code.
 
 ## 9. Provenance + reproducibility checklist (before a `pass` is believed)
 
