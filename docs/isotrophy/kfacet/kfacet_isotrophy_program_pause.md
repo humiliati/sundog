@@ -2,10 +2,12 @@
 
 Status: **PAUSED 2026-05-24** at end-of-v0.9, then **ADVANCED off-pause
 2026-05-29 -> 2026-06-02** with the v0.10 frontier pair (v0.10a + v0.10b), the
-v0.11 conditional-rank close, and the v0.12 -> v0.16 external-transfer arc, which
-reached a **clean Tier-2 external PASS at v0.16** (`tail_resolved_transfer_passes_clean`,
-AUC_cond 0.647, p 1e-5): the velocity-fraction signal transfers to an independent
-catalog once read as a continuous tail-resolved score rather than the coarse v0.11 zone.
+v0.11 conditional-rank close, and the v0.12 -> v0.17 external-transfer arc, which
+reached a **replicated clean Tier-2 external PASS at v0.17**
+(`heterogeneous_transfer_replicates_clean`, AUC_cond 0.646875, p 1e-5,
+rho=1.0, exact p_rho=1/5040): the velocity-fraction signal transfers to an independent
+catalog once read as a continuous tail-resolved score rather than the coarse v0.11 zone,
+and the seven-cell heterogeneity pattern repeats on fresh rows.
 The chain ran from v0.3 (December 2025 / January 2026, pre-anniversary)
 through v0.9 (May 2026) as seven sequential pre-registered chapters with
 seven distinct chapter-close types and one load-bearing in-sample positive
@@ -54,6 +56,13 @@ conditional-positive sequence**:
   was the bottleneck. Pooled and mass-cell-heterogeneous (5 of 7 cells in-direction, 2
   reversed; leave-one-out 0.593 still clears the floor), Tier-2 and bounded, not
   theorem-facing.
+- **v0.17 (the heterogeneity replication):** a fresh triple-holdout 80/80 draw over the
+  same seven cells landed `heterogeneous_transfer_replicates_clean` (AUC_cond 0.646875,
+  p 1e-5, attrition 0, frame gate clean). The v0.16 per-cell AUC rank order reproduced
+  exactly (Spearman rho=1.0, exact p_rho=1/5040); all seven directions relative to 0.5
+  repeated. Post-hoc anatomy reads the two sub-0.5 cells as the frame-fragile cell
+  (`qA2_qB1`) and a near-null cell (`qA3_qB0`), not a competing physics. Reliability-map
+  interpretation only; the registered claim is replicated heterogeneity.
 
 The mature, falsifiable claim is **"yes, but only after conditioning"**:
 velocity-fraction stratifies three-body stability, but as a function of the
@@ -63,13 +72,13 @@ the held-out chapter localized the signal rather than killing it.
 
 The program remains **paused at the lab-bandwidth level**, not retired. The
 within-m_3 conditional rung that v0.10b motivated is closed (v0.11); the
-external-catalog rung is now **CONFIRMED at Tier-2** -- v0.12's supp-A D5-attrition
+external-catalog rung is now **CONFIRMED and replicated at Tier-2** -- v0.12's supp-A D5-attrition
 wall and v0.13's landscape-negative left Li/Liao 2021 as the only viable target, and
-the v0.14 (undecidable) -> v0.15 (directional-weak) -> v0.16 (clean PASS) arc carried
-it to a held-out external confirmation of the continuous velocity-fraction projection.
-Remaining axes: the v0.16 mass-cell heterogeneity (which regions carry the transfer,
-why two reverse), a larger supported-region or multi-feature chapter, or new-mechanism
-work -- not another rephrasing of the same table.
+the v0.14 (undecidable) -> v0.15 (directional-weak) -> v0.16 (clean PASS) -> v0.17
+(heterogeneity replication) arc carried it to a held-out external confirmation of the
+continuous velocity-fraction projection plus reproducible seven-cell structure.
+Remaining axes: a wider-cell reliability/mechanism chapter, a larger supported-region or
+multi-feature chapter, or new-mechanism work -- not another rephrasing of the same table.
 
 Audience: paper-side writers, future coding agents, isotrophy-
 program lab initiates, anyone who wants to know what's left.
@@ -212,13 +221,21 @@ v0.16:  tail-resolved transfer (4-frame ensemble-median continuous vf, fresh
         transfers. First clean external (Tier-2, held-out) confirmation. Pooled +
         mass-cell-heterogeneous (5/7 in-direction, 2 reversed; leave-one-out 0.593);
         Tier-2, bounded, not theorem-facing.
+
+v0.17:  tail-resolved heterogeneity replication (fresh triple-holdout 80/80).
+        heterogeneous_transfer_replicates_clean: AUC_cond 0.646875, p 1e-5,
+        attrition 0, frame gate clean; exact Spearman rho=1.0, p_rho=1/5040
+        against the pinned v0.16 per-cell vector. Replicated external transfer
+        plus reproducible seven-cell heterogeneity. Anatomy suggests a
+        reliability map (qA2_qB1 frame-fragile, qA3_qB0 near-null), but that
+        "why" is descriptive, not a registered mechanism.
 ```
 
 ## The Load-Bearing Findings
 
-After seven chapters plus the v0.10-v0.13 frontier-advance, three findings
+After seven chapters plus the v0.10-v0.17 frontier-advance, three findings
 carry the program's substantive output (the second is now a publishable
-conditional profile, bounded by an external-transfer null):
+conditional profile with a replicated Tier-2 external transfer):
 
 1. **The v0.7a' chi^2 = 16.43 positive**. On the 250-row analyzable
    supp-B subset (post v0.7a integration-attrition), the velocity-
@@ -267,8 +284,8 @@ conditional profile, bounded by an external-transfer null):
    held-out chapter LOCALIZED the signal rather than killing it, and v0.11
    registered that localization under the exact conditional rank gate.
 
-   **The external-transfer arc (v0.12 -> v0.16): from supp-B-internal to a clean Tier-2
-   PASS.** v0.12 took the frozen rule to same-paper supplementary-A and hit
+   **The external-transfer arc (v0.12 -> v0.17): from supp-B-internal to a replicated
+   clean Tier-2 PASS.** v0.12 took the frozen rule to same-paper supplementary-A and hit
    `external_transfer_blocked_by_attrition` (uniform probe attrition 0.3433, the whole
    CI above the 0.20 gate; a measurement-feasibility limit, not a falsification).
    v0.13's signal-blind search found only Tier-2 Li/Liao 2021 viable; v0.13a bounded
@@ -280,12 +297,14 @@ conditional profile, bounded by an external-transfer null):
    `tail_resolved_transfer_passes_clean` (**AUC_cond 0.647, p 1e-5**) once the feature
    was read as a continuous 4-frame ensemble-median vf rather than the coarse zone. On
    the SAME held-out rows the coarse zone reads 0.510 -- direct proof the binning, not
-   the projection, was the bottleneck. **The conditional positive now has a held-out
-   external (Tier-2) confirmation of the underlying velocity-fraction projection** --
-   pooled and mass-cell-heterogeneous (5 of 7 cells in-direction, two reversed;
-   leave-one-out 0.593 still clears the floor), bounded to Tier-2 / stable-support /
-   not theorem-facing. The coarse v0.11 zone FORM does not transfer (v0.15); its
-   continuous tail-resolved relative does (v0.16).
+   the projection, was the bottleneck. v0.17 then replicated the transfer on fresh
+   triple-held-out rows (**AUC_cond 0.646875, p 1e-5**) and reproduced the seven-cell
+   heterogeneity exactly by rank (**rho=1.0, exact p_rho=1/5040**). **The conditional
+   positive now has a replicated held-out external (Tier-2) confirmation of the
+   underlying velocity-fraction projection** -- pooled and mass-cell-heterogeneous,
+   bounded to Tier-2 / stable-support / not theorem-facing. The coarse v0.11 zone FORM
+   does not transfer (v0.15); its continuous tail-resolved relative does and replicates
+   (v0.16/v0.17).
 
 3. **The methodology surface**. The chain produced and locked
    a comprehensive set of pre-registration discipline tools that
