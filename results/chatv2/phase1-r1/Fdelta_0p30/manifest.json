@@ -22,16 +22,16 @@
     "lr": 0.0003,
     "batch": 128,
     "eval_batch": 512,
-    "max_steps": 6000,
+    "max_steps": 12000,
     "eval_every": 250,
-    "patience": 10,
+    "patience": 12,
     "n_fingerprint": 3000,
     "k_outlier": 2,
     "seed": 0,
     "curriculum": false,
     "warm_start": "",
     "pos_h": 0,
-    "min_steps": 3000,
+    "min_steps": 6000,
     "twin_patience": 3,
     "save_ckpt": true,
     "fair_readout": true,
@@ -51,40 +51,71 @@
         "body_layer": 3,
         "zr_by_layer": [
           0.502,
-          0.593,
-          0.596,
-          0.596
+          0.522,
+          0.7,
+          0.728
         ],
-        "d_dec": 7.575,
-        "eff_dim_raw": 1.084,
-        "eff_dim_robust": 10.658,
-        "z1_acc": 0.592,
-        "z_recover_mean": 0.5965,
-        "body_carry": 0.5971,
+        "d_dec": 7.301,
+        "eff_dim_raw": 2.725,
+        "eff_dim_robust": 4.796,
+        "z1_acc": 0.674,
+        "z_recover_mean": 0.7285,
+        "body_carry": 0.7362,
         "z_recover_each": [
-          0.592,
-          0.578,
-          0.5997,
-          0.619,
-          0.5817,
-          0.615,
-          0.5657,
-          0.6207
+          0.674,
+          0.6723,
+          0.703,
+          0.8097,
+          0.729,
+          0.7273,
+          0.7507,
+          0.7617
         ],
-        "cross_latent_leak": 0.5048,
-        "outlier_carries_latents": 0.5018,
-        "latents_survive_outlier_removal": 0.5268
+        "cross_latent_leak": 0.5246,
+        "outlier_carries_latents": 0.522,
+        "latents_survive_outlier_removal": 0.7185
       },
-      "twin": null,
+      "twin": {
+        "fair_readout": true,
+        "body_layer": 2,
+        "zr_by_layer": [
+          0.502,
+          0.572,
+          0.586,
+          0.585
+        ],
+        "d_dec": 7.519,
+        "eff_dim_raw": 3.033,
+        "eff_dim_robust": 2.668,
+        "z1_acc": 0.8073,
+        "z_recover_mean": 0.5863,
+        "body_carry": 0.5548,
+        "z_recover_each": [
+          0.8073,
+          0.5677,
+          0.5717,
+          0.5467,
+          0.5407,
+          0.605,
+          0.5447,
+          0.507
+        ],
+        "cross_latent_leak": 0.5049,
+        "outlier_carries_latents": 0.5245,
+        "latents_survive_outlier_removal": 0.522
+      },
       "gen_train": {
-        "eval_loss": 0.6931476593017578,
+        "eval_loss": 0.6380690932273865,
         "bayes_floor": 0.5967748020490666,
-        "steps": 3750
+        "steps": 12000
       },
-      "twin_train": null,
+      "twin_train": {
+        "train_acc_z1": 0.798828125,
+        "steps": 1250
+      },
       "sharp": false,
-      "learned": false,
-      "status": "UNLEARNED"
+      "learned": true,
+      "status": "MARGINAL"
     }
   ]
 }
