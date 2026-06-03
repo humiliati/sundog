@@ -6,6 +6,39 @@
 > Cells + read-out: `PHASE1_R1_COMPLETION.md`. Promotion discipline: `PROMOTE_GATE.md`
 > (we are R1-partial; no R2/R3 language).
 
+## 0. Substrate note — read first (added 2026-06-03, after `lattice_ldt_model.py`)
+
+This handoff was first framed assuming LATTICE would reuse the chatv2 **parity**
+harness on GPU. The actual LATTICE model is the **Lattice Deduction Transformer**
+(Sudoku-Extreme, weight-shared recurrence) — a *different, richer* substrate that
+borrows chatv2's **methodology**, not its task. So each piece below maps as:
+
+- **§2 parity / de-confound — TRANSFERS, as discipline.** The chatv2 rule "the
+  latent must be input-*un*decodable, verified by a linear probe ≈ chance" maps
+  directly onto the LDT's **input-lattice-linear baseline** (`docs/lattice/PHASE3_B1`
+  trap F4): the body is computed *from* the lattice, so credit only decode accuracy
+  **above** an input-linear regression. The parity confirm certifies the principle;
+  the LDT baseline is the correct analogue. **Non-negotiable.**
+- **§1 warm-start asymmetry — does NOT transfer to the LDT.** chatv2's warm-start
+  was **H-scaling-specific** (easier→harder H; shared *positional* capacity via
+  spare pos-embedding rows). The LDT scales via **weight-shared recurrence** (16
+  iterations), not a pos/H ladder — **do not import the pos-capacity reservation.**
+  It would re-apply only for a future **Sudoku-difficulty curriculum** (easy →
+  extreme), and even then it attaches to the recurrence/data, not the positional
+  embedding.
+- **gen-twin objective contrast — does NOT transfer.** The LDT is single-objective;
+  there is no gen / control-only pair. LATTICE correctly replaces it with the
+  **twin-fiber** (B2) and **decision-extra** (B1) resistance measures — keep it that
+  way; do not retrofit gen/twin onto a deduction model.
+- **Smoke (2026-06-03):** `lattice_ldt_model.py --mode smoke` runs clean — param
+  count **798,346 (in budget, ≈800K)**, which confirms the `[I1]` weight-shared
+  recurrence inference; elim/conflict shapes correct; capture-grains = expected;
+  loss decreases. Plumbing + param budget sound. The build-gate verdict still needs
+  the real Sudoku-Extreme dataset + the iterative-deduction rollout (`[I5]`).
+
+*(Sections 1–2 below remain the chatv2-side reference — accurate for chatv2; §0
+maps them onto the LDT.)*
+
 ## 1. Warm-start asymmetry (the curriculum contract)
 
 Warm-start transfers a **learned generative backbone** to a **harder** rung so it

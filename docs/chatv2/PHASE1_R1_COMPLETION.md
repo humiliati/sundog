@@ -110,6 +110,16 @@ R1 is **met** iff every cell: pre-check ≈ chance, gen learned, body resists
 
 ## Results (appended as conditions land)
 
+- **R1 battery launched (2026-06-03, CPU — GPU not yet live).** 4 cells sequential,
+  order F-δ → F-opt → A2 → L2. **L2 deployed warm-started** from seed 0's arity-2
+  checkpoint (`phase1-seedstab/seed0/ckpt/H8_gen.pt`) — the pre-registered
+  learnability fallback, deployed up-front given the smoke evidence that cold
+  3-parity likely fails. The warm-start is a *learnability* aid (transfers the
+  parity-aggregation circuit), **not** a body-resistance shortcut: `objective_excess`
+  is still measured on the resulting learned model, and arity-2 → arity-3 is a
+  same-shape load (both `L=192` at `bpc=24`/`H=8`, no `--pos-h` needed). First cell
+  (F-δ, δ=0.30): pre-check PASS 0.496.
+
 - **F-readout (free, 2026-06-01): PASS.** `objective_excess` = **0.205 ± 0.022
   (fair) / 0.245 ± 0.020 (non-fair)** across the 3 seeds — both robustly ≥ 0.10;
   the effect is *not* fair-readout-dependent (the gap is slightly *wider*

@@ -1,0 +1,90 @@
+{
+  "lane": "chatv2",
+  "phase": "0.2",
+  "verdict": "MARGINAL",
+  "H_star": null,
+  "precheck": {
+    "8": 0.49579166666666663
+  },
+  "cfg": {
+    "mode": "full",
+    "stage": "all",
+    "latent": "computed",
+    "window": 2,
+    "h_sweep": [
+      8
+    ],
+    "bits_per_channel": 24,
+    "delta": 0.3,
+    "d_model": 192,
+    "n_layers": 3,
+    "n_heads": 4,
+    "lr": 0.0003,
+    "batch": 128,
+    "eval_batch": 512,
+    "max_steps": 6000,
+    "eval_every": 250,
+    "patience": 10,
+    "n_fingerprint": 3000,
+    "k_outlier": 2,
+    "seed": 0,
+    "curriculum": false,
+    "warm_start": "",
+    "pos_h": 0,
+    "min_steps": 3000,
+    "twin_patience": 3,
+    "save_ckpt": true,
+    "fair_readout": true,
+    "arity": 2,
+    "d_dec_frac_min": 0.5,
+    "z1_ctrl_min": 0.7,
+    "leak_max": 0.58,
+    "body_carry_min": 0.7,
+    "body_carry_gap_min": 0.2,
+    "precheck_max": 0.6
+  },
+  "records": [
+    {
+      "H": 8,
+      "generative": {
+        "fair_readout": true,
+        "body_layer": 3,
+        "zr_by_layer": [
+          0.502,
+          0.593,
+          0.596,
+          0.596
+        ],
+        "d_dec": 7.575,
+        "eff_dim_raw": 1.084,
+        "eff_dim_robust": 10.658,
+        "z1_acc": 0.592,
+        "z_recover_mean": 0.5965,
+        "body_carry": 0.5971,
+        "z_recover_each": [
+          0.592,
+          0.578,
+          0.5997,
+          0.619,
+          0.5817,
+          0.615,
+          0.5657,
+          0.6207
+        ],
+        "cross_latent_leak": 0.5048,
+        "outlier_carries_latents": 0.5018,
+        "latents_survive_outlier_removal": 0.5268
+      },
+      "twin": null,
+      "gen_train": {
+        "eval_loss": 0.6931476593017578,
+        "bayes_floor": 0.5967748020490666,
+        "steps": 3750
+      },
+      "twin_train": null,
+      "sharp": false,
+      "learned": false,
+      "status": "UNLEARNED"
+    }
+  ]
+}
