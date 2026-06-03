@@ -45,7 +45,7 @@ import platform
 import subprocess
 import sys
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import Any, Optional
 
@@ -84,8 +84,12 @@ class Cfg:
     weight_decay: float = 0.01
     batch: int = 64
     max_steps: int = 6000
-    elim_threshold: float = 0.5          # commit-elimination confidence cut (inference)
     conflict_corrupt_p: float = 0.25     # [I4]
+    # I5 rollout (contract: docs/lattice/PHASE1_I5_ROLLOUT_CONTRACT.md)
+    theta_drop: float = 0.5              # eliminate when drop_conf = 1 - sigmoid(logit) >= theta_drop
+    theta_cls: float = THETA_CLS         # conflict when sigmoid(conflict_logit) > theta_cls (0.6)
+    max_deduction_steps: int = 64        # per-node deduction cap
+    max_search_nodes: int = 4096         # per-puzzle DFS node cap
     seed: int = 0
     mode: str = "smoke"                  # smoke | build-gate
     data_dir: Optional[str] = None       # Sudoku-Extreme root (build-gate)
@@ -317,6 +321,157 @@ def param_count(model) -> int:
 
 
 # ============================================================================
+# I5 iterative-deduction rollout (contract: docs/lattice/PHASE1_I5_ROLLOUT_CONTRACT.md)
+# ============================================================================
+ROLLOUT_VERSION = "phase1_i5_v1"
+PUZZLE_STOP_REASONS = ["solved_exact", "solved_valid_wrong", "node_cap_exceeded",
+                       "unsolved_no_branches", "unsolved_conflict_exhausted"]
+
+
+def _valid_grid_flat(g1to9: list[int]) -> bool:
+    return _valid_solution([g1to9[r * N:(r + 1) * N] for r in range(N)])
+
+
+def _lattice_key(lat: torch.Tensor) -> bytes:
+    return bytes(lat.to(torch.uint8).flatten().tolist())
+
+
+@torch.no_grad()
+def _deduce_node(model, lat, clue_t, cfg, diag, ans_t=None):
+    """Model-driven monotone narrowing to fixpoint within one node (contract §4) with the
+    vectorized last-candidate guard. Returns (lattice, status, last_keep)."""
+    last_keep = None
+    for _ in range(cfg.max_deduction_steps):
+        elim_logit, conflict_logit = model(lat.unsqueeze(0))
+        keep = torch.sigmoid(elim_logit[0]); last_keep = keep
+        if bool((lat.sum(dim=1) == 0).any()):
+            return lat, "empty_cell_conflict", keep
+        if torch.sigmoid(conflict_logit[0]).item() > cfg.theta_cls:
+            return lat, "model_conflict", keep
+        drop = 1.0 - keep
+        open_mask = lat == 1.0
+        flagged = open_mask & (~clue_t[:, None]) & (drop >= cfg.theta_drop)
+        n_open = open_mask.sum(dim=1)
+        n_flag = flagged.sum(dim=1)
+        must_spare = (n_flag == n_open) & (n_flag > 0)   # all open flagged -> keep lowest-drop (incl. singletons)
+        removed = flagged.clone()
+        if bool(must_spare.any()):
+            spare_idx = torch.where(open_mask, drop, torch.full_like(drop, 1e9)).argmin(dim=1)
+            sp = must_spare.nonzero(as_tuple=True)[0]
+            removed[sp, spare_idx[sp]] = False
+            diag["blocked_last_candidate"] += int(must_spare.sum().item())
+        committed = int(removed.sum().item())
+        if ans_t is not None and committed:
+            diag["false_eliminations"] += int(removed[torch.arange(N2, device=lat.device), ans_t].sum().item())
+        diag["committed_eliminations"] += committed
+        if committed == 0:
+            return lat, ("solved" if bool((lat.sum(dim=1) == 1).all()) else "stall"), keep
+        lat = lat.clone(); lat[removed] = 0.0
+    return lat, "step_cap_exceeded", last_keep
+
+
+@torch.no_grad()
+def rollout(model, lat0, clue_t, cfg, ans_t):
+    """Deterministic DFS over model deductions (contract §4-7). ans_t is used ONLY for
+    scoring + the false-elim audit, never to guide search. -> (stop_reason, grid|None, diag)."""
+    diag = {"committed_eliminations": 0, "blocked_last_candidate": 0, "false_eliminations": 0,
+            "branches": 0, "nodes": 0, "model_conflict": 0, "empty_cell_conflict": 0,
+            "terminal_invalid_grid": 0, "step_cap": 0, "stalled": 0}
+    ans = ans_t.tolist()
+    stack, seen = [lat0.clone()], set()
+    while stack:
+        if diag["nodes"] >= cfg.max_search_nodes:
+            return "node_cap_exceeded", None, diag
+        lat = stack.pop()
+        key = _lattice_key(lat)
+        if key in seen:
+            continue
+        seen.add(key); diag["nodes"] += 1
+        final_lat, status, keep = _deduce_node(model, lat, clue_t, cfg, diag, ans_t)
+        if status == "step_cap_exceeded":
+            diag["step_cap"] += 1; continue
+        if status in ("empty_cell_conflict", "model_conflict"):
+            diag[status] += 1; continue
+        if status == "solved":
+            grid0 = final_lat.argmax(dim=1).tolist()
+            if _valid_grid_flat([g + 1 for g in grid0]):
+                return ("solved_exact" if grid0 == ans else "solved_valid_wrong"), final_lat.argmax(dim=1), diag
+            diag["terminal_invalid_grid"] += 1; continue
+        # stall -> branch (contract §5): most-constrained non-clue cell, candidates by keep desc
+        diag["stalled"] += 1
+        counts = final_lat.sum(dim=1)
+        cand_counts = torch.where((counts > 1) & (~clue_t), counts, torch.full_like(counts, DIGITS + 1.0))
+        best = int(cand_counts.argmin().item())
+        if int(cand_counts[best].item()) > DIGITS:
+            return "unsolved_no_branches", None, diag
+        cands = [d for d in range(DIGITS) if final_lat[best, d].item() == 1.0]
+        cands.sort(key=lambda d: (-keep[best, d].item(), d))     # latest keep_prob desc, digit asc
+        diag["branches"] += len(cands)
+        for d in reversed(cands):                                # reverse push -> LIFO preserves order
+            child = final_lat.clone(); child[best].zero_(); child[best, d] = 1.0
+            stack.append(child)
+    return "unsolved_conflict_exhausted", None, diag
+
+
+@torch.no_grad()
+def rollout_eval(model, pairs, device, cfg):
+    """Run the rollout per puzzle; aggregate rollout_exact_rate + contract diagnostics + records."""
+    model.eval()
+    counts = {s: 0 for s in PUZZLE_STOP_REASONS}
+    agg = {k: 0 for k in ("nodes", "branches", "committed", "false_elim", "valid", "node_cap",
+                          "step_cap", "model_conflict", "empty", "blocked", "stalled")}
+    per_puzzle, n = [], len(pairs)
+    for idx, (puz, sol) in enumerate(pairs):
+        lat, _ = grids_to_tensors([(puz, sol)], device)
+        clue_t = torch.tensor([puz[r][c] != 0 for r in range(N) for c in range(N)], device=device)
+        ans_t = torch.tensor([sol[r][c] - 1 for r in range(N) for c in range(N)], device=device)
+        sr, _, d = rollout(model, lat[0], clue_t, cfg, ans_t)
+        counts[sr] = counts.get(sr, 0) + 1
+        valid = sr in ("solved_exact", "solved_valid_wrong")
+        agg["nodes"] += d["nodes"]; agg["branches"] += d["branches"]; agg["committed"] += d["committed_eliminations"]
+        agg["false_elim"] += d["false_eliminations"]; agg["valid"] += int(valid)
+        agg["node_cap"] += int(sr == "node_cap_exceeded"); agg["step_cap"] += d["step_cap"]
+        agg["model_conflict"] += d["model_conflict"]; agg["empty"] += d["empty_cell_conflict"]
+        agg["blocked"] += d["blocked_last_candidate"]; agg["stalled"] += d["stalled"]
+        per_puzzle.append({"idx": idx, "clues": int(clue_t.sum().item()), "stop_reason": sr,
+                           "exact": sr == "solved_exact", "valid": valid, "nodes": d["nodes"],
+                           "branches": d["branches"], "committed": d["committed_eliminations"],
+                           "false_elim": d["false_eliminations"]})
+    m = max(1, n)
+    diagnostics = {
+        "rollout_valid_rate": round(agg["valid"] / m, 5),
+        "avg_committed_eliminations": round(agg["committed"] / m, 2),
+        "false_elimination_rate_answer_key_audit": round(agg["false_elim"] / m, 4),
+        "avg_nodes_expanded": round(agg["nodes"] / m, 2),
+        "avg_branches_created": round(agg["branches"] / m, 2),
+        "node_cap_fraction": round(agg["node_cap"] / m, 4),
+        "step_cap_fraction": round(agg["step_cap"] / m, 4),
+        "model_conflict_count": agg["model_conflict"], "empty_cell_conflict_count": agg["empty"],
+        "blocked_last_candidate_count": agg["blocked"], "stalled_branch_count": agg["stalled"],
+    }
+    return counts["solved_exact"] / m, counts, diagnostics, per_puzzle
+
+
+def _rollout_smoke(model, real_pairs, cpu_rng, device, cfg):
+    """Contract §10 smoke: rollout runs on real/synthetic; clue cells unchanged; no empty
+    cell created by a step; stop reasons populated. Small caps so an untrained model bounds fast."""
+    smcfg = replace(cfg, max_search_nodes=64, max_deduction_steps=16)
+    sample = (list(real_pairs[:4]) if real_pairs else [gen_sudoku(cpu_rng, 30) for _ in range(4)])
+    p0, s0 = sample[0]
+    lat1, _ = grids_to_tensors([(p0, s0)], device)
+    clue_t = torch.tensor([p0[r][c] != 0 for r in range(N) for c in range(N)], device=device)
+    out_lat, _, _ = _deduce_node(model, lat1[0], clue_t, smcfg,
+                                 {"committed_eliminations": 0, "blocked_last_candidate": 0, "false_eliminations": 0})
+    clues_unchanged = bool((out_lat[clue_t] == lat1[0][clue_t]).all())
+    no_empty = bool((out_lat.sum(dim=1) >= 1).all())
+    er, counts, diag, _ = rollout_eval(model, sample, device, smcfg)
+    model.train()
+    return {"ran": True, "n": len(sample), "source": "real" if real_pairs else "synthetic",
+            "clues_unchanged": clues_unchanged, "no_empty_cell_after_step": no_empty,
+            "stop_reasons": counts, "exact_rate": round(er, 4), "diagnostics_present": bool(diag)}
+
+
+# ============================================================================
 # Modes
 # ============================================================================
 def run_smoke(cfg: Cfg, device) -> dict:
@@ -353,6 +508,8 @@ def run_smoke(cfg: Cfg, device) -> dict:
         real = {"checked": True, "n_loaded": len(rp), "valid_solutions": f"{valid}/{len(rp)}",
                 "parser_ok": bool(valid == len(rp)), "avg_clues": round(clues, 1),
                 "elim_shape": list(relim.shape), "loss": round(rloss.item(), 4)}
+    # I5 rollout smoke (contract §10): runs on real/synthetic, guards clues + no empty cell
+    rcheck = _rollout_smoke(model, rp if real["checked"] else None, cpu_rng, device, cfg)
     return {
         "mode": "smoke", "param_count_full_config": pc,
         "param_count_in_budget": bool(6e5 <= pc <= 1.0e6),  # ~800K target
@@ -361,14 +518,13 @@ def run_smoke(cfg: Cfg, device) -> dict:
         "loss_decreased": bool(losses[-1] < losses[0]),
         "capture_grains": len(cap), "capture_grains_expected": cfg.n_iters * cfg.n_layers,
         "smoke_solve_rate": round(sr, 4), "device": str(device),
-        "real_data_check": real,
+        "real_data_check": real, "i5_rollout_check": rcheck,
     }
 
 
-def run_build_gate(cfg: Cfg, device) -> dict:
-    """The real build-gate: train on Sudoku-Extreme to reproduce 100%. SCAFFOLDED; the
-    run needs the dataset + GPU + time and is gated (do not launch until on-ramp parity
-    is confirmed). load_dataset raises until the real data is wired."""
+def run_build_gate(cfg: Cfg, device, out: Path) -> dict:
+    """The real build-gate: train on Sudoku-Extreme, eval via the I5 rollout to reproduce
+    100% (contract PHASE1_I5_ROLLOUT_CONTRACT.md). Needs dataset + GPU + time; gated."""
     set_determinism(cfg.seed)
     if not cfg.data_dir:
         raise SystemExit("--data-dir (Sudoku-Extreme root) required for build-gate.")
@@ -383,10 +539,15 @@ def run_build_gate(cfg: Cfg, device) -> dict:
         lat, sol = grids_to_tensors([train_pairs[i] for i in idx], device)
         loss, _, _ = compute_loss(model, lat, sol, cfg, rng)
         opt.zero_grad(); loss.backward(); opt.step()
-    acc = solve_rate(model, test_pairs[: cfg.max_eval] if cfg.max_eval else test_pairs, device, cfg)
-    branch = "build_gate_pass" if acc >= 0.999 else ("build_gate_partial" if acc > 0 else "build_gate_fail")
-    return {"mode": "build-gate", "test_accuracy": round(acc, 5), "branch": branch,
-            "wall_s": round(time.time() - t0, 1), "n_train": len(train_pairs), "n_test": len(test_pairs)}
+    one_shot = solve_rate(model, test_pairs, device, cfg)            # diagnostic only
+    exact_rate, counts, diagnostics, per_puzzle = rollout_eval(model, test_pairs, device, cfg)
+    branch = ("build_gate_pass" if exact_rate >= 0.999 else
+              "build_gate_partial" if exact_rate > 0 else "build_gate_fail")
+    (out / "rollout_per_puzzle.jsonl").write_text("\n".join(json.dumps(r) for r in per_puzzle), encoding="utf-8")
+    return {"mode": "build-gate", "rollout_exact_rate": round(exact_rate, 5), "branch": branch,
+            "one_shot_exact_rate": round(one_shot, 5), "stop_reason_counts": counts,
+            "diagnostics": diagnostics, "wall_s": round(time.time() - t0, 1),
+            "n_train": len(train_pairs), "n_test": len(test_pairs)}
 
 
 def main() -> int:
@@ -403,20 +564,25 @@ def main() -> int:
     cfg = Cfg(mode=a.mode, data_dir=a.data_dir, out=a.out, seed=a.seed,
               max_steps=a.max_steps, batch=a.batch, lr=a.lr, allow_dirty=a.allow_dirty)
     if a.mode == "smoke":
-        cfg = Cfg(mode="smoke", d_model=32, n_layers=1, n_iters=2, batch=16, seed=a.seed, allow_dirty=True, out=a.out)
+        cfg = Cfg(mode="smoke", d_model=32, n_layers=1, n_iters=2, batch=16, seed=a.seed,
+                  allow_dirty=True, out=a.out, data_dir=a.data_dir)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     repo = Path(__file__).resolve().parents[1]
     out = Path(cfg.out).resolve(); out.mkdir(parents=True, exist_ok=True)
     git = git_commit(repo, cfg.allow_dirty or cfg.mode == "smoke")
 
-    result = run_smoke(cfg, device) if cfg.mode == "smoke" else run_build_gate(cfg, device)
+    result = run_smoke(cfg, device) if cfg.mode == "smoke" else run_build_gate(cfg, device, out)
     manifest = {
         "lane": "lattice", "phase": "1-build-gate", "tool": "scripts/lattice_ldt_model.py",
         "gitCommit": git["commit"], "gitDirty": git["dirty"], "device": str(device),
         "torch": torch.__version__, "python": sys.version.split()[0], "platform": platform.platform(),
         "arch": {"d_model": cfg.d_model, "n_layers": cfg.n_layers, "n_heads": cfg.n_heads,
                  "n_iters": cfg.n_iters, "lattice_dim": LATTICE_DIM, "lambda_cls": LAMBDA_CLS, "theta_cls": THETA_CLS},
+        "rolloutContract": "docs/lattice/PHASE1_I5_ROLLOUT_CONTRACT.md", "rolloutVersion": ROLLOUT_VERSION,
+        "thetaDrop": cfg.theta_drop, "thetaCls": cfg.theta_cls, "logitSemantics": "candidate_keep_logit",
+        "dropConfFormula": "1 - sigmoid(candidate_logit)",
+        "maxDeductionStepsPerNode": cfg.max_deduction_steps, "maxSearchNodesPerPuzzle": cfg.max_search_nodes,
         "result": result,
         "discipline": "build-gate model only; no body/fiber number is a B-layer result until build_gate_pass",
     }
