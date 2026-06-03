@@ -116,3 +116,13 @@ R1 is **met** iff every cell: pre-check ≈ chance, gen learned, body resists
   non-fair, because the fair read raises the twin's floor ~0.10 while the gen
   barely moves). First R1 falsifier cleared. 4 verdict cells (L2, A2, F-δ, F-opt)
   remain → staged for GPU/LATTICE.
+- **arity-3 pre-check (smoke, 2026-06-01): PASS** — input-probe 0.484 ≈ chance,
+  so **3-bit parity is input-undecodable** → L2 is a valid de-confounded latent.
+  The `--arity` / `--n-layers` / `--n-heads` / `--lr` knobs and the GPU
+  device-detection (`device=cpu` fallback) also validated. **Learnability
+  caveat:** 3-parity did *not* learn at smoke scale (`d=64`, ~600 steps — far too
+  small, and harder than 2-XOR); full-scale learnability (`d=192`, 6000 steps,
+  grok-aware floor) is TBD. If cold L2 returns UNLEARNED, escalate via
+  `--curriculum` / `--warm-start` from an arity-2 checkpoint (the UNLEARNED guard
+  keeps it out of any marginality/body-resistance claim) — same fix that cracked
+  H=16.
