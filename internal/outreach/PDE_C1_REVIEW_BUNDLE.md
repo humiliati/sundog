@@ -1289,10 +1289,10 @@ sending.
 ### Thank you for reading to the end.
 
 That is the whole packet. The ask was narrow on purpose: not endorsement,
-not a Navier–Stokes claim — just a framing check from someone who knows where
-the honest boundary of this problem sits. If the language is too strong, the
-most useful thing you can tell us is exactly which phrase to weaken and why.
-A negative answer is the most valuable outcome we could get.
+not a Navier–Stokes claim — just a framing check from someone who knows where the honest boundary of this problem sits.
+If the language is too strong, the most useful thing you can tell us is
+exactly which phrase to weaken and why. A negative answer is the most
+valuable outcome we could get.
 
 > **One last note, for a cover-to-cover read.** A sundog — the bright parhelion
 > beside the sun that gives this lab its name — is the sky's own `Φ_K`: a

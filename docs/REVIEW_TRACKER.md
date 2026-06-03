@@ -21,7 +21,7 @@ below); this doc is the dispatch / decision surface, not a re-statement.
 
 | Lane | Status | Reviewer community | Open Qs | Owner next action |
 | --- | --- | --- | --- | --- |
-| Navier–Stokes C1 | DRAFTED | PDE / determining-modes / data-assimilation | 4 | Pick reviewer + fill `[Name]`/`[link]`, send (**email staged**) |
+| Navier–Stokes C1 | **SENT** (Titi) + DRAFTED (Olson parallel) | PDE / determining-modes / data-assimilation | 4 | Awaiting Titi reply; send the parallel Olson first-wave note (draft staged) |
 | Kakeya | DRAFTED | finite-field incidence / additive combinatorics | 5 | Publish unlinked review URL + permalinks + screenshots, pick reviewer, send |
 | Hodge | DRAFTED | algebraic geometer / Hodge theorist | 6 | Fill `[Name]`/`[link]`/`[Your name]`, send |
 | Yang–Mills | **SENT** (2026-06-01) | lattice gauge theorist | 7 | Awaiting reply — sent to Dr. Biagio Lucini via LinkedIn DM |
@@ -74,14 +74,18 @@ work is load-bearing in two pending reviews.
   objective-overlap discriminator (`proof/PDE_C1_OBJECTIVE_OVERLAP_DISCRIMINATOR.md`)
   shows control-sufficiency does *not* track predictability (Spearman −0.75 / −1.0).
   One honest open puzzle: palinstrophy (predictable but not control-sufficient).
-- **Owner-fill (only blockers):** `[Name]` (reviewer) and the specialty phrase —
-  both human calls. **`[link]` is now solved:** attach the self-contained bundle
-  `internal/outreach/PDE_C1_REVIEW_BUNDLE.md` (58 KB, the 4 primary docs + 3 run
-  receipts inlined, 7 provenance hashes verified vs disk 2026-06-02; rebuild with
-  `node scripts/build-c1-review-bundle.mjs`, render to PDF if a single file is
-  preferred). **Email staged →**
+- **Dispatch state:** Titi **sent** (2026-06-02, per the Titi draft Sender Note;
+  owner to confirm exact date/channel). **Parallel first-wave Olson note staged**
+  (`internal/outreach/NSE_C1_OLSON_EMAIL_DRAFT.md`) — most direct CDA /
+  determining-modes fit, recommended next send. Both are individually addressed
+  one-to-one sends, not a blast.
+- **Attachment (solved):** `internal/outreach/PDE_C1_REVIEW_BUNDLE.pdf` (902 KB,
+  the 4 primary docs + 3 run receipts inlined + on-brand closing page; rebuild via
+  `node scripts/build-c1-review-bundle.mjs` then `node scripts/render-c1-bundle-pdf.mjs`).
+  Verified IP-clean and number-accurate vs the run receipts 2026-06-02. The `.md`
+  source bundle remains for anyone wanting plain text. **Templates:**
   [`proof/PDE_C1_EXTERNAL_REVIEW_EMAIL_DRAFT.md`](proof/PDE_C1_EXTERNAL_REVIEW_EMAIL_DRAFT.md)
-  ▸ "Send Prep". Every headline figure in the packet verified against the run
+  (general) + Titi/Olson specifics under `internal/outreach/`. Every headline figure in the packet verified against the run
   receipts 2026-06-02 (942,834 pairs, δ_H 0.0111, ε_K 0.0664, a_mm −0.00079/+0.00058,
   damp 0.3003/0.2688 — all match).
 - **Packet:** bundle above, or individually
@@ -197,3 +201,5 @@ Append one row per dispatch so the portfolio's review state stays visible.
 | Date | Lane | Reviewer (role, not always name) | Channel | Outcome / next check |
 | --- | --- | --- | --- | --- |
 | 2026-06-01 | Yang–Mills | Dr. Biagio Lucini (lattice gauge theory, Swansea) | LinkedIn DM | Awaiting reply (no reply yet) |
+| 2026-06-02 | Navier–Stokes C1 | Prof. Edriss Titi (data assimilation / determining modes, Texas A&M) | email | Sent (per Titi draft Sender Note; owner to confirm date/channel). Awaiting reply |
+| _staged_ | Navier–Stokes C1 | Prof. Eric Olson (continuous data assimilation / determining modes, UNR) | email | Parallel first-wave draft `internal/outreach/NSE_C1_OLSON_EMAIL_DRAFT.md`; attach the Olson-geared `PDE_C1_REVIEW_BUNDLE_OLSON.pdf` (CDA-framed cover, byte-identical body), then log send date here |

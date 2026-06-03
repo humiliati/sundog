@@ -19,7 +19,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const OUT = "internal/outreach/PDE_C1_REVIEW_BUNDLE.md";
+// Output path is reviewer-specific; see outPathFor(). Generic stays at the
+// canonical PDE_C1_REVIEW_BUNDLE.md so existing references keep resolving.
 
 // Reviewer read-order. Each entry is inlined verbatim under a divider.
 const SECTIONS = [
@@ -43,7 +44,51 @@ function sha12(text) {
   return createHash("sha256").update(text).digest("hex").slice(0, 12);
 }
 
-const COVER = `# PDE C1 Finite-Galerkin Separation — Self-Contained Review Bundle
+// Reviewer profiles. ONLY the cover framing and one closing salutation line vary
+// by reviewer. The inlined artifact SECTIONS/RECEIPTS, their provenance hashes,
+// the four locked questions, the answer menu, the anti-folklore guard, and the
+// sundog easter-egg are byte-identical across every reviewer — gearing toward a
+// reviewer must never change what evidence or claims they see, only the framing
+// that helps them read it in their own vocabulary.
+const REVIEWER_PROFILES = {
+  generic: {
+    label: "generic",
+    // Optional CDA/determining-modes orientation paragraph; empty for generic.
+    orientation: "",
+    closingSalutation: "from someone who knows where the honest boundary of this problem sits",
+  },
+  olson: {
+    label: "Eric Olson (continuous data assimilation / determining modes)",
+    orientation: `## For a continuous-data-assimilation / determining-modes reader
+
+You are receiving this because the load-bearing question is squarely in your
+language. In determining-modes / AOT continuous-data-assimilation terms, the
+candidate result is a **complement** of the determining-functionals program, not
+a restatement of it:
+
+- Determining functionals / determining modes (Foias–Prodi lineage,
+  Cockburn–Jones–Titi 1997) say a coarse functional set, once it determines the
+  state, pins the whole trajectory. C1's signature \`Φ_K\` sits **below** that
+  determining threshold — it is **certified non-injective on the sampled
+  support** (twin states with separated high modes) — yet it is still
+  **sufficient for a registered control decision**.
+- So the claim is not "\`Φ_K\` determines the state" (it provably does not here);
+  it is "\`Φ_K\` is decision-observable while state-unobservable." The exact
+  prior-art delta vs determining functionals and AIM slaving is tabulated in the
+  separation statement §7 ("Prior-art delta").
+- The question we most want from you specifically: **is that a real distinction,
+  or is a sub-determining observation being control-sufficient just ordinary
+  nudging / data-assimilation observability that should be named as such?** If it
+  is the latter, the single most useful reply is which result settles it
+  (Cockburn–Jones–Titi, Azouani–Olson–Titi, or other) and which word to drop.
+
+`,
+    closingSalutation: "from someone whose continuous-data-assimilation and determining-modes work is the closest fit to the honest boundary of this problem",
+  },
+};
+
+function buildCover(profile) {
+  return `# PDE C1 Finite-Galerkin Separation — Self-Contained Review Bundle
 
 > **This is one file containing the whole reviewer packet**, assembled by
 > \`scripts/build-c1-review-bundle.mjs\` from the on-disk artifacts. It is the
@@ -57,7 +102,7 @@ Navier–Stokes. It is **not** a Navier–Stokes existence/smoothness claim, **n
 a new determining-modes theorem, **not** a statement about the
 infinite-dimensional NSE attractor, and **not** a Clay-problem claim.
 
-## The one-sentence ask
+${profile.orientation}## The one-sentence ask
 
 On the sampled invariant measure of a 2D Kolmogorov-flow Galerkin model
 (\`k_f = 2\`, \`K = 3\`, \`G ∈ {200, 300}\`), the low-band signature \`Φ_K\` is
@@ -108,9 +153,30 @@ Please stress-test that distinction specifically.
 *Read order below: separation statement → result → two adjudicators → three run
 receipts (verbatim). Each section is the unmodified on-disk artifact.*
 `;
+}
+
+function parseReviewer(argv) {
+  let id = "generic";
+  for (const a of argv) {
+    if (a.startsWith("--reviewer=")) id = a.slice("--reviewer=".length).trim().toLowerCase();
+  }
+  if (!REVIEWER_PROFILES[id]) {
+    throw new Error(`Unknown reviewer '${id}'. Known: ${Object.keys(REVIEWER_PROFILES).join(", ")}`);
+  }
+  return id;
+}
+
+function outPathFor(reviewerId) {
+  return reviewerId === "generic"
+    ? "internal/outreach/PDE_C1_REVIEW_BUNDLE.md"
+    : `internal/outreach/PDE_C1_REVIEW_BUNDLE_${reviewerId.toUpperCase()}.md`;
+}
 
 function main() {
-  const parts = [COVER];
+  const reviewerId = parseReviewer(process.argv.slice(2));
+  const profile = REVIEWER_PROFILES[reviewerId];
+  const OUT = outPathFor(reviewerId);
+  const parts = [buildCover(profile)];
   const provenance = [];
 
   for (const s of [...SECTIONS, ...RECEIPTS]) {
@@ -150,10 +216,10 @@ function main() {
     "### Thank you for reading to the end.",
     "",
     "That is the whole packet. The ask was narrow on purpose: not endorsement,",
-    "not a Navier–Stokes claim — just a framing check from someone who knows where",
-    "the honest boundary of this problem sits. If the language is too strong, the",
-    "most useful thing you can tell us is exactly which phrase to weaken and why.",
-    "A negative answer is the most valuable outcome we could get.",
+    `not a Navier–Stokes claim — just a framing check ${profile.closingSalutation}.`,
+    "If the language is too strong, the most useful thing you can tell us is",
+    "exactly which phrase to weaken and why. A negative answer is the most",
+    "valuable outcome we could get.",
     "",
     "> **One last note, for a cover-to-cover read.** A sundog — the bright parhelion",
     "> beside the sun that gives this lab its name — is the sky's own `Φ_K`: a",
@@ -174,6 +240,7 @@ function main() {
 
   const bytes = Buffer.byteLength(assembled);
   console.log(`C1 review bundle written: ${OUT}`);
+  console.log(`  reviewer profile: ${profile.label}`);
   console.log(`  sections: ${SECTIONS.length} primary + ${RECEIPTS.length} receipts`);
   console.log(`  size: ${bytes} bytes (${Math.round(bytes / 1024)} KB)`);
   console.log(`  provenance hashes: ${provenance.length}`);
