@@ -2,14 +2,19 @@
 
 Status: **PAUSED 2026-05-24** at end-of-v0.9, then **ADVANCED off-pause
 2026-05-29 -> 2026-06-03** with the v0.10 frontier pair (v0.10a + v0.10b), the
-v0.11 conditional-rank close, and the v0.12 -> v0.18 external-transfer arc, which
-reached a **replicated and mechanistically explained Tier-2 external PASS at v0.18**:
+v0.11 conditional-rank close, and the v0.12 -> v0.19 external-transfer / reliability
+mechanism arc, which reached a **replicated and mechanistically explained Tier-2
+external PASS at v0.18, then explained frame-fragility at v0.19**:
 the velocity-fraction signal transfers to an independent catalog once read as a
 continuous tail-resolved score rather than the coarse v0.11 zone, the per-cell
 heterogeneity repeats on fresh rows, and a fresh wider-cell reliability chapter
 confirmed that label-blind frame reliability predicts per-cell AUC
 (`AUC_cond = 0.620208`, `p = 1e-5`, `rho = 0.5975`, `p_reliability = 0.00523`,
-reversal guard `0` stable-decisive-negative cells).
+reversal guard `0` stable-decisive-negative cells). v0.19 then confirmed the
+first-principles H1 link from spectral near-degeneracy to frame-fragility
+(`rho(re_gap, frame_spread) = -0.836`, `p = 1e-5`, falsifier 15/2880), while
+preserving the procedural `spectral_gap_mechanism_partial` verdict because the
+direct per-cell median-gap H2 bridge to AUC missed.
 The chain ran from v0.3 (December 2025 / January 2026, pre-anniversary)
 through v0.9 (May 2026) as seven sequential pre-registered chapters with
 seven distinct chapter-close types and one load-bearing in-sample positive
@@ -71,6 +76,13 @@ conditional-positive sequence**:
   `p = 1e-5`), label-blind frame reliability predicted per-cell AUC (`rho = 0.5975`,
   `p = 0.00523`), and the reversal guard found 0 stable-decisive-negative cells.
   The post-hoc v0.17 reliability-map interpretation is now a registered finding.
+- **v0.19 (the first-principles reliability mechanism):** exact v0.18 re-measure
+  plus identity-frame spectrum dump landed `spectral_gap_mechanism_partial`. H1
+  is strong and label-blind: small Re-part Floquet gap predicts high frame spread
+  (`rho = -0.836`, `p = 1e-5`), with a clean large-gap/high-spread falsifier
+  (15/2880). H2's median `gap_reliability` -> AUC bridge misses (`rho = 0.063`),
+  so the locked verdict stays partial. Interpretation: reliability is spectral
+  near-degeneracy at the orbit level; median gap is the wrong cell aggregation.
 
 The mature, falsifiable claim is **"yes, but only after conditioning"**:
 velocity-fraction stratifies three-body stability, but as a function of the
@@ -83,9 +95,10 @@ within-m_3 conditional rung that v0.10b motivated is closed (v0.11); the
 external-catalog rung is now **CONFIRMED, replicated, and mechanism-explained at Tier-2** -- v0.12's supp-A D5-attrition
 wall and v0.13's landscape-negative left Li/Liao 2021 as the only viable target, and
 the v0.14 (undecidable) -> v0.15 (directional-weak) -> v0.16 (clean PASS) -> v0.17
-(heterogeneity replication) -> v0.18 (reliability mechanism) arc carried it to a
-held-out external confirmation of the continuous velocity-fraction projection plus a
-registered explanation of its per-cell heterogeneity. Remaining axes: a larger
+(heterogeneity replication) -> v0.18 (reliability mechanism) -> v0.19
+(spectral-gap fragility mechanism) arc carried it to a held-out external confirmation
+of the continuous velocity-fraction projection plus a registered explanation of its
+per-cell heterogeneity and orbit-level frame fragility. Remaining axes: a larger
 supported-region or multi-feature chapter, or new-mechanism work -- not another
 rephrasing of the same table.
 
@@ -249,7 +262,7 @@ v0.18:  reliability-conditioned per-cell AUC chapter (fresh quadruple-holdout
 
 ## The Load-Bearing Findings
 
-After seven chapters plus the v0.10-v0.18 frontier-advance, three findings
+After seven chapters plus the v0.10-v0.19 frontier-advance, three findings
 carry the program's substantive output (the second is now a publishable
 conditional profile with a replicated and mechanism-explained Tier-2 external transfer):
 
@@ -300,7 +313,7 @@ conditional profile with a replicated and mechanism-explained Tier-2 external tr
    held-out chapter LOCALIZED the signal rather than killing it, and v0.11
    registered that localization under the exact conditional rank gate.
 
-   **The external-transfer arc (v0.12 -> v0.18): from supp-B-internal to a replicated,
+   **The external-transfer arc (v0.12 -> v0.19): from supp-B-internal to a replicated,
    mechanism-explained clean Tier-2 PASS.** v0.12 took the frozen rule to same-paper supplementary-A and hit
    `external_transfer_blocked_by_attrition` (uniform probe attrition 0.3433, the whole
    CI above the 0.20 gate; a measurement-feasibility limit, not a falsification).
@@ -321,9 +334,13 @@ conditional profile with a replicated and mechanism-explained Tier-2 external tr
    v0.18 then promoted the v0.17 reliability-map anatomy into a registered mechanism:
    fresh 8 x 8 quadruple-holdout sample, **AUC_cond 0.620208, p 1e-5**,
    frame-reliability **rho=0.5975, p=0.00523**, and 0 stable-decisive-negative cells.
-   The coarse v0.11 zone FORM does not transfer (v0.15); its continuous tail-resolved
-   relative does, replicates, and is now mechanistically explained by frame reliability
-   (v0.16/v0.17/v0.18). Bounded to Tier-2 / stable-support / not theorem-facing.
+   v0.19 then explained frame-fragility itself: exact v0.18 re-measure plus spectrum
+   dump gave **rho(re_gap, frame_spread) = -0.836, p = 1e-5**, with a clean
+   large-gap/high-spread falsifier, while the median-gap -> AUC H2 bridge missed
+   (**rho=0.063**). The coarse v0.11 zone FORM does not transfer (v0.15); its
+   continuous tail-resolved relative does, replicates, and is now mechanistically
+   explained by frame reliability plus spectral near-degeneracy
+   (v0.16/v0.17/v0.18/v0.19). Bounded to Tier-2 / stable-support / not theorem-facing.
 
 3. **The methodology surface**. The chain produced and locked
    a comprehensive set of pre-registration discipline tools that
@@ -616,7 +633,7 @@ sequential audits on the v0.7a' analyzable subset.
 
 ## Doc Trail
 
-- `kfacet_external_transfer_capstone.md` -- consolidated v0.11-v0.18
+- `kfacet_external_transfer_capstone.md` -- consolidated v0.11-v0.19
   external-transfer capstone and claim boundary.
 - `kfacet_v03h_writeup.md` -- v0.3 chapter close.
 - `kfacet_v04_writeup.md` -- v0.4 chapter close.
@@ -649,17 +666,25 @@ sequential audits on the v0.7a' analyzable subset.
 - `kfacet_v17_liao2021_heterogeneity_scope.md` -- v0.17 replicated
   heterogeneity.
 - `kfacet_v18_liao2021_reliability_auc_form.md` -- v0.18 wider-cell reliability
-  chapter; mechanism capstone positive.
+  chapter; frame-reliability map positive.
+- `kfacet_v19_spectral_gap_reliability_form.md` -- v0.19 first-principles
+  reliability mechanism; H1 spectral-gap -> frame-fragility positive, H2 median
+  gap -> AUC bridge not confirmed.
 - `docs/CROSS_SUBSTRATE_NOTES.md` -- cross-substrate
   framing (avenue 6).
 - `docs/isotrophy/sundog_v_isotrophy.md` -- full chapter-by-chapter dated log.
 
 ---
 
-Isotrophy program paused at end-of-v0.9, then reopened through the v0.10-v0.18
+Isotrophy program paused at end-of-v0.9, then reopened through the v0.10-v0.19
 conditional/external-transfer frontier. The live result is now sharper:
 velocity-fraction is a real conditioned stability rank signal, externally
 confirmed, replicated, and mechanism-explained at Tier-2 when read as a
 continuous tail-resolved score. v0.18 confirmed the reproduced per-cell
 heterogeneity as a frame-reliability map under a registered label-blind test.
+v0.19 then explained frame-fragility itself as spectral near-degeneracy
+(`rho(re_gap, frame_spread) = -0.836`, `p = 1e-5`), while preserving the
+procedural `partial` label because the direct per-cell median-gap H2 bridge
+missed. The mechanism is strong at the orbit/reliability level; the median
+aggregation is not the AUC bridge.
 Reopening is invited; mechanism-laundering is not.

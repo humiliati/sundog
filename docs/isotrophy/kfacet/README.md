@@ -33,3 +33,5 @@ under the internal anniversary catch-all.
 - v0.16: [liao2021 tail-resolved transfer — passes_clean (Tier-2 external PASS)](kfacet_v16_liao2021_tail_resolved_transfer_form.md)
 - v0.17: [liao2021 heterogeneity replication -- heterogeneous_transfer_replicates_clean](kfacet_v17_liao2021_heterogeneity_scope.md)
 - v0.18: [liao2021 reliability-conditioned per-cell AUC -- reliability_drives_per_cell_auc_supported](kfacet_v18_liao2021_reliability_auc_form.md)
+- v0.19: [liao2021 spectral-gap reliability mechanism -- spectral_gap_mechanism_partial](kfacet_v19_spectral_gap_reliability_form.md)
+- v0.20: [liao2021 tail-gap AUC bridge -- tail_gap_bridge_supported_confirmatory (median 0.063 -> q10 tail 0.882)](kfacet_v20_tail_gap_auc_bridge_form.md)

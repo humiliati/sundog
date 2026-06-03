@@ -8,10 +8,11 @@ Short version:
 
 > Allelopathy, EM side-channels, and "field" language all collapse to one
 > falsifiable question: when can a leaky, low-dimensional observation constrain
-> the rest of a system? Sundog's in-scope version is a determining-shadow-set
-> probe on the existing chatv2 residual bodies, plus a cross-seed transplant
-> test. An animated SVG is allowed only after the spec and receipts decide what
-> it is allowed to show.
+> the rest of a system? Sundog's in-scope version is now split in two: use the
+> existing chatv2 residual bodies as a cheap prediction-bank control for the
+> uncoupled same-seed null, and put the discovery budget on cross-seed transplant
+> plus a coupled-substrate closure bracket. An animated SVG is allowed only
+> after the spec and receipts decide what it is allowed to show.
 
 Status: Scaffold opened 2026-06-03. No public page, `site-pages.json` entry,
 SVG, promotion copy, or external-review packet exists. The first target is a
@@ -20,12 +21,28 @@ research-internal roadmap and probe spec using the saved seed-stability bodies:
 `H=8`, computed pair-XOR, fair-readout residual tensors with shape
 `(3000, 4, 8, 192)`, and the receipt already records stable same-seed resistance:
 `d_dec = 7.5-7.6`, `z1_acc = 0.80-0.86`, `leak = 0.51-0.52`, and decomposed
-`objective_excess = 0.205 +/- 0.022`. This roadmap does not reinterpret those
-numbers; it asks the next, cheaper observability question over the saved bodies.
+`objective_excess = 0.205 +/- 0.022`. Updated posture: because the pair-XOR
+latents are independent by construction, same-seed determining-set closure is a
+predicted null, not the headline discovery. The saved-body sweep is still useful
+as a verify-before-file control: bank the prediction that independent latent
+shadows do not reconstruct other independent latent bodies. The genuine open
+frontier is (i) cross-seed coordinate transplant on the saved bodies and (ii)
+`k_func << k_state` closure on a coupled substrate.
 
 This is not a claim about real LLMs, consciousness fields, plant allelopathy,
 biological signaling, or the electromagnetic emanations of hardware. It is a
 partial-observability probe on a synthetic toy residual stream.
+
+**Pre-registration freeze (2026-06-03).** This roadmap is frozen as the
+plan-of-record: the probe split (same-seed prediction-bank control vs cross-seed
+transplant headline), the load-bearing `closure is a coupling phenomenon`
+reservation of `k_func << k_state` to a coupled substrate, the Core Objects
+definitions, the branch tables, the attack list, and the allowed/forbidden
+language are committed. Per the pre-registration discipline, thresholds and branch
+definitions may be **tightened or replaced before any result is read, never
+loosened after a sweep is seen**. Phase 0 translates this frozen plan into the
+runnable spec (`docs/chatv2/PHASE2_DETERMINING_SHADOW_SET_SPEC.md`); no
+verdict-bearing run is admitted until that spec freezes against this roadmap.
 
 ## Claim Boundary
 
@@ -40,10 +57,12 @@ This document explicitly does **not** claim:
 
 What this roadmap may stage:
 
-- a determining-shadow-set probe: sweep shadow subsets `S` of the eight latent
-  readout directions and measure whether `S` constrains the omitted body content;
-- a cross-seed "allelopathy" probe: test whether a source seed's shadow set
-  constrains a target seed's body without target-label refitting;
+- a same-seed determining-shadow-set **control**: sweep shadow subsets `S` of
+  the eight independent latent readout directions and verify the predicted null;
+- a cross-seed "allelopathy" **headline** probe: test whether a source seed's
+  shadow set constrains a target seed's body without target-label refitting;
+- a coupled-substrate closure bracket: test `k_func << k_state` only where
+  there is real latent/state coupling for a closure relation to exploit;
 - negative controls that make label leakage, same-seed overfit, and variance
   artifacts visible;
 - a data-driven, self-contained animated SVG that visualizes the actual branch:
@@ -71,6 +90,19 @@ body through the shadow." If no subset below all eight latents collapses the
 body, that is also a result: the toy body remains additively resistant under the
 registered information basis.
 
+But the saved chatv2 toy has an important built-in answer: its latents are
+independent Bernoulli variables in independent parity channels. That independence
+is what made the de-confound clean, and it also removes the coupling a
+determining set would need to exploit. So the same-seed sweep should be read as
+a prediction-bank control, not a fishing expedition. The expected branch is:
+
+```text
+independent latents + leak ~= chance + d_dec ~= H  ->  no within-seed closure below H
+```
+
+The discovery question moves to representations that may share geometry across
+training seeds, or to substrates where the state variables are actually coupled.
+
 ## The NSE Lesson - Functional Closure Before State Reconstruction
 
 The Navier-Stokes C1 lane gives the best clue for making this probe sharp. Its
@@ -94,7 +126,7 @@ The direct transplant into this lane is a two-threshold bracket:
 
 ```text
 k_func  = smallest |S| where the relevant omitted functional is determined
-k_state = smallest |S| where the omitted body/state is reconstructed
+k_state = smallest |S| where the registered omitted state proxy is reconstructed
 ```
 
 The strongest result would be `k_func << k_state`: a small shadow set closes the
@@ -106,6 +138,12 @@ the available shadow family.
 This reframes the animated graphic too: the satisfying visual is not "shadows
 rebuild the body." It is "a shadow set pins the closure handle while the body
 cloud still has thickness."
+
+Load-bearing transplant from C1: **closure is a coupling phenomenon.** C1 worked
+because high and low modes are dynamically coupled (`R2(R | Phi_K) ~= 0.998` is
+a coupling statement). The saved chatv2 pair-XOR toy was built to remove
+cross-latent coupling. Therefore its within-seed `k_func << k_state` result is
+not expected to exist; a null would confirm the design, not disappoint the lane.
 
 ## The EMF Bridge
 
@@ -136,10 +174,10 @@ The non-mystical allelopathy question is:
 
 That is testable now because the seed-stability run saved three independent
 `H=8` bodies under the same task family. The hard version is direct transplant:
-fit the source seed's shadow readout directions, apply them to the target seed's
-body, and measure target-body constraints without training a new target-label
-decoder. Any label-aware target alignment is an upper-bound diagnostic, not the
-verdict.
+fit the source seed's layer, shadow readout directions, standardization, and
+decoder; apply them to the target seed's body; and measure target-latent recovery
+without target-label layer selection or refit. Any label-aware target alignment
+is an upper-bound diagnostic, not the verdict.
 
 ## Core Objects
 
@@ -152,19 +190,30 @@ verdict.
 | collapse | `S` predicts the omitted information above the pre-registered threshold |
 | determining number `k_det` | smallest `|S|` whose best subset collapses resistance |
 | functional closure number `k_func` | smallest `|S|` that determines a registered omitted functional |
-| state reconstruction number `k_state` | smallest `|S|` that reconstructs the omitted body/state target |
+| state reconstruction number `k_state` | smallest `|S|` that reconstructs the registered omitted state proxy; for saved bodies, omitted readout-score coordinates `s_j` |
 | cross-seed pass | source-seed `S` constrains target-seed body without target-label refit |
 
 The probe should preserve the chatv2 information-basis lesson: raw variance PR
 alone is not enough. Readout-direction geometry, omitted-latent leakage, and
 body reconstruction should all be reported separately.
 
-## Probe 1 - Determining Shadow-Set
+## Probe 1 - Same-Seed Determining-Set Control
 
 Question:
 
-> Within a single trained seed, what is the smallest shadow set `S` that
-> reconstructs or constrains the omitted body content?
+> Does the saved independent-latent toy behave exactly as it should: no shadow
+> subset `S < H` reconstructs or closes the omitted independent latents?
+
+This probe is deliberately **not** the discovery headline. It is a cheap
+verify-before-file control. The same-seed result is already strongly predicted
+by the construction and receipt:
+
+```text
+z_i independent by construction
+cross_latent_leak ~= 0.51
+d_dec ~= 7.6 ~= H
+=> omitted-latent closure should stay at chance for every S < H
+```
 
 Frozen design shape for the later spec:
 
@@ -172,30 +221,36 @@ Frozen design shape for the later spec:
 - Fit per-latent readout directions on a training split inside each seed.
 - For every subset `S` with `|S| = 1..7`, compute shadow scores on held-out rows.
 - Predict omitted latent labels `z_j, j not in S` from the scores in `S`.
-- Predict omitted readout scores and a frozen body target from the scores in `S`.
+- Predict omitted readout scores `s_j` from the scores in `S`; this is the
+  registered `k_state` body proxy for the saved-body spec, not a full
+  residual-minus-`S` reconstruction.
 - Separately classify `k_func` and `k_state`:
   - `k_func`: closure of registered omitted functionals.
-  - `k_state`: reconstruction of omitted body/state targets.
+  - `k_state`: reconstruction of omitted readout-score coordinates.
 - Compare against permutation controls, same-size random projections, and the
   existing one-shadow `z_1` leak baseline.
 
 Candidate functionals for the spec to freeze, in priority order:
 
 1. **Omitted-latent functional.** Predict the omitted latent vector or a frozen
-   aggregate of it from `S`. This is cheap and available from saved bodies.
+   aggregate of it from `S`. This is cheap and available from saved bodies. In
+   the saved pair-XOR toy, it is predicted to stay at chance.
 2. **Readout-closure functional.** Predict the omitted latent readout scores,
    not the labels. This asks whether the source shadow closes the information
-   basis itself.
-3. **Model-output functional.** If logits/checkpoints are admitted, measure the
-   next-token loss or decision margin induced by omitting the rest. This is the
-   closest chatv2 analogue of NSE's unresolved-transfer `R`, but it requires a
-   runner/spec extension beyond the saved `.npz` bodies.
+   basis itself. In the saved pair-XOR toy, any pass here would be surprising
+   and must first be attacked as leakage or same-seed overfit.
+3. **Model-output functional.** Scoped out of this saved-body spec. If
+   logits/checkpoints are admitted later, measure the next-token loss or decision
+   margin under a separate coupled-substrate/Phase 7 spec. This is the closest
+   chatv2 analogue of NSE's unresolved-transfer `R`, but the saved `.npz` bodies
+   do not contain the runner surface needed to measure it, and the uncoupled toy
+   is the wrong substrate for a headline `k_func << k_state` closure.
 
 Proposed, non-binding gates for the spec to freeze:
 
 ```text
 k_func:  rest_functional_acc_or_R2 >= 0.70
-k_state: body_target_FVE >= 0.60
+k_state: omitted_score_FVE >= 0.60
 permutation controls near chance / <= 0.12 where applicable
 ```
 
@@ -206,9 +261,9 @@ Expected branches:
 
 | branch | condition | interpretation |
 | --- | --- | --- |
-| `det_shadow_functional_closure` | `k_func < k_state` or `k_func` exists while `k_state` does not | NSE-like functional observability: the closure handle is determined before the body |
+| `det_shadow_predicted_null` | no subset `|S| <= 7` reaches either threshold and controls pass | predicted null confirmed: independent latents do not determine each other |
+| `det_shadow_functional_closure` | `k_func < k_state` or `k_func` exists while `k_state` does not | surprising in this toy; attack as leakage before treating as NSE-like closure |
 | `det_shadow_state_collapse` | `k_func ~= k_state < 8` | the shadow set reconstructs because it has effectively become state-determining |
-| `det_shadow_no_collapse_below_H` | no subset `|S| <= 7` reaches either threshold | the toy body remains resistant until the full latent basis |
 | `det_shadow_partial` | one metric passes but controls or companion reads fail | constrained in one basis, not enough for the headline |
 | `det_shadow_void` | split, leakage, shape, or control contract fails | no result; repair spec/tooling |
 
@@ -249,13 +304,22 @@ Question:
 > Does a shadow set learned on seed `a` constrain the body of independently
 > trained seed `b`?
 
+This is the real "allelopathy" frontier for the saved bodies. It is not answered
+by within-seed independence, because it asks whether independently trained
+models converge to a shared coordinate geometry for the same task. The analogy
+to NSE is not "low modes determine high modes"; it is "two systems share a
+common attractor/task geometry strongly enough that a shadow basis learned in
+one system lands in another."
+
 Use all six directed pairs among seeds `{0, 1, 2}`. The verdict tier order should
 be hard:
 
-1. **Direct transplant:** source readout directions and source standardization
-   applied to the target body. This is the only strong allelopathy-positive tier.
-2. **Unlabeled calibration:** source directions with target mean/scale
-   calibration only. This is a weaker coordinate-shape pass.
+1. **Direct transplant:** source layer, source readout directions, source
+   standardization, and source decoder applied to the target body. No target
+   labels, no target layer selection, no target refit. This is the only strong
+   allelopathy-positive tier.
+2. **Unlabeled calibration:** same source layer/directions/decoder with target
+   mean/scale calibration only. This is a weaker coordinate-shape pass.
 3. **Label-aware or Procrustes ceiling:** uses target labels or paired latent
    information. This is an upper bound and must be labeled as such.
 
@@ -301,12 +365,16 @@ Before any SVG or public language, attack the probes in these ways:
 10. **State-vs-functional conflation.** Report `k_func` and `k_state`
     separately. A result that only reconstructs the body is not the NSE-like
     closure story.
+11. **Uncoupled-substrate overread.** Do not demand a closure bracket from a
+    substrate with no coupling. The saved pair-XOR body is designed to be
+    independent; its same-seed null is a feature.
 
 ## Roadmap
 
 ### Phase 0 - Spec Freeze
 
-Draft `docs/chatv2/PHASE2_DETERMINING_SHADOW_SET_SPEC.md`.
+Filed as `docs/chatv2/PHASE2_DETERMINING_SHADOW_SET_SPEC.md` (draft for
+sign-off, not run).
 
 Required contents:
 
@@ -331,7 +399,7 @@ results/chatv2/phase2-determining-shadow-set/
 
 No verdict-bearing run is admitted until Phase 0 freezes.
 
-### Phase 1 - Same-Seed Determining Set
+### Phase 1 - Same-Seed Prediction-Bank Control
 
 Run the subset sweep on seeds `0, 1, 2`.
 
@@ -346,11 +414,12 @@ same_seed_controls.csv
 same_seed_branch_adjudication.md
 ```
 
-The receipt should report both the best subset at each `k` and the full
-distribution over subsets, so a later reader can see whether one lucky subset or
-a broad structural trend drove the branch.
+Expected branch: `det_shadow_predicted_null`. The receipt should report both the
+best subset at each `k` and the full distribution over subsets, so a later
+reader can see whether the predicted null is broad or whether one suspicious
+subset needs a leakage audit.
 
-### Phase 2 - Cross-Seed Transplant
+### Phase 2 - Cross-Seed Transplant Headline
 
 Run the six directed source-target pairs.
 
@@ -439,6 +508,33 @@ Assumption for pursuing it: high-fidelity numerics or an adaptive/stiff
 integrator removes the high-G numerical wall. Without that, it repeats the C1/C2
 fixed-dt trap and should remain staged, not run.
 
+### Phase 7 - Coupled-Latent Toy (Optional, Separate Spec)
+
+If the goal is to test the closure bracket cheaply without the NSE numerical
+wall, build a new toy where latent variables are coupled by construction. This
+is a new substrate, not a reinterpretation of the saved pair-XOR bodies.
+
+Candidate design shape:
+
+```text
+primitive latents u_1...u_m       independent sources
+state latents z_1...z_H           coupled functions of u, e.g. Markov/tree/parity constraints
+shadow set S                      readouts for a subset of z
+functional R_toy                  a coupled closure target, e.g. parity/checksum/transition hazard
+state target                      omitted z or residual body coordinates
+headline                         k_func << k_state, if it exists
+```
+
+Good coupled-toy properties:
+
+- de-confound still passes: no target is linearly input-decodable by accident;
+- marginal/additive baselines are included;
+- the coupling graph is known, so the expected `k_func` is pre-registerable;
+- the uncoupled pair-XOR toy is run as a negative control with the same runner.
+
+This is the toy analogue of high-fidelity NSE: closure has something real to
+close over.
+
 ## SVG Storyboard
 
 The graphic should be a receipt visual, not a marketing flourish.
@@ -488,27 +584,46 @@ default posture is internal only.
 
 Before probes:
 
-> We are opening an internal determining-shadow-set probe: how many saved
-> chatv2 latent readouts are needed before the omitted residual body stops
-> resisting, and does any source-seed shadow transfer to another seed?
+> We are opening an internal same-seed control plus cross-seed transplant probe:
+> the saved pair-XOR bodies should confirm the independent-latent null, while
+> the live allelopathy question is whether a shadow basis learned in one seed
+> lands in another.
 
-If same-seed collapse passes:
+If a same-seed closure appears on the saved pair-XOR bodies (unexpected):
 
-> On the saved toy residual bodies, a subset of `k_func` registered shadows
-> determines the omitted functional before the full omitted body is reconstructed.
-> This is a toy observability result, not a real-LLM, NSE, or side-channel claim.
+> A subset of `k_func` shadows appeared to close the omitted functional on the
+> saved pair-XOR bodies. Because those latents are independent by construction,
+> this contradicts the predicted null: it is **suspect** and is **not announced**
+> until it survives the full leakage, same-seed-overfit, and permutation attack.
+> A genuine `k_func << k_state` closure is expected only on a coupled substrate
+> (Phase 7), not on these bodies.
 
-If state reconstruction lands first:
+If same-seed state reconstruction lands first (also unexpected here):
 
-> The shadow set becomes useful by becoming state-reconstructive: `k_func` and
-> `k_state` collapse together. That is a determining-set result, not the
-> stronger NSE-like functional-closure story.
+> `k_func` and `k_state` collapsed together on the saved bodies. On independent
+> pair-XOR latents this is also unexpected; it is held to the same leakage and
+> overfit attack before any claim. If it survives, it is a determining-set result,
+> not the stronger NSE-like functional-closure story.
+
+If a closure lands on a coupled substrate (Phase 7):
+
+> On a substrate with constructed latent coupling, a subset of `k_func` shadows
+> determines the registered closure functional before the omitted state is
+> reconstructed (`k_func << k_state`). This is a toy observability result on a
+> coupled toy, not a real-LLM, NSE, or side-channel claim.
 
 If no collapse:
 
 > The toy body remains resistant below the full latent set: adding shadows does
 > not close the registered functional or reconstruct the omitted content under
 > the frozen controls.
+
+If the predicted same-seed null lands:
+
+> The saved pair-XOR body confirmed the independence prediction: below the full
+> latent set, same-seed shadows do not close omitted independent latents. The
+> result is a control receipt; the live allelopathy question is cross-seed
+> transplant.
 
 If cross-seed direct pass:
 

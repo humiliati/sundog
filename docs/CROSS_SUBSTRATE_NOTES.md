@@ -802,6 +802,20 @@ and mechanistically explained as far as the available Tier-2 target permits.
 The consolidated claim boundary lives at
 [`isotrophy/kfacet/kfacet_external_transfer_capstone.md`](isotrophy/kfacet/kfacet_external_transfer_capstone.md).
 
+Post-v0.19 update: the reliability mechanism now has a first-principles cause, but the
+locked verdict remains procedurally `spectral_gap_mechanism_partial`. H1 landed hard:
+small Floquet Re-part spectral gap predicts high frame spread on the exact v0.18 rows
+(`rho = -0.836`, `p = 1e-5`, reproduce gate exact, large-gap/high-spread falsifier
+15/2880). That confirms the exportable **fragility** principle: an argmax-selected
+shadow is reparameterization-fragile exactly where the selection spectrum is
+near-degenerate. H2 missed because it used a per-cell **median** gap summary
+(`rho = 0.063`), while v0.18's AUC relationship runs through the frame-spread tail
+(`frame_p90`). So the seventh projection lesson is not "partial means weak"; it is
+**well-posedness is spectral, but region-level transfer needs an aggregation matched
+to the failure mode**. For chatv2 / Mesa / NSE, compute the eigengap or control-basis
+gap first as a label-blind reliability predictor, then decide whether the downstream
+claim is median-, tail-, or threshold-driven before collapsing a region to one number.
+
 ### 7.3 Threebody
 
 Phase 18 revises this row. The accelerometer / tidal proxy was a useful scaffold

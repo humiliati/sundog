@@ -1456,7 +1456,7 @@ finding preserved. Chapter close at
 `docs/isotrophy/kfacet/kfacet_v09_writeup.md`.
 
 **Isotrophy program PAUSED 2026-05-24 at end-of-v0.9, then advanced
-off-pause through v0.10-v0.18 on 2026-05-29 -> 2026-06-03.** Pause/frontier
+off-pause through v0.10-v0.19 on 2026-05-29 -> 2026-06-03.** Pause/frontier
 document at `docs/isotrophy/kfacet/kfacet_isotrophy_program_pause.md`; capstone
 synthesis at `docs/isotrophy/kfacet/kfacet_external_transfer_capstone.md`.
 The live conditional profile is: v0.10a registers the monotone vf ->
@@ -1483,8 +1483,13 @@ quadruple-holdout sample (`AUC_cond = 0.620208`, `p = 1e-5`, frame-reliability
 This is a replicated held-out external (Tier-2) confirmation that the
 velocity-fraction projection transfers across the ansatz boundary, with the
 per-cell heterogeneity now explained by a registered label-blind frame-reliability
-mechanism -- pooled, mass-cell-heterogeneous, bounded to Tier-2, not
-theorem-facing. The program remains paused at the
+mechanism. **v0.19 then landed `spectral_gap_mechanism_partial`: H1 strongly
+confirms the first-principles link `re_gap -> frame_spread` (`rho = -0.836`,
+`p = 1e-5`, falsifier 15/2880), while H2's direct per-cell median-gap -> AUC
+bridge misses (`rho = 0.063`).** The honest synthesis is that reliability is a
+spectral-gap / near-degeneracy phenomenon at the orbit level; the locked partial
+label reflects a failed median aggregation, not a weak fragility mechanism --
+pooled, mass-cell-heterogeneous, bounded to Tier-2, not theorem-facing. The program remains paused at the
 lab-bandwidth level; remaining reopening is Tier-3 data, paper-side consolidation,
 or a separate cross-substrate reliability test under the locked discipline.
 

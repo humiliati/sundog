@@ -1,8 +1,9 @@
 # K_facet External Transfer Capstone
 
-Status: **CONSOLIDATED 2026-06-03.** This is a paper-side synthesis of the
-v0.11 -> v0.18 external-transfer arc. It adds no new statistic, no new sample,
-and no new claim beyond the locked chapter receipts.
+Status: **CONSOLIDATED 2026-06-03; UPDATED THROUGH v0.19.** This is a paper-side
+synthesis of the v0.11 -> v0.19 external-transfer and reliability-mechanism arc.
+It adds no new statistic, no new sample, and no new claim beyond the locked chapter
+receipts.
 
 ## One-Sentence Claim
 
@@ -10,7 +11,7 @@ The Floquet velocity-fraction projection stratifies three-body stability after
 conditioning on mass structure; read as a continuous tail-resolved score, it
 transfers to the Li/Liao 2021 external catalog at Tier-2, replicates on fresh
 rows, and its per-cell heterogeneity is explained by a registered label-blind
-frame-reliability map.
+frame-reliability map whose per-orbit cause is Floquet spectral near-degeneracy.
 
 ## What Is Being Claimed
 
@@ -44,6 +45,7 @@ then explains the otherwise puzzling per-cell heterogeneity.
 | v0.16 | continuous tail-resolved transfer | passes_clean: AUC_cond = 0.6469866, p = 1e-5 |
 | v0.17 | fresh replication + heterogeneity | AUC_cond = 0.646875, p = 1e-5; heterogeneity rho = 1.0 |
 | v0.18 | reliability mechanism | AUC_cond = 0.620208, p = 1e-5; reliability rho = 0.5975, p = 0.00523 |
+| v0.19 | first-principles reliability mechanism | H1 pass: Spearman(re_gap, frame_spread) = -0.836, p = 1e-5; H2 median-gap bridge misses |
 
 The arc is complete because the result now has all four pieces: an internal
 conditional positive, an external transfer, a fresh replication, and a
@@ -87,6 +89,25 @@ That matters because the reversal guard was capable of falsifying the mechanism:
 a frame-stable decisive-negative cell would have shown a real competing local
 law. None appeared.
 
+v0.19 then asked what frame-fragility *is*. The answer is strong at the orbit
+level: small Floquet Re-part spectral gap predicts high four-frame spread
+(`rho = -0.836`, `p = 1e-5`) on the exact v0.18 rows, with the reproduce gate
+bit-for-bit clean and the large-gap/high-spread falsifier nearly empty
+(15/2880). The locked verdict is still `spectral_gap_mechanism_partial` because
+the direct H2 bridge used a cell **median** gap summary and missed
+(`rho = 0.063`): the v0.18 AUC relationship lives in the frame-spread tail
+(`frame_p90`), and a median washes that tail out. So the honest synthesis is:
+
+```text
+spectral gap -> frame fragility (v0.19 H1, confirmed)
+frame fragility tail -> per-cell AUC reliability map (v0.18, confirmed)
+median spectral gap -> per-cell AUC (v0.19 H2, not confirmed)
+```
+
+The mechanism is therefore answered at altitude 2: reliability varies because
+argmax-selected Floquet shadows become fragile near spectral degeneracy. The
+specific median aggregation did not carry that mechanism to AUC.
+
 ## Claim Boundary
 
 Allowed:
@@ -114,18 +135,20 @@ The most compact public phrasing is:
 
 > Velocity-fraction is a real conditional stability shadow, externally confirmed
 > at Tier-2 when read continuously; its transfer heterogeneity is not noise, but
-> a frame-reliability map.
+> a frame-reliability map, and that map is driven at the orbit level by spectral
+> near-degeneracy of the selected Floquet direction.
 
 ## Sundog Lesson
 
 This is one of the cleanest body/shadow examples in the repository. The shadow
 works only after the held-fixed coordinate is named, only after the target can
 host the comparison, and only when the feature's granularity matches the target
-distribution. v0.18 adds the final transfer lesson:
+distribution. v0.18 and v0.19 add the reliability lessons:
 
 ```text
 for eigenvector/argmax-selected shadows, per-region transfer strength can track
-instrument reliability.
+instrument reliability, and instrument reliability can be predicted label-blind
+from the spectral gap that makes the selection well-posed.
 ```
 
 That lesson is exportable. It should be tested in new threads, not by stretching
@@ -150,4 +173,6 @@ Primary receipts:
 - `docs/isotrophy/kfacet/kfacet_v16_liao2021_tail_resolved_transfer_form.md`
 - `docs/isotrophy/kfacet/kfacet_v17_liao2021_heterogeneity_scope.md`
 - `docs/isotrophy/kfacet/kfacet_v18_liao2021_reliability_auc_form.md`
+- `docs/isotrophy/kfacet/kfacet_v19_spectral_gap_reliability_form.md`
 - `results/isotrophy/k-facet-v18-liao2021-reliability-auc/manifest.json`
+- `results/isotrophy/k-facet-v19-spectral-gap-reliability/manifest.json`

@@ -213,6 +213,8 @@
     "isotrophy:v19:shard": "python scripts/v19_spectral_gap_reliability.py shard --out results/isotrophy/k-facet-v19-spectral-gap-reliability",
     "isotrophy:v19:merge": "python scripts/v19_spectral_gap_reliability.py merge --out results/isotrophy/k-facet-v19-spectral-gap-reliability --shard-count 16",
     "isotrophy:v19:analyze": "python scripts/v19_spectral_gap_reliability.py analyze --out results/isotrophy/k-facet-v19-spectral-gap-reliability --permutations 100000 --seed 20260523",
+    "isotrophy:v20:prepare": "python scripts/v20_tail_gap_auc_bridge.py prepare --target docs/isotrophy/external_targets/liao2021_nonhierarchical.txt --v18 results/isotrophy/k-facet-v18-liao2021-reliability-auc --v19 results/isotrophy/k-facet-v19-spectral-gap-reliability --out results/isotrophy/k-facet-v20-tail-gap-auc-bridge",
+    "isotrophy:v20:analyze": "python scripts/v20_tail_gap_auc_bridge.py analyze --out results/isotrophy/k-facet-v20-tail-gap-auc-bridge --permutations 100000 --seed 20260523",
     "deploy": "npm run build && node scripts/deploy-pages.mjs",
     "faraday:phase4": "node scripts/faraday-phase4-battery.mjs",
     "faraday:phase7": "node scripts/faraday-phase7-battery.mjs",
