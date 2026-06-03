@@ -38,6 +38,9 @@ Related docs:
 - [`lattice/PHASE4_B3_SOUNDNESS_FRONTIER.md`](lattice/PHASE4_B3_SOUNDNESS_FRONTIER.md)
   - Phase 4 B3 companion design memo: the false-elimination vs progress/abstention
   frontier the LDT loss already encodes.
+- [`lattice/PROMOTE_GATE.md`](lattice/PROMOTE_GATE.md) - the canonical R0->R3 rung
+  ladder, per-rung gates, do-not-claim ledger (ported from the chatv2 gate); §7
+  points here.
 - [`chatv2/LANE_CHARTER.md`](chatv2/LANE_CHARTER.md) - sibling residual-body
   lane and the variance-PR masking lesson this lane inherits.
 - [`CROSS_SUBSTRATE_NOTES.md`](CROSS_SUBSTRATE_NOTES.md) - body-resistance axis
@@ -225,6 +228,40 @@ Branch criteria:
 | `build_gate_fail` | cannot reproduce substrate | close or re-register |
 | `access_checkpoint_available` | authors or public release provide usable model | run an access/fidelity audit before Phase 0 |
 
+#### GPU on-ramp + harness inheritance (verified 2026-06-02)
+
+The build-gate inherits the chatv2 measurement harness, made GPU-ready and
+CPU->GPU parity-smoked by the chatv2 R1-completion battery
+(`scripts/chatv2_phase0_bodyresist.py`, device-parameterized end-to-end -
+`device = cuda if available else cpu`, threaded through train/extract). **Ports:**
+the train/extract/measure decoupling, device threading, the information-basis
+`d_dec` fingerprint, and the baseline-ladder contrast decomposition
+(`architectural / incidental / objective_excess`). **New:** the LDT model itself - a
+lattice-domain transformer, not a tiny GPT on synthetic bits -
+`scripts/lattice_ldt_model.py`. The measurement scaffolding is reused; the model is
+rebuilt. Do **not** launch the 20+h lattice jobs until the on-ramp's CPU->GPU
+parity is confirmed by the chatv2 smoke (record the verified state, not an assumed
+one).
+
+Build-gate guard inherited from chatv2 (the UNLEARNED / matched-treatment lesson):
+no body/fiber number is read off a model that did not pass the build-gate, and any
+training advantage in a contrast (warm-start, curriculum, extra steps) must be
+**matched across the compared models or disclosed** - a learnability or
+training-curriculum gap must never masquerade as a body-resistance signal. (chatv2's
+L2 cell surfaced a gen/twin warm-start asymmetry; the lattice analogue is the
+build-gate's "reproduce 100% first" rule.)
+
+#### Audit-team handoff (taken at the build-gate)
+
+The chatv2 team, having lived the promote-gate discipline, becomes the lattice
+lane's **named internal red-team** starting at the build-gate. They audit: the
+build-gate receipt (is the reproduction faithful?), the Phase-2 B2 receipt (does the
+twin-state certify state-insufficiency; is the cross-decode guard clean?), and the
+B1/B3 receipts. This is the promote-gate's external-grounding role internalized for
+the build phase; it does **not** replace Phase-7 external review - the audit team
+also co-signs the external-refute invitation per
+[`lattice/PROMOTE_GATE.md`](lattice/PROMOTE_GATE.md) (R2).
+
 The build-gate is not optional. A broken model would make every downstream
 measurement uninterpretable.
 
@@ -318,6 +355,11 @@ Branch criteria:
 ### Phase 5 - Coupling Adjudication
 
 Goal: decide what the lane has earned before any website work begins.
+
+Every earned-language call in the table below is **audit-team-reviewed** (the
+chatv2 red-team, per Phase 1) and gates on the
+[`lattice/PROMOTE_GATE.md`](lattice/PROMOTE_GATE.md) rung whose §2 gate it clears -
+no row's language is spoken until its rung is cleared.
 
 Adjudication table:
 
