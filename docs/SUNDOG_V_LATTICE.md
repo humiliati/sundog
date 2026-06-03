@@ -243,13 +243,18 @@ rebuilt. Do **not** launch the 20+h lattice jobs until the on-ramp's CPU->GPU
 parity is confirmed by the chatv2 smoke (record the verified state, not an assumed
 one).
 
-Build-gate guard inherited from chatv2 (the UNLEARNED / matched-treatment lesson):
-no body/fiber number is read off a model that did not pass the build-gate, and any
-training advantage in a contrast (warm-start, curriculum, extra steps) must be
-**matched across the compared models or disclosed** - a learnability or
-training-curriculum gap must never masquerade as a body-resistance signal. (chatv2's
-L2 cell surfaced a gen/twin warm-start asymmetry; the lattice analogue is the
-build-gate's "reproduce 100% first" rule.)
+Build-gate guard inherited from chatv2 (the UNLEARNED / fresh-baseline contract,
+pinned implementation-grade in
+[`chatv2/LATTICE_HANDOFF.md`](../chatv2/LATTICE_HANDOFF.md)): no body/fiber number is
+read off a model that did not pass the build-gate; and in any contrast the **control
+baseline stays fresh** - warm-starting it would *contaminate* the comparison, not fix
+it (it injects the advantaged side's structure into the baseline) - while the
+curriculum'd side must **genuinely converge** (the UNLEARNED guard) or be skipped,
+with the curriculum **disclosed in scope**. A learnability or training-curriculum gap
+must never masquerade as a body-resistance signal. (The contract was produced by the
+chatv2 L2 gen/twin warm-start asymmetry the lattice audit raised; the lattice
+analogues are the build-gate's "reproduce 100% first" rule and the cross-decode guard
+- the input-undecodability pre-check chatv2 confirmed at arity-3 = 0.484 ≤ 0.60.)
 
 #### Audit-team handoff (taken at the build-gate)
 
