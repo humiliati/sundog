@@ -452,18 +452,17 @@ no longer learned or discovered.
 
 ## 7. Promotion Criteria
 
-A lattice result can be promoted out of this roadmap only when all are true:
+The rung ladder (**R0** receipt -> **R1** reimplemented-substrate -> **R2**
+substrate-general / real-model -> **R3** theory) with its per-rung pre-registered
+gates, the do-not-claim ledger, and the adversarial pre-mortem are the **canonical
+promote-gate**: [`lattice/PROMOTE_GATE.md`](lattice/PROMOTE_GATE.md) (ported from
+the chatv2 gate; binding once ratified). **No rung's language may be used until
+that rung's gate is cleared** - a result is a *receipt* until promoted, and
+external review **plus the chatv2 audit team** gate any claim past R1. The R1 gate
+folds in the build-gate pass, the cross-decode / vacuity guards, generality across
+>=2 tasks, and honest reporting of `CERTIFIED_MARGINAL_BODY` / `UNSOUND` as results.
 
-1. build-gate or access-gate passed;
-2. phase result filed with manifest and dirty-git/runner provenance;
-3. at least one non-vacuous B-layer metric is measured on the learned model, not
-   on the definitional alpha/gamma pair;
-4. claim-boundary language is updated before public copy;
-5. external review packet exists for any positive public claim;
-6. `lattice.html`, if shipped, has the evidence tier and noindex/link policy
-   appropriate to the result.
-
-Promotion should add:
+Where a promoted result then goes (mechanics):
 
 - a narrow row to [`CROSS_SUBSTRATE_NOTES.md`](CROSS_SUBSTRATE_NOTES.md);
 - an entry in the review tracker if public-facing;
