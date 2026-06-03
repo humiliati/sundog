@@ -1,4 +1,4 @@
-seed,branch,n_pairs,eps,D_witness,D_witness_lowmargin
-0,paired_fiber_conflict,890,0.11664389318263838,0.9932584269662922,0.9855072463768116
-1,paired_fiber_conflict,911,0.16205290458221144,0.9802414928649835,0.975
-2,paired_fiber_conflict,988,0.09015190242342826,0.979757085020243,0.98989898989899
+seed,branch,n_pairs,D_witness
+0,paired_fiber_conflict,900,0.9922
+1,paired_fiber_conflict,898,0.9833
+2,paired_fiber_conflict,994,0.9779

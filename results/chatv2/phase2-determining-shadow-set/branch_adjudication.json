@@ -3,68 +3,67 @@
     {
       "seed": 0,
       "lstar": 3,
-      "kf": null,
-      "ks": null,
-      "kd": null,
       "branch": "det_shadow_predicted_null",
-      "twin_kf": null,
-      "twin_ks": null,
       "max_func_gen": 0.5783,
-      "max_func_twin": 0.594
+      "max_state_gen": 0.1068,
+      "max_func_twin": 0.594,
+      "nf_func": 0.7304,
+      "nf_state": 0.4528,
+      "det_func": false,
+      "det_state": false
     },
     {
       "seed": 1,
       "lstar": 3,
-      "kf": null,
-      "ks": null,
-      "kd": null,
       "branch": "det_shadow_predicted_null",
-      "twin_kf": null,
-      "twin_ks": null,
       "max_func_gen": 0.562,
-      "max_func_twin": 0.5827
+      "max_state_gen": 0.1296,
+      "max_func_twin": 0.5827,
+      "nf_func": 0.7304,
+      "nf_state": 0.4528,
+      "det_func": false,
+      "det_state": false
     },
     {
       "seed": 2,
       "lstar": 3,
-      "kf": null,
-      "ks": null,
-      "kd": null,
-      "branch": "det_shadow_void",
-      "twin_kf": null,
-      "twin_ks": null,
+      "branch": "det_shadow_predicted_null",
       "max_func_gen": 0.6147,
-      "max_func_twin": 0.618
+      "max_state_gen": 0.1299,
+      "max_func_twin": 0.618,
+      "nf_func": 0.7304,
+      "nf_state": 0.4528,
+      "det_func": false,
+      "det_state": false
     }
   ],
   "probe1_aggregate": [
     "det_shadow_predicted_null",
     "det_shadow_predicted_null",
-    "det_shadow_void"
+    "det_shadow_predicted_null"
   ],
   "controls": [
     {
       "seed": 0,
-      "perm_max_func": 0.515,
-      "perm_ok": true,
-      "randdir_ok": true,
-      "controls_ok": true
+      "perm_max_func": 0.5267,
+      "perm_ok": true
     },
     {
       "seed": 1,
-      "perm_max_func": 0.5083,
-      "perm_ok": true,
-      "randdir_ok": true,
-      "controls_ok": true
+      "perm_max_func": 0.5063,
+      "perm_ok": true
     },
     {
       "seed": 2,
-      "perm_max_func": 0.5017,
-      "perm_ok": true,
-      "randdir_ok": false,
-      "controls_ok": false
+      "perm_max_func": 0.514,
+      "perm_ok": true
     }
   ],
+  "null_floor": {
+    "func": 0.7303999999999999,
+    "state": 0.45284252635838346,
+    "R": 30
+  },
   "cross_seed_branch": "cross_seed_no_transfer",
   "cross_seed_counts": [
     0,
@@ -77,69 +76,84 @@
       "b": 1,
       "tier1": 0.49675,
       "tier2": 0.5018333333333334,
-      "tier3": 0.5353333333333333
+      "tier3": 0.5353333333333333,
+      "tier3b": 0.57575,
+      "subspace_overlap": 0.0451
     },
     {
       "a": 0,
       "b": 2,
       "tier1": 0.498,
       "tier2": 0.49516666666666664,
-      "tier3": 0.51125
+      "tier3": 0.51125,
+      "tier3b": 0.5229999999999999,
+      "subspace_overlap": 0.0478
     },
     {
       "a": 1,
       "b": 0,
       "tier1": 0.4970833333333333,
       "tier2": 0.4935,
-      "tier3": 0.5055833333333334
+      "tier3": 0.5055833333333334,
+      "tier3b": 0.546,
+      "subspace_overlap": 0.0451
     },
     {
       "a": 1,
       "b": 2,
       "tier1": 0.50175,
       "tier2": 0.49475,
-      "tier3": 0.5029166666666667
+      "tier3": 0.5029166666666667,
+      "tier3b": 0.532,
+      "subspace_overlap": 0.0144
     },
     {
       "a": 2,
       "b": 0,
       "tier1": 0.5057499999999999,
       "tier2": 0.48033333333333333,
-      "tier3": 0.51075
+      "tier3": 0.51075,
+      "tier3b": 0.57725,
+      "subspace_overlap": 0.0478
     },
     {
       "a": 2,
       "b": 1,
       "tier1": 0.5014166666666666,
       "tier2": 0.5005000000000001,
-      "tier3": 0.5151666666666668
+      "tier3": 0.5151666666666668,
+      "tier3b": 0.57675,
+      "subspace_overlap": 0.0144
     }
   ],
+  "A1_A2": {
+    "rho_eigengap_framespread": 0.065,
+    "q10_eigengap": 0.5109,
+    "q10_framespread": 0.0873,
+    "median_framespread": 0.1192,
+    "subspace_overlap": 0.0358,
+    "tier3b": 0.5551,
+    "a3": "different_encoding_subspaces"
+  },
   "paired_fiber": [
     {
       "seed": 0,
       "branch": "paired_fiber_conflict",
-      "n_pairs": 890,
-      "eps": 0.11664389318263838,
-      "D_witness": 0.9932584269662922,
-      "D_witness_lowmargin": 0.9855072463768116
+      "n_pairs": 900,
+      "D_witness": 0.9922
     },
     {
       "seed": 1,
       "branch": "paired_fiber_conflict",
-      "n_pairs": 911,
-      "eps": 0.16205290458221144,
-      "D_witness": 0.9802414928649835,
-      "D_witness_lowmargin": 0.975
+      "n_pairs": 898,
+      "D_witness": 0.9833
     },
     {
       "seed": 2,
       "branch": "paired_fiber_conflict",
-      "n_pairs": 988,
-      "eps": 0.09015190242342826,
-      "D_witness": 0.979757085020243,
-      "D_witness_lowmargin": 0.98989898989899
+      "n_pairs": 994,
+      "D_witness": 0.9779
     }
   ],
-  "wall_clock_s": 189.2
+  "wall_clock_s": 498.5
 }

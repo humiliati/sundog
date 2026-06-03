@@ -508,20 +508,21 @@ Assumption for pursuing it: high-fidelity numerics or an adaptive/stiff
 integrator removes the high-G numerical wall. Without that, it repeats the C1/C2
 fixed-dt trap and should remain staged, not run.
 
-### Phase 7 - Coupled-Latent Toy (Optional, Separate Spec)
+### Phase 7 - Coupled-Latent Toy (Open Draft Spec)
 
 If the goal is to test the closure bracket cheaply without the NSE numerical
 wall, build a new toy where latent variables are coupled by construction. This
 is a new substrate, not a reinterpretation of the saved pair-XOR bodies.
 
-Candidate design shape:
+Filed as `docs/chatv2/PHASE7_COUPLED_LATENT_SPEC.md` (draft for sign-off, not
+run). Current design shape:
 
 ```text
 primitive latents u_1...u_m       independent sources
-state latents z_1...z_H           coupled functions of u, e.g. Markov/tree/parity constraints
+state latents z_1...z_H           noisy parity functions of u
 shadow set S                      readouts for a subset of z
-functional R_toy                  a coupled closure target, e.g. parity/checksum/transition hazard
-state target                      omitted z or residual body coordinates
+functional target                 hidden source u, mean held acc >= 0.70
+state target                      omitted individual z_j, mean held acc >= 0.70
 headline                         k_func << k_state, if it exists
 ```
 
@@ -530,7 +531,8 @@ Good coupled-toy properties:
 - de-confound still passes: no target is linearly input-decodable by accident;
 - marginal/additive baselines are included;
 - the coupling graph is known, so the expected `k_func` is pre-registerable;
-- the uncoupled pair-XOR toy is run as a negative control with the same runner.
+- the uncoupled pair-XOR toy is run as a negative control with a frozen
+  independent `u_null` target on the same runner.
 
 This is the toy analogue of high-fidelity NSE: closure has something real to
 close over.

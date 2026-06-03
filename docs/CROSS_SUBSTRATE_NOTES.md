@@ -833,6 +833,19 @@ sub-population, not a central summary) as the label-blind a-priori reliability p
 Bounded as registered: confirmatory, same cells, not an evidence upgrade -- what it earns is
 that v0.19's "partial" is now legible as a strong, direct, tail-aggregated spectral bridge.
 
+chatv2 cross-check (2026-06-03): the bridge was tested on the **LLM residual-stream**
+substrate it names, and chatv2 **contrasts** it. The chatv2 Phase-2
+determining-shadow-set receipt (`docs/chatv2/PHASE2_DETERMINING_SHADOW_SET_RECEIPT.md`)
+found per-latent readout directions **stable** within-seed (`frame_spread` median
+0.12) with **no eigengap -> spread link** (`rho = 0.065`), yet cross-seed
+non-transferable because the 8-dim readout subspaces are **near-orthogonal across
+seeds** (`subspace_overlap = 0.036 ~= random k/d = 8/192`). So chatv2's non-transfer
+is genuine near-random subspace placement, **not** the spectral-gap fragility
+mechanism -- a *boundary* of the v0.20 law, not a 4th confirmation. Caveat: the simple
+covariance top-eigengap may also just be the wrong discriminative-conditioning measure
+on this substrate (a discriminative-gap variant is the registered refinement). Toy;
+unpromoted.
+
 ### 7.3 Threebody
 
 Phase 18 revises this row. The accelerometer / tidal proxy was a useful scaffold
