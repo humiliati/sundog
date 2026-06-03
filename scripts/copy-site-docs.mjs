@@ -23,17 +23,35 @@ const publicChatArtifacts = [
   "prompts/gold-differential.jsonl"
 ];
 
-async function copyPublicDocs(sourceDir, targetDir) {
+// Docs withheld from the public site (dist/docs/). A path that names a
+// directory withholds the whole subtree. IMPORTANT: this guard operates on the
+// working tree (readdir), so it withholds files even when they are gitignored
+// but still present on disk — which is exactly the case for the confidential
+// material below after the 2026-06-03 leak remediation. Keep this set in sync
+// with the /docs/* entries in .gitignore.
+//   501c3 = confidential patent / counsel material + 501(c)(3) governance
+//           drafts. Public accessibility can itself count as a patent
+//           disclosure, so this MUST never reach dist/.
+const DOCS_NO_PUBLISH = new Set([
+  "501c3",
+]);
+
+async function copyPublicDocs(sourceDir, targetDir, noPublish = new Set(), relBase = "") {
   const entries = await readdir(sourceDir, { withFileTypes: true });
 
   await mkdir(targetDir, { recursive: true });
 
   for (const entry of entries) {
+    const rel = relBase ? `${relBase}/${entry.name}` : entry.name;
+    if (noPublish.has(rel)) {
+      console.log(`[copy-site-docs] withheld (no-publish): docs/${rel}`);
+      continue;
+    }
     const source = join(sourceDir, entry.name);
     const target = join(targetDir, entry.name);
 
     if (entry.isDirectory()) {
-      await copyPublicDocs(source, target);
+      await copyPublicDocs(source, target, noPublish, rel);
     } else if (entry.isFile()) {
       await cp(source, target);
     }
@@ -45,7 +63,7 @@ for (const artifact of rootPublicArtifacts) {
   await cp(join(root, artifact), join(dist, artifact));
 }
 await rm(targetDocs, { recursive: true, force: true });
-await copyPublicDocs(sourceDocs, targetDocs);
+await copyPublicDocs(sourceDocs, targetDocs, DOCS_NO_PUBLISH);
 await rm(targetChat, { recursive: true, force: true });
 await mkdir(targetChat, { recursive: true });
 

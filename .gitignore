@@ -71,4 +71,17 @@ docs/calibration/halosim_outputs/_staging/
 scripts/_halosim_calib*.png
 /tmp/kakeya-qa/chrome-profile-1780302225623
 /tmp/kakeya-qa
-/internal/outreach
+
+# --- Private / never-publish (leak remediation 2026-06-03) ---
+# These dirs were accidentally tracked and pushed to the public remote, then
+# purged from git history. They are kept locally (untracked) for working use.
+# Do NOT re-add them to git. The /docs/501c3 guard is mirrored in
+# scripts/copy-site-docs.mjs (DOCS_NO_PUBLISH) so the build cannot republish it.
+/docs/501c3/
+/internal/
+/AppData/
+/.claude/launch.json
+# stray temp/log artifacts that were committed by accident
+/_tmp_vite.err.log
+/_tmp_vite.out.log
+/_v6prov2.txt
