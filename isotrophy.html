@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Sundog Isotrophy audit chain, v0.3 through v0.19: v0.3h's structural-zero receipts, the v0.11 conditional-rank pass, v0.17's replicated Tier-2 external confirmation, v0.18's frame-reliability map, and v0.19's spectral-gap explanation of frame-fragility.">
+    <meta name="description" content="Sundog Isotrophy audit chain, v0.3 through v0.20: v0.3h's structural-zero receipts, the v0.11 conditional-rank pass, v0.17's replicated Tier-2 external confirmation, v0.18's frame-reliability map, v0.19's spectral-gap explanation of frame-fragility, and v0.20's tail-gap AUC bridge.">
     <meta name="keywords" content="K_facet, isotrophy, choreography, three-body, structural zero, audit chain, Floquet velocity fraction, Sundog, claim hygiene, quarantine, Golod-Shafarevich">
     <meta name="theme-color" content="#1A3A52">
     <meta name="author" content="Sundog Research Lab">
@@ -12,13 +12,13 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="manifest" href="/site.webmanifest">
     <link rel="canonical" href="https://sundog.cc/isotrophy">
-    <title>Isotrophy Audit Chain v0.3-v0.19 &mdash; Sundog</title>
+    <title>Isotrophy Audit Chain v0.3-v0.20 &mdash; Sundog</title>
 
     <!-- OG-BLOCK-START (managed by public/og/_patch_meta.py) -->
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Sundog">
     <meta property="og:title" content="Isotrophy Audit Chain: structural zeros and external transfer">
-    <meta property="og:description" content="From v0.3h's structural-zero receipts to v0.19: tail-resolved velocity-fraction transfers and replicates on a Tier-2 external catalog, and spectral gap explains frame-fragility.">
+    <meta property="og:description" content="From v0.3h's structural-zero receipts to v0.20: tail-resolved velocity-fraction transfers and replicates on a Tier-2 external catalog, spectral gap explains frame-fragility, and the gap's low tail bridges directly to per-cell transfer strength.">
     <meta property="og:image" content="https://sundog.cc/og/isotrophy.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -35,7 +35,7 @@
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Isotrophy Audit Chain: structural zeros and external transfer">
-    <meta name="twitter:description" content="Tail-resolved velocity-fraction transfers and replicates on a Tier-2 external catalog; frame reliability tracks transfer strength, and spectral gap explains frame-fragility.">
+    <meta name="twitter:description" content="Tail-resolved velocity-fraction transfers and replicates on a Tier-2 external catalog; frame reliability tracks transfer strength, spectral gap explains frame-fragility, and its low tail bridges directly to per-cell transfer strength.">
     <meta name="twitter:image" content="https://sundog.cc/og/isotrophy.png">
     <meta name="twitter:image:alt" content="Isotrophy K_facet card: a doctor's bead-maze with 20 gold beads (structural-zero receipts) and O_617 isolated on a side loop with a dashed-red quarantine ring.">
 
@@ -43,8 +43,8 @@
     {
       "@context": "https://schema.org",
       "@type": "TechArticle",
-      "headline": "Isotrophy Audit Chain v0.3-v0.19",
-      "description": "A pre-registered isotrophy audit chain: v0.3h's structural-zero receipts plus one O_617 quarantine, and a velocity-fraction signal that passes within fixed mass-ratio strata, replicates on a Tier-2 external catalog only after tail-resolved continuous scoring, and whose frame-fragility is explained by label-blind spectral gap.",
+      "headline": "Isotrophy Audit Chain v0.3-v0.20",
+      "description": "A pre-registered isotrophy audit chain: v0.3h's structural-zero receipts plus one O_617 quarantine, and a velocity-fraction signal that passes within fixed mass-ratio strata, replicates on a Tier-2 external catalog only after tail-resolved continuous scoring, whose frame-fragility is explained by a label-blind spectral gap, and whose gap low tail bridges directly to per-cell transfer strength.",
       "image": "https://sundog.cc/og/isotrophy.png",
       "datePublished": "2026-05-22",
       "dateModified": "2026-06-03",
@@ -421,7 +421,7 @@
 
     <main>
         <section class="iso-hero">
-            <p class="eyebrow">Isotrophy · K_facet · v0.3-v0.19</p>
+            <p class="eyebrow">Isotrophy · K_facet · v0.3-v0.20</p>
             <h1>The audit chain catches itself working.</h1>
             <p class="lede">
                 Twenty <a class="sd-def" href="/legend#kfacet-structural-zero-receipt" data-def-anchor="left" data-def="A row earns one when c_i = d_i = 0 by construction — not by tolerance, not by post-hoc pruning. The named artifact class.">structural-zero receipts</a> and one <a class="sd-def" href="/legend#kfacet-quarantine" data-def="A row held back from being counted for or against the prediction, with a specific representation-level reason given. O_617 is the sole quarantine in v0.3h.">named quarantine</a>. A
@@ -443,7 +443,7 @@
             </div>
             <p class="lede">
                 That v0.3h result became the first chapter of a
-                pre-registered program that now runs through v0.19. The
+                pre-registered program that now runs through v0.20. The
                 later chain sharpened the Floquet velocity-fraction finding:
                 it stratifies stability inside fixed mass-ratio strata
                 (<code>AUC_cond = 0.6783</code>, exact <code>p = 2.046e-7</code>)
@@ -464,7 +464,11 @@
                 frame-fragility at the orbit level: small Floquet spectral gap
                 predicts high frame spread (<code>rho = -0.836</code>,
                 <code>p = 1e-5</code>), while the direct median-gap cell summary
-                misses the AUC bridge.
+                misses the AUC bridge. v0.20 then recovers that bridge by reading
+                the gap's low tail instead of its median (<code>rho = 0.882</code>,
+                <code>p = 1e-5</code>) &mdash; a confirmatory re-analysis on the
+                same cells, so the median was the wrong aggregation, not a missing
+                mechanism.
             </p>
             <div class="status-ribbon" aria-label="Isotrophy conditional rank profile">
                 <span>v0.7 restricted positive</span>
@@ -477,6 +481,7 @@
                 <span class="pass">v0.17 heterogeneity replicated</span>
                 <span class="pass">v0.18 reliability map confirmed</span>
                 <span class="pass">v0.19 spectral fragility mechanism</span>
+                <span class="pass">v0.20 tail-gap bridge confirmed</span>
             </div>
 
             <aside class="iso-crossref" aria-label="Where the 21 strict rows came from">
@@ -547,7 +552,7 @@
                 <h2>From structural zeros to a conditional stability signal.</h2>
                 <p>
                     v0.3h is the bead-maze pillar. The full isotrophy program
-                    continued through v0.19, asking whether progressively richer
+                    continued through v0.20, asking whether progressively richer
                     projections of the Li &amp; Liao piano-trio catalog carry
                     stability information. The chain now has a sharper boundary:
                     velocity-fraction ranks stability inside fixed mass-ratio
@@ -555,8 +560,9 @@
                     only after the saturated coarse zone is replaced by a
                     tail-resolved continuous score. Its transfer reliability is
                     now traced to a spectral-gap mechanism at the orbit level,
-                    with the procedural partial label preserved for the failed
-                    median-gap cell bridge.
+                    and the direct gap&rarr;AUC bridge is recovered once the gap is
+                    read at its low tail rather than its median (v0.20,
+                    confirmatory, same cells).
                 </p>
                 <div class="stage-list">
                     <div class="stage-card">
@@ -704,6 +710,17 @@
                             (rho = -0.836, p = 1e-5). The locked verdict remains
                             partial because median gap does not bridge directly to
                             per-cell AUC &mdash; the effect lives in the fragile tail.
+                        </p>
+                    </div>
+                    <div class="stage-card">
+                        <h3><span class="num">v0.20</span> Tail-gap bridge confirmed</h3>
+                        <p>
+                            A confirmatory re-analysis on the same 18 cells swaps
+                            the median gap for a pre-registered q10 low-tail summary:
+                            the direct gap&rarr;AUC bridge returns at full strength
+                            (rho = 0.882, p = 1e-5), leave-one-cell-out
+                            0.86&ndash;0.92. The median washed the mechanism out of
+                            view; it did not break the bridge.
                         </p>
                     </div>
                 </div>
@@ -888,18 +905,19 @@
                 <div class="not-card">
                     <h3>Not a universal external transfer claim.</h3>
                     <p>
-                        v0.16/v0.17/v0.18/v0.19 confirm, replicate, and explain
-                        the tail-resolved continuous score on Tier-2 liao2021
-                        stable-support samples. They do not confirm the coarse
-                        zone rule, the full catalog, a Tier-3 independent
-                        target, a uniform per-cell law, or a direct median-gap
-                        AUC bridge.
+                        v0.16/v0.17/v0.18/v0.19/v0.20 confirm, replicate, and
+                        explain the tail-resolved continuous score on Tier-2
+                        liao2021 stable-support samples. They do not confirm the
+                        coarse zone rule, the full catalog, a Tier-3 independent
+                        target, or a uniform per-cell law; v0.20's direct
+                        gap&rarr;AUC tail bridge is a confirmatory re-analysis on
+                        the same cells, not a fresh-evidence upgrade.
                     </p>
                 </div>
                 <div class="not-card">
                     <h3>Not a retired program.</h3>
                     <p>
-                        The isotrophy program reopened through v0.19 and earned
+                        The isotrophy program reopened through v0.20 and earned
                         a replicated, mechanism-explained bounded external
                         confirmation. The next honest upgrade is Tier-3 data,
                         a paper-side consolidation, or a separate
@@ -928,6 +946,7 @@
                 <a href="docs/isotrophy/kfacet/kfacet_v17_liao2021_heterogeneity_scope.md">v0.17 heterogeneity replication</a>
                 <a href="docs/isotrophy/kfacet/kfacet_v18_liao2021_reliability_auc_form.md">v0.18 reliability map confirmation</a>
                 <a href="docs/isotrophy/kfacet/kfacet_v19_spectral_gap_reliability_form.md">v0.19 spectral-gap fragility mechanism</a>
+                <a href="docs/isotrophy/kfacet/kfacet_v20_tail_gap_auc_bridge_form.md">v0.20 tail-gap AUC bridge (confirmatory)</a>
                 <a href="docs/isotrophy/kfacet/kfacet_v03h_o617_deep_dive.md">O_617 deep dive</a>
                 <a href="docs/isotrophy/kfacet/kfacet-runner-spec.md">Runner spec</a>
                 <a href="docs/SUNDOG_V_THREEBODY.md">Three-Body Roadmap</a>

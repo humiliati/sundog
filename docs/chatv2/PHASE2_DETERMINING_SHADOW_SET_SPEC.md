@@ -269,5 +269,84 @@ closure bracket are explicitly **out of scope** here (roadmap Phases 6/7).
 
 ---
 
+## Amendment 1 (2026-06-03) — selection-spectral-gap reliability, Procrustes/subspace ceiling, selection-corrected null
+
+**Why (disclosed, not a silent edit).** A first run surfaced two things the frozen
+spec under-specified, and the isotrophy lane's v0.19/v0.20 "seventh projection
+lesson" (`CROSS_SUBSTRATE_NOTES.md` §7.2) supplies the principled fix. (i) The
+absolute `k_func`/`k_state` thresholds are **trippable by best-of-254 selection
+optimism** — random directions reach max-func ~0.60–0.73 — so they are not a valid
+null. (ii) `cross_seed_no_transfer` (Tier-3 per-latent refit ≈ 0.51 on all 6 pairs)
+cannot, by itself, distinguish *no shared structure* from *shared subspace with a
+reparameterization-fragile per-latent frame*. The isotrophy export — *"for an
+argmax-selected shadow, compute the selection spectral gap (… **LLM residual-stream
+eigengap** …), read its LOW TAIL as the label-blind a-priori reliability predictor;
+decide median/tail/threshold before collapsing a region to one number"* — is
+transplanted here. This is a **tightening** prompted by cross-substrate transfer;
+the headline (cross-seed) is re-read with the stronger ceiling. Tighten-not-loosen
+still binds. **Tier-1/2 source-layer rigor (l\*_a) is unchanged.**
+
+### A1. Selection spectral gap + frame-spread (label-blind, per seed × latent)
+- **`frame_spread_i`** (direct fragility): refit the readout direction `w_i` on
+  `B_g = 30` bootstrap resamples of TRAIN; `frame_spread_i = 1 − mean_{pairs}
+  |cos(w^{(b1)}, w^{(b2)})|`. High spread = reparameterization-fragile.
+- **`eigengap_i`** (label-blind a-priori): top relative gap of the standardised
+  body-view covariance, `(λ_1 − λ_2)/λ_1`, the chatv2 read of "residual-stream
+  eigengap." (Honest caveat: a discriminative-conditioning variant is a refinement
+  if the covariance gap fails to track `frame_spread`.)
+- **Region summary:** the **low tail** `q10` of each over the seed×latent
+  population (the fragile sub-population), per the v0.20 tail lesson — not a median.
+
+### A2. Spectral-gap → fragility → transfer test
+Report `rho(eigengap, frame_spread)`, `rho(frame_spread, transfer)`,
+`rho(eigengap, transfer)` over the seed×latent population, where `transfer_i` =
+mean Tier-3b recovery across directed pairs. **Power caveat (pre-registered):** if
+cross-seed transfer is null-floored (all ≈ chance, no variance), the correlation is
+under-powered; the informative read is then **descriptive** — does the population
+sit in the *fragile regime* (large `frame_spread`, small `q10(eigengap)`)? A
+uniform fragile regime makes `cross_seed_no_transfer` **consistent with the
+fragility principle** (chatv2 as a 4th substrate, descriptive tier); a non-fragile
+regime with no transfer is the **stronger** negative.
+
+### A3. Cross-seed ceiling upgrade — separate "no structure" from "fragile frame"
+Add, per directed pair `(a→b)`:
+- **`subspace_overlap`** = mean `cos²` of the principal angles between `span(W_a)`
+  and `span(W_b)` (the two ≤8-dim readout frames). `~1` = same encoding subspace;
+  `~0` = orthogonal subspaces.
+- **Tier 3b (subspace ceiling):** decode `b`'s `z_i` from **all 8** `a`-transplanted
+  scores with a `b`-label-refit decoder (vs Tier-3's single score). If Tier-3b ≫
+  Tier-3, `a`'s *subspace* carries `b`'s latents though no single direction aligns.
+
+New cross-seed readings (supersede the bare branch where they apply):
+| condition | reading |
+| --- | --- |
+| `subspace_overlap` high ∧ Tier-3b passes ∧ Tier-1 fails | **shared subspace, fragile per-latent frame** — non-transfer is reparameterization fragility, not absence of structure |
+| `subspace_overlap` low ∧ Tier-3b fails | **genuinely different encoding subspaces** — the strong negative |
+| any tier ≥0.70 on ≥4/6 (Tier order) | the §9 branch as written |
+
+### A4. Probe-1 selection-corrected null (replaces the absolute threshold for reading)
+- **Null floor:** `R = 30` random-direction draws (train-std, randomized `w`);
+  each draw's best-of-254 `func`/`state` HELD metric forms the null distribution.
+- **Pass rule:** gen (or twin) shows determination only if its best-subset metric
+  exceeds the **95th percentile** of the null distribution — not the absolute 0.70.
+- The §7 `det_shadow_*` branch is read against this selection-corrected null. The
+  `eigengap` q10 (A1) is reported alongside as the label-blind companion predictor.
+- The absolute `0.70/0.60` numbers stay as a secondary descriptive column only.
+
+### A5. Amendment frozen parameters
+| parameter | value |
+| --- | --- |
+| `B_g` (frame-spread bootstraps) | 30 |
+| `eigengap` | `(λ_1 − λ_2)/λ_1` of body-view covariance |
+| region summary | low tail `q10` |
+| `subspace_overlap` | mean `cos²` principal angles of `span(W_a)`,`span(W_b)` |
+| Tier 3b | 8-score `b`-refit decoder |
+| null draws `R` | 30; pass = `> 95th pct` of null |
+
+*Headline read with A3 (cross-seed) + A4 (Probe-1 null); A1/A2 are the cross-substrate
+reliability read. Re-run is admitted under this amendment.*
+
+---
+
 *Sundog Research Lab — chatv2 Phase 2 spec, Phase-0 draft. Internal; gated on the
 frozen `SUNDOG_V_ALLELOPATHY.md` roadmap. No verdict-bearing run until sign-off.*

@@ -42,6 +42,7 @@ import argparse
 import json
 import math
 import platform
+import random
 import subprocess
 import sys
 import time
@@ -85,6 +86,7 @@ class Cfg:
     batch: int = 64
     max_steps: int = 6000
     conflict_corrupt_p: float = 0.25     # [I4]
+    aug_factor: int = 50                 # augmented pool = aug_factor x 1000 (symmetry aug; breaks 1K overfit)
     # I5 rollout (contract: docs/lattice/PHASE1_I5_ROLLOUT_CONTRACT.md)
     theta_drop: float = 0.5              # eliminate when drop_conf = 1 - sigmoid(logit) >= theta_drop
     theta_cls: float = THETA_CLS         # conflict when sigmoid(conflict_logit) > theta_cls (0.6)
@@ -130,6 +132,27 @@ def gen_sudoku(rng: torch.Generator, n_holes: int) -> tuple[list[list[int]], lis
     holes = set(shuf(flat)[:n_holes])
     puz = [[0 if r * N + c in holes else sol[r][c] for c in range(N)] for r in range(N)]
     return puz, sol
+
+
+def augment_grid(puz, sol, rng):
+    """Validity-preserving Sudoku symmetry augmentation (digit permute + band/within row+col
+    permutes + transpose). rng: random.Random. Breaks 1K-set memorization (HRM/TRM approach);
+    the augmented grid stays a valid Sudoku, so the clue/solution relation is preserved."""
+    dperm = list(range(DIGITS)); rng.shuffle(dperm)                       # digit v(1-9) -> dperm[v-1]+1
+    def band_order():                                                     # band-respecting row/col perm
+        bands = [0, 1, 2]; rng.shuffle(bands)
+        within = [[0, 1, 2] for _ in range(3)]
+        for w in within:
+            rng.shuffle(w)
+        return [bands[p // 3] * 3 + within[bands[p // 3]][p % 3] for p in range(N)]
+    rows, cols = band_order(), band_order()
+    transpose = rng.random() < 0.5
+    def xf(g):
+        out = [[g[rows[r]][cols[c]] for c in range(N)] for r in range(N)]
+        if transpose:
+            out = [list(z) for z in zip(*out)]
+        return [[(dperm[v - 1] + 1 if v else 0) for v in row] for row in out]
+    return xf(puz), xf(sol)
 
 
 def _parse_grid(s: str) -> list[list[int]]:
@@ -268,19 +291,19 @@ class LatticeDeductionTransformer(nn.Module):
 # Loss + training
 # ============================================================================
 def compute_loss(model, lat: torch.Tensor, sol: torch.Tensor, cfg: Cfg, rng):
-    # [I4] conflict supervision: corrupt some inputs to ⊥, target=1; else 0.
+    # [I4] conflict supervision (vectorized — no per-item Python loop / GPU syncs): with prob
+    # conflict_corrupt_p drop the true digit at a random cell; target=1 iff that empties the cell.
     B = lat.shape[0]
+    dev = lat.device
     lat_in = lat.clone()
-    conflict_tgt = torch.zeros(B, device=lat.device)
-    corrupt = torch.rand(B, generator=rng, device=lat.device) < cfg.conflict_corrupt_p
-    for b in range(B):
-        if corrupt[b]:
-            i = int(torch.randint(N2, (1,), generator=rng, device=lat.device))
-            lat_in[b, i, sol[b, i]] = 0.0                   # drop the solution candidate -> ⊥
-            if lat_in[b, i].sum() == 0:
-                conflict_tgt[b] = 1.0
-            else:                                            # still has candidates: not yet ⊥
-                conflict_tgt[b] = 0.0
+    b_idx = torch.arange(B, device=dev)
+    corrupt = torch.rand(B, generator=rng, device=dev) < cfg.conflict_corrupt_p   # (B,)
+    cells = torch.randint(N2, (B,), generator=rng, device=dev)                     # (B,) random cell/sample
+    true_digit = sol[b_idx, cells]                                                 # (B,) solution digit there
+    cb = corrupt.nonzero(as_tuple=True)[0]
+    lat_in[b_idx[cb], cells[cb], true_digit[cb]] = 0.0                             # drop true digit (corrupted only)
+    cell_sums = lat_in[b_idx, cells].sum(dim=1)                                    # candidates left in chosen cell
+    conflict_tgt = (corrupt & (cell_sums == 0)).float()                           # (B,) ⊥ iff emptied
     elim, conflict = model(lat_in)
     # [I3] elimination: per-cell BCE toward the solution one-hot
     tgt = F.one_hot(sol, DIGITS).float()
@@ -600,12 +623,18 @@ def run_build_gate(cfg: Cfg, device, out: Path) -> dict:
     train_summary = None
     if cfg.stage in ("train", "all"):
         model.train()
+        # symmetry-augmented pool (breaks 1K-set overfitting, HRM/TRM approach); built ONCE on
+        # device, then the train loop is a pure GPU gather (no per-step Python -> GPU-bound)
+        aug_rng = random.Random(cfg.seed)
+        aug_pool = [augment_grid(p, s, aug_rng) for (p, s) in train_pairs for _ in range(cfg.aug_factor)]
+        pool_lat, pool_sol = grids_to_tensors(aug_pool, device)
+        print(json.dumps({"aug_pool_size": len(aug_pool), "aug_factor": cfg.aug_factor}), flush=True)
         log_path = out / "train_log.jsonl"
         last_loss = last_elim = last_conflict = None
         for step0 in range(start_step, cfg.max_steps):
             step = step0 + 1
-            idx = torch.randint(len(train_pairs), (cfg.batch,), generator=rng, device=device).tolist()
-            lat, sol = grids_to_tensors([train_pairs[i] for i in idx], device)
+            idx = torch.randint(pool_lat.shape[0], (cfg.batch,), generator=rng, device=device)
+            lat, sol = pool_lat[idx], pool_sol[idx]            # pure GPU gather from the augmented pool
             loss, elim_loss, conflict_loss = compute_loss(model, lat, sol, cfg, rng)
             opt.zero_grad(); loss.backward(); opt.step()
             last_loss, last_elim, last_conflict = float(loss.item()), float(elim_loss), float(conflict_loss)
