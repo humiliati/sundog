@@ -63,6 +63,11 @@ conditional-positive sequence**:
   repeated. Post-hoc anatomy reads the two sub-0.5 cells as the frame-fragile cell
   (`qA2_qB1`) and a near-null cell (`qA3_qB0`), not a competing physics. Reliability-map
   interpretation only; the registered claim is replicated heterogeneity.
+- **v0.18 (locked + prepared, not measured):** a fresh wider-cell reliability chapter now
+  asks whether per-cell AUC tracks label-blind frame reliability across an 8 x 8
+  sorted-mass grid, with v0.14-v0.17 rows excluded. The source/sample-only prepare
+  stage landed `reliability_auc_prepared_not_measured` (18 supported cells, 2880
+  rows, 4640 disjoint holdouts); no D5 shards or AUC statistics have run.
 
 The mature, falsifiable claim is **"yes, but only after conditioning"**:
 velocity-fraction stratifies three-body stability, but as a function of the
@@ -77,8 +82,9 @@ wall and v0.13's landscape-negative left Li/Liao 2021 as the only viable target,
 the v0.14 (undecidable) -> v0.15 (directional-weak) -> v0.16 (clean PASS) -> v0.17
 (heterogeneity replication) arc carried it to a held-out external confirmation of the
 continuous velocity-fraction projection plus reproducible seven-cell structure.
-Remaining axes: a wider-cell reliability/mechanism chapter, a larger supported-region or
-multi-feature chapter, or new-mechanism work -- not another rephrasing of the same table.
+Remaining axes: execute the v0.18 wider-cell reliability/mechanism D5 shards, a
+larger supported-region or multi-feature chapter, or new-mechanism work -- not another
+rephrasing of the same table.
 
 Audience: paper-side writers, future coding agents, isotrophy-
 program lab initiates, anyone who wants to know what's left.
@@ -229,6 +235,13 @@ v0.17:  tail-resolved heterogeneity replication (fresh triple-holdout 80/80).
         plus reproducible seven-cell heterogeneity. Anatomy suggests a
         reliability map (qA2_qB1 frame-fragile, qA3_qB0 near-null), but that
         "why" is descriptive, not a registered mechanism.
+
+v0.18:  reliability-conditioned per-cell AUC chapter (LOCKED + PREPARED, not measured).
+        Fresh quadruple-holdout 8 x 8 sorted-mass grid, expected 18 supported
+        cells and 2880 rows. Prepare landed exactly (4640 disjoint holdouts);
+        no D5 shards/AUC statistics yet. Primary question: does label-blind
+        frame reliability predict per-cell AUC, with a guard against strong
+        frame-stable reversals?
 ```
 
 ## The Load-Bearing Findings
@@ -611,13 +624,33 @@ sequential audits on the v0.7a' analyzable subset.
   mass-marginal held-out null / conditional diagnostic.
 - `kfacet_v11_m3_conditional_vf_rank_form.md` -- v0.11 within-m3
   conditional rank pass.
+- `kfacet_v12_external_frozen_transfer_form.md` -- v0.12 external transfer
+  blocked by frozen-measurement attrition on supp-A.
+- `kfacet_v13_external_target_search_form.md` -- v0.13 signal-blind external
+  target search.
+- `kfacet_v13a_liao2021_adapter_leakage_preflight_form.md` -- v0.13a
+  liao2021 adapter/leakage preflight.
+- `kfacet_v13b_frame_zone_stability_audit_form.md` -- v0.13b frame-zone
+  stability audit.
+- `kfacet_v14_liao2021_sampled_transfer_form.md` -- v0.14 sampled transfer
+  coverage wall.
+- `kfacet_v15_liao2021_stable_support_transfer_form.md` -- v0.15 stable-support
+  directional-weak transfer.
+- `kfacet_v16_liao2021_tail_resolved_transfer_form.md` -- v0.16 clean Tier-2
+  tail-resolved transfer pass.
+- `kfacet_v17_liao2021_heterogeneity_scope.md` -- v0.17 replicated
+  heterogeneity.
+- `kfacet_v18_liao2021_reliability_auc_form.md` -- v0.18 wider-cell reliability
+  chapter, locked and prepared but not measured.
 - `docs/CROSS_SUBSTRATE_NOTES.md` -- cross-substrate
   framing (avenue 6).
 - `docs/isotrophy/sundog_v_isotrophy.md` -- full chapter-by-chapter dated log.
 
 ---
 
-Isotrophy program paused at end-of-v0.9, then reopened through the v0.10/v0.11
-conditional-rank frontier. The live result is now sharper: velocity-fraction is a
-real in-sample, within-m3 stability rank signal, but not a mass-marginal held-out
-predictor. Reopening is invited; mechanism-laundering is not.
+Isotrophy program paused at end-of-v0.9, then reopened through the v0.10-v0.17
+conditional/external-transfer frontier. The live result is now sharper:
+velocity-fraction is a real conditioned stability rank signal, externally
+confirmed and replicated at Tier-2 when read as a continuous tail-resolved score.
+v0.18 is the drafted mechanism/anatomy test for the reproduced per-cell
+heterogeneity. Reopening is invited; mechanism-laundering is not.

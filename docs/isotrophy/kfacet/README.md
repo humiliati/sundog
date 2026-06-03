@@ -31,3 +31,4 @@ under the internal anniversary catch-all.
 - v0.15: [liao2021 stable-support transfer — directional_weak](kfacet_v15_liao2021_stable_support_transfer_form.md)
 - v0.16: [liao2021 tail-resolved transfer — passes_clean (Tier-2 external PASS)](kfacet_v16_liao2021_tail_resolved_transfer_form.md)
 - v0.17: [liao2021 heterogeneity replication -- heterogeneous_transfer_replicates_clean](kfacet_v17_liao2021_heterogeneity_scope.md)
+- v0.18: [liao2021 reliability-conditioned per-cell AUC -- prepared_not_measured](kfacet_v18_liao2021_reliability_auc_form.md)
