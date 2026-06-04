@@ -81,7 +81,8 @@ class Cfg:
     n_iters: int = N_ITERS
     ffn_mult: float = FFN_MULT
     reinject_input: bool = True          # [I2]
-    lr: float = 1e-3
+    lr: float = 1e-3                     # peak lr (warmup target); cosine-decays to 0 over max_steps
+    warmup_steps: int = 1000             # v2: linear lr warmup before cosine decay (stabilizes training)
     weight_decay: float = 0.01
     batch: int = 64
     max_steps: int = 6000
@@ -348,6 +349,14 @@ def git_commit(repo: Path, allow_dirty: bool) -> dict:
 
 def param_count(model) -> int:
     return sum(p.numel() for p in model.parameters())
+
+
+def lr_at_step(step: int, total: int, warmup: int, peak_lr: float) -> float:
+    """Linear warmup to peak_lr over `warmup` steps, then cosine decay to 0 by `total` (v2 stabilizer)."""
+    if warmup > 0 and step <= warmup:
+        return peak_lr * step / warmup
+    progress = min(1.0, max(0.0, (step - warmup) / max(1, total - warmup)))
+    return 0.5 * peak_lr * (1.0 + math.cos(math.pi * progress))
 
 
 def _cfg_json(cfg: Cfg) -> dict:
@@ -643,11 +652,14 @@ def run_build_gate(cfg: Cfg, device, out: Path) -> dict:
             idx = torch.randint(pool_lat.shape[0], (cfg.batch,), generator=rng, device=device)
             lat, sol = pool_lat[idx], pool_sol[idx]            # pure GPU gather from the augmented pool
             loss, elim_loss, conflict_loss = compute_loss(model, lat, sol, cfg, rng)
+            cur_lr = lr_at_step(step, cfg.max_steps, cfg.warmup_steps, cfg.lr)   # v2: warmup + cosine decay
+            for g in opt.param_groups:
+                g["lr"] = cur_lr
             opt.zero_grad(); loss.backward(); opt.step()
             last_loss, last_elim, last_conflict = float(loss.item()), float(elim_loss), float(conflict_loss)
             if cfg.log_every and (step == 1 or step % cfg.log_every == 0 or step == cfg.max_steps):
                 row = {"step": step, "loss": round(last_loss, 6), "elim_loss": round(last_elim, 6),
-                       "conflict_loss": round(last_conflict, 6), "wall_s": round(time.time() - t0, 1)}
+                       "conflict_loss": round(last_conflict, 6), "lr": round(cur_lr, 7), "wall_s": round(time.time() - t0, 1)}
                 if cfg.eval_every and step % cfg.eval_every == 0:
                     sample = test_pairs[: min(cfg.eval_sample, len(test_pairs))]
                     row["diag_one_shot_exact_rate"] = round(solve_rate(model, sample, device, cfg), 5)
@@ -692,6 +704,7 @@ def main() -> int:
     ap.add_argument("--max-eval", type=int, default=0)
     ap.add_argument("--batch", type=int, default=64)
     ap.add_argument("--lr", type=float, default=1e-3)
+    ap.add_argument("--warmup-steps", type=int, default=1000, help="linear lr warmup before cosine decay (v2)")
     ap.add_argument("--aug-factor", type=int, default=50, help="augmented pool = aug_factor x 1000")
     ap.add_argument("--compile", action="store_true", help="torch.compile reduce-overhead; needs GPU CC>=7.0 (A100/H100)")
     ap.add_argument("--resume", default="", help="latest or checkpoint path")
@@ -707,7 +720,7 @@ def main() -> int:
     a = ap.parse_args()
     cfg = Cfg(mode=a.mode, stage=a.stage, data_dir=a.data_dir, out=a.out, seed=a.seed,
               max_steps=a.max_steps, max_eval=a.max_eval, batch=a.batch, lr=a.lr, aug_factor=a.aug_factor,
-              compile_model=a.compile,
+              warmup_steps=a.warmup_steps, compile_model=a.compile,
               resume=a.resume, checkpoint_every=a.checkpoint_every, log_every=a.log_every,
               eval_every=a.eval_every, eval_sample=a.eval_sample, theta_drop=a.theta_drop,
               theta_cls=a.theta_cls, max_deduction_steps=a.max_deduction_steps,

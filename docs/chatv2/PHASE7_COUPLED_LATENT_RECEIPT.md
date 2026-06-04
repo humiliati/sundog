@@ -19,10 +19,12 @@
   Gen UNLEARNED at 300 steps (expected; seedstab needs 6000) → UNLEARNED guard
   correctly skipped the twin. Wall-clock 154 s incl. measure.
 
-## 2. Training — STAGED (operator / long-budget runner)
+## 2. Training — RUNNING (background task `bwxr1y4lo`, started 2026-06-03)
 
 300-step smoke ⇒ ~0.25–0.3 s/step net ⇒ **~25–40 min gen + twin per seed ⇒ ~1.5–3 h
-for 3 seeds.** Over the 10-minute inline bar → **do not run inline.** Exact commands:
+for 3 seeds.** Over the 10-minute inline bar → launched as a **background task**
+(3 seeds sequential on the one GPU; `rm -rf` each seed dir first for idempotency).
+Equivalent PowerShell for an operator re-run:
 
 ```powershell
 $PY = "C:/Users/hughe/.venvs/sundog-gpu/Scripts/python.exe"
