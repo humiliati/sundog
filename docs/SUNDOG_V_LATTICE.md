@@ -246,7 +246,11 @@ objective permits memorization; the next lever is **deep supervision** (`[I3]` r
 or the paper's actual training objective - a recipe change, not more compute (v2 already
 converged at lr -> 0). Full receipt:
 [`lattice/receipts/2026-06-03_BUILD_GATE_V1V2.md`](lattice/receipts/2026-06-03_BUILD_GATE_V1V2.md).
-Phase 0 / Phase 2 (B2) execution stays **gated** on a `build_gate_pass`.
+**Amendment 01 (pre-registered + owner-approved 2026-06-03, implementation pending):**
+[`lattice/PHASE1_AMENDMENT_01_I3_PROCESS_SUPERVISION.md`](lattice/PHASE1_AMENDMENT_01_I3_PROCESS_SUPERVISION.md)
+- replace `[I3]` solution-one-hot BCE with **`[I3′]` imitation of sound CP narrowing** over
+classical CP+DFS node states (sound-only target -> `false_elim`→0 by construction; gate /
+rollout / caps frozen). Phase 0 / Phase 2 (B2) execution stays **gated** on a `build_gate_pass`.
 
 #### GPU on-ramp + what transfers from chatv2 (scoped 2026-06-03, handoff §0)
 
