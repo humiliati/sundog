@@ -22,14 +22,15 @@ Short version:
 or external packet. **Gated on (a) a lit pass and (b) a Phase-0 spec freeze before any run.**
 Generality R&D (2026-06-04 pivot demoted it) → carries an explicit **kill-gate**.
 
-**2026-06-04 preflight update:** the model-free legal-move functional screen fired
-**`blocked_by_ill_posed_functional`** for the Othello closure read in 47 seconds, with no
-model run. Legal moves are a nonlinear flanking-rule functional of the board, so a linear
-determining-set bracket cannot see them (`k_func(legal) ~= 0` even from the full board).
-Othello remains a candidate for the de-confound pre-check and a weaker regime-2 body/shadow
-read, but it is **not** the default closure substrate unless the lit pass names a genuinely
-linear computed functional. The closure prize now routes primarily through **Attack B,
-semi-synthetic injection**.
+**2026-06-04 preflight update:** the model-free Othello functional screen fired
+**`blocked_by_ill_posed_functional`** for the named Othello closure slate in 76 seconds,
+with no model run. Legal moves, material parity, frontier, and mobility all fail to produce
+a non-vacuous linear `k_func << k_state` bracket. Othello remains a candidate for the
+de-confound pre-check and a weaker regime-2 body/shadow read, but it is **not** the closure
+substrate on the current candidate slate. Receipt:
+`results/deconfound/othello-functional-screen-2026-06-04.txt`. The closure prize now routes
+through **Attack B, semi-synthetic injection** unless a new canonical linear Othello
+functional is named before spec lock.
 
 Not a claim about AGI, frontier-LLM cognition, or "understanding." It is a measurement
 question: does the determining-shadow-set / body-shadow read survive onto a real model that
@@ -76,8 +77,8 @@ substrate being real and model-built is not enough.
   and well-decodable from the residual stream? (The pre-check, ported.)
 - **(b) Determining-set / closure:** does a shadow-set of the state determine a registered
   functional (or the omitted state) before the individuals — reflecting the coupling the
-  model learned? **Current Othello status:** blocked for legal moves; requires a new linear
-  computed functional or a pivot to Attack B.
+  model learned? **Current Othello status:** blocked for the named candidate slate; requires
+  a new canonical linear computed functional or a pivot to Attack B.
 - **(c) Body/shadow regime-2:** does the model's *output* (the control-sufficient shadow,
   e.g. legal next moves) fail to reconstruct the *computed state* (body) → state-insufficient
   / resisting, on a real substrate?
@@ -96,17 +97,19 @@ substrate being real and model-built is not enough.
   corroborating causal axis.
 - **Model-free functional screen (new hard preflight):** before any model run, a candidate
   board functional must be linearly readable from the full board and support a non-vacuous
-  `k_func << k_state` bracket. Legal moves failed this screen:
+  `k_func << k_state` bracket. The named Othello slate failed this screen on 2,500 generated
+  legal positions (`python scripts/deconfound_othello_datacheck.py --functionals all`):
 
-  | k | func(legal) det | state(board) det |
-  | --- | ---: | ---: |
-  | 1 | 0.000 | 0.004 |
-  | 8 | -0.008 | 0.037 |
-  | 60 | -0.068 | 0.142 |
+  | functional | high-k det_func | high-k det_state | best lead | verdict |
+  | --- | ---: | ---: | ---: | --- |
+  | legal moves | -0.068 | 0.142 | -0.004 | blocked |
+  | material parity | 0.134 | 0.152 | 0.007 | blocked |
+  | frontier | -0.020 | 0.146 | 0.001 | blocked |
+  | mobility | 0.161 | 0.143 | 0.018 | blocked |
 
-  This is not a model null. It is a measurement-geometry block: legality is a nonlinear
-  AND/OR flanking rule over board lines, so the linear determining-set instrument is the
-  wrong closure instrument for that functional.
+  This is not a model null. It is a measurement-geometry block: the obvious real Othello
+  functionals are nonlinear or too weak for the linear determining-set instrument, and none
+  gives a closure lead over board-state reconstruction.
 - **KILL-GATE:** (i) the de-confound must hold (board input-undecodable + rep-decodable),
   else the premise fails → repair/shelve; (ii) a non-vacuous read — a determining/closure
   structure or an honest null. Distinguish **`blocked_by_unavailable_substrate`** (can't get
@@ -129,11 +132,11 @@ pass alone does **not** license a closure read. The spec must nominate exactly o
 functional before measuring closure/body-shadow, with all alternatives fixed as report-only
 or explicit fallback branches.
 
-**Legal-move candidate disposition:** legal moves are still useful for a regime-2 output
-shadow read, but the model-free screen rejects them as the primary **linear closure**
-functional. `side-to-move` risks being position/parity-decodable from the input stream, and
-`material` risks being too coarse or count-like. Board-square determining sets are promising
-but higher-risk; treat them as a separate sub-lane unless the lit pass finds a canonical
+**Named Othello candidate disposition:** legal moves are still useful for a regime-2 output
+shadow read, but legal moves, material parity, frontier, and mobility are rejected as
+primary **linear closure** functionals. `side-to-move` still risks being
+position/parity-decodable from the input stream. Board-square determining sets are promising
+but higher-risk; treat them as a separate sub-lane only if the lit pass finds a canonical
 linear reachability basis. Otherwise the closure read should pivot to **Attack B**.
 
 ## 7. Attack hierarchy (from `DECONFOUND_REAL_DATA_MEMO.md`)
@@ -150,10 +153,11 @@ linear reachability basis. Otherwise the closure read should pivot to **Attack B
 1. **Othello-GPT specifics** — public weights + the linear board probe (Nanda's
    mine/theirs relative basis), reproducibility on the 1080, and the exact board
    representation + decodability numbers.
-2. **The functional/state decomposition (§6 crux)** — legal moves have failed the linear
-   closure preflight. The lit pass must now answer whether any other Othello board
-   functional is both nontrivial and linearly readable from the full board. If not, Othello
-   is limited to de-confound/regime-2 and the closure Phase 0 pivots to Attack B.
+2. **The functional/state decomposition (§6 crux)** — the named Othello slate has failed
+   the linear closure preflight. The lit pass may reopen Othello closure only by naming a
+   new canonical functional that is both nontrivial and linearly readable from the full
+   board. Otherwise Othello is limited to de-confound/regime-2 and closure Phase 0 pivots
+   to Attack B.
 3. **The de-confound numbers** — is "board ≤-chance from input move-tokens" measured
    anywhere, or do we measure it ourselves (cheap).
 4. **Closest neighbours** — emergent-world-model interpretability (Othello-GPT, chess-GPT,

@@ -190,6 +190,20 @@ honestly. Memo-only until owner sign-off.
 4. **A tag is a claim too.** Mis-tagging a `vacuous` lane as `bounded-null` (or
    either as a result) is an overclaim and must score as a failure.
 5. **Transfer is unrun.** §7's transfer probe is reach until it has a receipt.
+6. **The gate is a claim-boundary backstop, not a standalone semantic verifier.**
+   The claim-gate catches phrase-level overclaim and mis-tag patterns — obvious
+   overclaim language, and (after the 2026-06-04 brittleness fix) bracketed
+   paraphrases — at **off-slate recall ≈81% with 0% false-positive**. It does **not**
+   semantically understand every lift; it misses paraphrases like "a previously
+   unknown principle", "an original theorem", "essentially settles smoothness",
+   "informative about the zeros", "regardless of mass", "a real Kakeya result". Do
+   not describe it as a semantic verifier, a guarantee, or "the gate understands the
+   claim." The 81% number governs only the **hosted-draft path** (a model drafting
+   freely), where a rejected draft falls back to the static template. **Earned-tail
+   and deterministic answers ship safely because the route templates are pre-gated
+   (52/52 deterministic), not because the gate re-verifies them at runtime** — the
+   trusted-static-content path does not depend on the recall number. A true semantic
+   verifier (an LLM/NLI judge over the answer) is a separate, unbuilt layer.
 
 ---
 
@@ -311,7 +325,7 @@ router's measured behavior:
      (48 fresh drafts: 32 overclaim + 16 honest, none echoing slate prompts/forbidden) +
      scorer `chat/eval/score_valence_offslate.mjs`, gated with **`forbidden` DISABLED**
      (general machinery only). **Overclaim recall 71.9% (23/32); honest false-positive
-     rate 0% (0/16).** Receipt: `results/chat/phase13-valence-offslate/summary.json`. This
+     rate observed 0% (0/16; Wilson 95% upper ≈ 19%).** Receipt: `results/chat/phase13-valence-offslate/summary.json`. This
      confirms the audit — against fresh phrasings the phrase-list gate catches ~72%, not
      ~100% — so **Valence Completeness stays internal, not a headline number.** Misses
      split into (1) **brittleness** — a listed phrase defeated by an inserted word ("beat
@@ -333,12 +347,19 @@ router's measured behavior:
      remaining are **coverage** misses, deliberately **left unpatched** (fitting them
      re-creates the circularity). 81.3% / 0% is the honest post-fix number; Valence
      Completeness still **internal** pending the hosted-drafts (b) gold standard.
+   - **Backstop framing ADOPTED 2026-06-04 (option b)** as do-not-claim **#6** (§8): the
+     gate is a phrase-level claim-boundary backstop, not a standalone semantic verifier;
+     earned-tail/deterministic safety comes from pre-gated templates, the 81% recall
+     governs only the hosted-draft path. A semantic verifier (LLM/NLI judge) is a
+     separate, unbuilt layer.
 
-**Remaining for 13.3 (next step):**
-
-3. **Wire + run** the slate (`--slate generality-boundary`): deterministic + S1 +
-   baselines first, hosted/open-weight second → `results/chat/phase13-generality-boundary/`,
-   then the 13.4 Failure-Mode Classification Accuracy table.
+**13.3 — wire + run: deterministic DONE (2026-06-04).** The slate is wired into both
+runners (`score_phase3_drafts.mjs`, `run_hosted_drafts.mjs`, `--slate generality-boundary`);
+the deterministic + S1 + baseline pass ran clean (52/52 accepted, 0 gate escapes) → receipt
+`results/chat/phase13-generality-boundary/summary.json`. **Remaining:** the hosted /
+open-weight pass (API-gated) and the 13.4 Failure-Mode Classification Accuracy table — read
+as Valence Completeness (internal, §12), with the off-slate recall (§11) as the robustness
+companion.
 
 ---
 
@@ -476,3 +497,88 @@ Complements (does not replace) `current_controlled_result` (single strongest cla
 `answerTemplate`, then implement in order — content rewrite (two registers) → `earned`
 schema field + trace passthrough → "✓ Earned" UI chip (Tier-1 vs Tier-2 confidence) →
 the earned-inventory route → re-verify the gate stays 52/52 + 22/22.
+
+---
+
+## 13. Semantic verifier layer (SPEC — deferred build; mechanism TBD via harness bake-off)
+
+**Status (2026-06-04): spec only.** No harness, no model, no runtime change. Per owner
+direction the mechanism choice is deferred until a pluggable eval harness can measure
+candidates head-to-head. This section fixes the contract, the harness, the candidate
+mechanisms, and the selection criteria so the build is unambiguous when greenlit.
+
+**Why.** The lexical gate is a claim-boundary *backstop*, not a semantic verifier
+(do-not-claim §8 #6): off-slate recall ≈81% / 0% FP, but it misses *semantic lifts*
+("a previously unknown principle", "essentially settles smoothness", "informative about
+the zeros", "regardless of mass", "a real Kakeya result", "an original theorem"). A
+semantic layer would judge claim-strength by meaning, not phrase.
+
+**Placement.** Layer 2, **behind** the lexical gate, on the **hosted-draft path only**.
+The deterministic / earned-tail path is unaffected — it ships pre-gated templates and needs
+no runtime semantic re-verification. A draft clears layer 1 (lexical) then layer 2
+(semantic); rejection on either falls back to the static template.
+
+**Verifier interface (pluggable) — reject-only by contract.** A verifier may only *block*
+(→ static-template fallback); it can **never approve, green-light, upgrade a tier, or raise
+confidence**. `reject:false` means "no objection," NOT "endorsed." The layer is strictly
+*subtractive* — it can tighten the gate, never loosen it — so adding it can only ever lower
+the accept rate, never raise it.
+
+```
+verify({ draft, route }) -> { reject: boolean, reason: string|null, score?: number }
+// reject:true blocks (static-template fallback); reject:false = no objection (NOT approval)
+// route carries { id, evidenceTier, failureMode, boundaries[], answerTemplate, earned }
+```
+
+**Eval harness (the first thing to build when greenlit).** Takes any `verify` fn and runs
+it over the off-slate set (`offslate-valence-paraphrase.jsonl`) — and later hosted-model
+drafts — reporting, *as a layer on top of the lexical gate*:
+- **incremental recall** — overclaim drafts the lexical gate MISSED that the semantic layer
+  now catches (target: the 6 current coverage misses + generalization);
+- **false-positive rate** — honest drafts the semantic layer wrongly rejects, reported as
+  **observed FPR with sample size n AND the Wilson 95% upper bound** — never a bare "0%".
+  With only 16 honest examples, observed 0/16 means true risk ≤ ~19% (Wilson upper), not
+  literally zero. Bar for adoption: observed-0 AND a Wilson upper no worse than the lexical
+  baseline; grow the honest sample to tighten the bound;
+- **net recall / FPR** of the combined layer-1 + layer-2 stack.
+The harness is mechanism-agnostic; it is the bake-off rig.
+
+**Candidate mechanisms (selection deferred to the measured bake-off):**
+
+| mechanism | determinism | infra | circularity | note |
+| --- | --- | --- | --- | --- |
+| **NLI-entailment** | deterministic (fixed model + threshold) | small local NLI model | none — reuses route `boundaries` as hypotheses | test **both directions** — (i) draft *entails* a forbidden upgrade AND (ii) draft *contradicts* a boundary — then reconcile; NLI handles negation unreliably and our boundaries are phrased negatively ("…is not progress on X"), so a single direction is not trustworthy |
+| **embedding-kNN** | deterministic (fixed embedder) | embedder + held-out exemplar bank | mild — needs a held-out bank, not the off-slate set it is tested on | mirrors the lab's own kNN / disintegration toolkit; explainable |
+| **LLM-as-judge** | non-deterministic | API / server | judge needs its own eval | **last resort** — adopt only if it *decisively* beats both deterministic options; a marginal recall win does not justify the non-determinism + the LLM-judging-LLM ethos cost |
+
+**Selection criteria (decided after the bake-off):** (1) incremental recall on the 6 misses
++ generalization; (2) FPR — observed-0 with a Wilson upper no worse than lexical; (3)
+determinism / reproducibility; (4) deployability vs the browser-native budget; (5) infra
+cost. A mechanism is adopted only if it beats the lexical-only baseline on a **held-out**
+set — NOT the off-slate set it was tuned on, else we recreate the S1 circularity one level up.
+
+**Provenance requirement (non-negotiable).** Every adopted mechanism must record, in its
+receipt, the **model id + version, threshold(s), and a config/model hash** — especially NLI
+and embedding, whose verdicts are model-version-dependent and silently drift on upgrade. A
+verifier result is not interpretable without the exact model+threshold that produced it.
+
+**Rollout stages (each gated on the prior):** eval-time bake-off → adopt if it clears the
+criteria → wire to the hosted-draft path (server-side) → only then consider in-browser
+(transformers.js) if the first-load budget allows.
+
+**Open questions / discipline:** (a) **held-out set** — the off-slate set is the *tuning*
+harness; a separate held-out adversarial set (ideally hosted-model-generated) is needed for
+the honest adoption number; (b) an LLM-judge would itself need the same off-slate-style
+recall/precision eval before it can be trusted (the recursion the project is wary of);
+(c) prefer NLI / embedding (fixed model) over a judge whose behavior drifts with model
+updates; (d) a runtime in-browser model is a real download cost — server-side on the
+hosted path avoids it.
+
+**Next step (when build is greenlit):** build the pluggable harness + interface (runnable
+without a model), then plug in one candidate (NLI-entailment is the front-runner on
+determinism + boundary-reuse) and measure. No mechanism is adopted before it clears the
+held-out criteria.
+
+**Owner refinements folded in 2026-06-04:** reject-only contract; observed-FPR + sample
+size + Wilson upper (never a bare 0%); receipt provenance (model/version/threshold/hash);
+NLI tested in both directions (negation-aware); LLM-as-judge demoted to last resort.

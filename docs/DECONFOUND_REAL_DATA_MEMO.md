@@ -9,11 +9,12 @@
 
 > **2026-06-04 correction after model-free functional screen:** Othello-GPT-class
 > computed-state tasks still open the **de-confound** door, but they do **not** automatically
-> provide a linear closure functional. The legal-move candidate failed the
-> `blocked_by_ill_posed_functional` preflight (`k_func(legal) ~= 0` even from the full
-> board), because legality is a nonlinear flanking-rule functional. Othello remains useful
-> for de-confound/regime-2; the closure read now routes primarily through semi-synthetic
-> injection unless a genuinely linear computed Othello functional is found.
+> provide a linear closure functional. The named Othello slate (legal moves, material
+> parity, frontier, mobility) failed the `blocked_by_ill_posed_functional` preflight: none
+> produced a non-vacuous linear `k_func << k_state` bracket. Receipt:
+> `results/deconfound/othello-functional-screen-2026-06-04.txt`. Othello remains useful for
+> de-confound/regime-2; the closure read now routes primarily through semi-synthetic
+> injection unless a new canonical linear Othello functional is found before spec lock.
 
 ## 1. The requirement (what the toy gave for free)
 
@@ -37,9 +38,9 @@ representation of the board** — which is *computed* from the moves (tracking f
 is **input-undecodable but representation-decodable.** That is *exactly* our de-confound,
 satisfied by **task structure rather than construction**, on a *real trained transformer*.
 And the board squares are **coupled** by the game rules → the de-confound door is real.
-The legal-move screen corrected the overreach: this does **not** by itself make the linear
-closure bracket well-posed. This remains a bridge for de-confound and possible regime-2
-reads; closure needs a separately registered linear functional.
+The model-free functional screen corrected the overreach: this does **not** by itself make
+the linear closure bracket well-posed. This remains a bridge for de-confound and possible
+regime-2 reads; closure needs a separately registered linear functional.
 
 **B. Semi-synthetic injection — the controllable bridge.** Inject a *constructed*
 computed functional (e.g. a hidden parity over real features) into real data, à la
@@ -74,10 +75,10 @@ unless the lit pass identifies a nontrivial linear Othello functional. Concretel
 - **De-confound pre-check (ports directly):** confirm the board state is ≤-chance from a
   linear probe on the *input* move-tokens, but well-decodable from the residual stream.
   (Expected to hold — that *is* the Othello-GPT result.)
-- **Closure read:** not legal moves. The legal-move candidate is ill-posed for the linear
-  determining-set instrument. Either identify another nontrivial board functional that is
-  linearly readable from the full board, or pivot closure Phase 0 to semi-synthetic
-  injection.
+- **Closure read:** not the named Othello slate. Legal moves, material parity, frontier,
+  and mobility are ill-posed for the linear determining-set instrument. Either identify a
+  new canonical board functional that is linearly readable from the full board, or pivot
+  closure Phase 0 to semi-synthetic injection.
 - **Body/shadow read:** does the model's legal-move output (shadow) fail to reconstruct the
   board (body) → state-insufficient/resisting, on a real substrate?
 - **Controls:** the `u_null` independent-target control + selection-corrected null carry
@@ -107,8 +108,8 @@ closure only if a linear functional survives preflight. We do not certify cognit
 The redirect paid off, but with a boundary: **the de-confound wall has a door, and the
 linear-closure wall remains.** Recommendation: keep `SUNDOG_V_DECONFOUND` open with two
 branches: Othello-GPT for de-confound/regime-2, and semi-synthetic injection for the closure
-read unless the lit pass identifies a linear Othello functional. The kill-gate worked by
-refuting the attractive legal-move closure target before any model run.
+read unless the lit pass identifies a new canonical linear Othello functional. The kill-gate
+worked by refuting the attractive Othello closure slate before any model run.
 
 ---
 
