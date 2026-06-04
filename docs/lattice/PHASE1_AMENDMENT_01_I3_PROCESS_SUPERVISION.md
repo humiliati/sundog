@@ -271,3 +271,30 @@ extension clause.
    `process_functional` table + `tail` + stop-reasons.
 4. CP-target soundness audit (true digit kept on solution-consistent states).
 5. pull the 5 artifacts → receipt → teardown.
+
+## 13. Product deliverables (2026-06-04 pivot — generality → product)
+
+Per the lab's generality→product pivot, v3 is **kill-gated R&D** and must emit **chat-product
+assets**, not just a build-gate verdict. All four pre-registered (owner-selected); the run/eval
+emits the data, the docs frame it.
+
+1. **Trust metric + Sound Reasoning card** — [`SOUND_REASONING_CARD.md`](SOUND_REASONING_CARD.md)
+   (drafted; `[v3]` numbers fill from the receipt). `false_elim` reported as a *false-rejection
+   / trust* metric for Ask Sundog / SUNDOG_V_CHAT.
+2. **Calibration + OOD instrumentation.** `process_functional.conflict_calibration` (conflict
+   head vs CP contradictions = "knows when it's stuck") — **IMPLEMENTED**. OOD: v3 also evals a
+   **harder slice** (top-`rating` Sudoku-Extreme puzzles) via `--eval-hardest` — **STAGED** into
+   the v3-eval (GPU-free; reports rollout_exact + false_elim on the hard slice).
+3. **Reasoning-trace demo artifact.** The I5 per-step candidate-set narrowing for a flagship
+   puzzle → `rollout_trace_demo.json` via `--save-trace <idx>` — **STAGED** (render separately).
+   On-brand "watch it reason, never wrong" Ask Sundog showcase.
+4. **Generalized method note + horizon-chat pilot** —
+   [`VERIFIED_REASONING_METHOD.md`](VERIFIED_REASONING_METHOD.md) (drafted): the verifier-
+   imitation harness abstracted + a "Verified-Reasoning Mode" pilot proposal.
+
+**Honest transfer (binding on all product copy):** the METHOD + METRIC + DEMO transfer to chat;
+the Sudoku MODEL does not. No copy claims open-domain hallucination-freedom or the Sundog
+regime-2 signature. **Kill-gate:** extract these assets, or the pivot shelves the lane.
+
+**Implemented now (GPU-free, smoke-green):** `conflict_calibration` + both product docs.
+**Staged into the v3-eval (pre-registered):** `--eval-hardest` (OOD) and `--save-trace` (demo).

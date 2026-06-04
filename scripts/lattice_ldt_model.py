@@ -676,23 +676,28 @@ def run_smoke(cfg: Cfg, device) -> dict:
 
 
 @torch.no_grad()
-def cp_target_accuracy(model, pairs, device, node_cap, theta_drop, max_states=20000):
+def cp_target_accuracy(model, pairs, device, node_cap, theta_drop, theta_cls, max_states=20000):
     """Process-functional diagnostic (Amendment 01; the k_func-vs-k_state separation): on
-    held-out CP states, does the model's keep-decision (the rollout's OWN rule) match the
-    SOUND CP narrowing target? High = imitates sound narrowing; this is NOT a B-layer claim."""
+    held-out CP states, does the model's keep-decision (the rollout's OWN rule) match the SOUND
+    CP narrowing target? Also conflict-head CALIBRATION (does it flag CP contradictions = "knows
+    when it's stuck"). High accuracy = imitates sound narrowing; NOT a B-layer claim."""
     model.eval()
-    lat_in, keep_tgt, cand_mask, _c, meta = build_cp_trajectory_pool(
+    lat_in, keep_tgt, cand_mask, conf_tgt, meta = build_cp_trajectory_pool(
         pairs, device, node_cap=node_cap, max_states=max_states)
     if lat_in.shape[0] == 0:
-        return {"cp_target_accuracy": None, "states": 0, "puzzles_solved": meta["puzzles_solved"]}
-    correct = total = 0.0
+        return {"cp_target_accuracy": None, "conflict_calibration": None, "states": 0,
+                "puzzles_solved": meta["puzzles_solved"]}
+    correct = total = conf_correct = 0.0
     for i in range(0, lat_in.shape[0], 512):
-        elim, _ = model(lat_in[i:i + 512])
+        elim, conflict = model(lat_in[i:i + 512])
         keep_pred = (1.0 - torch.sigmoid(elim) < theta_drop).float()      # the rollout's keep rule
         msk = cand_mask[i:i + 512]
         correct += ((keep_pred == keep_tgt[i:i + 512]).float() * msk).sum().item()
         total += msk.sum().item()
+        conf_pred = (torch.sigmoid(conflict) > theta_cls).float()         # the rollout's conflict rule
+        conf_correct += (conf_pred == conf_tgt[i:i + 512]).float().sum().item()
     return {"cp_target_accuracy": round(correct / max(1.0, total), 4),
+            "conflict_calibration": round(conf_correct / lat_in.shape[0], 4),
             "states": lat_in.shape[0], "puzzles_solved": meta["puzzles_solved"]}
 
 
@@ -815,11 +820,12 @@ def run_build_gate(cfg: Cfg, device, out: Path) -> dict:
     (out / "rollout_per_puzzle.jsonl").write_text("\n".join(json.dumps(r) for r in per_puzzle), encoding="utf-8")
     # process-functional diagnostic table + low-tail visibility (build-gate DIAGNOSIS, not a B-layer claim)
     cp_diag = cp_target_accuracy(model, test_pairs[: min(64, len(test_pairs))], device,
-                                 cfg.max_search_nodes, cfg.theta_drop)
+                                 cfg.max_search_nodes, cfg.theta_drop, cfg.theta_cls)
     return {"mode": "build-gate", "stage": cfg.stage, "rollout_exact_rate": round(exact_rate, 5), "branch": branch,
             "one_shot_exact_rate": round(one_shot, 5), "stop_reason_counts": counts,
             "diagnostics": diagnostics, "tail": tail_stats(per_puzzle),
             "process_functional": {"cp_target_accuracy": cp_diag["cp_target_accuracy"],
+                                   "conflict_calibration": cp_diag["conflict_calibration"],
                                    "false_elim": diagnostics["false_elimination_rate_answer_key_audit"],
                                    "rollout_exact": round(exact_rate, 5), "one_shot_exact": round(one_shot, 5),
                                    "avg_nodes": diagnostics["avg_nodes_expanded"], "cp_states": cp_diag["states"]},
