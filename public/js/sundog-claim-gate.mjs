@@ -58,6 +58,29 @@ const ROUTES_ALLOWED_TO_SAY_RESEARCH_RESULT = new Set([
   "application_tier_summary"
 ]);
 
+// Failure-mode tag classifier (Phase 13 / generality-boundary corpus). When the
+// trace carries a failureMode tag, a drafted answer must not assert a category
+// STRONGER than the tag permits — that is a mis-tag, which is itself an overclaim
+// (lane-note do-not-claim #4). Each list holds phrases that would over-state that
+// specific tag; the check is negation-aware (mirrors UNSUPPORTED_CLAIMS), so an
+// honest answer naming the boundary to deny it ("not a discovery", "no separating
+// structure") passes. The check only fires when trace.failureMode is set, so the
+// pre-Phase-13 routes and the falsification slate are unaffected.
+const FAILURE_MODE_VIOLATIONS = {
+  "vacuous": ["bounded null", "a genuine separation", "a real result"],
+  "bounded-null": ["a genuine separation", "separating structure", "mass gap proof", "a real result"],
+  "marginal": ["non-marginal", "sharp separation", "physically sharp", "global regularity result"],
+  "numerical": ["the run found", "the finding is", "we discovered", "turbulence result"],
+  "convergence-to-null": ["high dimensional body", "beat the benchmark", "state of the art", "solved arc"],
+  "conditional": ["mass marginal predictor", "general stability predictor", "unconditional predictor", "settled result"],
+  "deflationary": ["senses gravity", "tidal sensing", "tidal gradient steering"],
+  "build-gate-partial": ["is working", "is shipping", "reproduced the ldt", "a lattice result"],
+  "identity-success": ["a discovery", "new physics", "new law of physics", "a new theorem"],
+  "exact-separation": ["a new theorem", "new physics", "an original result"],
+  "explainer-tier": ["sundog proved", "sundog disproved", "sundog s own result"],
+  "bounded-positive": ["resolved p vs np", "a complexity result", "complexity theoretic result"]
+};
+
 export async function draftWithAdapter({ adapter, prompt, trace, context = {} }) {
   if (!adapter || typeof adapter.draft !== "function") {
     throw new TypeError("draftWithAdapter requires an adapter with a draft({ prompt, trace, context }) function.");
@@ -152,6 +175,17 @@ export function gateFailures({ prompt = "", trace, draftAnswer, context = {} }) 
     }
   }
 
+  // Failure-mode tag classifier: a draft for a tagged route must not claim a
+  // category stronger than its tag (negation-aware). Only active when the trace
+  // carries a failureMode (Phase 13 generality-boundary routes).
+  if (trace?.failureMode && FAILURE_MODE_VIOLATIONS[trace.failureMode]) {
+    for (const phrase of FAILURE_MODE_VIOLATIONS[trace.failureMode]) {
+      if (hasPhrase(answer, phrase) && !hasNearbyNegation(answer, phrase)) {
+        failures.push(`failure_mode_violation:${trace.failureMode}:${phrase}`);
+      }
+    }
+  }
+
   return failures;
 }
 
@@ -188,7 +222,7 @@ function hasNearbyNegation(normalizedText, phrase) {
   // post-normalize() contraction forms ("can t" from "can't"). Different
   // model families prefer different styles; the lexicon must handle both.
   const negBefore = /\b(no|not|never|cannot|can t|won t|isn t|aren t|doesn t|don t|didn t|wasn t|weren t|haven t|hasn t|wouldn t|couldn t|shouldn t|does not|do not|did not|unsupported|an unsupported|without|rather than|instead of|absent|absence of|lack of|no specific|no specified|blocking a claim|blocked a claim|if the tier should be|should be|hypothetically)\b/;
-  const negAfter = /\b(is (still |not )?pending|is not|isn t|are not|aren t|has not|hasn t|have not|haven t|is unsupported|is out of scope|cannot be (claimed|supported|asserted|stated|verified|established)|can t be (claimed|supported|asserted|stated|verified|established)|are not (claimed|supported)|is not supported|isn t supported|is currently unsupported)\b/;
+  const negAfter = /\b(is (still |not )?pending|is not|isn t|are not|aren t|has not|hasn t|have not|haven t|is unsupported|is out of scope|cannot be (claimed|supported|asserted|stated|verified|established)|can t be (claimed|supported|asserted|stated|verified|established)|are not (claimed|supported)|is not supported|isn t supported|is currently unsupported|was withdrawn|were withdrawn|is withdrawn|withdrawn as)\b/;
   return negBefore.test(before) || negAfter.test(after);
 }
 

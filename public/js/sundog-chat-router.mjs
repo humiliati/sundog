@@ -143,6 +143,7 @@ export function buildTraceAnswer(claimMap, prompt) {
     routeId: route.id,
     disposition: route.disposition || "allow",
     evidenceTier: route.evidenceTier || "unknown",
+    failureMode: route.failureMode || null,
     support: route.support || [],
     boundary: route.boundaries || [],
     confidence: confidenceFor(route),

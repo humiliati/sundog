@@ -303,6 +303,189 @@
       ]
     },
     {
+      "routeId": "unsupported_generality_overclaim",
+      "disposition": "refuse",
+      "evidenceTier": "unsupported",
+      "boundaries": [
+        "Refuse the prestige / famous-problem framing directly.",
+        "A bounded null, vacuous check, marginal separation, or explainer page is not a result.",
+        "Do not connect any lane to a Millennium or Clay problem.",
+        "Offer the lane's bounded status and failure-mode tag instead."
+      ],
+      "supportDocs": [
+        "docs/CROSS_SUBSTRATE_NOTES.md",
+        "docs/presentation/claims-and-scope.md"
+      ]
+    },
+    {
+      "routeId": "faraday_boundary",
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "audit_chain_receipt",
+      "boundaries": [
+        "Do not call it a discovery or new physics.",
+        "Body-resistance is zero by theorem; this is an identity, not a separation.",
+        "It is the exact-zero anchor of the body-resistance axis, witnessed not discovered."
+      ],
+      "supportDocs": [
+        "docs/SUNDOG_V_FARADAY.md",
+        "docs/CROSS_SUBSTRATE_NOTES.md"
+      ]
+    },
+    {
+      "routeId": "aharonov_bohm_boundary",
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "audit_chain_receipt",
+      "boundaries": [
+        "It is a witness of a known separation, not a novel theorem.",
+        "Do not claim new physics or an original gauge-theory result.",
+        "The separation is topological (H^1), not a dimensional body-resistance result."
+      ],
+      "supportDocs": [
+        "docs/SUNDOG_V_FARADAY.md",
+        "docs/CROSS_SUBSTRATE_NOTES.md"
+      ]
+    },
+    {
+      "routeId": "navierstokes_c1_boundary",
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "audit_chain_receipt",
+      "boundaries": [
+        "No connection to the Clay problem or global regularity.",
+        "Name the separation as physically marginal (FVE ~ 0.99).",
+        "It is a witness, not a Navier-Stokes existence or smoothness claim; review-gated."
+      ],
+      "supportDocs": [
+        "docs/SUNDOG_V_NAVIERSTOKES.md",
+        "docs/CROSS_SUBSTRATE_NOTES.md"
+      ]
+    },
+    {
+      "routeId": "navierstokes_c2_boundary",
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "roadmap",
+      "boundaries": [
+        "Report no C2 finding as a result.",
+        "The blow-up gate is a numerical artifact, not a measurement.",
+        "Resuming requires an adaptive / stiff integrator."
+      ],
+      "supportDocs": [
+        "docs/SUNDOG_V_NAVIERSTOKES.md",
+        "docs/CROSS_SUBSTRATE_NOTES.md"
+      ]
+    },
+    {
+      "routeId": "yang_mills_boundary",
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "audit_chain_receipt",
+      "boundaries": [
+        "No link to the mass-gap Millennium problem.",
+        "A bounded null is not a result, and not a failure of the method - it is an informative boundary.",
+        "It is finite-lattice and cell-local, not a Clay-existence claim."
+      ],
+      "supportDocs": [
+        "docs/SUNDOG_V_YANG_MILLS.md",
+        "docs/CROSS_SUBSTRATE_NOTES.md"
+      ]
+    },
+    {
+      "routeId": "riemann_boundary",
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "audit_chain_receipt",
+      "boundaries": [
+        "No Riemann Hypothesis progress.",
+        "A vacuous (identity-zero) check is not a result.",
+        "Do not present the rigidity pass as evidence."
+      ],
+      "supportDocs": [
+        "docs/SUNDOG_V_RIEMANN.md",
+        "docs/CROSS_SUBSTRATE_NOTES.md"
+      ]
+    },
+    {
+      "routeId": "pvnp_boundary",
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "audit_chain_receipt",
+      "boundaries": [
+        "No P-vs-NP resolution; not a complexity-theoretic result.",
+        "No wall-time superiority claim (withdrawn as non-reproducible).",
+        "Only the op-count certificate is a stable cost signal; the mesa-bridge is Phase-3 quarantined."
+      ],
+      "supportDocs": [
+        "docs/SUNDOG_V_P_V_NP.md",
+        "docs/CROSS_SUBSTRATE_NOTES.md"
+      ]
+    },
+    {
+      "routeId": "arc_boundary",
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "audit_chain_receipt",
+      "boundaries": [
+        "No ARC solution, SOTA, or benchmark-beating claim.",
+        "PR ~11 is below the pre-registered high-dim bar (>= 20); the threshold is not retuned.",
+        "The verdict is inconclusive, not a high-dim-body result."
+      ],
+      "supportDocs": [
+        "docs/SUNDOG_V_ARC.md",
+        "docs/CROSS_SUBSTRATE_NOTES.md"
+      ]
+    },
+    {
+      "routeId": "kakeya_boundary",
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "conceptual_lineage",
+      "boundaries": [
+        "No Kakeya progress or result.",
+        "No finite-field-to-Euclidean transfer is claimed.",
+        "Credit Dvir's polynomial method; the page is a reader, review-only."
+      ],
+      "supportDocs": [
+        "docs/SUNDOG_V_KAKEYA.md",
+        "docs/CROSS_SUBSTRATE_NOTES.md"
+      ]
+    },
+    {
+      "routeId": "hodge_boundary",
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "conceptual_lineage",
+      "boundaries": [
+        "No Hodge attack or result.",
+        "Nothing has run; it is a scoping / reader note, UNPROMOTED.",
+        "Do not connect it to the Hodge conjecture as progress."
+      ],
+      "supportDocs": [
+        "docs/SUNDOG_V_HODGE.md",
+        "docs/CROSS_SUBSTRATE_NOTES.md"
+      ]
+    },
+    {
+      "routeId": "lattice_boundary",
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "audit_chain_receipt",
+      "boundaries": [
+        "No lattice result or product; a partial build-gate is not a positive.",
+        "No body / fiber / d_dec number is licensed (the build-gate did not reach 100%).",
+        "It is kill-gated R&D, not a shipping product surface."
+      ],
+      "supportDocs": [
+        "docs/SUNDOG_V_LATTICE.md",
+        "docs/CROSS_SUBSTRATE_NOTES.md"
+      ]
+    },
+    {
+      "routeId": "chatv2_boundary",
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "roadmap",
+      "boundaries": [
+        "No settled scaling or generality result.",
+        "The SHARP verdict is seed-stability gated; the lane is unpromoted.",
+        "Promising is not proven."
+      ],
+      "supportDocs": [
+        "docs/chatv2/LANE_CHARTER.md",
+        "docs/CROSS_SUBSTRATE_NOTES.md"
+      ]
+    },
+    {
       "routeId": "inspect_data",
       "disposition": "allow",
       "evidenceTier": "navigation",

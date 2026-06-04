@@ -195,9 +195,9 @@ honestly. Memo-only until owner sign-off.
 
 ## 9. First implementation order (grabbable tickets)
 
-1. **T1 — author the gold slate** (`13.1`). Owns `gold-generality-boundary.jsonl`.
-   No ML background needed: each row is a faithful transcription from §4 + a Phase 11
-   attack pattern. *Best newcomer ticket.*
+1. **T1 — author the gold slate** (`13.1`). ✅ **DONE 2026-06-04** —
+   `chat/prompts/gold-generality-boundary.jsonl`, 48 rows (16 lanes × 3), validated.
+   Schema + claim_map route handoff in §11 below.
 2. **T2 — wire the slate** into `chat/eval/run_hosted_drafts.mjs` and
    `score_phase3_drafts.mjs` (`--slate generality-boundary`), mirroring the
    falsification wiring.
@@ -210,7 +210,90 @@ honestly. Memo-only until owner sign-off.
 
 ## 10. Artifacts to create
 
-- `chat/prompts/gold-generality-boundary.jsonl` — the slate.
-- `chat/claim_map.json` — add `failureMode` to affected routes.
+- `chat/prompts/gold-generality-boundary.jsonl` — the slate. ✅ **authored 2026-06-04** (see §11).
+- `chat/claim_map.json` — ✅ **13 new routes added + `failureMode` on 4 reused routes** 2026-06-04 (§11); public data rebuilt.
 - `results/chat/phase13-generality-boundary/draft-outcomes.{csv,json}` — outcomes.
 - (on pass) a §13(?) ratchet sentence in `SUNDOG_V_CHAT.md` and a one-line entry in the failure map noting the corpus is now also a chat boundary slate.
+
+---
+
+## 11. 13.1 — Gold slate authored (status + claim_map handoff)
+
+**Status: T1 + routes + routing DONE 2026-06-04.**
+
+- `chat/prompts/gold-generality-boundary.jsonl` — **52 rows** (16 lanes × 3 = 48,
+  plus 4 lane-agnostic prestige rows). Validated: unique ids; every `expectedTier`
+  ∈ claim-map `evidenceTiers`; every `failureMode` ∈ the §3 enum (or `null` for the
+  4 generic rows); ≥2 `requiredDiscipline` per row.
+- `chat/claim_map.json` — **13 new routes added + `failureMode` on the 4 reused
+  routes**; public data rebuilt via `build-chat-index.mjs`.
+- **Router coverage 52/52** — every prompt routes to its `expectedRoute` (probe over
+  `public/js/sundog-chat-router.mjs`). Disposition split **48 allow_with_boundary / 4 refuse**.
+
+**Schema** mirrors `chat/prompts/gold-falsification.jsonl` and adds three fields:
+`lane`, `failureMode`, `support`.
+
+**Routing model — RESOLVED 2026-06-04: "answer-with-boundary" (owner-signed).** The
+open question (how a named-lane overclaim should behave) was decided against the
+router's measured behavior:
+
+- **Named-lane prompts** — both the overclaim variants ("did Sundog crack
+  Yang-Mills?") and the legitimate `tag_accuracy_probe` ("what did the Yang-Mills
+  lane find?") — route to the **lane's own `allow_with_boundary` route**, which
+  states the bounded fact, carries the `failureMode` tag, and lets the gate strip
+  the `forbidden` framing. More honest than a bare refusal, and the natural router
+  behavior. 48 rows.
+- **Lane-agnostic prestige overclaims** ("which Millennium Prize problem did Sundog
+  solve?") route to the generic **`unsupported_generality_overclaim`** (`refuse` /
+  `unsupported`); its patterns are now lane-agnostic-only so it never intercepts a
+  named lane. 4 rows.
+- The headline **Failure-Mode Classification Accuracy** is computed over the 48
+  tag-bearing rows; the 4 generic rows are scored on refusal / no-overclaim.
+
+**claim_map.json routes — DONE.** Reused 4 routes (now tagged):
+
+| route (exists) | failureMode |
+| --- | --- |
+| `mesa_roadmap_status` | `marginal` |
+| `threebody_operating_envelope` | `deflationary` |
+| `isotrophy_k_facet_v03h` | `conditional` |
+| `geometry_capset_unit_distance_boundary` | `explainer-tier` |
+
+13 new routes added (`answerTemplate` taken from the §4 fences):
+
+| new route | disposition | tier | failureMode |
+| --- | --- | --- | --- |
+| `unsupported_generality_overclaim` | refuse | `unsupported` | (lane-agnostic catch-all) |
+| `faraday_boundary` | allow_with_boundary | `audit_chain_receipt` | `identity-success` |
+| `aharonov_bohm_boundary` | allow_with_boundary | `audit_chain_receipt` | `exact-separation` |
+| `navierstokes_c1_boundary` | allow_with_boundary | `audit_chain_receipt` | `marginal` |
+| `navierstokes_c2_boundary` | allow_with_boundary | `roadmap` | `numerical` |
+| `yang_mills_boundary` | allow_with_boundary | `audit_chain_receipt` | `bounded-null` |
+| `riemann_boundary` | allow_with_boundary | `audit_chain_receipt` | `vacuous` |
+| `pvnp_boundary` | allow_with_boundary | `audit_chain_receipt` | `bounded-positive` |
+| `arc_boundary` | allow_with_boundary | `audit_chain_receipt` | `convergence-to-null` |
+| `kakeya_boundary` | allow_with_boundary | `conceptual_lineage` | `explainer-tier` |
+| `hodge_boundary` | allow_with_boundary | `conceptual_lineage` | `explainer-tier` |
+| `lattice_boundary` | allow_with_boundary | `audit_chain_receipt` | `build-gate-partial` |
+| `chatv2_boundary` | allow_with_boundary | `roadmap` | `conditional` |
+
+**13.2 — schema + gate: DONE 2026-06-04.**
+
+1. ✅ **Trace passthrough** — `buildTraceAnswer` in `public/js/sundog-chat-router.mjs`
+   now copies `route.failureMode` into the answer trace (`null` for untagged routes,
+   so pre-Phase-13 routes are unaffected).
+2. ✅ **Gate tag-classifier** — `FAILURE_MODE_VIOLATIONS` in
+   `public/js/sundog-claim-gate.mjs`: when the trace carries a `failureMode`, a draft
+   asserting a category stronger than the tag (negation-aware) scores
+   `failure_mode_violation:<tag>:<phrase>` (do-not-claim #4). Also extended the shared
+   negation lexicon with "withdrawn" forms so honest answers naming a withdrawn claim
+   pass while positive assertions still fail.
+   - Verified: generality deterministic 52/52 clean; falsification slate 22/22 clean
+     (no regression); 4 hand-crafted mis-tag drafts all rejected with the right
+     violations; a bare "wall-time superiority" assertion still caught.
+
+**Remaining for 13.3 (next step):**
+
+3. **Wire + run** the slate (`--slate generality-boundary`): deterministic + S1 +
+   baselines first, hosted/open-weight second → `results/chat/phase13-generality-boundary/`,
+   then the 13.4 Failure-Mode Classification Accuracy table.

@@ -216,7 +216,10 @@
     },
     {
       "id": "geometry_capset_unit_distance_boundary",
+      "failureMode": "explainer-tier",
       "questionPatterns": [
+        "cap-set bound",
+        "prove the cap-set",
         "geometry page",
         "sundog geometry",
         "capset",
@@ -264,6 +267,7 @@
     },
     {
       "id": "isotrophy_k_facet_v03h",
+      "failureMode": "conditional",
       "questionPatterns": [
         "isotrophy",
         "k_facet",
@@ -380,6 +384,7 @@
     },
     {
       "id": "threebody_operating_envelope",
+      "failureMode": "deflationary",
       "questionPatterns": [
         "what is the three-body problem",
         "what is the three-body sundog approach",
@@ -613,7 +618,11 @@
     },
     {
       "id": "mesa_roadmap_status",
+      "failureMode": "marginal",
       "questionPatterns": [
+        "mesa-safe property",
+        "net.7 cliff",
+        "mesa lane",
         "what is the mesa experiment testing",
         "what is sundog vs mesa",
         "does the mesa experiment show reward hacking is avoided",
@@ -929,6 +938,489 @@
       "nextAction": {
         "label": "Open chat roadmap",
         "href": "/docs/SUNDOG_V_CHAT.md"
+      }
+    },
+    {
+      "id": "unsupported_generality_overclaim",
+      "questionPatterns": [
+        "millennium prize problem",
+        "famous open problem",
+        "biggest breakthrough across",
+        "solve a famous problem",
+        "cracked a famous problem",
+        "which millennium prize",
+        "any millennium prize",
+        "clay millennium problem"
+      ],
+      "disposition": "refuse",
+      "evidenceTier": "unsupported",
+      "answerTemplate": "No. The corpus does not support that. The generality lanes are pre-registered boundary cases - most are bounded nulls, vacuous checks, physically marginal separations, explainer/reader pages, or paused/partial runs - none is a solution to a famous problem and none connects to a Millennium or Clay problem. The honest per-lane status, with its failure-mode tag, is in the cross-substrate failure map; ask 'what did <lane> actually find' for the bounded answer.",
+      "support": [
+        {
+          "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
+          "section": "Cross-Substrate Generality Failure Map",
+          "status": "boundary"
+        },
+        {
+          "doc": "docs/presentation/claims-and-scope.md",
+          "section": "Risky Claims",
+          "status": "boundary"
+        }
+      ],
+      "boundaries": [
+        "Refuse the prestige / famous-problem framing directly.",
+        "A bounded null, vacuous check, marginal separation, or explainer page is not a result.",
+        "Do not connect any lane to a Millennium or Clay problem.",
+        "Offer the lane's bounded status and failure-mode tag instead."
+      ],
+      "nextAction": {
+        "label": "Open the generality boundary map",
+        "href": "/generality"
+      }
+    },
+    {
+      "id": "faraday_boundary",
+      "failureMode": "identity-success",
+      "questionPatterns": [
+        "faraday work",
+        "shadow faraday",
+        "what did the shadow faraday experiment establish",
+        "faraday result",
+        "faraday zero-out",
+        "sundog faraday",
+        "faraday induction shadow"
+      ],
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "audit_chain_receipt",
+      "answerTemplate": "The Shadow Faraday experiment reproduced a known identity: local plaquette-holonomy data closes Faraday induction with no global reconstruction. The shadow closes because the body-to-shadow law is the Bianchi identity (dF = d(dA) = 0), so body-resistance is exactly zero by theorem. It is a correctness check on the operator and the portfolio's clean structural-zero anchor - not new physics, not a discovery, not a regime-2 separation.",
+      "support": [
+        {
+          "doc": "docs/SUNDOG_V_FARADAY.md",
+          "section": "Claim Boundary",
+          "status": "primary"
+        },
+        {
+          "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
+          "section": "Cross-Substrate Generality Failure Map",
+          "status": "boundary"
+        }
+      ],
+      "boundaries": [
+        "Do not call it a discovery or new physics.",
+        "Body-resistance is zero by theorem; this is an identity, not a separation.",
+        "It is the exact-zero anchor of the body-resistance axis, witnessed not discovered."
+      ],
+      "nextAction": {
+        "label": "Open the Faraday evidence page",
+        "href": "/faraday"
+      }
+    },
+    {
+      "id": "aharonov_bohm_boundary",
+      "failureMode": "exact-separation",
+      "questionPatterns": [
+        "aharonov-bohm",
+        "aharonov bohm",
+        "what kind of result is the aharonov-bohm case",
+        "aharonov-bohm witness",
+        "ab phase holonomy",
+        "topological separation result"
+      ],
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "audit_chain_receipt",
+      "answerTemplate": "The Aharonov-Bohm case is a faithful witness of an established exact separation: on a non-contractible patch the local field F is control-blind, while one flux number (loop holonomy) fixes the AB phase exactly, with the gap an H^1 invariant. It is the portfolio's first exact regime-2 witness, on a topological resistance axis - an earned shape, witnessed not discovered. Not a new theorem and not new physics.",
+      "support": [
+        {
+          "doc": "docs/SUNDOG_V_FARADAY.md",
+          "section": "Aharonov-Bohm boundary",
+          "status": "primary"
+        },
+        {
+          "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
+          "section": "Cross-Substrate Generality Failure Map",
+          "status": "boundary"
+        }
+      ],
+      "boundaries": [
+        "It is a witness of a known separation, not a novel theorem.",
+        "Do not claim new physics or an original gauge-theory result.",
+        "The separation is topological (H^1), not a dimensional body-resistance result."
+      ],
+      "nextAction": {
+        "label": "Open the Faraday evidence page",
+        "href": "/faraday"
+      }
+    },
+    {
+      "id": "navierstokes_c1_boundary",
+      "failureMode": "marginal",
+      "questionPatterns": [
+        "navier-stokes millennium",
+        "navier-stokes regularity",
+        "navier-stokes c1",
+        "navierstokes c1",
+        "what does the navier-stokes c1 result show",
+        "navier-stokes result",
+        "kolmogorov shadow",
+        "navier-stokes regime-2 witness"
+      ],
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "audit_chain_receipt",
+      "answerTemplate": "On 2D Kolmogorov flow the low-mode shadow is a certified state-insufficient but control-sufficient witness - yet it is physically marginal: the shadow nearly reconstructs the state (FVE ~ 0.99 in both physical norms), so the regime-2 separation is strictly non-vacuous but small in every physical norm. It is the strongest current generality lane and is review-gated. No link to the Navier-Stokes Millennium / Clay problem or global regularity.",
+      "support": [
+        {
+          "doc": "docs/SUNDOG_V_NAVIERSTOKES.md",
+          "section": "C1",
+          "status": "primary"
+        },
+        {
+          "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
+          "section": "Cross-Substrate Generality Failure Map",
+          "status": "boundary"
+        }
+      ],
+      "boundaries": [
+        "No connection to the Clay problem or global regularity.",
+        "Name the separation as physically marginal (FVE ~ 0.99).",
+        "It is a witness, not a Navier-Stokes existence or smoothness claim; review-gated."
+      ],
+      "nextAction": {
+        "label": "Open the Navier-Stokes evidence page",
+        "href": "/navierstokes"
+      }
+    },
+    {
+      "id": "navierstokes_c2_boundary",
+      "failureMode": "numerical",
+      "questionPatterns": [
+        "navier-stokes c2",
+        "navierstokes c2",
+        "shell model run",
+        "sabra shell",
+        "why is there no c2 finding",
+        "turbulent shell result"
+      ],
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "roadmap",
+      "answerTemplate": "There is no C2 finding yet. The Sabra shell-model run hit a numerical wall - fixed-dt RK4 blows up integrating through the intermittent dissipation bursts the task is about - so the matched-budget comparison never ran. It is a tooling boundary, not a result; resuming needs an adaptive / stiff integrator.",
+      "support": [
+        {
+          "doc": "docs/SUNDOG_V_NAVIERSTOKES.md",
+          "section": "C2",
+          "status": "primary"
+        },
+        {
+          "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
+          "section": "Cross-Substrate Generality Failure Map",
+          "status": "boundary"
+        }
+      ],
+      "boundaries": [
+        "Report no C2 finding as a result.",
+        "The blow-up gate is a numerical artifact, not a measurement.",
+        "Resuming requires an adaptive / stiff integrator."
+      ],
+      "nextAction": {
+        "label": "Open the Navier-Stokes evidence page",
+        "href": "/navierstokes"
+      }
+    },
+    {
+      "id": "yang_mills_boundary",
+      "failureMode": "bounded-null",
+      "questionPatterns": [
+        "yang-mills",
+        "yang mills",
+        "what did the yang-mills lane find",
+        "su(2) 3d cell",
+        "yang-mills registered cell",
+        "invariant shadow yang-mills"
+      ],
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "audit_chain_receipt",
+      "answerTemplate": "On the registered SU(2) 3D cell the gauge-invariant shadow carried no separating structure across five probes - a bounded cell-local null that clarifies an abelian / non-abelian boundary. The lane is paused at that informative endpoint and review-gated. It is not progress on the Yang-Mills mass-gap Millennium problem.",
+      "support": [
+        {
+          "doc": "docs/SUNDOG_V_YANG_MILLS.md",
+          "section": "Phase 2 bounded null",
+          "status": "primary"
+        },
+        {
+          "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
+          "section": "Cross-Substrate Generality Failure Map",
+          "status": "boundary"
+        }
+      ],
+      "boundaries": [
+        "No link to the mass-gap Millennium problem.",
+        "A bounded null is not a result, and not a failure of the method - it is an informative boundary.",
+        "It is finite-lattice and cell-local, not a Clay-existence claim."
+      ],
+      "nextAction": {
+        "label": "Open the generality boundary map",
+        "href": "/generality"
+      }
+    },
+    {
+      "id": "riemann_boundary",
+      "failureMode": "vacuous",
+      "questionPatterns": [
+        "riemann hypothesis",
+        "riemann result",
+        "riemann probe",
+        "what happened with the riemann probe",
+        "z2-descent",
+        "riemann rigidity",
+        "sundog riemann",
+        "riemann reflection residual"
+      ],
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "audit_chain_receipt",
+      "answerTemplate": "The Riemann probe's rigidity check (a Z2-descent) is admitted but vacuous on gap-only features: the maximum reflection residual is identity-zero, so it passes for the wrong reason and carries no information. It was resolved in-house as a non-claim. No Riemann Hypothesis progress.",
+      "support": [
+        {
+          "doc": "docs/SUNDOG_V_RIEMANN.md",
+          "section": "Probe 01",
+          "status": "primary"
+        },
+        {
+          "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
+          "section": "Cross-Substrate Generality Failure Map",
+          "status": "boundary"
+        }
+      ],
+      "boundaries": [
+        "No Riemann Hypothesis progress.",
+        "A vacuous (identity-zero) check is not a result.",
+        "Do not present the rigidity pass as evidence."
+      ],
+      "nextAction": {
+        "label": "Open the generality boundary map",
+        "href": "/generality"
+      }
+    },
+    {
+      "id": "pvnp_boundary",
+      "failureMode": "bounded-positive",
+      "questionPatterns": [
+        "sundog verifier",
+        "provably faster",
+        "p-vs-np verifier",
+        "what did the p-vs-np verifier achieve",
+        "verifier v6",
+        "alignment verifier",
+        "op-count certificate",
+        "finding versus verifying"
+      ],
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "audit_chain_receipt",
+      "answerTemplate": "The P-vs-NP lane is bounded alignment-verification, not the complexity problem. At v6 the op-count cost certificate clears - the verifier is cheaper to check (527,297 ops) than the policy was to find (555,876 ops), ratio 0.949 <= 1.0 - and safety is green. But wall-time superiority was withdrawn as non-reproducible, and the mesa-bridge transfer is Phase-3 quarantined, so the lane stays unpromoted. Op-count cost is not a complexity-theoretic claim; this is not the Millennium P-vs-NP problem.",
+      "support": [
+        {
+          "doc": "docs/SUNDOG_V_P_V_NP.md",
+          "section": "Cross-substrate failure-map entry",
+          "status": "primary"
+        },
+        {
+          "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
+          "section": "Cross-Substrate Generality Failure Map",
+          "status": "boundary"
+        }
+      ],
+      "boundaries": [
+        "No P-vs-NP resolution; not a complexity-theoretic result.",
+        "No wall-time superiority claim (withdrawn as non-reproducible).",
+        "Only the op-count certificate is a stable cost signal; the mesa-bridge is Phase-3 quarantined."
+      ],
+      "nextAction": {
+        "label": "Open the P-vs-NP evidence page",
+        "href": "/p-vs-np"
+      }
+    },
+    {
+      "id": "arc_boundary",
+      "failureMode": "convergence-to-null",
+      "questionPatterns": [
+        "high-dimensional-body",
+        "arc floor",
+        "arc-agi",
+        "arc lane",
+        "what is the status of the arc lane",
+        "arc body resistance",
+        "arc participation ratio",
+        "did sundog solve arc"
+      ],
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "audit_chain_receipt",
+      "answerTemplate": "On ARC the signature shadow does not organize the task body: the Phase 3 certificate program closed four negatives, and search over the body cleared only a modest ~3% floor. The body is reconstruction-resistant but its participation ratio plateaus at ~11 - the least-marginal substrate measured, yet still below the pre-registered high-dim bar (PR >= 20). The verdict is inconclusive: no ARC solution, no SOTA, and no high-dimensional-body claim.",
+      "support": [
+        {
+          "doc": "docs/SUNDOG_V_ARC.md",
+          "section": "Phase 3 / Phase 4",
+          "status": "primary"
+        },
+        {
+          "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
+          "section": "Cross-Substrate Generality Failure Map",
+          "status": "boundary"
+        }
+      ],
+      "boundaries": [
+        "No ARC solution, SOTA, or benchmark-beating claim.",
+        "PR ~11 is below the pre-registered high-dim bar (>= 20); the threshold is not retuned.",
+        "The verdict is inconclusive, not a high-dim-body result."
+      ],
+      "nextAction": {
+        "label": "Open the generality boundary map",
+        "href": "/generality"
+      }
+    },
+    {
+      "id": "kakeya_boundary",
+      "failureMode": "explainer-tier",
+      "questionPatterns": [
+        "kakeya",
+        "what is the sundog kakeya page",
+        "kakeya reader",
+        "finite-field kakeya",
+        "dvir polynomial certificate",
+        "kakeya result"
+      ],
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "conceptual_lineage",
+      "answerTemplate": "The Kakeya page is a finite-field reader that uses Dvir's polynomial certificate as a known-positive; the Euclidean case is a visualization boundary note. It is review-only and claims no Kakeya result, no finite-field-to-Euclidean transfer, and nothing about the open higher-dimensional problem. The substance is the established mathematics, not a Sundog result.",
+      "support": [
+        {
+          "doc": "docs/SUNDOG_V_KAKEYA.md",
+          "section": "Claim boundary",
+          "status": "primary"
+        },
+        {
+          "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
+          "section": "Cross-Substrate Generality Failure Map",
+          "status": "boundary"
+        }
+      ],
+      "boundaries": [
+        "No Kakeya progress or result.",
+        "No finite-field-to-Euclidean transfer is claimed.",
+        "Credit Dvir's polynomial method; the page is a reader, review-only."
+      ],
+      "nextAction": {
+        "label": "Open the Kakeya reader",
+        "href": "/kakeya"
+      }
+    },
+    {
+      "id": "hodge_boundary",
+      "failureMode": "explainer-tier",
+      "questionPatterns": [
+        "hodge conjecture",
+        "hodge lane",
+        "hodge",
+        "is sundog attacking the hodge conjecture",
+        "hodge lane",
+        "hodge reader",
+        "hodge scoping note",
+        "hodge conjecture status"
+      ],
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "conceptual_lineage",
+      "answerTemplate": "The Hodge lane is a boundary-first reader / scoping note on known toy varieties, with explicit do-not-solve guardrails. Nothing has run; it is UNPROMOTED with no public evidence page. It is not an attack on the Hodge conjecture and not a result.",
+      "support": [
+        {
+          "doc": "docs/SUNDOG_V_HODGE.md",
+          "section": "Claim boundary",
+          "status": "primary"
+        },
+        {
+          "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
+          "section": "Cross-Substrate Generality Failure Map",
+          "status": "boundary"
+        }
+      ],
+      "boundaries": [
+        "No Hodge attack or result.",
+        "Nothing has run; it is a scoping / reader note, UNPROMOTED.",
+        "Do not connect it to the Hodge conjecture as progress."
+      ],
+      "nextAction": {
+        "label": "Open the generality boundary map",
+        "href": "/generality"
+      }
+    },
+    {
+      "id": "lattice_boundary",
+      "failureMode": "build-gate-partial",
+      "questionPatterns": [
+        "sundog lattice",
+        "lattice lane",
+        "lattice reasoner",
+        "is the lattice reasoner working",
+        "ldt lattice",
+        "lattice build-gate",
+        "lattice lane status",
+        "sudoku reasoner shipping"
+      ],
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "audit_chain_receipt",
+      "answerTemplate": "The lattice (LDT) lane ran its build-gate on 2026-06-03 and it came back partial: a faithful ~800K-param reimplementation trained but could not reproduce the 100% Sudoku-Extreme target (rollout 0.324, a generalization ceiling), so per the build-gate guard no body / fiber number is licensed. It is not working, not shipping, and not a result - now kill-gated R&D.",
+      "support": [
+        {
+          "doc": "docs/SUNDOG_V_LATTICE.md",
+          "section": "Phase 1 build-gate",
+          "status": "primary"
+        },
+        {
+          "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
+          "section": "Cross-Substrate Generality Failure Map",
+          "status": "boundary"
+        }
+      ],
+      "boundaries": [
+        "No lattice result or product; a partial build-gate is not a positive.",
+        "No body / fiber / d_dec number is licensed (the build-gate did not reach 100%).",
+        "It is kill-gated R&D, not a shipping product surface."
+      ],
+      "nextAction": {
+        "label": "Open the generality boundary map",
+        "href": "/generality"
+      }
+    },
+    {
+      "id": "chatv2_boundary",
+      "failureMode": "conditional",
+      "questionPatterns": [
+        "chatv2",
+        "residual stream body",
+        "residual-stream lane",
+        "body resistance lane",
+        "what is unsettled about chatv2",
+        "scaling generality lane"
+      ],
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "roadmap",
+      "answerTemplate": "The chatv2 (residual-body) lane is the first deconfounded residual-stream substrate where the body resists its shadow and scales - promising, but the SHARP verdict is seed-stability gated and the lane is unpromoted. It is not a settled scaling or generality result.",
+      "support": [
+        {
+          "doc": "docs/chatv2/LANE_CHARTER.md",
+          "section": "The claim this lane makes falsifiable",
+          "status": "primary"
+        },
+        {
+          "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
+          "section": "Cross-Substrate Generality Failure Map",
+          "status": "boundary"
+        }
+      ],
+      "boundaries": [
+        "No settled scaling or generality result.",
+        "The SHARP verdict is seed-stability gated; the lane is unpromoted.",
+        "Promising is not proven."
+      ],
+      "nextAction": {
+        "label": "Open the generality boundary map",
+        "href": "/generality"
       }
     }
   ],
