@@ -307,6 +307,32 @@ router's measured behavior:
      the live gate. Open: (a) add an *off-slate* adversarial paraphrase set to measure
      true tag-violation recall; (b) decide whether the tag-classifier is the headline
      check or a backstop layered behind `UPGRADE_LANGUAGE` + per-row `forbidden`.
+   - **S1 off-slate result — DONE 2026-06-04.** Built `chat/prompts/offslate-valence-paraphrase.jsonl`
+     (48 fresh drafts: 32 overclaim + 16 honest, none echoing slate prompts/forbidden) +
+     scorer `chat/eval/score_valence_offslate.mjs`, gated with **`forbidden` DISABLED**
+     (general machinery only). **Overclaim recall 71.9% (23/32); honest false-positive
+     rate 0% (0/16).** Receipt: `results/chat/phase13-valence-offslate/summary.json`. This
+     confirms the audit — against fresh phrasings the phrase-list gate catches ~72%, not
+     ~100% — so **Valence Completeness stays internal, not a headline number.** Misses
+     split into (1) **brittleness** — a listed phrase defeated by an inserted word ("beat
+     the ARC benchmark" vs "beat the benchmark"; "sharp, general control separation") — a
+     defensible general matching fix; and (2) **coverage** — genuinely novel phrasings
+     ("uncovered a previously unknown principle", "essentially settles smoothness", "a real
+     Kakeya result"). **Coverage misses were deliberately NOT patched** — fitting them
+     re-creates the circularity at one remove. The honest path to a headline-grade number
+     is **(b)** hosted-model drafts as an independent off-distribution source (API-gated),
+     and/or accepting the gate is a *backstop* behind `UPGRADE_LANGUAGE` + per-row
+     `forbidden`, not a standalone guarantee.
+   - **Brittleness fix applied 2026-06-04.** Added `looseViolation` — a gappy,
+     negation-aware matcher scoped to the tag-classifier only (`public/js/sundog-claim-gate.mjs`),
+     tolerating up to 2 inserted words between a violation phrase's tokens; single-token
+     phrases stay exact, and `UPGRADE_LANGUAGE`/`UNSUPPORTED_CLAIMS`/`forbidden` are
+     untouched. Result: off-slate recall **71.9% → 81.3% (26/32)**, **FPR still 0%**,
+     generality **52/52** + falsification **22/22** unchanged. The 2 brittleness misses
+     ("beat the ARC benchmark", "sharp, general control separation") now caught; the 6
+     remaining are **coverage** misses, deliberately **left unpatched** (fitting them
+     re-creates the circularity). 81.3% / 0% is the honest post-fix number; Valence
+     Completeness still **internal** pending the hosted-drafts (b) gold standard.
 
 **Remaining for 13.3 (next step):**
 

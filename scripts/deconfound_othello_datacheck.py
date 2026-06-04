@@ -1,14 +1,16 @@
 #!/usr/bin/env python
-"""SUNDOG_V_DECONFOUND §6 — model-free legal-move determining-set data-check.
+"""SUNDOG_V_DECONFOUND §6 — model-free Othello determining-set data-check.
 
 Question: on REAL Othello positions (no model), does a SUBSET of board squares determine
-the LEGAL-MOVE set (func) before it determines the FULL board (state)?
-  k_func(legal) << k_state(board)  =>  the closure functional (legal moves) is WELL-POSED
+the candidate functional (func) before it determines the FULL board (state)?
+  k_func << k_state(board)  =>  the closure functional is WELL-POSED
   at the data level -> green-light SUNDOG_V_DECONFOUND 0B.
 
 This is the Othello analog of the coupled-toy data-check that grounded Phase 7 before any
 training. Pure numpy + sklearn; no model.
 """
+import argparse
+
 import numpy as np
 from numpy.random import default_rng
 from sklearn.linear_model import LogisticRegression
@@ -75,25 +77,63 @@ def gen_positions(n, rng):
     return np.array(boards), np.array(legals)
 
 
+def frontier_labels(board):
+    labels = np.zeros_like(board, dtype=np.int8)
+    for i, row in enumerate(board.reshape((-1, 8, 8))):
+        out = np.zeros((8, 8), dtype=np.int8)
+        for r in range(8):
+            for c in range(8):
+                if row[r, c] == 0:
+                    continue
+                for dr, dc in DIRS:
+                    rr, cc = r + dr, c + dc
+                    if 0 <= rr < 8 and 0 <= cc < 8 and row[rr, cc] == 0:
+                        out[r, c] = 1
+                        break
+        labels[i] = out.flatten()
+    return labels
+
+
+def make_functional(name, board, legal):
+    if name == "legal":
+        return legal, "64 binary labels: legal next-move squares"
+    if name == "frontier":
+        return frontier_labels(board), "64 binary labels: occupied squares adjacent to empties"
+    if name == "material_parity":
+        # Parity of material advantage is intentionally nonlinear in square indicators.
+        # It is a useful escape-hatch screen precisely because it should fail if the
+        # linear closure instrument cannot see XOR-like real-board aggregates.
+        y = (np.abs(board.sum(axis=1).astype(np.int64)) % 2).reshape((-1, 1))
+        return y.astype(np.int8), "1 binary label: parity of absolute material advantage"
+    if name == "mobility":
+        counts = legal.sum(axis=1)
+        threshold = int(np.median(counts))
+        y = (counts >= threshold).reshape((-1, 1))
+        return y.astype(np.int8), f"1 binary label: legal-move count >= sample median ({threshold})"
+    raise ValueError(f"unknown functional {name!r}")
+
+
 def _acc(Xtr, ytr, Xhe, yhe):
     if len(np.unique(ytr)) < 2:
         return None, None
-    base = max(np.bincount(yhe).max() / len(yhe), 1 - yhe.mean() if yhe.mean() < .5 else yhe.mean())
     base = np.bincount(yhe).max() / len(yhe)
     acc = LogisticRegression(max_iter=200).fit(Xtr, ytr).score(Xhe, yhe)
     return acc, base
 
 
-def sweep(board, legal, rng, ks, R=15, ntgt=12):
+def sweep(board, functional, rng, ks, R=15, ntgt=12):
     N = len(board); tr = slice(0, N // 2); he = slice(N // 2, N)
+    if functional.ndim == 1:
+        functional = functional.reshape((-1, 1))
     out = {}
     for k in ks:
         fa, fb, sa, sb = [], [], [], []
         for _ in range(R):
             S = rng.choice(64, k, replace=False)
             Xtr, Xhe = board[tr][:, S], board[he][:, S]
-            for j in rng.choice(64, min(ntgt, 64), replace=False):          # func: legal-move squares
-                a, bse = _acc(Xtr, legal[tr][:, j], Xhe, legal[he][:, j])
+            functional_targets = np.arange(functional.shape[1])
+            for j in rng.choice(functional_targets, min(ntgt, len(functional_targets)), replace=False):
+                a, bse = _acc(Xtr, functional[tr][:, j], Xhe, functional[he][:, j])
                 if a is not None:
                     fa.append(a); fb.append(bse)
             J = np.array([j for j in range(64) if j not in set(S.tolist())])
@@ -109,24 +149,57 @@ def sweep(board, legal, rng, ks, R=15, ntgt=12):
     return out
 
 
+def summarize_verdict(res, ks):
+    max_k = max(ks)
+    max_func = res[max_k]["det_func"]
+    max_state = res[max_k]["det_state"]
+    lead = [res[k]["det_func"] - res[k]["det_state"] for k in ks]
+    best_lead = max(lead)
+    kf = next((k for k in ks if res[k]["det_func"] >= 0.80), None)
+    ks_ = next((k for k in ks if res[k]["det_state"] >= 0.80), None)
+    if max_func < 0.50:
+        verdict = "BLOCKED: functional not linearly readable enough even at high k"
+    elif kf and (ks_ is None or kf < ks_) and best_lead >= 0.20:
+        verdict = "CLOSURE WELL-POSED: functional leads board state"
+    else:
+        verdict = "BLOCKED: no non-vacuous k_func << k_state bracket"
+    return verdict, lead, kf, ks_, best_lead, max_func, max_state
+
+
 if __name__ == "__main__":
-    rng = default_rng(0)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--n", type=int, default=2500)
+    parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--functionals", default="legal",
+                        help="comma-separated: legal,material_parity,frontier,mobility,all")
+    parser.add_argument("--ks", default="1,2,4,8,16,24,32,48,60")
+    parser.add_argument("--repeats", type=int, default=15)
+    parser.add_argument("--targets", type=int, default=12)
+    args = parser.parse_args()
+
+    rng = default_rng(args.seed)
     assert len(legal_moves(init_board(), 1)) == 4, "Othello rules sanity (opening = 4 legal)"
     print("[gen] generating real Othello positions...", flush=True)
-    board, legal = gen_positions(2500, rng)
+    board, legal = gen_positions(args.n, rng)
     print(f"[gen] {len(board)} positions | mean legal moves/pos = {legal.sum(1).mean():.1f} | "
           f"board occupancy = {(board != 0).mean():.2f}", flush=True)
-    ks = [1, 2, 4, 8, 16, 24, 32, 48, 60]
-    res = sweep(board, legal, rng, ks)
-    print("\n k  | func(legal) acc/base det | state(board) acc/base det")
-    for k in ks:
-        r = res[k]
-        print(f" {k:>2} |  {r['func_acc']:.3f} / {r['func_base']:.3f}  {r['det_func']:.3f}"
-              f"   |  {r['state_acc']:.3f} / {r['state_base']:.3f}  {r['det_state']:.3f}", flush=True)
-    # crude verdict: does det_func clearly lead det_state at small k?
-    lead = [res[k]['det_func'] - res[k]['det_state'] for k in ks]
-    print(f"\n det_func - det_state by k: {[round(x,3) for x in lead]}")
-    kf = next((k for k in ks if res[k]['det_func'] >= 0.80), None)
-    ks_ = next((k for k in ks if res[k]['det_state'] >= 0.80), None)
-    print(f" k_func(det>=.80)={kf}  k_state(det>=.80)={ks_}  -> "
-          f"{'CLOSURE WELL-POSED (legal leads board)' if kf and (ks_ is None or kf < ks_) else 'no clear lead — re-examine functional'}")
+    ks = [int(k) for k in args.ks.split(",") if k.strip()]
+    names = [name.strip() for name in args.functionals.split(",") if name.strip()]
+    if "all" in names:
+        names = ["legal", "material_parity", "frontier", "mobility"]
+
+    for name in names:
+        functional, description = make_functional(name, board, legal)
+        print(f"\n=== functional: {name} ===")
+        print(f"[functional] {description} | positive/base mean = {functional.mean():.3f}", flush=True)
+        res = sweep(board, functional, rng, ks, R=args.repeats, ntgt=args.targets)
+        print("\n k  | func acc/base det | state(board) acc/base det")
+        for k in ks:
+            r = res[k]
+            print(f" {k:>2} |  {r['func_acc']:.3f} / {r['func_base']:.3f}  {r['det_func']:.3f}"
+                  f"   |  {r['state_acc']:.3f} / {r['state_base']:.3f}  {r['det_state']:.3f}", flush=True)
+        verdict, lead, kf, ks_, best_lead, max_func, max_state = summarize_verdict(res, ks)
+        print(f"\n det_func - det_state by k: {[round(x, 3) for x in lead]}")
+        print(f" k_func(det>=.80)={kf}  k_state(det>=.80)={ks_}  "
+              f"best_lead={best_lead:.3f}  high_k_func={max_func:.3f}  high_k_state={max_state:.3f}")
+        print(f" verdict: {verdict}", flush=True)

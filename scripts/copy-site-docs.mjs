@@ -34,6 +34,20 @@ const publicChatArtifacts = [
 //           disclosure, so this MUST never reach dist/.
 const DOCS_NO_PUBLISH = new Set([
   "501c3",
+  // White-box "representational" instrument R&D (kill-gated; each carries an
+  // explicit "No public surface" stamp). These describe the same
+  // determining-shadow-set / body-shadow method that is the subject of the 501c3
+  // invention disclosure, so a public (even unlinked) copy bears on patent
+  // enabling-disclosure timing. Held until BOTH the research freeze lifts
+  // (LATTICE + threebody v0.19) AND counsel clears. A bare filename withholds that
+  // file; "chatv2" (no slash) withholds the whole docs/chatv2/ subtree.
+  "chatv2",
+  "SUNDOG_V_DECONFOUND.md",
+  "DECONFOUND_REAL_DATA_MEMO.md",
+  "SUNDOG_V_JEPA.md",
+  "JEPA_LIT_PASS_MEMO.md",
+  "SUNDOG_V_ALLELOPATHY.md",
+  "CROSS_SUBSTRATE_NOTES.md",
 ]);
 
 async function copyPublicDocs(sourceDir, targetDir, noPublish = new Set(), relBase = "") {

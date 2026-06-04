@@ -191,7 +191,7 @@ export function gateFailures({ prompt = "", trace, draftAnswer, context = {} }) 
   // carries a failureMode (Phase 13 generality-boundary routes).
   if (trace?.failureMode && FAILURE_MODE_VIOLATIONS[trace.failureMode]) {
     for (const phrase of FAILURE_MODE_VIOLATIONS[trace.failureMode]) {
-      if (hasPhrase(answer, phrase) && !hasNearbyNegation(answer, phrase)) {
+      if (looseViolation(answer, phrase)) {
         failures.push(`failure_mode_violation:${trace.failureMode}:${phrase}`);
       }
     }
@@ -226,8 +226,15 @@ function hasNearbyNegation(normalizedText, phrase) {
   const normalizedPhrase = normalize(phrase);
   const index = normalizedText.indexOf(normalizedPhrase);
   if (index < 0) return false;
+  return negatedAround(normalizedText, index, normalizedPhrase.length);
+}
+
+// Negation check around an arbitrary matched span — shared by the exact
+// hasNearbyNegation and the gappy looseViolation matcher.
+function negatedAround(normalizedText, index, matchLength) {
+  if (index < 0) return false;
   const before = normalizedText.slice(Math.max(0, index - 96), index);
-  const afterStart = index + normalizedPhrase.length;
+  const afterStart = index + matchLength;
   const after = normalizedText.slice(afterStart, afterStart + 48);
   // Negation lexicon — covers unabbreviated forms ("cannot", "is not") and
   // post-normalize() contraction forms ("can t" from "can't"). Different
@@ -235,6 +242,25 @@ function hasNearbyNegation(normalizedText, phrase) {
   const negBefore = /\b(no|not|never|cannot|can t|won t|isn t|aren t|doesn t|don t|didn t|wasn t|weren t|haven t|hasn t|wouldn t|couldn t|shouldn t|does not|do not|did not|unsupported|an unsupported|without|rather than|instead of|absent|absence of|lack of|no specific|no specified|blocking a claim|blocked a claim|if the tier should be|should be|hypothetically)\b/;
   const negAfter = /\b(is (still |not )?pending|is not|isn t|are not|aren t|has not|hasn t|have not|haven t|is unsupported|is out of scope|cannot be (claimed|supported|asserted|stated|verified|established)|can t be (claimed|supported|asserted|stated|verified|established)|are not (claimed|supported)|is not supported|isn t supported|is currently unsupported|was withdrawn|were withdrawn|is withdrawn|withdrawn as)\b/;
   return negBefore.test(before) || negAfter.test(after);
+}
+
+// Gappy phrase match for the failure-mode tag classifier ONLY: tolerates up to
+// `maxGap` inserted words between the phrase's tokens, so "beat the ARC
+// benchmark" still trips the listed "beat the benchmark" and "sharp, general
+// control separation" trips "sharp separation". Negation-aware. Single-token
+// phrases reduce to an exact word match. Deliberately scoped to the tag
+// classifier — the exact hasPhrase still governs UPGRADE_LANGUAGE,
+// UNSUPPORTED_CLAIMS, and per-row forbidden, so their tuned behavior is unchanged.
+function looseViolation(normalizedText, phrase, maxGap = 2) {
+  const normalizedPhrase = normalize(phrase);
+  if (!normalizedPhrase) return false;
+  const tokens = normalizedPhrase.split(" ").filter(Boolean);
+  if (!tokens.length) return false;
+  const body = tokens.map(escapeRegExp).join(`(?: \\w+){0,${maxGap}} `);
+  const re = new RegExp(`(?:^| )${body}(?: |$)`);
+  const m = re.exec(normalizedText);
+  if (!m) return false;
+  return !negatedAround(normalizedText, m.index, m[0].length);
 }
 
 function normalize(value) {
