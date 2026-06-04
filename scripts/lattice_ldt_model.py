@@ -89,6 +89,7 @@ class Cfg:
     conflict_corrupt_p: float = 0.25     # [I4]
     aug_factor: int = 50                 # augmented pool = aug_factor x 1000 (symmetry aug; breaks 1K overfit)
     compile_model: bool = False          # torch.compile (reduce-overhead/CUDA graphs); needs GPU CC>=7.0 (A100/H100)
+    recipe: str = "cp_imitation"         # [I3'] cp_imitation (Amendment 01) | solution_onehot (legacy v1/v2)
     # I5 rollout (contract: docs/lattice/PHASE1_I5_ROLLOUT_CONTRACT.md)
     theta_drop: float = 0.5              # eliminate when drop_conf = 1 - sigmoid(logit) >= theta_drop
     theta_cls: float = THETA_CLS         # conflict when sigmoid(conflict_logit) > theta_cls (0.6)
@@ -270,12 +271,15 @@ class LatticeDeductionTransformer(nn.Module):
         cell = self.cell_in(lattice) + self.row_emb(self.row_idx)[None] + self.col_emb(self.col_idx)[None]
         return torch.cat([self.cls.expand(B, -1, -1), cell], dim=1)
 
-    def forward(self, lattice: torch.Tensor, capture: Optional[dict] = None):
+    def forward(self, lattice: torch.Tensor, capture: Optional[dict] = None, deep_sup: bool = False):
         """One forward pass = n_iters weight-shared recurrences of the 4-layer block.
         Returns (elim_logits (B,81,9), conflict_logit (B,)). If `capture` is given, stores
-        the residual stream at each (iteration, layer) for the B-phase fingerprint."""
+        the residual stream at each (iteration, layer) for the B-phase fingerprint. If
+        `deep_sup` (Amendment 01 [I3']), returns (per_iter_elim (T,B,81,9), conflict (B,))
+        for per-iteration deep supervision toward the sound CP fixpoint."""
         x0 = self._embed(lattice)
         x = x0
+        per_iter = []
         for t in range(self.cfg.n_iters):
             if self.cfg.reinject_input and t > 0:           # [I2] re-inject input each step
                 x = x + x0
@@ -283,9 +287,13 @@ class LatticeDeductionTransformer(nn.Module):
                 x = layer(x)
                 if capture is not None:
                     capture[(t, li)] = x.detach()
-        x = self.ln_f(x)
-        elim = self.elim_head(x[:, 1:])                      # (B,81,9)
-        conflict = self.conflict_head(x[:, 0]).squeeze(-1)   # (B,)
+            if deep_sup:                                     # elim head at each iteration
+                per_iter.append(self.elim_head(self.ln_f(x)[:, 1:]))   # (B,81,9)
+        xf = self.ln_f(x)
+        conflict = self.conflict_head(xf[:, 0]).squeeze(-1)  # (B,)
+        if deep_sup:
+            return torch.stack(per_iter, dim=0), conflict    # (T,B,81,9), (B,)
+        elim = self.elim_head(xf[:, 1:])                     # (B,81,9)
         return elim, conflict
 
 
@@ -310,6 +318,52 @@ def compute_loss(model, lat: torch.Tensor, sol: torch.Tensor, cfg: Cfg, rng):
     # [I3] elimination: per-cell BCE toward the solution one-hot
     tgt = F.one_hot(sol, DIGITS).float()
     elim_loss = F.binary_cross_entropy_with_logits(elim, tgt)
+    conflict_loss = F.binary_cross_entropy_with_logits(conflict, conflict_tgt)
+    return elim_loss + LAMBDA_CLS * conflict_loss, elim_loss.item(), conflict_loss.item()
+
+
+def build_cp_trajectory_pool(pairs, device, node_cap=4096, max_states=600000):
+    """Amendment 01 [I6]: run the classical CP+DFS solver on each puzzle and log every
+    search node's (L_t, L_fix, status). Returns sound-narrowing imitation targets as
+    tensors: lat_in (M,81,9), keep_tgt (M,81,9), cand_mask (M,81,9), conflict_tgt (M,).
+    The SOLUTION is NOT read (leakage guard, amendment 3.3) - pure CP from the puzzle."""
+    import lattice_cp as cp
+    lt_all, lf_all, st_all = [], [], []
+    n_solved = 0
+    for puz, _sol in pairs:                                  # solution unused
+        grid = [v for row in puz for v in row]
+        ok, _s, log = cp.solve(grid, node_cap=node_cap)
+        n_solved += int(ok)
+        for lt, lf, status in log:
+            lt_all.append(lt); lf_all.append(lf); st_all.append(status)
+    M = len(lt_all)
+    sel = list(range(M))
+    if M > max_states:                                       # deterministic cap (every k-th node)
+        k = (M + max_states - 1) // max_states
+        sel = list(range(0, M, k))
+    dbits = torch.arange(DIGITS, device=device)
+    lt_t = torch.tensor([lt_all[i] for i in sel], dtype=torch.long, device=device)   # (M,81)
+    lf_t = torch.tensor([lf_all[i] for i in sel], dtype=torch.long, device=device)
+    lat_in = ((lt_t.unsqueeze(-1) >> dbits) & 1).float()     # (M,81,9) live candidates
+    keep_tgt = ((lf_t.unsqueeze(-1) >> dbits) & 1).float()   # (M,81,9) survive sound CP fixpoint
+    cand_mask = lat_in                                       # loss only on live candidates
+    conflict_tgt = torch.tensor([1.0 if st_all[i] == "contradiction" else 0.0 for i in sel],
+                                dtype=torch.float, device=device)
+    meta = {"cp_pool_states": lat_in.shape[0], "cp_nodes_total": M, "puzzles": len(pairs),
+            "puzzles_solved": n_solved, "conflict_frac": round(conflict_tgt.mean().item(), 4)}
+    return lat_in, keep_tgt, cand_mask, conflict_tgt, meta
+
+
+def compute_loss_cp(model, lat_in, keep_tgt, cand_mask, conflict_tgt, cfg):
+    """Amendment 01 [I3']: deep-supervised imitation of sound CP narrowing. Each of the
+    n_iters elim-head outputs is BCE'd toward the sound-fixpoint keep-target, masked to
+    live candidates; the conflict head [I4'] toward CP-detected contradictions."""
+    per_iter_elim, conflict = model(lat_in, deep_sup=True)   # (T,B,81,9), (B,)
+    T = per_iter_elim.shape[0]
+    tgt = keep_tgt.unsqueeze(0).expand(T, -1, -1, -1)
+    mask = cand_mask.unsqueeze(0).expand(T, -1, -1, -1)
+    bce = F.binary_cross_entropy_with_logits(per_iter_elim, tgt, reduction="none")
+    elim_loss = (bce * mask).sum() / mask.sum().clamp(min=1.0)
     conflict_loss = F.binary_cross_entropy_with_logits(conflict, conflict_tgt)
     return elim_loss + LAMBDA_CLS * conflict_loss, elim_loss.item(), conflict_loss.item()
 
@@ -639,22 +693,34 @@ def run_build_gate(cfg: Cfg, device, out: Path) -> dict:
     train_summary = None
     if cfg.stage in ("train", "all"):
         model.train()
-        # symmetry-augmented pool (breaks 1K-set overfitting, HRM/TRM approach); built ONCE on
-        # device, then the train loop is a pure GPU gather (no per-step Python -> GPU-bound)
         aug_rng = random.Random(cfg.seed)
-        aug_pool = [augment_grid(p, s, aug_rng) for (p, s) in train_pairs for _ in range(cfg.aug_factor)]
-        pool_lat, pool_sol = grids_to_tensors(aug_pool, device)
-        print(json.dumps({"aug_pool_size": len(aug_pool), "aug_factor": cfg.aug_factor}), flush=True)
+        if cfg.recipe == "cp_imitation":                       # Amendment 01 [I3'] / [I6]
+            # classical CP+DFS sound-narrowing trajectory pool, built ONCE on device.
+            puzzles = ([augment_grid(p, s, aug_rng) for (p, s) in train_pairs for _ in range(cfg.aug_factor)]
+                       if cfg.aug_factor > 1 else list(train_pairs))
+            cp_lat, cp_keep, cp_mask, cp_conf, cp_meta = build_cp_trajectory_pool(
+                puzzles, device, node_cap=cfg.max_search_nodes)
+            print(json.dumps({"recipe": "cp_imitation", **cp_meta, "aug_factor": cfg.aug_factor}), flush=True)
+        else:
+            # v2 legacy: symmetry-augmented puzzle->solution pool (solution-one-hot [I3])
+            aug_pool = [augment_grid(p, s, aug_rng) for (p, s) in train_pairs for _ in range(cfg.aug_factor)]
+            pool_lat, pool_sol = grids_to_tensors(aug_pool, device)
+            print(json.dumps({"recipe": "solution_onehot", "aug_pool_size": len(aug_pool), "aug_factor": cfg.aug_factor}), flush=True)
         log_path = out / "train_log.jsonl"
         last_loss = last_elim = last_conflict = None
         for step0 in range(start_step, cfg.max_steps):
             step = step0 + 1
-            idx = torch.randint(pool_lat.shape[0], (cfg.batch,), generator=rng, device=device)
-            lat, sol = pool_lat[idx], pool_sol[idx]            # pure GPU gather from the augmented pool
-            loss, elim_loss, conflict_loss = compute_loss(model, lat, sol, cfg, rng)
             cur_lr = lr_at_step(step, cfg.max_steps, cfg.warmup_steps, cfg.lr)   # v2: warmup + cosine decay
             for g in opt.param_groups:
                 g["lr"] = cur_lr
+            if cfg.recipe == "cp_imitation":
+                idx = torch.randint(cp_lat.shape[0], (cfg.batch,), generator=rng, device=device)
+                loss, elim_loss, conflict_loss = compute_loss_cp(
+                    model, cp_lat[idx], cp_keep[idx], cp_mask[idx], cp_conf[idx], cfg)
+            else:
+                idx = torch.randint(pool_lat.shape[0], (cfg.batch,), generator=rng, device=device)
+                lat, sol = pool_lat[idx], pool_sol[idx]         # pure GPU gather from the augmented pool
+                loss, elim_loss, conflict_loss = compute_loss(model, lat, sol, cfg, rng)
             opt.zero_grad(); loss.backward(); opt.step()
             last_loss, last_elim, last_conflict = float(loss.item()), float(elim_loss), float(conflict_loss)
             if cfg.log_every and (step == 1 or step % cfg.log_every == 0 or step == cfg.max_steps):
@@ -706,6 +772,8 @@ def main() -> int:
     ap.add_argument("--lr", type=float, default=1e-3)
     ap.add_argument("--warmup-steps", type=int, default=1000, help="linear lr warmup before cosine decay (v2)")
     ap.add_argument("--aug-factor", type=int, default=50, help="augmented pool = aug_factor x 1000")
+    ap.add_argument("--recipe", choices=["cp_imitation", "solution_onehot"], default="cp_imitation",
+                    help="[I3'] training objective: cp_imitation (Amendment 01) or legacy solution_onehot")
     ap.add_argument("--compile", action="store_true", help="torch.compile reduce-overhead; needs GPU CC>=7.0 (A100/H100)")
     ap.add_argument("--resume", default="", help="latest or checkpoint path")
     ap.add_argument("--checkpoint-every", type=int, default=0)
@@ -720,7 +788,7 @@ def main() -> int:
     a = ap.parse_args()
     cfg = Cfg(mode=a.mode, stage=a.stage, data_dir=a.data_dir, out=a.out, seed=a.seed,
               max_steps=a.max_steps, max_eval=a.max_eval, batch=a.batch, lr=a.lr, aug_factor=a.aug_factor,
-              warmup_steps=a.warmup_steps, compile_model=a.compile,
+              warmup_steps=a.warmup_steps, compile_model=a.compile, recipe=a.recipe,
               resume=a.resume, checkpoint_every=a.checkpoint_every, log_every=a.log_every,
               eval_every=a.eval_every, eval_sample=a.eval_sample, theta_drop=a.theta_drop,
               theta_cls=a.theta_cls, max_deduction_steps=a.max_deduction_steps,
@@ -742,6 +810,7 @@ def main() -> int:
         "arch": {"d_model": cfg.d_model, "n_layers": cfg.n_layers, "n_heads": cfg.n_heads,
                  "n_iters": cfg.n_iters, "lattice_dim": LATTICE_DIM, "lambda_cls": LAMBDA_CLS, "theta_cls": THETA_CLS},
         "stage": cfg.stage, "seed": cfg.seed, "maxSteps": cfg.max_steps, "maxEval": cfg.max_eval,
+        "recipe": cfg.recipe, "augFactor": cfg.aug_factor, "warmupSteps": cfg.warmup_steps,   # Amendment 01
         "resume": cfg.resume, "checkpointEvery": cfg.checkpoint_every,
         "rolloutContract": "docs/lattice/PHASE1_I5_ROLLOUT_CONTRACT.md", "rolloutVersion": ROLLOUT_VERSION,
         "thetaDrop": cfg.theta_drop, "thetaCls": cfg.theta_cls, "logitSemantics": "candidate_keep_logit",
