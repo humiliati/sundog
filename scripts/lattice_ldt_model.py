@@ -116,7 +116,9 @@ def _valid_base(perm: list[int], band: list[int], stack: list[int],
                 rows_in: list[list[int]], cols_in: list[list[int]]) -> list[list[int]]:
     """A valid filled grid by permuting the canonical pattern (validity-preserving)."""
     def pat(r: int, c: int) -> int:
-        return (N * (r % 3) + r // 3 + c) % N
+        # canonical valid-Sudoku base pattern; coefficient is the BOX dim (3), not N=9
+        # (N*(r%3) vanishes mod N, which collapsed each band to 3 identical rows -> invalid)
+        return (3 * (r % 3) + r // 3 + c) % N
     rows = [band[b] * 3 + rows_in[b][i] for b in range(3) for i in range(3)]
     cols = [stack[s] * 3 + cols_in[s][j] for s in range(3) for j in range(3)]
     return [[perm[pat(rows[r], cols[c])] for c in range(N)] for r in range(N)]
@@ -630,6 +632,7 @@ def run_smoke(cfg: Cfg, device) -> dict:
     model = LatticeDeductionTransformer(cfg).to(device)
     opt = torch.optim.AdamW(model.parameters(), lr=cfg.lr, weight_decay=cfg.weight_decay)
     pairs = [gen_sudoku(cpu_rng, n_holes=20) for _ in range(cfg.batch)]
+    syn_valid = sum(_valid_solution(s) for _, s in pairs)        # gen_sudoku must emit VALID Sudokus
     lat, sol = grids_to_tensors(pairs, device)
     losses = []
     for step in range(8):
@@ -663,6 +666,8 @@ def run_smoke(cfg: Cfg, device) -> dict:
         "loss_decreased": bool(losses[-1] < losses[0]),
         "capture_grains": len(cap), "capture_grains_expected": cfg.n_iters * cfg.n_layers,
         "smoke_solve_rate": round(sr, 4), "device": str(device),
+        "synthetic_solutions_valid": f"{syn_valid}/{len(pairs)}",
+        "synthetic_valid_ok": bool(syn_valid == len(pairs)),     # gen_sudoku emits valid Sudokus
         "real_data_check": real, "i5_rollout_check": rcheck,
     }
 

@@ -10,7 +10,7 @@ of z-readouts:
 Headline positive = k_func << k_state.
 
 Modes:
-  --mode coupled  : load results/chatv2/phase7-coupled-latent/seed{s}/bodies, target
+  --mode coupled  : load results/chatv2/{--dir}/seed{s}/bodies, target
                     the saved hidden source u.
   --mode control  : load the Phase-2 uncoupled pair-XOR bodies (phase1-seedstab) and
                     target a FROZEN INDEPENDENT u_null ~ Bernoulli(0.5)^(N x 3),
@@ -25,6 +25,7 @@ import chatv2_phase2_shadowset as p2
 from sklearn.linear_model import LogisticRegression
 
 ROOT = "C:/Users/hughe/Dev/sundog"
+RESULT_BASE = os.path.join(ROOT, "results", "chatv2")
 THRESH = 0.70
 R_NULL = 30
 
@@ -82,18 +83,24 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--mode", choices=["coupled", "control"], required=True)
     ap.add_argument("--seeds", default="0,1,2")
+    ap.add_argument("--dir", default="phase7-coupled-latent",
+                    help="results/chatv2 subdirectory for coupled inputs and probe output")
     a = ap.parse_args()
     seeds = [int(s) for s in a.seeds.split(",")]
+    result_base = os.path.abspath(RESULT_BASE)
+    result_dir = os.path.abspath(os.path.join(result_base, a.dir))
+    if result_dir != result_base and not result_dir.startswith(result_base + os.sep):
+        raise SystemExit(f"--dir must stay inside {result_base}: {a.dir}")
     out = []
     for s in seeds:
         if a.mode == "coupled":
-            d = np.load(f"{ROOT}/results/chatv2/phase7-coupled-latent/seed{s}/bodies/H8_gen.npz",
+            d = np.load(os.path.join(result_dir, f"seed{s}", "bodies", "H8_gen.npz"),
                         allow_pickle=True)
             bodies, z, U = d["bodies"], d["z"].astype(int), d["u"].astype(int)
             label = f"coupled-seed{s}"
         else:  # control: Phase-2 uncoupled bodies + frozen independent u_null
-            d = np.load(f"{ROOT}/results/chatv2/phase1-seedstab/seed{s}/bodies/H8_gen.npz",
-                        allow_pickle=True)
+            d = np.load(os.path.join(result_base, "phase1-seedstab", f"seed{s}",
+                                     "bodies", "H8_gen.npz"), allow_pickle=True)
             bodies, z = d["bodies"], d["z"].astype(int)
             U = default_rng(7007 + s).integers(0, 2, size=(z.shape[0], 3))
             label = f"control-unull-seed{s}"
@@ -101,7 +108,7 @@ def main():
         out.append(r)
         print(f"[{label}] l*={r['lstar']} k_func={r['k_func']} k_state={r['k_state']} "
               f"nf_func={r['nf_func']} | func/state by k: {r['table']}", flush=True)
-    odir = f"{ROOT}/results/chatv2/phase7-coupled-latent"
+    odir = result_dir
     os.makedirs(odir, exist_ok=True)
     fn = f"{odir}/{a.mode}_probe.json"
     with open(fn, "w") as f:
