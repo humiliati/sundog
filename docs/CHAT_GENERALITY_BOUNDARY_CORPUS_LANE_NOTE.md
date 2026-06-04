@@ -356,10 +356,20 @@ router's measured behavior:
 **13.3 — wire + run: deterministic DONE (2026-06-04).** The slate is wired into both
 runners (`score_phase3_drafts.mjs`, `run_hosted_drafts.mjs`, `--slate generality-boundary`);
 the deterministic + S1 + baseline pass ran clean (52/52 accepted, 0 gate escapes) → receipt
-`results/chat/phase13-generality-boundary/summary.json`. **Remaining:** the hosted /
-open-weight pass (API-gated) and the 13.4 Failure-Mode Classification Accuracy table — read
-as Valence Completeness (internal, §12), with the off-slate recall (§11) as the robustness
-companion.
+`results/chat/phase13-generality-boundary/summary.json`.
+
+**13.3 hosted pass — DONE 2026-06-04 (real spend, 2 vendors).** Ran the deployed
+architecture (gate + trace handoff) with real models drafting on all 52 generality
+prompts: **gpt-4o-mini** (51/52 accepted) and **claude-haiku-4-5-20251001** (45/52
+accepted) — **0 gate escapes across 104 real drafts** (the 8 rejects fell back to the
+static template). Receipts: `results/chat/phase5-hosted/generality-boundary/{openai,anthropic}/`.
+*Caveat:* "0 escapes" is the gate's own (forbidden-aware) label; the models were also given
+the forbidden phrases in the trace handoff (deployed architecture), which suppresses
+overclaims. **Remaining:** the 13.4 Failure-Mode Classification Accuracy table, read as
+Valence Completeness (internal, §12), with the off-slate recall (§11) as the robustness
+companion. Adapter note: the harness sets `ANTHROPIC_BASE_URL=https://api.anthropic.com`
+(no `/v1`), so the Anthropic adapter must be run with `ANTHROPIC_BASE_URL=.../v1` overridden
+— a latent adapter bug (it should normalize the base URL).
 
 ---
 
@@ -502,10 +512,9 @@ the earned-inventory route → re-verify the gate stays 52/52 + 22/22.
 
 ## 13. Semantic verifier layer (SPEC — deferred build; mechanism TBD via harness bake-off)
 
-**Status (2026-06-04): spec only.** No harness, no model, no runtime change. Per owner
-direction the mechanism choice is deferred until a pluggable eval harness can measure
-candidates head-to-head. This section fixes the contract, the harness, the candidate
-mechanisms, and the selection criteria so the build is unambiguous when greenlit.
+**Status (2026-06-04): harness + interface BUILT (runnable, no model); mechanism bake-off
+pending model infra.** The pluggable harness now exists; plugging a real model and running
+the head-to-head bake-off is the next step. Build details at the end of this section.
 
 **Why.** The lexical gate is a claim-boundary *backstop*, not a semantic verifier
 (do-not-claim §8 #6): off-slate recall ≈81% / 0% FP, but it misses *semantic lifts*
@@ -566,18 +575,39 @@ verifier result is not interpretable without the exact model+threshold that prod
 criteria → wire to the hosted-draft path (server-side) → only then consider in-browser
 (transformers.js) if the first-load budget allows.
 
-**Open questions / discipline:** (a) **held-out set** — the off-slate set is the *tuning*
-harness; a separate held-out adversarial set (ideally hosted-model-generated) is needed for
-the honest adoption number; (b) an LLM-judge would itself need the same off-slate-style
+**Open questions / discipline:** (a) **held-out set — ACQUIRED 2026-06-04.** A
+hosted-model-generated held-out set now exists: 8 real overclaim drafts the deployed gate
+caught (gpt-4o-mini + claude-haiku), banked at `results/chat/phase13-hosted-valence/held-out-overclaims.jsonl`
+(analysis `chat/eval/analyze_hosted_valence.mjs`; receipt `…/phase13-hosted-valence/summary.json`).
+On those real overclaims the **general machinery (forbidden disabled) caught 6/8 (75%)** —
+corroborating the off-slate 81%, and **one gpt-4o-mini draft was caught ONLY by the per-row
+forbidden list** (general machinery missed it) — direct confirmation of the S1 concern on
+real data. This is now the held-out set the verifier bake-off validates against (it's small,
+because the trace-handoff coaching suppresses overclaims — grow it with more vendors/uncoached
+runs); (b) an LLM-judge would itself need the same off-slate-style
 recall/precision eval before it can be trusted (the recursion the project is wary of);
 (c) prefer NLI / embedding (fixed model) over a judge whose behavior drifts with model
 updates; (d) a runtime in-browser model is a real download cost — server-side on the
 hosted path avoids it.
 
-**Next step (when build is greenlit):** build the pluggable harness + interface (runnable
-without a model), then plug in one candidate (NLI-entailment is the front-runner on
-determinism + boundary-reuse) and measure. No mechanism is adopted before it clears the
-held-out criteria.
+**Built 2026-06-04 (greenlit):**
+- `chat/eval/lib/semantic-verifier.mjs` — reject-only interface, `nullVerifier` (control),
+  `wilsonUpper`, and `makeNliVerifier({ infer })` scaffold implementing the both-directions
+  logic (entails-forbidden + contradicts-boundary) with provenance `meta`.
+- `chat/eval/score_semantic_verifier.mjs` — the bake-off rig: runs any verifier over the
+  off-slate set as a layer on the lexical gate, reporting incremental recall, net recall,
+  and net FPR with sample size + Wilson upper, plus verifier provenance.
+- Null-baseline run reproduces the lexical numbers: recall **26/32 (81.3%)**, semantic
+  incremental **0**, net FPR **0/16 (Wilson 95% upper 19.4%)**. The NLI scaffold's
+  both-directions logic is mock-`infer` verified (rejects an overclaim with an
+  `entails_forbidden` reason, passes the honest draft). Receipt:
+  `results/chat/phase13-semantic-verifier/summary.json`.
+
+**Next:** plug a real NLI model into `makeNliVerifier`'s `infer` (needs model infra — HF
+transformers locally or an API), run the bake-off to measure incremental recall on the
+off-slate set, then validate on a separate held-out set before any adoption. No mechanism is
+adopted before it clears the held-out criteria, records its provenance, and holds FPR
+(observed-0 with a non-worse Wilson upper than lexical).
 
 **Owner refinements folded in 2026-06-04:** reject-only contract; observed-FPR + sample
 size + Wilson upper (never a bare 0%); receipt provenance (model/version/threshold/hash);

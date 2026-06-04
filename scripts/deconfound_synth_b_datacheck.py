@@ -1,169 +1,121 @@
 #!/usr/bin/env python
-"""SUNDOG_V_DECONFOUND Attack-B (semi-synthetic, real-feature) — model-free 0-pre data-check.
+"""SUNDOG_V_DECONFOUND Attack-B (semi-synthetic, real-feature) — 0-pre DE-CONFOUND CORRELATION SWEEP.
 
-Pre-registered gate (frozen BEFORE running; mirrors the Phase-7 data-validation and the
-Othello legal-move screen). No model. Pure numpy + sklearn.
+Re-posed after the first 0-pre run + reading the toy (`chatv2_phase0_bodyresist._gen_coupled`,
+`input_probe_precheck`): the toy's input-undecodability is MANUFACTURED by its synthetic
+parity-channel encoder (the de-confound targets z_i, made nonlinear by the encoding). So
+"toy + real noise" does NOT test a real de-confound. The real Attack-B (SYNLABEL) puts REAL
+features in the INPUT path and makes the functional a parity over them; the de-confound is
+then a genuine, MODEL-FREE question: does real feature-correlation leak the constructed parity?
 
-CONSTRUCTION (minimal controlled upgrade of the frozen Phase-7b coupled-latent positive):
-  u ~ Uniform({0,1}^3)                      hidden source (constructed functional; input-undecodable)
-  A = _COUPLE_A (8x3 coupling graph)         same graph as Phase 7/7b/7c
-  clean_i = parity(u, A_i)                    latent i's clean value
-  z_i = clean_i XOR b_i                       observed latent
-  b_i = REAL digit-feature bit (flip noise), P(b_i=1) ~= q (q=0.12 ~ Phase-7b's working ~0.10)
-The ONLY change from Phase-7b is that the 8 noise bits b carry REAL spatial correlation
-(handwritten-digit structure) instead of being i.i.d. The CONTROLLED comparison arm shuffles
-each b-column independently (kills cross-i correlation, preserves the marginal flip rate q) =
-the i.i.d. Phase-7b regime at matched q. So real correlation is the only changed variable.
+CONSTRUCTION (SYNLABEL):
+  input  = real feature bits b in {0,1}^D
+  label  = u = XOR(b_S) for a FIXED hidden subset S (|S| = s)        [constructed functional]
+De-confound = a real-linear probe on b -> u. For INDEPENDENT balanced b, parity is
+input-undecodable (det ~ 0). REAL correlation among b can make u linearly leak. That is the
+§7 wall as a measurable boundary — and it needs NO model (the de-confound is just a probe).
 
-PRE-REGISTERED 0-pre PASS CRITERIA:
-  (1) DE-CONFOUND holds: real-linear probe (LogReg) on z -> each u-bit in [0.45, 0.55] (chance
-      base 0.50), on BOTH real and iid arms. >0.55 on the real arm => real correlation LEAKS the
-      parity (the de-confound fails — a finding, needs lower q / decorrelation).
-  (2) CLOSURE bracket (real arm), data-level via conditional-entropy determination:
-      k_func(u) <= 3  AND  k_state(z_j) >= k_func + 2   (a >=2-gap, Phase-7b-class signature).
-  (3) CONTROLLED read: real-arm bracket vs iid-arm bracket (measured headline, not pass/fail).
+EXPERIMENT — map de-confound leak vs feature-correlation:
+  - SYNTHETIC curve: 1-factor Gaussian copula, tunable equicorrelation rho -> balanced
+    correlated bits; sweep rho, measure de-confound det(u | b).
+  - REAL anchors: sklearn digits pooled to D bits (fine D=8 and coarse D=4 = stronger corr),
+    median-binarized; realized bit-correlation + de-confound det, overlaid on the curve.
 
-Substrate: sklearn load_digits (8x8 handwritten digits = a download-free MNIST-class real
-feature distribution). The eventual TRAINING spec may use full MNIST; for the model-free
-data-level check, digits' real correlation structure is what matters.
+PRE-REGISTERED (frozen before running). Tie the bar to the toy's own de-confound standard
+(`precheck_max = 0.60` on balanced binary == det 0.20):
+  det = (acc - base)/(1 - base);   HOLD iff det <= 0.10 (clean) ;  MARG 0.10 < det <= 0.20 ;
+  LEAK det > 0.20 (exceeds the toy precheck bar).
+  Primary subset size s = 3 (odd; matches the toy's m=3); s = 2 reported as a more
+  correlation-sensitive secondary.
+  GREEN-LIGHT the (training-gated) closure read iff the REAL anchors HOLD/MARG (det <= 0.20).
+  A LEAKing real anchor = an honest de-confound-wall-on-real-data result: the closure
+  substrate must drop correlation (finer pooling / decorrelation) or the cell reports the wall.
 """
 import numpy as np
 from numpy.random import default_rng
 from sklearn.datasets import load_digits
 from sklearn.linear_model import LogisticRegression
-
-# Same coupling graph as Phase 7/7b/7c (chatv2_phase0_bodyresist._COUPLE_A).
-_COUPLE_A = np.array([[0, 0, 1], [0, 1, 0], [1, 0, 0], [0, 1, 1],
-                      [1, 0, 1], [1, 1, 0], [1, 1, 1], [0, 0, 1]], dtype=np.int8)
-M = 3            # hidden source bits
-D = 8            # observed latents (= rows of _COUPLE_A)
-Q = 0.12         # target marginal flip rate P(b_i=1) ~ Phase-7b working regime
+from sklearn.model_selection import cross_val_score
 
 
-def real_feature_bits(rng):
-    """8 spatially-pooled, quantile-binarized digit features -> a pool of real b-bit rows.
+def parity(b, S):
+    return (b[:, S].sum(1) & 1).astype(np.int64)
 
-    Returns B_real (n_img, 8) with column-wise P(=1) ~= Q and REAL cross-column correlation.
-    """
-    X = load_digits().images.astype(np.float64)              # (1797, 8, 8)
+
+def deconfound_det(b, u):
+    """5-fold CV linear-probe accuracy of b -> u, reported as det over base rate."""
+    base = float(max(u.mean(), 1 - u.mean()))
+    if len(np.unique(u)) < 2:
+        return 1.0, base, 0.0                      # constant u: 'predictable' by base alone, det 0
+    acc = float(cross_val_score(LogisticRegression(max_iter=300), b, u, cv=5).mean())
+    return acc, base, (acc - base) / (1 - base + 1e-9)
+
+
+def mean_offdiag_corr(b):
+    if b.shape[1] < 2:
+        return 0.0
+    cc = np.corrcoef(b.T)
+    return float(np.abs(cc[np.triu_indices(b.shape[1], 1)]).mean())
+
+
+def synth_bits(n, D, rho, rng):
+    """1-factor Gaussian copula -> balanced correlated bits (pairwise latent corr = rho)."""
+    f = rng.standard_normal((n, 1))
+    e = rng.standard_normal((n, D))
+    g = np.sqrt(rho) * f + np.sqrt(1.0 - rho) * e
+    return (g > 0).astype(np.int64)                # median threshold -> ~balanced
+
+
+def digit_bits(D):
+    """sklearn digits pooled to D median-binarized bits with REAL spatial correlation.
+    D=8 -> 4x2 blocks ; D=4 -> 2x2 blocks (coarser = stronger correlation)."""
+    X = load_digits().images.astype(np.float64)
+    grid = {8: (4, 2), 4: (2, 2)}[D]
+    rb, cb = 8 // grid[0], 8 // grid[1]
     n = X.shape[0]
-    feats = np.zeros((n, D), dtype=np.float64)
+    feats = np.zeros((n, D))
     f = 0
-    for br in range(4):                                       # 4x2 grid of 2-row x 4-col blocks -> 8 feats
-        for bc in range(2):
-            feats[:, f] = X[:, br * 2:(br + 1) * 2, bc * 4:(bc + 1) * 4].mean(axis=(1, 2))
+    for br in range(grid[0]):
+        for bc in range(grid[1]):
+            feats[:, f] = X[:, br * rb:(br + 1) * rb, bc * cb:(bc + 1) * cb].mean((1, 2))
             f += 1
-    thr = np.quantile(feats, 1.0 - Q, axis=0)                # per-feature (1-Q) quantile
-    B = (feats > thr).astype(np.int8)                        # ~Q ones per column, real correlation
-    return B
+    return (feats > np.median(feats, 0)).astype(np.int64)
 
 
-def gen(n, rng, correlated=True):
-    """Draw n samples of (u, z). b sampled from the real digit-bit pool (correlated) or
-    column-independently shuffled (iid control)."""
-    B_pool = real_feature_bits(rng)
-    npool = B_pool.shape[0]
-    if correlated:
-        idx = rng.integers(0, npool, size=n)
-        b = B_pool[idx]                                      # rows kept intact => real cross-i correlation
-    else:
-        b = np.empty((n, D), dtype=np.int8)
-        for j in range(D):                                   # independent per-column resample => iid, same marginal
-            b[:, j] = B_pool[rng.integers(0, npool, size=n), j]
-    u = rng.integers(0, 2, size=(n, M)).astype(np.int8)
-    clean = (u @ _COUPLE_A.T) & 1                            # parity(u, A_i) per latent  (XOR via mod 2)
-    z = (clean ^ b).astype(np.int8)
-    return u, z, b
-
-
-def _entropy(counts):
-    p = counts[counts > 0].astype(np.float64)
-    p /= p.sum()
-    return float(-(p * np.log2(p)).sum())
-
-
-def cond_ent(y, x, ny, nx):
-    """H(Y|X) in bits, plug-in from counts. y in [0,ny), x in [0,nx)."""
-    joint = np.bincount(x * ny + y, minlength=nx * ny).reshape(nx, ny).astype(np.float64)
-    px = joint.sum(axis=1)
-    tot = px.sum()
-    H = 0.0
-    for xi in range(nx):
-        if px[xi] > 0:
-            H += (px[xi] / tot) * _entropy(joint[xi])
-    return H
-
-
-def _enc(bits):
-    """Encode an (n, k) bit array as integer codes 0..2^k-1."""
-    k = bits.shape[1]
-    w = (1 << np.arange(k)).astype(np.int64)
-    return (bits.astype(np.int64) * w).sum(axis=1)
-
-
-def sweep(u, z, rng, ks, R=24):
-    u_idx = _enc(u)                                          # 0..7
-    Hu = _entropy(np.bincount(u_idx, minlength=2 ** M))
-    out = {}
-    for k in ks:
-        df, ds = [], []
-        for _ in range(R):
-            S = rng.choice(D, k, replace=False)
-            xS = _enc(z[:, S])
-            df.append(1.0 - cond_ent(u_idx, xS, 2 ** M, 2 ** k) / (Hu + 1e-12))
-            J = [j for j in range(D) if j not in set(S.tolist())]
-            for j in rng.choice(J, min(4, len(J)), replace=False):
-                zj = z[:, j].astype(np.int64)
-                Hzj = _entropy(np.bincount(zj, minlength=2))
-                if Hzj > 1e-9:
-                    ds.append(1.0 - cond_ent(zj, xS, 2, 2 ** k) / Hzj)
-        out[k] = (float(np.mean(df)), float(np.mean(ds)))
-    return out
-
-
-def deconfound_acc(u, z):
-    """Max held-out LogReg accuracy predicting any u-bit from z (real-linear). Want ~0.50."""
-    n = len(u); tr = slice(0, n // 2); he = slice(n // 2, n)
-    accs = []
-    for j in range(M):
-        if len(np.unique(u[tr, j])) < 2:
-            continue
-        m = LogisticRegression(max_iter=200).fit(z[tr], u[tr, j])
-        accs.append(m.score(z[he], u[he, j]))
-    return float(max(accs)) if accs else float("nan")
-
-
-def bracket(res, ks, thr=0.95):
-    kf = next((k for k in ks if res[k][0] >= thr), None)
-    ksx = next((k for k in ks if res[k][1] >= thr), None)
-    ok = kf is not None and (ksx is None or ksx >= kf + 2)
-    return kf, ksx, ok
+def flag(det):
+    return "HOLD" if det <= 0.10 else ("MARG" if det <= 0.20 else "LEAK")
 
 
 if __name__ == "__main__":
     rng = default_rng(0)
-    N = 30000
-    ks = [1, 2, 3, 4, 5, 6, 7]
-    print(f"[cfg] N={N} D={D} m={M} q(target)={Q}  substrate=sklearn-digits 8x8 -> 8 pooled bits\n")
+    D = 8
+    Ssets = {2: [0, 1], 3: [0, 1, 2]}              # fixed hidden subsets
+    N = 20000
+    rhos = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+    print(f"[cfg] synthetic N={N} D={D} ; real = sklearn-digits ; bar tied to toy precheck "
+          f"(det<=0.20). HOLD<=0.10 < MARG <=0.20 < LEAK\n")
 
-    for arm, corr in (("REAL-correlated", True), ("iid-control", False)):
-        u, z, b = gen(N, rng, correlated=corr)
-        qhat = b.mean(axis=0)
-        cc = np.corrcoef(b.T)
-        offdiag = np.abs(cc[np.triu_indices(D, 1)])
-        dc = deconfound_acc(u, z)
-        res = sweep(u, z, rng, ks)
-        kf, ksx, ok = bracket(res, ks)
-        print(f"==== {arm} ====")
-        print(f"  flip rate q_hat per latent: {np.array2string(qhat, precision=2)}")
-        print(f"  mean |b cross-corr| (off-diag): {offdiag.mean():.3f}  (real should exceed iid)")
-        print(f"  de-confound: max LogReg acc(z -> u-bit) = {dc:.3f}   [want in 0.45..0.55]")
-        print("   k | det_func(u) | det_state(z_j)")
-        for k in ks:
-            print(f"  {k:>2} |   {res[k][0]:.3f}    |   {res[k][1]:.3f}")
-        print(f"  -> k_func(u)={kf}  k_state(z_j)={ksx}  bracket(>=2 gap)={ok}\n")
+    for s in (3, 2):
+        S = Ssets[s]
+        print(f"================  s = |S| = {s}  (u = XOR of {s} features)  ================")
+        print("  SYNTHETIC 1-factor copula:")
+        print("   rho | bitcorr | acc / base |   det    flag")
+        for rho in rhos:
+            b = synth_bits(N, D, rho, rng)
+            u = parity(b, S)
+            acc, base, det = deconfound_det(b, u)
+            print(f"  {rho:.1f} |  {mean_offdiag_corr(b):.3f}  | {acc:.3f}/{base:.3f} | "
+                  f"{det:+.3f}  {flag(det)}")
+        print("  REAL digit anchors:")
+        for Dd in (8, 4):
+            Sd = S if s <= Dd else list(range(min(s, Dd)))
+            b = digit_bits(Dd)
+            u = parity(b, Sd)
+            acc, base, det = deconfound_det(b, u)
+            print(f"   digits D={Dd}: bitcorr {mean_offdiag_corr(b):.3f} | "
+                  f"acc {acc:.3f}/base {base:.3f} | det {det:+.3f}  {flag(det)}")
+        print()
 
-    print("PRE-REG VERDICT KEY:")
-    print("  PASS  = de-confound in 0.45..0.55 (both arms) AND real-arm bracket True")
-    print("  LEAK  = real-arm de-confound > 0.55 (real correlation defeats input-undecodability)")
-    print("  WASH  = de-confound holds but real-arm bracket False (real correlation washes closure)")
+    print("VERDICT KEY: green-light closure training iff the REAL anchors are HOLD/MARG "
+          "(det<=0.20).")
+    print("            a LEAKing real anchor = honest de-confound-wall-on-real-data result.")

@@ -1,0 +1,33 @@
+{
+  "backend": "anthropic",
+  "adapter": {
+    "backend": "anthropic",
+    "model": "claude-haiku-4-5-20251001",
+    "temperature": 0,
+    "baseUrl": "https://api.anthropic.com/v1"
+  },
+  "slate": "generality-boundary",
+  "promptCount": 52,
+  "elapsedSeconds": 27.9,
+  "accepted": 45,
+  "rejected": 7,
+  "errored": 0,
+  "flippedVsBaseline": 7,
+  "gateEscapesVsBaseline": 0,
+  "byCategory": {
+    "generality-boundary": {
+      "total": 52,
+      "accepted": 45,
+      "rejected": 7,
+      "flipped": 7
+    }
+  },
+  "byProbeAxis": {
+    "(none)": {
+      "total": 52,
+      "accepted": 45,
+      "rejected": 7,
+      "flipped": 7
+    }
+  }
+}

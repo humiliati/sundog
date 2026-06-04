@@ -1,0 +1,446 @@
+{
+  "phase": "attack-b-phase0-closure",
+  "n_seeds": 5,
+  "n_perm": 1000,
+  "split_base_rates": [
+    0.53,
+    0.531,
+    0.531
+  ],
+  "split_ok": true,
+  "deconfound_replay": {
+    "det": 0.0771,
+    "ok": true
+  },
+  "counts": {
+    "func_bracket": 5,
+    "state_bracket": 0,
+    "func_stateful": 0,
+    "compressed_bracket": 5,
+    "compressed_learned": false,
+    "median_keeper_gap": 7.0
+  },
+  "verdict": "attack_b_closure_confirmed",
+  "per_seed": [
+    {
+      "seed": 0,
+      "gates": {
+        "func_learned": true,
+        "state_learned": true,
+        "compressed_learned": true,
+        "func_acc": 1.0,
+        "func_det": 1.0,
+        "state_acc": 0.989,
+        "state_det": 0.978,
+        "compressed_acc": 1.0,
+        "compressed_det": 1.0
+      },
+      "reads": {
+        "state": {
+          "k_func": {
+            "k": null,
+            "det": null,
+            "p": null
+          },
+          "k_state": {
+            "k": 4,
+            "det": 0.8128,
+            "p": 0.001
+          },
+          "k_null": {
+            "k": null,
+            "det": null,
+            "p": null
+          }
+        },
+        "func": {
+          "k_func": {
+            "k": 2,
+            "det": 0.8698,
+            "p": 0.001
+          },
+          "k_state": {
+            "k": null,
+            "det": null,
+            "p": null
+          },
+          "k_null": {
+            "k": null,
+            "det": null,
+            "p": null
+          }
+        },
+        "compressed": {
+          "k_func": {
+            "k": 2,
+            "det": 0.7189,
+            "p": 0.001
+          },
+          "k_state": {
+            "k": null,
+            "det": null,
+            "p": null
+          },
+          "k_null": {
+            "k": null,
+            "det": null,
+            "p": null
+          }
+        }
+      },
+      "brackets": {
+        "state": {
+          "bracket": false,
+          "margin": 0,
+          "u_null_hit": false
+        },
+        "func": {
+          "bracket": true,
+          "margin": 7,
+          "u_null_hit": false
+        },
+        "compressed": {
+          "bracket": true,
+          "margin": 2,
+          "u_null_hit": false
+        }
+      }
+    },
+    {
+      "seed": 1,
+      "gates": {
+        "func_learned": true,
+        "state_learned": true,
+        "compressed_learned": true,
+        "func_acc": 1.0,
+        "func_det": 1.0,
+        "state_acc": 0.982,
+        "state_det": 0.961,
+        "compressed_acc": 0.983,
+        "compressed_det": 0.9639999866485596
+      },
+      "reads": {
+        "state": {
+          "k_func": {
+            "k": null,
+            "det": null,
+            "p": null
+          },
+          "k_state": {
+            "k": 4,
+            "det": 0.8228,
+            "p": 0.001
+          },
+          "k_null": {
+            "k": null,
+            "det": null,
+            "p": null
+          }
+        },
+        "func": {
+          "k_func": {
+            "k": 2,
+            "det": 0.8817,
+            "p": 0.001
+          },
+          "k_state": {
+            "k": null,
+            "det": null,
+            "p": null
+          },
+          "k_null": {
+            "k": null,
+            "det": null,
+            "p": null
+          }
+        },
+        "compressed": {
+          "k_func": {
+            "k": 2,
+            "det": 0.997,
+            "p": 0.001
+          },
+          "k_state": {
+            "k": null,
+            "det": null,
+            "p": null
+          },
+          "k_null": {
+            "k": null,
+            "det": null,
+            "p": null
+          }
+        }
+      },
+      "brackets": {
+        "state": {
+          "bracket": false,
+          "margin": 0,
+          "u_null_hit": false
+        },
+        "func": {
+          "bracket": true,
+          "margin": 7,
+          "u_null_hit": false
+        },
+        "compressed": {
+          "bracket": true,
+          "margin": 2,
+          "u_null_hit": false
+        }
+      }
+    },
+    {
+      "seed": 2,
+      "gates": {
+        "func_learned": true,
+        "state_learned": true,
+        "compressed_learned": false,
+        "func_acc": 1.0,
+        "func_det": 1.0,
+        "state_acc": 0.994,
+        "state_det": 0.987,
+        "compressed_acc": 0.856,
+        "compressed_det": 0.6919999718666077
+      },
+      "reads": {
+        "state": {
+          "k_func": {
+            "k": null,
+            "det": null,
+            "p": null
+          },
+          "k_state": {
+            "k": 3,
+            "det": 0.7068,
+            "p": 0.001
+          },
+          "k_null": {
+            "k": null,
+            "det": null,
+            "p": null
+          }
+        },
+        "func": {
+          "k_func": {
+            "k": 2,
+            "det": 0.997,
+            "p": 0.001
+          },
+          "k_state": {
+            "k": null,
+            "det": null,
+            "p": null
+          },
+          "k_null": {
+            "k": null,
+            "det": null,
+            "p": null
+          }
+        },
+        "compressed": {
+          "k_func": {
+            "k": 1,
+            "det": 0.713,
+            "p": 0.001
+          },
+          "k_state": {
+            "k": null,
+            "det": null,
+            "p": null
+          },
+          "k_null": {
+            "k": null,
+            "det": null,
+            "p": null
+          }
+        }
+      },
+      "brackets": {
+        "state": {
+          "bracket": false,
+          "margin": 0,
+          "u_null_hit": false
+        },
+        "func": {
+          "bracket": true,
+          "margin": 7,
+          "u_null_hit": false
+        },
+        "compressed": {
+          "bracket": true,
+          "margin": 3,
+          "u_null_hit": false
+        }
+      }
+    },
+    {
+      "seed": 3,
+      "gates": {
+        "func_learned": true,
+        "state_learned": true,
+        "compressed_learned": true,
+        "func_acc": 1.0,
+        "func_det": 1.0,
+        "state_acc": 0.983,
+        "state_det": 0.965,
+        "compressed_acc": 1.0,
+        "compressed_det": 1.0
+      },
+      "reads": {
+        "state": {
+          "k_func": {
+            "k": null,
+            "det": null,
+            "p": null
+          },
+          "k_state": {
+            "k": 4,
+            "det": 0.8222,
+            "p": 0.001
+          },
+          "k_null": {
+            "k": null,
+            "det": null,
+            "p": null
+          }
+        },
+        "func": {
+          "k_func": {
+            "k": 2,
+            "det": 0.9586,
+            "p": 0.001
+          },
+          "k_state": {
+            "k": null,
+            "det": null,
+            "p": null
+          },
+          "k_null": {
+            "k": null,
+            "det": null,
+            "p": null
+          }
+        },
+        "compressed": {
+          "k_func": {
+            "k": 1,
+            "det": 0.7367,
+            "p": 0.001
+          },
+          "k_state": {
+            "k": null,
+            "det": null,
+            "p": null
+          },
+          "k_null": {
+            "k": null,
+            "det": null,
+            "p": null
+          }
+        }
+      },
+      "brackets": {
+        "state": {
+          "bracket": false,
+          "margin": 0,
+          "u_null_hit": false
+        },
+        "func": {
+          "bracket": true,
+          "margin": 7,
+          "u_null_hit": false
+        },
+        "compressed": {
+          "bracket": true,
+          "margin": 3,
+          "u_null_hit": false
+        }
+      }
+    },
+    {
+      "seed": 4,
+      "gates": {
+        "func_learned": true,
+        "state_learned": true,
+        "compressed_learned": true,
+        "func_acc": 1.0,
+        "func_det": 1.0,
+        "state_acc": 0.999,
+        "state_det": 0.999,
+        "compressed_acc": 1.0,
+        "compressed_det": 1.0
+      },
+      "reads": {
+        "state": {
+          "k_func": {
+            "k": null,
+            "det": null,
+            "p": null
+          },
+          "k_state": {
+            "k": 3,
+            "det": 0.755,
+            "p": 0.001
+          },
+          "k_null": {
+            "k": null,
+            "det": null,
+            "p": null
+          }
+        },
+        "func": {
+          "k_func": {
+            "k": 2,
+            "det": 0.713,
+            "p": 0.001
+          },
+          "k_state": {
+            "k": null,
+            "det": null,
+            "p": null
+          },
+          "k_null": {
+            "k": null,
+            "det": null,
+            "p": null
+          }
+        },
+        "compressed": {
+          "k_func": {
+            "k": 2,
+            "det": 0.7337,
+            "p": 0.001
+          },
+          "k_state": {
+            "k": null,
+            "det": null,
+            "p": null
+          },
+          "k_null": {
+            "k": null,
+            "det": null,
+            "p": null
+          }
+        }
+      },
+      "brackets": {
+        "state": {
+          "bracket": false,
+          "margin": 0,
+          "u_null_hit": false
+        },
+        "func": {
+          "bracket": true,
+          "margin": 7,
+          "u_null_hit": false
+        },
+        "compressed": {
+          "bracket": true,
+          "margin": 2,
+          "u_null_hit": false
+        }
+      }
+    }
+  ]
+}

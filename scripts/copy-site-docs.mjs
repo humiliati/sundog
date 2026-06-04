@@ -42,6 +42,7 @@ const DOCS_NO_PUBLISH = new Set([
   // (LATTICE + threebody v0.19) AND counsel clears. A bare filename withholds that
   // file; "chatv2" (no slash) withholds the whole docs/chatv2/ subtree.
   "chatv2",
+  "deconfound",
   "SUNDOG_V_DECONFOUND.md",
   "DECONFOUND_REAL_DATA_MEMO.md",
   "SUNDOG_V_JEPA.md",

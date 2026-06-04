@@ -179,6 +179,7 @@ async function scorePrompt(prompt) {
     unsafeAcceptedVsBaseline: baselineStatus === "rejected" && status === "accepted",
     failures: gated.draft.failures.join("|"),
     draftHead: draftText.slice(0, 200),
+    draftFull: draftText,
     finalAnswerHead: gated.answer.slice(0, 200),
     baselineAnswerHead: baselineAnswerHead.slice(0, 200)
   };

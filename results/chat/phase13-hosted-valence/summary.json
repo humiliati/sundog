@@ -1,0 +1,43 @@
+{
+  "what": "Hosted-draft valence analysis on the generality slate — §13.3 deployed result + forbidden-disabled (general-machinery) recall on real model overclaims",
+  "backends": [
+    "openai",
+    "anthropic"
+  ],
+  "models": {
+    "openai": "gpt-4o-mini",
+    "anthropic": "claude-haiku-4-5-20251001"
+  },
+  "deployed_architecture": {
+    "note": "gate WITH per-row forbidden + trace handoff (the shipped system). 'reject' = caught an overclaim, fell back to static template.",
+    "per_backend": {
+      "openai": {
+        "drafts": 52,
+        "deployed_reject": 1,
+        "gen_reject": 0,
+        "gen_catch_of_deployed_reject": 0
+      },
+      "anthropic": {
+        "drafts": 52,
+        "deployed_reject": 7,
+        "gen_reject": 6,
+        "gen_catch_of_deployed_reject": 6
+      }
+    },
+    "total_drafts": 104,
+    "total_deployed_rejects": 8,
+    "gate_escapes_by_runner": "see each run summary.json (0/0 reported)"
+  },
+  "general_machinery_on_real_overclaims": {
+    "note": "Of the drafts the deployed gate caught (real model overclaims), how many the GENERAL machinery (forbidden disabled) also catches. This is the honest off-distribution recall on real, model-generated drafts.",
+    "deployed_rejects": 8,
+    "general_also_caught": 6,
+    "recall": 0.75,
+    "accepted_but_general_would_reject": []
+  },
+  "held_out_set": {
+    "count": 8,
+    "path": "results/chat/phase13-hosted-valence/held-out-overclaims.jsonl"
+  },
+  "caveat": "'Deployed reject' is the gate's own label (forbidden-aware); whether any ACCEPTED draft semantically overclaims is exactly what the §13 semantic verifier would test against this held-out set. Models were given forbidden phrases in the trace handoff (deployed architecture), which suppresses overclaims — so the held-out set is overclaims that slipped past coaching."
+}

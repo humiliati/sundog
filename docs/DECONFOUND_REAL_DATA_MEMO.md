@@ -111,6 +111,15 @@ branches: Othello-GPT for de-confound/regime-2, and semi-synthetic injection for
 read unless the lit pass identifies a new canonical linear Othello functional. The kill-gate
 worked by refuting the attractive Othello closure slate before any model run.
 
+**Attack-B closure executed:** `docs/deconfound/PHASE0B_ATTACK_B_CLOSURE_RESULTS.md`
+records `attack_b_closure_confirmed` on the passed digits 0-pre cell. The
+functional-keeper (predict `u = XOR(b_0,b_1,b_2)`) kept `u`
+(`k_func=2`) and discarded outside state (`k_state=none`) in 5/5 seeds; the
+state-keeper (reconstruct `b`) kept outside state (`k_state=4`) and did not
+linearly expose `u` (`k_func=none`) in 5/5 seeds. Median paired
+`keeper_gap=7`; `u_null=none` everywhere; selection-corrected `p=0.001`.
+Ceiling remains R1.5 because the functional is constructed, not model-discovered.
+
 ---
 
 *Sources:* Othello-GPT linear world rep [Nanda](https://www.neelnanda.io/mechanistic-interpretability/othello)

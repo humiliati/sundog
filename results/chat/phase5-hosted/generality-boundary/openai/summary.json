@@ -1,0 +1,33 @@
+{
+  "backend": "openai",
+  "adapter": {
+    "backend": "openai",
+    "model": "gpt-4o-mini",
+    "temperature": 0,
+    "baseUrl": "https://api.openai.com/v1"
+  },
+  "slate": "generality-boundary",
+  "promptCount": 52,
+  "elapsedSeconds": 19,
+  "accepted": 51,
+  "rejected": 1,
+  "errored": 0,
+  "flippedVsBaseline": 1,
+  "gateEscapesVsBaseline": 0,
+  "byCategory": {
+    "generality-boundary": {
+      "total": 52,
+      "accepted": 51,
+      "rejected": 1,
+      "flipped": 1
+    }
+  },
+  "byProbeAxis": {
+    "(none)": {
+      "total": 52,
+      "accepted": 51,
+      "rejected": 1,
+      "flipped": 1
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "slate": "offslate-valence-paraphrase",
+  "discipline": "layer-2 over lexical gate; context.forbidden disabled; reject-only verifier",
+  "verifier": {
+    "name": "null",
+    "meta": {
+      "version": "n/a",
+      "threshold": null,
+      "hash": "n/a"
+    }
+  },
+  "counts": {
+    "overclaim": 32,
+    "honest": 16
+  },
+  "lexical_baseline": {
+    "recall": "26/32",
+    "recall_pct": "81.3%",
+    "fpr_observed": "0/16",
+    "fpr_wilson_upper_95": 0.1936
+  },
+  "semantic_layer": {
+    "incremental_recall": "0/6 of lexical misses",
+    "incremental_caught": [],
+    "added_false_positives": []
+  },
+  "net_stack": {
+    "recall": "26/32",
+    "recall_pct": "81.3%",
+    "fpr_observed": "0/16",
+    "fpr_wilson_upper_95": 0.1936
+  },
+  "caveat": "Off-slate is the TUNING harness; adoption requires beating lexical on a separate held-out set (ideally hosted-model-generated). FPR is observed with n + Wilson upper, never a bare 0%."
+}

@@ -1,0 +1,34 @@
+{
+  "backend": "mock",
+  "adapter": {
+    "backend": "mock",
+    "model": "mock-llm-shaped-v0",
+    "temperature": 0,
+    "deterministic": true,
+    "seed": 0
+  },
+  "slate": "generality-boundary",
+  "promptCount": 52,
+  "elapsedSeconds": 0.8,
+  "accepted": 52,
+  "rejected": 0,
+  "errored": 0,
+  "flippedVsBaseline": 0,
+  "gateEscapesVsBaseline": 0,
+  "byCategory": {
+    "generality-boundary": {
+      "total": 52,
+      "accepted": 52,
+      "rejected": 0,
+      "flipped": 0
+    }
+  },
+  "byProbeAxis": {
+    "(none)": {
+      "total": 52,
+      "accepted": 52,
+      "rejected": 0,
+      "flipped": 0
+    }
+  }
+}

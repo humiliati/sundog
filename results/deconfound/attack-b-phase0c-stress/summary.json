@@ -1,0 +1,79 @@
+{
+  "phase": "attack-b-phase0c-stress",
+  "factor_seed": 20260604,
+  "n_seeds": 1,
+  "n_perm": 200,
+  "verdict": "closure_void_unlearned",
+  "boundary_table": [
+    {
+      "alpha": 0.0,
+      "det": 0.0771,
+      "label": "HOLD",
+      "state_summary": "split",
+      "n_interpreted": 1
+    },
+    {
+      "alpha": 2.5,
+      "det": 0.4586,
+      "label": "LEAK",
+      "state_summary": "split",
+      "n_interpreted": 1
+    }
+  ],
+  "per_rung": [
+    {
+      "alpha": 0.0,
+      "det": 0.0771,
+      "label": "HOLD",
+      "n_interpreted": 1,
+      "state_summary": "split",
+      "state_kfunc_finite": 0,
+      "state_kfunc_none": 1,
+      "seeds": [
+        {
+          "seed": 0,
+          "interpreted": true,
+          "gates": {
+            "func_learned": true,
+            "state_learned": true,
+            "func_acc": 1.0,
+            "state_acc": 0.989
+          },
+          "state_kfunc": null,
+          "state_kstate": 4,
+          "func_kfunc": 2,
+          "func_kstate": null,
+          "func_bracket": true,
+          "u_null_hit": false
+        }
+      ]
+    },
+    {
+      "alpha": 2.5,
+      "det": 0.4586,
+      "label": "LEAK",
+      "n_interpreted": 1,
+      "state_summary": "split",
+      "state_kfunc_finite": 0,
+      "state_kfunc_none": 1,
+      "seeds": [
+        {
+          "seed": 0,
+          "interpreted": true,
+          "gates": {
+            "func_learned": true,
+            "state_learned": true,
+            "func_acc": 0.942,
+            "state_acc": 0.955
+          },
+          "state_kfunc": null,
+          "state_kstate": 1,
+          "func_kfunc": 1,
+          "func_kstate": 2,
+          "func_bracket": false,
+          "u_null_hit": false
+        }
+      ]
+    }
+  ]
+}

@@ -148,6 +148,38 @@ linear reachability basis. Otherwise the closure read should pivot to **Attack B
 - **C. Amnesic / causal (LEACE)** — corroborating "computes vs decodes" axis, not a
   replacement.
 
+## 7.1 Attack-B Phase 0B — closure result
+
+**Status:** executed 2026-06-04 -> `attack_b_closure_confirmed`.
+
+Phase 0B routes the closure prize through the de-confound-clean real-feature
+cell validated by the Attack-B 0-pre screen: median-binarized sklearn digit
+features, `D=8`, `u = XOR(b_0,b_1,b_2)`, primary 0-pre `det=+0.077` (`HOLD`).
+It trained paired bodies on the same real features:
+
+- **state-keeper:** reconstruct all `b_j`, so it must keep state;
+- **functional-keeper:** predict `u`, so it is free to discard `b_j notin S`.
+
+The read landed as a clean double dissociation under the inherited
+selection-corrected null and independent `u_null` control:
+
+| body | `k_func(u)` | `k_state(b_j notin S)` | bracket |
+| --- | ---: | ---: | :--: |
+| functional-keeper | 2 | none | 5/5 |
+| state-keeper | none | 4 | 0/5 |
+
+Median paired `keeper_gap = 7`; `u_null = none` everywhere; all interpreted
+selection-corrected p-values are `0.001`. The state-keeper's `k_state=4` proves
+the probe can find outside features when the body carries them, so the
+functional-keeper's `k_state=none` is genuine discard, not probe weakness.
+
+This is the JEPA principle in clean supervised form on real features; it is
+**not** a JEPA implementation and not "more than we know." Evidence ceiling:
+**R1.5**.
+
+Spec: `docs/deconfound/PHASE0B_ATTACK_B_CLOSURE_SPEC.md`.
+Results: `docs/deconfound/PHASE0B_ATTACK_B_CLOSURE_RESULTS.md`.
+
 ## 8. Lit-pass targets (resolve before the Phase-0 spec)
 
 1. **Othello-GPT specifics** — public weights + the linear board probe (Nanda's
