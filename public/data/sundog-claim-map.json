@@ -102,6 +102,58 @@
       }
     },
     {
+      "id": "sundog_earned_inventory",
+      "questionPatterns": [
+        "what has sundog earned",
+        "what has sundog actually earned",
+        "what has sundog accomplished",
+        "what does sundog have to show",
+        "what are the wins",
+        "what actually works",
+        "positive results",
+        "show me the wins",
+        "not just no",
+        "what are the positive results"
+      ],
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "navigation",
+      "earned": "Sundog's strongest earned items are the photometric alignment result, Ask Sundog's boundary-preservation experiment, two exact physics receipts, and several bounded operating-envelope studies.",
+      "earnedDetail": "Inventory route only: each listed item keeps its own evidence tier. Photometric alignment is the paper-grade research result; Ask Sundog is a bounded claim-boundary experiment; Faraday/AB are audit-chain receipts; Three-Body, Balance, Pressure Mines, and Mesa stay bounded envelopes or roadmaps.",
+      "earnedConfidence": "inventory",
+      "answerTemplate": "Here is the positive inventory, strongest first. First: the paper-grade photometric mirror-alignment result. Second: Ask Sundog itself, which preserved claim boundaries with 0 unsafe accepts on the tested slate. Third: two exact receipts - Faraday, where a known law closes from local data, and Aharonov-Bohm, where one hidden quantity fixes the outcome while the local view stays blind. Fourth: bounded workbenches such as Three-Body, Balance, Pressure Mines, and Mesa. After that come the review-gated positives, promising partials, explainers, and honest nulls in the generality map. Boundary: this is a tiered inventory, not a validated universal framework.",
+      "support": [
+        {
+          "doc": "docs/SCIENTIFIC_CRITERIA.md",
+          "section": "Research Object / Scientific Criteria Met",
+          "status": "primary"
+        },
+        {
+          "doc": "docs/SUNDOG_V_CHAT.md",
+          "section": "Section 13 claim ratchet",
+          "status": "supporting"
+        },
+        {
+          "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
+          "section": "Cross-Substrate Generality Failure Map",
+          "status": "boundary"
+        },
+        {
+          "doc": "docs/APPLICATIONS.md",
+          "section": "Evidence Tiers",
+          "status": "boundary"
+        }
+      ],
+      "boundaries": [
+        "Keep each item at its own evidence tier.",
+        "Do not aggregate the inventory into a validated universal framework.",
+        "Name the partial and null lanes after the strongest positives so the answer stays honest."
+      ],
+      "nextAction": {
+        "label": "Open scientific criteria",
+        "href": "/docs/SCIENTIFIC_CRITERIA.md"
+      }
+    },
+    {
       "id": "framework_pattern",
       "questionPatterns": [
         "what is sundog",
@@ -236,7 +288,7 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "conceptual_lineage",
-      "answerTemplate": "The /geometry and /capset pages are public primers and apparatus exhibits, not Sundog-original math results. /capset is an interactive F_3^n workbench for the cap-set problem and the 2016 polynomial-method breakthrough; /geometry uses it beside the 2026 OpenAI unit-distance disproof to show a bounded pattern: visible geometry can be controlled by hidden algebraic structure. Sundog's contribution here is claim hygiene and apparatus framing, not a proof of cap-set, unit-distance, or a general geometry theorem.",
+      "answerTemplate": "No Sundog-original geometry proof here. Earned: honest explainer pages for real outside breakthroughs, credited to their authors rather than to Sundog. Boundary: /geometry and /capset are public primers and apparatus exhibits, not proofs of cap-set, unit-distance, or a general geometry theorem.",
       "support": [
         {
           "doc": "geometry.html",
@@ -263,7 +315,10 @@
       "nextAction": {
         "label": "Open geometry page",
         "href": "/geometry"
-      }
+      },
+      "earned": "Honest explainer pages for real outside breakthroughs, credited to their authors rather than to Sundog.",
+      "earnedDetail": "Clean reader / apparatus exhibits of genuine external breakthroughs: the cap-set polynomial method and OpenAI's unit-distance disproof. The earned Sundog piece is claim hygiene and apparatus framing, not original mathematics.",
+      "earnedConfidence": "education"
     },
     {
       "id": "isotrophy_k_facet_v03h",
@@ -301,7 +356,7 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "audit_chain_receipt",
-      "answerTemplate": "K_facet v0.3h is the third audit-chain artifact in the public ledger (alongside the structural-failure boundary map and the mesa-trap envelope). v0.3h resolves 20 strict G.2 catalog rows as structural zeros at m_3 = 1. The sole quarantined row, O_617, is a clean opposite-strict row whose bridge direction sits outside the valid D_3 representation; it is not a Gamma_i audit-chain failure and not an admission weakness. Compact form: 20/21 structural zeros plus one quarantined O_617 defective-D3 bridge -- not a closed 21/21 theorem-facing result. The wider v0.3-v0.11 isotrophy program adds a separate conditional stability result: Floquet velocity-fraction ranks stable above unstable piano-trio rows within fixed m_3 strata (AUC_cond = 0.6783, exact p = 2.046e-7 on the locked 229-row primary domain), while the mass-marginal held-out predictor fails (AUC = 0.4125). The audit chain is intact; the theorem-facing result is not closed.",
+      "answerTemplate": "No to a closed isotropy theorem. Earned: K_facet v0.3h resolved 20 strict rows as structural zeros and kept O_617 as a named quarantine; the later velocity-fraction signal works within the right mass strata and held up on outside data. Boundary: this is conditional and theorem-adjacent, not a 21/21 theorem-facing result and not a mass-marginal predictor.",
       "support": [
         {
           "doc": "isotrophy.html",
@@ -337,7 +392,10 @@
       "nextAction": {
         "label": "Open the Isotrophy K_facet page",
         "href": "/isotrophy"
-      }
+      },
+      "earned": "It works within the right conditions, and that held up on outside data.",
+      "earnedDetail": "A real conditional transfer replicated to external data within the right mass strata. K_facet v0.3h also preserves the audit-chain discipline: 20 strict rows resolved as structural zeros plus one named O_617 quarantine, not a false 21/21.",
+      "earnedConfidence": "promising"
     },
     {
       "id": "application_tier_summary",
@@ -394,7 +452,7 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "operating_envelope_study",
-      "answerTemplate": "The Three-Body workbench is a bounded operating-envelope study. In the tested planar restricted setup, a robust high-velocity near-escape survival pocket exists through the 16-second horizon, but Phase 18 shows the mechanism is deflationary: at matched duty, a radius-gated inward-thrust reflex reproduces guarded TRACK's survival envelope without tidal sensing or gradient steering. Lower-velocity and equal-mass cells remain harm boundaries, and the result does not solve three-body dynamics or promote the Phase 15 Fail-Magnitude verdict.",
+      "answerTemplate": "No, Sundog does not solve the three-body problem. Earned: the workbench really does hold a hard near-escape pocket from an indirect cue through the tested horizon. Boundary: Phase 18 makes the mechanism plainer - radius-gated inward thrust in the tested pocket, not sophisticated tidal sensing or chaos prediction.",
       "support": [
         {
           "doc": "docs/threebody/PHASE18_RESULTS.md",
@@ -421,7 +479,10 @@
       "nextAction": {
         "label": "Open Three-Body page",
         "href": "/threebody"
-      }
+      },
+      "earned": "It really does hold a hard orbit from an indirect cue; a closer look just described the mechanism more plainly.",
+      "earnedDetail": "A real, mapped near-escape survival pocket held from an indirect signal. Phase 18 made the mechanism more honest by reducing the story to radius-gated inward thrust at matched duty rather than tidal sensing.",
+      "earnedConfidence": "promising"
     },
     {
       "id": "balance_operating_envelope",
@@ -632,7 +693,7 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "roadmap",
-      "answerTemplate": "The mesa roadmap asks whether learned signature-tracking agents reconstruct internal reward proxies under capacity and selection-pressure scaling. It is a planned empirical front testing proxy reconstruction, not a completed result. Bounded outcome language stays tied to the measured range, tested capacity range, probe slate, environment shape, and any failure boundary.",
+      "answerTemplate": "No to mesa immunity or reward-hacking absence. Earned: the mesa lane found a small, specific internal region that flips controller behavior - a real interpretability result. Boundary: the body-resistance profile is marginal and the claim stays inside the measured in-vitro operating envelope.",
       "support": [
         {
           "doc": "docs/SUNDOG_V_MESA.md",
@@ -653,7 +714,10 @@
       "nextAction": {
         "label": "Open mesa roadmap",
         "href": "/docs/SUNDOG_V_MESA.md"
-      }
+      },
+      "earned": "It found a small, specific internal region that flips the controller's behavior - a real interpretability result.",
+      "earnedDetail": "A real, causally localized control cliff in a 5D net.7 subspace, with direction-specific behavior and failed linear / SAE decompositions. It is useful threat-model evidence, not mesa immunity.",
+      "earnedConfidence": "promising"
     },
     {
       "id": "chat_widget_roadmap_status",
@@ -992,7 +1056,7 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "audit_chain_receipt",
-      "answerTemplate": "The Shadow Faraday experiment reproduced a known identity: local plaquette-holonomy data closes Faraday induction with no global reconstruction. The shadow closes because the body-to-shadow law is the Bianchi identity (dF = d(dA) = 0), so body-resistance is exactly zero by theorem. It is a correctness check on the operator and the portfolio's clean structural-zero anchor - not new physics, not a discovery, not a regime-2 separation.",
+      "answerTemplate": "Earned: the Shadow Faraday experiment reproduced a known physical law exactly from purely local data - a clean, fully checked result. Boundary: it is an identity-success and operator check, not new physics, not a discovery, and not a separation where the hidden body resists the shadow.",
       "support": [
         {
           "doc": "docs/SUNDOG_V_FARADAY.md",
@@ -1013,7 +1077,10 @@
       "nextAction": {
         "label": "Open the Faraday evidence page",
         "href": "/faraday"
-      }
+      },
+      "earned": "It reproduced a known physical law exactly from purely local data - a clean, fully checked result.",
+      "earnedDetail": "A clean structural zero: local plaquette-holonomy closes Faraday induction with no global reconstruction. It is the exact-zero anchor behind the safety-method essay, because the law closes by identity.",
+      "earnedConfidence": "win"
     },
     {
       "id": "aharonov_bohm_boundary",
@@ -1028,7 +1095,7 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "audit_chain_receipt",
-      "answerTemplate": "The Aharonov-Bohm case is a faithful witness of an established exact separation: on a non-contractible patch the local field F is control-blind, while one flux number (loop holonomy) fixes the AB phase exactly, with the gap an H^1 invariant. It is the portfolio's first exact regime-2 witness, on a topological resistance axis - an earned shape, witnessed not discovered. Not a new theorem and not new physics.",
+      "answerTemplate": "Earned: one thing Sundog nailed exactly is the Aharonov-Bohm witness - a single hidden quantity fixes the outcome while the local view stays blind to it. Boundary: this is a faithful witness of established physics, not a new theorem or new physics.",
       "support": [
         {
           "doc": "docs/SUNDOG_V_FARADAY.md",
@@ -1049,7 +1116,10 @@
       "nextAction": {
         "label": "Open the Faraday evidence page",
         "href": "/faraday"
-      }
+      },
+      "earned": "One thing Sundog nailed exactly: a single hidden quantity fixes the outcome while the local view stays blind to it.",
+      "earnedDetail": "The portfolio's first exact regime-2 witness: one flux number fixes the Aharonov-Bohm phase while the local field is control-blind. It is sharp and pre-registered, but it witnesses established physics rather than discovering a new theorem.",
+      "earnedConfidence": "win"
     },
     {
       "id": "navierstokes_c1_boundary",
@@ -1066,7 +1136,7 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "audit_chain_receipt",
-      "answerTemplate": "On 2D Kolmogorov flow the low-mode shadow is a certified state-insufficient but control-sufficient witness - yet it is physically marginal: the shadow nearly reconstructs the state (FVE ~ 0.99 in both physical norms), so the regime-2 separation is strictly non-vacuous but small in every physical norm. It is the strongest current generality lane and is review-gated. No link to the Navier-Stokes Millennium / Clay problem or global regularity.",
+      "answerTemplate": "No to Navier-Stokes Millennium progress. Earned: a finite-Galerkin PDE witness - a real, checked example on a fluid model, modest but genuine - still under review. Boundary: the separation is physically marginal and has no link to global regularity or the Clay problem.",
       "support": [
         {
           "doc": "docs/SUNDOG_V_NAVIERSTOKES.md",
@@ -1087,7 +1157,10 @@
       "nextAction": {
         "label": "Open the Navier-Stokes evidence page",
         "href": "/navierstokes"
-      }
+      },
+      "earned": "It earned a finite-Galerkin PDE witness - a real, checked example on a fluid model, modest but genuine - still under review.",
+      "earnedDetail": "A certified state-insufficient yet control-sufficient witness on a finite-Galerkin 2D Kolmogorov-flow substrate. It is the strongest current generality lane, but physically marginal because the shadow nearly reconstructs the state in physical norms.",
+      "earnedConfidence": "under_review"
     },
     {
       "id": "navierstokes_c2_boundary",
@@ -1102,7 +1175,7 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "roadmap",
-      "answerTemplate": "There is no C2 finding yet. The Sabra shell-model run hit a numerical wall - fixed-dt RK4 blows up integrating through the intermittent dissipation bursts the task is about - so the matched-budget comparison never ran. It is a tooling boundary, not a result; resuming needs an adaptive / stiff integrator.",
+      "answerTemplate": "No C2 finding yet. Earned: the lane mapped exactly why the comparison did not run and what would make it work. Boundary: the shell-model route hit a numerical wall, so this is a tooling boundary and honest deferral, not a result.",
       "support": [
         {
           "doc": "docs/SUNDOG_V_NAVIERSTOKES.md",
@@ -1123,7 +1196,10 @@
       "nextAction": {
         "label": "Open the Navier-Stokes evidence page",
         "href": "/navierstokes"
-      }
+      },
+      "earned": "We mapped exactly why it did not run and what would make it work.",
+      "earnedDetail": "A four-obstruction methodology catalogue and an honest deferral. The numerical wall is known: fixed-dt RK4 fails through intermittent bursts, and the resume path is an adaptive / stiff integrator.",
+      "earnedConfidence": "null"
     },
     {
       "id": "yang_mills_boundary",
@@ -1138,7 +1214,7 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "audit_chain_receipt",
-      "answerTemplate": "On the registered SU(2) 3D cell the gauge-invariant shadow carried no separating structure across five probes - a bounded cell-local null that clarifies an abelian / non-abelian boundary. The lane is paused at that informative endpoint and review-gated. It is not progress on the Yang-Mills mass-gap Millennium problem.",
+      "answerTemplate": "No to Yang-Mills or mass-gap progress. Earned: a clean, honest 'nothing here' on a specific registered test, plus a safety check that caught a real bug before the score was read. Boundary: the invariant shadow carried no separating structure on that finite-lattice cell; it is a bounded null, not a theorem result.",
       "support": [
         {
           "doc": "docs/SUNDOG_V_YANG_MILLS.md",
@@ -1159,7 +1235,10 @@
       "nextAction": {
         "label": "Open the generality boundary map",
         "href": "/generality"
-      }
+      },
+      "earned": "A clean, honest 'nothing here' on a specific test - and a safety check caught a real bug along the way.",
+      "earnedDetail": "A pre-registered bounded null that sharpens the abelian / non-abelian boundary. The gauge-randomization control caught a real staple-orientation bug before any score was read.",
+      "earnedConfidence": "null"
     },
     {
       "id": "riemann_boundary",
@@ -1176,7 +1255,7 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "audit_chain_receipt",
-      "answerTemplate": "The Riemann probe's rigidity check (a Z2-descent) is admitted but vacuous on gap-only features: the maximum reflection residual is identity-zero, so it passes for the wrong reason and carries no information. It was resolved in-house as a non-claim. No Riemann Hypothesis progress.",
+      "answerTemplate": "No Riemann result. Earned: the discipline worked - a tempting shortcut was caught as empty before it became a claim. Boundary: the rigidity check passes for the wrong reason, so it carries no information and is not Riemann Hypothesis progress.",
       "support": [
         {
           "doc": "docs/SUNDOG_V_RIEMANN.md",
@@ -1197,7 +1276,10 @@
       "nextAction": {
         "label": "Open the generality boundary map",
         "href": "/generality"
-      }
+      },
+      "earned": "The discipline worked: a tempting shortcut was caught as empty before it became a claim.",
+      "earnedDetail": "The vacuity was caught and recorded in-house: a rigidity check that passed for the wrong reason was flagged instead of published as evidence.",
+      "earnedConfidence": "null"
     },
     {
       "id": "pvnp_boundary",
@@ -1214,7 +1296,7 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "audit_chain_receipt",
-      "answerTemplate": "The P-vs-NP lane is bounded alignment-verification, not the complexity problem. At v6 the op-count cost certificate clears - the verifier is cheaper to check (527,297 ops) than the policy was to find (555,876 ops), ratio 0.949 <= 1.0 - and safety is green. But wall-time superiority was withdrawn as non-reproducible, and the mesa-bridge transfer is Phase-3 quarantined, so the lane stays unpromoted. Op-count cost is not a complexity-theoretic claim; this is not the Millennium P-vs-NP problem.",
+      "answerTemplate": "No to P-vs-NP progress. Earned: a bounded verifier certificate - checking the answer is cheaper than finding it, and the safety checks stayed green - still under review. Boundary: wall-time superiority was withdrawn, the mesa bridge is quarantined, and op-count cost is not a complexity-theoretic claim.",
       "support": [
         {
           "doc": "docs/SUNDOG_V_P_V_NP.md",
@@ -1235,7 +1317,10 @@
       "nextAction": {
         "label": "Open the P-vs-NP evidence page",
         "href": "/p-vs-np"
-      }
+      },
+      "earned": "It earned a bounded verifier certificate: checking the answer is cheaper than finding it, and it stayed safe throughout - still under review.",
+      "earnedDetail": "The op-count certificate clears: checking costs 527,297 ops versus 555,876 ops to find the policy, ratio 0.949 <= 1.0, with safety green. Wall-time superiority was withdrawn and the mesa bridge is quarantined.",
+      "earnedConfidence": "under_review"
     },
     {
       "id": "arc_boundary",
@@ -1252,7 +1337,7 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "audit_chain_receipt",
-      "answerTemplate": "On ARC the signature shadow does not organize the task body: the Phase 3 certificate program closed four negatives, and search over the body cleared only a modest ~3% floor. The body is reconstruction-resistant but its participation ratio plateaus at ~11 - the least-marginal substrate measured, yet still below the pre-registered high-dim bar (PR >= 20). The verdict is inconclusive: no ARC solution, no SOTA, and no high-dimensional-body claim.",
+      "answerTemplate": "No ARC solution or benchmark result. Earned: the most promising body signal so far - the task structure resists easy shortcuts more than anything else measured. Boundary: it still falls below the pre-registered high-dimensional bar, so the verdict is inconclusive and unpromoted.",
       "support": [
         {
           "doc": "docs/SUNDOG_V_ARC.md",
@@ -1273,7 +1358,10 @@
       "nextAction": {
         "label": "Open the generality boundary map",
         "href": "/generality"
-      }
+      },
+      "earned": "The most promising body signal so far: the task structure resists easy shortcuts more than anything else measured - just not yet enough.",
+      "earnedDetail": "The least-marginal body-resistance substrate measured to date: participation ratio around 11, reconstruction-resistant, plus a non-zero search floor. It still falls below the pre-registered high-dimensional bar.",
+      "earnedConfidence": "promising"
     },
     {
       "id": "kakeya_boundary",
@@ -1288,7 +1376,7 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "conceptual_lineage",
-      "answerTemplate": "The Kakeya page is a finite-field reader that uses Dvir's polynomial certificate as a known-positive; the Euclidean case is a visualization boundary note. It is review-only and claims no Kakeya result, no finite-field-to-Euclidean transfer, and nothing about the open higher-dimensional problem. The substance is the established mathematics, not a Sundog result.",
+      "answerTemplate": "No Kakeya result from Sundog. Earned: an honest, review-only explainer built on a known proof. Boundary: it claims no new Kakeya progress, no finite-field-to-Euclidean transfer, and nothing about the open higher-dimensional problem.",
       "support": [
         {
           "doc": "docs/SUNDOG_V_KAKEYA.md",
@@ -1309,7 +1397,10 @@
       "nextAction": {
         "label": "Open the Kakeya reader",
         "href": "/kakeya"
-      }
+      },
+      "earned": "An honest, review-only explainer built on a known proof.",
+      "earnedDetail": "A faithful finite-field reader built on Dvir's polynomial certificate. The earned Sundog piece is correct framing and review discipline, not a Kakeya result.",
+      "earnedConfidence": "education"
     },
     {
       "id": "hodge_boundary",
@@ -1326,7 +1417,7 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "conceptual_lineage",
-      "answerTemplate": "The Hodge lane is a boundary-first reader / scoping note on known toy varieties, with explicit do-not-solve guardrails. Nothing has run; it is UNPROMOTED with no public evidence page. It is not an attack on the Hodge conjecture and not a result.",
+      "answerTemplate": "No Hodge result or attack. Earned: a careful scoping note whose value is knowing exactly where not to claim. Boundary: nothing has run, there is no public evidence page, and it is not progress on the Hodge conjecture.",
       "support": [
         {
           "doc": "docs/SUNDOG_V_HODGE.md",
@@ -1347,7 +1438,10 @@
       "nextAction": {
         "label": "Open the generality boundary map",
         "href": "/generality"
-      }
+      },
+      "earned": "A careful scoping note - its value is knowing exactly where not to claim.",
+      "earnedDetail": "A disciplined boundary-first scoping note on known toy varieties. No run is claimed; the deliverable is guardrails and non-promotion.",
+      "earnedConfidence": "education"
     },
     {
       "id": "lattice_boundary",
@@ -1364,7 +1458,7 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "audit_chain_receipt",
-      "answerTemplate": "The lattice (LDT) lane ran its build-gate on 2026-06-03 and it came back partial: a faithful ~800K-param reimplementation trained but could not reproduce the 100% Sudoku-Extreme target (rollout 0.324, a generalization ceiling), so per the build-gate guard no body / fiber number is licensed. It is not working, not shipping, and not a result - now kill-gated R&D.",
+      "answerTemplate": "No lattice result or product. Earned: the build check did its job - it caught that the model was not ready before any body/fiber result was claimed. Boundary: the gate was partial, not positive; the lane is kill-gated R&D unless a faithful substrate clears the build gate.",
       "support": [
         {
           "doc": "docs/SUNDOG_V_LATTICE.md",
@@ -1385,7 +1479,10 @@
       "nextAction": {
         "label": "Open the generality boundary map",
         "href": "/generality"
-      }
+      },
+      "earned": "The build check did its job - it caught that the model was not ready before any result was claimed.",
+      "earnedDetail": "A faithful roughly 800K-parameter reimplementation trained, and the build gate caught the generalization ceiling before any body / fiber number was licensed.",
+      "earnedConfidence": "null"
     },
     {
       "id": "chatv2_boundary",
@@ -1400,7 +1497,7 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "roadmap",
-      "answerTemplate": "The chatv2 (residual-body) lane is the first deconfounded residual-stream substrate where the body resists its shadow and scales - promising, but the SHARP verdict is seed-stability gated and the lane is unpromoted. It is not a settled scaling or generality result.",
+      "answerTemplate": "No settled scaling or generality result. Earned: chatv2 is the most promising open lane - rich internal structure that holds up as the model scales, pending a stability check. Boundary: the SHARP verdict is seed-stability gated, so the lane is unpromoted.",
       "support": [
         {
           "doc": "docs/chatv2/LANE_CHARTER.md",
@@ -1421,7 +1518,10 @@
       "nextAction": {
         "label": "Open the generality boundary map",
         "href": "/generality"
-      }
+      },
+      "earned": "The most promising open lane: rich internal structure that holds up as the model scales, pending a stability check.",
+      "earnedDetail": "The first deconfounded residual-stream lane where the body both resists its shadow and scales. It remains conditional because the SHARP verdict is seed-stability gated.",
+      "earnedConfidence": "promising"
     }
   ],
   "nonClaimRoutes": [

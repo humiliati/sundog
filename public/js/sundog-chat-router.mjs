@@ -1,5 +1,6 @@
 export const DEFAULT_FAQS = [
   "What does Sundog claim?",
+  "What has Sundog actually earned?",
   "What does Sundog not claim?",
   "Show me the strongest safe claim.",
   "What is the current controlled result?",
@@ -144,6 +145,9 @@ export function buildTraceAnswer(claimMap, prompt) {
     disposition: route.disposition || "allow",
     evidenceTier: route.evidenceTier || "unknown",
     failureMode: route.failureMode || null,
+    earned: route.earned || null,
+    earnedDetail: route.earnedDetail || null,
+    earnedConfidence: route.earnedConfidence || null,
     support: route.support || [],
     boundary: route.boundaries || [],
     confidence: confidenceFor(route),

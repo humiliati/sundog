@@ -291,9 +291,159 @@ router's measured behavior:
    - Verified: generality deterministic 52/52 clean; falsification slate 22/22 clean
      (no regression); 4 hand-crafted mis-tag drafts all rejected with the right
      violations; a bare "wall-time superiority" assertion still caught.
+   - **S1 hardening (post-audit 2026-06-04):** an independent read-only audit found the
+     first violation lists too literal (caught few *paraphrased* overclaims). Added a
+     shared `RESULT_OVERCLAIM` set (solved / breakthrough / cracked / made progress / …)
+     plus per-tag paraphrases; re-verified 52/52 + 22/22 still clean and all six
+     audit-supplied paraphrases ("a breakthrough on the mass gap", "P equals NP",
+     "the lattice reasoner works", "discovered a new law of nature", "feels the gravity
+     field", "attacking the Hodge conjecture") now caught by the tag-classifier alone.
+   - **Deferred (circle back — owner flagged "S1 raises other questions"):** the audit's
+     deeper point stands — because each slate row carries its own `forbidden` list, a
+     13.3 run measures tag-recall partly against prompts we hand-wrote, which can flatter
+     the live gate. Open: (a) add an *off-slate* adversarial paraphrase set to measure
+     true tag-violation recall; (b) decide whether the tag-classifier is the headline
+     check or a backstop layered behind `UPGRADE_LANGUAGE` + per-row `forbidden`.
 
 **Remaining for 13.3 (next step):**
 
 3. **Wire + run** the slate (`--slate generality-boundary`): deterministic + S1 +
    baselines first, hosted/open-weight second → `results/chat/phase13-generality-boundary/`,
    then the 13.4 Failure-Mode Classification Accuracy table.
+
+---
+
+## 12. "No, but" / earned-tail design (SPEC — pending owner sign-off; no code yet)
+
+**Problem.** The Phase-13 answers are weighted almost entirely to refusal. A widget
+that only ever says "no" is not disciplined, it is timid — and "0 unsafe accepts
+across a slate with no real positives" is a weak achievement and a worse UX. The
+honest move is not *more* refusal; it is **correct valence**: refuse the overclaim,
+then surface the genuinely-earned, correctly-tiered positive the lane actually banked.
+This is also the product / credibility play from the 2026-06-04 pivot — "the lab that
+tells you exactly what it earned and what it didn't," not "the lab that says no."
+
+**Discipline guardrail (non-negotiable).** The "but" is the bounded fact *at its real
+evidence tier* — never a softening into "in a sense, yes." It is gated exactly like the
+rest of the answer: the tier / `forbidden` / failure-mode-tag checks apply to the earned
+tail too, so an earned line that upgrades gets rejected. For honest-null lanes the earned
+tail is explicitly *methodological and small* — we do not manufacture a win.
+
+**Two registers (owner direction).** Every earned tail has a **plain widget version**
+(short, no internal jargon — the default a visitor sees) and a **technical version in
+the trace drawer** (the full receipt, surfaced on technical follow-up). Reserve terms
+like "regime-2", "body-resistance", "participation ratio", "FVE", "twin-state" for the
+trace drawer, never the first answer.
+
+**Valence spectrum.** Not every lane is a null. Classes (with their UI confidence):
+
+- **Tier-1 wins — lead with the positive, full confidence:** Aharonov-Bohm
+  (`exact-separation`), Faraday (`identity-success`). Render as a confident "✓ Earned".
+- **Tier-2 positive-but-review-gated — lead, but at lower visual confidence and with a
+  NARROW first noun:** P-vs-NP → "bounded verifier certificate" (not "P-vs-NP"),
+  Navier-Stokes C1 → "finite-Galerkin PDE witness" (not "Navier-Stokes progress").
+  Render as "✓ Earned · under review".
+- **Promising / real-but-partial — "no, but here is the live signal":** Mesa, ARC,
+  chatv2, Isotrophy, Three-body.
+- **Honest nulls — keep the "but" small (the methodology win):** Yang-Mills, Riemann,
+  Navier-Stokes C2, Lattice, Hodge; cap-set/unit-distance and Kakeya are educational
+  reader exhibits.
+
+**Trace-drawer register (technical ✓ — the full receipt, for follow-up):** drafted for review.
+
+| Lane | tag | lead+? | earned tail (tier-bounded ✓) |
+| --- | --- | --- | --- |
+| Aharonov-Bohm | exact-separation | **yes** | The portfolio's first *exact* regime-2 witness: one flux number fixes the AB phase while the local field stays control-blind — a sharp, pre-registered topological separation. |
+| Faraday | identity-success | **yes** | A clean structural-zero — local plaquette-holonomy closes Faraday induction with no global reconstruction; the exact-zero anchor the marginal lanes only approach, and the worked example behind the safety-method essay. |
+| P-vs-NP | bounded-positive | **yes** | The op-count certificate genuinely clears — cheaper to check than the policy was to find (0.949 ≤ 1.0) — and safety has stayed green across every version. |
+| Navier-Stokes C1 | marginal | **yes** | A certified state-insufficient yet control-sufficient witness on a real PDE substrate (twin-state certified) — the strongest current generality lane, review-gated. |
+| Mesa | marginal | no | A real, causally-localized control cliff in a 5D net.7 subspace — a genuine interpretability finding that resisted every linear / SAE factorization. |
+| ARC | convergence-to-null | no | The least-marginal body-resistance substrate measured to date (participation ratio ~11, reconstruction-resistant) plus a non-zero search floor — the most promising body signal so far, even though it sits below the high-dim bar. |
+| chatv2 | conditional | no | The first deconfounded residual-stream lane where the body both resists its shadow *and* scales — the most promising path to a sharp result, pending seed-stability. |
+| Isotrophy | conditional | no | A real conditional transfer that replicated to external data (Liao 2021) within the right mass strata — bounded but reproduced. |
+| Three-body | deflationary | no | A real, mapped near-escape survival pocket held from an indirect signal; the Phase-18 deflation sharpened rather than erased the mechanism — honest precision. |
+| Yang-Mills | bounded-null | no | A clean, pre-registered bounded null that sharpens the abelian / non-abelian boundary; the gauge-randomization control caught a real staple-orientation bug before any score was read. |
+| Navier-Stokes C2 | numerical | no | A four-obstruction methodology catalogue and an honest deferral — the exact numerical wall is known and the integrator that resumes it is named. |
+| Riemann | vacuous | no | The vacuity was caught and recorded in-house — the discipline worked: a rigidity check that passes for the wrong reason was flagged, not published. |
+| Lattice | build-gate-partial | no | A faithful ~800K-param reimplementation that trained, and a build-gate that did its job — it caught the generalization ceiling before any body / fiber number was licensed. |
+| cap-set / unit-distance | explainer-tier | no | Clean, honest reader / apparatus exhibits of genuine external breakthroughs (the polynomial method; OpenAI's unit-distance disproof) — claim-hygiene done right. |
+| Kakeya | explainer-tier | no | A faithful finite-field reader built on Dvir's polynomial certificate — a correct, review-only teaching surface. |
+| Hodge | explainer-tier | no | A disciplined boundary-first scoping note — knowing exactly where *not* to claim is the deliverable. |
+
+**Widget register (plain ✓ — what the visitor sees by default):**
+
+| Lane | confidence | widget tail (plain, no jargon) |
+| --- | --- | --- |
+| Aharonov-Bohm | ✓ win | One thing it nailed exactly: a single hidden quantity fixes the outcome while the local view stays blind to it. |
+| Faraday | ✓ win | It reproduced a known physical law exactly from purely local data — a clean, fully-checked result. |
+| P-vs-NP | ✓ under review | It earned a bounded verifier certificate: checking the answer is provably cheaper than finding it, and it stayed safe throughout — still under review. |
+| Navier-Stokes C1 | ✓ under review | It earned a finite-Galerkin PDE witness — a real, checked example on a fluid model, modest but genuine — still under review. |
+| Mesa | ~ promising | It found a small, specific internal region that flips the controller's behavior — a real interpretability result. |
+| ARC | ~ promising | The most promising signal we have: the task's structure resists easy shortcuts more than anything else we've measured — just not yet enough. |
+| chatv2 | ~ promising | Our most promising open lane — rich internal structure that holds up as the model scales, pending a stability check. |
+| Isotrophy | ~ promising | It works within the right conditions, and that held up on outside data. |
+| Three-body | ~ promising | It really does hold a hard orbit from an indirect cue; a closer look just described the mechanism more plainly. |
+| Yang-Mills | – null | A clean, honest "nothing here" on a specific test — and a safety check caught a real bug along the way. |
+| Navier-Stokes C2 | – null | We mapped exactly why it didn't run and what would make it work. |
+| Riemann | – null | The discipline worked: a tempting shortcut was caught as empty before it became a claim. |
+| Lattice | – null | The build check did its job — it caught that the model wasn't ready before any result was claimed. |
+| cap-set / unit-distance | edu | Honest explainer pages for real outside breakthroughs — credited to their authors, not us. |
+| Kakeya | edu | An honest, review-only explainer built on a known proof. |
+| Hodge | edu | A careful scoping note — its value is knowing exactly where not to claim. |
+
+### 12a. Earned-inventory route (new first-class surface — owner-requested)
+
+The widget should not only *react* to overclaims; it should *volunteer* the positive
+inventory when asked "what has Sundog actually earned?" — that is where the "not just
+no" feeling lands. Proposed new route `sundog_earned_inventory`:
+
+- **questionPatterns:** "what has sundog earned", "what has sundog actually earned",
+  "what has sundog accomplished", "what does sundog have to show", "what are the wins",
+  "what actually works", "positive results", "show me the wins".
+- **disposition:** allow_with_boundary · **tier:** `navigation` (it points onward to
+  per-lane routes, each carrying its own tier).
+- **answerTemplate (tiered inventory, strongest first, plain register):**
+  1. Strongest controlled result — photometric mirror-alignment.
+  2. The widget itself — Ask Sundog preserves claim boundaries under pressure (0 unsafe accepts on the tested slate).
+  3. Two exact receipts — Faraday (a law reproduced exactly from local data) and Aharonov-Bohm (a hidden quantity fixing the outcome exactly).
+  4. Operating-envelope studies — three-body, mesa, balance, pressure-mines (bounded, mapped; not global solutions).
+  5. Then, honestly — the promising-but-open lanes and the bounded nulls → the generality boundary map.
+- **boundaries:** each item at its own tier; never aggregate into "validated framework";
+  always taper to the partials / nulls so the inventory stays honest.
+- **nextAction:** Open the strongest result (/docs/SCIENTIFIC_CRITERIA.md) or the generality boundary map (/generality).
+
+Complements (does not replace) `current_controlled_result` (single strongest claim) and
+`application_tier_summary`. This is the proactive positive surface.
+
+**Proposed implementation (when signed off):**
+
+1. **Content** — rewrite each route's `answerTemplate` (and the §4 fences) to the
+   "no, but" shape: lead-with-positive for the four wins; "[honest status] + [✓ earned
+   tail] + [✗ boundary]" for the rest. Re-run the gate self-pass (must stay 52/52 +
+   22/22) — the earned tails become part of the gated answer, so each must stay
+   tier-faithful (spot-checked safe against the current tag-classifier in drafting).
+2. **Schema** — add an `earned` string field on each generality route; pass it into the
+   trace (`buildTraceAnswer`) alongside `failureMode`; render a distinct "✓ Earned"
+   line/chip beside the "✗ Boundary" in the trace drawer / evidence rail.
+3. **Metric — "Valence Completeness" (internal / product-quality for v1.0).** Score a
+   row fully correct only when the answer gets *all three*: **correct boundary + correct
+   earned tail + correct tier**. Per owner direction this stays an **internal gate /
+   product-quality metric, NOT the headline ratchet**, until the off-slate S1 paraphrase
+   set runs — otherwise it measures "we wrote the right tails for prompts we wrote," not
+   real robustness. The off-slate set (from the §11 deferred questions) is the gate to
+   promoting Valence Completeness to a headline number.
+
+**Sign-off status (2026-06-04, owner feedback folded in):**
+- (a) Earned-tail wording approved with the **two-register** split — plain in the widget,
+  technical in the trace drawer.
+- (b) Lead set = **Tier-1** Aharonov-Bohm + Faraday (full confidence) and **Tier-2**
+  P-vs-NP + Navier-Stokes C1 (review-gated, narrow first noun: "bounded verifier
+  certificate" / "finite-Galerkin PDE witness").
+- (c) Ship content + schema + UX; keep **Valence Completeness internal** until the
+  off-slate S1 set runs.
+- New: a first-class **earned-inventory route** (§12a).
+
+**Remaining before build:** final nod on the drafted *widget* tails + the inventory
+`answerTemplate`, then implement in order — content rewrite (two registers) → `earned`
+schema field + trace passthrough → "✓ Earned" UI chip (Tier-1 vs Tier-2 confidence) →
+the earned-inventory route → re-verify the gate stays 52/52 + 22/22.

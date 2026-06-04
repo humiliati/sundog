@@ -383,6 +383,12 @@ body {
   color: rgba(20, 43, 58, 0.7);
 }
 
+.sd-chat-chip--earned {
+  background: #fff7d9;
+  border-color: rgba(157, 116, 30, 0.42);
+  color: #6b4a0b;
+}
+
 .sd-chat-next {
   display: inline-flex;
   margin-top: 0.7rem;

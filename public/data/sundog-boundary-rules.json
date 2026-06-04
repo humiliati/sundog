@@ -17,6 +17,22 @@
       ]
     },
     {
+      "routeId": "sundog_earned_inventory",
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "navigation",
+      "boundaries": [
+        "Keep each item at its own evidence tier.",
+        "Do not aggregate the inventory into a validated universal framework.",
+        "Name the partial and null lanes after the strongest positives so the answer stays honest."
+      ],
+      "supportDocs": [
+        "docs/SCIENTIFIC_CRITERIA.md",
+        "docs/SUNDOG_V_CHAT.md",
+        "docs/CROSS_SUBSTRATE_NOTES.md",
+        "docs/APPLICATIONS.md"
+      ]
+    },
+    {
       "routeId": "framework_pattern",
       "disposition": "allow_with_boundary",
       "evidenceTier": "roadmap",

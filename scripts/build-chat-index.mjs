@@ -30,6 +30,8 @@ const chunks = routes.flatMap((route) => {
     questionPatterns: route.questionPatterns || [],
     text: [
       route.answerTemplate,
+      route.earned,
+      route.earnedDetail,
       ...(route.questionPatterns || []),
       ...(route.boundaries || [])
     ].filter(Boolean).join(" ")

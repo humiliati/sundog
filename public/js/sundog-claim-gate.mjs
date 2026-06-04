@@ -66,19 +66,30 @@ const ROUTES_ALLOWED_TO_SAY_RESEARCH_RESULT = new Set([
 // honest answer naming the boundary to deny it ("not a discovery", "no separating
 // structure") passes. The check only fires when trace.failureMode is set, so the
 // pre-Phase-13 routes and the falsification slate are unaffected.
+// Shared "famous-problem solution" overclaim markers, applied to every null /
+// marginal / explainer tag. None appear unnegated in an honest bounded answer, so
+// the negation-aware check leaves the deterministic templates clean. (Faraday's
+// `identity-success` and Aharonov-Bohm's `exact-separation` are POSITIVE anchors —
+// they legitimately claim an earned identity / exact separation — so they use their
+// own discovery-framed lists rather than this set, and `bounded-positive` likewise.)
+const RESULT_OVERCLAIM = [
+  "solved", "a breakthrough", "breakthrough on", "breakthrough in", "cracked",
+  "a proof of", "resolved the", "made progress", "making progress", "real progress",
+  "a major result", "a genuine result"
+];
 const FAILURE_MODE_VIOLATIONS = {
-  "vacuous": ["bounded null", "a genuine separation", "a real result"],
-  "bounded-null": ["a genuine separation", "separating structure", "mass gap proof", "a real result"],
-  "marginal": ["non-marginal", "sharp separation", "physically sharp", "global regularity result"],
-  "numerical": ["the run found", "the finding is", "we discovered", "turbulence result"],
-  "convergence-to-null": ["high dimensional body", "beat the benchmark", "state of the art", "solved arc"],
-  "conditional": ["mass marginal predictor", "general stability predictor", "unconditional predictor", "settled result"],
-  "deflationary": ["senses gravity", "tidal sensing", "tidal gradient steering"],
-  "build-gate-partial": ["is working", "is shipping", "reproduced the ldt", "a lattice result"],
-  "identity-success": ["a discovery", "new physics", "new law of physics", "a new theorem"],
-  "exact-separation": ["a new theorem", "new physics", "an original result"],
-  "explainer-tier": ["sundog proved", "sundog disproved", "sundog s own result"],
-  "bounded-positive": ["resolved p vs np", "a complexity result", "complexity theoretic result"]
+  "vacuous": [...RESULT_OVERCLAIM, "bounded null", "a genuine separation", "a real result", "carries information", "informative result"],
+  "bounded-null": [...RESULT_OVERCLAIM, "a genuine separation", "separating structure", "mass gap proof", "a real result"],
+  "marginal": [...RESULT_OVERCLAIM, "non-marginal", "sharp separation", "physically sharp", "global regularity"],
+  "numerical": [...RESULT_OVERCLAIM, "the run found", "the finding is", "we discovered", "turbulence result"],
+  "convergence-to-null": [...RESULT_OVERCLAIM, "high dimensional body", "beat the benchmark", "state of the art", "sota", "solved arc"],
+  "conditional": [...RESULT_OVERCLAIM, "mass marginal predictor", "general stability predictor", "unconditional predictor", "settled result"],
+  "deflationary": [...RESULT_OVERCLAIM, "senses gravity", "sensing gravity", "tidal sensing", "tidal gradient steering", "feels the gravity", "feels the field"],
+  "build-gate-partial": [...RESULT_OVERCLAIM, "is working", "works", "is shipping", "shipping", "reproduced the ldt", "a lattice result", "reached 100"],
+  "explainer-tier": [...RESULT_OVERCLAIM, "sundog proved", "sundog disproved", "sundog s own result", "attacking the", "an attack on"],
+  "identity-success": ["a discovery", "discovered a new", "new physics", "new law of physics", "new law of nature", "a new theorem", "a new law"],
+  "exact-separation": ["a new theorem", "new physics", "new law of nature", "an original result", "a novel theorem", "discovered"],
+  "bounded-positive": ["resolved p vs np", "p equals np", "a complexity result", "complexity theoretic result", "provably faster", "faster than finding", "faster than search", "wall clock superiority"]
 };
 
 export async function draftWithAdapter({ adapter, prompt, trace, context = {} }) {

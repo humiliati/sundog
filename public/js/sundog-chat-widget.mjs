@@ -245,6 +245,9 @@ function renderTierRail(trace, mascotLabel = null) {
   const rail = document.createElement("div");
   rail.className = "sd-chat-tier-rail";
   rail.append(chip(trace.evidenceTier || "unknown", "tier"));
+  if (trace.earned) {
+    rail.append(chip(earnedChipLabel(trace.earnedConfidence), "earned"));
+  }
   if (trace.boundary?.length) rail.append(chip("Boundary Active", "state"));
   if (trace.disposition === "refuse") {
     rail.append(chip("Refused", "state"));
@@ -292,6 +295,10 @@ function renderTrace(trace) {
     details.append(traceList("Sources", trace.support.map((support) => `${support.doc} - ${support.section} (${support.status})`)));
   }
 
+  if (trace.earned || trace.earnedDetail) {
+    details.append(traceList("Earned", [trace.earnedDetail || trace.earned]));
+  }
+
   if (trace.boundary?.length) {
     details.append(traceList("Boundary", trace.boundary));
   }
@@ -330,6 +337,24 @@ function chip(value, kind = "tier") {
   span.className = `sd-chat-chip sd-chat-chip--${kind}`;
   span.textContent = String(value || "unknown").replaceAll("_", " ");
   return span;
+}
+
+function earnedChipLabel(confidence) {
+  switch (confidence) {
+    case "under_review":
+      return "Earned - under review";
+    case "promising":
+      return "Earned - partial";
+    case "null":
+      return "Earned - method";
+    case "education":
+      return "Explainer";
+    case "inventory":
+      return "Earned inventory";
+    case "win":
+    default:
+      return "Earned";
+  }
 }
 
 function paragraph(text) {

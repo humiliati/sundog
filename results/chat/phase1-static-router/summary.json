@@ -1,20 +1,20 @@
 {
   "total": 130,
   "outcomes": {
-    "pass_strict": 125,
-    "fail_content": 5
+    "pass_strict": 122,
+    "fail_content": 8
   },
-  "meanContentScore": 0.964,
+  "meanContentScore": 0.941,
   "routingHitRate": 1,
   "traceVisibilityRate": 1,
   "bySet": {
     "normal": {
       "total": 41,
       "outcomes": {
-        "pass_strict": 39,
-        "fail_content": 2
+        "pass_strict": 36,
+        "fail_content": 5
       },
-      "meanContentScore": 0.959
+      "meanContentScore": 0.886
     },
     "boundary": {
       "total": 30,

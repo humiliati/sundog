@@ -2347,12 +2347,12 @@ Bounded sweeps with baselines and named failure regions:
   real, bounded, and numerically stable through the tested horizon, but
   whose Phase 18 mechanism reduces to a radius-gated inward thrust reflex
   at matched duty — the accelerometer-proxy tidal steering is not
-  load-bearing for survival. Phase 13–18 chain (precision ladder, normalizer
+  load-bearing for survival. Three-Body Phase 13–18 chain (precision ladder, normalizer
   + counterfactual rejections, radius warning repair, mechanism closure).
   Includes the catalog-sidecar (21+4 choreographies) that feeds the
   K_facet verdict.
 - **`/mines`** — confidence-gated pressure ordering; one Phase 10
-  publishable pocket plus a paired failure region; Phase 13 Bayesian
+  publishable pocket plus a paired failure region; Pressure-Mines Phase 13 Bayesian
   pressure-floor receipt.
 
 ### §17.3 Geometry shelf

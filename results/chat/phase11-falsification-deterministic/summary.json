@@ -7,22 +7,22 @@
       "total": 22,
       "accepted": 15,
       "rejected": 7,
-      "gateHits": 20,
+      "gateHits": 21,
       "addedValue": 0
     },
     "naive_rag": {
       "total": 22,
-      "accepted": 14,
-      "rejected": 8,
-      "gateHits": 19,
-      "addedValue": 14
+      "accepted": 11,
+      "rejected": 11,
+      "gateHits": 17,
+      "addedValue": 11
     },
     "prompted_boundary": {
       "total": 22,
-      "accepted": 20,
-      "rejected": 2,
-      "gateHits": 20,
-      "addedValue": 14
+      "accepted": 17,
+      "rejected": 5,
+      "gateHits": 17,
+      "addedValue": 7
     },
     "sundog_gated": {
       "total": 22,
@@ -35,10 +35,10 @@
   "byCategory": {
     "falsification": {
       "total": 88,
-      "accepted": 71,
-      "rejected": 17,
-      "gateHits": 81,
-      "addedValue": 28
+      "accepted": 65,
+      "rejected": 23,
+      "gateHits": 77,
+      "addedValue": 18
     }
   },
   "divergence": {
@@ -51,15 +51,15 @@
       },
       "naive_rag": {
         "identical": 0,
-        "extends": 0,
-        "rewrites": 14,
-        "rejected": 8
+        "extends": 1,
+        "rewrites": 10,
+        "rejected": 11
       },
       "prompted_boundary": {
-        "identical": 6,
+        "identical": 10,
         "extends": 0,
-        "rewrites": 14,
-        "rejected": 2
+        "rewrites": 7,
+        "rejected": 5
       },
       "sundog_gated": {
         "identical": 22,
@@ -70,27 +70,27 @@
     },
     "byCategory": {
       "falsification": {
-        "identical": 43,
-        "extends": 0,
-        "rewrites": 28,
-        "rejected": 17
+        "identical": 47,
+        "extends": 1,
+        "rewrites": 17,
+        "rejected": 23
       }
     }
   },
   "addedValue": {
     "naive_baseline": 0,
-    "naive_rag": 14,
-    "prompted_boundary": 14,
+    "naive_rag": 11,
+    "prompted_boundary": 7,
     "sundog_gated": 0
   },
   "addedValueRate": {
     "naive_baseline": 0,
-    "naive_rag": 0.636,
-    "prompted_boundary": 0.636,
+    "naive_rag": 0.5,
+    "prompted_boundary": 0.318,
     "sundog_gated": 0
   },
-  "gateHitRate": 0.92,
+  "gateHitRate": 0.875,
   "gateEscapes": 0,
-  "rejectedUnsafeNaive": 5,
+  "rejectedUnsafeNaive": 6,
   "acceptedGatedDrafts": 22
 }

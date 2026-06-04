@@ -85,6 +85,10 @@ quantity rather than a slogan.
   gap beyond the seed spread). **If JEPA and GEN read the same on the toy, the "JEPA
   discards state" claim has no signal here → shelve the lane.** No scaling to real JEPA
   without a toy signal.
+- **Blocked-vs-shelved distinction:** if the lit-pass-faithful small JEPA collapses or
+  cannot be trained on the toy backbone, Phase 0 is `blocked_by_unfaithful_jepa`, not a
+  scientific null. The shelf verdict is reserved for a trainable, control-clean JEPA
+  whose closure read matches GEN inside the pre-registered seed spread.
 
 ## 6. Phases beyond 0 (gated on Phase-0 pass AND the lit pass)
 
@@ -105,11 +109,18 @@ cannot port to real JEPA representations, the lane stalls at the toy** — and t
 acceptable, bounded outcome, but it must be known *before* Phase 1. The lit pass decides
 whether there is a real path past the toy.
 
+This is a hard wall, not a delay. If the lit pass cannot name a faithful real-data
+de-confound, the lane may still run Phase 0 as a toy-tier measurement, but it cannot use
+that result as permission to speak about real JEPA representations.
+
 ## 8. Lit-pass targets (resolve before the Phase-0 spec)
 
 1. **JEPA mechanics** — I-JEPA / V-JEPA encoder–predictor–EMA-target structure, masking
    schemes, and the exact collapse-avoidance that makes a faithful *small* JEPA trainable
    on the toy backbone (the 1080).
+   - Sub-question: can Phase 0 reuse the coupled toy directly, or does it need a
+     JEPA-compatible context/target view of the same toy? A new JEPA-friendly toy is not
+     licensed unless the lit pass says the frozen toy cannot host a faithful JEPA read.
 2. **What's already measured** — prior probing of JEPA representations: is "JEPA discards
    unpredictable detail / keeps abstract structure" an empirical result or a design claim?
    What methods exist, and does the determining-shadow-set read add anything?
