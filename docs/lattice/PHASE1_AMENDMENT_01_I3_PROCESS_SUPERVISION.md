@@ -192,3 +192,35 @@ python scripts/lattice_ldt_model.py --mode build-gate --stage eval \
 - [`PROMOTE_GATE.md`](PROMOTE_GATE.md) — `build_gate_pass` is the R1 precondition; the
   cross-decode / Target-A fences the §3.3 leakage guard serves.
 - [`../SUNDOG_V_LATTICE.md`](../SUNDOG_V_LATTICE.md) — Phase-1 status; B2/B1/B3 gating.
+
+## 11. Freeze marker (2026-06-03 — implementation complete, run gated)
+
+Implementation landed at commit `fd49da49` (CP solver `scripts/lattice_cp.py` + runner
+integration). **The GPU-free portion is done and smoke-verified; the v3 binding run is the
+only remaining step, gated on a CC ≥ 7.0 box.**
+
+**Validation banked:**
+- CP solver: solves AI Escargot + **200/200 Sudoku-Extreme test puzzles**, 0 solution-
+  mismatch, 0 clue-violations, **0 soundness-violations** (true digit never eliminated on a
+  solution-consistent state), ~98 nodes/puzzle (≈98k sound states from 1000 puzzles).
+- CP-imitation training (CPU smoke, real puzzles): `keep ⊆ cand_mask`, deep-sup shape
+  `(16,B,81,9)`, `elim_loss 0.737 → 0.509`. `--mode smoke` regression green (param 798346).
+
+**Pre-registered v3 run config (FROZEN; supersedes the §9 placeholder):**
+- TRAIN: `--recipe cp_imitation --aug-factor 1 --warmup-steps 1000 --max-steps 80000
+  --compile --batch 64 --seed 0` (+ `--checkpoint-every 1000 --log-every 200
+  --eval-every 1000 --max-eval 1000`).
+- **`aug-factor 1`** (not v2's 50): the ≈98k CP-trajectory states already supply state
+  diversity, and sound CP narrowing is a *universal, position/label-equivariant* function, so
+  it should generalize off the base puzzles without symmetry augmentation — the clean test of
+  the thesis. If Falsifier C (low train loss, unsound on test) triggers, v3.1 adds aug as the
+  first lever (new slate id, pre-registered then).
+- **`max-steps 80000`** (≈52 epochs over the pool; extend by resume per the runbook if the
+  diag one-shot is still climbing). Deep supervision applies the head 16×/step → expect
+  ~1.2–1.5× v2's per-step time.
+- **EVAL UNCHANGED (the gate):** `--stage eval --resume latest --max-eval 1000`, full frozen
+  caps 4096/64, `θ 0.5/0.6`, `build_gate_pass iff rollout_exact_rate ≥ 0.999`.
+
+**Next (gated on GPU):** provision a CC ≥ 7.0 box (runbook) → run the frozen train →
+soundness audit (CP-target true-digit-kept) → binding eval → receipt
+`receipts/2026-06-03+_build_gate_v3.md`.
