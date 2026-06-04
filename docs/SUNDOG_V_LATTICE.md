@@ -232,6 +232,22 @@ Branch criteria:
 | `build_gate_fail` | cannot reproduce substrate | close or re-register |
 | `access_checkpoint_available` | authors or public release provide usable model | run an access/fidelity audit before Phase 0 |
 
+**Status (2026-06-03): `build_gate_partial` - receipt filed, B-layers GATED.** A faithful
+798,346-param reimplementation was trained on a rented H100 (Sudoku-Extreme 1K, aug_factor
+50, lr warmup+cosine decay, `--compile`, ~37 ms/step) and scored under the frozen I5
+rollout: **`rollout_exact_rate 0.324`** (`one_shot == rollout`; `avg_nodes 1.03`; `false_elim
+18.78`/puzzle; 676/1000 conflict-exhausted). Two-step finding - v1 (flat lr) was
+optimization-unstable (oscillated, diag crashed to 0.0); v2 (lr warmup+cosine decay)
+trained stably (loss -> 1.2e-5) but hit a **generalization ceiling** (fits the augmented
+pool, unsound on held-out test). Per the table this is the `build_gate_partial`
+disposition: **no B-layer verdict; diagnose implementation.** Likely root - symmetry
+augmentation adds no *logical* diversity and the `[I3]` per-cell-BCE-on-final-solution
+objective permits memorization; the next lever is **deep supervision** (`[I3]` revisited)
+or the paper's actual training objective - a recipe change, not more compute (v2 already
+converged at lr -> 0). Full receipt:
+[`lattice/receipts/2026-06-03_BUILD_GATE_V1V2.md`](lattice/receipts/2026-06-03_BUILD_GATE_V1V2.md).
+Phase 0 / Phase 2 (B2) execution stays **gated** on a `build_gate_pass`.
+
 #### GPU on-ramp + what transfers from chatv2 (scoped 2026-06-03, handoff §0)
 
 The LDT does **not** reuse the chatv2 parity harness - it borrows chatv2's
