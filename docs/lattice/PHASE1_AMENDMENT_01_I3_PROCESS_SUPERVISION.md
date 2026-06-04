@@ -224,3 +224,50 @@ only remaining step, gated on a CC ≥ 7.0 box.**
 **Next (gated on GPU):** provision a CC ≥ 7.0 box (runbook) → run the frozen train →
 soundness audit (CP-target true-digit-kept) → binding eval → receipt
 `receipts/2026-06-03+_build_gate_v3.md`.
+
+## 12. v3 protocol hardening (sundog_v_allelopathy top-down review, 2026-06-03)
+
+The allelopathy team's boundary-discipline review tightened the v3 protocol *before any run*.
+All five accepted and **implemented (GPU-free, smoke-verified)**. These SUPERSEDE the §11
+extension clause.
+
+1. **Checkpoint freeze (hard).** Binding eval is `checkpoint_latest.pt` at **exactly 80000
+   steps — no best-checkpoint selection, no "still climbing" extension.** A `partial` does NOT
+   license "train a bit more"; it opens **v3.1** with a NEW pre-registered `--max-steps` (new
+   slate id). This removes the "train until the graph looks hopeful" path. *(§11's "extend by
+   resume if the diag is climbing" is WITHDRAWN.)*
+
+2. **Null-rollout control (`u_null` analogue) — IMPLEMENTED + CONFIRMED.** `--null-rollout`
+   rolls out the **untrained** model on a small fixed test slice at the frozen I5 caps; it MUST
+   NOT pass (`null_control_ok = rollout_exact < 0.05`). Verified now on a fresh model:
+   **`rollout_exact 0.0`, `null_control_ok true`** (avg_branches ≈ 364 — it thrashes without
+   solving). Certifies I5 + terminal-validity + DFS is **not a Sudoku solver independent of the
+   learned model**, so a `build_gate_pass` reflects the model, not the harness. v3 runs this
+   alongside the binding eval; the receipt reports it.
+
+3. **Process-functional vs reconstruction (k_func/k_state) — IMPLEMENTED.** The eval emits a
+   `process_functional` table: `cp_target_accuracy / false_elim / rollout_exact /
+   one_shot_exact / avg_nodes`. It localizes a miss to **soundness** (false_elim high),
+   **coverage** (sound but rollout low), **endpoint memorization** (one_shot high yet
+   cp_target_accuracy low), or **rollout policy** (avg_nodes ≈ 1). Build-gate **diagnosis, NOT a
+   B-layer claim.** (Untrained baseline `cp_target_accuracy ≈ 0.48`; a sound imitator ≈ 0.99.)
+
+4. **Low-tail visibility — IMPLEMENTED.** Beyond mean `rollout_exact`, the eval emits the full
+   stop-reason counts, the false_elim distribution (`tail`: p50/p90/p99/max), `node_cap_fraction`,
+   and the **worst-10 puzzle slices** (idx / false_elim / stop_reason / nodes). A `partial`
+   must show its tail, not a fog bank.
+
+5. **Artifact preservation before teardown.** Pull + keep (gitignored): `checkpoint_latest.pt`,
+   `manifest.json` (carries `gitCommit` = exact code), `train_log.jsonl`, `rollout_per_puzzle
+   .jsonl` (+ `_null.jsonl`), and **`cp_pool_meta.json`** (CP-target metadata + content
+   `fingerprint`). No B-layer read unless `build_gate_pass`, but the only trained body must stay
+   auditable.
+
+**Updated v3 protocol (FROZEN):**
+1. train (frozen §11 config) → `checkpoint_latest.pt` @ 80000 (no best-of, no extension).
+2. **null control:** `--mode build-gate --stage eval --null-rollout --max-eval 256` → assert
+   `null_control_ok`.
+3. **binding eval:** `--stage eval --resume latest --max-eval 1000` (full caps) →
+   `process_functional` table + `tail` + stop-reasons.
+4. CP-target soundness audit (true digit kept on solution-consistent states).
+5. pull the 5 artifacts → receipt → teardown.

@@ -90,6 +90,7 @@ class Cfg:
     aug_factor: int = 50                 # augmented pool = aug_factor x 1000 (symmetry aug; breaks 1K overfit)
     compile_model: bool = False          # torch.compile (reduce-overhead/CUDA graphs); needs GPU CC>=7.0 (A100/H100)
     recipe: str = "cp_imitation"         # [I3'] cp_imitation (Amendment 01) | solution_onehot (legacy v1/v2)
+    null_rollout: bool = False           # rollout the UNTRAINED model (allelopathy u_null control); MUST NOT pass
     # I5 rollout (contract: docs/lattice/PHASE1_I5_ROLLOUT_CONTRACT.md)
     theta_drop: float = 0.5              # eliminate when drop_conf = 1 - sigmoid(logit) >= theta_drop
     theta_cls: float = THETA_CLS         # conflict when sigmoid(conflict_logit) > theta_cls (0.6)
@@ -352,7 +353,9 @@ def build_cp_trajectory_pool(pairs, device, node_cap=4096, max_states=600000):
     conflict_tgt = torch.tensor([1.0 if st_all[i] == "contradiction" else 0.0 for i in sel],
                                 dtype=torch.float, device=device)
     meta = {"cp_pool_states": lat_in.shape[0], "cp_nodes_total": M, "puzzles": len(pairs),
-            "puzzles_solved": n_solved, "conflict_frac": round(conflict_tgt.mean().item(), 4)}
+            "puzzles_solved": n_solved, "conflict_frac": round(conflict_tgt.mean().item(), 4),
+            "fingerprint": f"s{lat_in.shape[0]}|k{keep_tgt.sum().item():.0f}|"
+                           f"m{cand_mask.sum().item():.0f}|c{conflict_tgt.sum().item():.0f}"}
     return lat_in, keep_tgt, cand_mask, conflict_tgt, meta
 
 
@@ -672,6 +675,42 @@ def run_smoke(cfg: Cfg, device) -> dict:
     }
 
 
+@torch.no_grad()
+def cp_target_accuracy(model, pairs, device, node_cap, theta_drop, max_states=20000):
+    """Process-functional diagnostic (Amendment 01; the k_func-vs-k_state separation): on
+    held-out CP states, does the model's keep-decision (the rollout's OWN rule) match the
+    SOUND CP narrowing target? High = imitates sound narrowing; this is NOT a B-layer claim."""
+    model.eval()
+    lat_in, keep_tgt, cand_mask, _c, meta = build_cp_trajectory_pool(
+        pairs, device, node_cap=node_cap, max_states=max_states)
+    if lat_in.shape[0] == 0:
+        return {"cp_target_accuracy": None, "states": 0, "puzzles_solved": meta["puzzles_solved"]}
+    correct = total = 0.0
+    for i in range(0, lat_in.shape[0], 512):
+        elim, _ = model(lat_in[i:i + 512])
+        keep_pred = (1.0 - torch.sigmoid(elim) < theta_drop).float()      # the rollout's keep rule
+        msk = cand_mask[i:i + 512]
+        correct += ((keep_pred == keep_tgt[i:i + 512]).float() * msk).sum().item()
+        total += msk.sum().item()
+    return {"cp_target_accuracy": round(correct / max(1.0, total), 4),
+            "states": lat_in.shape[0], "puzzles_solved": meta["puzzles_solved"]}
+
+
+def tail_stats(per_puzzle):
+    """Low-tail visibility (CROSS_SUBSTRATE lesson: boundaries live in the tail, not the mean).
+    Prevents a `partial` verdict from being a fog bank."""
+    if not per_puzzle:
+        return {}
+    fe = sorted(p["false_elim"] for p in per_puzzle)
+    n = len(fe)
+    pct = lambda q: fe[min(n - 1, int(q * n))]
+    worst = sorted(per_puzzle, key=lambda p: (-p["false_elim"], -p["nodes"]))[:10]
+    return {"false_elim_p50": pct(0.5), "false_elim_p90": pct(0.9), "false_elim_p99": pct(0.99),
+            "false_elim_max": fe[-1], "n_nonexact": sum(1 for p in per_puzzle if not p["exact"]),
+            "worst10": [{"idx": p["idx"], "false_elim": p["false_elim"], "stop": p["stop_reason"],
+                         "nodes": p["nodes"]} for p in worst]}
+
+
 def run_build_gate(cfg: Cfg, device, out: Path) -> dict:
     """The real build-gate: train on Sudoku-Extreme, eval via the I5 rollout to reproduce
     100% (contract PHASE1_I5_ROLLOUT_CONTRACT.md). Needs dataset + GPU + time; gated."""
@@ -685,7 +724,7 @@ def run_build_gate(cfg: Cfg, device, out: Path) -> dict:
     opt = torch.optim.AdamW(model.parameters(), lr=cfg.lr, weight_decay=cfg.weight_decay)
     resume_info = None
     start_step = 0
-    if cfg.resume:
+    if cfg.resume and not cfg.null_rollout:                  # null control rolls out the UNTRAINED model
         resume_info = _load_checkpoint(out, cfg.resume, model, opt, rng, device)
         start_step = resume_info["step"]
     if cfg.compile_model:
@@ -705,6 +744,9 @@ def run_build_gate(cfg: Cfg, device, out: Path) -> dict:
                        if cfg.aug_factor > 1 else list(train_pairs))
             cp_lat, cp_keep, cp_mask, cp_conf, cp_meta = build_cp_trajectory_pool(
                 puzzles, device, node_cap=cfg.max_search_nodes)
+            (out / "cp_pool_meta.json").write_text(json.dumps(                    # artifact (review #5)
+                {**cp_meta, "aug_factor": cfg.aug_factor, "node_cap": cfg.max_search_nodes,
+                 "seed": cfg.seed}, indent=2), encoding="utf-8")
             print(json.dumps({"recipe": "cp_imitation", **cp_meta, "aug_factor": cfg.aug_factor}), flush=True)
         else:
             # v2 legacy: symmetry-augmented puzzle->solution pool (solution-one-hot [I3])
@@ -750,6 +792,20 @@ def run_build_gate(cfg: Cfg, device, out: Path) -> dict:
                 "resume": resume_info, "train": train_summary, "wall_s": round(time.time() - t0, 1),
                 "n_train": len(train_pairs), "n_test_loaded": len(test_pairs)}
 
+    if cfg.null_rollout:
+        # Null-rollout control (allelopathy u_null analogue): rollout the UNTRAINED model. It MUST
+        # NOT pass -> certifies I5 + terminal-validity + DFS is not a Sudoku solver independent of
+        # the learned model (else build_gate_pass would be vacuous). Use a small fixed --max-eval.
+        one_shot = solve_rate(model, test_pairs, device, cfg)
+        exact_rate, counts, diagnostics, per_puzzle = rollout_eval(model, test_pairs, device, cfg)
+        (out / "rollout_per_puzzle_null.jsonl").write_text("\n".join(json.dumps(r) for r in per_puzzle), encoding="utf-8")
+        return {"mode": "build-gate", "stage": cfg.stage, "branch": "null_rollout_control",
+                "rollout_exact_rate": round(exact_rate, 5), "null_control_ok": bool(exact_rate < 0.05),
+                "one_shot_exact_rate": round(one_shot, 5), "stop_reason_counts": counts,
+                "diagnostics": diagnostics, "tail": tail_stats(per_puzzle),
+                "note": "untrained model; expect ~0 (rollout is not a standalone Sudoku solver)",
+                "n_test": len(test_pairs), "wall_s": round(time.time() - t0, 1)}
+
     if cfg.stage == "eval" and not cfg.resume:
         raise SystemExit("--stage eval requires --resume latest or --resume <checkpoint.pt>")
     one_shot = solve_rate(model, test_pairs, device, cfg)            # diagnostic only
@@ -757,10 +813,17 @@ def run_build_gate(cfg: Cfg, device, out: Path) -> dict:
     branch = ("build_gate_pass" if exact_rate >= 0.999 else
               "build_gate_partial" if exact_rate > 0 else "build_gate_fail")
     (out / "rollout_per_puzzle.jsonl").write_text("\n".join(json.dumps(r) for r in per_puzzle), encoding="utf-8")
+    # process-functional diagnostic table + low-tail visibility (build-gate DIAGNOSIS, not a B-layer claim)
+    cp_diag = cp_target_accuracy(model, test_pairs[: min(64, len(test_pairs))], device,
+                                 cfg.max_search_nodes, cfg.theta_drop)
     return {"mode": "build-gate", "stage": cfg.stage, "rollout_exact_rate": round(exact_rate, 5), "branch": branch,
             "one_shot_exact_rate": round(one_shot, 5), "stop_reason_counts": counts,
-            "diagnostics": diagnostics, "resume": resume_info, "train": train_summary,
-            "wall_s": round(time.time() - t0, 1),
+            "diagnostics": diagnostics, "tail": tail_stats(per_puzzle),
+            "process_functional": {"cp_target_accuracy": cp_diag["cp_target_accuracy"],
+                                   "false_elim": diagnostics["false_elimination_rate_answer_key_audit"],
+                                   "rollout_exact": round(exact_rate, 5), "one_shot_exact": round(one_shot, 5),
+                                   "avg_nodes": diagnostics["avg_nodes_expanded"], "cp_states": cp_diag["states"]},
+            "resume": resume_info, "train": train_summary, "wall_s": round(time.time() - t0, 1),
             "n_train": len(train_pairs), "n_test": len(test_pairs)}
 
 
@@ -779,6 +842,8 @@ def main() -> int:
     ap.add_argument("--aug-factor", type=int, default=50, help="augmented pool = aug_factor x 1000")
     ap.add_argument("--recipe", choices=["cp_imitation", "solution_onehot"], default="cp_imitation",
                     help="[I3'] training objective: cp_imitation (Amendment 01) or legacy solution_onehot")
+    ap.add_argument("--null-rollout", action="store_true",
+                    help="eval the UNTRAINED model (u_null control); expect no pass -> rollout is not a standalone solver")
     ap.add_argument("--compile", action="store_true", help="torch.compile reduce-overhead; needs GPU CC>=7.0 (A100/H100)")
     ap.add_argument("--resume", default="", help="latest or checkpoint path")
     ap.add_argument("--checkpoint-every", type=int, default=0)
@@ -794,6 +859,7 @@ def main() -> int:
     cfg = Cfg(mode=a.mode, stage=a.stage, data_dir=a.data_dir, out=a.out, seed=a.seed,
               max_steps=a.max_steps, max_eval=a.max_eval, batch=a.batch, lr=a.lr, aug_factor=a.aug_factor,
               warmup_steps=a.warmup_steps, compile_model=a.compile, recipe=a.recipe,
+              null_rollout=a.null_rollout,
               resume=a.resume, checkpoint_every=a.checkpoint_every, log_every=a.log_every,
               eval_every=a.eval_every, eval_sample=a.eval_sample, theta_drop=a.theta_drop,
               theta_cls=a.theta_cls, max_deduction_steps=a.max_deduction_steps,
