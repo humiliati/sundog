@@ -7,6 +7,14 @@
 > determining-shadow-set / body-shadow read (JEPA, LLMs, the lot). Focused read done; this
 > memo frames the requirement, the prior-art attack paths, and a recommended Phase-0.
 
+> **2026-06-04 correction after model-free functional screen:** Othello-GPT-class
+> computed-state tasks still open the **de-confound** door, but they do **not** automatically
+> provide a linear closure functional. The legal-move candidate failed the
+> `blocked_by_ill_posed_functional` preflight (`k_func(legal) ~= 0` even from the full
+> board), because legality is a nonlinear flanking-rule functional. Othello remains useful
+> for de-confound/regime-2; the closure read now routes primarily through semi-synthetic
+> injection unless a genuinely linear computed Othello functional is found.
+
 ## 1. The requirement (what the toy gave for free)
 
 The instrument needs a functional `u` that is:
@@ -28,10 +36,10 @@ world-representation): input = move sequence, and the model builds a **linear
 representation of the board** — which is *computed* from the moves (tracking flips), so it
 is **input-undecodable but representation-decodable.** That is *exactly* our de-confound,
 satisfied by **task structure rather than construction**, on a *real trained transformer*.
-And the board squares are **coupled** by the game rules → the closure bracket can even
-*exist* there. This is the bridge: a real substrate where the de-confound holds for free,
-and where "the sundial reads structure **we did not design**" finally becomes earnable —
-the model built the world-state; we only read it.
+And the board squares are **coupled** by the game rules → the de-confound door is real.
+The legal-move screen corrected the overreach: this does **not** by itself make the linear
+closure bracket well-posed. This remains a bridge for de-confound and possible regime-2
+reads; closure needs a separately registered linear functional.
 
 **B. Semi-synthetic injection — the controllable bridge.** Inject a *constructed*
 computed functional (e.g. a hidden parity over real features) into real data, à la
@@ -54,20 +62,22 @@ a corroborating second read, not a replacement.
 | B. semi-synthetic injection | real data, real arch | clean, by construction | partial (functional still ours) | medium |
 | C. amnesic/causal (LEACE) | any | causal, different axis | n/a (corroborating) | cheap add-on |
 
-**A dominates.** It's the only path that gives a real substrate, a free clean de-confound,
-*and* a functional the model invented rather than one we planted — which is the whole point
-of moving off the toy.
+**Post-screen assessment:** A dominates for **de-confound** and possible regime-2. B now
+dominates for the **closure** read, because it can construct a linear computed functional
+while still moving onto a real distribution / architecture.
 
 ## 4. Recommended Phase-0 (for the sub-lane, if opened)
 
-**Port the determining-shadow-set / closure instrument to a computed-world-state model
-(Othello-GPT or a small reproduction).** Concretely:
+**Split the path.** Use Othello-GPT or a small reproduction for the computed-state
+de-confound / regime-2 question; use semi-synthetic injection for the closure question
+unless the lit pass identifies a nontrivial linear Othello functional. Concretely:
 - **De-confound pre-check (ports directly):** confirm the board state is ≤-chance from a
   linear probe on the *input* move-tokens, but well-decodable from the residual stream.
   (Expected to hold — that *is* the Othello-GPT result.)
-- **Closure read:** is the board a **coupled** body whose **functional** (e.g. side-to-move
-  / legal-move set / "who's ahead") is determined by a small shadow-set of square-readouts
-  before the **full board** is — i.e. `k_func ≪ k_state` on a *computed, real* state?
+- **Closure read:** not legal moves. The legal-move candidate is ill-posed for the linear
+  determining-set instrument. Either identify another nontrivial board functional that is
+  linearly readable from the full board, or pivot closure Phase 0 to semi-synthetic
+  injection.
 - **Body/shadow read:** does the model's legal-move output (shadow) fail to reconstruct the
   board (body) → state-insufficient/resisting, on a real substrate?
 - **Controls:** the `u_null` independent-target control + selection-corrected null carry
@@ -80,13 +90,13 @@ state, a free clean de-confound — a real rung above the designed toy. **But** 
 game-state model, not a frontier LLM; "more than we know" *begins* here (the model's
 world-model) and stays bounded. **External review before any promotion; R3 vocabulary
 ("world model," "understanding") stays gated** even though the literature uses "world
-model" for Othello-GPT — we measure the closure/observability structure, we do not certify
-cognition.
+model" for Othello-GPT — we measure de-confound / regime-2 observability structure, and
+closure only if a linear functional survives preflight. We do not certify cognition.
 
 ## 6. What this unlocks
 
-- The **JEPA lane** becomes real, not toy: JEPA-vs-generative on a computed-state substrate
-  has a clean de-confound → the §7 wall is *passed* for that comparison.
+- The **JEPA lane** gets a sharper wall: computed-state substrates can pass de-confound,
+  but a linear closure functional is still a separate requirement.
 - The **determining-shadow-set instrument** gets its first real substrate, with the
   body/shadow regime-2 read on a model-built world-state.
 - It is the first place the program can honestly ask whether the shadow tells us something
@@ -94,11 +104,11 @@ cognition.
 
 ## Re-posed decision
 
-The redirect paid off: **the wall has a door, and it's Othello-GPT-class computed-state
-models.** Recommendation: **open a `SUNDOG_V_DECONFOUND` (or computed-state) sub-lane with
-the §4 Phase-0**, gated as usual (lit-pass on Othello-GPT probing specifics → Phase-0 spec
-freeze → run). Cheap, real-substrate, clean de-confound, and it carries the whole
-determining-shadow-set program across the toy/real line that JEPA could not.
+The redirect paid off, but with a boundary: **the de-confound wall has a door, and the
+linear-closure wall remains.** Recommendation: keep `SUNDOG_V_DECONFOUND` open with two
+branches: Othello-GPT for de-confound/regime-2, and semi-synthetic injection for the closure
+read unless the lit pass identifies a linear Othello functional. The kill-gate worked by
+refuting the attractive legal-move closure target before any model run.
 
 ---
 
