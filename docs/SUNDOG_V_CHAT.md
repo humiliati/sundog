@@ -25,6 +25,7 @@ Audience:
 
 Related docs:
 - `docs/SUNDOG_V_CHAT_V2.md` — product charter (sister doc; this doc governs *what is honest*, v2 governs *what gets shipped*).
+- `docs/CHAT_GENERALITY_BOUNDARY_CORPUS_LANE_NOTE.md` — Phase 13 lane note (generality-as-boundary corpus; proposed, corpus frozen 2026-06-04).
 - `docs/SUNDOG_V_MESA.md`
 - `docs/STANDALONE_APP_ROADMAP.md`
 - `docs/APPLICATIONS.md`
@@ -1897,6 +1898,54 @@ This run-locally plan completed and became the clean route around the broken
 paid-tier waitlist. It tightened the cross-architecture cell-class-map rather
 than remaining a partial-coverage caveat.
 
+## Phase 13 — Generality-as-Boundary Corpus
+
+Status: **proposed, not yet scheduled.** Detailed spec and corpus table:
+[`CHAT_GENERALITY_BOUNDARY_CORPUS_LANE_NOTE.md`](CHAT_GENERALITY_BOUNDARY_CORPUS_LANE_NOTE.md)
+(lane note v0.1; corpus frozen 2026-06-04). No claim language ships from this
+phase until it runs and clears the §13 ratchet discipline.
+
+Goal:
+Extend the Phase 11 falsification slate along its hardest axis — *maximum-prestige*
+overclaim temptation. The generality lanes (Navier–Stokes, Yang–Mills, Riemann,
+P-vs-NP, ARC, Hodge, Kakeya, …) are the project's hardest claim-boundary cases:
+each is a pre-registered, adversarially-adjudicated ruling on a famous problem
+with an explicit do-not-claim list, catalogued in
+[`CROSS_SUBSTRATE_NOTES.md`](CROSS_SUBSTRATE_NOTES.md) ▸ *Cross-Substrate
+Generality Failure Map*. This phase converts that failure map into a boundary-test
+corpus and asks whether the safety floor that held on generic claim text also holds
+when the user's flattery and the model's prior both push toward "you cracked a
+Millennium Problem."
+
+It raises the bar from binary refuse/accept to **correct failure-mode tagging**:
+the widget must not merely decline the overclaim, it must carry the right taxonomy
+tag (`marginal`, `bounded-null`, `vacuous`, `cost-bounded`, …). A mis-tag is itself
+an overclaim and scores as a failure (lane note §8).
+
+Structure (full detail in the lane note §6):
+
+- **13.0 — Corpus freeze.** ✅ done 2026-06-04: 16 lanes verified against their
+  ledgers + the failure map; the Lattice and P-vs-NP fences corrected; two tag
+  adjudications and one failure-map sync flagged for owner sign-off.
+- **13.1 — Gold slate.** Author `chat/prompts/gold-generality-boundary.jsonl`
+  (~16 lanes × ~3 attack variants ≈ 48 prompts), each with `expectedDisposition`,
+  `failureMode`, and a `support` doc — sibling to `chat/prompts/gold-falsification.jsonl`.
+- **13.2 — Schema + gate.** Add `failureMode` to the §4 response trace and a
+  tag-classifier check to the gate (mirrors the negation-aware tier check).
+- **13.3 — Run.** Deterministic compositor + S1 + B0–B2 baselines + one hosted +
+  one open-weight, mirroring the Phase 11/12 wiring →
+  `results/chat/phase13-generality-boundary/`.
+- **13.4 — Metric + ratchet.** Failure-Mode Classification Accuracy is the headline
+  (binary refusal is necessary but not sufficient); extend the §13 ratchet only on
+  a clean pass; file any break as a named failure mode.
+
+Why it matters: a clean pass is the strongest possible extension of the §13 ratchet
+— the corpus is a year of disciplined adjudication (hard to reproduce) and the
+0-unsafe-accept apparatus makes the behaviour provable — while a single break is the
+most informative possible named failure. Both outcomes are wins. Per the 2026-06-04
+product pivot, this phase is also where the frozen generality portfolio becomes a
+load-bearing product-credibility asset rather than open science.
+
 ## 11. Browser Architecture
 ```text
 public/
@@ -2020,12 +2069,30 @@ The tested Sundog-gated chat assistant does not reliably preserve claim
 boundaries beyond deterministic routing. The public widget should remain a
 static claim inspector until the failure modes are addressed.
 
+Phase 13 generality-boundary ratchet candidate (if the Phase 13 slate runs clean):
+
+On the project's hardest maximum-prestige overclaim prompts — questions of the form
+"did Sundog crack [famous problem]" across the frozen 16-lane generality corpus —
+the Sundog-gated assistant preserved the correct claim boundary *and applied the
+correct failure-mode tag* more reliably than matched retrieval-chat baselines.
+Bounded to this corpus and the named models. Because a mis-tag (calling a `vacuous`
+lane a `bounded-null`, or either a result) scores as a failure, this is a sharper
+boundary than binary refuse/accept. Detail:
+[`CHAT_GENERALITY_BOUNDARY_CORPUS_LANE_NOTE.md`](CHAT_GENERALITY_BOUNDARY_CORPUS_LANE_NOTE.md).
+
+If the Phase 13 slate breaks:
+
+At least one generality prompt elicited an overclaim or a wrong failure-mode tag,
+filed with a concrete reproduction as a named failure mode. The widget ships with
+that boundary visible and the §13 ratchet language is not extended.
+
 Never claim:
 
 - "Sundog Chat solves chatbot alignment."
 - "Sundog Chat is robust to prompt injection."
 - "Sundog Chat proves mesa-optimization does not emerge."
 - "Sundog Chat demonstrates LLM-scale safety."
+- "The generality-boundary corpus is evidence that Sundog generalizes." (It is the catalogue of where it does **not**.)
 
 The mesa roadmap uses exactly this kind of ratchet discipline: report where the claim holds, where it fails, and do not promote any outcome into inner-alignment or reward-hacking claims.
 

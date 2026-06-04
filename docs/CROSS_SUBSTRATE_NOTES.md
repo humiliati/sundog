@@ -75,12 +75,25 @@ theme-matching.
   passes *for the wrong reason* and carries no information. Escalation = an
   `S3`-triple bridge (Probe 01b) or external sanity check.
   -> [`SUNDOG_V_RIEMANN.md`](SUNDOG_V_RIEMANN.md).
-- **P-vs-NP - COST-BOUNDED (the shadow works, but the operating envelope blocks
-  promotion).** Bounded alignment-verification: v0-v5 are all named quarantines
-  - safety repaired (0 false accepts since v2, 0 spoof since v1) but the **cost
-  gate** never clears (cap not_estimated; rollout ratio / absolute wall-time
-  fail). The projection is control-useful yet bounded out of promotion by its
-  cost envelope. -> [`SUNDOG_V_P_V_NP.md`](SUNDOG_V_P_V_NP.md).
+- **P-vs-NP - BOUNDED-POSITIVE (the cost certificate clears; promotion is still
+  bounded, but the boundary moved).** Bounded alignment-verification. Phase 1 **v6**
+  is the arc's first bounded-positive: the **op-count** cost certificate clears
+  (signature 527,297 ops, cheaper to *check* than the policy's 555,876 ops to
+  *find*; ratio 0.949 <= a pre-frozen 1.0 threshold), safety green (0 false accepts
+  since v2, 0 spoof since v1). The earlier `v0-v5` cost-bounded reading is **retired**:
+  **wall-time** superiority was withdrawn as non-reproducible (4 clean runs spanned
+  3.5x; the op-count ratio is the only stable cost signal), so "the cost gate never
+  clears" was a machine-load artifact, not a verifier-cost fact. The mesa
+  verification bridge (Phase 2 v1) is also bounded-positive (op-count ratio 0.7376),
+  but the capacity-relative one-wayness transfer (**Phase 3**) is **quarantined** -
+  v0 falsified a registered cell, and v1's frozen block-consensus repair closes that
+  spoof yet still quarantines on a block-unstable disclosure flag ("consensus-only
+  repair"). So the projection is control-useful and now cost-clean, but the lane stays
+  **unpromoted** - the boundary moved from the cost envelope to verification-transfer
+  fidelity. Body-resistance is marginal (mesa `FVE(net.7|5D) ~ 0.97-0.99`), so this
+  is cert-discipline transfer, not a regime-2 separation. NOT the Millennium P-vs-NP
+  problem; op-count cost is not a complexity-theoretic claim.
+  -> [`SUNDOG_V_P_V_NP.md`](SUNDOG_V_P_V_NP.md).
 - **ARC-AGI - CONVERGENCE-TO-NULL on the signature *shadow*; CAPABILITY-FLOOR on
   the *body*; body-resistance probe + v2 expansion ran 2026-06-01 -> the
   least-marginal substrate measured, but PR plateaus at ~11 (NOT sample-limited),
@@ -164,7 +177,11 @@ reframing), *conditional* (rigid only after conditioning), *deflationary*
 (over-attribution). Two non-failure anchors now bound the map: *identity-success*
 (Faraday - the shadow closes because the body<->shadow law is an identity, so
 there is no body to resist) and *exact-separation* (Aharonov-Bohm - a sharp,
-exact, topological regime-2, pre-registered). Cataloguing the mode - success or
+exact, topological regime-2, pre-registered). A third bounded disposition,
+*bounded-positive* (P-vs-NP, v6), marks a lane whose core certificate clears (the
+op-count cost is cheaper to check than to find) yet stays unpromoted on a moved
+boundary - wall-time non-reproducibility plus a quarantined verification bridge.
+Cataloguing the mode - success or
 failure - is what turns each substrate into a design constraint for the next.
 
 ## 1. What Transfers

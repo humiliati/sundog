@@ -1,7 +1,10 @@
 # Sundog vs. P-vs-NP Verification
 
-> **Cross-substrate failure-map entry:** COST-BOUNDED (the verification shadow
-> works, but the operating-cost envelope blocks promotion) — see
+> **Cross-substrate failure-map entry:** BOUNDED-POSITIVE (v6 op-count cost
+> certificate clears — cheaper to check than to find, 0.949 ≤ 1.0 — and safety is
+> green; promotion stays bounded by withdrawn wall-time superiority and a
+> quarantined Phase-3 verification bridge, not by the cost envelope). Retired the
+> earlier `v0-v5` COST-BOUNDED reading. See
 > [`CROSS_SUBSTRATE_NOTES.md`](CROSS_SUBSTRATE_NOTES.md)
 > "Cross-Substrate Generality Failure Map".
 

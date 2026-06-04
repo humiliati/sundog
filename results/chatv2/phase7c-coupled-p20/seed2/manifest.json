@@ -1,0 +1,123 @@
+{
+  "lane": "chatv2",
+  "phase": "7",
+  "verdict": "MARGINAL",
+  "H_star": null,
+  "precheck": {
+    "8": 0.5027083333333333
+  },
+  "cfg": {
+    "mode": "full",
+    "stage": "all",
+    "latent": "coupled",
+    "window": 2,
+    "h_sweep": [
+      8
+    ],
+    "bits_per_channel": 24,
+    "delta": 0.45,
+    "d_model": 192,
+    "n_layers": 3,
+    "n_heads": 4,
+    "lr": 0.0003,
+    "batch": 128,
+    "eval_batch": 512,
+    "max_steps": 6000,
+    "eval_every": 250,
+    "patience": 10,
+    "n_fingerprint": 3000,
+    "k_outlier": 2,
+    "seed": 2,
+    "curriculum": false,
+    "warm_start": "",
+    "pos_h": 0,
+    "min_steps": 3000,
+    "twin_patience": 3,
+    "save_ckpt": true,
+    "fair_readout": true,
+    "arity": 2,
+    "m": 3,
+    "p_noise": 0.2,
+    "d_dec_frac_min": 0.5,
+    "z1_ctrl_min": 0.7,
+    "leak_max": 0.58,
+    "body_carry_min": 0.7,
+    "body_carry_gap_min": 0.2,
+    "precheck_max": 0.6
+  },
+  "records": [
+    {
+      "H": 8,
+      "generative": {
+        "fair_readout": true,
+        "body_layer": 3,
+        "zr_by_layer": [
+          0.506,
+          0.523,
+          0.714,
+          0.773
+        ],
+        "d_dec": 7.473,
+        "eff_dim_raw": 1.882,
+        "eff_dim_robust": 7.176,
+        "z1_acc": 0.6573,
+        "z_recover_mean": 0.7733,
+        "body_carry": 0.7899,
+        "z_recover_each": [
+          0.6573,
+          0.682,
+          0.7953,
+          0.9677,
+          0.8413,
+          0.6893,
+          0.906,
+          0.6477
+        ],
+        "cross_latent_leak": 0.5504,
+        "outlier_carries_latents": 0.518,
+        "latents_survive_outlier_removal": 0.8
+      },
+      "twin": {
+        "fair_readout": true,
+        "body_layer": 2,
+        "zr_by_layer": [
+          0.506,
+          0.528,
+          0.637,
+          0.633
+        ],
+        "d_dec": 7.524,
+        "eff_dim_raw": 3.407,
+        "eff_dim_robust": 1.778,
+        "z1_acc": 0.968,
+        "z_recover_mean": 0.6369,
+        "body_carry": 0.5896,
+        "z_recover_each": [
+          0.968,
+          0.5277,
+          0.5357,
+          0.542,
+          0.53,
+          0.5113,
+          0.536,
+          0.9443
+        ],
+        "cross_latent_leak": 0.5326,
+        "outlier_carries_latents": 0.5876,
+        "latents_survive_outlier_removal": 0.58
+      },
+      "gen_train": {
+        "eval_loss": 0.4831697642803192,
+        "bayes_floor": 0.445831211952909,
+        "steps": 6000
+      },
+      "twin_train": {
+        "train_acc_z1": 0.99609375,
+        "steps": 2750
+      },
+      "sharp": false,
+      "learned": true,
+      "status": "MARGINAL"
+    }
+  ]
+}
