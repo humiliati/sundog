@@ -13,7 +13,7 @@
 //   OPENAI_API_KEY=sk-... node chat/eval/run_hosted_drafts.mjs --slate differential --backend openai
 //
 // Optional flags:
-//   --slate    differential | adversarial | wild   (default: differential)
+//   --slate    differential | adversarial | wild | falsification | generality-boundary   (default: differential)
 //   --backend  mock | openai                        (default: mock)
 //   --limit    integer                              (truncate slate — useful for $ control)
 //   --concurrency  integer                          (parallel requests, default 4)
@@ -318,6 +318,13 @@ function configForSlate(name) {
       // missing baseline file (loadBaselineByPrompt logs a warning and
       // returns an empty map).
       baselinePath: join("results", "chat", "phase11-falsification", "deterministic-baseline-PLACEHOLDER.json")
+    };
+  }
+  if (name === "generality-boundary") {
+    return {
+      label: "generality-boundary",
+      promptPath: join("chat", "prompts", "gold-generality-boundary.jsonl"),
+      baselinePath: join("results", "chat", "phase13-generality-boundary", "draft-outcomes.json")
     };
   }
   throw new Error(`Unknown slate "${name}".`);

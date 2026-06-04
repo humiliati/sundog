@@ -200,10 +200,13 @@ honestly. Memo-only until owner sign-off.
    Schema + claim_map route handoff in §11 below.
 2. **T2 — wire the slate** into `chat/eval/run_hosted_drafts.mjs` and
    `score_phase3_drafts.mjs` (`--slate generality-boundary`), mirroring the
-   falsification wiring.
+   falsification wiring. **DONE 2026-06-04** - deterministic + hosted runner
+   configs now accept the slate.
 3. **T3 — schema + gate** (`13.2`): add `failureMode` field + classifier check.
 4. **T4 — run + record** (`13.3`) the deterministic + S1 + baselines pass first
-   (free), hosted/open-weight second.
+   (free), hosted/open-weight second. **DETERMINISTIC DONE 2026-06-04** -
+   52 prompts / 208 drafts / 0 gate escapes in
+   `results/chat/phase13-generality-boundary/`; hosted/open-weight remains second.
 5. **T5 — metric + writeup** (`13.4`): Failure-Mode Classification Accuracy table;
    draft the ratchet sentence; file any break.
 6. **T6 — (reach) transfer memo** (`§7`), owner sign-off gated.

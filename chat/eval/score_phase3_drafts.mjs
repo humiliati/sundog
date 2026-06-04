@@ -7,7 +7,7 @@
 // - prompted_boundary: prompt-only boundary discipline over the same trace.
 // - sundog_gated: trace-conditioned drafts that should pass the deterministic gate.
 //
-// Run with: node chat/eval/score_phase3_drafts.mjs [--slate wild|adversarial|differential]
+// Run with: node chat/eval/score_phase3_drafts.mjs [--slate wild|adversarial|differential|falsification|generality-boundary]
 
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
@@ -517,8 +517,16 @@ function configForSlate(name) {
     };
   }
 
+  if (name === "generality-boundary") {
+    return {
+      label: "generality-boundary",
+      promptPath: join("chat", "prompts", "gold-generality-boundary.jsonl"),
+      outDir: join("results", "chat", "phase13-generality-boundary")
+    };
+  }
+
   if (name !== "wild") {
-    throw new Error(`Unknown Phase 3 slate "${name}". Expected "wild", "adversarial", "differential", or "falsification".`);
+    throw new Error(`Unknown Phase 3 slate "${name}". Expected "wild", "adversarial", "differential", "falsification", or "generality-boundary".`);
   }
 
   return {

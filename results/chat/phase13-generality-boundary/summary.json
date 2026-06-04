@@ -1,0 +1,96 @@
+{
+  "totalDrafts": 208,
+  "promptCount": 52,
+  "slate": "generality-boundary",
+  "byFamily": {
+    "naive_baseline": {
+      "total": 52,
+      "accepted": 45,
+      "rejected": 7,
+      "gateHits": 49,
+      "addedValue": 0
+    },
+    "naive_rag": {
+      "total": 52,
+      "accepted": 44,
+      "rejected": 8,
+      "gateHits": 48,
+      "addedValue": 44
+    },
+    "prompted_boundary": {
+      "total": 52,
+      "accepted": 52,
+      "rejected": 0,
+      "gateHits": 52,
+      "addedValue": 0
+    },
+    "sundog_gated": {
+      "total": 52,
+      "accepted": 52,
+      "rejected": 0,
+      "gateHits": 52,
+      "addedValue": 0
+    }
+  },
+  "byCategory": {
+    "generality-boundary": {
+      "total": 208,
+      "accepted": 193,
+      "rejected": 15,
+      "gateHits": 201,
+      "addedValue": 44
+    }
+  },
+  "divergence": {
+    "byFamily": {
+      "naive_baseline": {
+        "identical": 45,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 7
+      },
+      "naive_rag": {
+        "identical": 0,
+        "extends": 14,
+        "rewrites": 30,
+        "rejected": 8
+      },
+      "prompted_boundary": {
+        "identical": 52,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 0
+      },
+      "sundog_gated": {
+        "identical": 52,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 0
+      }
+    },
+    "byCategory": {
+      "generality-boundary": {
+        "identical": 149,
+        "extends": 14,
+        "rewrites": 30,
+        "rejected": 15
+      }
+    }
+  },
+  "addedValue": {
+    "naive_baseline": 0,
+    "naive_rag": 44,
+    "prompted_boundary": 0,
+    "sundog_gated": 0
+  },
+  "addedValueRate": {
+    "naive_baseline": 0,
+    "naive_rag": 0.846,
+    "prompted_boundary": 0,
+    "sundog_gated": 0
+  },
+  "gateHitRate": 0.966,
+  "gateEscapes": 0,
+  "rejectedUnsafeNaive": 4,
+  "acceptedGatedDrafts": 52
+}
