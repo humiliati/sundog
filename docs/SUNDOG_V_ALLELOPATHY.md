@@ -44,6 +44,27 @@ loosened after a sweep is seen**. Phase 0 translates this frozen plan into the
 runnable spec (`docs/chatv2/PHASE2_DETERMINING_SHADOW_SET_SPEC.md`); no
 verdict-bearing run is admitted until that spec freezes against this roadmap.
 
+**LANE BANKED — COMPLETE (2026-06-04).** The lane ran to a fully calibrated
+instrument across the whole closure spectrum, every cell against frozen thresholds,
+a selection-corrected null, and one standing clean independent control (`u_null`,
+`k_func=none`):
+
+| phase | substrate | verdict | receipt |
+| --- | --- | --- | --- |
+| Phase 2 | uncoupled pair-XOR (saved bodies) | **negative** — same-seed predicted-null + cross-seed `no_transfer` (near-random orthogonal subspaces) | `PHASE2_DETERMINING_SHADOW_SET_RECEIPT.md` |
+| Phase 7 | coupled `p_noise=0.25` | **partial** — `closure_washed_by_readout` (data bracket present, washed below the bar) | `PHASE7_COUPLED_LATENT_RECEIPT.md` |
+| Phase 7b | coupled `p_noise=0.10` | **positive** — `closure_confirmed`, 3/3 seeds (`k_func=2 ≪ k_state∈{6,7}`) | `PHASE7B_..._RECEIPT.md` |
+| Phase 7c | coupled `p_noise=0.20` | **boundary** — `boundary_transition_zone`, readout-quality-gated | `PHASE7C_..._RECEIPT.md` |
+
+Noise-survival curve **located**: survives ≲0.10, transitions through a
+readout-quality-gated zone at **p≈0.20**, washes ≳0.25. The meta-result is the
+calibration itself — the instrument correctly reports negative / partial / positive /
+boundary, so its **negatives are trustworthy and its positive is credible**.
+Confirmed the load-bearing transplant: *closure is a coupling phenomenon*. **Tier:
+toy** (designed coupling, `H=8`, `d_dec≈7.6`); **no real-LLM / NSE / scaling claim;
+R1 not met; unpromoted; internal.** Optional future refinement (`p∈{0.15,0.18}` to
+sharpen the zone width) is a *new* cell, not a reopening — the lane is banked here.
+
 ## Claim Boundary
 
 This document explicitly does **not** claim:
