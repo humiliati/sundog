@@ -5,8 +5,15 @@ pre-freeze seed-100000/110000/120000/130000 holdout battery is quarantined as
 diagnostic-only and cannot promote a v2 bounded-positive receipt. The
 promotion-eligible successor path is `phase3-capacity-one-wayness-v2b` with
 fresh seed starts `140000, 150000, 160000, 170000`; that fresh holdout battery
-is complete on disk. The v2/v2b verifier harness has not yet been implemented
-or scored.
+is complete on disk. **Scored 2026-06-04** (`npm run
+pvnp:phase3:capacity-one-wayness:v2`,
+`scripts/pvnp-phase3-capacity-one-wayness-v2.mjs`): verdict **bounded positive —
+`consensus-only disclosure repair`** on the v2b battery; the disclosure repair
+holds and no unsafe controller consensus-accepts, with one breach block still
+crossing without consensus (no source-block-safety claim) and a **disclosed
+seed-fragility** at the anchor (the pre-freeze diagnostic battery quarantines on
+the anchor's `clean_consensus` drift). See
+[`receipts/2026-06-04_phase3_capacity_one_wayness_v2b.md`](receipts/2026-06-04_phase3_capacity_one_wayness_v2b.md).
 
 Date opened: 2026-06-04
 Date provenance-corrected and frozen: 2026-06-04 local
@@ -483,8 +490,14 @@ Deferred until after corrected freeze:
 
 - [x] Run the corrected v2b fresh holdout battery. Done 2026-06-04 local:
       52/52 blocks complete, 0 failed, 52/52 `trial_logs_saved: true`.
-- [ ] Add npm wiring.
-- [ ] Implement the v2/v2b harness.
+- [x] Add npm wiring. Done 2026-06-04: `pvnp:phase3:capacity-one-wayness:v2`
+      and `pvnp:phase3:capacity-one-wayness:v2:pre-freeze`.
+- [x] Implement the v2/v2b harness. Done 2026-06-04:
+      `scripts/pvnp-phase3-capacity-one-wayness-v2.mjs` +
+      `scripts/lib/pvnp-phase3-v2-config.mjs`. Scored the v2b promotion battery,
+      the v1 regression set, and the v0 falsifier from raw logs; v1 scorer left
+      untouched. Verdict bounded positive (`consensus-only disclosure repair`);
+      determinism confirmed; receipt filed.
 
 ## Freeze Rule
 

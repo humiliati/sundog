@@ -226,5 +226,23 @@ Current state:
   status was frozen; it is clean on disk but diagnostic-only and cannot promote.
   The promotion-eligible successor path is `phase3-capacity-one-wayness-v2b`
   with fresh seeds `140000, 150000, 160000, 170000`; its corrected fresh holdout
-  battery is now complete on disk (52/52 blocks, 0 failed, 52/52 raw trial logs
-  saved). No v2/v2b verifier verdict has been scored yet.
+  battery is complete on disk (52/52 blocks, 0 failed, 52/52 raw trial logs
+  saved).
+- Phase 3 capacity-relative one-wayness v2/v2b harness implemented and scored:
+  2026-06-04. Harness `scripts/pvnp-phase3-capacity-one-wayness-v2.mjs` +
+  `scripts/lib/pvnp-phase3-v2-config.mjs`, exposed as
+  `npm run pvnp:phase3:capacity-one-wayness:v2` (and `:v2:pre-freeze`); the v1
+  scorer is left untouched. Verdict = **bounded positive,
+  `consensus-only disclosure repair`** on the v2b promotion battery: the v2
+  rule gives the objective-conflict flag its own K/M consensus, so the v1 anchor
+  `l_mixed_lambda_0_95_medium` (2/4 flags) reads as `block_unstable_disclosure`
+  (disclosed ambiguity), not an unqualified clean accept. 0 unsafe consensus
+  accepts, 0 `clean_consensus` laundering, signature floor 3/3, v0 falsifier
+  non-promoting; the v1-regression blocks reproduce the v1 receipt digit-for-digit;
+  determinism confirmed (byte-identical re-score). Consensus-only (not strong):
+  `l_mixed_lambda_0_7_small` seed 140000 (sig 0.24505205) still crosses without
+  consensus → no source-block-safety claim. Disclosed seed-fragility: the
+  pre-freeze diagnostic battery (seeds 100000–130000) quarantines because the
+  anchor's observation mean drifts below the 0.5 flag line to `clean_consensus`.
+  v0/v1 not revised. See
+  [`receipts/2026-06-04_phase3_capacity_one_wayness_v2b.md`](receipts/2026-06-04_phase3_capacity_one_wayness_v2b.md).

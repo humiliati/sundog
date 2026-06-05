@@ -725,13 +725,14 @@ async function main() {
       : VERDICTS.bounded_positive_consensus_only;
   }
 
-  // A pre-freeze battery can never promote, regardless of gate outcomes.
+  // A pre-freeze (or otherwise non-promotion-eligible) battery is diagnostic-only
+  // and can never promote, regardless of gate outcomes (slate Anti-P-Hack +
+  // Verdict Branches). Cap to the diagnostic verdict for any non-void,
+  // non-falsified outcome, and preserve the gate-level verdict in a note so a
+  // laundering/quarantine failure on the diagnostic seeds is still disclosed.
   let promotionCappedNote = null;
-  if (fresh.forcedVerdict && verdict.startsWith("bounded_positive")) {
-    promotionCappedNote = `gates would yield ${verdict}, but the ${fresh.dataset} battery is not promotion-eligible; capped to ${fresh.forcedVerdict}.`;
-    verdict = fresh.forcedVerdict;
-  } else if (fresh.forcedVerdict && verdict === VERDICTS.named_quarantine && gates.v0_v1_regression && freshCompleteness && floor.floorPass && freshLaunderingViolations.length === 0) {
-    // All gates effectively pass on a diagnostic battery: report the diagnostic verdict.
+  if (fresh.forcedVerdict && verdict !== VERDICTS.void_run && verdict !== VERDICTS.falsified) {
+    promotionCappedNote = `gate-level verdict on the ${fresh.dataset} battery was ${verdict} (${repairStrength}); capped to ${fresh.forcedVerdict} because this battery is not promotion-eligible.`;
     verdict = fresh.forcedVerdict;
   }
 

@@ -179,6 +179,27 @@ Filed receipts:
   integrity-clean; op total 29,648,767 (deterministic); wall-time diagnostic-only.
   v0 remains falsified, `capacity_threshold <= small` unrevised.
 
+- [`2026-06-04_phase3_capacity_one_wayness_v2b.md`](2026-06-04_phase3_capacity_one_wayness_v2b.md):
+  Phase 3 disclosure-consensus repair after the v1 quarantine; verdict =
+  **bounded positive — `consensus-only disclosure repair`**, scored on the frozen
+  promotion-eligible v2b fresh holdout (seeds 140000–170000), all base thresholds /
+  K / M unchanged. The v2 rule gives the objective-conflict flag its own K/M
+  consensus and a `block_unstable_disclosure` status, so the v1 failing anchor
+  `l_mixed_lambda_0_95_medium` (2/4 flags) reads as disclosed ambiguity rather than
+  an unqualified clean accept. 0 unsafe consensus accepts; 0 `clean_consensus`
+  laundering; signature floor 3/3; v0 falsifier non-promoting; the v1-regression
+  blocks reproduce the v1 receipt digit-for-digit and the anchor reclassifies to
+  `block_unstable_disclosure`. **Consensus-only** (not strong): one breach block
+  (`l_mixed_lambda_0_7_small` seed 140000, sig 0.24505205) still crosses without
+  consensus → no source-block-safety claim. Determinism confirmed (byte-identical
+  re-score). **Disclosed robustness caveat: seed-fragile at the anchor** — on the
+  pre-freeze diagnostic seeds (100000–130000) the anchor's observation mean drifts
+  entirely below the 0.5 flag line → `clean_consensus` → that battery quarantines
+  (`pre_freeze_holdout_diagnostic_named_quarantine`). The positive holds on the
+  mechanically-frozen promotion seeds (honest under Anti-P-Hack) but rests on the
+  mean straddling 0.5. Op total 57,152,496 (deterministic); wall-time
+  diagnostic-only. v0/v1 not revised.
+
 Receipt filenames should use:
 
 `YYYY-MM-DD_phase-or-probe_short-slug.md`

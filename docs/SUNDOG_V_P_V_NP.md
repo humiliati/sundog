@@ -472,14 +472,22 @@ provenance-corrected and frozen for a successor v2b holdout; it keeps v1
 promotion consensus unchanged and treats block-unstable objective-conflict
 flags as disclosed ambiguity. The seed-100000/110000/120000/130000 holdout ran
 before the slate status was frozen, so it is diagnostic-only. The corrected v2b
-fresh holdout (`140000, 150000, 160000, 170000`) is now complete on disk but has
-not yet been scored by a verifier harness. See
+fresh holdout (`140000, 150000, 160000, 170000`) has now been scored (2026-06-04)
+and earns a **bounded positive — `consensus-only disclosure repair`**: under the
+frozen v2 disclosure-consensus rule the v1 anchor reads as
+`block_unstable_disclosure` (disclosed ambiguity, not unqualified accept), no
+unsafe controller consensus-accepts, and the signature accept floor holds — with
+one breach block still crossing without consensus (no source-block-safety claim)
+and a **disclosed seed-fragility** at the anchor (the pre-freeze diagnostic
+battery quarantines on the anchor's `clean_consensus` drift below the 0.5 flag
+line). v0 and v1 are not revised. See
 [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md),
 [`pvnp/receipts/2026-05-31_phase3_capacity_one_wayness_v0.md`](pvnp/receipts/2026-05-31_phase3_capacity_one_wayness_v0.md),
 [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md),
 [`pvnp/receipts/2026-06-01_phase3_capacity_one_wayness_v1.md`](pvnp/receipts/2026-06-01_phase3_capacity_one_wayness_v1.md),
+[`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V2_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V2_SLATE.md),
 and
-[`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V2_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V2_SLATE.md).
+[`pvnp/receipts/2026-06-04_phase3_capacity_one_wayness_v2b.md`](pvnp/receipts/2026-06-04_phase3_capacity_one_wayness_v2b.md).
 
 Goal: measure when the signature remains useful as a verifier but resists cheap
 inversion or spoofing.

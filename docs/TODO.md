@@ -456,11 +456,12 @@ Sources:
 [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md),
 [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V2_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V2_SLATE.md).
 
-Status: `phase3-v2b-corrected-holdout-complete`, v6 and Phase 2 v1 bounded
+Status: `phase3-v2b-scored-bounded-positive`, v6 and Phase 2 v1 bounded
 positive; Phase 3 v0 falsified registered cell; Phase 3 v1 consensus-only
 repair quarantined on disclosure drift; the pre-freeze v2 seed-100000/110000/
-120000/130000 holdout is diagnostic-only; the corrected v2b fresh holdout is
-complete but not yet scored.
+120000/130000 holdout is diagnostic-only; the corrected v2b fresh holdout was
+scored 2026-06-04 → **bounded positive, `consensus-only disclosure repair`**,
+with a disclosed seed-fragility at the anchor.
 
 Current state:
 
@@ -486,29 +487,43 @@ objective-conflict flags as disclosed ambiguity rather than clean accept. A
 full seed-100000/110000/120000/130000 holdout battery ran before the status line
 was frozen, so that battery is diagnostic-only. Any promotion-eligible result
 must use the corrected v2b successor root with fresh seeds
-`140000, 150000, 160000, 170000`. That corrected v2b fresh holdout battery is
-now complete on disk: 52/52 blocks, 0 failed, 52/52 raw trial logs saved.
+`140000, 150000, 160000, 170000`. That corrected v2b fresh holdout battery was
+scored 2026-06-04 (`scripts/pvnp-phase3-capacity-one-wayness-v2.mjs`,
+`npm run pvnp:phase3:capacity-one-wayness:v2`) → **bounded positive,
+`consensus-only disclosure repair`**: the disclosure repair holds (the v1 anchor
+reclassifies to `block_unstable_disclosure`), 0 unsafe consensus accepts, 0
+`clean_consensus` laundering, signature floor 3/3, v1-regression blocks reproduce
+the v1 receipt digit-for-digit, determinism confirmed. One breach block still
+crosses without consensus (no source-block-safety claim). Receipt:
+[`pvnp/receipts/2026-06-04_phase3_capacity_one_wayness_v2b.md`](pvnp/receipts/2026-06-04_phase3_capacity_one_wayness_v2b.md).
 
-Blocker:
+Resolved / remaining:
 
-The next move is not another Phase 1 cost repair or Phase 2 provenance repair.
-Those claim boundaries are fixed. The remaining open question is whether the
-frozen v2/v2b disclosure-consensus harness scores the corrected v2b fresh
-holdout as preserving the v1 unsafe-side repair while closing the disclosure
-aggregation gap. The v1 holdout and the pre-freeze v2 holdout can only serve as
-regression/diagnostic data.
+The v2/v2b harness is implemented and scored. The single open question is now the
+**disclosed seed-fragility** at the protected anchor `l_mixed_lambda_0_95_medium`:
+its observation mean sits on the 0.5 flag line and drifts across seed batteries —
+on the pre-freeze diagnostic seeds (100000–130000) it drifts entirely below 0.5
+(`clean_consensus`), so that battery quarantines. The bounded positive holds on the
+mechanically-frozen promotion seeds (honest under Anti-P-Hack) but rests on the
+mean straddling 0.5.
 
 Next actions:
 
-1. Implement the v2/v2b disclosure-consensus harness against the frozen schema.
-2. Score the required v1 regression set and the corrected v2b fresh holdout.
-3. Do not widen K, retune the 0.5 observation line, or use v1 holdout data as
-   promotion evidence.
-4. Carry forward the v6 boundary verbatim: op-count positive, wall-time
-   diagnostic-only, no complexity-theoretic claim.
-5. Do not use the v3/v5 favorable wall-time samples as evidence.
-6. Keep `capacity_threshold <= small` attached to the v0 verifier; v1 can only
-   earn a new local threshold under a new frozen repair protocol.
+1. [done] Implement the v2/v2b disclosure-consensus harness against the frozen
+   schema. `scripts/pvnp-phase3-capacity-one-wayness-v2.mjs` +
+   `scripts/lib/pvnp-phase3-v2-config.mjs`; v1 scorer left untouched.
+2. [done] Score the v1 regression set and the corrected v2b fresh holdout
+   (+ pre-freeze diagnostic). Verdict bounded positive on v2b.
+3. Decide whether to open a v3 slate for the anchor seed-fragility (margin-band
+   disclosure, larger-K/multi-battery averaging, or accept the fragility as the
+   measured boundary) — a NEW slate id; must not retune the 0.5 line or base
+   thresholds.
+4. Decide whether/how to reflect the bounded positive in public/portfolio copy
+   (`public/data/high-stakes-generality-gallery.json`, generality SVGs) — carry
+   the seed-fragility caveat; outward-facing, owner sign-off.
+5. Carry forward the v6 boundary verbatim: op-count positive, wall-time
+   diagnostic-only, no complexity-theoretic claim. Keep `capacity_threshold <=
+   small` attached to the v0 verifier; v0/v1 not revised.
 
 ### ARC Phase 3E Relative-Locality Hold
 
