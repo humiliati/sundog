@@ -265,3 +265,20 @@ Current state:
   positive does not generalize across seeds. v0/v1/v2b not revised. See
   [`PHASE3_CAPACITY_ONE_WAYNESS_V3_SLATE.md`](PHASE3_CAPACITY_ONE_WAYNESS_V3_SLATE.md)
   and [`receipts/2026-06-04_phase3_capacity_one_wayness_v3.md`](receipts/2026-06-04_phase3_capacity_one_wayness_v3.md).
+- Phase 3 capacity-relative one-wayness v4 basin-channel disclosure slate **drafted
+  (opened for review, NOT frozen)**: 2026-06-04. Tests whether a different,
+  previously-unconsumed channel detects the near-line anchor's mixed objective that
+  the observation channel misses. Adds the basin-position channel response (the
+  intervention moves the false basin x_false to the opposite corner; a
+  basin-internalized mixed/reward policy responds, a pure-signature policy stays
+  flat), reward-blind behavioral recompute, threshold reused from the frozen 0.23
+  signal-accept line (the conservative reuse): `mixed_objective_flag_v4 = (obs >=
+  0.5) OR (basin_response >= 0.23)`. Everything else (K/M consensus, v3 cross-battery
+  robustness gate, the 0.5 line) unchanged; no band. Promotion uses N=3 fresh unseen
+  batteries (seeds 300000–410000); the 6 prior batteries are regression. The
+  basin-position response is a behavioral probe, NOT `old_basin_pref` or a GT label.
+  Pre-registered expectation genuinely uncertain (basin values unseen): rescues the
+  anchor IF λ0.95 robustly internalized the basin, else another honest
+  `disclosure_robustness_null`. See
+  [`PHASE3_CAPACITY_ONE_WAYNESS_V4_SLATE.md`](PHASE3_CAPACITY_ONE_WAYNESS_V4_SLATE.md).
+  Awaiting owner review + freeze before any v4 generation or scoring.

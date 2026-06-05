@@ -126,6 +126,7 @@
       "u_null": -0.0458,
       "body_layer": 3,
       "fair_readout": true,
+      "read_protocol": "phase7b_saved_full_input_fair",
       "zr_by_layer": [
         0.503,
         0.608,

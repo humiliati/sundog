@@ -1,7 +1,9 @@
 # JEPA Phase 0 Noise-Carry Results
 
-**Status:** DEBUG HOLD after failed smoke (2026-06-04). No phase verdict; no full JEPA
-battery run.
+**Status:** DEBUG HOLD (2026-06-04). Read-design repaired (flip-conditioned `z_flip_acc`,
+GEN positive-control live). The JEPA training/collapse smoke RAN: **buildable + directional gap
+`+0.170`, but JEPA `u_det=0.256` fails the control → uninterpretable.** Read-protocol fix queued
+for next session. No phase verdict; no full battery run.
 
 Binding/draft spec: `docs/chatv2/JEPA_PHASE0_NOISE_CARRY_SPEC.md`.
 Runner under debug: `scripts/jepa_phase0_noise_carry.py`.
@@ -128,3 +130,49 @@ If that smoke passes, the operator-staged lock battery is:
 ```powershell
 python scripts/jepa_phase0_noise_carry.py --out results/chatv2/jepa-phase0-noise-carry-zflip-lock
 ```
+
+## Debug repair 4 - JEPA training/collapse smoke (the staged z_flip smoke) RAN
+
+Ran the staged smoke (d=128, 1 seed, full Phase-7b training, ~15.5 min). First launch died
+silently at the `[cfg]` line — a background PowerShell `& py … 2>&1 | Tee-Object` promotes
+python's first stderr line to a fatal `NativeCommandError`, killing the run with no traceback.
+Re-launched **clean** (no `2>&1`, `$ErrorActionPreference='Continue'`, `$env:PYTHONWARNINGS='ignore'`).
+Receipt: `results/chatv2/jepa-phase0-noise-carry/smoke.json`.
+
+| read | GEN | JEPA |
+| --- | ---: | ---: |
+| `z_flip_acc` (primary) | 0.713 | 0.542 |
+| `u_det` (control) | 0.622 | **0.256** |
+| effective rank | 3.0 | 31.5 |
+| collapsed | - | **False** |
+
+`z_flip_gap = +0.170` (> `frozen_delta` 0.15); direct-`x_i` sidecar gap `+0.046`.
+
+**Verdict: VIABLE-BUT-UNINTERPRETABLE.**
+- ✓ **Buildable** — JEPA trains without collapse (`frac_std_ok=1.0`, eff-rank 31.5 ≥ the
+  `max(8, 0.05·d)` floor). VICReg holds. This was the hard engineering gate.
+- ✓ **Directional** — the noise-discard gap is `+0.170`, above the bar: JEPA tracks the private
+  noise *less* than GEN, in the predicted direction.
+- ✗ **`u_det` control fails** — JEPA `u_det = 0.256 ≪ 0.70`. Until JEPA visibly *keeps* `u`, the
+  gap is **uninterpretable**: a lower `z_flip_acc` could be a weaker overall body rather than a
+  *selective* noise-discard. (GEN's own `u_det=0.622` is soft vs the banked 0.754 — partly the
+  smoke's `n=1000` vs 3000.)
+- `support_starved=True` is a pure **smoke artifact** of `n=1000` (~45 flips/latent); the full
+  `n=3000` gives ~150 and clears the floor.
+
+**Most likely cause:** read-protocol mismatch — the JEPA context encoder is *trained* on
+50%-masked input but *read* on full input (8 latents it never co-saw), so its full-input
+representation is off-distribution and recovers `u` weakly.
+
+## Queued next session - read-protocol diagnostic
+
+The read-design blocker is closed and the build is viable; the one open blocker is the JEPA
+`u_det` control. Next session:
+
+1. Patch the JEPA body read to the **masked-input protocol** (read the context encoder on
+   masked input matching training, averaged over mask patterns); re-smoke (~15 min, clean
+   background launch, `n=3000` if feasible).
+2. If JEPA `u_det` clears 0.70 → the `z_flip_gap` is interpretable → run the operator-staged
+   `{128,256} × 3-seed` battery (~3 h, the capacity sweep to the `d=256` deflation point).
+3. If `u_det` stays low even on the matched read → JEPA genuinely does not keep `u` on this toy
+   → shelve as `blocked_by_unfaithful_jepa` (a real, banked finding).

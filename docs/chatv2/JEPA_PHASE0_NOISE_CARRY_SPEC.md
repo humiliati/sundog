@@ -74,6 +74,7 @@ values, and any change requires a spec amendment.
 | loss | `L = λ_inv·MSE(pred, stopgrad(target)) + λ_var·var + λ_cov·cov`; VICReg var/cov applied to the **context-encoder body embeddings** (the read surface) |
 | VICReg weights | **λ_inv = 25, λ_var = 25, λ_cov = 1** (original VICReg defaults); variance target γ = 1.0, hinge `mean(relu(1 − std_d))` |
 | optimizer / budget | **matched to GEN** (same AdamW, lr, total steps) |
+| JEPA read protocol | **masked-context average**: read the context encoder on input with the same 50% latent-channel mask distribution used in training, take the final-position body activation, and average over **8** independently sampled mask patterns before probing |
 
 **Collapse guard** (gates `blocked_by_unfaithful_jepa`; the smoke records and asserts these):
 - per-dim body-embedding std **≥ 0.10** (batch-averaged) on **≥ 90%** of dims;
@@ -194,25 +195,26 @@ path to AGI"; any statement about real I-JEPA/V-JEPA/LLM behaviour; R2 / "more t
 1. Operator lock review.
 2. Implementation exists at `scripts/jepa_phase0_noise_carry.py`, but the first smoke moved this
    spec back to DEBUG HOLD. The primary read has been repaired and GEN positive-control preflight
-   passes (`z_flip_acc=0.7839` on the banked Phase-7b GEN body), but JEPA training/collapse smoke
-   has not passed yet.
-3. **Smoke** (1 seed, `d=128`): JEPA trains without collapse (VICReg receipt + variance
-   floor) AND the repaired noise read runs.
+   passes (`z_flip_acc=0.7839` on the banked Phase-7b GEN body). A first JEPA smoke was buildable
+   and directional (`z_flip_gap=+0.170`) but uninterpretable because JEPA `u_det=0.256` under a
+   full-input read. The queued repair is the masked-context read protocol above.
+3. **Re-smoke** (1 seed, `d=128`): JEPA trains without collapse (VICReg receipt + variance
+   floor), the repaired noise read runs, and JEPA `u_det >= 0.70` under masked-context read.
 
    ```powershell
-   python scripts/jepa_phase0_noise_carry.py --smoke --out results/chatv2/jepa-phase0-noise-carry-zflip-smoke
+   python scripts/jepa_phase0_noise_carry.py --smoke --read-n-fingerprint 3000 --jepa-mask-reads 8 --out results/chatv2/jepa-phase0-noise-carry-zflip-masked-smoke
    ```
 
-   Inline status: corrected GEN-only training exceeded the ~10-minute CPU rule, so this smoke is
-   operator-staged/background. CPU lower bound is `>10 min` for GEN-only; the matched GEN+JEPA
-   smoke is expected to exceed inline budget unless run on the 1080. Record actual wall-clock in
-   the results doc.
+   Inline status: the previous matched GEN+JEPA smoke took ~15.5 min, so this is
+   operator-staged/background under the repo's ~10-minute rule. Record actual wall-clock in the
+   results doc. If JEPA `u_det < 0.70` even under masked-context read, the lane returns
+   `blocked_by_unfaithful_jepa`; do not run the capacity battery.
 
 4. **Training is operator-staged (background, hours on the 1080)** — GEN + JEPA × `{128,256}` × 3
    seeds. Stage the exact PowerShell commands; do not run the full battery inline.
 
    ```powershell
-   python scripts/jepa_phase0_noise_carry.py --out results/chatv2/jepa-phase0-noise-carry-zflip-lock
+   python scripts/jepa_phase0_noise_carry.py --jepa-mask-reads 8 --out results/chatv2/jepa-phase0-noise-carry-zflip-masked-lock
    ```
 
 5. Read + verdict; record in `docs/chatv2/JEPA_PHASE0_NOISE_CARRY_RESULTS.md`.
@@ -225,7 +227,8 @@ path to AGI"; any statement about real I-JEPA/V-JEPA/LLM behaviour; R2 / "more t
 - held-out flip counts per latent; all-row and clean-row `z_i` accuracies; direct `x_i`
   `noise_det` sidecar (non-gating);
 - `u_det` (both bodies), `u_null`, `z_det` (report-only);
-- JEPA collapse guard: per-dim variance floor, VICReg variance/covariance receipt, rank;
+- JEPA read protocol (`masked_context_avg`), mask-read count, collapse guard: per-dim variance
+  floor, VICReg variance/covariance receipt, rank;
 - `frozen_delta`, per-seed spread; branch verdict; allowed/forbidden from §9.
 
 ## Open lock-review knobs

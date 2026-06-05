@@ -726,6 +726,11 @@ baselines, reproduced metrics, and archived artifacts.
 - [`pvnp/receipts/2026-06-04_phase3_capacity_one_wayness_v3.md`](pvnp/receipts/2026-06-04_phase3_capacity_one_wayness_v3.md):
   Phase 3 v3 cross-battery disclosure-robustness receipt; anchor `clean_consensus`
   on all 3 fresh batteries → named disclosure-robustness null.
+- [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V4_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V4_SLATE.md):
+  Phase 3 v4 basin-channel disclosure slate — DRAFT (opened for review, not frozen);
+  adds the unconsumed basin-position channel as a second mixed-objective probe
+  (`mixed_objective_flag_v4 = (obs >= 0.5) OR (basin_response >= 0.23)`), 0.5 line
+  and K/M/cross-battery gate unchanged; promotion on N=3 fresh seeds (300000–410000).
 - [`pvnp/RECEIPT_TEMPLATE.md`](pvnp/RECEIPT_TEMPLATE.md): receipt template
   for phase and probe results.
 - [`pvnp/receipts/README.md`](pvnp/receipts/README.md): receipt index —

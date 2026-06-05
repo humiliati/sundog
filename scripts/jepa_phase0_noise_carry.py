@@ -164,7 +164,7 @@ def split_half(n, seed=0):
     return perm[:cut], perm[cut:]
 
 
-def read_arrays(bodies, z, u, H, seed, with_nonlinear=False):
+def read_arrays(bodies, z, u, H, seed, with_nonlinear=False, read_protocol="full"):
     Ln = bodies.shape[1]
     fair = bodies.ndim == 4
 
@@ -232,6 +232,7 @@ def read_arrays(bodies, z, u, H, seed, with_nonlinear=False):
         "u_null": round(_det(_cv(Xg, unull), max(unull.mean(), 1 - unull.mean())), 4),
         "body_layer": l,
         "fair_readout": bool(fair),
+        "read_protocol": read_protocol,
         "zr_by_layer": [round(float(v), 3) for v in zr],
         "collapse": {"frac_std_ok": round(float((std >= 0.10).mean()), 3),
                      "eff_rank": round(eff_rank(raw), 2), "d": int(raw.shape[1]),
@@ -241,7 +242,38 @@ def read_arrays(bodies, z, u, H, seed, with_nonlinear=False):
 
 def read_body(model, H, cfg, device, seed, with_nonlinear=False):
     bodies, z, u = extract_body(model, H, cfg, device, seed)
-    return read_arrays(bodies, z, u, H, seed, with_nonlinear=with_nonlinear)
+    return read_arrays(bodies, z, u, H, seed, with_nonlinear=with_nonlinear,
+                       read_protocol="full_input_fair" if cfg.fair_readout else "full_input_final")
+
+
+def extract_jepa_body_masked(model, H, cfg, device, seed, mask_reads=8):
+    rng = default_rng(seed + 123)
+    mask_rng = default_rng(seed + 456)
+    bits, z, u = gen_batch(H, cfg.n_fingerprint, cfg, rng)
+    lat = latent_of_pos(cfg.max_len, H, max(2, cfg.arity))
+    nmask = int(round(MASK_FRAC * H))
+    accum = None
+    model.eval()
+    with torch.no_grad():
+        for _ in range(mask_reads):
+            mask_lat = np.zeros((bits.shape[0], H), dtype=bool)
+            for b in range(bits.shape[0]):
+                mask_lat[b, mask_rng.choice(H, nmask, replace=False)] = True
+            masked_bits = np.where(mask_lat[:, lat], MASK_TOKEN, bits)
+            idx = torch.tensor(masked_bits, device=device)
+            _, hiddens = model(idx, return_hidden=True)
+            arr = np.stack([h[:, -1, :].cpu().numpy() for h in hiddens], axis=1)
+            accum = arr if accum is None else accum + arr
+    bodies = accum / float(mask_reads)
+    return bodies, z, u
+
+
+def read_jepa_body(model, H, cfg, device, seed, with_nonlinear=False, mask_reads=8):
+    bodies, z, u = extract_jepa_body_masked(model, H, cfg, device, seed, mask_reads=mask_reads)
+    out = read_arrays(bodies, z, u, H, seed, with_nonlinear=with_nonlinear,
+                      read_protocol="masked_context_avg")
+    out["mask_reads"] = int(mask_reads)
+    return out
 
 
 def support_starved(read):
@@ -266,6 +298,10 @@ def main():
                     help="debug: read existing Phase-7b GEN bodies instead of training")
     ap.add_argument("--with-nonlinear-probe", action="store_true",
                     help="debug: also run expensive MLP sidecar probes")
+    ap.add_argument("--jepa-mask-reads", type=int, default=8,
+                    help="number of random 50%%-mask read passes to average for JEPA")
+    ap.add_argument("--read-n-fingerprint", type=int, default=0,
+                    help="override cfg.n_fingerprint for the readout sample")
     args = ap.parse_args()
     if args.smoke:
         args.dims, args.seeds = [128], [0]
@@ -280,12 +316,15 @@ def main():
     for d in args.dims:
         for seed in args.seeds:
             cfg = cfg_for(d, args.p_noise, args.smoke)
+            if args.read_n_fingerprint:
+                cfg = replace(cfg, n_fingerprint=args.read_n_fingerprint)
             run_seed = seed + 1000 * H                         # matches Phase-7b train_stage
             if args.read_phase7b_gen:
                 npz = Path(f"results/chatv2/phase7b-coupled-lownoise/seed{seed}/bodies/H8_gen.npz")
                 d0 = np.load(npz, allow_pickle=True)
                 gr = read_arrays(d0["bodies"], d0["z"].astype(int), d0["u"].astype(int),
-                                 H, run_seed, with_nonlinear=args.with_nonlinear_probe)
+                                 H, run_seed, with_nonlinear=args.with_nonlinear_probe,
+                                 read_protocol="phase7b_saved_full_input_fair")
                 gmeta = {"source": str(npz), "trained_elsewhere": True}
             else:
                 gen, gmeta = train_generative(H, cfg, device, run_seed)
@@ -310,8 +349,9 @@ def main():
                 continue
 
             jepa, jmeta = train_jepa(H, cfg, device, run_seed)
-            jr = read_body(jepa, H, cfg, device, run_seed,
-                           with_nonlinear=args.with_nonlinear_probe)
+            jr = read_jepa_body(jepa, H, cfg, device, run_seed,
+                                with_nonlinear=args.with_nonlinear_probe,
+                                mask_reads=args.jepa_mask_reads)
             gap = round(gr["noise_det"] - jr["noise_det"], 4)
             z_flip_gap = round(gr["z_flip_acc"] - jr["z_flip_acc"], 4)
             row.update({"gap": gap,
@@ -325,12 +365,16 @@ def main():
                    "jepa_collapse": jr["collapse"], "jepa_collapsed": collapsed(jr, d),
                    "jepa_read": jr,
                    "support_starved": support_starved(gr) or support_starved(jr),
-                   "train_ctx_std_ok": jmeta["train_ctx_frac_std_ok"]})
+                   "train_ctx_std_ok": jmeta["train_ctx_frac_std_ok"],
+                   "jepa_read_protocol": jr["read_protocol"],
+                   "jepa_mask_reads": jr["mask_reads"],
+                   "n_fingerprint": cfg.n_fingerprint})
             rows.append(row)
             print(f"[d={d} s={seed}] GEN nd_lin={gr['noise_det']:.3f} nd_nl={gr['noise_det_nl']:.3f} "
                   f"zflip={gr['z_flip_acc']:.3f} u={gr['u_det']:.3f} effR={gr['collapse']['eff_rank']} | "
                   f"JEPA nd_lin={jr['noise_det']:.3f} nd_nl={jr['noise_det_nl']:.3f} u={jr['u_det']:.3f} "
-                  f"zflip={jr['z_flip_acc']:.3f} effR={jr['collapse']['eff_rank']} std_ok={jr['collapse']['frac_std_ok']} | "
+                  f"zflip={jr['z_flip_acc']:.3f} effR={jr['collapse']['eff_rank']} std_ok={jr['collapse']['frac_std_ok']} "
+                  f"read={jr['read_protocol']}x{jr['mask_reads']} | "
                   f"global_gap_nl={gr['noise_det_global_nl']-jr['noise_det_global_nl']:+.3f} "
                   f"zflip_gap={z_flip_gap:+.3f} "
                   f"({round(time.time()-t0,1)}s)",
@@ -346,6 +390,8 @@ def main():
         if not args.gen_only:
             print(f"  JEPA collapsed = {r['jepa_collapsed']}  "
                   f"(guard: frac_std_ok>=0.90, eff_rank>=max(8,{EFF_RANK_MIN_FRAC}d))")
+            print(f"  JEPA read = {r['jepa_read_protocol']} x {r['jepa_mask_reads']}  "
+                  f"n_fingerprint = {r['n_fingerprint']}")
             print(f"  GEN z_flip_acc = {r['gen_z_flip_acc']}  JEPA z_flip_acc = {r['jepa_z_flip_acc']}  "
                   f"gap = {r['z_flip_gap']:+.3f}")
             print(f"  direct x sidecar GEN/JEPA = {r['gen_noise_det']}/{r['jepa_noise_det']}  "
