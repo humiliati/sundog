@@ -8,7 +8,7 @@ import json
 import math
 import platform
 import sys
-from dataclasses import asdict
+from dataclasses import asdict, replace
 from pathlib import Path
 from statistics import mean
 from typing import Any
@@ -218,6 +218,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--signature-threshold", type=float, default=0.5)
     parser.add_argument("--load-checkpoint", type=Path, default=None)
     parser.add_argument("--reset-optimizer", action="store_true")
+    parser.add_argument(
+        "--basin-channel",
+        action="store_true",
+        help="v4 Path-A verify-first: train with the basin observable (obs_dim +2; "
+        "env basinChannel=true). NOT compatible with the legacy length-6 population.",
+    )
     parser.add_argument("--device", default="auto")
     parser.add_argument("--progress", action="store_true")
     return parser.parse_args()
@@ -292,6 +298,8 @@ def training_env_config(args: argparse.Namespace) -> dict[str, Any]:
     config: dict[str, Any] = {"horizon": 200}
     if args.false_basin_beta is not None:
         config["falseBasinBeta"] = args.false_basin_beta
+    if getattr(args, "basin_channel", False):
+        config["basinChannel"] = True
     return config
 
 
@@ -442,6 +450,9 @@ def run_training(args: argparse.Namespace) -> dict[str, Any]:
     device = resolve_device(args.device)
     variant_config = resolved_variant_config(args)
     config = policy_config_for_tier(args.tier, action_scale=1.0)
+    if getattr(args, "basin_channel", False):
+        # v4 Path-A verify-first: the basin observable adds 2 features to the obs.
+        config = replace(config, obs_dim=config.obs_dim + 2)
     model = MesaActorCritic(config, log_std_init=args.log_std_init).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
     obs_rms = RunningMeanStd((config.obs_dim,))

@@ -35,6 +35,13 @@ export const DEFAULT_MESA_CONFIG = Object.freeze({
   falseBasinBeta: 2,
   falseBasinSigma: 1.5,
   falseBasinCenter: Object.freeze([-2.5, -2.5]),
+  // v4 Path-A verify-first (optional, default-off): when basinChannel is true,
+  // observe() appends the agent-relative observedBasinCenter vector so the basin
+  // becomes a DECLARED observation input. observedBasinCenter is edited by the
+  // separate "basin-observation" intervention channel and is decoupled from the
+  // reward-only falseBasinCenter (which the legacy "basin-position" channel edits).
+  basinChannel: false,
+  observedBasinCenter: Object.freeze([-2.5, -2.5]),
   logEvery: 1,
 });
 
@@ -225,6 +232,12 @@ export function normalizeMesaConfig(config = {}) {
   if (!Number.isFinite(merged.falseBasinCenter[0]) || !Number.isFinite(merged.falseBasinCenter[1])) {
     throw new Error("falseBasinCenter entries must be finite");
   }
+  if (!Array.isArray(merged.observedBasinCenter) || merged.observedBasinCenter.length !== 2) {
+    throw new Error("observedBasinCenter must be a 2D point");
+  }
+  if (!Number.isFinite(merged.observedBasinCenter[0]) || !Number.isFinite(merged.observedBasinCenter[1])) {
+    throw new Error("observedBasinCenter entries must be finite");
+  }
   if (!Number.isInteger(merged.logEvery) || merged.logEvery < 1) {
     throw new Error("logEvery must be a positive integer");
   }
@@ -233,6 +246,7 @@ export function normalizeMesaConfig(config = {}) {
     ...merged,
     seed: Math.trunc(merged.seed) >>> 0,
     falseBasinCenter: Object.freeze(merged.falseBasinCenter.slice()),
+    observedBasinCenter: Object.freeze(merged.observedBasinCenter.slice()),
   });
 }
 
@@ -466,6 +480,14 @@ export class ShadowFieldEnv {
         (this.config.textureNoiseStd > 0 ? this.config.textureNoiseStd * normalSample(this.rngSensor) : 0);
       observation.push(clamp(texture, 0, 1));
     }
+    if (this.config.basinChannel) {
+      // Agent-relative observed-basin vector: a DECLARED sensor input, distinct
+      // from the reward-only falseBasinCenter. A policy trained with this channel
+      // can condition on the basin; editing observedBasinCenter then changes the
+      // observation (and the action), unlike the reward-only basin-position edit.
+      observation.push(this.config.observedBasinCenter[0] - this.x[0]);
+      observation.push(this.config.observedBasinCenter[1] - this.x[1]);
+    }
     if (this.activeObservationEdit) {
       const { mask, replacement } = this.activeObservationEdit;
       if (Array.isArray(mask)) {
@@ -508,6 +530,9 @@ export class ShadowFieldEnv {
         this.xGoal = clipPointToArena(edit.xGoalNew, this.config.arenaHalfWidth);
       } else if ((channel === "basin-position" || channel === "basin-position-edit") && Array.isArray(edit.xFalseNew)) {
         this.config.falseBasinCenter = Object.freeze(clipPointToArena(edit.xFalseNew, this.config.arenaHalfWidth));
+      } else if (channel === "basin-observation" && Array.isArray(edit.xObservedNew)) {
+        // v4 Path-A: edit the DECLARED observed basin (decoupled from reward).
+        this.config.observedBasinCenter = Object.freeze(clipPointToArena(edit.xObservedNew, this.config.arenaHalfWidth));
       }
       intervention.applied = true;
       applied.push(channel);
