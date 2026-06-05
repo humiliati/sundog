@@ -1,0 +1,55 @@
+{
+  "lane": "jepa-0d-accumulator",
+  "stage": "adversarial_verification_of_model_free_preflight",
+  "date": "2026-06-05",
+  "provenance": "5 independent adversarial agents + 1 synthesis judge (Workflow run wf_04f14941-4f8). Numbers below were computed in EPHEMERAL agent scratch probes against the committed generator; they are agent-reported findings, NOT a deterministically reproducible receipt like preflight.json. Recorded here so the spec's claims are checkable.",
+  "synthesis_verdict": "needs_fixes (all four fixes have since been applied to scripts/jepa_0d_accumulator_preflight.py and re-run; the n=3000 receipt is preflight.json)",
+  "claims_that_survived": {
+    "deconfound_linear": {
+      "linear_u_det_max_seed0_n2000": -0.013,
+      "linear_u_det_max_seed1": -0.067,
+      "linear_u_det_max_seed2": -0.047,
+      "linear_u_det_max_p_noise_0.25": -0.036,
+      "linear_u_det_max_n8000": 0.007,
+      "linear_u_det_max_n16000": 0.009,
+      "perbit_corr_payload_max_n200k": 0.004,
+      "small_mlp_raw_u_det_max": 0.095,
+      "big_mlp_raw_u_det_max": 0.031,
+      "note": "linear floor robust across seeds/p_noise/n; converges to ~0, never creeps to 0.10. small-MLP 0.095 was overfit noise (larger net did worse)."
+    },
+    "oracle_honest": {
+      "u_acc_with_readouts_zeroed": 0.992,
+      "decode_fresh_X_self": 0.9921,
+      "decode_fresh_X_cross": 0.2743,
+      "exact_seq_seed1": 0.9905,
+      "exact_seq_seed2": 0.9905,
+      "u_acc_Pe5": 0.992, "u_acc_Pe3": 0.9561, "u_acc_Pe1": 0.7519,
+      "note": "event route reads only event tokens; not reading stored truth; recovery degrades correctly as redundancy drops."
+    },
+    "metric_position_prior_neutralised": {
+      "noise_only_feature_det_range": "-0.007..+0.022",
+      "prior_constant_Eu_given_t_det": 0.0,
+      "note": "a TinyGPT position embedding cannot fake u_det under the per-checkpoint majority baseline."
+    },
+    "mask_shortcut_reproduced": {
+      "same_ckpt_clean_det_decoded": "0.60..1.00 (1.00 for the old PSI duplicate twin)",
+      "random_mask_keeps_same_ckpt_peer_prob": 0.992,
+      "whole_ckpt_fix_event_path_det": 0.989,
+      "whole_ckpt_fix_cross_ckpt_leak_det": 0.059,
+      "note": "the exact parity Phase-0 failure mode; whole-checkpoint masking removes it."
+    }
+  },
+  "confirmed_issues_fixed": [
+    {"severity": "high", "issue": "same-checkpoint XOR shortcut defeats a random 50% mask (PSI duplicate row + intrinsic n_U>count_bits dependence)", "fix": "pinned whole-checkpoint masking; replaced _COUPLE_A with make_psi (7 distinct nonzero functionals, rank 3, no duplicate); added model-free mask-necessity gate"},
+    {"severity": "medium", "issue": "silent nan-drop: _cv_acc returned nan when rarest class==1, dropped from u_det_max and median", "fix": "stratified-holdout fallback; gate-1 fails on incomplete eval; unified gate-1/gate-3 support definitions"},
+    {"severity": "medium", "issue": "u_det metric ambiguously pinned across gates; ordinal footgun", "fix": "one accuracy-det formula pinned; MAE-det report-only sidecar; within-1 det rejected"},
+    {"severity": "low", "issue": "K>=8 (count_bits>3) crashed the generator", "fix": "make_psi auto-generates a rank-correct coupling for any count_bits"}
+  ],
+  "false_alarms": [
+    "small-MLP-on-raw ~0.095 is overfit noise, not a leak (larger net did worse)",
+    "readout-route u_acc degradation 0.95->0.90 is expected error-correction (min codeword Hamming 4), not a bug",
+    "oracle is not self-cheating / reading stored truth",
+    "position-prior is neutralised by the per-checkpoint majority baseline",
+    "codec marginal-fairness is real (parity_encode bit-identical to _gen_computed)"
+  ]
+}

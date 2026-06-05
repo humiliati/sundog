@@ -89,11 +89,14 @@ The three adversary tasks are **separate**, with separate metrics:
 
 1. **verify** safety from `σ` (the friendly task);
 2. **reconstruct** the hidden target from `σ` (inversion);
-3. **spoof** `σ` while violating safety (forge a passing-but-unsafe certificate).
+3. **spoof** `σ` while violating safety (forge a passing-but-unsafe certificate;
+   structurally impossible for Candidate A under its distance-to-code safety
+   predicate, but still part of the general failure taxonomy).
 
-Phase 3 already taught which one is load-bearing: **spoof**, not inversion — an
-inversion failure is often near-tautological by construction (any view exposing the
-verifier's decision leaks the safety bit), whereas a spoof success is a real break.
+Phase 3 already taught why these tasks must be separated: in mesa the load-bearing
+break was spoof-like, while in Candidate A spoofing is structurally impossible and
+the measured capacity probe is invert-`e` witness recovery. An invert-`s` failure is
+vacuous by algebra and must never be promoted as a capacity result.
 
 ### 1.4 The named-failure contract
 
@@ -286,10 +289,13 @@ quotient + cost asymmetry" family.
 
 ## 4. The constructed instance (the theorem-shaped core)
 
-One clean instance where **checking is cheap, spoofing is capacity-hard, the shadow
-is control-sufficient but provably lossy, and the failure branches are pre-named.**
-It is an **existence proof / design**, not a measured receipt — its capacity curve is
-unrun (§6, RISK 1).
+One clean instance where **checking is cheap, recovering a valid light deviation
+witness from the shadow is capacity-hard, the shadow is control-sufficient but
+provably lossy, and the failure branches are pre-named.** (Spoof — a passing
+certificate for a truly-unsafe body — is *structurally* impossible here under the
+distance-to-code safety predicate; the capacity-hard probe is witness recovery /
+invert-`e`, not spoof.) It is an **existence proof / design**, not a measured
+receipt — its capacity curve is unrun (§6, RISK 1).
 
 ### 4.1 Candidate A — the syndrome / SIS certificate (recommended)
 
@@ -300,11 +306,12 @@ estimate**, which closes the mesa trap by algebra.
 
 - **Body** `x = (s, e)`: a secret `s ∈ Z_q^k`, a sparse error `e` of weight `w`, a
   public generator `G` and parity-check `H` of rank `n−k`. The local observation is
-  `y = Gᵀs + e`.
+  `y = sG + e`.
 - **Certificate** `σ = (z, b, t)`: the **syndrome** `z = H y`, a cheap weight witness
   `b`, and a **source-binding tag** `t = PRF_K(y)`. **Safety predicate**
-  `Safe := wt(e) ≤ d/2` (the error is correctable / the policy stays inside the safe
-  ball).
+  `Safe(y) := ∃ e* : He* = Hy ∧ wt(e*) ≤ τ` (the body is within the safe
+  decoding ball). The planted `e` is a generation/scoring label, not a verifier
+  decision input.
 - **Verifier** `V`: recompute `z = H y`, check `t` (so only `y` is editable), run a
   cheap sound-but-incomplete weight lower bound from `z`; output
   `accept / reject / quarantine`.
@@ -312,28 +319,31 @@ estimate**, which closes the mesa trap by algebra.
 ### 4.2 Property-by-property
 
 - **Check-cheap (Claim 1 / 6.4).** `V` = a linear map `Hy` + a PRF + a cheap bound.
-  **Find** (decode `e` from the syndrome, i.e. find a safe policy) is **syndrome
-  decoding — NP-hard**. The cost asymmetry is structural, not measured.
+  **Find** (decode a valid light witness `e*` from the syndrome, i.e. find a safe
+  policy witness) is **syndrome decoding — NP-hard**. The cost asymmetry is
+  structural, not measured.
 - **Lossy-but-sufficient shadow (4.3 Sufficiency / 6.1 / 6.2).** Because `H` kills
-  codewords, `z = H y = H(Gᵀs + e) = He` depends on `e` **only**, and `He` has
+  codewords, `z = H y = H(sG + e) = He` depends on `e` **only**, and `He` has
   kernel dimension `k > 0`, so **`qᵏ` secrets map to each syndrome** — `s` is
   *exactly* gone. This is the certified state-insufficiency, the inverse of mesa's
   0.97–0.99, and it is true **by algebra, not by a hoped-for FVE<1** — closing the
   mesa trap. Yet `z` still decides `Safe` via a coset-weight bound: sufficient for
   the predicate without reconstructing the body.
-- **Capacity-hard spoof (4.4 / 6.3).** A passing-but-unsafe certificate is a
-  same-syndrome near-codeword *below* the decoding radius — an **SIS instance below
-  an information-set-decoding (ISD) capacity `C`**. Spoof-hardness is the load-bearing
-  leg (matching v0's lesson). **Claim spoof-resistance, never inversion-resistance:**
-  `s` is provably gone, so an inversion-resistance claim would be vacuous.
-- **Binding = loss = the same map.** `V` recomputes `z` from `y`, so only `y` is
-  editable, and editing `y` to be unsafe-but-passing *is* a decoding problem. The
-  single map `H` does both jobs — this is *why* A beats the controls.
+- **Capacity-hard witness recovery (4.4 / 6.3).** Recovering a same-syndrome light
+  witness from `z` alone is an **SIS / syndrome-decoding instance below an
+  information-set-decoding (ISD) capacity `C`**. This witness-recovery threshold is
+  the load-bearing measured leg. **Claim invert-`e` capacity, never invert-`s`
+  resistance:** `s` is provably gone, so an invert-`s` resistance claim would be
+  vacuous. A passing-but-unsafe certificate is structurally impossible under
+  `Safe(y)` because a passing light witness is the safety predicate.
+- **Binding = loss = the same map.** `V` recomputes `z` from `y`, so witness claims
+  are bound to the observed body, while `H` still quotients away the secret
+  direction. The single map `H` does both jobs — this is *why* A beats the controls.
 - **Pre-named failure branches.** 6.1 vacuity (would fire if `z` added nothing over
   raw features — closed, `z` is the decision statistic); 6.2 sufficiency (fires as a
   named quarantine inside the false-quarantine band of the cheap bound, RISK 2); 6.3
-  inversion/spoof (the capacity-`C` breakpoint where ISD finds a same-syndrome
-  near-codeword); 6.4 overhead (closed structurally); 6.5 boundary (the promise
+  invert-`e` capacity (the capacity-`C` breakpoint where ISD finds a same-syndrome
+  light witness); 6.4 overhead (closed structurally); 6.5 boundary (the promise
   domain is the frozen `(n, k, w)` regime; out-of-regime inputs quarantine).
 
 ### 4.3 Controls B and C (named negative controls, not candidates)
@@ -347,7 +357,8 @@ estimate**, which closes the mesa trap by algebra.
   exact-zero anchor a one-wayness instance must avoid.
 
 A wins because it is the only one of the three that holds all four properties at
-once: lossy (unlike C), safety-binding (unlike B), check-cheap, and spoof-hard.
+once: lossy (unlike C), safety-binding (unlike B), check-cheap, and
+witness-recovery hard.
 
 ---
 
@@ -364,18 +375,19 @@ question is the P-vs-NP-shaped one:
   Medium → Large, exactly the registered ladder.
 - **Verifier curve:** `V`'s op-count, which must stay below the find/decode cost
   across the ladder (Claim 1 must not erode as `C` grows).
-- **Spoof curve:** the rate at which a capacity-`C` ISD attacker produces a
-  same-syndrome near-codeword that passes `V` while violating `Safe` (the
-  load-bearing probe, per Phase 3).
-- **The breakpoint** is the measured `C` where the spoof curve crosses from 0 to
-  positive *while the verifier is still cheap* — a measured capacity-relative
+- **Invert-`e` curve:** the rate at which a capacity-`C` ISD attacker, given only
+  `z`, produces a same-syndrome light witness that passes `V` (the load-bearing
+  checker-vs-finder probe). Exact recovery of the planted `e` is diagnostic; any
+  valid light witness is success.
+- **The breakpoint** is the measured `C` where the invert-`e` curve crosses from 0
+  to positive *while the verifier is still cheap* — a measured capacity-relative
   one-wayness threshold, the thing every Phase-1 receipt reported as
   `capacity_threshold = not_estimated`.
 
 This run is what would convert §4 from existence proof to receipt. It must obey the
 same anti-p-hack discipline the Phase-3 receipts earned: freeze the regime before
-the attacker runs, keep `wt(e)` and `s` as scoring labels only (never verifier
-inputs), and pre-register the verdict branches.
+the attacker runs, keep planted `e`, `wt(e)`, and `s` as scoring labels only
+(never verifier inputs), and pre-register the verdict branches.
 
 ### 5.1 Prototype result (2026-06-04)
 
@@ -391,7 +403,13 @@ breakpoint. Honest limits: a toy regime, a naive (non-ISD) forger, imported deco
 hardness, and a degenerate cheap-reject branch (RISK 1). See
 [`SUNDOG_CERTIFICATE_SYNDROME_PROTOTYPE_NOTE.md`](SUNDOG_CERTIFICATE_SYNDROME_PROTOTYPE_NOTE.md)
 and `scripts/pvnp-certificate-syndrome.py`. The frozen, scaled, ISD-attacker run
-remains the step that earns a measured capacity threshold.
+remains the step that earns a measured capacity threshold — pre-registered in the
+draft slate
+[`SUNDOG_CERTIFICATE_SYNDROME_V1_SLATE.md`](SUNDOG_CERTIFICATE_SYNDROME_V1_SLATE.md)
+(frozen regime `[128,64] w=12`, non-enumerable `C(128,12)≈2.4×10¹⁶`; a Prange-ISD
+capacity ladder with a pre-registered breakpoint at ~5,000 iterations / ~2.6×10⁹
+ops vs the 8,192-op flat check; the measured `C` is honestly a threshold against
+Prange ISD).
 
 ---
 
@@ -406,16 +424,17 @@ sound on paper and was falsified before freeze by an actual run.
    precedent is the standing warning: a mechanism sound on paper (the basin channel)
    was killed by measurement (signature 0.431 vs reward 0.558, ratio 1.29×). Do not
    rest the capacity-relative claim on A until §5 has produced the curve.
-2. **The cheap weight bound may be as hard as decoding.** A *tight* `wt(e) ≤ d/2`
-   bound from the syndrome can itself be decoding-hard (reopening 6.4). Mitigation:
+2. **The cheap weight bound may be as hard as decoding.** A *tight*
+   `dist(y, Code(G)) ≤ τ` bound from the syndrome can itself be decoding-hard
+   (reopening 6.4). Mitigation:
    use a cheap, sound-but-incomplete lower bound and **pre-register the
    false-quarantine band** as the explicit 6.2 boundary — a quarantine, never a false
    accept (consistent with false-accept-first ordering).
-3. **Label-freeze discipline.** `wt(e)` and `s` must be scoring labels only, never
-   verifier inputs (grep-enforced), and `(n, k, w)` frozen before the spoof curve —
-   else the spoof result is contaminated, exactly the contamination the Phase-3
-   receipts were built to avoid.
-4. **Hardness import, not demonstration.** A's spoof-hardness rests on an SIS/ISD
+3. **Label-freeze discipline.** Planted `e`, `wt(e)`, and `s` must be scoring
+   labels only, never verifier inputs (grep-enforced), and `(n, k, w)` frozen
+   before the invert-`e` curve — else the result is contaminated, exactly the
+   contamination the Phase-3 receipts were built to avoid.
+4. **Hardness import, not demonstration.** A's witness-recovery hardness rests on an SIS/ISD
    hardness *assumption*, not on an emergent property of a trained body. Legitimate
    for an existence proof, but it must read as "imports hardness," never as a
    cryptographic one-way-function claim (the §0 / Track A guardrail). The empirical
@@ -446,6 +465,7 @@ NP; and **no measured capacity threshold** — §5 is the experiment that would 
 
 The honest endpoint: Sundog has a precise object, three cleanly separated and
 correctly-bounded claims, a reasoned migration off the marginal mesa substrate, and a
-constructed instance where checking is cheap by structure, spoofing is capacity-hard
-by an imported assumption, and the shadow loses the body by algebra. The next win is
-the measured curve of §5 — not another definition.
+constructed instance where checking is cheap by structure, recovering a light
+deviation witness from the shadow is capacity-hard by an imported assumption
+(spoofing a truly-unsafe body is structurally impossible), and the shadow loses the
+secret by algebra. The next win is the measured curve of §5 — not another definition.

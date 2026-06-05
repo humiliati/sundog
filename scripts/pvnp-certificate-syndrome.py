@@ -5,12 +5,16 @@ Implements Candidate A from docs/pvnp/SUNDOG_CERTIFICATE_PROBLEM.md and verifies
 the three load-bearing properties on a real GF(2) regime BEFORE any frozen ladder
 run (verify-first discipline):
 
-  body      x = (s, e):  s in GF(2)^k (secret), e sparse weight w (deviation)
+  body      x = (s, e):  s in GF(2)^k (secret), planted e sparse weight w (deviation)
             observation  y = s G + e            (G systematic [I_k | P], k x n)
-  certificate sigma = (z = H y = H e, witness e, tag t)   (H = [P^T | I], parity check)
-  safety predicate  Safe := wt(e) <= tau        (policy stays within tau of the safe code)
-  verifier V(y, e, tau): He == Hy and wt(e) <= tau -> accept ; cheap syndrome
-            lower-bound > tau -> reject ; else quarantine   (three-valued, op-counted)
+  certificate sigma = (z = H y = H e, witness e*, tag t)  (H = [P^T | I], parity check)
+  safety predicate  Safe(y) := exists e* : H e* = H y and wt(e*) <= tau
+                    (y is within Hamming distance tau of the code; the planted e is a
+                     generation/scoring label, NOT the semantic safety definition or a
+                     verifier input)
+  verifier V(y, e*, tau): He* == Hy and wt(e*) <= tau -> accept ; cheap syndrome
+            lower-bound > tau -> reject ; else quarantine   (three-valued, op-counted;
+            accept requires ANY valid light witness e*, not necessarily the planted e)
 
 Properties this script CHECKS (not assumes):
   P1 LOSSY-BY-ALGEBRA   z = Hy = He depends ONLY on e; s is q^k-to-one gone.

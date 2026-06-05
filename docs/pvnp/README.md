@@ -11,21 +11,38 @@ Phase-4 synthesis:
 - [`SUNDOG_CERTIFICATE_PROBLEM.md`](SUNDOG_CERTIFICATE_PROBLEM.md) — theorem-shaped
   synthesis (2026-06-04). Banks Phase 3 as the honest boundary and states the formal
   promise problem (tightening §4–§6), the three separated claims (cheap
-  verification = op-count; capacity-relative spoof resistance = bounded+fragile;
+  verification = op-count; capacity-relative mesa spoof resistance =
+  bounded+fragile;
   disclosure robustness = the v3 null), the substrate migration off marginal mesa
   toward an AB/topological-style design, and **one constructed instance** (the
-  syndrome/SIS certificate: check-cheap, spoof capacity-hard, shadow lossy-by-algebra,
+  syndrome/SIS certificate: check-cheap, witness-recovery capacity-hard, shadow lossy-by-algebra,
   failure branches pre-named). It is a **design / existence note** — §5 names the
-  next experiment (an ISD spoof curve on a frozen (n,k,w) regime).
+  next experiment (an ISD invert-`e` curve on a frozen `(n,k,w)` regime).
 - [`SUNDOG_CERTIFICATE_SYNDROME_PROTOTYPE_NOTE.md`](SUNDOG_CERTIFICATE_SYNDROME_PROTOTYPE_NOTE.md)
   — the constructed instance **built + mechanism verified** (2026-06-04,
   `scripts/pvnp-certificate-syndrome.py`, deterministic). On a real `[48,24]` GF(2)
   regime: P1 lossy-by-algebra (`z=He`, `s` gone, 2²⁴/syndrome); P2 cheap+sound
   (check 2,376 ops vs ~5.1M decode, 0 false accepts); P3 `s` one-way; and the
-  find-vs-check capacity curve (forge 0.00→1.00 with budget while check stays flat).
+  find-vs-check capacity curve (witness recovery 0.00→1.00 with budget while check
+  stays flat).
   The verify-first PASS v4 never got. Honest limits: toy regime, naive non-ISD
   forger, imported hardness, degenerate cheap-reject (RISK 1). Frozen scaled
   ISD-attacker run is the step that earns a measured capacity threshold.
+- [`SUNDOG_CERTIFICATE_SYNDROME_V1_SLATE.md`](SUNDOG_CERTIFICATE_SYNDROME_V1_SLATE.md)
+  — **DRAFT (opened for review, NOT frozen)**: the §5 capacity experiment
+  pre-registered. Frozen regime `[128,64] w=12 τ=12` (non-enumerable
+  `C(128,12)≈2.4×10¹⁶`, answering the toy critique); capacity probe = recover the
+  valid light deviation witness `e*` from the syndrome `z` (= syndrome decoding)
+  via **Prange ISD**;
+  ladder Small/Medium/Large/XL with a pre-registered breakpoint at ~5,000 iters /
+  ~2.6×10⁹ ops vs the flat 8,192-op check (gap ~3.2×10⁵×). The measured `C` is
+  honestly a threshold *against Prange* (upper bound vs better ISD). `s` is
+  unconditionally hidden (vacuous, not capacity); spoof is structurally impossible
+  (sound verifier). **FROZEN 2026-06-04** after three pre-freeze repairs (existence
+  predicate `Safe(y):=∃e*`, parent-doc invert-`e` framing, Prange rank-valid `B`
+  convention) reconciled across all artifacts; seeds locked (code_seed 2026128,
+  body-base 7000000, T=64). Next: implement the Prange ISD attacker + smoke on a
+  throwaway regime, then the operator-gated frozen-regime run → the receipt.
 
 Lit-pass:
 

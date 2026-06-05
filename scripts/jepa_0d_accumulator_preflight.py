@@ -328,39 +328,44 @@ def oracle_recover(data, cfg: AccCfg):
 
 
 def mask_necessity(data, cfg: AccCfg, u_hat):
-    """Model-free mask-necessity gate (added after adversarial review). For each checkpoint c and
-    readout target, compare how predictable the clean/observed readout is from:
-      * same-ckpt peers   (the random-mask SHORTCUT, expected HIGH -> documents the footgun);
-      * other ckpts only  (whole-checkpoint mask, NO same-ckpt peers, NO events -> expected FLOOR);
-      * one-hot(u_hat)    (the intended event->u_t path, expected HIGH).
-    Whole-checkpoint masking PASSES iff its shortcut det is floored AND the intended path is live."""
-    X = data["X"].astype(np.float64)
-    clean, z = data["clean"], data["z_obs"]
-    ckpts = data["ckpts"]
-    ck_tokens = {c: np.concatenate([X[:, s:e] for s, e in
-                 (data["layout"]["checkpoints"][c][j] for j in range(cfg.n_U))], axis=1)
-                 for c in ckpts}
+    """Model-free mask-necessity gate (added after adversarial review).
+
+    The shortcut A5 found lives at the DECODED level: a JEPA encoder computes each visible readout's
+    parity, then same-checkpoint readouts (all functions of the SAME u_c) XOR-predict a masked one
+    with NO count integration. A linear probe on raw parity-encoded tokens cannot see this (that is
+    just the de-confound), so the shortcut features must be the parity-DECODED peer bits -- the
+    representation the encoder forms. For each checkpoint c and readout target, predict the masked
+    clean/observed readout from:
+      * decoded same-ckpt peers (the shortcut available under a RANDOM channel mask -- a masked
+        readout keeps >=1 same-ckpt peer ~99% of the time -- expected HIGH = footgun confirmed);
+      * decoded OTHER-checkpoint readouts (whole-checkpoint mask: NO same-ckpt peers; any residual is
+        count-based cross-ckpt inference, not the local XOR shortcut -- expected low);
+      * one-hot(u_hat) from the EVENT route (the intended event->u_t path -- expected HIGH).
+    Whole-checkpoint masking PASSES iff the residual shortcut is floored AND the intended path lives."""
+    def decode_block(c, j):
+        s, e = data["layout"]["checkpoints"][c][j]
+        return parity_decode(data["X"][:, s:e].astype(np.int64), cfg.P_u, cfg.arity)
+
+    clean, z, ckpts = data["clean"], data["z_obs"], data["ckpts"]
+    dec = {c: np.stack([decode_block(c, j) for j in range(cfg.n_U)], axis=1) for c in ckpts}  # (n,n_U) observed
     uoh = np.eye(cfg.K + 1)[u_hat[:, [c - 1 for c in ckpts]]]            # (n, n_ckpt, K+1) one-hot u_hat_c
 
     same, other, intended_c, intended_z = [], [], [], []
     for ci, c in enumerate(ckpts):
-        peers_all = ck_tokens[c]
-        slices = data["layout"]["checkpoints"][c]
-        widths = [slices[j][1] - slices[j][0] for j in range(cfg.n_U)]
-        offs = np.cumsum([0] + widths)
-        other_tok = np.concatenate([ck_tokens[cc] for cc in ckpts if cc != c], axis=1) \
-            if len(ckpts) > 1 else np.zeros((X.shape[0], 1))
+        other_dec = np.concatenate([dec[cc] for cc in ckpts if cc != c], axis=1) \
+            if len(ckpts) > 1 else np.zeros((clean.shape[0], 1))
         for j in range(cfg.n_U):
-            peers = np.delete(peers_all, np.s_[offs[j]:offs[j + 1]], axis=1)   # same-ckpt minus self
+            peers = np.delete(dec[c], j, axis=1)                         # decoded same-ckpt peers minus self
             a, m, _ = _cv_acc(peers, clean[:, ci, j], cv=3); same.append(_det(a, m))
-            a, m, _ = _cv_acc(other_tok, clean[:, ci, j], cv=3); other.append(_det(a, m))
+            a, m, _ = _cv_acc(other_dec, clean[:, ci, j], cv=3); other.append(_det(a, m))
             a, m, _ = _cv_acc(uoh[:, ci, :], clean[:, ci, j], cv=3); intended_c.append(_det(a, m))
             a, m, _ = _cv_acc(uoh[:, ci, :], z[:, ci, j], cv=3); intended_z.append(_det(a, m))
     return {"shortcut_same_ckpt_clean_det": round(safe_median(same), 4),
             "shortcut_whole_ckpt_clean_det": round(safe_median(other), 4),
             "intended_path_clean_det": round(safe_median(intended_c), 4),
             "intended_path_obs_z_det": round(safe_median(intended_z), 4),
-            "mask_policy": "whole_checkpoint"}
+            "mask_policy": "whole_checkpoint",
+            "note": "shortcut features = parity-decoded peer bits (encoder-level); random-mask keeps a same-ckpt peer ~99%"}
 
 
 def base_rates(data, cfg: AccCfg):
