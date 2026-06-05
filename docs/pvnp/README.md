@@ -280,7 +280,13 @@ Current state:
   basin detector is incoherent on this substrate. The owner's 4 pre-freeze findings
   (overstated "unseen"; ban aggregate-CSV reads; paste full v4 commands; claim-cap
   the pure-signature anomaly) are all confirmed but unapplied pending a path
-  decision: (A) make the basin action-visible [likely re-opens the privilege issue],
-  (B) re-scope v4 as a pre-registered negative control, or (C) accept the v3
-  `disclosure_robustness_null` as the Phase-3 boundary and close. See
-  [`PHASE3_CAPACITY_ONE_WAYNESS_V4_SLATE.md`](PHASE3_CAPACITY_ONE_WAYNESS_V4_SLATE.md).
+  decision. Owner chose **Path A (make the basin action-visible)**; a verify-first
+  experiment was run before pre-registration: the basin-observation channel is
+  action-visible + decoupled (mechanism works) but **NOT specific** — a
+  pure-signature policy responds 0.431 (reward 0.558; ratio 1.29×, worsening with
+  training), so Design 1 does not justify the ~45–76-policy retrain. **PAUSED**;
+  scaffolding kept (default-off `basinChannel` env + `--basin-channel` trainer);
+  the v3 `disclosure_robustness_null` stands as the boundary unless a new
+  pre-registered fresh-seed variant is opened. See
+  [`PHASE3_CAPACITY_ONE_WAYNESS_V4_SLATE.md`](PHASE3_CAPACITY_ONE_WAYNESS_V4_SLATE.md)
+  and [`PHASE3_V4_PATHA_VERIFY_NOTE.md`](PHASE3_V4_PATHA_VERIFY_NOTE.md).

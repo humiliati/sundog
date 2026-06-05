@@ -730,9 +730,9 @@ baselines, reproduced metrics, and archived artifacts.
   Phase 3 v4 basin-channel disclosure slate — **ON HOLD, mechanism falsified before
   freeze** (basin-position action response is structurally 0: the basin move feeds
   only reward, which reward-blind feed-forward policies ignore at inference; verified
-  in code + on disk). The OR term never fires, so v4 would collapse to v3. Awaiting
-  an owner path decision (action-visible redesign / negative-control re-scope /
-  accept v3 as the boundary).
+  in code + on disk). The OR term never fires, so v4 would collapse to v3. Path A
+  was tested verify-first and paused: basin-observation is action-visible but
+  non-specific, so the retrain is not justified.
 - [`pvnp/RECEIPT_TEMPLATE.md`](pvnp/RECEIPT_TEMPLATE.md): receipt template
   for phase and probe results.
 - [`pvnp/receipts/README.md`](pvnp/receipts/README.md): receipt index —

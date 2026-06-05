@@ -1,0 +1,438 @@
+{
+  "lane": "jepa-0d-accumulator",
+  "stage": "model_free_preflight",
+  "verdict": "preflight_pass_ready_for_spec",
+  "gates": {
+    "deconfound": true,
+    "oracle": true,
+    "support": true
+  },
+  "bars": {
+    "deconfound_max": 0.1,
+    "oracle_min": 0.95,
+    "min_class_support": 30,
+    "min_flip_support": 50
+  },
+  "cfg": {
+    "K": 6,
+    "T": 12,
+    "p_event": 0.34,
+    "arity": 2,
+    "delta": 0.45,
+    "p_noise": 0.1,
+    "P_e": 5,
+    "P_u": 3,
+    "n_U": 8,
+    "emit_checkpoints": [
+      4,
+      8,
+      12
+    ],
+    "n": 3000,
+    "seed": 0,
+    "deconfound_max": 0.1,
+    "oracle_min": 0.95,
+    "min_class_support": 30,
+    "min_flip_support": 50
+  },
+  "L": 264,
+  "raw_linear": {
+    "u_per_tick": [
+      {
+        "tick": 1,
+        "acc": 0.633,
+        "maj": 0.6747,
+        "u_det": -0.1281
+      },
+      {
+        "tick": 2,
+        "acc": 0.433,
+        "maj": 0.4617,
+        "u_det": -0.0533
+      },
+      {
+        "tick": 3,
+        "acc": 0.381,
+        "maj": 0.4433,
+        "u_det": -0.112
+      },
+      {
+        "tick": 4,
+        "acc": 0.344,
+        "maj": 0.4097,
+        "u_det": -0.1112
+      },
+      {
+        "tick": 5,
+        "acc": 0.3,
+        "maj": 0.3383,
+        "u_det": -0.0579
+      },
+      {
+        "tick": 6,
+        "acc": 0.2757,
+        "maj": 0.343,
+        "u_det": -0.1025
+      },
+      {
+        "tick": 7,
+        "acc": 0.25,
+        "maj": 0.321,
+        "u_det": -0.1046
+      },
+      {
+        "tick": 8,
+        "acc": 0.2477,
+        "maj": 0.2827,
+        "u_det": -0.0488
+      },
+      {
+        "tick": 9,
+        "acc": 0.2347,
+        "maj": 0.2767,
+        "u_det": -0.0581
+      },
+      {
+        "tick": 10,
+        "acc": 0.2093,
+        "maj": 0.27,
+        "u_det": -0.0831
+      },
+      {
+        "tick": 11,
+        "acc": 0.201,
+        "maj": 0.2387,
+        "u_det": -0.0495
+      },
+      {
+        "tick": 12,
+        "acc": 0.2033,
+        "maj": 0.2327,
+        "u_det": -0.0382
+      }
+    ],
+    "e_per_tick": [
+      {
+        "tick": 1,
+        "acc": 0.633,
+        "maj": 0.6747,
+        "e_det": -0.1281
+      },
+      {
+        "tick": 2,
+        "acc": 0.6117,
+        "maj": 0.6787,
+        "e_det": -0.2085
+      },
+      {
+        "tick": 3,
+        "acc": 0.608,
+        "maj": 0.665,
+        "e_det": -0.1701
+      },
+      {
+        "tick": 4,
+        "acc": 0.629,
+        "maj": 0.6803,
+        "e_det": -0.1606
+      },
+      {
+        "tick": 5,
+        "acc": 0.617,
+        "maj": 0.67,
+        "e_det": -0.1606
+      },
+      {
+        "tick": 6,
+        "acc": 0.6133,
+        "maj": 0.6703,
+        "e_det": -0.1729
+      },
+      {
+        "tick": 7,
+        "acc": 0.594,
+        "maj": 0.661,
+        "e_det": -0.1976
+      },
+      {
+        "tick": 8,
+        "acc": 0.5837,
+        "maj": 0.6497,
+        "e_det": -0.1884
+      },
+      {
+        "tick": 9,
+        "acc": 0.5943,
+        "maj": 0.655,
+        "e_det": -0.1758
+      },
+      {
+        "tick": 10,
+        "acc": 0.594,
+        "maj": 0.662,
+        "e_det": -0.2012
+      },
+      {
+        "tick": 11,
+        "acc": 0.6003,
+        "maj": 0.6633,
+        "e_det": -0.1871
+      },
+      {
+        "tick": 12,
+        "acc": 0.597,
+        "maj": 0.649,
+        "e_det": -0.1481
+      }
+    ],
+    "emission": {
+      "clean_det_median": -0.1094,
+      "obs_det_median": -0.0967
+    },
+    "bitcount_uT_det": -0.0087,
+    "u_det_median": -0.0706,
+    "u_det_max": -0.0382,
+    "e_det_median": -0.1744,
+    "e_det_max": -0.1281
+  },
+  "oracle": {
+    "event_route_e_acc": 0.9992,
+    "event_route_u_acc_overall": 0.9949,
+    "event_route_u_exact_seq": 0.9903,
+    "event_route_u_acc_per_tick": [
+      0.999,
+      0.9973,
+      0.997,
+      0.997,
+      0.9967,
+      0.9957,
+      0.995,
+      0.994,
+      0.9927,
+      0.9913,
+      0.991,
+      0.9917
+    ],
+    "readout_route_u_acc_per_ckpt": {
+      "4": 0.9497,
+      "8": 0.918,
+      "12": 0.8987
+    }
+  },
+  "base_rates": {
+    "u_per_tick": [
+      {
+        "tick": 1,
+        "hist": {
+          "0": 2024,
+          "1": 976
+        },
+        "n_classes": 2,
+        "n_usable_classes": 2,
+        "maj": 0.6747
+      },
+      {
+        "tick": 2,
+        "hist": {
+          "0": 1385,
+          "1": 1290,
+          "2": 325
+        },
+        "n_classes": 3,
+        "n_usable_classes": 3,
+        "maj": 0.4617
+      },
+      {
+        "tick": 3,
+        "hist": {
+          "0": 907,
+          "1": 1330,
+          "2": 674,
+          "3": 89
+        },
+        "n_classes": 4,
+        "n_usable_classes": 4,
+        "maj": 0.4433
+      },
+      {
+        "tick": 4,
+        "hist": {
+          "0": 601,
+          "1": 1229,
+          "2": 868,
+          "3": 269,
+          "4": 33
+        },
+        "n_classes": 5,
+        "n_usable_classes": 5,
+        "maj": 0.4097
+      },
+      {
+        "tick": 5,
+        "hist": {
+          "0": 404,
+          "1": 1004,
+          "2": 1015,
+          "3": 455,
+          "4": 115,
+          "5": 7
+        },
+        "n_classes": 6,
+        "n_usable_classes": 5,
+        "maj": 0.3383
+      },
+      {
+        "tick": 6,
+        "hist": {
+          "0": 269,
+          "1": 810,
+          "2": 1029,
+          "3": 595,
+          "4": 258,
+          "5": 36,
+          "6": 3
+        },
+        "n_classes": 7,
+        "n_usable_classes": 6,
+        "maj": 0.343
+      },
+      {
+        "tick": 7,
+        "hist": {
+          "0": 185,
+          "1": 610,
+          "2": 963,
+          "3": 745,
+          "4": 374,
+          "5": 107,
+          "6": 16
+        },
+        "n_classes": 7,
+        "n_usable_classes": 6,
+        "maj": 0.321
+      },
+      {
+        "tick": 8,
+        "hist": {
+          "0": 122,
+          "1": 452,
+          "2": 848,
+          "3": 817,
+          "4": 514,
+          "5": 197,
+          "6": 50
+        },
+        "n_classes": 7,
+        "n_usable_classes": 7,
+        "maj": 0.2827
+      },
+      {
+        "tick": 9,
+        "hist": {
+          "0": 76,
+          "1": 338,
+          "2": 709,
+          "3": 830,
+          "4": 628,
+          "5": 313,
+          "6": 106
+        },
+        "n_classes": 7,
+        "n_usable_classes": 7,
+        "maj": 0.2767
+      },
+      {
+        "tick": 10,
+        "hist": {
+          "0": 51,
+          "1": 242,
+          "2": 586,
+          "3": 810,
+          "4": 670,
+          "5": 437,
+          "6": 204
+        },
+        "n_classes": 7,
+        "n_usable_classes": 7,
+        "maj": 0.27
+      },
+      {
+        "tick": 11,
+        "hist": {
+          "0": 28,
+          "1": 186,
+          "2": 489,
+          "3": 711,
+          "4": 716,
+          "5": 519,
+          "6": 351
+        },
+        "n_classes": 7,
+        "n_usable_classes": 6,
+        "maj": 0.2387
+      },
+      {
+        "tick": 12,
+        "hist": {
+          "0": 16,
+          "1": 129,
+          "2": 394,
+          "3": 637,
+          "4": 698,
+          "5": 581,
+          "6": 545
+        },
+        "n_classes": 7,
+        "n_usable_classes": 6,
+        "maj": 0.2327
+      }
+    ],
+    "u_pooled": {
+      "0": 6068,
+      "1": 8596,
+      "2": 7900,
+      "3": 5958,
+      "4": 4006,
+      "5": 2197,
+      "6": 1275
+    },
+    "u_pooled_classes_starved": [],
+    "u_ticks_starved": [],
+    "e_base_rate": 0.3351,
+    "flip_counts": [
+      [
+        298,
+        309,
+        311,
+        302,
+        250,
+        300,
+        324,
+        303
+      ],
+      [
+        314,
+        294,
+        308,
+        268,
+        300,
+        278,
+        308,
+        310
+      ],
+      [
+        309,
+        313,
+        291,
+        318,
+        311,
+        308,
+        314,
+        307
+      ]
+    ],
+    "flip_min": 250,
+    "flip_starved_cells": 0
+  },
+  "wall_s": 63.5
+}

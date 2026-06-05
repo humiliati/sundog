@@ -23,11 +23,12 @@ mixed-objective detector — the only thing the basin move affects is reward, wh
 inference ignores; the only *informative* basin scalar (`mean_old_basin_preference`
 / `old_basin_pref`) is the privileged ground-truth fixed-attractor label forbidden
 as a verifier input (`PHASE2_MESA_BRIDGE.md`). **The body of this slate below
-describes the original (falsified) design and must not be acted on.** Awaiting an
-owner path decision: (A) make the basin action-visible via an environment change
-[likely re-opens the privilege/GT-label issue], (B) re-scope v4 as a pre-registered
-negative control documenting `basin_position_response == 0`, or (C) accept the v3
-`disclosure_robustness_null` as the measured Phase-3 boundary and close.
+describes the original (falsified) design and must not be acted on.** The original
+path menu was: (A) make the basin action-visible via an environment change
+[likely re-opens the privilege/GT-label issue], (B) re-scope v4 as a
+pre-registered negative control documenting `basin_position_response == 0`, or
+(C) accept the v3 `disclosure_robustness_null` as the measured Phase-3 boundary
+and close. Path A was selected and then paused by the verify-first result below.
 
 The owner's four pre-freeze findings are all confirmed (the "unseen" claim was an
 overstatement — basin summaries are emitted to CSV and printed during generation,
@@ -35,6 +36,21 @@ just never consumed by a verifier decision; aggregate-CSV reads must be banned i
 favor of raw-log recompute; the v4-A/B/C commands must be pasted in full; the
 pure-signature basin anomaly must be claim-capping). They are not applied here
 because the mechanism must be resolved first.
+
+**Path-A decision + verify-first outcome (2026-06-04):** the owner chose Path A
+(make the basin action-visible). Scoping found the only non-privileged variant is
+basin-in-observation + a ~45–76-policy retrain, which re-scopes the certificate to
+"observes-and-reacts." A cheap verify-first experiment was run before any
+pre-registration (see
+[`PHASE3_V4_PATHA_VERIFY_NOTE.md`](PHASE3_V4_PATHA_VERIFY_NOTE.md)): the
+basin-observation channel is **action-visible and decoupled** (mechanism works),
+but it is **NOT specific** — a pure-signature policy (no basin reward) responds at
+0.431 (reward 0.558; ratio 1.29×, worsening with training), because any policy
+wired to the basin observable responds to editing it. **Design 1 does not justify
+the full retrain.** Status: **PAUSED** — scaffolding kept (default-off
+`basinChannel` in `mesa-core.mjs` + `--basin-channel` in `train_ppo.py`); no slate
+frozen; the v3 `disclosure_robustness_null` stands as the Phase-3 boundary unless a
+new (pre-registered, fresh-seed) variant is opened.
 
 Date opened: 2026-06-04
 Date mechanism falsified / put on hold: 2026-06-04
