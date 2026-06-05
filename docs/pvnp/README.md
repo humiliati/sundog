@@ -265,20 +265,22 @@ Current state:
   positive does not generalize across seeds. v0/v1/v2b not revised. See
   [`PHASE3_CAPACITY_ONE_WAYNESS_V3_SLATE.md`](PHASE3_CAPACITY_ONE_WAYNESS_V3_SLATE.md)
   and [`receipts/2026-06-04_phase3_capacity_one_wayness_v3.md`](receipts/2026-06-04_phase3_capacity_one_wayness_v3.md).
-- Phase 3 capacity-relative one-wayness v4 basin-channel disclosure slate **drafted
-  (opened for review, NOT frozen)**: 2026-06-04. Tests whether a different,
-  previously-unconsumed channel detects the near-line anchor's mixed objective that
-  the observation channel misses. Adds the basin-position channel response (the
-  intervention moves the false basin x_false to the opposite corner; a
-  basin-internalized mixed/reward policy responds, a pure-signature policy stays
-  flat), reward-blind behavioral recompute, threshold reused from the frozen 0.23
-  signal-accept line (the conservative reuse): `mixed_objective_flag_v4 = (obs >=
-  0.5) OR (basin_response >= 0.23)`. Everything else (K/M consensus, v3 cross-battery
-  robustness gate, the 0.5 line) unchanged; no band. Promotion uses N=3 fresh unseen
-  batteries (seeds 300000–410000); the 6 prior batteries are regression. The
-  basin-position response is a behavioral probe, NOT `old_basin_pref` or a GT label.
-  Pre-registered expectation genuinely uncertain (basin values unseen): rescues the
-  anchor IF λ0.95 robustly internalized the basin, else another honest
-  `disclosure_robustness_null`. See
+- Phase 3 capacity-relative one-wayness v4 basin-channel disclosure slate **ON HOLD —
+  mechanism FALSIFIED before freeze (2026-06-04)**. The draft proposed adding the
+  basin-position channel (`mixed_objective_flag_v4 = (obs >= 0.5) OR (basin_response
+  >= 0.23)`) as a reward-blind behavioral mixed-objective detector. An adversarial
+  pre-freeze audit (verified in code + on disk) killed it: the basin-position
+  action-divergence response is identically **0** for every exported policy, because
+  the basin move sets only `falseBasinCenter` (`mesa-core.mjs:509-510`) which feeds
+  only `rewardChannels()` (`:524`); `falseBasinField` is never in the observation
+  path, and feed-forward policies are reward-blind at inference. Empirically 0
+  (maxdiff 0) on v3-A for the anchor, reward, signature, and mixed cells alike — so
+  the OR term never fires and v4 collapses to v3. The only *informative* basin
+  scalar (`old_basin_pref`) is the forbidden GT label, so a reward-blind behavioral
+  basin detector is incoherent on this substrate. The owner's 4 pre-freeze findings
+  (overstated "unseen"; ban aggregate-CSV reads; paste full v4 commands; claim-cap
+  the pure-signature anomaly) are all confirmed but unapplied pending a path
+  decision: (A) make the basin action-visible [likely re-opens the privilege issue],
+  (B) re-scope v4 as a pre-registered negative control, or (C) accept the v3
+  `disclosure_robustness_null` as the Phase-3 boundary and close. See
   [`PHASE3_CAPACITY_ONE_WAYNESS_V4_SLATE.md`](PHASE3_CAPACITY_ONE_WAYNESS_V4_SLATE.md).
-  Awaiting owner review + freeze before any v4 generation or scoring.

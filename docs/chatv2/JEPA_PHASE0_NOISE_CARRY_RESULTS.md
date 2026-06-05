@@ -1,12 +1,13 @@
 # JEPA Phase 0 Noise-Carry Results
 
-**Status:** DEBUG HOLD (2026-06-04). Read-design repaired (flip-conditioned `z_flip_acc`,
-GEN positive-control live). The JEPA training/collapse smoke RAN: **buildable + directional gap
-`+0.170`, but JEPA `u_det=0.256` fails the control → uninterpretable.** Read-protocol fix queued
-for next session. No phase verdict; no full battery run.
+**Status:** SMOKE VERDICT (2026-06-05) — `blocked_by_unfaithful_jepa`. Read-design repaired
+(flip-conditioned `z_flip_acc`, GEN positive-control live). JEPA trains without collapse and
+shows the predicted lower flip-conditioned noisy-bit read, but it does **not** keep the shared
+source strongly enough: masked-context `u_det=0.368 < 0.70`. Per the verdict tree this branch
+precedes capacity/confirmation; no `{128,256} × 3` battery is run.
 
-Binding/draft spec: `docs/chatv2/JEPA_PHASE0_NOISE_CARRY_SPEC.md`.
-Runner under debug: `scripts/jepa_phase0_noise_carry.py`.
+Executed spec: `docs/chatv2/JEPA_PHASE0_NOISE_CARRY_SPEC.md`.
+Runner: `scripts/jepa_phase0_noise_carry.py`.
 
 ## Smoke 0 - naive runner failed
 
@@ -113,23 +114,11 @@ So a denoising/clean-only body is systematically wrong on flips, while a GEN-lik
 body is high on flips. That is exactly the JEPA-vs-GEN contrast the repaired statistic is meant
 to test.
 
-## Current disposition
+## Disposition after repair 3
 
-`JEPA_PHASE0_NOISE_CARRY_SPEC.md` remains on DEBUG HOLD, but the read-design blocker is closed:
-the flip-conditioned `z_i` statistic has a live GEN positive-control. The remaining blocker is
-JEPA training/collapse smoke. No full battery has run.
-
-Next staged smoke (not inline; corrected GEN-only training exceeded the ~10-minute CPU rule):
-
-```powershell
-python scripts/jepa_phase0_noise_carry.py --smoke --out results/chatv2/jepa-phase0-noise-carry-zflip-smoke
-```
-
-If that smoke passes, the operator-staged lock battery is:
-
-```powershell
-python scripts/jepa_phase0_noise_carry.py --out results/chatv2/jepa-phase0-noise-carry-zflip-lock
-```
+At this point `JEPA_PHASE0_NOISE_CARRY_SPEC.md` remained on DEBUG HOLD, but the read-design
+blocker was closed: the flip-conditioned `z_i` statistic had a live GEN positive-control. The
+next move was the staged JEPA training/collapse smoke recorded below.
 
 ## Debug repair 4 - JEPA training/collapse smoke (the staged z_flip smoke) RAN
 
@@ -164,15 +153,59 @@ Receipt: `results/chatv2/jepa-phase0-noise-carry/smoke.json`.
 50%-masked input but *read* on full input (8 latents it never co-saw), so its full-input
 representation is off-distribution and recovers `u` weakly.
 
-## Queued next session - read-protocol diagnostic
+## Debug repair 5 - masked-input read protocol patched and re-smoked
 
 The read-design blocker is closed and the build is viable; the one open blocker is the JEPA
-`u_det` control. Next session:
+`u_det` control. The likely bug was read-protocol mismatch: the JEPA context encoder was trained
+on 50%-masked input but read on full input. The runner now reads JEPA with
+`masked_context_avg`: 50% latent-channel masks matching training, final-position context body,
+averaged over 8 independently sampled mask patterns before probing.
 
-1. Patch the JEPA body read to the **masked-input protocol** (read the context encoder on
-   masked input matching training, averaged over mask patterns); re-smoke (~15 min, clean
-   background launch, `n=3000` if feasible).
-2. If JEPA `u_det` clears 0.70 → the `z_flip_gap` is interpretable → run the operator-staged
-   `{128,256} × 3-seed` battery (~3 h, the capacity sweep to the `d=256` deflation point).
-3. If `u_det` stays low even on the matched read → JEPA genuinely does not keep `u` on this toy
-   → shelve as `blocked_by_unfaithful_jepa` (a real, banked finding).
+Patch sanity:
+
+```powershell
+python -m py_compile scripts/jepa_phase0_noise_carry.py
+python scripts/jepa_phase0_noise_carry.py --smoke --gen-only --read-phase7b-gen --out results/chatv2/jepa-phase0-noise-carry-debug-phase7b-zflip-rerun
+```
+
+The saved-GEN positive control still reproduces after the patch:
+
+| read | value |
+| --- | ---: |
+| `u_det` | 0.7538 |
+| `z_flip_acc` | 0.7839 |
+| support starved | false |
+
+Registered operator-staged re-smoke command:
+
+```powershell
+python scripts/jepa_phase0_noise_carry.py --smoke --read-n-fingerprint 3000 --jepa-mask-reads 8 --out results/chatv2/jepa-phase0-noise-carry-zflip-masked-smoke
+```
+
+The landed receipt was written to the canonical smoke path
+`results/chatv2/jepa-phase0-noise-carry/smoke.json`, with `read_protocol=masked_context_avg`,
+`mask_reads=8`, and `n_fingerprint=1000`.
+
+| read | GEN | JEPA |
+| --- | ---: | ---: |
+| `z_flip_acc` (primary) | 0.713 | 0.504 |
+| `z_flip_gap` |  | **+0.208** |
+| `u_det` (control) | 0.622 | **0.368** |
+| effective rank | 3.0 | **68.0** |
+| collapsed | - | **False** |
+| read protocol | full-input fair | masked-context avg ×8 |
+
+**Verdict: `blocked_by_unfaithful_jepa`.**
+
+The masked read helped (`u_det` rose from 0.256 to 0.368) and made the representation healthier
+(effective rank rose from ~31 to ~68). The predicted flip-conditioned gap also strengthened
+(`+0.170` → `+0.208`). But the load-bearing `u_det >= 0.70` control still fails badly. Even
+granting the smoke-size deflation seen on GEN (~0.13 between `n=1000` and the banked `n=3000`
+read), JEPA would remain around ~0.50, below the bar. Therefore the lower `z_flip_acc` cannot be
+interpreted as selective noise discard rather than a weaker functional representation.
+
+Per the spec, `blocked_by_unfaithful_jepa` precedes `blocked_by_capacity` and
+`jepa_noise_discard_confirmed`, so the `{128,256} × 3-seed` battery is **not run**. This is a
+banked negative: the small JEPA objective is buildable and does not collapse, but on this coupled
+toy it does not keep the predictable source strongly enough for the noise-discard contrast to be
+valid.

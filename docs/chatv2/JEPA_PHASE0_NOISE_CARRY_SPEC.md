@@ -1,7 +1,8 @@
 # JEPA Phase 0 — Noise-Carry Test (coupled toy)
 
-> 2026-06-04, DEBUG HOLD after first smoke. JEPA code exists, but the phase is **not
-> lock-ready** and no full battery has run. Implements
+> 2026-06-05, SMOKE VERDICT: **`blocked_by_unfaithful_jepa`**. JEPA code exists and the
+> flip-conditioned read is repaired, but no full `{128,256} × 3` battery has run because the
+> JEPA `u_det` control failed at smoke. Implements
 > `SUNDOG_V_JEPA.md` Phase 0, **re-posed** to the noise-carry read: the determining-shadow
 > closure does *not* distinguish JEPA from GEN (both recover the shared `u`; `k_state(z_j)` is
 > noise-driven for both), so the distinguishing read is **whether the body retains the
@@ -21,8 +22,13 @@
 > read, `z_flip_acc`: train an ordinary linear probe `body -> z_i` on all training rows, then
 > score it only on held-out rows where `x_i=1`. On the Phase-7b GEN positive-control body this
 > repaired read is live (`z_flip_acc=0.7839`, held-out flip counts 118-165 per latent), while
-> the failed direct `x_i` read remains a report-only sidecar. The spec stays on DEBUG HOLD
-> until the JEPA smoke proves the objective trains without collapse.
+> the failed direct `x_i` read remains a report-only sidecar.
+
+> **Final smoke (2026-06-05):** JEPA trains without collapse and the masked-context read improves
+> the control, but `u_det` remains too low (`0.256` full-input read → `0.368` masked-context read,
+> bar `0.70`). `z_flip_gap=+0.208` is directional, but uninterpretable because the required
+> functional-retention control failed. Per §8, the branch is `blocked_by_unfaithful_jepa`; do not
+> run the capacity battery.
 
 ## 1. Primary claim
 
@@ -193,31 +199,17 @@ path to AGI"; any statement about real I-JEPA/V-JEPA/LLM behaviour; R2 / "more t
 ## 10. Run order
 
 1. Operator lock review.
-2. Implementation exists at `scripts/jepa_phase0_noise_carry.py`, but the first smoke moved this
-   spec back to DEBUG HOLD. The primary read has been repaired and GEN positive-control preflight
-   passes (`z_flip_acc=0.7839` on the banked Phase-7b GEN body). A first JEPA smoke was buildable
-   and directional (`z_flip_gap=+0.170`) but uninterpretable because JEPA `u_det=0.256` under a
-   full-input read. The queued repair is the masked-context read protocol above.
-3. **Re-smoke** (1 seed, `d=128`): JEPA trains without collapse (VICReg receipt + variance
-   floor), the repaired noise read runs, and JEPA `u_det >= 0.70` under masked-context read.
+2. Implementation exists at `scripts/jepa_phase0_noise_carry.py`. The primary read has been
+   repaired and GEN positive-control preflight passes (`z_flip_acc=0.7839` on the banked
+   Phase-7b GEN body). A first JEPA smoke was buildable and directional (`z_flip_gap=+0.170`) but
+   uninterpretable because JEPA `u_det=0.256` under a full-input read. The masked-context repair
+   improved `u_det` to `0.368` and strengthened `z_flip_gap` to `+0.208`, but still failed the
+   required `u_det >= 0.70` control.
+3. **Branch:** `blocked_by_unfaithful_jepa`. The capacity battery is not run.
 
-   ```powershell
-   python scripts/jepa_phase0_noise_carry.py --smoke --read-n-fingerprint 3000 --jepa-mask-reads 8 --out results/chatv2/jepa-phase0-noise-carry-zflip-masked-smoke
-   ```
-
-   Inline status: the previous matched GEN+JEPA smoke took ~15.5 min, so this is
-   operator-staged/background under the repo's ~10-minute rule. Record actual wall-clock in the
-   results doc. If JEPA `u_det < 0.70` even under masked-context read, the lane returns
-   `blocked_by_unfaithful_jepa`; do not run the capacity battery.
-
-4. **Training is operator-staged (background, hours on the 1080)** — GEN + JEPA × `{128,256}` × 3
-   seeds. Stage the exact PowerShell commands; do not run the full battery inline.
-
-   ```powershell
-   python scripts/jepa_phase0_noise_carry.py --jepa-mask-reads 8 --out results/chatv2/jepa-phase0-noise-carry-zflip-masked-lock
-   ```
-
-5. Read + verdict; record in `docs/chatv2/JEPA_PHASE0_NOISE_CARRY_RESULTS.md`.
+   The landed receipt is recorded in `docs/chatv2/JEPA_PHASE0_NOISE_CARRY_RESULTS.md` and
+   `results/chatv2/jepa-phase0-noise-carry/smoke.json`; it used `read_protocol=masked_context_avg`
+   and `mask_reads=8`.
 
 ## 11. Readback checklist
 
@@ -231,13 +223,16 @@ path to AGI"; any statement about real I-JEPA/V-JEPA/LLM behaviour; R2 / "more t
   floor, VICReg variance/covariance receipt, rank;
 - `frozen_delta`, per-seed spread; branch verdict; allowed/forbidden from §9.
 
-## Open lock-review knobs
+## Locked pins used
 
-- `p_noise = 0.10` (clean `u`) vs a higher-noise rung (more to discard, weaker `u_det`).
-- `frozen_delta = 0.15`; capacity points `{128, 256}`; **3** seeds.
+- `p_noise = 0.10` (clean `u` regime).
+- `frozen_delta = 0.15`; capacity points `{128, 256}`; **3** seeds were reserved, but not run
+  because the smoke returned `blocked_by_unfaithful_jepa`.
+- JEPA read protocol: `masked_context_avg`, `mask_reads=8`.
 
 ---
 
-*Sundog Research Lab — JEPA Phase-0 noise-carry spec. DEBUG HOLD after failed smoke. Repaired
-flip-conditioned read has passed GEN positive-control; no full battery until JEPA smoke passes.
-R1 toy; kill-gated R&D.*
+*Sundog Research Lab — JEPA Phase-0 noise-carry spec. Smoke verdict:
+`blocked_by_unfaithful_jepa`. Repaired flip-conditioned read passed GEN positive-control; JEPA
+did not keep `u` strongly enough for the noise-discard contrast to be interpretable. R1 toy;
+kill-gated R&D.*

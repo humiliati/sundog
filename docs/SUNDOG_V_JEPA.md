@@ -20,10 +20,13 @@ Short version:
 `docs/chatv2/JEPA_PHASE0_NOISE_CARRY_SPEC.md`, but the first smoke moved it to **DEBUG
 HOLD**. JEPA code exists at `scripts/jepa_phase0_noise_carry.py`; no full battery, public
 page, `site-pages.json` entry, or external packet exists. The repaired GEN positive-control
-has now passed (`z_flip_acc=0.7839` on the banked Phase-7b GEN body); the remaining lock
-blocker is a JEPA training/collapse smoke. This is generality R&D, which the 2026-06-04
-strategy pivot demoted — so it carries an explicit **kill-gate** (below), not an open-ended
-program.
+has now passed (`z_flip_acc=0.7839` on the banked Phase-7b GEN body). The first JEPA smoke was
+buildable and directional (`z_flip_gap=+0.170`) but uninterpretable because JEPA `u_det=0.256`
+under a full-input read. The masked-context read helped (`u_det=0.368`, `z_flip_gap=+0.208`) but
+still failed the `u_det >= 0.70` control, so Phase 0 lands
+**`blocked_by_unfaithful_jepa`**. No capacity battery is run. This is generality R&D, which the
+2026-06-04 strategy pivot demoted — so it carries an explicit **kill-gate** (below), not an
+open-ended program.
 
 This is not a claim about AGI, world models, real LLMs, or whether LeCun is right. It is
 a measurement question about what a JEPA-trained representation keeps and discards, asked
@@ -78,8 +81,9 @@ noise flips `{x_i=1}`.
 **Debug caveat (2026-06-04):** direct linear `det(x_i | body)` failed as a GEN positive-control
 on the already banked Phase-7b GEN body: `u_det=0.754`, but local linear `noise_det=-0.010`.
 The repaired flip-conditioned `z_i` read passes that GEN preflight (`z_flip_acc=0.7839`,
-held-out flip counts 118-165 per latent). Phase 0 remains on DEBUG HOLD only because JEPA
-training/collapse smoke has not passed yet.
+held-out flip counts 118-165 per latent). A first JEPA smoke then showed the objective is
+buildable but `u_det` failed under an off-distribution full-input read. The masked-context
+re-smoke improves but does not rescue `u_det`; Phase 0 closes as `blocked_by_unfaithful_jepa`.
 
 ## 5. Phase 0 (KILL-GATED) — JEPA vs generative on the coupled toy
 
@@ -98,10 +102,9 @@ training/collapse smoke has not passed yet.
 - **Pre-registered prediction:** GEN predicts observed noisy `z_i` on flips; JEPA denoises and
   fails/sub-chance-predicts `z_i` on flips while retaining `u`.
   The headline is the paired **GEN−JEPA noise-carry gap**, not either body alone.
-- **KILL-GATE:** Phase 0 must show a pre-registered, control-clean **JEPA-vs-GEN
-  noise-carry gap** that survives to the non-bottleneck `d_model=256` rung where chatv2's
-  `objective_excess` deflated. If the gap exists only at low capacity, the verdict is
-  `blocked_by_capacity`, not "JEPA works." No scaling to real JEPA without a toy signal.
+- **KILL-GATE RESULT:** Phase 0 did **not** reach the capacity sweep. JEPA was buildable and
+  directional, but `u_det(JEPA)=0.368 < 0.70` under the repaired masked-context read, so the
+  branch is `blocked_by_unfaithful_jepa`. No scaling to real JEPA without a toy signal.
 - **Blocked-vs-shelved distinction:** if the lit-pass-faithful small JEPA collapses or
   cannot be trained on the toy backbone, Phase 0 is `blocked_by_unfaithful_jepa`, not a
   scientific null. The shelf verdict is reserved for a trainable, control-clean JEPA

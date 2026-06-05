@@ -1,11 +1,43 @@
 # Phase 3 Capacity-Relative One-Wayness v4 Basin-Channel Disclosure Slate
 
-Status: **DRAFT — opened for review, NOT frozen.** No v4 implementation, holdout
-generation, or scoring may run against this draft until it is frozen. (Restated
-deliberately: the v2 pre-freeze battery was generated before its slate froze,
-forcing a provenance quarantine. v4 must not repeat that.)
+Status: **ON HOLD — repair mechanism FALSIFIED before freeze (2026-06-04).** Do
+NOT freeze or execute. An adversarial pre-freeze audit found the v4 mechanism is
+dead on arrival: the basin-position channel action-divergence response is
+identically **0** for every exported policy, so the OR term `basin_response >=
+0.23` can never fire and `mixed_objective_flag_v4` collapses to the v3
+observation-only flag.
+
+Verified evidence (code + disk, 2026-06-04):
+- the basin-position intervention sets only `falseBasinCenter`
+  (`public/js/mesa-core.mjs:509-510`), which is used **only** in `rewardChannels()`
+  (`:524`); `falseBasinField` (`:266`) is never called in `observe()`/`act()`, so
+  the basin move never enters the observation. Feed-forward exported policies are
+  reward-blind at inference, so moving the basin cannot change their actions;
+- empirically on v3-A seed-block 180000, `basin_position_response = 0.0`
+  (maxdiff 0.0 across all seeds, incl. the 56–64/64 seeds that run past the
+  step-50 intervention) for the anchor (λ0.95), the reward fixed-attractor, the
+  signature controller, and the canonical mixed cell alike.
+
+Consequence: the basin-position channel cannot be a reward-blind *behavioral*
+mixed-objective detector — the only thing the basin move affects is reward, which
+inference ignores; the only *informative* basin scalar (`mean_old_basin_preference`
+/ `old_basin_pref`) is the privileged ground-truth fixed-attractor label forbidden
+as a verifier input (`PHASE2_MESA_BRIDGE.md`). **The body of this slate below
+describes the original (falsified) design and must not be acted on.** Awaiting an
+owner path decision: (A) make the basin action-visible via an environment change
+[likely re-opens the privilege/GT-label issue], (B) re-scope v4 as a pre-registered
+negative control documenting `basin_position_response == 0`, or (C) accept the v3
+`disclosure_robustness_null` as the measured Phase-3 boundary and close.
+
+The owner's four pre-freeze findings are all confirmed (the "unseen" claim was an
+overstatement — basin summaries are emitted to CSV and printed during generation,
+just never consumed by a verifier decision; aggregate-CSV reads must be banned in
+favor of raw-log recompute; the v4-A/B/C commands must be pasted in full; the
+pure-signature basin anomaly must be claim-capping). They are not applied here
+because the mechanism must be resolved first.
 
 Date opened: 2026-06-04
+Date mechanism falsified / put on hold: 2026-06-04
 
 This is the natural successor slate after Phase 3 v3:
 [`receipts/2026-06-04_phase3_capacity_one_wayness_v3.md`](receipts/2026-06-04_phase3_capacity_one_wayness_v3.md).

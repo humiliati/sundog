@@ -127,6 +127,7 @@
       "u_null": -0.0601,
       "body_layer": 3,
       "fair_readout": true,
+      "read_protocol": "full_input_fair",
       "zr_by_layer": [
         0.502,
         0.615,
@@ -161,36 +162,36 @@
       49,
       39
     ],
-    "gap": 0.0457,
-    "jepa_noise_det": -0.0564,
+    "gap": 0.3212,
+    "jepa_noise_det": -0.3319,
     "jepa_noise_det_nl": null,
-    "jepa_noise_det_global": -0.7506,
+    "jepa_noise_det_global": -0.3319,
     "jepa_noise_det_global_nl": null,
-    "jepa_z_flip_acc": 0.5425,
-    "z_flip_gap": 0.1702,
-    "jepa_u_det": 0.2561,
-    "jepa_u_null": -0.0681,
+    "jepa_z_flip_acc": 0.5044,
+    "z_flip_gap": 0.2083,
+    "jepa_u_det": 0.3678,
+    "jepa_u_null": -0.0341,
     "jepa_collapse": {
       "frac_std_ok": 1.0,
-      "eff_rank": 31.48,
+      "eff_rank": 67.96,
       "d": 128,
-      "min_std": 0.6846
+      "min_std": 0.526
     },
     "jepa_collapsed": false,
     "jepa_read": {
-      "noise_det": -0.0564,
+      "noise_det": -0.3319,
       "noise_det_nl": null,
-      "noise_det_global": -0.7506,
+      "noise_det_global": -0.3319,
       "noise_det_global_nl": null,
       "noise_det_each": [
-        -0.056,
-        -0.057,
-        0.0,
-        -0.18,
-        -0.058,
-        -0.009,
-        -0.02,
-        -0.148
+        -0.236,
+        -0.292,
+        -0.337,
+        -0.48,
+        -0.327,
+        -0.215,
+        -0.378,
+        -0.37
       ],
       "noise_det_nl_each": [
         null,
@@ -203,14 +204,14 @@
         null
       ],
       "noise_det_global_each": [
-        -0.876,
-        -0.736,
-        -0.717,
-        -0.7,
-        -0.606,
-        -0.832,
-        -0.765,
-        -0.988
+        -0.236,
+        -0.292,
+        -0.337,
+        -0.48,
+        -0.327,
+        -0.215,
+        -0.378,
+        -0.37
       ],
       "noise_det_global_nl_each": [
         null,
@@ -242,38 +243,38 @@
         98,
         81
       ],
-      "z_all_acc": 0.547,
-      "z_flip_acc": 0.5425,
-      "z_clean_acc": 0.5524,
+      "z_all_acc": 0.645,
+      "z_flip_acc": 0.5044,
+      "z_clean_acc": 0.6533,
       "z_all_acc_each": [
-        0.746,
-        0.71,
-        0.546,
-        0.548,
-        0.536,
-        0.532,
-        0.518,
-        0.726
+        0.87,
+        0.722,
+        0.606,
+        0.656,
+        0.504,
+        0.634,
+        0.478,
+        0.692
       ],
       "z_flip_acc_each": [
-        0.673,
-        0.689,
-        0.511,
-        0.491,
-        0.556,
-        0.529,
-        0.571,
-        0.308
+        0.837,
+        0.667,
+        0.447,
+        0.527,
+        0.481,
+        0.627,
+        0.449,
+        0.385
       ],
       "z_clean_acc_each": [
-        0.754,
-        0.712,
-        0.55,
-        0.555,
-        0.534,
-        0.532,
-        0.512,
-        0.761
+        0.874,
+        0.727,
+        0.623,
+        0.672,
+        0.507,
+        0.635,
+        0.481,
+        0.718
       ],
       "z_flip_n": [
         49,
@@ -285,23 +286,28 @@
         49,
         39
       ],
-      "u_det": 0.2561,
-      "u_null": -0.0681,
+      "u_det": 0.3678,
+      "u_null": -0.0341,
       "body_layer": 3,
-      "fair_readout": true,
+      "fair_readout": false,
+      "read_protocol": "masked_context_avg",
       "zr_by_layer": [
-        0.502,
-        0.527,
-        0.543,
-        0.613
+        0.5,
+        0.512,
+        0.529,
+        0.671
       ],
       "collapse": {
         "frac_std_ok": 1.0,
-        "eff_rank": 31.48,
+        "eff_rank": 67.96,
         "d": 128,
-        "min_std": 0.6846
-      }
+        "min_std": 0.526
+      },
+      "mask_reads": 8
     },
-    "train_ctx_std_ok": 1.0
+    "train_ctx_std_ok": 1.0,
+    "jepa_read_protocol": "masked_context_avg",
+    "jepa_mask_reads": 8,
+    "n_fingerprint": 1000
   }
 ]
