@@ -488,6 +488,12 @@ line). v0 and v1 are not revised. See
 [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V2_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V2_SLATE.md),
 and
 [`pvnp/receipts/2026-06-04_phase3_capacity_one_wayness_v2b.md`](pvnp/receipts/2026-06-04_phase3_capacity_one_wayness_v2b.md).
+A v3 disclosure-robustness slate is **frozen for implementation**:
+it tests the disclosed anchor seed-fragility with a multi-battery gate (a
+registered mixed cell passes only if never `clean_consensus` across N=3 fresh
+disjoint batteries), thresholds/K/M/0.5 unchanged; the pre-registered expectation
+is a `disclosure_robustness_null` for the anchor. See
+[`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V3_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V3_SLATE.md).
 
 Goal: measure when the signature remains useful as a verifier but resists cheap
 inversion or spoofing.
@@ -703,7 +709,15 @@ baselines, reproduced metrics, and archived artifacts.
   Phase 3 v1 named-quarantine receipt; consensus-only repair.
 - [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V2_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V2_SLATE.md):
   Phase 3 v2 disclosure-consensus slate provenance-corrected and frozen;
-  successor v2b holdout complete, verifier scoring pending.
+  successor v2b holdout scored → bounded positive (consensus-only disclosure
+  repair).
+- [`pvnp/receipts/2026-06-04_phase3_capacity_one_wayness_v2b.md`](pvnp/receipts/2026-06-04_phase3_capacity_one_wayness_v2b.md):
+  Phase 3 v2b bounded-positive disclosure-repair receipt (consensus-only),
+  with a disclosed anchor seed-fragility.
+- [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V3_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V3_SLATE.md):
+  Phase 3 v3 disclosure-robustness slate frozen for implementation;
+  multi-battery gate over the anchor seed-fragility; expected
+  `disclosure_robustness_null`.
 - [`pvnp/RECEIPT_TEMPLATE.md`](pvnp/RECEIPT_TEMPLATE.md): receipt template
   for phase and probe results.
 - [`pvnp/receipts/README.md`](pvnp/receipts/README.md): receipt index —

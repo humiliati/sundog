@@ -514,10 +514,13 @@ Next actions:
    `scripts/lib/pvnp-phase3-v2-config.mjs`; v1 scorer left untouched.
 2. [done] Score the v1 regression set and the corrected v2b fresh holdout
    (+ pre-freeze diagnostic). Verdict bounded positive on v2b.
-3. Decide whether to open a v3 slate for the anchor seed-fragility (margin-band
-   disclosure, larger-K/multi-battery averaging, or accept the fragility as the
-   measured boundary) — a NEW slate id; must not retune the 0.5 line or base
-   thresholds.
+3. [frozen] v3 disclosure-robustness slate frozen for implementation:
+   `pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V3_SLATE.md`. Multi-battery gate — a
+   registered mixed cell passes only if never `clean_consensus` across N=3 fresh
+   disjoint batteries (seed starts 180000–290000); thresholds/K/M/0.5 unchanged,
+   no band added; seen batteries are regression-only; pre-registered expectation
+   is `disclosure_robustness_null` for the anchor. Next: generate the 3 fresh
+   batteries, implement the cross-battery harness, then score.
 4. Decide whether/how to reflect the bounded positive in public/portfolio copy
    (`public/data/high-stakes-generality-gallery.json`, generality SVGs) — carry
    the seed-fragility caveat; outward-facing, owner sign-off.

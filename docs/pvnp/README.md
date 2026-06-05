@@ -246,3 +246,16 @@ Current state:
   anchor's observation mean drifts below the 0.5 flag line to `clean_consensus`.
   v0/v1 not revised. See
   [`receipts/2026-06-04_phase3_capacity_one_wayness_v2b.md`](receipts/2026-06-04_phase3_capacity_one_wayness_v2b.md).
+- Phase 3 capacity-relative one-wayness v3 disclosure-robustness slate **frozen
+  for implementation**: 2026-06-04 local. Targets the v2b anchor
+  seed-fragility with a multi-battery robustness gate: a registered mixed cell
+  passes only if it is never `clean_consensus` across N = 3 fresh disjoint
+  batteries (seed starts 180000–290000). Thresholds, K, M, and the 0.5 line are
+  unchanged; no band is added (forbidden). The three seen batteries
+  (v1 / pre-freeze v2 / v2b) are regression-only. Pre-registered expectation:
+  `named_quarantine — disclosure_robustness_null` for the anchor (it is already
+  `clean_consensus` on 1 of 3 seen batteries), so a bounded positive would be a
+  genuine surprise. See
+  [`PHASE3_CAPACITY_ONE_WAYNESS_V3_SLATE.md`](PHASE3_CAPACITY_ONE_WAYNESS_V3_SLATE.md).
+  Fresh battery generation, harness implementation, and scoring are the next
+  post-freeze steps.
