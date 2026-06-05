@@ -12,15 +12,17 @@ This is the **stronger-attacker** successor to
 [`receipts/2026-06-04_certificate_syndrome_v1.md`](receipts/2026-06-04_certificate_syndrome_v1.md)).
 v1's measured `C` was a threshold **against Prange ISD** — an explicit upper bound.
 v2 tightens that bound: it measures the witness-recovery threshold against a ladder
-of stronger attackers on the **same frozen instance**, and tests whether `C` drops
-monotonically as the better-attack work factors predict.
+of stronger attackers on the same frozen code/regime with a new frozen decoupled
+target manifest, and tests whether `C` drops as the better-attack work factors
+predict.
 
 ## What v2 measures
 
-On the **same frozen `[128,64] w=12` regime and the same `T=64` targets as v1**,
-the witness-recovery (invert-`e`) capacity threshold `C` for a **ladder of attacker
-classes** — Prange (the v1 baseline, reused), Lee-Brickell (p=2), and Stern
-(p=2, l=4). The single question:
+On the **same frozen `[128,64] w=12` code/regime as v1**, with a fresh decoupled
+`T=64` target manifest shared by every attacker, v2 measures the witness-recovery
+(invert-`e`) capacity threshold `C` for a **ladder of attacker classes** — Prange
+(the baseline algorithm, re-run on the v2 target manifest), Lee-Brickell (p=2), and
+Stern (p=2, l=8). The single question:
 
 > Does `C` drop monotonically as attacker strength increases, by the predicted
 > work factors? (Stronger finder → lower `C` → tighter upper bound on the
@@ -55,8 +57,10 @@ The attackers do different work per iteration (Stern does more per iteration but
 far fewer iterations), so the only fair cross-attacker capacity unit is **operations**.
 `C_attacker := the measured op-count budget at which that attacker reaches 50%
 witness recovery` over the `T` targets. Each attacker also reports its natural
-iteration budget and its valid-iteration audit. The ladder claim is
-`C_Prange > C_LB > C_Stern` (in ops), monotone, matching the predicted work factors.
+iteration budget and its valid-iteration audit. The robust ladder claim is that
+`C_Prange > C_LB` resolves cleanly in ops; the LB→Stern step is small (~1.35× at
+`w=12`) and may be within `T=64` noise, so it is reported as separately resolved or
+within-noise rather than used as a hard monotonicity tripwire.
 
 ## Frozen regime (code identical to v1; targets decoupled)
 
@@ -81,8 +85,9 @@ against valid iterations; the cross-attacker comparison is in measured ops. For
 Stern, a full-rank draw with zero useful list collisions is still a valid iteration
 and still charged to ops; collision/list work is never free.
 
-1. **Prange** (baseline, reused from v1): random size-`k` information set; candidate
-   error supported on the `n−k` complement; success iff its weight `≤ τ`.
+1. **Prange** (baseline algorithm, re-run on the v2 target manifest): random size-`k`
+   information set; candidate error supported on the `n−k` complement; success iff
+   its weight `≤ τ`.
 2. **Lee-Brickell, p=2** (frozen `p=2`): Prange, but allow exactly `p=2` error
    positions inside the information set — enumerate the `C(k,2)` weight-2 info-set
    patterns, add each to the candidate, accept if total weight `≤ τ`.
@@ -173,14 +178,16 @@ replaces these with smoke-calibrated constants and a frozen tolerance band.
 ## Verdict branches
 
 - **bounded-positive measured attacker-hierarchy one-wayness** — the three curves
-  rise `0→1` with monotone breakpoints `C_Prange > C_LB > C_Stern` (ops) matching
-  the predicted work factors (within tolerance), the verifier stays cheap, and the
-  audits pass: report the tightened upper bound `C_Stern` (the threshold against the
-  best tested attacker) and the full Prange/LB/Stern `C`-ladder.
+  rise `0→1`; the large Prange→LB step resolves cleanly; the LB→Stern step is either
+  separately resolved in the predicted direction or explicitly reported as
+  within-noise under the frozen tolerance; the verifier stays cheap; and the audits
+  pass. Report the tightened upper bound against the **best tested attacker class**
+  (`C_best = min(C_LB, C_Stern)` in measured ops, with `C_Stern` also reported) and
+  the full Prange/LB/Stern `C`-ladder.
 - **model-deviation (named, not a failure)** — the ladder is monotone but a measured
   `C` deviates from its predicted work factor beyond tolerance: report the deviation
   honestly (the better-attack model is mis-calibrated for this regime); the tightened
-  bound still stands at the measured `C_Stern`.
+  bound still stands at the measured `C_best`.
 - **6.1 vacuity / 6.4 overhead** — the verifier op-count is not below the cheapest
   attacker's effort: falsified.
 - **non-monotone / no clean threshold (6.5 boundary)** — on a **large** predicted
@@ -204,7 +211,7 @@ replaces these with smoke-calibrated constants and a frozen tolerance band.
 - `attacker_ladder_curve.csv` (per attacker, per op-budget: witness-recovery success,
   iterations, measured ops);
 - `capacity_ladder.json` (per attacker: measured `C(ops)`, predicted work factor,
-  measured/predicted ratio, drop vs Prange);
+  measured/predicted ratio, drop vs Prange, and `C_best = min(C_LB, C_Stern)`);
 - `valid_iteration_audit.json` (per attacker: valid iterations, `rank_fail_draws`,
   measured ops incl. overhead);
 - `witness_validity_audit.json` (per attacker: a sample of recovered `e*` re-checked
@@ -229,15 +236,16 @@ JSON.)
   calibrate op constants only because it is disjoint from the frozen regime; the
   calibrated constants must be locked before frozen targets are scored.
 - Deterministic seeds; report determinism.
-- The measured `C_Stern` is still an **upper bound** (BJMM/MMT would lower it) — a
-  new slate, not a v2 edit.
+- The measured `C_best` among tested stronger attackers is still an **upper bound**
+  (BJMM/MMT would lower it) — a new slate, not a v2 edit.
 
 ## Freeze checklist
 
-- [ ] Reconstruct and hash the v1 `T=64` target manifest; confirm the regime/seeds
-      are byte-equal to v1 and all attackers will consume only manifest `z`.
-- [ ] Freeze `LB p=2` and `Stern p=2, l=4`, plus `prediction_lock.json` with exact
-      formulas, calibrated constants, predicted 50% `C(ops)`, and tolerance.
+- [ ] Sample and hash the decoupled `target_seed=2026220` `T=64` target manifest;
+      confirm the code (`n,k,w,τ,code_seed`) is byte-equal to v1 and all attackers
+      consume only manifest `z`.
+- [ ] Freeze `LB p=2` and `Stern p=2, l=8`, plus `prediction_lock.json` (the Locked
+      formulas above + smoke-calibrated constants + predicted 50% `C(ops)` + tolerance).
 - [ ] Implement the three attackers (Prange reused) sharing the v1 verifier + GF(2)
       core; smoke each on a throwaway regime (recover valid witnesses; curve matches
       analytic) before the frozen run.
@@ -246,7 +254,8 @@ JSON.)
 ## Freeze rule
 
 Edits allowed without a new slate id: typo/path/output-naming corrections preserving
-semantics. Edits requiring a new slate id: changing the regime/seeds/targets (would
-break the v1 comparison); changing the attacker set or the frozen `p`/`l`; adding a
-representation attack (MMT/BJMM); giving an attacker more than `z`; using
-`wt(e)`/`s` as an input; retuning parameters after seeing the ladder.
+semantics. Edits requiring a new slate id: changing the code (`n,k,w,τ,code_seed`) or
+`target_seed` (would break the within-v2 cross-attacker comparison); changing the
+attacker set or the frozen `p`/`l`; adding a representation attack (MMT/BJMM); giving
+an attacker more than `z`; using `wt(e)`/`s` as an input; retuning parameters or
+locked constants after seeing the frozen ladder.

@@ -53,18 +53,22 @@ Phase-4 synthesis:
   crypto/P-vs-NP claim. A stronger attacker class / scaled regime = a new slate.
 - [`SUNDOG_CERTIFICATE_SYNDROME_V2_SLATE.md`](SUNDOG_CERTIFICATE_SYNDROME_V2_SLATE.md)
   — **DRAFT (opened for review, NOT frozen)**: the stronger-ISD tightening. Same
-  frozen `[128,64] w=12` regime and intended same targets as v1; freeze now requires
-  a replayed `target_manifest.json` because v1 interleaved target sampling with
-  Prange attack draws. Measures the witness-recovery `C` against a
-  **Prange→Lee-Brickell(p=2)→Stern(p=2,l=4)** attacker ladder in **ops** (the only
-  cross-attacker unit). Draft work-factor ladder expects `C` drops ~62× (LB) and
-  ~153× (Stern) vs Prange, but the freeze comparator must be a machine-readable
-  `prediction_lock.json` with formulas/constants/tolerance locked before frozen
-  scoring. Verdict branches: monotone-ladder-matching-prediction (bounded positive,
-  tightened bound `C_Stern`) / named model-deviation / non-monotone quarantine.
-  `C_Stern` is still an upper bound (BJMM/MMT = future slate). Per-file output bundle
-  pre-registered (per the v1 artifact note). Awaiting owner review + freeze; each
-  attacker smoke-validated on a throwaway regime before the frozen run.
+  **code** as v1 (`[128,64] w=12`, code_seed 2026128) but **decoupled targets** (a
+  fresh `target_seed=2026220` + an emitted `target_manifest.json`, fixing v1's
+  interleaving of target sampling with attack draws; Prange is re-baselined in-ladder,
+  with v1's `C` as a statistical cross-check). Measures the witness-recovery `C`
+  against a **Prange→Lee-Brickell(p=2)→Stern(p=2,l=8)** attacker ladder in **ops**.
+  Corrected work-factor ladder (a full Stern cost model with the collision term):
+  `C` drops ~62× (LB) and **~84× (Stern, l=8)** vs Prange — *not* the prose draft's
+  153×/l=4, and the LB→Stern margin is **compressed (~1.35×)** at this small `w`
+  (Stern's big win is a large-`w` phenomenon, e.g. ~2,757× at `[256,128] w=24` — the
+  scaled-regime lever). Freeze comparator = a machine-readable `prediction_lock.json`
+  (locked formulas incl. the Stern collision term + smoke-calibrated constants +
+  tolerance). Ladder gate: Prange→LB must resolve; LB→Stern may be within-`T=64`-noise
+  (a pass, not a violation). The reported bound is `C_best` across the tested stronger
+  attackers; it is still an upper bound (BJMM/MMT = future slate). Per-file output
+  bundle pre-registered. Awaiting owner review + freeze; each attacker smoke-validated
+  on a throwaway regime before the frozen run.
 
 Lit-pass:
 

@@ -317,6 +317,77 @@ def json_clean(v):
 
 
 # --------------------------------------------------------------------------- #
+# DIAGNOSTIC: where does each body store u_c? probe multiple read surfaces.
+# --------------------------------------------------------------------------- #
+def _diag_positions(acc):
+    lay = read_layout(acc)
+    rre = [max(es) for es in lay["readout_end"]]            # last token of each ckpt's readout region
+    pos = [lay["L"] - 1] + list(lay["event_pos"]) + rre     # [final] + event-end[c] + readout-end[c]
+    return lay, pos, rre
+
+
+def diag_extract_gen(model, acc, device, seed):
+    bits, e, u, *_ = gen_batch(acc, acc.n, default_rng(seed + 123))
+    lay, pos, _ = _diag_positions(acc); nck = len(lay["ckpts"])
+    H = _forward_positions(model, bits, device, pos)         # (n, 1+2*nck, Ln, d)
+    final = H[:, 0]; ev = H[:, 1:1 + nck]; ro = H[:, 1 + nck:1 + 2 * nck]
+    surf = {"final": np.repeat(final[:, None], nck, axis=1), "event": ev, "readout": ro}
+    return surf, u_at_ckpts(u, lay["ckpts"])
+
+
+def diag_extract_jepa(model, acc, tcfg, device, seed):
+    bits, e, u, *_ = gen_batch(acc, acc.n, default_rng(seed + 123))
+    lay, pos, _ = _diag_positions(acc); ckpts = lay["ckpts"]; nck = len(ckpts)
+    readout_tok = [np.asarray(t) for t in lay["readout_tok"]]
+    fin_all, ev_all = None, None
+    fin_mc = [None] * nck; cfm = np.zeros(nck)
+    ro_vis = [None] * nck; cro = np.zeros(nck)
+    for p in range(tcfg.mask_reads):
+        mc = p % nck
+        masked = bits.copy(); masked[:, readout_tok[mc]] = MASK_TOKEN
+        H = _forward_positions(model, masked, device, pos)
+        fin = H[:, 0]; ev = H[:, 1:1 + nck]; ro = H[:, 1 + nck:1 + 2 * nck]
+        fin_all = fin if fin_all is None else fin_all + fin
+        ev_all = ev if ev_all is None else ev_all + ev
+        fin_mc[mc] = fin if fin_mc[mc] is None else fin_mc[mc] + fin; cfm[mc] += 1
+        for ci in range(nck):
+            if ci != mc:
+                ro_vis[ci] = ro[:, ci] if ro_vis[ci] is None else ro_vis[ci] + ro[:, ci]; cro[ci] += 1
+    surf = {"final_all": np.repeat((fin_all / tcfg.mask_reads)[:, None], nck, axis=1),
+            "final_maskC": np.stack([fin_mc[ci] / max(cfm[ci], 1) for ci in range(nck)], axis=1),
+            "event": ev_all / tcfg.mask_reads,
+            "readout_vis": np.stack([ro_vis[ci] / max(cro[ci], 1) for ci in range(nck)], axis=1)}
+    return surf, u_at_ckpts(u, ckpts)
+
+
+def run_diag(acc, tcfg, device, seed):
+    t0 = time.time()
+    gen, gm = train_gen(acc, tcfg, device, seed)
+    gs, uck = diag_extract_gen(gen, acc, device, seed)
+    gen_res = {k: probe_u_det(v, uck) for k, v in gs.items()}
+    print(f"[diag] GEN trained ({gm['steps']} steps, eval_loss={gm['eval_loss']:.4f}); "
+          f"surfaces read  ({round(time.time()-t0,1)}s)", flush=True)
+    jepa, jm = train_jepa(acc, tcfg, device, seed)
+    js, uck2 = diag_extract_jepa(jepa, acc, tcfg, device, seed)
+    jepa_res = {k: probe_u_det(v, uck2) for k, v in js.items()}
+    out = {"gen": {"train": gm, "surfaces": gen_res}, "jepa": {"train": jm, "surfaces": jepa_res},
+           "wall_s": round(time.time() - t0, 1)}
+    print("\n==== DIAGNOSTIC: u_det by read surface (per-ckpt majority baseline) ====")
+    print("  GEN:")
+    for k, r in gen_res.items():
+        print(f"    {k:12s} u_det={r['u_det']:+.3f}  per_ckpt={[p['u_det'] for p in r['per_ckpt']]}  "
+              f"effR={r['collapse']['eff_rank']}  layer={r['body_layer']}")
+    print("  JEPA:")
+    for k, r in jepa_res.items():
+        print(f"    {k:12s} u_det={r['u_det']:+.3f}  per_ckpt={[p['u_det'] for p in r['per_ckpt']]}  "
+              f"effR={r['collapse']['eff_rank']}  layer={r['body_layer']}")
+    print(f"  (wall {out['wall_s']}s)  Reading: which JEPA surface (final_all/final_maskC/event/"
+          f"readout_vis) carries u_c tells us the read fix; GEN surfaces show if the count is "
+          f"present-but-decaying vs read-misplaced.", flush=True)
+    return out
+
+
+# --------------------------------------------------------------------------- #
 def run_cell(d, seed, acc, tcfg, device):
     t0 = time.time()
     gen, gmeta = train_gen(acc, tcfg, device, seed)
@@ -351,12 +422,17 @@ def main():
     ap.add_argument("--dims", type=int, nargs="+", default=[128, 256])
     ap.add_argument("--seeds", type=int, nargs="+", default=[0, 1, 2])
     ap.add_argument("--smoke", action="store_true", help="d=128, 1 seed, full training, n_fp=1000")
+    ap.add_argument("--diag", action="store_true",
+                    help="diagnostic re-smoke: full training, probe u at final/event/readout surfaces")
     ap.add_argument("--dev", action="store_true", help="tiny self-test: d=64, 40 steps, n_fp=300")
     ap.add_argument("--allow-cpu", action="store_true",
                     help="permit CPU execution (default: refuse, since the CPU path is hours-slow)")
     args = ap.parse_args()
 
-    if args.smoke:
+    if args.diag:
+        args.dims, args.seeds = [128], [0]
+        acc, tcfg = acc_cfg(1000), TCfg(d_model=128, mask_reads=9)   # 9 -> balanced 3 masks/ckpt
+    elif args.smoke:
         args.dims, args.seeds = [128], [0]
         acc, tcfg = acc_cfg(1000), TCfg(d_model=128)
     elif args.dev:
@@ -377,8 +453,14 @@ def main():
               f"The CPU path is hours-slow (handoff footgun). Pass --allow-cpu to override.", flush=True)
         raise SystemExit(2)
     print(f"[cfg] device={device} dims={args.dims} seeds={args.seeds} "
-          f"smoke={args.smoke} dev={args.dev} n_fp={acc.n} steps={tcfg.max_steps} "
+          f"smoke={args.smoke} diag={args.diag} dev={args.dev} n_fp={acc.n} steps={tcfg.max_steps} "
           f"mask=whole_checkpoint mask_reads={tcfg.mask_reads}", flush=True)
+
+    if args.diag:
+        res = run_diag(acc, replace(tcfg, d_model=args.dims[0]), device, args.seeds[0])
+        (out / "diag.json").write_text(json.dumps(json_clean(res), indent=2))
+        print(f"\nwrote {out/'diag.json'}", flush=True)
+        return
 
     rows = []
     for d in args.dims:
