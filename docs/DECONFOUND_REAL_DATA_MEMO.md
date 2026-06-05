@@ -120,6 +120,15 @@ linearly expose `u` (`k_func=none`) in 5/5 seeds. Median paired
 `keeper_gap=7`; `u_null=none` everywhere; selection-corrected `p=0.001`.
 Ceiling remains R1.5 because the functional is constructed, not model-discovered.
 
+**Attack-B de-confound stress executed:** `docs/deconfound/PHASE0C_DECONFOUND_STRESS_RESULTS.md`
+records `deconfound_load_bearing_confirmed`. Under the shared-factor leak sweep,
+the state-keeper's continuous exposure of `u` climbed monotonically with input
+leak (`state_det_u`: `0.192 -> 0.423 -> 0.522 -> 0.654`; `rise=0.461` vs the
+0.15 bar), while the HOLD inherited `k_func` read stayed clean (`0` hits) and
+`u_null` stayed clean. This shows the input-de-confound is load-bearing for the
+closure read; it does not lift the R1.5 ceiling or make the injected functional
+natural.
+
 ---
 
 *Sources:* Othello-GPT linear world rep [Nanda](https://www.neelnanda.io/mechanistic-interpretability/othello)

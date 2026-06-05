@@ -4,15 +4,17 @@
 Implements docs/deconfound/PHASE0C_DECONFOUND_STRESS_SPEC.md (locked, post-calibration).
 
 Sweeps an injected shared-factor correlation knob over the calibrated rungs, re-runs the
-frozen Phase-0B closure read at each rung, and locates where the double-dissociation collapses:
-the headline is the STATE-KEEPER's k_func(u), which should be `none` while the de-confound holds
-and flip `finite` once u leaks linearly into the input the state body must carry.
+frozen Phase-0B closure read at each rung, and asks whether the double-dissociation degrades:
+the headline is continuous state_det_u, the STATE-KEEPER's max selection-corrected-significant
+held-out det(u) over k, baseline-subtracted from the HOLD rung. The inherited binary
+k_func>=0.70 read is retained only as the HOLD retro-flag.
 
 Imports the frozen Phase-0B runner (no edit to it); adds only the alpha-injection substrate +
 the rung loop + the boundary classifier. Substrate matches deconfound_attack_b_alpha_calibration.py
 exactly (same pooling, z-score, fixed g seed, median binarization).
 """
 import argparse
+import itertools
 import json
 import time
 from pathlib import Path
@@ -25,8 +27,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import cross_val_score
 
 from deconfound_attack_b_phase0_closure import (          # frozen 0B machinery (imported, not edited)
-    strat_split, Model, train_model, body_acts, read_body, bracket, _det, _native,
-    S_IDX, OUT_IDX, SPLIT_SEED, D,
+    strat_split, Model, train_model, body_acts, read_body, bracket, _det, _native, _design,
+    S_IDX, OUT_IDX, SPLIT_SEED, D, LAM, ALPHA,
 )
 
 FACTOR_SEED = 20260604
@@ -67,7 +69,67 @@ def learned_gates(sk, fk, b, te, u):
                              max(b[te, j].mean(), 1 - b[te, j].mean())) for j in range(D)]))
     return {"func_learned": bool(_det(ua, ub) >= 0.70 and ua >= 0.80),
             "state_learned": bool(sd >= 0.70 and sa >= 0.80),
-            "func_acc": round(ua, 3), "state_acc": round(sa, 3)}
+            "func_acc": round(ua, 3), "state_acc": round(sa, 3),
+            "func_det": round(_det(ua, ub), 3), "state_det": round(sd, 3)}
+
+
+def state_det_u(H, u, seed, n_perm):
+    """Max selection-corrected-significant det(u) over k for the state-keeper body.
+
+    This mirrors the Phase-0B subset-selection procedure but removes the inherited
+    det>=0.70 crossing bar. For each k, the subset is selected on probe-train accuracy,
+    scored on probe-heldout det, and tested against a label-permutation null that repeats
+    the same subset-selection step. The headline is max significant det, or 0 if no k is
+    significant.
+    """
+    n, d = H.shape
+    tr, he = strat_split(u, [0.6, 0.4], SPLIT_SEED + 911 + seed)
+    y = u.astype(np.float32)
+    base_he = float(max(y[he].mean(), 1 - y[he].mean()))
+    rng = default_rng(SPLIT_SEED + 1701 + seed)
+    perms = np.stack([rng.permutation(n) for _ in range(n_perm)])
+    best_sig = {"det": 0.0, "k": None, "p": None}
+    rows = []
+
+    for k in range(1, d + 1):
+        subsets = list(itertools.combinations(range(d), k))
+        observed = {"train_acc": -1.0, "det": -1.0}
+        for subset in subsets:
+            xtr, xhe = _design(H[tr], subset), _design(H[he], subset)
+            solve = np.linalg.solve(xtr.T @ xtr + LAM * np.eye(xtr.shape[1]), xtr.T)
+            w = solve @ (2 * y[tr] - 1)
+            train_acc = float(((xtr @ w > 0) == y[tr]).mean())
+            if train_acc > observed["train_acc"]:
+                held_acc = float(((xhe @ w > 0) == y[he]).mean())
+                observed = {"train_acc": train_acc, "det": _det(held_acc, base_he)}
+
+        null_train = np.empty((len(subsets), n_perm))
+        null_det = np.empty((len(subsets), n_perm))
+        for si, subset in enumerate(subsets):
+            xtr, xhe = _design(H[tr], subset), _design(H[he], subset)
+            solve = np.linalg.solve(xtr.T @ xtr + LAM * np.eye(xtr.shape[1]), xtr.T)
+            yp = y[perms]
+            w = solve @ (2 * yp[:, tr] - 1).T
+            ptr = xtr @ w > 0
+            phe = xhe @ w > 0
+            null_train[si] = (ptr == yp[:, tr].T).mean(axis=0)
+            held_acc = (phe == yp[:, he].T).mean(axis=0)
+            base = np.maximum(yp[:, he].mean(axis=1), 1 - yp[:, he].mean(axis=1))
+            null_det[si] = (held_acc - base) / np.maximum(1 - base, 1e-9)
+        pick = null_train.argmax(axis=0)
+        selected_null_det = null_det[pick, np.arange(n_perm)]
+        p = (1 + int((selected_null_det >= observed["det"]).sum())) / (n_perm + 1)
+        row = {"k": int(k), "det": round(float(observed["det"]), 4), "p": round(float(p), 4)}
+        rows.append(row)
+        if p <= ALPHA and observed["det"] > best_sig["det"]:
+            best_sig = row
+
+    return {
+        "det": round(float(best_sig["det"]), 4),
+        "k": best_sig["k"],
+        "p": best_sig["p"],
+        "per_k": rows,
+    }
 
 
 def main():
@@ -101,25 +163,28 @@ def main():
             sk = train_model("state", 8, b, u, tr, va, seed, init_state=init)
             fk = train_model("func", 8, b, u, tr, va, seed, init_state=init)
             gt = learned_gates(sk, fk, b, te, u)
-            rs = read_body(body_acts(sk, b), b, u, seed, 8, args.n_perm)
+            Hs = body_acts(sk, b)
+            rs = read_body(Hs, b, u, seed, 8, args.n_perm)
+            sdu = state_det_u(Hs, u, seed, args.n_perm)
             rf = read_body(body_acts(fk, b), b, u, seed, 8, args.n_perm)
             unull_hit = (rs["k_null"]["k"] is not None) or (rf["k_null"]["k"] is not None)
             seeds_out.append({
                 "seed": seed, "interpreted": gt["func_learned"] and gt["state_learned"],
-                "gates": gt, "state_kfunc": rs["k_func"]["k"], "state_kstate": rs["k_state"]["k"],
+                "gates": gt, "state_det_u": sdu, "state_kfunc_context": rs["k_func"]["k"],
+                "state_kstate": rs["k_state"]["k"],
                 "func_kfunc": rf["k_func"]["k"], "func_kstate": rf["k_state"]["k"],
                 "func_bracket": bracket(rf, 8)[0], "u_null_hit": bool(unull_hit)})
         interp = [s for s in seeds_out if s["interpreted"]]
-        nfin = sum(s["state_kfunc"] is not None for s in interp)
-        nnone = sum(s["state_kfunc"] is None for s in interp)
-        summ = ("exposes_u" if (interp and nfin >= 2) else
-                "hides_u" if (interp and nnone >= 2) else "split")
+        state_det_vals = [s["state_det_u"]["det"] for s in interp]
+        med_state_det_u = float(np.median(state_det_vals)) if state_det_vals else 0.0
         label = "HOLD" if det <= 0.10 else ("MARG" if det <= 0.20 else "LEAK")
         per_rung.append({"alpha": alpha, "det": round(det, 4), "label": label,
-                         "n_interpreted": len(interp), "state_summary": summ,
-                         "state_kfunc_finite": nfin, "state_kfunc_none": nnone, "seeds": seeds_out})
-        print(f"[alpha {alpha:.2f}] det={det:+.3f} {label} | state k_func -> {summ} "
-              f"(finite {nfin}/{len(interp)}) ({round(time.time()-t0,1)}s)", flush=True)
+                         "n_interpreted": len(interp),
+                         "state_det_u_median": round(med_state_det_u, 4),
+                         "seeds": seeds_out})
+        print(f"[alpha {alpha:.2f}] input_det={det:+.3f} {label} | "
+              f"state_det_u={med_state_det_u:.3f} ({len(interp)} interpreted) "
+              f"({round(time.time()-t0,1)}s)", flush=True)
 
     # ---- branch (precedence: voids -> boundary classification) ----
     def rung(a): return next((r for r in per_rung if abs(r["alpha"] - a) < 1e-9), None)
@@ -127,7 +192,16 @@ def main():
     r0, rdeep = rung(0.0), rung(2.5)
     endpoints_ok = bool(r0 and rdeep and r0["n_interpreted"] >= 2 and rdeep["n_interpreted"] >= 2)
     any_leak = any(r["det"] > 0.20 for r in per_rung)
-    hold = [r for r in per_rung if r["det"] <= 0.10]
+    s0 = r0["state_det_u_median"] if r0 else 0.0
+    sdeep = rdeep["state_det_u_median"] if rdeep else 0.0
+    rise = round(float(sdeep - s0), 4)
+    hold_state_kfunc_hits = 0
+    if r0:
+        hold_state_kfunc_hits = sum(
+            1 for s in r0["seeds"]
+            if s["interpreted"] and s["state_kfunc_context"] is not None
+        )
+    hold_state_kfunc_majority = bool(r0 and hold_state_kfunc_hits >= 2)
 
     if not endpoints_ok:
         verdict = "closure_void_unlearned"
@@ -135,27 +209,30 @@ def main():
         verdict = "closure_void_control"
     elif not any_leak:
         verdict = "rungs_missed_boundary"
-    elif any(r["state_summary"] == "exposes_u" for r in hold):
+    elif hold_state_kfunc_majority:
         verdict = "closure_confounded_throughout"
-    elif all(r["state_summary"] == "hides_u" for r in hold) and rdeep["state_summary"] == "exposes_u":
+    elif rise >= 0.15:
         verdict = "deconfound_load_bearing_confirmed"
-    elif all(r["state_summary"] == "hides_u" for r in hold) and rdeep["state_summary"] == "hides_u":
-        verdict = "closure_robust_to_leak"
     else:
-        verdict = "boundary_inconclusive"      # safety net (split verdict on a required rung; not in spec's 6)
+        verdict = "closure_robust_to_leak"
 
     summary = {"phase": "attack-b-phase0c-stress", "factor_seed": FACTOR_SEED,
                "n_seeds": len(args.seeds), "n_perm": args.n_perm, "verdict": verdict,
+               "headline": {"s0": s0, "sdeep": sdeep, "rise": rise,
+                            "hold_state_kfunc_hits": hold_state_kfunc_hits,
+                            "hold_state_kfunc_majority": hold_state_kfunc_majority},
                "boundary_table": [{"alpha": r["alpha"], "det": r["det"], "label": r["label"],
-                                   "state_summary": r["state_summary"],
+                                   "state_det_u_median": r["state_det_u_median"],
                                    "n_interpreted": r["n_interpreted"]} for r in per_rung],
                "per_rung": per_rung}
     (out / "summary.json").write_text(json.dumps(summary, indent=2, default=_native))
     print("\n==== VERDICT:", verdict, "====")
-    print("  alpha | det    | label | state k_func")
+    print(f"  s0={s0:.3f}  sdeep={sdeep:.3f}  rise={rise:.3f}")
+    print(f"  HOLD state_kfunc hits={hold_state_kfunc_hits} majority={hold_state_kfunc_majority}")
+    print("  alpha | input_det | label | state_det_u")
     for r in per_rung:
-        print(f"  {r['alpha']:.2f}  | {r['det']:+.3f} | {r['label']:<5} | {r['state_summary']} "
-              f"(finite {r['state_kfunc_finite']}/{r['n_interpreted']})")
+        print(f"  {r['alpha']:.2f}  | {r['det']:+.3f}    | {r['label']:<5} | "
+              f"{r['state_det_u_median']:.3f} ({r['n_interpreted']} interpreted)")
     print(f"  wrote {out/'summary.json'}")
 
 

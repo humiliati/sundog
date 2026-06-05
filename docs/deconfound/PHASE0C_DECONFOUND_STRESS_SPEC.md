@@ -1,18 +1,27 @@
 # Deconfound Phase 0C - De-confound-Stress Boundary Spec
 
-> 2026-06-04, DRAFT for operator lock review after model-free alpha calibration. No stress
-> runner written, no model run. This cell deliberately degrades the input-deconfound and asks
+> 2026-06-04, LOCKED + EXECUTED. Verdict:
+> `deconfound_load_bearing_confirmed` (see
+> `PHASE0C_DECONFOUND_STRESS_RESULTS.md`). This cell deliberately degrades the input-deconfound and asks
 > whether the Phase-0B closure double-dissociation degrades with it — i.e. whether the
 > de-confound is **load-bearing or decorative**. It is a boundary-locate (Phase-7c structure
 > on a new knob), not a new rung.
 >
-> **Amendment (2026-06-04, post-smoke; pending re-lock):** the headline changes from a binary
+> **Amendment (2026-06-04, post-smoke; locked before execution):** the headline changes from a binary
 > state-keeper `k_func` flip to a **continuous `state_det_u`** (§4/§5). The timing smoke showed
 > the de-confound leak tops out at det 0.459 (alpha=2.5), **below** the inherited `k_func` bar
 > (det >= 0.70), so a binary flip is structurally pinned at `none` and would false-read as
 > `closure_robust_to_leak`; reaching det 0.70 needs near-degenerate correlation (bits ->
 > `sign(g)`). The continuous measure reads the dissociation degradation at non-degenerate leak.
-> The runner update is held pending this review.
+>
+> **Post-state-det smoke repair (2026-06-04; locked before full run):** the re-smoke validated the
+> load-bearing trend but found a weak HOLD baseline (`state_det_u = 0.148` for seed 0 at
+> `alpha=0`). This is a refinement of Phase 0B, not a retro-flag: Phase 0B's inherited claim was
+> that the state body does **not determine** `u` at the 0.70 bar, not that every continuous
+> lower-signal read is exactly zero. Phase 0C therefore gates on the **baseline-subtracted rise**
+> (`sdeep - s0`) and retro-flags 0B only if the inherited HOLD state-keeper `k_func(u)` read is
+> finite in a majority of interpreted seeds. The runner was patched for this baseline-relative
+> branch logic before the full run.
 
 ## 1. Decision Lock
 
@@ -33,7 +42,8 @@ which controls how linearly `u` leaks into the input — i.e. the de-confound st
 longer a pass/fail gate; it is the **recorded independent variable** of the sweep.
 
 **Dropped:** the read-dim-3 capacity diagnostic (irrelevant here — the headline is the
-state-keeper's `k_func`, and the functional-keeper is expected to bracket at every rung).
+state-keeper's continuous `state_det_u`, and the functional-keeper is expected to bracket at
+every rung).
 
 ## 2. Substrate + correlation knob
 
@@ -110,14 +120,16 @@ The headline is the **trend of `state_det_u` vs the realized de-confound det** a
 
 | de-confound | expected `state_det_u` | meaning |
 | --- | --- | --- |
-| HOLD (det ~ 0.08) | ~ 0 (null-guarded) | state body does not expose `u` -> dissociation clean (= Phase-0B) |
+| HOLD (det ~ 0.08) | low but measured, not assumed zero | state body may weakly expose `u` below the 0.70 determination bar; Phase 0B remains clean if inherited `k_func(u)` stays `none` |
 | LEAK (det up to ~0.46) | rises toward the input-leak level | `u` leaks into the input the state body carries -> dissociation **degrades** |
 
 **Pre-registered effect size.** Let `s0 = state_det_u` at the HOLD control (`alpha=0`) and
 `sdeep = state_det_u` at the deep-LEAK rung (`alpha=2.5`). The state body **exposes-more** if
 `sdeep - s0 >= 0.15`; it **stays-flat** if `sdeep - s0 < 0.15`. The intermediate rungs
 (`alpha=0.75, 1.0`) are reported to show whether `state_det_u` rises monotonically with det
-(corroborating context, not a gate).
+(corroborating context, not a gate). `s0` is reported as the HOLD baseline; by itself it is not
+a retro-flag unless the inherited state-keeper `k_func(u)` read at the 0.70 bar is finite in
+at least 2 of the 3 interpreted HOLD seeds.
 
 (Report-only context: the functional-keeper still reaches `k_func` at the 0.70 bar at every
 rung — trivially in the LEAK zone, since `u` was in the input — so it is *not* evidence of
@@ -127,17 +139,17 @@ det is the headline.)
 
 ## 5. Branches
 
-Precedence (first match wins): voids, then the `s0`/`sdeep` classification (§4). The two
-binary splits — `s0 <= 0.10?` and `sdeep - s0 >= 0.15?` — make this exhaustive.
+Precedence (first match wins): voids, then the inherited-HOLD retro-flag, then the
+baseline-subtracted `sdeep - s0` classification (§4).
 
 | branch | condition | reading |
 | --- | --- | --- |
 | `closure_void_unlearned` | split gate fails, or either required rung (`alpha=0.0` HOLD control, `alpha=2.5` deep LEAK) has fewer than 2 interpreted seeds after learned-body gates | no phase result |
 | `closure_void_control` | `u_null` clears (`k_null` finite, `p<=0.01`) in any interpreted body/seed | instrument hallucinated; no result |
 | `rungs_missed_boundary` | the deep-LEAK rung's realized de-confound `det <= 0.20` | sweep under-stressed; refine `alpha` upward, re-pose |
-| `closure_confounded_throughout` | `s0 > 0.10` (state body exposes `u` already at the HOLD control) | would retro-flag the Phase-0B read; investigate before any further use |
-| `deconfound_load_bearing_confirmed` | `s0 <= 0.10` AND `sdeep - s0 >= 0.15` | **the de-confound is the necessary precondition** — input leak drives state-body exposure, the dissociation degrades with it; shown, not asserted |
-| `closure_robust_to_leak` | `s0 <= 0.10` AND `sdeep - s0 < 0.15` | the body's nonlinearity blocks the input leak: the body-level closure read is **robust to input-deconfound leakage** — a genuine, stronger-than-expected finding; flag for follow-up |
+| `closure_confounded_throughout` | at `alpha=0`, the inherited state-keeper `k_func(u)` read is finite in >=2 interpreted HOLD seeds | would retro-flag the Phase-0B read at its own bar; investigate before any further use |
+| `deconfound_load_bearing_confirmed` | `sdeep - s0 >= 0.15` | **the de-confound is the necessary precondition** — input leak drives state-body exposure above the measured HOLD baseline, and the dissociation degrades with it; shown, not asserted |
+| `closure_robust_to_leak` | `sdeep - s0 < 0.15` | the body's nonlinearity blocks the input leak: the body-level closure read is **robust to input-deconfound leakage** — a genuine, stronger-than-expected finding; flag for follow-up |
 
 ## 6. Integrity boundaries
 
@@ -163,10 +175,13 @@ constructed. It demonstrates that Phase-0B's core validity gate does real work.
 3. The runner `scripts/deconfound_attack_b_phase0c_stress.py` is written (imports the frozen
    Phase-0B `Model` / `train_model` / `read_body` / `bracket` / `determine_k`; no edit to the
    locked 0B runner; substrate replicates the calibration exactly, with an `alpha=0 == 0B`
-   assertion). **Pending this amendment:** the state-keeper read must report **`state_det_u`**
-   (max selection-corrected-significant `det(u)` over k, §4) instead of the binary `k_func` flip.
-4. Timing smoke (already run pre-amendment: machinery + substrate validated, dets match the
-   calibration, ~4-5 min full estimate). Re-smoke after the `state_det_u` update.
+   assertion). It now reports **`state_det_u`** (max selection-corrected-significant `det(u)`
+   over k, §4) instead of the binary `k_func` flip, and its verdict is baseline-relative:
+   `closure_confounded_throughout` uses the inherited HOLD `k_func` read, while
+   `deconfound_load_bearing_confirmed` uses `sdeep - s0`.
+4. Timing smoke complete. The pre-amendment smoke validated machinery + substrate
+   (dets match calibration, ~4-5 min full estimate). The post-`state_det_u` re-smoke wrote
+   JSON in about 19.5 seconds and triggered the baseline-relative repair in §4/§5.
 5. Run all rungs; record verdict + the realized det / `state_det_u` (`s0`, `sdeep`) table in
    `docs/deconfound/PHASE0C_DECONFOUND_STRESS_RESULTS.md`.
 
@@ -178,9 +193,10 @@ constructed. It demonstrates that Phase-0B's core validity gate does real work.
 - per-rung per-seed learned-body gates;
 - per-rung per-seed `k_func`/`k_state`/`k_null` for both bodies + `keeper_gap`;
 - the state-keeper `state_det_u` (with `s0`, `sdeep`, `sdeep - s0`) vs realized-det table (the headline);
+- the HOLD inherited state-keeper `k_func(u)` majority check used only for the retro-flag branch;
 - selection-corrected null summary; branch verdict; allowed/forbidden language from §6.
 
 ---
 
-*Sundog Research Lab - Deconfound Phase 0C de-confound-stress boundary spec. Draft pending
-operator lock. No model run until lock.*
+*Sundog Research Lab - Deconfound Phase 0C de-confound-stress boundary spec. Locked + executed
+2026-06-04; verdict `deconfound_load_bearing_confirmed`.*

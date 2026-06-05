@@ -180,6 +180,50 @@ This is the JEPA principle in clean supervised form on real features; it is
 Spec: `docs/deconfound/PHASE0B_ATTACK_B_CLOSURE_SPEC.md`.
 Results: `docs/deconfound/PHASE0B_ATTACK_B_CLOSURE_RESULTS.md`.
 
+## 7.2 Attack-B Phase 0C - de-confound stress result
+
+**Status:** executed 2026-06-04 -> `deconfound_load_bearing_confirmed`.
+
+Phase 0C stress-tested the Phase 0B validity gate by injecting a shared factor into
+the same digit features and sweeping the input leak from HOLD to deep-LEAK. The
+state-keeper's continuous exposure of `u` rose monotonically with the measured
+input de-confound leak:
+
+| alpha | input `det(u|b)` | label | state `det(u)` |
+| ---: | ---: | --- | ---: |
+| 0.00 | +0.077 | HOLD | 0.192 |
+| 0.75 | +0.190 | MARG | 0.423 |
+| 1.00 | +0.231 | LEAK | 0.522 |
+| 2.50 | +0.459 | LEAK | 0.654 |
+
+`rise = 0.461`, far above the 0.15 load-bearing bar. The HOLD control did not
+retro-flag Phase 0B (`state_kfunc` hits = 0), and `u_null` stayed clean. This
+turns the input-de-confound from an assumed guard into a measured dependency:
+when the guard fails, the closure read degrades smoothly.
+
+The ceiling remains **R1.5**: the functional is still constructed, and the
+correlation is injected. The result validates the method's guard; it does not
+claim a natural functional, Othello rescue, JEPA behavior, R2, or "more than we
+know."
+
+Spec: `docs/deconfound/PHASE0C_DECONFOUND_STRESS_SPEC.md`.
+Results: `docs/deconfound/PHASE0C_DECONFOUND_STRESS_RESULTS.md`.
+
+## 7.3 Resolved lesson + review packet
+
+**Closure can be measured on real features when the functional is linear and the substrate is
+de-confound-clean** — 0B confirms the read, 0C shows the de-confound is load-bearing. **But real
+*computed-state* tasks (the Attack-A / Othello slate, §6-§7) may still fail, because their
+natural functionals are *nonlinear*** — legal moves are a flanking AND/OR, not a linear
+functional, which the linear determining-shadow instrument cannot bracket. So the de-confound
+wall has a **real-feature crossing for constructed linear functionals**, and stays closed for
+nonlinear computed-state functionals. Closure-measurability is gated by *functional linearity +
+de-confound cleanliness*, not by realness of the substrate per se.
+
+**Internal review packet (staged, unsent):** `docs/deconfound/ATTACK_B_REVIEW_PACKET.md` —
+claim boundary, the 0-pre → 0B → 0C arc, reviewer questions, receipts + runnable commands.
+Deploy only on the review trigger (an R2 emergent-functional result, or folding into NSE-C1).
+
 ## 8. Lit-pass targets (resolve before the Phase-0 spec)
 
 1. **Othello-GPT specifics** — public weights + the linear board probe (Nanda's

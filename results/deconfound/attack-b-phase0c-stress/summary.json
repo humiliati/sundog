@@ -1,23 +1,44 @@
 {
   "phase": "attack-b-phase0c-stress",
   "factor_seed": 20260604,
-  "n_seeds": 1,
-  "n_perm": 200,
-  "verdict": "closure_void_unlearned",
+  "n_seeds": 3,
+  "n_perm": 1000,
+  "verdict": "deconfound_load_bearing_confirmed",
+  "headline": {
+    "s0": 0.1923,
+    "sdeep": 0.6536,
+    "rise": 0.4613,
+    "hold_state_kfunc_hits": 0,
+    "hold_state_kfunc_majority": false
+  },
   "boundary_table": [
     {
       "alpha": 0.0,
       "det": 0.0771,
       "label": "HOLD",
-      "state_summary": "split",
-      "n_interpreted": 1
+      "state_det_u_median": 0.1923,
+      "n_interpreted": 3
+    },
+    {
+      "alpha": 0.75,
+      "det": 0.1898,
+      "label": "MARG",
+      "state_det_u_median": 0.4234,
+      "n_interpreted": 3
+    },
+    {
+      "alpha": 1.0,
+      "det": 0.2308,
+      "label": "LEAK",
+      "state_det_u_median": 0.5223,
+      "n_interpreted": 2
     },
     {
       "alpha": 2.5,
       "det": 0.4586,
       "label": "LEAK",
-      "state_summary": "split",
-      "n_interpreted": 1
+      "state_det_u_median": 0.6536,
+      "n_interpreted": 3
     }
   ],
   "per_rung": [
@@ -25,10 +46,8 @@
       "alpha": 0.0,
       "det": 0.0771,
       "label": "HOLD",
-      "n_interpreted": 1,
-      "state_summary": "split",
-      "state_kfunc_finite": 0,
-      "state_kfunc_none": 1,
+      "n_interpreted": 3,
+      "state_det_u_median": 0.1923,
       "seeds": [
         {
           "seed": 0,
@@ -37,10 +56,597 @@
             "func_learned": true,
             "state_learned": true,
             "func_acc": 1.0,
-            "state_acc": 0.989
+            "state_acc": 0.989,
+            "func_det": 1.0,
+            "state_det": 0.978
           },
-          "state_kfunc": null,
+          "state_det_u": {
+            "det": 0.1479,
+            "k": 6,
+            "p": 0.001,
+            "per_k": [
+              {
+                "k": 1,
+                "det": 0.0888,
+                "p": 0.001
+              },
+              {
+                "k": 2,
+                "det": 0.0888,
+                "p": 0.001
+              },
+              {
+                "k": 3,
+                "det": 0.0533,
+                "p": 0.004
+              },
+              {
+                "k": 4,
+                "det": 0.0769,
+                "p": 0.002
+              },
+              {
+                "k": 5,
+                "det": 0.1479,
+                "p": 0.001
+              },
+              {
+                "k": 6,
+                "det": 0.1479,
+                "p": 0.001
+              },
+              {
+                "k": 7,
+                "det": 0.1065,
+                "p": 0.001
+              },
+              {
+                "k": 8,
+                "det": 0.0178,
+                "p": 0.0699
+              }
+            ]
+          },
+          "state_kfunc_context": null,
           "state_kstate": 4,
+          "func_kfunc": 2,
+          "func_kstate": null,
+          "func_bracket": true,
+          "u_null_hit": false
+        },
+        {
+          "seed": 1,
+          "interpreted": true,
+          "gates": {
+            "func_learned": true,
+            "state_learned": true,
+            "func_acc": 1.0,
+            "state_acc": 0.982,
+            "func_det": 1.0,
+            "state_det": 0.961
+          },
+          "state_det_u": {
+            "det": 0.1923,
+            "k": 4,
+            "p": 0.001,
+            "per_k": [
+              {
+                "k": 1,
+                "det": 0.142,
+                "p": 0.001
+              },
+              {
+                "k": 2,
+                "det": 0.1361,
+                "p": 0.001
+              },
+              {
+                "k": 3,
+                "det": 0.1716,
+                "p": 0.001
+              },
+              {
+                "k": 4,
+                "det": 0.1923,
+                "p": 0.001
+              },
+              {
+                "k": 5,
+                "det": 0.0858,
+                "p": 0.001
+              },
+              {
+                "k": 6,
+                "det": 0.1331,
+                "p": 0.001
+              },
+              {
+                "k": 7,
+                "det": 0.1243,
+                "p": 0.001
+              },
+              {
+                "k": 8,
+                "det": 0.1302,
+                "p": 0.001
+              }
+            ]
+          },
+          "state_kfunc_context": null,
+          "state_kstate": 4,
+          "func_kfunc": 2,
+          "func_kstate": null,
+          "func_bracket": true,
+          "u_null_hit": false
+        },
+        {
+          "seed": 2,
+          "interpreted": true,
+          "gates": {
+            "func_learned": true,
+            "state_learned": true,
+            "func_acc": 1.0,
+            "state_acc": 0.994,
+            "func_det": 1.0,
+            "state_det": 0.987
+          },
+          "state_det_u": {
+            "det": 0.1923,
+            "k": 4,
+            "p": 0.001,
+            "per_k": [
+              {
+                "k": 1,
+                "det": 0.0592,
+                "p": 0.002
+              },
+              {
+                "k": 2,
+                "det": 0.1331,
+                "p": 0.001
+              },
+              {
+                "k": 3,
+                "det": 0.0947,
+                "p": 0.001
+              },
+              {
+                "k": 4,
+                "det": 0.1923,
+                "p": 0.001
+              },
+              {
+                "k": 5,
+                "det": 0.1805,
+                "p": 0.001
+              },
+              {
+                "k": 6,
+                "det": 0.1657,
+                "p": 0.001
+              },
+              {
+                "k": 7,
+                "det": 0.142,
+                "p": 0.001
+              },
+              {
+                "k": 8,
+                "det": 0.1243,
+                "p": 0.001
+              }
+            ]
+          },
+          "state_kfunc_context": null,
+          "state_kstate": 3,
+          "func_kfunc": 2,
+          "func_kstate": null,
+          "func_bracket": true,
+          "u_null_hit": false
+        }
+      ]
+    },
+    {
+      "alpha": 0.75,
+      "det": 0.1898,
+      "label": "MARG",
+      "n_interpreted": 3,
+      "state_det_u_median": 0.4234,
+      "seeds": [
+        {
+          "seed": 0,
+          "interpreted": true,
+          "gates": {
+            "func_learned": true,
+            "state_learned": true,
+            "func_acc": 1.0,
+            "state_acc": 0.994,
+            "func_det": 1.0,
+            "state_det": 0.988
+          },
+          "state_det_u": {
+            "det": 0.4735,
+            "k": 3,
+            "p": 0.001,
+            "per_k": [
+              {
+                "k": 1,
+                "det": 0.2869,
+                "p": 0.001
+              },
+              {
+                "k": 2,
+                "det": 0.454,
+                "p": 0.001
+              },
+              {
+                "k": 3,
+                "det": 0.4735,
+                "p": 0.001
+              },
+              {
+                "k": 4,
+                "det": 0.4318,
+                "p": 0.001
+              },
+              {
+                "k": 5,
+                "det": 0.4011,
+                "p": 0.001
+              },
+              {
+                "k": 6,
+                "det": 0.3983,
+                "p": 0.001
+              },
+              {
+                "k": 7,
+                "det": 0.3454,
+                "p": 0.001
+              },
+              {
+                "k": 8,
+                "det": 0.2591,
+                "p": 0.001
+              }
+            ]
+          },
+          "state_kfunc_context": null,
+          "state_kstate": 3,
+          "func_kfunc": 2,
+          "func_kstate": null,
+          "func_bracket": true,
+          "u_null_hit": false
+        },
+        {
+          "seed": 1,
+          "interpreted": true,
+          "gates": {
+            "func_learned": true,
+            "state_learned": true,
+            "func_acc": 1.0,
+            "state_acc": 0.986,
+            "func_det": 1.0,
+            "state_det": 0.972
+          },
+          "state_det_u": {
+            "det": 0.3983,
+            "k": 3,
+            "p": 0.001,
+            "per_k": [
+              {
+                "k": 1,
+                "det": 0.2368,
+                "p": 0.001
+              },
+              {
+                "k": 2,
+                "det": 0.3983,
+                "p": 0.001
+              },
+              {
+                "k": 3,
+                "det": 0.3983,
+                "p": 0.001
+              },
+              {
+                "k": 4,
+                "det": 0.2535,
+                "p": 0.001
+              },
+              {
+                "k": 5,
+                "det": 0.2646,
+                "p": 0.001
+              },
+              {
+                "k": 6,
+                "det": 0.3064,
+                "p": 0.001
+              },
+              {
+                "k": 7,
+                "det": 0.2507,
+                "p": 0.001
+              },
+              {
+                "k": 8,
+                "det": 0.1281,
+                "p": 0.002
+              }
+            ]
+          },
+          "state_kfunc_context": null,
+          "state_kstate": 3,
+          "func_kfunc": 2,
+          "func_kstate": null,
+          "func_bracket": true,
+          "u_null_hit": false
+        },
+        {
+          "seed": 2,
+          "interpreted": true,
+          "gates": {
+            "func_learned": true,
+            "state_learned": true,
+            "func_acc": 1.0,
+            "state_acc": 0.992,
+            "func_det": 1.0,
+            "state_det": 0.984
+          },
+          "state_det_u": {
+            "det": 0.4234,
+            "k": 4,
+            "p": 0.001,
+            "per_k": [
+              {
+                "k": 1,
+                "det": 0.1281,
+                "p": 0.001
+              },
+              {
+                "k": 2,
+                "det": 0.3872,
+                "p": 0.001
+              },
+              {
+                "k": 3,
+                "det": 0.376,
+                "p": 0.001
+              },
+              {
+                "k": 4,
+                "det": 0.4234,
+                "p": 0.001
+              },
+              {
+                "k": 5,
+                "det": 0.3677,
+                "p": 0.001
+              },
+              {
+                "k": 6,
+                "det": 0.3287,
+                "p": 0.001
+              },
+              {
+                "k": 7,
+                "det": 0.3816,
+                "p": 0.001
+              },
+              {
+                "k": 8,
+                "det": 0.3203,
+                "p": 0.001
+              }
+            ]
+          },
+          "state_kfunc_context": null,
+          "state_kstate": 3,
+          "func_kfunc": 2,
+          "func_kstate": null,
+          "func_bracket": true,
+          "u_null_hit": false
+        }
+      ]
+    },
+    {
+      "alpha": 1.0,
+      "det": 0.2308,
+      "label": "LEAK",
+      "n_interpreted": 2,
+      "state_det_u_median": 0.5223,
+      "seeds": [
+        {
+          "seed": 0,
+          "interpreted": false,
+          "gates": {
+            "func_learned": false,
+            "state_learned": true,
+            "func_acc": 0.631,
+            "state_acc": 0.994,
+            "func_det": 0.26100000739097595,
+            "state_det": 0.989
+          },
+          "state_det_u": {
+            "det": 0.5042,
+            "k": 4,
+            "p": 0.001,
+            "per_k": [
+              {
+                "k": 1,
+                "det": 0.3343,
+                "p": 0.001
+              },
+              {
+                "k": 2,
+                "det": 0.4234,
+                "p": 0.001
+              },
+              {
+                "k": 3,
+                "det": 0.4763,
+                "p": 0.001
+              },
+              {
+                "k": 4,
+                "det": 0.5042,
+                "p": 0.001
+              },
+              {
+                "k": 5,
+                "det": 0.5014,
+                "p": 0.001
+              },
+              {
+                "k": 6,
+                "det": 0.5014,
+                "p": 0.001
+              },
+              {
+                "k": 7,
+                "det": 0.3955,
+                "p": 0.001
+              },
+              {
+                "k": 8,
+                "det": 0.3565,
+                "p": 0.001
+              }
+            ]
+          },
+          "state_kfunc_context": null,
+          "state_kstate": 3,
+          "func_kfunc": null,
+          "func_kstate": 4,
+          "func_bracket": false,
+          "u_null_hit": false
+        },
+        {
+          "seed": 1,
+          "interpreted": true,
+          "gates": {
+            "func_learned": true,
+            "state_learned": true,
+            "func_acc": 1.0,
+            "state_acc": 0.985,
+            "func_det": 1.0,
+            "state_det": 0.97
+          },
+          "state_det_u": {
+            "det": 0.5794,
+            "k": 3,
+            "p": 0.001,
+            "per_k": [
+              {
+                "k": 1,
+                "det": 0.3092,
+                "p": 0.001
+              },
+              {
+                "k": 2,
+                "det": 0.5627,
+                "p": 0.001
+              },
+              {
+                "k": 3,
+                "det": 0.5794,
+                "p": 0.001
+              },
+              {
+                "k": 4,
+                "det": 0.5181,
+                "p": 0.001
+              },
+              {
+                "k": 5,
+                "det": 0.4178,
+                "p": 0.001
+              },
+              {
+                "k": 6,
+                "det": 0.3955,
+                "p": 0.001
+              },
+              {
+                "k": 7,
+                "det": 0.3315,
+                "p": 0.001
+              },
+              {
+                "k": 8,
+                "det": 0.3203,
+                "p": 0.001
+              }
+            ]
+          },
+          "state_kfunc_context": null,
+          "state_kstate": 3,
+          "func_kfunc": 1,
+          "func_kstate": null,
+          "func_bracket": true,
+          "u_null_hit": false
+        },
+        {
+          "seed": 2,
+          "interpreted": true,
+          "gates": {
+            "func_learned": true,
+            "state_learned": true,
+            "func_acc": 1.0,
+            "state_acc": 0.968,
+            "func_det": 1.0,
+            "state_det": 0.936
+          },
+          "state_det_u": {
+            "det": 0.4652,
+            "k": 3,
+            "p": 0.001,
+            "per_k": [
+              {
+                "k": 1,
+                "det": 0.2786,
+                "p": 0.001
+              },
+              {
+                "k": 2,
+                "det": 0.4011,
+                "p": 0.001
+              },
+              {
+                "k": 3,
+                "det": 0.4652,
+                "p": 0.001
+              },
+              {
+                "k": 4,
+                "det": 0.4373,
+                "p": 0.001
+              },
+              {
+                "k": 5,
+                "det": 0.4178,
+                "p": 0.001
+              },
+              {
+                "k": 6,
+                "det": 0.3287,
+                "p": 0.001
+              },
+              {
+                "k": 7,
+                "det": 0.3259,
+                "p": 0.001
+              },
+              {
+                "k": 8,
+                "det": 0.2758,
+                "p": 0.001
+              }
+            ]
+          },
+          "state_kfunc_context": null,
+          "state_kstate": 3,
           "func_kfunc": 2,
           "func_kstate": null,
           "func_bracket": true,
@@ -52,10 +658,8 @@
       "alpha": 2.5,
       "det": 0.4586,
       "label": "LEAK",
-      "n_interpreted": 1,
-      "state_summary": "split",
-      "state_kfunc_finite": 0,
-      "state_kfunc_none": 1,
+      "n_interpreted": 3,
+      "state_det_u_median": 0.6536,
       "seeds": [
         {
           "seed": 0,
@@ -64,9 +668,188 @@
             "func_learned": true,
             "state_learned": true,
             "func_acc": 0.942,
-            "state_acc": 0.955
+            "state_acc": 0.955,
+            "func_det": 0.8830000162124634,
+            "state_det": 0.91
           },
-          "state_kfunc": null,
+          "state_det_u": {
+            "det": 0.6536,
+            "k": 4,
+            "p": 0.001,
+            "per_k": [
+              {
+                "k": 1,
+                "det": 0.6536,
+                "p": 0.001
+              },
+              {
+                "k": 2,
+                "det": 0.6341,
+                "p": 0.001
+              },
+              {
+                "k": 3,
+                "det": 0.6313,
+                "p": 0.001
+              },
+              {
+                "k": 4,
+                "det": 0.6536,
+                "p": 0.001
+              },
+              {
+                "k": 5,
+                "det": 0.567,
+                "p": 0.001
+              },
+              {
+                "k": 6,
+                "det": 0.5698,
+                "p": 0.001
+              },
+              {
+                "k": 7,
+                "det": 0.5615,
+                "p": 0.001
+              },
+              {
+                "k": 8,
+                "det": 0.5615,
+                "p": 0.001
+              }
+            ]
+          },
+          "state_kfunc_context": null,
+          "state_kstate": 1,
+          "func_kfunc": 1,
+          "func_kstate": 2,
+          "func_bracket": false,
+          "u_null_hit": false
+        },
+        {
+          "seed": 1,
+          "interpreted": true,
+          "gates": {
+            "func_learned": true,
+            "state_learned": true,
+            "func_acc": 0.919,
+            "state_acc": 0.955,
+            "func_det": 0.8379999995231628,
+            "state_det": 0.91
+          },
+          "state_det_u": {
+            "det": 0.7486,
+            "k": 1,
+            "p": 0.001,
+            "per_k": [
+              {
+                "k": 1,
+                "det": 0.7486,
+                "p": 0.001
+              },
+              {
+                "k": 2,
+                "det": 0.7235,
+                "p": 0.001
+              },
+              {
+                "k": 3,
+                "det": 0.7067,
+                "p": 0.001
+              },
+              {
+                "k": 4,
+                "det": 0.662,
+                "p": 0.001
+              },
+              {
+                "k": 5,
+                "det": 0.6508,
+                "p": 0.001
+              },
+              {
+                "k": 6,
+                "det": 0.6257,
+                "p": 0.001
+              },
+              {
+                "k": 7,
+                "det": 0.6285,
+                "p": 0.001
+              },
+              {
+                "k": 8,
+                "det": 0.5838,
+                "p": 0.001
+              }
+            ]
+          },
+          "state_kfunc_context": 1,
+          "state_kstate": 1,
+          "func_kfunc": 1,
+          "func_kstate": 3,
+          "func_bracket": true,
+          "u_null_hit": false
+        },
+        {
+          "seed": 2,
+          "interpreted": true,
+          "gates": {
+            "func_learned": true,
+            "state_learned": true,
+            "func_acc": 0.922,
+            "state_acc": 0.949,
+            "func_det": 0.843999981880188,
+            "state_det": 0.897
+          },
+          "state_det_u": {
+            "det": 0.6508,
+            "k": 1,
+            "p": 0.001,
+            "per_k": [
+              {
+                "k": 1,
+                "det": 0.6508,
+                "p": 0.001
+              },
+              {
+                "k": 2,
+                "det": 0.6145,
+                "p": 0.001
+              },
+              {
+                "k": 3,
+                "det": 0.6313,
+                "p": 0.001
+              },
+              {
+                "k": 4,
+                "det": 0.6285,
+                "p": 0.001
+              },
+              {
+                "k": 5,
+                "det": 0.6117,
+                "p": 0.001
+              },
+              {
+                "k": 6,
+                "det": 0.567,
+                "p": 0.001
+              },
+              {
+                "k": 7,
+                "det": 0.567,
+                "p": 0.001
+              },
+              {
+                "k": 8,
+                "det": 0.5726,
+                "p": 0.001
+              }
+            ]
+          },
+          "state_kfunc_context": null,
           "state_kstate": 1,
           "func_kfunc": 1,
           "func_kstate": 2,

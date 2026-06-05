@@ -205,6 +205,13 @@ Mesa and Geometry both converged on field-shaped structure:
   as a mass-marginal held-out predictor, then transfers to Li/Liao 2021 as a
   continuous tail-resolved score with frame reliability explaining the per-cell
   heterogeneity.
+- De-confound (Attack-B): the determining-shadow **closure** read transfers to **real features**
+  when the functional is **linear** and the substrate is **de-confound-clean** (digit features:
+  0B confirms the closure dissociation, 0C shows the input-de-confound is load-bearing). It does
+  **not** transfer to real **computed-state** tasks (Othello legal moves), whose natural
+  functionals are **nonlinear** — the linear instrument cannot bracket them. Closure-measurability
+  is gated by *functional linearity + de-confound cleanliness*, not by realness of the substrate
+  per se — a substrate-specific, asymmetric transfer in the same spirit as the posture below.
 
 The shared theorem posture is:
 

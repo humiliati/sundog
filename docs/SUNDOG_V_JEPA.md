@@ -113,6 +113,18 @@ This is a hard wall, not a delay. If the lit pass cannot name a faithful real-da
 de-confound, the lane may still run Phase 0 as a toy-tier measurement, but it cannot use
 that result as permission to speak about real JEPA representations.
 
+**RESOLVED — partial crossing (2026-06-04, via Attack-B in `SUNDOG_V_DECONFOUND.md`).** The
+de-confound wall *does* have a real-feature crossing — but only for a **linear, constructed**
+functional: on real digit features the determining-shadow closure read confirms a
+functional-vs-state dissociation (Attack-B 0B), and the input-de-confound is shown load-bearing
+(0C). So **the Phase-0 question — does a functional-targeting objective keep the functional and
+discard the state? — is now answerable on a *real* substrate**, not only the toy; Attack-B
+already answered it for a *supervised* functional objective. The JEPA-specific step is the
+natural fork: **swap the supervised functional-keeper for an actual JEPA objective on the same
+Attack-B substrate.** What stays blocked is the *nonlinear / computed-state* functional (the
+Othello slate failed because legal moves are nonlinear) — the "more than we know" direction a
+constructed linear functional cannot reach.
+
 ## 8. Lit-pass targets (resolve before the Phase-0 spec)
 
 1. **JEPA mechanics** — I-JEPA / V-JEPA encoder–predictor–EMA-target structure, masking
