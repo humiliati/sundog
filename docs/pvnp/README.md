@@ -6,6 +6,27 @@ Main roadmap:
 
 - [`../SUNDOG_V_P_V_NP.md`](../SUNDOG_V_P_V_NP.md)
 
+Phase-4 synthesis:
+
+- [`SUNDOG_CERTIFICATE_PROBLEM.md`](SUNDOG_CERTIFICATE_PROBLEM.md) — theorem-shaped
+  synthesis (2026-06-04). Banks Phase 3 as the honest boundary and states the formal
+  promise problem (tightening §4–§6), the three separated claims (cheap
+  verification = op-count; capacity-relative spoof resistance = bounded+fragile;
+  disclosure robustness = the v3 null), the substrate migration off marginal mesa
+  toward an AB/topological-style design, and **one constructed instance** (the
+  syndrome/SIS certificate: check-cheap, spoof capacity-hard, shadow lossy-by-algebra,
+  failure branches pre-named). It is a **design / existence note** — §5 names the
+  next experiment (an ISD spoof curve on a frozen (n,k,w) regime).
+- [`SUNDOG_CERTIFICATE_SYNDROME_PROTOTYPE_NOTE.md`](SUNDOG_CERTIFICATE_SYNDROME_PROTOTYPE_NOTE.md)
+  — the constructed instance **built + mechanism verified** (2026-06-04,
+  `scripts/pvnp-certificate-syndrome.py`, deterministic). On a real `[48,24]` GF(2)
+  regime: P1 lossy-by-algebra (`z=He`, `s` gone, 2²⁴/syndrome); P2 cheap+sound
+  (check 2,376 ops vs ~5.1M decode, 0 false accepts); P3 `s` one-way; and the
+  find-vs-check capacity curve (forge 0.00→1.00 with budget while check stays flat).
+  The verify-first PASS v4 never got. Honest limits: toy regime, naive non-ISD
+  forger, imported hardness, degenerate cheap-reject (RISK 1). Frozen scaled
+  ISD-attacker run is the step that earns a measured capacity threshold.
+
 Lit-pass:
 
 - [`../P_V_NP_LITPASS_MEMO.md`](../P_V_NP_LITPASS_MEMO.md) - 2026-05-28

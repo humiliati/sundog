@@ -465,7 +465,15 @@ disclosed anchor seed-fragility; **v3 frozen + executed 2026-06-04 → `named_qu
 the anchor `l_mixed_lambda_0_95_medium` is `clean_consensus` on all three, so the
 v2b positive does NOT generalize. The measured Phase-3 arc (v1 spoof repair → v2b
 single-battery disclosure repair → v3 multi-battery null) is a complete, honest
-capacity-relative one-wayness boundary.
+capacity-relative one-wayness boundary. v4/v4-A (basin channel) explored + rejected
+(reward-only inert; basin-observation non-specific) — paused, scaffolding kept.
+**Phase 4 synthesis written 2026-06-04:** `pvnp/SUNDOG_CERTIFICATE_PROBLEM.md` — the
+formal promise problem, the three separated claims, the substrate migration off
+marginal mesa, and one constructed instance (syndrome/SIS certificate). It is a
+design/existence note; the next win is the **§5 experiment** (an ISD spoof curve on a
+frozen (n,k,w) regime → a measured capacity-relative one-wayness threshold, the thing
+every Phase-1 receipt reported as `capacity_threshold = not_estimated`). The empirical
+substrate migration targets are the LDT/Galois lane and the chatv2 pair-XOR latent.
 
 Current state:
 

@@ -677,6 +677,14 @@ baselines, reproduced metrics, and archived artifacts.
 - [`P_V_NP_LITPASS_MEMO.md`](P_V_NP_LITPASS_MEMO.md): 2026-05-28 literature
   pass, citation spine, gap map, and probe-ranking disposition.
 - [`SUNDOG_V_P_V_NP.md`](SUNDOG_V_P_V_NP.md): this roadmap.
+- [`pvnp/SUNDOG_CERTIFICATE_PROBLEM.md`](pvnp/SUNDOG_CERTIFICATE_PROBLEM.md):
+  Phase-4 theorem-shaped synthesis (2026-06-04). Formal promise problem tightening
+  §4–§6; the three separated claims (op-count cheap verification; bounded+fragile
+  capacity-relative spoof resistance; the v3 disclosure-robustness null); the
+  substrate migration off marginal mesa toward an AB/topological-style design; and
+  one constructed instance (the syndrome/SIS certificate — check-cheap, spoof
+  capacity-hard, shadow lossy-by-algebra, failure branches pre-named). A design /
+  existence note; the capacity curve is unrun (§5 = the next experiment).
 - [`pvnp/README.md`](pvnp/README.md): project index and artifact map.
 - [`pvnp/PHASE1_TOY_VERIFIER_SPEC.md`](pvnp/PHASE1_TOY_VERIFIER_SPEC.md):
   draft formal toy verifier spec.
