@@ -11,15 +11,16 @@ Short version:
 > *target embedding* and discard unpredictable detail — i.e., to keep the **functional**
 > and throw away the **state**. That is exactly the closure relation the
 > determining-shadow-set instrument now measures (Phase 2/7/7b/7c, calibrated). So the
-> in-scope question is sharp and falsifiable: **does a JEPA body show the closure bracket
-> (`k_func ≪ k_state`) more cleanly than a generative body, because it was trained to
-> keep the functional and drop the state?** First test reuses the frozen coupled toy and
-> the calibrated instrument — one objective swap. **Kill-gated R&D.**
+> in-scope question is sharp and falsifiable: **does a JEPA body retain less private
+> unpredictable noise than a generative body, while still keeping the predictable shared
+> source?** First test reuses the frozen coupled toy and the calibrated instrument — one
+> objective swap. **Kill-gated R&D.**
 
-**Status:** Scaffold opened 2026-06-04. No public page, `site-pages.json` entry, spec,
-run, or external packet exists. **Gated on (a) a lit pass and (b) a Phase-0 spec freeze
-before any run.** This is generality R&D, which the 2026-06-04 strategy pivot demoted —
-so it carries an explicit **kill-gate** (below), not an open-ended program.
+**Status:** Scaffold opened 2026-06-04. Phase-0 noise-carry spec drafted at
+`docs/chatv2/JEPA_PHASE0_NOISE_CARRY_SPEC.md`; no JEPA code, run, public page,
+`site-pages.json` entry, or external packet exists. **Gated on operator lock before any
+run.** This is generality R&D, which the 2026-06-04 strategy pivot demoted — so it carries
+an explicit **kill-gate** (below), not an open-ended program.
 
 This is not a claim about AGI, world models, real LLMs, or whether LeCun is right. It is
 a measurement question about what a JEPA-trained representation keeps and discards, asked
@@ -60,9 +61,15 @@ quantity rather than a slogan.
 
 ## 4. The core question
 
-> Does a JEPA-trained body show `k_func ≪ k_state` **more cleanly** than a
-> generative-trained body on the same data — i.e., does JEPA represent the hidden
-> functional `u` while *discarding* the per-latent state `x_i` that generative must keep?
+> Does a JEPA-trained body carry less directly probe-able private noise `x_i` than a
+> generative-trained body on the same coupled toy, while both bodies still retain the shared
+> predictable source `u`?
+
+The original closure-bracket sketch (`k_func` on `u`, `k_state` on `z_j`) is now demoted to
+report-only. On the coupled toy, both objectives can recover the shared `u`, and
+`k_state(z_j)` is dominated by private noise that is unrecoverable from other latents
+regardless of objective. The discriminating read is therefore **noise-carry**:
+`det(x_i | body)`.
 
 ## 5. Phase 0 (KILL-GATED) — JEPA vs generative on the coupled toy
 
@@ -74,21 +81,19 @@ quantity rather than a slogan.
     channels; predict the masked channels' **target embeddings** from the context
     channels; loss in representation space (no token reconstruction). Collapse-avoidance
     per the lit pass.
-- **Read both bodies with the determining-shadow-set instrument** (`k_func` on `u`,
-  `k_state` on omitted `z_j`, selection-corrected null, `u_null` control, UNLEARNED
-  guard — all carried from the frozen probe).
-- **Pre-registered prediction:** JEPA → `k_func` small (keeps `u`) and `k_state`
-  large/none (discarded `x_i`); GEN → muddier (carries the state). The headline is the
-  **JEPA−GEN closure difference**, not either alone.
-- **KILL-GATE:** Phase 0 must show a pre-registered, control-clean **JEPA-vs-GEN closure
-  difference** (effect size to be frozen in the spec — e.g. a `k_state` or body-state-carry
-  gap beyond the seed spread). **If JEPA and GEN read the same on the toy, the "JEPA
-  discards state" claim has no signal here → shelve the lane.** No scaling to real JEPA
-  without a toy signal.
+- **Read both bodies with the determining-shadow-set machinery**, but make noise-carry the
+  primary: `noise_det = median_i det(x_i | body)`, with `x_i = z_i xor parity(u,A_i)`.
+  `k_func(u)` / `k_state(z_j)` remain report-only controls, expected not to distinguish.
+- **Pre-registered prediction:** GEN carries `x_i`; JEPA discards it while retaining `u`.
+  The headline is the paired **GEN−JEPA noise-carry gap**, not either body alone.
+- **KILL-GATE:** Phase 0 must show a pre-registered, control-clean **JEPA-vs-GEN
+  noise-carry gap** that survives to the non-bottleneck `d_model=256` rung where chatv2's
+  `objective_excess` deflated. If the gap exists only at low capacity, the verdict is
+  `blocked_by_capacity`, not "JEPA works." No scaling to real JEPA without a toy signal.
 - **Blocked-vs-shelved distinction:** if the lit-pass-faithful small JEPA collapses or
   cannot be trained on the toy backbone, Phase 0 is `blocked_by_unfaithful_jepa`, not a
   scientific null. The shelf verdict is reserved for a trainable, control-clean JEPA
-  whose closure read matches GEN inside the pre-registered seed spread.
+  whose noise-carry read matches GEN inside the pre-registered seed spread.
 
 ## 6. Phases beyond 0 (gated on Phase-0 pass AND the lit pass)
 
@@ -153,9 +158,10 @@ constructed linear functional cannot reach.
 ## 10. Allowed / Forbidden language
 
 **Allowed (Phase 0, on pass):**
-> On a designed coupled toy, the JEPA objective produced a *[cleaner / same / muddier]*
-> closure body than the generative objective, measured by the determining-shadow-set
-> instrument against frozen thresholds and a clean independent control.
+> On a designed coupled toy, the JEPA objective discarded per-sample private noise that the
+> generative objective retained, while both bodies retained the predictable shared source.
+> The effect survived the capacity rung where chatv2's prior objective-excess contrast
+> deflated, and passed the collapse / null controls.
 
 **Forbidden:**
 - "JEPA learns a world model" / "JEPA understands."
@@ -173,5 +179,5 @@ motivates the lane, it is not a result.
 
 ---
 
-*Sundog Research Lab — SUNDOG_V_JEPA scaffold. Internal; kill-gated R&D. No spec, run, or
-public surface until a lit pass and a Phase-0 spec freeze.*
+*Sundog Research Lab — SUNDOG_V_JEPA scaffold. Internal; kill-gated R&D. Phase-0 spec
+drafted; no run or public surface until operator lock.*

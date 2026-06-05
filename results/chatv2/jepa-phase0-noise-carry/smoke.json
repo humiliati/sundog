@@ -1,0 +1,32 @@
+[
+  {
+    "d": 128,
+    "seed": 0,
+    "gap": 0.0717,
+    "gen_noise_det": 0.0,
+    "jepa_noise_det": -0.0717,
+    "gen_u_det": -0.0269,
+    "jepa_u_det": 0.0713,
+    "gen_u_null": -0.0026,
+    "jepa_u_null": -0.0079,
+    "jepa_collapse": {
+      "frac_std_ok": 1.0,
+      "eff_rank": 23.2,
+      "d": 128,
+      "min_std": 0.7256
+    },
+    "jepa_collapsed": true,
+    "support_starved": false,
+    "x_minority": [
+      77,
+      74,
+      83,
+      73,
+      90,
+      80,
+      83,
+      96
+    ],
+    "train_ctx_std_ok": 1.0
+  }
+]
