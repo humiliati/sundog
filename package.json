@@ -285,6 +285,7 @@
     "pvnp:phase3:capacity-one-wayness:v1": "node scripts/pvnp-phase3-capacity-one-wayness-v1.mjs",
     "pvnp:phase3:capacity-one-wayness:v2": "node scripts/pvnp-phase3-capacity-one-wayness-v2.mjs",
     "pvnp:phase3:capacity-one-wayness:v2:pre-freeze": "node scripts/pvnp-phase3-capacity-one-wayness-v2.mjs --mode pre-freeze",
+    "pvnp:phase3:capacity-one-wayness:v3": "node scripts/pvnp-phase3-capacity-one-wayness-v3.mjs",
     "pvnp:phase1:envs": "node scripts/pvnp-phase1-generate-environments.mjs",
     "pvnp:phase1:policies": "node scripts/pvnp-phase1-policies.mjs",
     "pvnp:phase1:mlp-train": "python -m training.pvnp.train_mlp_policy",
