@@ -1,0 +1,138 @@
+[
+  {
+    "d": 128,
+    "seed": 0,
+    "gen_u_det": 0.4918,
+    "jepa_u_det": 0.0205,
+    "gen_z_flip_acc": 0.3946,
+    "jepa_z_flip_acc": 0.3639,
+    "z_flip_gap": 0.0307,
+    "jepa_collapsed": true,
+    "jepa_train_std_ok": 1.0,
+    "gen": {
+      "u": {
+        "u_det": 0.4918,
+        "body_layer": 3,
+        "per_ckpt": [
+          {
+            "acc": 0.885,
+            "maj": 0.381,
+            "u_det": 0.8142
+          },
+          {
+            "acc": 0.628,
+            "maj": 0.268,
+            "u_det": 0.4918
+          },
+          {
+            "acc": 0.414,
+            "maj": 0.217,
+            "u_det": 0.2516
+          }
+        ],
+        "layer_score": [
+          0.296,
+          0.303,
+          0.626,
+          0.642
+        ],
+        "collapse": {
+          "frac_std_ok": 1.0,
+          "eff_rank": 1.87,
+          "d": 128,
+          "min_std": 0.1069
+        }
+      },
+      "z": {
+        "z_flip_acc": 0.3946,
+        "z_flip_per_ckpt": [
+          0.3761,
+          0.3946,
+          0.4013
+        ],
+        "z_all_per_ckpt": [
+          0.8694,
+          0.7,
+          0.6317
+        ],
+        "z_clean_per_ckpt": [
+          0.9203,
+          0.732,
+          0.654
+        ],
+        "flip_n_per_ckpt": [
+          327,
+          332,
+          309
+        ]
+      },
+      "train": {
+        "eval_loss": 0.5714784860610962,
+        "steps": 6000
+      }
+    },
+    "jepa": {
+      "u": {
+        "u_det": 0.0205,
+        "body_layer": 0,
+        "per_ckpt": [
+          {
+            "acc": 0.381,
+            "maj": 0.381,
+            "u_det": 0.0
+          },
+          {
+            "acc": 0.283,
+            "maj": 0.268,
+            "u_det": 0.0205
+          },
+          {
+            "acc": 0.237,
+            "maj": 0.217,
+            "u_det": 0.0255
+          }
+        ],
+        "layer_score": [
+          0.3,
+          0.281,
+          0.296,
+          0.289
+        ],
+        "collapse": {
+          "frac_std_ok": 0.875,
+          "eff_rank": 1.0,
+          "d": 128,
+          "min_std": 0.003
+        }
+      },
+      "z": {
+        "z_flip_acc": 0.3639,
+        "z_flip_per_ckpt": [
+          0.3639,
+          0.3494,
+          0.4078
+        ],
+        "z_all_per_ckpt": [
+          0.6334,
+          0.5869,
+          0.6014
+        ],
+        "z_clean_per_ckpt": [
+          0.6612,
+          0.6117,
+          0.6202
+        ],
+        "flip_n_per_ckpt": [
+          327,
+          332,
+          309
+        ]
+      },
+      "train": {
+        "steps": 6000,
+        "train_ctx_frac_std_ok": 1.0
+      }
+    },
+    "wall_s": 1285.0
+  }
+]
