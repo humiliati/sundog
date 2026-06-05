@@ -1,0 +1,164 @@
+[
+  {
+    "d": 128,
+    "seed": 0,
+    "run_seed": 8000,
+    "gen_noise_det": -0.0103,
+    "gen_noise_det_nl": null,
+    "gen_noise_det_global": -0.4758,
+    "gen_noise_det_global_nl": null,
+    "gen_z_flip_acc": 0.7839,
+    "gen_u_det": 0.7538,
+    "gen_u_null": -0.0458,
+    "gen_train": {
+      "source": "results\\chatv2\\phase7b-coupled-lownoise\\seed0\\bodies\\H8_gen.npz",
+      "trained_elsewhere": true
+    },
+    "gen_read": {
+      "noise_det": -0.0103,
+      "noise_det_nl": null,
+      "noise_det_global": -0.4758,
+      "noise_det_global_nl": null,
+      "noise_det_each": [
+        -0.01,
+        -0.006,
+        -0.01,
+        -0.016,
+        0.0,
+        0.0,
+        -0.023,
+        -0.037
+      ],
+      "noise_det_nl_each": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "noise_det_global_each": [
+        -0.163,
+        -0.497,
+        -0.455,
+        -0.395,
+        -0.564,
+        -0.596,
+        -0.503,
+        -0.366
+      ],
+      "noise_det_global_nl_each": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "x_base": [
+        0.098,
+        0.104,
+        0.096,
+        0.104,
+        0.102,
+        0.092,
+        0.099,
+        0.091
+      ],
+      "x_minority": [
+        294,
+        312,
+        288,
+        311,
+        307,
+        275,
+        298,
+        273
+      ],
+      "z_all_acc": 0.903,
+      "z_flip_acc": 0.7839,
+      "z_clean_acc": 0.9168,
+      "z_all_acc_each": [
+        0.93,
+        0.904,
+        0.902,
+        0.952,
+        0.807,
+        0.889,
+        0.874,
+        0.933
+      ],
+      "z_flip_acc_each": [
+        0.66,
+        0.764,
+        0.804,
+        0.921,
+        0.566,
+        0.817,
+        0.825,
+        0.678
+      ],
+      "z_clean_acc_each": [
+        0.961,
+        0.921,
+        0.912,
+        0.956,
+        0.835,
+        0.897,
+        0.879,
+        0.954
+      ],
+      "z_flip_n": [
+        153,
+        165,
+        143,
+        165,
+        152,
+        142,
+        137,
+        118
+      ],
+      "u_det": 0.7538,
+      "u_null": -0.0458,
+      "body_layer": 3,
+      "fair_readout": true,
+      "zr_by_layer": [
+        0.503,
+        0.608,
+        0.802,
+        0.906
+      ],
+      "collapse": {
+        "frac_std_ok": 1.0,
+        "eff_rank": 1.25,
+        "d": 192,
+        "min_std": 0.2051
+      }
+    },
+    "support_starved": false,
+    "x_minority": [
+      294,
+      312,
+      288,
+      311,
+      307,
+      275,
+      298,
+      273
+    ],
+    "z_flip_n": [
+      153,
+      165,
+      143,
+      165,
+      152,
+      142,
+      137,
+      118
+    ]
+  }
+]

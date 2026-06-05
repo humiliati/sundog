@@ -1,0 +1,110 @@
+[
+  {
+    "d": 128,
+    "seed": 0,
+    "run_seed": 8000,
+    "gen_noise_det": -0.0103,
+    "gen_noise_det_nl": NaN,
+    "gen_noise_det_global": -0.4758,
+    "gen_noise_det_global_nl": NaN,
+    "gen_u_det": 0.7538,
+    "gen_u_null": -0.0451,
+    "gen_train": {
+      "source": "results\\chatv2\\phase7b-coupled-lownoise\\seed0\\bodies\\H8_gen.npz",
+      "trained_elsewhere": true
+    },
+    "gen_read": {
+      "noise_det": -0.0103,
+      "noise_det_nl": NaN,
+      "noise_det_global": -0.4758,
+      "noise_det_global_nl": NaN,
+      "noise_det_each": [
+        -0.01,
+        -0.006,
+        -0.01,
+        -0.016,
+        0.0,
+        0.0,
+        -0.023,
+        -0.037
+      ],
+      "noise_det_nl_each": [
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN
+      ],
+      "noise_det_global_each": [
+        -0.163,
+        -0.497,
+        -0.455,
+        -0.395,
+        -0.564,
+        -0.596,
+        -0.503,
+        -0.366
+      ],
+      "noise_det_global_nl_each": [
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN
+      ],
+      "x_base": [
+        0.098,
+        0.104,
+        0.096,
+        0.104,
+        0.102,
+        0.092,
+        0.099,
+        0.091
+      ],
+      "x_minority": [
+        294,
+        312,
+        288,
+        311,
+        307,
+        275,
+        298,
+        273
+      ],
+      "u_det": 0.7538,
+      "u_null": -0.0451,
+      "body_layer": 3,
+      "fair_readout": true,
+      "zr_by_layer": [
+        0.503,
+        0.608,
+        0.802,
+        0.906
+      ],
+      "collapse": {
+        "frac_std_ok": 1.0,
+        "eff_rank": 1.25,
+        "d": 192,
+        "min_std": 0.2051
+      }
+    },
+    "support_starved": false,
+    "x_minority": [
+      294,
+      312,
+      288,
+      311,
+      307,
+      275,
+      298,
+      273
+    ]
+  }
+]

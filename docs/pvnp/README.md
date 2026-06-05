@@ -58,8 +58,13 @@ Phase specs:
   positive. Registers the attacker/capacity battery and source-bound
   seed-extension plan before any execution.
 - [`PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md`](PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md) -
-  opened repair slate after the v0 falsified registered cell. Drafts a
-  block-consensus accept rule to target source-bound seed-block mean drift.
+  frozen block-consensus repair slate after the v0 falsified registered cell.
+  Targets source-bound seed-block mean drift without changing the base response
+  thresholds.
+- [`PHASE3_CAPACITY_ONE_WAYNESS_V2_SLATE.md`](PHASE3_CAPACITY_ONE_WAYNESS_V2_SLATE.md) -
+  opened disclosure-consensus repair slate after the v1 named quarantine.
+  Targets block-unstable objective-conflict disclosure while keeping v1
+  promotion consensus unchanged.
 
 Templates:
 
@@ -78,7 +83,8 @@ Receipts:
 - [`receipts/README.md`](receipts/README.md) - receipt index, including the
   Phase 1 v0-v5 named-quarantine receipts, the v6 op-count positive receipt,
   the Phase 2 v0 mesa-bridge named quarantine, the Phase 2 v1 mesa-bridge
-  bounded-positive receipt, and the Phase 3 v0 falsified-cell receipt.
+  bounded-positive receipt, the Phase 3 v0 falsified-cell receipt, and the
+  Phase 3 v1 named-quarantine receipt.
 
 Current state:
 
@@ -210,3 +216,11 @@ Current state:
   disclosure flag. Signature floor passed 3/3. v0 stays falsified;
   `capacity_threshold <= small` unrevised. Receipt:
   [`receipts/2026-06-01_phase3_capacity_one_wayness_v1.md`](receipts/2026-06-01_phase3_capacity_one_wayness_v1.md).
+- Phase 3 capacity-relative one-wayness v2 disclosure slate opened for review:
+  2026-06-04. It does not revise v0 or v1. The draft keeps v1's promotion
+  consensus unchanged and targets only the disclosure aggregation failure:
+  a bridge-view consensus accept is unqualified only if the clean/no-conflict
+  side itself has stable consensus; a 2/2 objective-conflict split is reported
+  as block-unstable disclosed ambiguity. Because v2 is opened after reading the
+  v1 flag split, the v1 holdout is regression-only; any promotion-eligible v2
+  needs fresh source-bound holdout seeds after freeze.

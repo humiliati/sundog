@@ -126,11 +126,12 @@ export const V0_FALSIFIER_REGRESSION = Object.freeze({
   seedStarts: Object.freeze([20000, 30000, 40000, 50000]),
 });
 
-export function holdoutBlockDir(source, seedStart) {
-  return `${V1_HOLDOUT_ROOT}/${source.slug}_seedblock_${seedStart}`;
+export function holdoutBlockDirForRoot(source, seedStart, root = V1_HOLDOUT_ROOT) {
+  const normalizedRoot = root.replace(/[\\/]+$/, "");
+  return `${normalizedRoot}/${source.slug}_seedblock_${seedStart}`;
 }
 
-export function holdoutArgs(source, seedStart) {
+export function holdoutArgsForRoot(source, seedStart, root = V1_HOLDOUT_ROOT) {
   const args = ["scripts/mesa-intervention-battery.mjs"];
   if (source.sourceKind === "reference") {
     args.push("--reference", source.reference);
@@ -139,13 +140,21 @@ export function holdoutArgs(source, seedStart) {
   }
   args.push(
     "--policy-label", source.label,
-    "--out", holdoutBlockDir(source, seedStart),
+    "--out", holdoutBlockDirForRoot(source, seedStart, root),
     "--seed-start", String(seedStart),
     "--seeds", String(V1_HOLDOUT_SEEDS),
     "--sensor-tier", V1_HOLDOUT_SENSOR_TIER,
     "--horizon", String(V1_HOLDOUT_HORIZON),
   );
   return args;
+}
+
+export function holdoutBlockDir(source, seedStart) {
+  return holdoutBlockDirForRoot(source, seedStart, V1_HOLDOUT_ROOT);
+}
+
+export function holdoutArgs(source, seedStart) {
+  return holdoutArgsForRoot(source, seedStart, V1_HOLDOUT_ROOT);
 }
 
 function quotePowerShellArg(arg) {

@@ -17,10 +17,13 @@ Short version:
 > objective swap. **Kill-gated R&D.**
 
 **Status:** Scaffold opened 2026-06-04. Phase-0 noise-carry spec drafted at
-`docs/chatv2/JEPA_PHASE0_NOISE_CARRY_SPEC.md`; no JEPA code, run, public page,
-`site-pages.json` entry, or external packet exists. **Gated on operator lock before any
-run.** This is generality R&D, which the 2026-06-04 strategy pivot demoted — so it carries
-an explicit **kill-gate** (below), not an open-ended program.
+`docs/chatv2/JEPA_PHASE0_NOISE_CARRY_SPEC.md`, but the first smoke moved it to **DEBUG
+HOLD**. JEPA code exists at `scripts/jepa_phase0_noise_carry.py`; no full battery, public
+page, `site-pages.json` entry, or external packet exists. The repaired GEN positive-control
+has now passed (`z_flip_acc=0.7839` on the banked Phase-7b GEN body); the remaining lock
+blocker is a JEPA training/collapse smoke. This is generality R&D, which the 2026-06-04
+strategy pivot demoted — so it carries an explicit **kill-gate** (below), not an open-ended
+program.
 
 This is not a claim about AGI, world models, real LLMs, or whether LeCun is right. It is
 a measurement question about what a JEPA-trained representation keeps and discards, asked
@@ -68,8 +71,15 @@ quantity rather than a slogan.
 The original closure-bracket sketch (`k_func` on `u`, `k_state` on `z_j`) is now demoted to
 report-only. On the coupled toy, both objectives can recover the shared `u`, and
 `k_state(z_j)` is dominated by private noise that is unrecoverable from other latents
-regardless of objective. The discriminating read is therefore **noise-carry**:
-`det(x_i | body)`.
+regardless of objective. The discriminating read is therefore **noise-carry**, repaired as a
+flip-conditioned noisy-bit read: train `body -> z_i` on all rows, then evaluate on held-out
+noise flips `{x_i=1}`.
+
+**Debug caveat (2026-06-04):** direct linear `det(x_i | body)` failed as a GEN positive-control
+on the already banked Phase-7b GEN body: `u_det=0.754`, but local linear `noise_det=-0.010`.
+The repaired flip-conditioned `z_i` read passes that GEN preflight (`z_flip_acc=0.7839`,
+held-out flip counts 118-165 per latent). Phase 0 remains on DEBUG HOLD only because JEPA
+training/collapse smoke has not passed yet.
 
 ## 5. Phase 0 (KILL-GATED) — JEPA vs generative on the coupled toy
 
@@ -81,10 +91,12 @@ regardless of objective. The discriminating read is therefore **noise-carry**:
     channels; predict the masked channels' **target embeddings** from the context
     channels; loss in representation space (no token reconstruction). Collapse-avoidance
     per the lit pass.
-- **Read both bodies with the determining-shadow-set machinery**, but make noise-carry the
-  primary: `noise_det = median_i det(x_i | body)`, with `x_i = z_i xor parity(u,A_i)`.
-  `k_func(u)` / `k_state(z_j)` remain report-only controls, expected not to distinguish.
-- **Pre-registered prediction:** GEN carries `x_i`; JEPA discards it while retaining `u`.
+- **Read both bodies with the determining-shadow-set machinery**, but make the repaired
+  noise-carry statistic primary: `z_flip_acc = median_i Acc(body -> z_i | heldout x_i=1)`.
+  The probe is trained on all rows; only the scoring slice is conditioned on flips.
+  `k_func(u)` / `k_state(z_j)` and direct `det(x_i | body)` remain report-only controls.
+- **Pre-registered prediction:** GEN predicts observed noisy `z_i` on flips; JEPA denoises and
+  fails/sub-chance-predicts `z_i` on flips while retaining `u`.
   The headline is the paired **GEN−JEPA noise-carry gap**, not either body alone.
 - **KILL-GATE:** Phase 0 must show a pre-registered, control-clean **JEPA-vs-GEN
   noise-carry gap** that survives to the non-bottleneck `d_model=256` rung where chatv2's

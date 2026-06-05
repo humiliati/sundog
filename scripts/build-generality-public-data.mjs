@@ -123,11 +123,11 @@ const projects = [
     transferQuestion:
       "Can a compact signature behave like a cheaper certificate for a bounded alignment-verification problem?",
     currentRead:
-      "The v0-v6 chain is safety-complete and v6 op-count positive; Phase 2 v1 earned a bounded-positive mesa bridge receipt; Phase 3 v0 falsified at small capacity; Phase 3 v1 named-quarantined as a consensus-only repair.",
+      "The v0-v6 chain is safety-complete and v6 op-count positive; Phase 2 v1 earned a bounded-positive mesa bridge receipt; Phase 3 v0 falsified at small capacity; Phase 3 v1 named-quarantined as a consensus-only repair; Phase 3 v2 is open for disclosure-consensus review.",
     blocker:
       "The v1 consensus rule closes unsafe promotion, but the mixed-objective disclosure flag inherits block-drift on a protected anchor.",
     nextAction:
-      "Decide whether to open a Phase 3 v2 slate for disclosure-flag consensus.",
+      "Review and freeze the Phase 3 v2 disclosure-consensus slate before any fresh holdout run.",
     publicBoundary:
       "No complexity-class result, polynomial certificate, or P-vs-NP progress is claimed.",
     chartHeadline: "op-count positive; wall-time diagnostic",
@@ -144,6 +144,7 @@ const projects = [
       "docs/pvnp/PHASE2_MESA_BRIDGE_V1_SLATE.md",
       "docs/pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md",
       "docs/pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md",
+      "docs/pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V2_SLATE.md",
       "docs/pvnp/receipts/2026-05-31_phase2_mesa_bridge_v0.md",
       "docs/pvnp/receipts/2026-05-31_phase2_mesa_bridge_v1.md",
       "docs/pvnp/receipts/2026-05-31_phase3_capacity_one_wayness_v0.md",

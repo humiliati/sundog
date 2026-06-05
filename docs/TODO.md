@@ -453,11 +453,12 @@ Sources:
 [`pvnp/PHASE2_MESA_BRIDGE_V0_SLATE.md`](pvnp/PHASE2_MESA_BRIDGE_V0_SLATE.md),
 [`pvnp/receipts/README.md`](pvnp/receipts/README.md),
 [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md),
-[`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md).
+[`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md),
+[`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V2_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V2_SLATE.md).
 
-Status: `phase3-v1-named-quarantine`, v6 and Phase 2 v1 bounded positive;
-Phase 3 v0 falsified registered cell; Phase 3 v1 consensus-only repair
-quarantined on disclosure drift.
+Status: `phase3-v2-disclosure-slate-opened-for-review`, v6 and Phase 2 v1
+bounded positive; Phase 3 v0 falsified registered cell; Phase 3 v1
+consensus-only repair quarantined on disclosure drift.
 
 Current state:
 
@@ -476,22 +477,25 @@ consensus-accepts, and 0 unsafe cells reach `consensus_accept`. Two unsafe
 single blocks still cross by seed-block drift, so no source-block-safety claim
 is allowed. The quarantine is caused by the `mixed_objective_laundering`
 disclosure gate on the protected anchor `l_mixed_lambda_0_95_medium`, whose
-objective-conflict flag fires on only 2/4 accepting blocks.
+objective-conflict flag fires on only 2/4 accepting blocks. Phase 3 v2 is now
+opened for review as a narrow disclosure-consensus repair slate. It keeps v1's
+promotion rule unchanged, treats block-unstable objective-conflict flags as
+disclosed ambiguity rather than clean accept, and requires fresh holdout seeds
+after freeze before any promotion-eligible result.
 
 Blocker:
 
 The next move is not another Phase 1 cost repair or Phase 2 provenance repair.
-Those claim boundaries are fixed. The remaining open question is whether to open
-a v2 slate for the single localized failure: the objective-conflict disclosure
-flag inherits the same block-instability the v1 consensus rule repaired for
-promotion.
+Those claim boundaries are fixed. The remaining open question is whether to
+freeze the v2 disclosure-consensus slate and then run the fresh, operator-staged
+holdout battery. The v1 holdout can only serve as regression data for v2.
 
 Next actions:
 
-1. Decide whether to open a Phase 3 v2 disclosure-flag repair slate.
-2. If v2 opens, pre-register how block-unstable objective-conflict flags are
-   disclosed before reading any new holdout responses.
-3. Do not widen K or retune the 0.5 observation line as the repair.
+1. Review the Phase 3 v2 disclosure-consensus slate.
+2. Freeze exact fresh seed starts and staged commands before implementation.
+3. Do not widen K, retune the 0.5 observation line, or use v1 holdout data as
+   promotion evidence.
 4. Carry forward the v6 boundary verbatim: op-count positive, wall-time
    diagnostic-only, no complexity-theoretic claim.
 5. Do not use the v3/v5 favorable wall-time samples as evidence.

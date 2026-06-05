@@ -2,18 +2,18 @@
   {
     "d": 128,
     "seed": 0,
-    "gap": 0.0717,
+    "gap": 0.2395,
     "gen_noise_det": 0.0,
-    "jepa_noise_det": -0.0717,
-    "gen_u_det": -0.0269,
-    "jepa_u_det": 0.0713,
-    "gen_u_null": -0.0026,
-    "jepa_u_null": -0.0079,
+    "jepa_noise_det": -0.2395,
+    "gen_u_det": 0.2127,
+    "jepa_u_det": 0.1203,
+    "gen_u_null": -0.0211,
+    "jepa_u_null": -0.058,
     "jepa_collapse": {
       "frac_std_ok": 1.0,
-      "eff_rank": 23.2,
+      "eff_rank": 32.48,
       "d": 128,
-      "min_std": 0.7256
+      "min_std": 0.6401
     },
     "jepa_collapsed": true,
     "support_starved": false,
