@@ -1,10 +1,15 @@
 # Phase 3 Capacity-Relative One-Wayness v3 Disclosure-Robustness Slate
 
-Status: **FROZEN for implementation (2026-06-04 local).** No v3 holdout
-generation or scoring ran before freeze. Only dry plans were run before freeze,
-and each reported 52/52 planned blocks with 0 blocks executed. The fresh
-promotion batteries may now be generated exactly as frozen below, operator-
-staged or sharded under the repository runtime rule.
+Status: **FROZEN then EXECUTED (2026-06-04 local).** No v3 holdout generation or
+scoring ran before freeze (only dry plans, each reporting 52/52 planned, 0
+executed). The three fresh batteries were then generated exactly as frozen below
+(52/52 each, 0 failed) and scored. **Verdict: `named_quarantine —
+disclosure_robustness_null`** — the pre-registered expected outcome: the protected
+anchor `l_mixed_lambda_0_95_medium` is `clean_consensus` on all three fresh
+batteries (not robustly disclosed), while the other three registered mixed cells
+are `robustly_disclosed`. The unsafe side stays closed (0 unsafe consensus
+accepts, floor 3/3 per battery). v0/v1/v2b not revised. See
+[`receipts/2026-06-04_phase3_capacity_one_wayness_v3.md`](receipts/2026-06-04_phase3_capacity_one_wayness_v3.md).
 
 Date opened: 2026-06-04
 Date frozen: 2026-06-04 local
@@ -275,10 +280,16 @@ Before freeze:
 
 Deferred until after freeze:
 
-- [ ] Generate the N = 3 fresh batteries (operator-staged or sharded).
-- [ ] Add npm wiring (`pvnp:phase3:capacity-one-wayness:v3`).
-- [ ] Implement the v3 cross-battery harness.
-- [ ] Score the seen-battery regression set + the N fresh batteries; file a receipt.
+- [x] Generate the N = 3 fresh batteries (operator-staged or sharded). Done
+      2026-06-04: v3-A/B/C each 52/52 blocks, 0 failed, `--jobs 4`.
+- [x] Add npm wiring (`pvnp:phase3:capacity-one-wayness:v3`). Done 2026-06-04.
+- [x] Implement the v3 cross-battery harness. Done 2026-06-04:
+      `scripts/pvnp-phase3-capacity-one-wayness-v3.mjs` +
+      `scripts/lib/pvnp-phase3-v3-config.mjs`; v1/v2 scorers left byte-untouched
+      (per-battery layer reproduces v1/pre-freeze/v2b digit-for-digit).
+- [x] Score the seen-battery regression set + the N fresh batteries; file a
+      receipt. Done 2026-06-04: verdict `disclosure_robustness_null`; receipt
+      `receipts/2026-06-04_phase3_capacity_one_wayness_v3.md`.
 
 ## Freeze Rule
 

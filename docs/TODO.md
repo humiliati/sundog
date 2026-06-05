@@ -456,12 +456,16 @@ Sources:
 [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md),
 [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V2_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V2_SLATE.md).
 
-Status: `phase3-v2b-scored-bounded-positive`, v6 and Phase 2 v1 bounded
+Status: `phase3-v3-disclosure-robustness-null`, v6 and Phase 2 v1 bounded
 positive; Phase 3 v0 falsified registered cell; Phase 3 v1 consensus-only
-repair quarantined on disclosure drift; the pre-freeze v2 seed-100000/110000/
-120000/130000 holdout is diagnostic-only; the corrected v2b fresh holdout was
-scored 2026-06-04 → **bounded positive, `consensus-only disclosure repair`**,
-with a disclosed seed-fragility at the anchor.
+repair quarantined on disclosure drift; v2b scored 2026-06-04 → **bounded
+positive, `consensus-only disclosure repair`** (on its frozen seeds), with a
+disclosed anchor seed-fragility; **v3 frozen + executed 2026-06-04 → `named_quarantine
+— disclosure_robustness_null`**: across N=3 fresh batteries (seeds 180000–290000)
+the anchor `l_mixed_lambda_0_95_medium` is `clean_consensus` on all three, so the
+v2b positive does NOT generalize. The measured Phase-3 arc (v1 spoof repair → v2b
+single-battery disclosure repair → v3 multi-battery null) is a complete, honest
+capacity-relative one-wayness boundary.
 
 Current state:
 
@@ -499,13 +503,13 @@ crosses without consensus (no source-block-safety claim). Receipt:
 
 Resolved / remaining:
 
-The v2/v2b harness is implemented and scored. The single open question is now the
-**disclosed seed-fragility** at the protected anchor `l_mixed_lambda_0_95_medium`:
-its observation mean sits on the 0.5 flag line and drifts across seed batteries —
-on the pre-freeze diagnostic seeds (100000–130000) it drifts entirely below 0.5
-(`clean_consensus`), so that battery quarantines. The bounded positive holds on the
-mechanically-frozen promotion seeds (honest under Anti-P-Hack) but rests on the
-mean straddling 0.5.
+The v2/v2b and v3 harnesses are implemented and scored. Phase 3 now has a
+complete, honest capacity-relative one-wayness boundary: v1 closes the spoof at
+consensus, v2b earns a bounded-positive disclosure repair on its frozen seeds, and
+v3's multi-battery robustness test shows that positive does NOT generalize — the
+near-line anchor `l_mixed_lambda_0_95_medium` is `clean_consensus` on all 3 fresh
+batteries (its observation mean sits below the 0.5 flag line on fresh seeds). No
+open repair question remains without a NEW slate id.
 
 Next actions:
 
@@ -514,19 +518,26 @@ Next actions:
    `scripts/lib/pvnp-phase3-v2-config.mjs`; v1 scorer left untouched.
 2. [done] Score the v1 regression set and the corrected v2b fresh holdout
    (+ pre-freeze diagnostic). Verdict bounded positive on v2b.
-3. [frozen] v3 disclosure-robustness slate frozen for implementation:
-   `pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V3_SLATE.md`. Multi-battery gate — a
-   registered mixed cell passes only if never `clean_consensus` across N=3 fresh
-   disjoint batteries (seed starts 180000–290000); thresholds/K/M/0.5 unchanged,
-   no band added; seen batteries are regression-only; pre-registered expectation
-   is `disclosure_robustness_null` for the anchor. Next: generate the 3 fresh
-   batteries, implement the cross-battery harness, then score.
-4. Decide whether/how to reflect the bounded positive in public/portfolio copy
-   (`public/data/high-stakes-generality-gallery.json`, generality SVGs) — carry
-   the seed-fragility caveat; outward-facing, owner sign-off.
-5. Carry forward the v6 boundary verbatim: op-count positive, wall-time
+3. [done] v3 disclosure-robustness slate frozen + executed:
+   `pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V3_SLATE.md`,
+   `scripts/pvnp-phase3-capacity-one-wayness-v3.mjs` (+ v3-config), npm
+   `pvnp:phase3:capacity-one-wayness:v3`. Generated 3 fresh batteries (seeds
+   180000–290000, 52/52 each), scored. Verdict **`named_quarantine —
+   disclosure_robustness_null`** (pre-registered expectation): anchor
+   `clean_consensus` on all 3 fresh; other 3 mixed cells `robustly_disclosed`;
+   unsafe side closed (0 unsafe consensus, floor 3/3 each); v1/v2 scorers
+   byte-untouched. Receipt
+   `pvnp/receipts/2026-06-04_phase3_capacity_one_wayness_v3.md`.
+4. Decide whether/how to reflect the Phase-3 arc in public/portfolio copy
+   (`public/data/high-stakes-generality-gallery.json`, generality SVGs) — the
+   honest framing is the v1→v2b→v3 boundary (a measured fragility/null), not a
+   bare bounded-positive; outward-facing, owner sign-off.
+5. Optional: a v4 slate ONLY if pursuing near-line mixed-objective detection via a
+   different pre-registered channel/statistic (NEW slate id; must not retune 0.5
+   or add a fitted band) — or accept the v3 null as the measured boundary.
+6. Carry forward the v6 boundary verbatim: op-count positive, wall-time
    diagnostic-only, no complexity-theoretic claim. Keep `capacity_threshold <=
-   small` attached to the v0 verifier; v0/v1 not revised.
+   small` attached to the v0 verifier; v0/v1/v2b not revised.
 
 ### ARC Phase 3E Relative-Locality Hold
 

@@ -488,12 +488,18 @@ line). v0 and v1 are not revised. See
 [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V2_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V2_SLATE.md),
 and
 [`pvnp/receipts/2026-06-04_phase3_capacity_one_wayness_v2b.md`](pvnp/receipts/2026-06-04_phase3_capacity_one_wayness_v2b.md).
-A v3 disclosure-robustness slate is **frozen for implementation**:
-it tests the disclosed anchor seed-fragility with a multi-battery gate (a
-registered mixed cell passes only if never `clean_consensus` across N=3 fresh
-disjoint batteries), thresholds/K/M/0.5 unchanged; the pre-registered expectation
-is a `disclosure_robustness_null` for the anchor. See
-[`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V3_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V3_SLATE.md).
+A v3 disclosure-robustness slate was then frozen and **executed**: across N=3
+fresh disjoint batteries (seeds 180000–290000) the anchor `l_mixed_lambda_0_95_medium`
+is `clean_consensus` on **all three** → verdict **`named_quarantine —
+disclosure_robustness_null`** (the pre-registered expected outcome). The other
+three registered mixed cells are `robustly_disclosed`; the unsafe side stays
+closed (0 unsafe consensus accepts, signature floor 3/3 per battery). The measured
+Phase-3 arc is therefore: a consensus-level spoof repair that holds (v1→v2b), a
+single-battery disclosure repair that holds on its frozen seeds (v2b), and a
+disclosure repair that does **not** survive a multi-battery robustness test at the
+near-line anchor (v3) — the v2b positive does not generalize across seeds. See
+[`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V3_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V3_SLATE.md)
+and [`pvnp/receipts/2026-06-04_phase3_capacity_one_wayness_v3.md`](pvnp/receipts/2026-06-04_phase3_capacity_one_wayness_v3.md).
 
 Goal: measure when the signature remains useful as a verifier but resists cheap
 inversion or spoofing.
@@ -715,9 +721,11 @@ baselines, reproduced metrics, and archived artifacts.
   Phase 3 v2b bounded-positive disclosure-repair receipt (consensus-only),
   with a disclosed anchor seed-fragility.
 - [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V3_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V3_SLATE.md):
-  Phase 3 v3 disclosure-robustness slate frozen for implementation;
-  multi-battery gate over the anchor seed-fragility; expected
-  `disclosure_robustness_null`.
+  Phase 3 v3 disclosure-robustness slate frozen and executed; multi-battery gate
+  over the anchor seed-fragility → `disclosure_robustness_null`.
+- [`pvnp/receipts/2026-06-04_phase3_capacity_one_wayness_v3.md`](pvnp/receipts/2026-06-04_phase3_capacity_one_wayness_v3.md):
+  Phase 3 v3 cross-battery disclosure-robustness receipt; anchor `clean_consensus`
+  on all 3 fresh batteries → named disclosure-robustness null.
 - [`pvnp/RECEIPT_TEMPLATE.md`](pvnp/RECEIPT_TEMPLATE.md): receipt template
   for phase and probe results.
 - [`pvnp/receipts/README.md`](pvnp/receipts/README.md): receipt index —

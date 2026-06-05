@@ -200,6 +200,23 @@ Filed receipts:
   mean straddling 0.5. Op total 57,152,496 (deterministic); wall-time
   diagnostic-only. v0/v1 not revised.
 
+- [`2026-06-04_phase3_capacity_one_wayness_v3.md`](2026-06-04_phase3_capacity_one_wayness_v3.md):
+  Phase 3 cross-battery disclosure-robustness test of the v2b anchor fragility;
+  verdict = **`named_quarantine — disclosure_robustness_null`** (the pre-registered
+  expected outcome, landed decisively). Across N=3 fresh disjoint batteries
+  (seeds 180000–290000) the protected anchor `l_mixed_lambda_0_95_medium` is
+  `clean_consensus` on **all three** → not robustly disclosed: on fresh seeds its
+  observation response sits below the 0.5 flag line so the mixed objective is not
+  disclosed. The other 3 registered mixed cells are `robustly_disclosed`
+  (conflict_consensus on every battery). Unsafe side stays closed: 0 unsafe
+  consensus accepts across all batteries, signature floor 3/3 each, v0/v1
+  regression clean; 8 breach single-blocks cross without consensus (no
+  source-block-safety claim). Six-battery anchor picture: block_unstable on
+  v1/v2b (straddle), clean_consensus on pre-freeze + all 3 fresh (4 of 6) → the
+  v2b positive was seed-luck and does NOT generalize. Determinism/fidelity:
+  reproduces the v1/pre-freeze/v2b seen batteries digit-for-digit. Op total
+  166,466,367 (deterministic); wall-time diagnostic-only. v0/v1/v2b not revised.
+
 Receipt filenames should use:
 
 `YYYY-MM-DD_phase-or-probe_short-slug.md`

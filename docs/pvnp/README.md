@@ -246,16 +246,22 @@ Current state:
   anchor's observation mean drifts below the 0.5 flag line to `clean_consensus`.
   v0/v1 not revised. See
   [`receipts/2026-06-04_phase3_capacity_one_wayness_v2b.md`](receipts/2026-06-04_phase3_capacity_one_wayness_v2b.md).
-- Phase 3 capacity-relative one-wayness v3 disclosure-robustness slate **frozen
-  for implementation**: 2026-06-04 local. Targets the v2b anchor
-  seed-fragility with a multi-battery robustness gate: a registered mixed cell
-  passes only if it is never `clean_consensus` across N = 3 fresh disjoint
-  batteries (seed starts 180000–290000). Thresholds, K, M, and the 0.5 line are
-  unchanged; no band is added (forbidden). The three seen batteries
-  (v1 / pre-freeze v2 / v2b) are regression-only. Pre-registered expectation:
-  `named_quarantine — disclosure_robustness_null` for the anchor (it is already
-  `clean_consensus` on 1 of 3 seen batteries), so a bounded positive would be a
-  genuine surprise. See
-  [`PHASE3_CAPACITY_ONE_WAYNESS_V3_SLATE.md`](PHASE3_CAPACITY_ONE_WAYNESS_V3_SLATE.md).
-  Fresh battery generation, harness implementation, and scoring are the next
-  post-freeze steps.
+- Phase 3 capacity-relative one-wayness v3 disclosure-robustness slate frozen and
+  **executed**: 2026-06-04 local. Harness
+  `scripts/pvnp-phase3-capacity-one-wayness-v3.mjs` +
+  `scripts/lib/pvnp-phase3-v3-config.mjs`, npm
+  `pvnp:phase3:capacity-one-wayness:v3`; v1/v2 scorers left byte-untouched
+  (per-battery layer reproduces v1/pre-freeze/v2b digit-for-digit). Multi-battery
+  robustness gate: a registered mixed cell passes only if never `clean_consensus`
+  across N = 3 fresh disjoint batteries (seeds 180000–290000); thresholds/K/M/0.5
+  unchanged, no band. Verdict = **`named_quarantine — disclosure_robustness_null`**
+  (the pre-registered expected outcome, landed decisively): the anchor
+  `l_mixed_lambda_0_95_medium` is `clean_consensus` on **all three** fresh
+  batteries (not robustly disclosed), while the other 3 registered mixed cells are
+  `robustly_disclosed`. Unsafe side closed: 0 unsafe consensus accepts across all
+  batteries, floor 3/3 each, v0/v1 regression clean; 8 breach single-blocks cross
+  without consensus (no source-block-safety claim). Six-battery anchor picture:
+  block_unstable on v1/v2b, clean on pre-freeze + all 3 fresh (4/6) → the v2b
+  positive does not generalize across seeds. v0/v1/v2b not revised. See
+  [`PHASE3_CAPACITY_ONE_WAYNESS_V3_SLATE.md`](PHASE3_CAPACITY_ONE_WAYNESS_V3_SLATE.md)
+  and [`receipts/2026-06-04_phase3_capacity_one_wayness_v3.md`](receipts/2026-06-04_phase3_capacity_one_wayness_v3.md).
