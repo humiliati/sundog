@@ -456,9 +456,10 @@ Sources:
 [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md),
 [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V2_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V2_SLATE.md).
 
-Status: `phase3-v2-disclosure-slate-opened-for-review`, v6 and Phase 2 v1
-bounded positive; Phase 3 v0 falsified registered cell; Phase 3 v1
-consensus-only repair quarantined on disclosure drift.
+Status: `phase3-v2b-corrected-slate-frozen`, v6 and Phase 2 v1 bounded
+positive; Phase 3 v0 falsified registered cell; Phase 3 v1 consensus-only
+repair quarantined on disclosure drift; the pre-freeze v2 seed-100000/110000/
+120000/130000 holdout is diagnostic-only.
 
 Current state:
 
@@ -478,22 +479,27 @@ single blocks still cross by seed-block drift, so no source-block-safety claim
 is allowed. The quarantine is caused by the `mixed_objective_laundering`
 disclosure gate on the protected anchor `l_mixed_lambda_0_95_medium`, whose
 objective-conflict flag fires on only 2/4 accepting blocks. Phase 3 v2 is now
-opened for review as a narrow disclosure-consensus repair slate. It keeps v1's
-promotion rule unchanged, treats block-unstable objective-conflict flags as
-disclosed ambiguity rather than clean accept, and requires fresh holdout seeds
-after freeze before any promotion-eligible result.
+provenance-corrected and frozen as a narrow disclosure-consensus repair slate.
+It keeps v1's promotion rule unchanged and treats block-unstable
+objective-conflict flags as disclosed ambiguity rather than clean accept. A
+full seed-100000/110000/120000/130000 holdout battery ran before the status line
+was frozen, so that battery is diagnostic-only. Any promotion-eligible result
+must use the corrected v2b successor root with fresh seeds
+`140000, 150000, 160000, 170000`.
 
 Blocker:
 
 The next move is not another Phase 1 cost repair or Phase 2 provenance repair.
-Those claim boundaries are fixed. The remaining open question is whether to
-freeze the v2 disclosure-consensus slate and then run the fresh, operator-staged
-holdout battery. The v1 holdout can only serve as regression data for v2.
+Those claim boundaries are fixed. The remaining open question is whether the
+corrected v2b fresh holdout battery preserves the v1 unsafe-side repair while
+closing the disclosure aggregation gap. The v1 holdout and the pre-freeze v2
+holdout can only serve as regression/diagnostic data.
 
 Next actions:
 
-1. Review the Phase 3 v2 disclosure-consensus slate.
-2. Freeze exact fresh seed starts and staged commands before implementation.
+1. Run the corrected v2b fresh holdout battery from the frozen slate, or shard
+   it into resumable operator batches.
+2. Implement the v2/v2b disclosure-consensus harness against the frozen schema.
 3. Do not widen K, retune the 0.5 observation line, or use v1 holdout data as
    promotion evidence.
 4. Carry forward the v6 boundary verbatim: op-count positive, wall-time

@@ -1,9 +1,13 @@
 # Phase 3 Capacity-Relative One-Wayness v2 Disclosure Slate
 
-Status: opened for review; not frozen (2026-06-04). No v2 implementation,
-holdout generation, or execution may run against this draft until it is frozen.
+Status: frozen for corrected successor execution (2026-06-04 local). The
+pre-freeze seed-100000/110000/120000/130000 holdout battery is quarantined as
+diagnostic-only and cannot promote a v2 bounded-positive receipt. The
+promotion-eligible successor path is `phase3-capacity-one-wayness-v2b` with
+fresh seed starts `140000, 150000, 160000, 170000`.
 
 Date opened: 2026-06-04
+Date provenance-corrected and frozen: 2026-06-04 local
 
 This is the natural repair slate after Phase 3 v1:
 [`receipts/2026-06-01_phase3_capacity_one_wayness_v1.md`](receipts/2026-06-01_phase3_capacity_one_wayness_v1.md).
@@ -11,6 +15,42 @@ This is the natural repair slate after Phase 3 v1:
 v2 does not revise v0 or v1. The v0 verifier remains falsified
 (`capacity_threshold <= small`). v1 remains `named_quarantine` with repair
 strength `consensus-only repair`.
+
+## Provenance Correction
+
+The original draft said "No v2 implementation, holdout generation, or execution
+may run against this draft until it is frozen." That rule was violated: the
+fresh-root holdout command was run while the status line still said "opened for
+review; not frozen."
+
+Disk facts for the pre-freeze battery:
+
+- root:
+  `results/pvnp/phase3-capacity-one-wayness-v2/phase4-intervention-battery/`;
+- runner manifest:
+  `results/pvnp/phase3-capacity-one-wayness-v2/holdout_runner_manifest.json`;
+- selected seed starts: `100000, 110000, 120000, 130000`;
+- source rows: 13/13;
+- planned blocks: 52/52;
+- blocks run: 52/52;
+- failed blocks: 0;
+- elapsed runner time: 692,249 ms (11.54 minutes) with `--jobs 4`;
+- per-block manifests checked: 52/52 present;
+- `trial_logs_saved: true`: 52/52;
+- seed count: 64 in every block;
+- trial pairs: 320 in every block;
+- horizon: 200 in every block;
+- sensor tier: `local-probe-field` in every block;
+- block manifest git SHA:
+  `aca032f509ee2c833f07f784eb7fbb056698dded` for all 52 blocks.
+
+Consequence: this battery is a valid execution/smoke/timing/provenance
+diagnostic, but it is not promotion evidence. Any verifier receipt that scores
+only this pre-freeze battery must use a diagnostic verdict such as
+`pre_freeze_holdout_diagnostic_named_quarantine`; it may not claim
+bounded-positive status. The corrected promotion-eligible path uses the next
+mechanical, disjoint seed starts `140000, 150000, 160000, 170000` and writes to
+the successor root `results/pvnp/phase3-capacity-one-wayness-v2b/`.
 
 ## v1 Result Locked
 
@@ -74,6 +114,11 @@ A promotion-eligible v2 result needs a fresh source-bound holdout battery at
 new seed starts, generated after this slate is frozen. If an implementation
 only re-scores the v1 holdout under the v2 disclosure rule, the strongest
 allowed verdict is `posthoc_repair_diagnostic_named_quarantine`.
+
+The same promotion restriction applies to the seed-100000/110000/120000/130000
+holdout battery generated before this provenance correction. It may be used to
+debug the runner, estimate runtime, and test verifier plumbing, but not to
+support a bounded-positive claim.
 
 ## Claim Under Test
 
@@ -211,15 +256,23 @@ If v1 regression does not behave as above, v2 is `void_run` or
 `named_quarantine` before fresh holdout scoring, depending on whether the
 implementation or the repair hypothesis failed.
 
-## Fresh v2 Holdout Battery
+## Fresh Corrected Holdout Battery
 
-Candidate fresh seed starts:
+Pre-freeze diagnostic seed starts, not promotion evidence:
 
 `100000, 110000, 120000, 130000`
 
-Fresh raw-log root:
+Promotion-eligible successor seed starts:
+
+`140000, 150000, 160000, 170000`
+
+Pre-freeze diagnostic raw-log root:
 
 `results/pvnp/phase3-capacity-one-wayness-v2/phase4-intervention-battery/`
+
+Promotion-eligible successor raw-log root:
+
+`results/pvnp/phase3-capacity-one-wayness-v2b/phase4-intervention-battery/`
 
 Exact PowerShell commands must be frozen before execution. The command shape is
 the v1 holdout runner shape with:
@@ -227,9 +280,9 @@ the v1 holdout runner shape with:
 - output root changed from
   `results/pvnp/phase3-capacity-one-wayness-v1/phase4-intervention-battery/`
   to
-  `results/pvnp/phase3-capacity-one-wayness-v2/phase4-intervention-battery/`;
+  `results/pvnp/phase3-capacity-one-wayness-v2b/phase4-intervention-battery/`;
 - seed starts changed from `60000, 70000, 80000, 90000` to
-  `100000, 110000, 120000, 130000`;
+  `140000, 150000, 160000, 170000`;
 - source rows, horizon, seed count, and sensor tier unchanged.
 
 Runner patch status (2026-06-04):
@@ -237,8 +290,10 @@ Runner patch status (2026-06-04):
 fresh-root execution, arbitrary registered seed starts, deterministic
 `--shard-index` / `--shard-count`, bounded `--jobs`, dry plans, and smoke caps.
 The helper keeps the source rows, horizon, seed count, and sensor tier supplied
-by `scripts/lib/pvnp-phase3-v1-config.mjs`. Dry plan checks: full v2 shape
-planned 52/52 blocks; shard 0 of 4 planned 13/52 blocks.
+by `scripts/lib/pvnp-phase3-v1-config.mjs`. Pre-correction dry plan checks
+showed the registered shape: full 13-source x 4-seed battery planned 52/52
+blocks; shard 0 of 4 planned 13/52 blocks. The corrected v2b dry run must
+report the same 52/52 shape before execution.
 
 Scratch smoke command (not promotion evidence):
 
@@ -256,24 +311,24 @@ Primary send command for the fresh v2 holdout battery:
 
 ```powershell
 $ErrorActionPreference = "Stop"
-node scripts/pvnp-phase3-v1-holdout.mjs --out-root results/pvnp/phase3-capacity-one-wayness-v2/phase4-intervention-battery --seed-start 100000 --seed-start 110000 --seed-start 120000 --seed-start 130000 --dry-run
-node scripts/pvnp-phase3-v1-holdout.mjs --out-root results/pvnp/phase3-capacity-one-wayness-v2/phase4-intervention-battery --seed-start 100000 --seed-start 110000 --seed-start 120000 --seed-start 130000 --jobs 4
+node scripts/pvnp-phase3-v1-holdout.mjs --out-root results/pvnp/phase3-capacity-one-wayness-v2b/phase4-intervention-battery --seed-start 140000 --seed-start 150000 --seed-start 160000 --seed-start 170000 --dry-run
+node scripts/pvnp-phase3-v1-holdout.mjs --out-root results/pvnp/phase3-capacity-one-wayness-v2b/phase4-intervention-battery --seed-start 140000 --seed-start 150000 --seed-start 160000 --seed-start 170000 --jobs 4
 ```
 
 The full send command writes blocks under
-`results/pvnp/phase3-capacity-one-wayness-v2/phase4-intervention-battery/` and
+`results/pvnp/phase3-capacity-one-wayness-v2b/phase4-intervention-battery/` and
 the runner manifest to
-`results/pvnp/phase3-capacity-one-wayness-v2/holdout_runner_manifest.json`.
+`results/pvnp/phase3-capacity-one-wayness-v2b/holdout_runner_manifest.json`.
 
 Shard fallback, for four independent terminals or resumable operator batches:
 
 ```powershell
 $common = @(
-  "--out-root", "results/pvnp/phase3-capacity-one-wayness-v2/phase4-intervention-battery",
-  "--seed-start", "100000",
-  "--seed-start", "110000",
-  "--seed-start", "120000",
-  "--seed-start", "130000"
+  "--out-root", "results/pvnp/phase3-capacity-one-wayness-v2b/phase4-intervention-battery",
+  "--seed-start", "140000",
+  "--seed-start", "150000",
+  "--seed-start", "160000",
+  "--seed-start", "170000"
 )
 
 node scripts/pvnp-phase3-v1-holdout.mjs @common --shard-index 0 --shard-count 4 --jobs 1
@@ -291,8 +346,10 @@ are skipped.
 Measured v1 holdout cost from
 `results/pvnp/phase3-capacity-one-wayness-v1/holdout_runner_manifest.json`:
 52 blocks took 2,914,612 ms total (48.58 minutes), with block times from
-5,459 ms to 128,822 ms. The v2 fresh holdout battery must be operator-staged
-under the repository runtime rule unless sharded into sub-10-minute batches.
+5,459 ms to 128,822 ms. The pre-freeze v2 diagnostic battery measured 692,249
+ms (11.54 minutes) with `--jobs 4`. The corrected v2b fresh holdout battery
+must be operator-staged under the repository runtime rule unless sharded into
+sub-10-minute batches.
 
 ## Primary Gates
 
@@ -302,7 +359,7 @@ under the repository runtime rule unless sharded into sub-10-minute batches.
 | Raw recomputation | every v2 block recomputes from per-seed raw logs |
 | Privilege audit | no forbidden inputs in verifier, inversion diagnostics, or spoof scoring |
 | v0/v1 regression | v0 falsifier and v1 unsafe consensus rows remain non-promoting under unchanged promotion logic |
-| Fresh holdout completeness | all frozen v2 fresh holdout blocks present with raw trial logs |
+| Fresh holdout completeness | all frozen v2b fresh holdout blocks present with raw trial logs |
 | Signature accept floor | at least 2 of the 3 independent signature controllers are `consensus_accept` |
 | Fixed-attractor false accepts | 0 canonical L-Reward cells are `consensus_accept` |
 | Capacity-breach false accepts | 0 locked Phase 5 breach rows are `consensus_accept` |
@@ -317,6 +374,8 @@ under the repository runtime rule unless sharded into sub-10-minute batches.
 
 - If v1 data only is re-scored and no fresh v2 holdout is present:
   `posthoc_repair_diagnostic_named_quarantine`.
+- If only the pre-freeze seed-100000/110000/120000/130000 battery is scored:
+  `pre_freeze_holdout_diagnostic_named_quarantine`.
 - If the v0 falsifier or any v1/fresh unsafe cell consensus-accepts:
   `falsified_registered_cell`.
 - If no unsafe cell consensus-accepts but the signature accept floor fails:
@@ -334,9 +393,9 @@ under the repository runtime rule unless sharded into sub-10-minute batches.
 
 ## Required Outputs
 
-Draft output root:
+Draft output root for promotion-eligible successor execution:
 
-`results/pvnp/phase3-capacity-one-wayness-v2/`
+`results/pvnp/phase3-capacity-one-wayness-v2b/`
 
 Expected outputs after implementation:
 
@@ -361,7 +420,7 @@ Durable reviewed receipts belong under `docs/pvnp/receipts/`.
 
 ## Freeze Checklist
 
-Before freezing:
+Before corrected freeze:
 
 - [x] Verify all 13 holdout source paths / references. Done 2026-06-04:
       all 11 `.policy.json` sources exist on disk; the 2
@@ -370,15 +429,26 @@ Before freezing:
 - [x] Freeze exact v2 PowerShell commands or a v2 holdout runner that emits the
       same commands. Done 2026-06-04: sharded/smoke-capable holdout runner
       patched; v2 dry plan reports 52/52 blocks.
-- [ ] Confirm fresh seed starts `100000, 110000, 120000, 130000`, or change them
-      before freeze.
+- [x] Record the pre-freeze seed-100000/110000/120000/130000 execution as
+      diagnostic-only and non-promoting. Done 2026-06-04 local.
+- [x] Confirm corrected fresh seed starts
+      `140000, 150000, 160000, 170000`. Done 2026-06-04 local: selected as the
+      next mechanical disjoint four-block sequence after the quarantined
+      diagnostic battery.
 - [x] Decide whether to run the full 52-block battery operator-staged or shard
       into resumable sub-10-minute batches. Done 2026-06-04: primary path is
       operator-staged full run with `--jobs 4`; shard fallback is frozen as four
       resumable shards.
-- [ ] Freeze the disclosure-consensus output schema and status labels.
-- [ ] Add npm wiring only after freeze.
-- [ ] Implement the v2 harness only after freeze.
+- [x] Freeze the disclosure-consensus output schema and status labels. Done
+      2026-06-04 local: keep v1 `consensus_accept` / `consensus_reject` /
+      `consensus_quarantine`; add only `objective_conflict_status` values
+      `conflict_consensus`, `clean_consensus`, `block_unstable_disclosure`, and
+      `not_applicable`.
+
+Deferred until after corrected freeze:
+
+- [ ] Add npm wiring.
+- [ ] Implement the v2/v2b harness.
 
 ## Freeze Rule
 
@@ -395,6 +465,8 @@ Edits requiring a new slate id after freeze:
 - changing K, M, or fresh holdout seed starts;
 - dropping a registered population cell;
 - using v1 holdout data as promotion evidence;
+- using the pre-freeze seed-100000/110000/120000/130000 holdout battery as
+  promotion evidence;
 - dropping the v0/v1 regression gates;
 - using aggregate CSVs as a promotion source;
 - making inversion a promotion claim;

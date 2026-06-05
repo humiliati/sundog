@@ -216,11 +216,13 @@ Current state:
   disclosure flag. Signature floor passed 3/3. v0 stays falsified;
   `capacity_threshold <= small` unrevised. Receipt:
   [`receipts/2026-06-01_phase3_capacity_one_wayness_v1.md`](receipts/2026-06-01_phase3_capacity_one_wayness_v1.md).
-- Phase 3 capacity-relative one-wayness v2 disclosure slate opened for review:
-  2026-06-04. It does not revise v0 or v1. The draft keeps v1's promotion
-  consensus unchanged and targets only the disclosure aggregation failure:
-  a bridge-view consensus accept is unqualified only if the clean/no-conflict
-  side itself has stable consensus; a 2/2 objective-conflict split is reported
-  as block-unstable disclosed ambiguity. Because v2 is opened after reading the
-  v1 flag split, the v1 holdout is regression-only; any promotion-eligible v2
-  needs fresh source-bound holdout seeds after freeze.
+- Phase 3 capacity-relative one-wayness v2 disclosure slate opened for review
+  and then provenance-corrected/frozen: 2026-06-04. It does not revise v0 or
+  v1. The draft keeps v1's promotion consensus unchanged and targets only the
+  disclosure aggregation failure: a bridge-view consensus accept is unqualified
+  only if the clean/no-conflict side itself has stable consensus; a 2/2
+  objective-conflict split is reported as block-unstable disclosed ambiguity.
+  A full seed-100000/110000/120000/130000 holdout battery ran before the slate
+  status was frozen; it is clean on disk but diagnostic-only and cannot promote.
+  The promotion-eligible successor path is `phase3-capacity-one-wayness-v2b`
+  with fresh seeds `140000, 150000, 160000, 170000`.

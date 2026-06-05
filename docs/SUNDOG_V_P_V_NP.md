@@ -467,10 +467,12 @@ Status: v0 executed as a falsified registered cell
 repair strength `consensus-only repair`. The v1 unsafe-side repair works at
 consensus level (0 unsafe consensus accepts), but the run cannot promote because
 the `mixed_objective_laundering` disclosure gate fails on the protected mixed
-anchor `l_mixed_lambda_0_95_medium`. A v2 disclosure-consensus slate is opened
-for review; it keeps v1 promotion consensus unchanged and treats
-block-unstable objective-conflict flags as disclosed ambiguity, with fresh
-holdout required for promotion. See
+anchor `l_mixed_lambda_0_95_medium`. A v2 disclosure-consensus slate is
+provenance-corrected and frozen for a successor v2b holdout; it keeps v1
+promotion consensus unchanged and treats block-unstable objective-conflict
+flags as disclosed ambiguity. The seed-100000/110000/120000/130000 holdout ran
+before the slate status was frozen, so it is diagnostic-only. Promotion requires
+the corrected v2b fresh seeds `140000, 150000, 160000, 170000`. See
 [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V0_SLATE.md),
 [`pvnp/receipts/2026-05-31_phase3_capacity_one_wayness_v0.md`](pvnp/receipts/2026-05-31_phase3_capacity_one_wayness_v0.md),
 [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md),
@@ -691,7 +693,8 @@ baselines, reproduced metrics, and archived artifacts.
 - [`pvnp/receipts/2026-06-01_phase3_capacity_one_wayness_v1.md`](pvnp/receipts/2026-06-01_phase3_capacity_one_wayness_v1.md):
   Phase 3 v1 named-quarantine receipt; consensus-only repair.
 - [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V2_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V2_SLATE.md):
-  Phase 3 v2 disclosure-consensus slate opened for review.
+  Phase 3 v2 disclosure-consensus slate provenance-corrected and frozen for
+  successor v2b execution.
 - [`pvnp/RECEIPT_TEMPLATE.md`](pvnp/RECEIPT_TEMPLATE.md): receipt template
   for phase and probe results.
 - [`pvnp/receipts/README.md`](pvnp/receipts/README.md): receipt index —
