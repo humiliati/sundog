@@ -456,10 +456,11 @@ Sources:
 [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V1_SLATE.md),
 [`pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V2_SLATE.md`](pvnp/PHASE3_CAPACITY_ONE_WAYNESS_V2_SLATE.md).
 
-Status: `phase3-v2b-corrected-slate-frozen`, v6 and Phase 2 v1 bounded
+Status: `phase3-v2b-corrected-holdout-complete`, v6 and Phase 2 v1 bounded
 positive; Phase 3 v0 falsified registered cell; Phase 3 v1 consensus-only
 repair quarantined on disclosure drift; the pre-freeze v2 seed-100000/110000/
-120000/130000 holdout is diagnostic-only.
+120000/130000 holdout is diagnostic-only; the corrected v2b fresh holdout is
+complete but not yet scored.
 
 Current state:
 
@@ -485,21 +486,22 @@ objective-conflict flags as disclosed ambiguity rather than clean accept. A
 full seed-100000/110000/120000/130000 holdout battery ran before the status line
 was frozen, so that battery is diagnostic-only. Any promotion-eligible result
 must use the corrected v2b successor root with fresh seeds
-`140000, 150000, 160000, 170000`.
+`140000, 150000, 160000, 170000`. That corrected v2b fresh holdout battery is
+now complete on disk: 52/52 blocks, 0 failed, 52/52 raw trial logs saved.
 
 Blocker:
 
 The next move is not another Phase 1 cost repair or Phase 2 provenance repair.
 Those claim boundaries are fixed. The remaining open question is whether the
-corrected v2b fresh holdout battery preserves the v1 unsafe-side repair while
-closing the disclosure aggregation gap. The v1 holdout and the pre-freeze v2
-holdout can only serve as regression/diagnostic data.
+frozen v2/v2b disclosure-consensus harness scores the corrected v2b fresh
+holdout as preserving the v1 unsafe-side repair while closing the disclosure
+aggregation gap. The v1 holdout and the pre-freeze v2 holdout can only serve as
+regression/diagnostic data.
 
 Next actions:
 
-1. Run the corrected v2b fresh holdout battery from the frozen slate, or shard
-   it into resumable operator batches.
-2. Implement the v2/v2b disclosure-consensus harness against the frozen schema.
+1. Implement the v2/v2b disclosure-consensus harness against the frozen schema.
+2. Score the required v1 regression set and the corrected v2b fresh holdout.
 3. Do not widen K, retune the 0.5 observation line, or use v1 holdout data as
    promotion evidence.
 4. Carry forward the v6 boundary verbatim: op-count positive, wall-time

@@ -225,4 +225,6 @@ Current state:
   A full seed-100000/110000/120000/130000 holdout battery ran before the slate
   status was frozen; it is clean on disk but diagnostic-only and cannot promote.
   The promotion-eligible successor path is `phase3-capacity-one-wayness-v2b`
-  with fresh seeds `140000, 150000, 160000, 170000`.
+  with fresh seeds `140000, 150000, 160000, 170000`; its corrected fresh holdout
+  battery is now complete on disk (52/52 blocks, 0 failed, 52/52 raw trial logs
+  saved). No v2/v2b verifier verdict has been scored yet.

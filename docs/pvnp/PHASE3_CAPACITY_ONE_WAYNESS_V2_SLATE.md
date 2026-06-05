@@ -1,13 +1,16 @@
 # Phase 3 Capacity-Relative One-Wayness v2 Disclosure Slate
 
-Status: frozen for corrected successor execution (2026-06-04 local). The
+Status: frozen; corrected successor holdout executed (2026-06-04 local). The
 pre-freeze seed-100000/110000/120000/130000 holdout battery is quarantined as
 diagnostic-only and cannot promote a v2 bounded-positive receipt. The
 promotion-eligible successor path is `phase3-capacity-one-wayness-v2b` with
-fresh seed starts `140000, 150000, 160000, 170000`.
+fresh seed starts `140000, 150000, 160000, 170000`; that fresh holdout battery
+is complete on disk. The v2/v2b verifier harness has not yet been implemented
+or scored.
 
 Date opened: 2026-06-04
 Date provenance-corrected and frozen: 2026-06-04 local
+Date corrected holdout executed: 2026-06-04 local
 
 This is the natural repair slate after Phase 3 v1:
 [`receipts/2026-06-01_phase3_capacity_one_wayness_v1.md`](receipts/2026-06-01_phase3_capacity_one_wayness_v1.md).
@@ -51,6 +54,37 @@ only this pre-freeze battery must use a diagnostic verdict such as
 bounded-positive status. The corrected promotion-eligible path uses the next
 mechanical, disjoint seed starts `140000, 150000, 160000, 170000` and writes to
 the successor root `results/pvnp/phase3-capacity-one-wayness-v2b/`.
+
+## Corrected Holdout Execution
+
+The corrected v2b fresh holdout battery has now run under the frozen successor
+path.
+
+Disk facts:
+
+- root:
+  `results/pvnp/phase3-capacity-one-wayness-v2b/phase4-intervention-battery/`;
+- runner manifest:
+  `results/pvnp/phase3-capacity-one-wayness-v2b/holdout_runner_manifest.json`;
+- selected seed starts: `140000, 150000, 160000, 170000`;
+- source rows: 13/13;
+- planned blocks: 52/52;
+- blocks run: 52/52;
+- failed blocks: 0;
+- elapsed runner time: 750,922 ms (12.52 minutes) with `--jobs 4`;
+- per-block manifests checked: 52/52 present;
+- `trial_logs_saved: true`: 52/52;
+- seed count: 64 in every block;
+- trial pairs: 320 in every block;
+- horizon: 200 in every block;
+- sensor tier: `local-probe-field` in every block;
+- block manifest git SHA:
+  `c1f39b0b2bf71c98e5f5df6f87a84ea5525b4653` for all 52 blocks.
+
+This completes the fresh holdout input battery only. It is not a verifier
+verdict. The next required step is to implement the v2/v2b disclosure-consensus
+harness against the frozen schema and score both the required v1 regression set
+and this corrected v2b holdout.
 
 ## v1 Result Locked
 
@@ -447,6 +481,8 @@ Before corrected freeze:
 
 Deferred until after corrected freeze:
 
+- [x] Run the corrected v2b fresh holdout battery. Done 2026-06-04 local:
+      52/52 blocks complete, 0 failed, 52/52 `trial_logs_saved: true`.
 - [ ] Add npm wiring.
 - [ ] Implement the v2/v2b harness.
 
