@@ -51,6 +51,20 @@ Phase-4 synthesis:
   [`receipts/2026-06-04_certificate_syndrome_v1.md`](receipts/2026-06-04_certificate_syndrome_v1.md).
   Boundary: against Prange (upper bound vs better ISD), imports decoding hardness, no
   crypto/P-vs-NP claim. A stronger attacker class / scaled regime = a new slate.
+- [`SUNDOG_CERTIFICATE_SYNDROME_V2_SLATE.md`](SUNDOG_CERTIFICATE_SYNDROME_V2_SLATE.md)
+  — **DRAFT (opened for review, NOT frozen)**: the stronger-ISD tightening. Same
+  frozen `[128,64] w=12` regime and intended same targets as v1; freeze now requires
+  a replayed `target_manifest.json` because v1 interleaved target sampling with
+  Prange attack draws. Measures the witness-recovery `C` against a
+  **Prange→Lee-Brickell(p=2)→Stern(p=2,l=4)** attacker ladder in **ops** (the only
+  cross-attacker unit). Draft work-factor ladder expects `C` drops ~62× (LB) and
+  ~153× (Stern) vs Prange, but the freeze comparator must be a machine-readable
+  `prediction_lock.json` with formulas/constants/tolerance locked before frozen
+  scoring. Verdict branches: monotone-ladder-matching-prediction (bounded positive,
+  tightened bound `C_Stern`) / named model-deviation / non-monotone quarantine.
+  `C_Stern` is still an upper bound (BJMM/MMT = future slate). Per-file output bundle
+  pre-registered (per the v1 artifact note). Awaiting owner review + freeze; each
+  attacker smoke-validated on a throwaway regime before the frozen run.
 
 Lit-pass:
 
