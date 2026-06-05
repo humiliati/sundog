@@ -352,6 +352,8 @@ def main():
     ap.add_argument("--seeds", type=int, nargs="+", default=[0, 1, 2])
     ap.add_argument("--smoke", action="store_true", help="d=128, 1 seed, full training, n_fp=1000")
     ap.add_argument("--dev", action="store_true", help="tiny self-test: d=64, 40 steps, n_fp=300")
+    ap.add_argument("--allow-cpu", action="store_true",
+                    help="permit CPU execution (default: refuse, since the CPU path is hours-slow)")
     args = ap.parse_args()
 
     if args.smoke:
@@ -367,6 +369,13 @@ def main():
 
     out = Path(args.out); out.mkdir(parents=True, exist_ok=True)
     device = "cuda" if torch.cuda.is_available() else "cpu"
+    if device == "cpu" and not (args.allow_cpu or args.dev):
+        print(f"[ABORT] CUDA not available (torch {torch.__version__}). You are almost certainly on "
+              f"the wrong interpreter — use the GPU venv:\n"
+              f"  C:/Users/hughe/.venvs/sundog-gpu/Scripts/python.exe scripts/jepa_0d_accumulator.py "
+              f"{'--smoke ' if args.smoke else ''}--out {args.out}\n"
+              f"The CPU path is hours-slow (handoff footgun). Pass --allow-cpu to override.", flush=True)
+        raise SystemExit(2)
     print(f"[cfg] device={device} dims={args.dims} seeds={args.seeds} "
           f"smoke={args.smoke} dev={args.dev} n_fp={acc.n} steps={tcfg.max_steps} "
           f"mask=whole_checkpoint mask_reads={tcfg.mask_reads}", flush=True)

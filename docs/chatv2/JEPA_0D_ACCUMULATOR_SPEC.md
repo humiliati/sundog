@@ -258,11 +258,16 @@ path to AGI"; any statement about real I-JEPA/V-JEPA/LLM behaviour; R2/R3 / "mor
 
 ## 12. Run order
 
+**Interpreter (load-bearing):** all model-training commands MUST use the GPU venv
+`C:/Users/hughe/.venvs/sundog-gpu/Scripts/python.exe` (torch 2.5.1+cu121). Bare `python` may resolve
+to a system Python with a CPU-only torch — the runner now ABORTS on CPU unless `--allow-cpu`
+(the CPU path is hours-slow; handoff footgun, hit once on 2026-06-05).
+
 1. **Operator lock review** (this doc) — especially the §3.1 mask re-pose and the predict-ahead
    alternative.
 2. **Model-free preflight — DONE.** `preflight_pass_ready_for_spec` (§5).
    ```powershell
-   python scripts/jepa_0d_accumulator_preflight.py --out results/chatv2/jepa-0d-accumulator-preflight
+   C:/Users/hughe/.venvs/sundog-gpu/Scripts/python.exe scripts/jepa_0d_accumulator_preflight.py --out results/chatv2/jepa-0d-accumulator-preflight
    ```
 3. **Runner — BUILT + dev-validated** at `scripts/jepa_0d_accumulator.py` (reuses `TinyGPT` / `_std`
    from `chatv2_phase0_bodyresist`, imports the frozen substrate from
@@ -272,19 +277,19 @@ path to AGI"; any statement about real I-JEPA/V-JEPA/LLM behaviour; R2/R3 / "mor
    `--dev` self-test (d=64, 40 steps, ~13s) exercised every path end-to-end (no science, plumbing
    only).
    ```powershell
-   python scripts/jepa_0d_accumulator.py --dev --out results/chatv2/jepa-0d-accumulator-dev
+   C:/Users/hughe/.venvs/sundog-gpu/Scripts/python.exe scripts/jepa_0d_accumulator.py --dev --out results/chatv2/jepa-0d-accumulator-dev
    ```
 4. **Smoke (operator-staged, ~20 min est.; L=246 ≈ 1.3× the parity L=192 ⇒ ~1.3× the ~15.5-min
    parity smoke).** Clean launch (no `2>&1 | Tee-Object`; verify the process is alive). Stops after:
    de-confound replay, GEN positive control, JEPA collapse guard, JEPA `u_det` gate, one flip-read
    sanity.
    ```powershell
-   python scripts/jepa_0d_accumulator.py --smoke --out results/chatv2/jepa-0d-accumulator-smoke
+   C:/Users/hughe/.venvs/sundog-gpu/Scripts/python.exe scripts/jepa_0d_accumulator.py --smoke --out results/chatv2/jepa-0d-accumulator-smoke
    ```
 5. **Only if smoke clears `u_det ≥ 0.70`:** lock battery `{128,256} × 3 seeds` (operator-staged,
    ~2 h est.).
    ```powershell
-   python scripts/jepa_0d_accumulator.py --out results/chatv2/jepa-0d-accumulator-lock
+   C:/Users/hughe/.venvs/sundog-gpu/Scripts/python.exe scripts/jepa_0d_accumulator.py --out results/chatv2/jepa-0d-accumulator-lock
    ```
    **Do not run the lock battery if `u_det` fails.**
 

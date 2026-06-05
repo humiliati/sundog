@@ -217,6 +217,21 @@ Filed receipts:
   reproduces the v1/pre-freeze/v2b seen batteries digit-for-digit. Op total
   166,466,367 (deterministic); wall-time diagnostic-only. v0/v1/v2b not revised.
 
+- [`2026-06-04_certificate_syndrome_v1.md`](2026-06-04_certificate_syndrome_v1.md):
+  Phase 4 / §5 of the Sundog Certificate Problem; verdict = **bounded positive —
+  measured capacity-relative one-wayness (against Prange ISD)**. On the frozen
+  non-enumerable `[128,64]` GF(2) regime (`C(128,12)=2.37×10¹⁶`), recovering a light
+  deviation witness `e*` from the syndrome `z` (= syndrome decoding) is capacity-hard
+  while the witness-verifier is cheap and flat (16,576 ops). The Prange-ISD invert-`e`
+  curve rises `0→1` with the 50%-breakpoint **on the pre-registered prediction**
+  (`B≈5007` rank-valid trials, max |Δ|=0.031); average attacker cost to recover one
+  witness ≈4.5×10⁹ ops → **find-vs-check gap ≈2.7×10⁵×**. The lane's **first measured
+  capacity threshold** (`capacity_threshold` was `not_estimated` in every Phase-1
+  receipt). `s` unconditionally hidden (2⁶⁴/syndrome); spoof structurally impossible;
+  rank-valid `B` convention audited (1,191,143 rank-fail draws). Honest boundary:
+  threshold is against Prange (upper bound vs better ISD), imports decoding hardness,
+  no crypto/P-vs-NP claim. Determinism by construction + smoke-confirmed.
+
 Receipt filenames should use:
 
 `YYYY-MM-DD_phase-or-probe_short-slug.md`

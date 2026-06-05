@@ -1,15 +1,16 @@
 # Sundog Certificate Problem — Syndrome Certificate v1 Capacity Slate
 
-Status: **FROZEN for implementation (2026-06-04 local).** The three pre-freeze
-review repairs are reconciled across all artifacts: the existence safety predicate
-`Safe(y) := ∃ e* : He* = Hy ∧ wt(e*) ≤ τ` (planted `e` a label only), the parent-doc
-framing aligned to invert-`e` / light-witness recovery (spoof structurally
-impossible), and the Prange rank-valid `B` convention. The regime, seeds, attacker
-class, ladder, and prediction table are now locked. No v1 attacker run may execute
-against the frozen regime until the post-freeze Prange ISD attacker is implemented
-and smoked on a **throwaway** regime; the frozen-regime run is the next
-operator-gated step. (Freeze-before-execute discipline, per the lane: the Phase-3 v2
-pre-freeze battery was generated before its slate froze and had to be quarantined.)
+Status: **FROZEN then EXECUTED (2026-06-04 local) → BOUNDED POSITIVE.** The three
+pre-freeze review repairs were reconciled across all artifacts (existence predicate
+`Safe(y) := ∃ e* : He* = Hy ∧ wt(e*) ≤ τ`; invert-`e`/light-witness framing; Prange
+rank-valid `B` convention); the regime, seeds, attacker class, ladder, and prediction
+table were locked; the Prange ISD attacker was smoke-validated on a throwaway regime;
+then the frozen `[128,64]` run executed. **Verdict: measured capacity-relative
+one-wayness (against Prange ISD)** — the invert-`e` curve rises `0→1` with the
+50%-breakpoint **on the pre-registered prediction** (`B≈5007`, max |Δ|=0.031), the
+verifier check is flat at 16,576 ops, and the find-vs-check gap is **≈2.7×10⁵×**. The
+lane's first measured capacity threshold. Receipt:
+[`receipts/2026-06-04_certificate_syndrome_v1.md`](receipts/2026-06-04_certificate_syndrome_v1.md).
 
 Date opened: 2026-06-04
 
@@ -21,8 +22,8 @@ measured capacity-relative one-wayness threshold**. The mechanism is already
 verified on a toy regime (P1/P2/P3 + the find-vs-check curve), see
 [`SUNDOG_CERTIFICATE_SYNDROME_PROTOTYPE_NOTE.md`](SUNDOG_CERTIFICATE_SYNDROME_PROTOTYPE_NOTE.md)
 and `scripts/pvnp-certificate-syndrome.py`. v1 scales the regime so it is
-non-enumerable, replaces the naive forger with a real attacker, and freezes the
-contract.
+non-enumerable, replaces the naive witness-recovery attacker with a real attacker,
+and freezes the contract.
 
 ## What v1 measures
 
@@ -213,7 +214,7 @@ A durable reviewed receipt belongs under `docs/pvnp/receipts/`.
 - [x] Implement the ISD attacker (`scripts/pvnp-certificate-syndrome-v1.py`,
       Prange ISD with the rank-valid `B` convention) and smoke it on a **throwaway**
       `[64,32] w=6` regime (code_seed 999, not the frozen one). Done 2026-06-04,
-      deterministic: the measured forge curve matches the analytic `1−(1−p)^B`
+      deterministic: the measured witness-recovery curve matches the analytic `1−(1−p)^B`
       (max |Δ| = 0.044 < 0.12; breakpoint at B≈83 = N), rank-fail draws audited
       (14,715, charged to ops not to `B`), verifier check flat at 4,192 ops.
       **ISD validated → the prediction table is a valid comparator for the frozen

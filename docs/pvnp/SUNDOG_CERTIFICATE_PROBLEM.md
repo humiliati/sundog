@@ -7,9 +7,14 @@ substrate migration off mesa, and one constructed instance.
 
 Companion to [`../SUNDOG_V_P_V_NP.md`](../SUNDOG_V_P_V_NP.md) (the roadmap and the
 registered definitions §4–§6 this document tightens) and the Phase 1–3 receipts in
-[`receipts/`](receipts/). Status: **design / existence note.** It introduces no new
-slate and makes no measured promotion claim; its one constructed instance is an
-existence proof whose capacity curve is **unrun** (see §6).
+[`receipts/`](receipts/). Status: **design synthesis with a measured instance.** Its
+one constructed instance (the syndrome/SIS certificate) has now been run on a frozen
+non-enumerable regime → a **measured capacity-relative one-wayness threshold against
+Prange ISD** (§5.1; receipt
+[`2026-06-04_certificate_syndrome_v1.md`](receipts/2026-06-04_certificate_syndrome_v1.md)).
+The §6 "UNVERIFIED-BY-RUN" risk is thereby resolved for this regime; the standing
+boundary is that the threshold is against a named attacker (Prange) and imports
+decoding hardness — no cryptographic one-wayness or P-vs-NP claim.
 
 ---
 
@@ -397,10 +402,11 @@ the verify-first pass that v4 never got. All three §4 properties hold by measur
 **P1** `z=He` is independent of `s` (2²⁴ secrets per syndrome — lossy by algebra);
 **P2** check = 2,376 ops vs naive decode ≈5.1M (~2,150× cheaper), with 0 false
 accepts / 0 false rejects; **P3** `z` is invariant under an `s`-flip (`s` one-way).
-The find-vs-check capacity curve is present: forge success rises 0.00 → 0.04 → 0.38
-→ 1.00 with attacker budget while check ops stay flat at 2,376 — a visible
-breakpoint. Honest limits: a toy regime, a naive (non-ISD) forger, imported decoding
-hardness, and a degenerate cheap-reject branch (RISK 1). See
+The find-vs-check capacity curve is present: witness recovery rises
+0.00 → 0.04 → 0.38 → 1.00 with attacker budget while check ops stay flat at
+2,376 — a visible breakpoint. Honest limits: a toy regime, a naive non-ISD
+witness-recovery attacker, imported decoding hardness, and a degenerate
+cheap-reject branch (RISK 1). See
 [`SUNDOG_CERTIFICATE_SYNDROME_PROTOTYPE_NOTE.md`](SUNDOG_CERTIFICATE_SYNDROME_PROTOTYPE_NOTE.md)
 and `scripts/pvnp-certificate-syndrome.py`. The frozen, scaled, ISD-attacker run
 remains the step that earns a measured capacity threshold — pre-registered in the
@@ -411,6 +417,18 @@ capacity ladder with a pre-registered breakpoint at ~5,000 iterations / ~2.6×10
 ops vs the 8,192-op flat check; the measured `C` is honestly a threshold against
 Prange ISD).
 
+**The frozen run has now executed (2026-06-04) → bounded positive.** On the frozen
+`[128,64]` regime the Prange-ISD invert-`e` curve rises `0.000 → 1.000` with the
+**50%-breakpoint landing on the pre-registered prediction** (`B≈5007` rank-valid
+trials, max |Δ| = 0.031 across the ladder), the witness-verifier is flat at 16,576
+ops, and the average attacker cost to recover one witness is ≈4.5×10⁹ ops → a measured
+**find-vs-check gap ≈2.7×10⁵×**. This is the lane's **first measured capacity-relative
+one-wayness threshold** (`capacity_threshold` was `not_estimated` in every Phase-1
+receipt), and it converts this constructed instance from existence proof to a measured
+Sundog receipt. The threshold is against Prange ISD (an upper bound vs better ISD);
+the rank-valid `B` convention was audited (1,191,143 rank-fail draws). Receipt:
+[`receipts/2026-06-04_certificate_syndrome_v1.md`](receipts/2026-06-04_certificate_syndrome_v1.md).
+
 ---
 
 ## 6. Open risks and what would falsify this
@@ -418,12 +436,14 @@ Prange ISD).
 Led by the biggest, because the lane's last design (the v4 basin channel) *looked*
 sound on paper and was falsified before freeze by an actual run.
 
-1. **UNVERIFIED-BY-RUN (the v4 analogy).** No ISD attacker has been run; the
-   two-sided capacity curve in §5 does not yet exist. Candidate A is an existence
-   proof / design, **not** a measured result, and must be presented as such. The v4-A
-   precedent is the standing warning: a mechanism sound on paper (the basin channel)
-   was killed by measurement (signature 0.431 vs reward 0.558, ratio 1.29×). Do not
-   rest the capacity-relative claim on A until §5 has produced the curve.
+1. **~~UNVERIFIED-BY-RUN~~ RESOLVED for the frozen `[128,64]` regime (2026-06-04).**
+   The §5 two-sided capacity curve has now been run: the Prange-ISD invert-`e` curve
+   matched the pre-registered prediction (breakpoint on target, max |Δ|=0.031) — the
+   verify-first PASS, contrasting the v4-A precedent where a paper-sound mechanism was
+   killed by measurement. Residual scope: the threshold is against **Prange** (an
+   upper bound vs better ISD), on a non-enumerable but bounded-scale regime, and
+   imports decoding hardness — so the capacity-relative claim is measured-but-bounded,
+   not asymptotic. A stronger attacker class or scaled regime is a new slate.
 2. **The cheap weight bound may be as hard as decoding.** A *tight*
    `dist(y, Code(G)) ≤ τ` bound from the syndrome can itself be decoding-hard
    (reopening 6.4). Mitigation:
@@ -461,7 +481,9 @@ sound on paper and was falsified before freeze by an actual run.
 **Not established (explicit non-goals):** no cryptographic one-wayness; no claim that
 verification is "polynomial" or "in P"; no general alignment verification; no
 wall-time cheapness; no body-resistance / Sundog-regime-2 result; no progress on P vs
-NP; and **no measured capacity threshold** — §5 is the experiment that would earn it.
+NP; and **no asymptotic / best-attacker capacity threshold** — §5 earned a *measured*
+threshold against Prange ISD on a bounded-scale regime (`C ≈ 5,007` trials,
+gap ≈2.7×10⁵×), which is an upper bound, not an asymptotic security claim.
 
 The honest endpoint: Sundog has a precise object, three cleanly separated and
 correctly-bounded claims, a reasoned migration off the marginal mesa substrate, and a

@@ -41,8 +41,16 @@ Phase-4 synthesis:
   (sound verifier). **FROZEN 2026-06-04** after three pre-freeze repairs (existence
   predicate `Safe(y):=∃e*`, parent-doc invert-`e` framing, Prange rank-valid `B`
   convention) reconciled across all artifacts; seeds locked (code_seed 2026128,
-  body-base 7000000, T=64). Next: implement the Prange ISD attacker + smoke on a
-  throwaway regime, then the operator-gated frozen-regime run → the receipt.
+  body-base 7000000, T=64), Prange ISD smoke-validated, then **EXECUTED 2026-06-04 →
+  BOUNDED POSITIVE (measured capacity-relative one-wayness against Prange ISD)**: the
+  invert-`e` curve rose `0→1` with the 50%-breakpoint **on the pre-registered
+  prediction** (`B≈5007`, max |Δ|=0.031), verifier check flat at 16,576 ops, average
+  attacker cost ≈4.5×10⁹ ops/witness → **find-vs-check gap ≈2.7×10⁵×** — the lane's
+  first measured capacity threshold. Rank-valid `B` convention audited (1.19M
+  rank-fail draws). Receipt
+  [`receipts/2026-06-04_certificate_syndrome_v1.md`](receipts/2026-06-04_certificate_syndrome_v1.md).
+  Boundary: against Prange (upper bound vs better ISD), imports decoding hardness, no
+  crypto/P-vs-NP claim. A stronger attacker class / scaled regime = a new slate.
 
 Lit-pass:
 
