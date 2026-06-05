@@ -210,9 +210,15 @@ A durable reviewed receipt belongs under `docs/pvnp/receipts/`.
       1024 / Large 16384 / XL 32768). Done.
 - [x] Freeze the Prange rank convention: `B` counts rank-valid information-set
       trials; rank-fail draws are charged to measured ops and audited separately. Done.
-- [ ] Implement the ISD attacker (a separate, post-freeze build) and smoke it on a
-      **throwaway** small regime (not the frozen one) to confirm it matches the
-      analytic prediction before the frozen run.
+- [x] Implement the ISD attacker (`scripts/pvnp-certificate-syndrome-v1.py`,
+      Prange ISD with the rank-valid `B` convention) and smoke it on a **throwaway**
+      `[64,32] w=6` regime (code_seed 999, not the frozen one). Done 2026-06-04,
+      deterministic: the measured forge curve matches the analytic `1−(1−p)^B`
+      (max |Δ| = 0.044 < 0.12; breakpoint at B≈83 = N), rank-fail draws audited
+      (14,715, charged to ops not to `B`), verifier check flat at 4,192 ops.
+      **ISD validated → the prediction table is a valid comparator for the frozen
+      run.** The frozen `[128,64]` run is the remaining operator-gated step
+      (`python scripts/pvnp-certificate-syndrome-v1.py`, no `--smoke`).
 - [x] Re-affirm: the inverter sees only `z`; planted `e`/`wt(e)`/`s` are scoring-only.
       Affirmed.
 

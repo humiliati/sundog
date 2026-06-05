@@ -28,6 +28,20 @@ still failed the `u_det >= 0.70` control, so Phase 0 lands
 2026-06-04 strategy pivot demoted — so it carries an explicit **kill-gate** (below), not an
 open-ended program.
 
+**JEPA-0D fork (2026-06-05) — the fairer substrate.** Per `docs/chatv2/JEPA_0D_HANDOFF.md`, the
+diagnosis of the parity failure is that the shared source `u` was *arbitrary* from JEPA's view, so
+the encoder matched masked target embeddings without isolating it. The fork builds an
+**accumulator/count substrate** where masked structure *depends on* a running bounded count `u_t`,
+giving a predictive JEPA objective a native reason to keep it. The model-free de-confound preflight
+(`scripts/jepa_0d_accumulator_preflight.py`) **PASSED and was adversarially verified** (5 agents):
+raw-linear `u_det` floored at −0.05, deterministic oracle recovers `u_t` at 0.994, no starvation,
+and a new mask-necessity gate showed a random latent mask reproduces the parity failure (same-ckpt
+XOR shortcut det 0.56) — so the spec **re-poses the mask to whole-checkpoint** (shortcut → 0.131,
+event→`u_t` path 0.99). Spec drafted + self-consistency-reviewed at
+`docs/chatv2/JEPA_0D_ACCUMULATOR_SPEC.md`; runner built + dev-validated at
+`scripts/jepa_0d_accumulator.py`. The decisive **gate-4 `u_det ≥ 0.70`** (where parity died) is
+operator-staged and unrun. Same kill-gate discipline: if gate-4 fails again, shelve.
+
 This is not a claim about AGI, world models, real LLMs, or whether LeCun is right. It is
 a measurement question about what a JEPA-trained representation keeps and discards, asked
 first on a synthetic toy.

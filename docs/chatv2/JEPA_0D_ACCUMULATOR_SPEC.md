@@ -1,7 +1,7 @@
 # JEPA-0D — Accumulator / Count Substrate (spec)
 
-> 2026-06-05. **STATUS: mask policy LOCKED (whole-checkpoint, operator 2026-06-05); under
-> adversarial self-consistency review before runner build.** Model-free preflight is COMPLETE
+> 2026-06-05. **STATUS: mask policy LOCKED (whole-checkpoint, operator 2026-06-05);
+> self-consistency review PASSED; runner built + dev-validated; smoke operator-staged.** Model-free preflight is COMPLETE
 > and PASSED (`preflight_pass_ready_for_spec`); no model battery has been run. Implements the
 > JEPA-0D fork of `docs/SUNDOG_V_JEPA.md` per `docs/chatv2/JEPA_0D_HANDOFF.md`. Tier **R1 (toy)**.
 > Kill-gated R&D (2026-06-04 strategy pivot).
@@ -264,10 +264,16 @@ path to AGI"; any statement about real I-JEPA/V-JEPA/LLM behaviour; R2/R3 / "mor
    ```powershell
    python scripts/jepa_0d_accumulator_preflight.py --out results/chatv2/jepa-0d-accumulator-preflight
    ```
-3. **Build the runner** `scripts/jepa_0d_accumulator.py` (post-lock; reuses `TinyGPT` /
-   `train_generative` / collapse guard / JSON cleaning from `jepa_phase0_noise_carry.py`; new:
-   accumulator generator import, whole-checkpoint mask, checkpoint `u_det` read, flip read pooled
-   across channels).
+3. **Runner — BUILT + dev-validated** at `scripts/jepa_0d_accumulator.py` (reuses `TinyGPT` / `_std`
+   from `chatv2_phase0_bodyresist`, imports the frozen substrate from
+   `jepa_0d_accumulator_preflight` so runner/preflight cannot drift; new: whole-checkpoint mask +
+   per-sample target gather, checkpoint `u_det` read at the event-integration position,
+   masked-context flip read that keeps the target checkpoint visible, pooled across channels). A
+   `--dev` self-test (d=64, 40 steps, ~13s) exercised every path end-to-end (no science, plumbing
+   only).
+   ```powershell
+   python scripts/jepa_0d_accumulator.py --dev --out results/chatv2/jepa-0d-accumulator-dev
+   ```
 4. **Smoke (operator-staged, ~20 min est.; L=246 ≈ 1.3× the parity L=192 ⇒ ~1.3× the ~15.5-min
    parity smoke).** Clean launch (no `2>&1 | Tee-Object`; verify the process is alive). Stops after:
    de-confound replay, GEN positive control, JEPA collapse guard, JEPA `u_det` gate, one flip-read
