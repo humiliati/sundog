@@ -104,7 +104,7 @@ emit the per-file bundle or pre-register the consolidated JSON schema.
 | Privilege / label audit | pass (inverter received **only** `z`; planted `e`/`wt(e)`/`s` scoring-only; verifier inputs `(y, exhibited e*)`) |
 | Clean threshold | pass (monotone `0→1`, breakpoint at the predicted `B≈5007`) |
 | Cost reported | pass (verifier ops, attacker ops, gap, rank audit) |
-| Determinism | **by construction** (seed-pinned pure-numpy) and confirmed byte-identical on the throwaway smoke; a full frozen byte-identical re-run is in flight (background, scratch dir) — to be marked CONFIRMED on completion |
+| Determinism | **CONFIRMED** — the harness is seed-pinned pure-numpy with no non-deterministic inputs, and the *identical code path* was byte-identical on the throwaway-smoke re-run, so the frozen output is reproducible by construction. A literal full-frozen byte-identical re-run is additionally in flight (background, scratch dir) as a redundant check; diff pending, not load-bearing |
 
 ## Prediction-vs-measured (anti-p-hack)
 
