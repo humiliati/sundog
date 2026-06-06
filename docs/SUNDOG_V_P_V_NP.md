@@ -746,6 +746,13 @@ baselines, reproduced metrics, and archived artifacts.
 - [`pvnp/receipts/README.md`](pvnp/receipts/README.md): receipt index —
   Phase 1 v0–v5 named-quarantine receipts plus the v6 and Phase 2 v1
   bounded-positive receipts.
+- [`pvnp/DIRECTIONB_GATE0_NOTE.md`](pvnp/DIRECTIONB_GATE0_NOTE.md): Direction-B
+  ("demonstrate, not import" the certificate hardness as an emergent property of a trained body)
+  — closed by measurement (2026-06-05); emergent leg-(d) one-wayness not available; one-wayness is
+  the imported leg. Converts `SUNDOG_CERTIFICATE_PROBLEM.md` §6 RISK-4 to a measured boundary.
+- [`pvnp/PVNP_DC_HANDOFF.md`](pvnp/PVNP_DC_HANDOFF.md): Tracks D (certificate framework as the Ask
+  Sundog widget's theory-spine + compander thread) & C (portfolio paper) handoff — scaffolded for
+  execution **after** the live v2 stronger-ISD frozen run files its receipt.
 
 ## 11. Cross-References
 
