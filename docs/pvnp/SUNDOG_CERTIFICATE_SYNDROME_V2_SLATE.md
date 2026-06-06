@@ -58,8 +58,8 @@ far fewer iterations), so the only fair cross-attacker capacity unit is **operat
 `C_attacker := the measured op-count budget at which that attacker reaches 50%
 witness recovery` over the `T` targets. Each attacker also reports its natural
 iteration budget and its valid-iteration audit. The robust ladder claim is that
-`C_Prange > C_LB` resolves cleanly in ops; the LB→Stern step is small (~1.35× at
-`w=12`) and may be within `T=64` noise, so it is reported as separately resolved or
+`C_Prange > C_LB` resolves cleanly in ops; the LB→Stern step is small (~1.11× at
+`w=12`, locked) and is within `T=64` noise, so it is reported as separately resolved or
 within-noise rather than used as a hard monotonicity tripwire.
 
 ## Frozen regime (code identical to v1; targets decoupled)
@@ -104,47 +104,57 @@ to these algorithms with these parameters; each must reproduce a valid witness
 
 ## Pre-registered prediction (the comparator)
 
-Draft work-factor target on `[128,64] w=12`. Per-iteration cost models (documented;
-the throwaway smoke re-calibrates the constants): Prange/LB ≈ `(n−k)³ = 2.62×10⁵`
-Gauss ops, LB plus `C(k,p)·(n−k)` to score the info-set patterns; **Stern** additionally
-`2·C(k/2,p)·l` (list build) + `C(k/2,p)²/2^l · (n−k)` (collision scoring) — this
-collision term is what the prose draft omitted, and why the cost-optimal window is
-`l=8`, not `l=4`.
+**Locked** work factors on `[128,64] w=12`, from the two-size throwaway-smoke
+calibration (`prediction_lock.json`; see Locked formulas). Per-iteration cost
+decomposes exactly as `per_iter = base(m) + enum`: `base(m)` is the shared
+systematic-form work (Gaussian elimination + the `U·H`/`U·z` matmul) **with the
+measured rank-fail overhead `ρ≈3.46` folded in**, fit empirically as
+`base(m)=3.95·m^3.07` on two throwaway sizes (`[80,40]`, `[120,60]`; `m=40,60`) →
+`base(64)=1.39×10⁶` ops; `enum` is the attacker-specific enumeration, analytically
+op-counted (`0` for Prange, `C(k,p)(p+1)m` for LB, `2C(k/2,p)pl +
+(C(k/2,p)²/2^l)(3p+1)m` for Stern) and validated against measurement at both smoke
+sizes (within 2–11%). The draft's gauss-only `(n−k)³=2.62×10⁵` per-iter estimate
+omitted the `U·H` matmul (`≈2m³`, so the base scales `~m³` — fit β=3.07) and the
+rank-fail overhead, making the calibrated base ~5× higher; the **drops** (ratios,
+instrumentation-invariant) are what the experiment tests.
 
-| Attacker | iters `N` | per-iter ops | work `W` (ops) | predicted `C` drop vs Prange |
+| Attacker | iters `N` | per-iter ops | work `C`(ops)@50% | `C` drop vs Prange |
 | --- | ---: | ---: | ---: | ---: |
-| Prange (v1) | 7,224 | 2.62×10⁵ | **1.9×10⁹** | 1× (v1 measured `C≈5007` trials / ~3×10⁹ ops at 50%) |
-| Lee-Brickell p=2 | 78 | 3.91×10⁵ | **3.0×10⁷** | **≈ 62×** |
-| Stern p=2, l=8 | 68 | 3.32×10⁵ | **2.3×10⁷** | **≈ 84×** |
+| Prange (re-baselined) | 7,224 | 1.39×10⁶ | **6.98×10⁹** | 1× |
+| Lee-Brickell p=2 | 78 | 1.78×10⁶ | **9.59×10⁷** | **≈ 72.8×** |
+| Stern p=2, l=8 | 68 | 1.84×10⁶ | **8.66×10⁷** | **≈ 80.6×** |
 
-**Draft expected ladder:** `C_Stern (~84×) < C_LB (~62×) < C_Prange (1×)` — monotone,
-but **compressed at this small `w`: Stern beats LB by only ~1.35×**, because Stern's
-collision overhead nearly cancels its iteration advantage when `w=12`. (Stern's
-dramatic win is a *large-`w`* phenomenon — e.g. `[256,128] w=24` predicts ~2,757× over
-Prange; that is the scaled-regime lever, a separate slate.) The compressed LB↔Stern
-margin means the `prediction_lock.json` tolerance and the `T=64` sampling noise must be
-tight enough to resolve a ~1.35× gap, or the LB↔Stern ordering is reported as
-**within-noise (not separately resolved)** rather than as a violated monotone gate.
-The run measures each attacker's witness-recovery curve vs an op budget, locates each
-50%-breakpoint `C(ops)`, and reports whether the measured drops match the locked
-prediction; a measured drop far from it is itself the finding.
+**Locked expected ladder:** `C_Stern (~81×) < C_LB (~73×) < C_Prange (1×)` — monotone,
+but **compressed at this small `w`: Stern beats LB by only ~1.11×** (`C_best = min(C_LB,
+C_Stern) = 8.66×10⁷` ops, Stern-set), because Stern's collision overhead nearly cancels
+its iteration advantage when `w=12`. (Stern's dramatic win is a *large-`w`* phenomenon —
+e.g. `[256,128] w=24`; that is the scaled-regime lever, a separate slate.) The
+compressed LB↔Stern margin means the `T=64` sampling noise cannot be expected to resolve
+a ~1.11× gap, so the LB↔Stern ordering is reported as **within-noise (not separately
+resolved)** rather than as a violated monotone gate. The run measures each attacker's
+witness-recovery curve vs an op budget, locates each 50%-breakpoint `C(ops)`, and reports
+whether the measured drops match the locked prediction; a measured drop far from it is
+itself the finding.
 
-**Freeze requirement:** before any frozen-regime attacker run, replace this draft
-planning table with a machine-readable `prediction_lock.json` that records, for each
-attacker, the exact success-probability formula, valid-iteration definition, op-count
-formula, calibrated constants from throwaway smoke only, predicted 50% `C(ops)`, and
-the frozen tolerance. Updating constants after seeing frozen-target results voids the
-run. The prose table is not enough for freeze.
+**Freeze requirement (status: prediction produced):** the table above is the **locked**
+prediction, recorded machine-readably in `prediction_lock.json` (produced by the two-size
+throwaway smoke — per-attacker success-probability formula, valid-iteration definition,
+op-count formula, calibrated `base(m)` fit + analytic `enum`, predicted 50% `C(ops)`,
+`C_best`, and the frozen tolerance). Before the frozen run, copy `prediction_lock.json`
+from the transient `results/` dir to a durable committed location (alongside this slate or
+in the receipt). Updating constants after seeing frozen-target results voids the run.
 
 ### Locked formulas (the `prediction_lock.json` contract)
 
 For each attacker: a **success-probability per valid iteration** `p` (pure
 combinatorics, no free constants), an **iteration count** `N = 1/p`, a **per-iteration
-op-count** with named constants, the **work** `W = N·per_iter`, and the predicted
-**50% threshold** `C(ops) = N·ln2·per_iter·ρ` where `ρ` is the measured rank-fail
-overhead factor. The constants (`c_gauss, c_score, c_list, c_collide, ρ`) are
-calibrated on the **throwaway smoke only** and then locked; they may not move after a
-frozen target is scored.
+op-count** `per_iter = base(m) + enum`, and the predicted **50% threshold**
+`C(ops) = N·ln2·per_iter`. `base(m)` is the shared gauss+matmul work **with the measured
+rank-fail overhead `ρ≈3.46` folded in** (Prange's per-iter is the base probe, since Prange
+does no enumeration); `enum` runs once per valid iteration and is the analytic op-count
+(not ρ-inflated, so ρ is not applied a second time). The `base(m)=α·m^β` fit and the
+`enum` op-counts are calibrated on the **two-size throwaway smoke only** and then locked;
+they may not move after a frozen target is scored.
 
 - **Prange:** `p = C(n−k,w)/C(n,w)`; `per_iter = c_gauss`.
 - **Lee-Brickell (p):** `p = C(k,p)·C(n−k,w−p)/C(n,w)`; `per_iter = c_gauss +
@@ -153,10 +163,12 @@ frozen target is scored.
   2·C(k/2,p)·c_list + (C(k/2,p)²/2^l)·c_collide`. The collision term
   `(C(k/2,p)²/2^l)·c_collide` is mandatory and is what makes `l=8` optimal at `w=12`.
 
-Frozen parameters: `LB p=2`; `Stern p=2, l=8`. With the documented constants
-(`c_gauss≈(n−k)³`, `c_score=c_collide=n−k`, `c_list=l`) the draft work factors are
-Prange `1.9×10⁹`, LB `3.0×10⁷` (62×), Stern `2.3×10⁷` (84×); `prediction_lock.json`
-replaces these with smoke-calibrated constants and a frozen tolerance band.
+Frozen parameters: `LB p=2`; `Stern p=2, l=8`. The **locked** (two-size-smoke-calibrated)
+50% `C(ops)` are Prange `6.98×10⁹`, LB `9.59×10⁷` (≈72.8×), Stern `8.66×10⁷` (≈80.6×),
+with `C_best = 8.66×10⁷` (Stern-set, LB/Stern ≈1.11×) and the frozen tolerance band, all in
+`prediction_lock.json`. (The earlier gauss-only draft — `c_gauss≈(n−k)³`,
+`c_score=(p+1)m`, `c_collide=(3p+1)m`, `c_list=l` — gave `1.9×10⁹ / 3.0×10⁷ / 2.3×10⁷`; it
+omitted the `U·H` matmul and rank-fail overhead, hence the ~5× higher calibrated base.)
 
 ## Primary gates
 
@@ -169,9 +181,9 @@ replaces these with smoke-calibrated constants and a frozen tolerance band.
 | Witness validity | every attacker, on success, exhibits a valid `e*` (`He*=z`, `wt≤τ`) — verified |
 | Privilege / label audit | every attacker receives **only** `z`; planted `e`/`wt(e)`/`s` scoring-only |
 | Valid-iteration audit | per attacker: `rank_fail_draws`, valid iterations, measured ops (incl. overhead) |
-| Ladder ordering | `C_Prange > C_LB` resolved cleanly (the ~62× step is large); `C_LB ≥ C_Stern` consistent with the locked prediction, with LB↔Stern reported as separately-resolved **or within-noise** (the ~1.35× step may be unresolvable at `T=64`) — within-noise is a pass, not a violation; each curve a clean `0→1` transition |
+| Ladder ordering | `C_Prange > C_LB` resolved cleanly (the ~73× step is large); `C_LB ≥ C_Stern` consistent with the locked prediction, with LB↔Stern reported as separately-resolved **or within-noise** (the ~1.11× step is expected to be unresolvable at `T=64`) — within-noise is a pass, not a violation; each curve a clean `0→1` transition |
 | Prediction match | each measured `C(ops)` within the frozen `prediction_lock.json` tolerance |
-| v1 Prange cross-check | the v2 Prange `C` is statistically consistent with v1's (≈5007 trials / ~3×10⁹ ops at 50%) |
+| v1 Prange cross-check | the v2 Prange's **50% valid-iteration count** is consistent with v1's (`≈5007` trials, `N≈7224`) — this is instrumentation-independent. The v2 Prange **op-count** is *not* expected to equal v1's: v1 solved `e_J=H_J⁻¹z` without the full systematic form `U·H`, whereas v2 re-baselines Prange *with* `U·H` (needed by LB/Stern), so v2's Prange `C(ops)` (~6.98×10⁹) is ~2× v1's (~3×10⁹). Cross-check on trials, not ops |
 | Determinism | byte-identical re-run under the frozen seeds (or established by construction + smoke, per v1) |
 | Cost reported | per-attacker ops, the `C` ladder, the find-vs-check gap at each `C` |
 
@@ -191,9 +203,9 @@ replaces these with smoke-calibrated constants and a frozen tolerance band.
 - **6.1 vacuity / 6.4 overhead** — the verifier op-count is not below the cheapest
   attacker's effort: falsified.
 - **non-monotone / no clean threshold (6.5 boundary)** — on a **large** predicted
-  step (Prange→LB, ~62×) a stronger attacker fails to beat the weaker one, or a curve
+  step (Prange→LB, ~73×) a stronger attacker fails to beat the weaker one, or a curve
   has no locatable breakpoint: named quarantine; this is almost certainly an
-  implementation bug the smoke should have caught. (The **small** LB→Stern step, ~1.35×,
+  implementation bug the smoke should have caught. (The **small** LB→Stern step, ~1.11×,
   being unresolved at `T=64` is *not* this branch — it is reported as within-noise per
   the Ladder-ordering gate.)
 - **void_run** — code/regime not matching the frozen spec, the target manifest not

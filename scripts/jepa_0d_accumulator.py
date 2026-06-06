@@ -35,7 +35,10 @@ from jepa_0d_accumulator_preflight import AccCfg, gen_accumulator
 from jepa_0d_accumulator_preflight import _cv_acc as pf_cv_acc, _det as pf_det
 
 MASK_TOKEN = 2                         # vocab 0,1 + MASK (JEPA context encoder)
-LAM_INV, LAM_VAR, LAM_COV, GAMMA = 25.0, 25.0, 1.0, 1.0
+# 2026-06-05 objective fix (operator-approved, experimental; spec deviation pending re-smoke):
+#   LAM_COV 1->10 to break the low-rank summary (diag showed ctx effR ~1 with lam_cov=1);
+#   targets standardized per masked-checkpoint group (see train_jepa) to kill the position shortcut.
+LAM_INV, LAM_VAR, LAM_COV, GAMMA = 25.0, 25.0, 10.0, 1.0
 EMA_TAU = 0.99
 EFF_RANK_MIN_FRAC = 0.05
 U_DET_BAR = 0.70                       # gates 3 (GEN) & 4 (JEPA)
@@ -180,7 +183,19 @@ def train_jepa(acc, tcfg, device, seed):
             if sel.any():
                 tgt[sel] = tgt_full[sel][:, readout_end[ci], :]
         pred = predictor(ctx)                                                # (B,n_U,d)
-        inv = ((pred - tgt) ** 2).mean()
+        # FIX (2026-06-05): standardize targets per masked-checkpoint group so the predictor must
+        # match the COUNT-DEPENDENT variation, not the positional mean. The diagnostic showed JEPA
+        # trivially matched the position-dominated embedding and never learned u_c (parity failure
+        # mode). Centering+normalizing the target per (group, channel, dim) removes that shortcut.
+        inv_terms = []
+        for ci in range(n_ckpt):
+            m = torch.tensor(mc == ci, device=device)
+            if int(m.sum()) < 4:
+                continue
+            t = tgt[m]
+            t = (t - t.mean(0, keepdim=True)) / (t.std(0, keepdim=True) + 1e-4)
+            inv_terms.append(((pred[m] - t) ** 2).mean())
+        inv = torch.stack(inv_terms).mean() if inv_terms else (pred * 0.0).mean()
         var_loss, cov_loss = vicreg(ctx)
         loss = LAM_INV * inv + LAM_VAR * var_loss + LAM_COV * cov_loss
         opt.zero_grad(); loss.backward(); opt.step()

@@ -1,0 +1,250 @@
+{
+  "gen": {
+    "train": {
+      "eval_loss": 0.5714784860610962,
+      "steps": 6000
+    },
+    "surfaces": {
+      "final": {
+        "u_det": 0.4139,
+        "body_layer": 3,
+        "per_ckpt": [
+          {
+            "acc": 0.73,
+            "maj": 0.381,
+            "u_det": 0.5638
+          },
+          {
+            "acc": 0.571,
+            "maj": 0.268,
+            "u_det": 0.4139
+          },
+          {
+            "acc": 0.436,
+            "maj": 0.217,
+            "u_det": 0.2797
+          }
+        ],
+        "layer_score": [
+          0.288,
+          0.284,
+          0.551,
+          0.579
+        ],
+        "collapse": {
+          "frac_std_ok": 1.0,
+          "eff_rank": 2.19,
+          "d": 128,
+          "min_std": 0.1409
+        }
+      },
+      "event": {
+        "u_det": 0.4918,
+        "body_layer": 3,
+        "per_ckpt": [
+          {
+            "acc": 0.885,
+            "maj": 0.381,
+            "u_det": 0.8142
+          },
+          {
+            "acc": 0.628,
+            "maj": 0.268,
+            "u_det": 0.4918
+          },
+          {
+            "acc": 0.414,
+            "maj": 0.217,
+            "u_det": 0.2516
+          }
+        ],
+        "layer_score": [
+          0.296,
+          0.303,
+          0.626,
+          0.642
+        ],
+        "collapse": {
+          "frac_std_ok": 1.0,
+          "eff_rank": 1.87,
+          "d": 128,
+          "min_std": 0.1069
+        }
+      },
+      "readout": {
+        "u_det": 0.541,
+        "body_layer": 3,
+        "per_ckpt": [
+          {
+            "acc": 0.941,
+            "maj": 0.381,
+            "u_det": 0.9047
+          },
+          {
+            "acc": 0.664,
+            "maj": 0.268,
+            "u_det": 0.541
+          },
+          {
+            "acc": 0.436,
+            "maj": 0.217,
+            "u_det": 0.2797
+          }
+        ],
+        "layer_score": [
+          0.271,
+          0.298,
+          0.629,
+          0.68
+        ],
+        "collapse": {
+          "frac_std_ok": 1.0,
+          "eff_rank": 2.19,
+          "d": 128,
+          "min_std": 0.1409
+        }
+      }
+    }
+  },
+  "jepa": {
+    "train": {
+      "steps": 6000,
+      "train_ctx_frac_std_ok": 1.0
+    },
+    "surfaces": {
+      "final_all": {
+        "u_det": -0.0048,
+        "body_layer": 1,
+        "per_ckpt": [
+          {
+            "acc": 0.378,
+            "maj": 0.381,
+            "u_det": -0.0048
+          },
+          {
+            "acc": 0.255,
+            "maj": 0.268,
+            "u_det": -0.0178
+          },
+          {
+            "acc": 0.238,
+            "maj": 0.217,
+            "u_det": 0.0268
+          }
+        ],
+        "layer_score": [
+          0.288,
+          0.29,
+          0.285,
+          0.265
+        ],
+        "collapse": {
+          "frac_std_ok": 0.922,
+          "eff_rank": 1.59,
+          "d": 128,
+          "min_std": 0.0271
+        }
+      },
+      "final_maskC": {
+        "u_det": 0.0027,
+        "body_layer": 1,
+        "per_ckpt": [
+          {
+            "acc": 0.377,
+            "maj": 0.381,
+            "u_det": -0.0065
+          },
+          {
+            "acc": 0.27,
+            "maj": 0.268,
+            "u_det": 0.0027
+          },
+          {
+            "acc": 0.242,
+            "maj": 0.217,
+            "u_det": 0.0319
+          }
+        ],
+        "layer_score": [
+          0.292,
+          0.296,
+          0.272,
+          0.261
+        ],
+        "collapse": {
+          "frac_std_ok": 0.656,
+          "eff_rank": 1.01,
+          "d": 128,
+          "min_std": 0.0042
+        }
+      },
+      "event": {
+        "u_det": 0.0205,
+        "body_layer": 0,
+        "per_ckpt": [
+          {
+            "acc": 0.381,
+            "maj": 0.381,
+            "u_det": 0.0
+          },
+          {
+            "acc": 0.283,
+            "maj": 0.268,
+            "u_det": 0.0205
+          },
+          {
+            "acc": 0.237,
+            "maj": 0.217,
+            "u_det": 0.0255
+          }
+        ],
+        "layer_score": [
+          0.3,
+          0.291,
+          0.287,
+          0.289
+        ],
+        "collapse": {
+          "frac_std_ok": 0.867,
+          "eff_rank": 1.0,
+          "d": 128,
+          "min_std": 0.0024
+        }
+      },
+      "readout_vis": {
+        "u_det": 0.0268,
+        "body_layer": 2,
+        "per_ckpt": [
+          {
+            "acc": 0.429,
+            "maj": 0.381,
+            "u_det": 0.0775
+          },
+          {
+            "acc": 0.26,
+            "maj": 0.268,
+            "u_det": -0.0109
+          },
+          {
+            "acc": 0.238,
+            "maj": 0.217,
+            "u_det": 0.0268
+          }
+        ],
+        "layer_score": [
+          0.273,
+          0.287,
+          0.309,
+          0.282
+        ],
+        "collapse": {
+          "frac_std_ok": 1.0,
+          "eff_rank": 7.76,
+          "d": 128,
+          "min_std": 0.2828
+        }
+      }
+    }
+  },
+  "wall_s": 1354.7
+}
