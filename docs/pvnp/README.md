@@ -82,7 +82,21 @@ Phase-4 synthesis:
   + 12-file bundle, GREEN 5-dimension pre-freeze audit, byte-deterministic): find-vs-check
   gap holds (verifier flat 16,576 ops, gap ≈5,015× at `C_best`); the Stern work-factor
   heuristic was optimistic at `w=12`, the named deviation. A confirmatory follow-up
-  (corrected Stern success model, or the large-`w` regime) is a future slate.
+  (corrected Stern success model + the large-`w` regime) is the v3 slate below.
+- [`SUNDOG_CERTIFICATE_SYNDROME_V3_SLATE.md`](SUNDOG_CERTIFICATE_SYNDROME_V3_SLATE.md)
+  — **FROZEN (stage-1 slate contract; NOT executed)**: the **scaling-ladder** successor. A 4-rung
+  ladder (`[128,64]w12` anchor reuse → `[128,64]w16` → `[160,80]w16` → `[192,96]w18`)
+  measuring **LB + Stern at each** (Prange is unmeasurable at scale — measured at the
+  anchor, formula-predicted at the rungs). Two pre-registered claims: **(A)** the
+  find-vs-check gap **scales** (predicted ~5,200× → ~153,000× anchor→top), and **(B)** the
+  **LB↔Stern crossover** — does Stern overtake LB as `w` grows, or does the measured
+  optimism/overhead curve explain why LB keeps winning? The v2 lesson is baked in: the
+  prediction is **empirically pre-calibrated** (Stern's true per-iteration success
+  measured on disjoint throwaway targets, the analytic carried only as the v2-falsified
+  reference), with fixed per-rung `l` candidate sets and deterministic tie-breaks. ~11 h
+  new frozen scoring (LB+Stern), staged by PowerShell command contract; regime selection
+  via `scripts/pvnp-certificate-syndrome-v3-regime-scan.py`. Next: implement harness →
+  empirical pre-cal → stage-2 prediction lock → operator-gated rung runs.
 
 Lit-pass:
 

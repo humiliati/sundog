@@ -75,8 +75,9 @@ theme-matching.
   passes *for the wrong reason* and carries no information. Escalation = an
   `S3`-triple bridge (Probe 01b) or external sanity check.
   -> [`SUNDOG_V_RIEMANN.md`](SUNDOG_V_RIEMANN.md).
-- **P-vs-NP - BOUNDED-POSITIVE (the cost certificate clears; promotion is still
-  bounded, but the boundary moved).** Bounded alignment-verification. Phase 1 **v6**
+- **P-vs-NP - BOUNDED-POSITIVE (the cost certificate clears; **Phase-4 adds a
+  *measured* capacity threshold on a constructed substrate**; promotion still bounded,
+  boundary moved).** Bounded alignment-verification. Phase 1 **v6**
   is the arc's first bounded-positive: the **op-count** cost certificate clears
   (signature 527,297 ops, cheaper to *check* than the policy's 555,876 ops to
   *find*; ratio 0.949 <= a pre-frozen 1.0 threshold), safety green (0 false accepts
@@ -93,6 +94,40 @@ theme-matching.
   fidelity. Body-resistance is marginal (mesa `FVE(net.7|5D) ~ 0.97-0.99`), so this
   is cert-discipline transfer, not a regime-2 separation. NOT the Millennium P-vs-NP
   problem; op-count cost is not a complexity-theoretic claim.
+  **Phase-4 update (2026-06-05): a *measured* capacity threshold on a CONSTRUCTED
+  substrate - the third resistance flavor.** The Phase-4 synthesis built one constructed
+  instance - the **syndrome/SIS certificate** (body = a secret `s` plus a light deviation
+  `e`, `y = sG + e`; shadow = the syndrome `z = Hy = He`, which drops `s` by linear
+  algebra) - and *measured* the find-vs-check separation the rest of the lane only argued.
+  Unlike the marginal *control* substrates above, here the body **genuinely resists** its
+  shadow, on a **computational / capacity** axis distinct from both the dimensional
+  (cap-set) and topological (Aharonov-Bohm) axes: the secret is lost *algebraically*
+  (`2^64` secrets per syndrome, exact - an AB-like unconditional lossiness but on the
+  algebraic axis), and the deviation is lost *computationally* (recovering `e` from `z`
+  alone is syndrome decoding, NP-hard). Yet the shadow stays **control-sufficient** -
+  `Safe(y) := exists e*: He*=Hy and wt(e*)<=tau` is cheap and flat to *check* (16,576 ops).
+  That is a regime-2 separation (state-insufficient yet control-sufficient) on a built
+  substrate, with a **measured threshold**. **v1** (frozen `[128,64] w=12`, Prange ISD) is
+  the lane's first measured capacity-relative one-wayness threshold: `C ~ 5,007` rank-valid
+  trials, find-vs-check gap `~ 2.7x10^5x`, the 50%-breakpoint landing *on* the
+  pre-registered prediction. **v2** tightened it against a Prange -> Lee-Brickell(p=2) ->
+  Stern(p=2,l=8) ladder and produced a **bounded-positive with a NAMED MODEL-DEVIATION** -
+  a new sub-pattern of the bounded-positive disposition. All three measured `C(ops)` land
+  within the locked factor-2 tolerance (the two-size-smoke calibration was accurate to ~2%
+  per-iteration), confirming the *absolute* work factors; but the locked *Stern-best*
+  ordering **reversed** - measured **Lee-Brickell is the best attacker** (`C_best =
+  8.31x10^7` ops, ~86x over Prange, find-vs-check gap `~5,015x` even against the strongest
+  tested attacker), while Stern *under*-performs (1.64x its locked `C`) because its ISD
+  work-factor *success* heuristic is optimistic at `w=12` while its per-iteration *cost*
+  model was right (to ~1%). Cross-substrate lesson: a frozen, calibrated, measured ladder
+  can confirm the magnitude of a separation and *simultaneously falsify the fine ordering
+  inside it* - the heuristic that a "stronger" algorithm wins can fail at a specific regime,
+  and only the measurement says so. The resistance is **imported** (the SIS/decoding
+  assumption), not proved, and `C_best` is an **upper bound** against the *tested* attacker
+  classes (BJMM/MMT = a future slate) - a constructed-substrate, certificate-discipline
+  *measurement*, not a complexity-theoretic claim. Receipts:
+  [`pvnp/receipts/2026-06-04_certificate_syndrome_v1.md`](pvnp/receipts/2026-06-04_certificate_syndrome_v1.md),
+  [`pvnp/receipts/2026-06-05_certificate_syndrome_v2.md`](pvnp/receipts/2026-06-05_certificate_syndrome_v2.md).
   -> [`SUNDOG_V_P_V_NP.md`](SUNDOG_V_P_V_NP.md).
 - **ARC-AGI - CONVERGENCE-TO-NULL on the signature *shadow*; CAPABILITY-FLOOR on
   the *body*; body-resistance probe + v2 expansion ran 2026-06-01 -> the
@@ -180,7 +215,12 @@ there is no body to resist) and *exact-separation* (Aharonov-Bohm - a sharp,
 exact, topological regime-2, pre-registered). A third bounded disposition,
 *bounded-positive* (P-vs-NP, v6), marks a lane whose core certificate clears (the
 op-count cost is cheaper to check than to find) yet stays unpromoted on a moved
-boundary - wall-time non-reproducibility plus a quarantined verification bridge.
+boundary - wall-time non-reproducibility plus a quarantined verification bridge. Its
+Phase-4 syndrome-certificate instance sharpens this to a *measured* capacity threshold on
+a **constructed** substrate (computational/capacity resistance - the third axis), and
+adds a sub-pattern: *bounded-positive with a named model-deviation* (v2 - the separation's
+magnitude confirmed within the locked tolerance, but the fine attacker-ordering inside it
+falsified, Lee-Brickell beating the predicted-best Stern at `w=12`).
 Cataloguing the mode - success or
 failure - is what turns each substrate into a design constraint for the next.
 
@@ -487,6 +527,7 @@ discarded.
 | Faraday / EM (homogeneous) | EM field history on a contractible patch (smooth `A`, `dF = 0`) | plaquette holonomy `∮A = ∫F` - **zero body-resistance *by identity***: closure is the Bianchi identity `dF = d(dA) = 0`, so the shadow reconstructs the body exactly. The exact-zero anchor of the axis (§8.1) |
 | Aharonov-Bohm / EM (topological) [EARNED] | EM field config on a non-contractible patch (`H^1 != 0`) | loop holonomy `∮A = Φ` - **exact *topological* body-resistance**: one flux number is state-insufficient (cannot rebuild interior `B`) yet control-sufficient (fixes the AB phase); local `F` is control-blind. Portfolio's first *exact* regime-2 witness; earned by Phase 7 case 3 (§8.2) |
 | Sourced EM / Maxwell (inhomogeneous) [EARNED] | full sourced field on a patch | dual-shadow `∮*F = Q_enc` (Gauss / Ampere-Maxwell) - **determined, not resisting**: by the uniqueness theorem the field is fixed by (sources, boundary, harmonic periods); the low-dim shadow is a lossy Gauss summary with no sharp objective-free regime-2. All exact regime-2 is the harmonic/AB sector above. Marginal by *determinacy* (Phase 8, §8.4) |
+| P-vs-NP syndrome/SIS cert [CONSTRUCTED, MEASURED] | secret `s` + light deviation `e` in `y=sG+e`; recovering `e` from `z` alone is syndrome decoding (NP-hard) | syndrome `z = Hy = He` - **computational/capacity resistance** (a third axis beyond dimensional/topological): `s` lost by algebra (`2^64`/syndrome, exact-lossy), the deviation *capacity-hard* to find, yet `Safe(y):=∃e*:He*=Hy∧wt≤τ` cheap+flat to check (16,576 ops). The only substrate with a **measured** find-vs-check threshold: `C_best=8.31×10⁷` ops (Lee-Brickell, v2), gap `≈5,015×`; imported hardness, upper bound vs tested attackers (§ failure-map P-vs-NP Phase-4 update) |
 
 The columns are the same operator. The substrate-specificity in row
 3-5 is what bounds the operating envelope; the cross-substrate
