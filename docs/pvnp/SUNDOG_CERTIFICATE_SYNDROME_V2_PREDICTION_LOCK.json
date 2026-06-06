@@ -1,0 +1,94 @@
+{
+  "schema": "pvnp-certificate-syndrome-v2-prediction-lock",
+  "frozen_regime": {
+    "n": 128,
+    "k": 64,
+    "w": 12,
+    "tau": 12,
+    "p": 2,
+    "l": 8
+  },
+  "formulas": {
+    "prange": "p=C(n-k,w)/C(n,w)",
+    "lb": "p=C(k,p)C(n-k,w-p)/C(n,w)",
+    "stern": "p=C(k/2,p)^2 C(n-k-l,w-2p)/C(n,w)"
+  },
+  "cost_model": "per_iter = base(m) + enum; base(m)=alpha*m^beta fit on two throwaway sizes; enum analytic & exactly op-counted: enum_lb=C(k,p)(p+1)m, enum_stern=2C(k/2,p)pl + (C(k/2,p)^2/2^l)(3p+1)m; C(ops)@50%=N*ln2*per_iter",
+  "constants_calibrated_on": "two throwaway smoke sizes [80,40] & [120,60] w=8 (base scaling); enum analytic",
+  "base_fit": {
+    "alpha": 3.9519351266355742,
+    "beta": 3.0714390585016966,
+    "points": [
+      {
+        "m": 40,
+        "base": 329184.54577603145
+      },
+      {
+        "m": 60,
+        "base": 1143649.6703353485
+      }
+    ],
+    "base_frozen_m64": 1394381.2220355754
+  },
+  "calibration_points": [
+    {
+      "m": 40,
+      "k": 40,
+      "base": 329184.54577603145,
+      "enum_lb_measured": 90288.0299211797,
+      "enum_lb_analytic": 93600,
+      "enum_lb_ratio": 0.9646157042861079,
+      "enum_stern_measured": 46560.79949802987,
+      "enum_stern_analytic": 45564.375,
+      "enum_stern_ratio": 1.021868499195476
+    },
+    {
+      "m": 60,
+      "k": 60,
+      "base": 1143649.6703353485,
+      "enum_lb_measured": 284981.7610860979,
+      "enum_lb_analytic": 318600,
+      "enum_lb_ratio": 0.8944813593411737,
+      "enum_stern_measured": 317963.6539205096,
+      "enum_stern_analytic": 324367.265625,
+      "enum_stern_ratio": 0.9802581444457666
+    }
+  ],
+  "predictions": {
+    "prange": {
+      "p_success": 0.0001384223386279442,
+      "N_analytic": 7224.267483934299,
+      "base_ops": 1394381.2220355754,
+      "enum_ops": 0.0,
+      "per_iter_ops_frozen": 1394381.2220355754,
+      "C_ops_50pct": 6982336971.4732895,
+      "drop_vs_prange": 1.0
+    },
+    "lb": {
+      "p_success": 0.012870665750160548,
+      "N_analytic": 77.69605857315703,
+      "base_ops": 1394381.2220355754,
+      "enum_ops": 387072,
+      "per_iter_ops_frozen": 1781453.2220355754,
+      "C_ops_50pct": 95939814.0020835,
+      "drop_vs_prange": 72.77830423271048
+    },
+    "stern": {
+      "p_success": 0.01472914104076773,
+      "N_analytic": 67.89262165608788,
+      "base_ops": 1394381.2220355754,
+      "enum_ops": 446400.0,
+      "per_iter_ops_frozen": 1840781.2220355754,
+      "C_ops_50pct": 86626389.85872214,
+      "drop_vs_prange": 80.60288536623416
+    }
+  },
+  "C_best": 86626389.85872214,
+  "C_best_source": "stern",
+  "lb_stern_ratio": 1.1075125508352652,
+  "external_crosscheck_v1": {
+    "v1_prange_ops_per_valid_iter": 624000.0,
+    "note": "v1 [128,64] Prange measured ~6.24e5 ops/valid-iter, but v1's harness solved e_J=H_J^-1 z WITHOUT the full systematic form U@H that LB/Stern require; v2 re-baselines Prange WITH U@H, so v2 base is expected ~2x v1. NOT a clean equality check."
+  },
+  "tolerance": "measured C(ops) within factor 2 of predicted; LB<->Stern (~1.11x) may be within T-noise"
+}

@@ -1,10 +1,16 @@
 # Sundog Certificate Problem — Syndrome Certificate v2 Stronger-ISD Slate
 
-Status: **DRAFT — opened for review, NOT frozen.** No v2 attacker run may execute
-against the frozen regime until this slate is frozen and each attacker has been
-smoke-validated on a throwaway regime. (Freeze-before-execute, per the lane.)
+Status: **FROZEN 2026-06-05** (owner sign-off: "freeze worthy and runnable"). The spec, the
+attacker parameters (`LB p=2`, `Stern p=2, l=8`), and the durable prediction lock
+[`SUNDOG_CERTIFICATE_SYNDROME_V2_PREDICTION_LOCK.json`](SUNDOG_CERTIFICATE_SYNDROME_V2_PREDICTION_LOCK.json)
+(sha256 `4e46be88…`) are locked. The three attackers are implemented and two-size-smoke-validated;
+the frozen-run harness emits the per-file Required-outputs bundle with `target_manifest.json` written
+**before** any attacker, and a 5-dimension adversarial pre-freeze audit returned **GREEN** (zero
+confirmed blockers; privilege-tight, deterministic, non-p-hacked, spec-faithful). The operator-gated
+frozen run (`python scripts/pvnp-certificate-syndrome-v2.py --frozen`, ≈2.5 h wall, Prange-dominated;
+op-count is the cost signal, wall-time diagnostic-only) is cleared to execute.
 
-Date opened: 2026-06-04
+Date opened: 2026-06-04 · Frozen: 2026-06-05
 
 This is the **stronger-attacker** successor to
 [`SUNDOG_CERTIFICATE_SYNDROME_V1_SLATE.md`](SUNDOG_CERTIFICATE_SYNDROME_V1_SLATE.md)
@@ -136,13 +142,14 @@ witness-recovery curve vs an op budget, locates each 50%-breakpoint `C(ops)`, an
 whether the measured drops match the locked prediction; a measured drop far from it is
 itself the finding.
 
-**Freeze requirement (status: prediction produced):** the table above is the **locked**
-prediction, recorded machine-readably in `prediction_lock.json` (produced by the two-size
-throwaway smoke — per-attacker success-probability formula, valid-iteration definition,
-op-count formula, calibrated `base(m)` fit + analytic `enum`, predicted 50% `C(ops)`,
-`C_best`, and the frozen tolerance). Before the frozen run, copy `prediction_lock.json`
-from the transient `results/` dir to a durable committed location (alongside this slate or
-in the receipt). Updating constants after seeing frozen-target results voids the run.
+**Freeze requirement (status: prediction lock produced and durably filed):** the table
+above is the **locked** prediction, recorded machine-readably at
+[`SUNDOG_CERTIFICATE_SYNDROME_V2_PREDICTION_LOCK.json`](SUNDOG_CERTIFICATE_SYNDROME_V2_PREDICTION_LOCK.json)
+(copied from the two-size throwaway-smoke output; SHA-256
+`4e46be88400a313bb73b11ffd3f96da6c5c993f87b4f443bb2dc90005a1f5374`). It records the
+per-attacker success-probability formula, valid-iteration definition, op-count formula,
+calibrated `base(m)` fit + analytic `enum`, predicted 50% `C(ops)`, `C_best`, and the
+frozen tolerance. Updating constants after seeing frozen-target results voids the run.
 
 ### Locked formulas (the `prediction_lock.json` contract)
 
@@ -156,12 +163,12 @@ does no enumeration); `enum` runs once per valid iteration and is the analytic o
 `enum` op-counts are calibrated on the **two-size throwaway smoke only** and then locked;
 they may not move after a frozen target is scored.
 
-- **Prange:** `p = C(n−k,w)/C(n,w)`; `per_iter = c_gauss`.
-- **Lee-Brickell (p):** `p = C(k,p)·C(n−k,w−p)/C(n,w)`; `per_iter = c_gauss +
-  C(k,p)·c_score`.
-- **Stern (p,l):** `p = C(k/2,p)²·C(n−k−l,w−2p)/C(n,w)`; `per_iter = c_gauss +
-  2·C(k/2,p)·c_list + (C(k/2,p)²/2^l)·c_collide`. The collision term
-  `(C(k/2,p)²/2^l)·c_collide` is mandatory and is what makes `l=8` optimal at `w=12`.
+- **Prange:** `p = C(n−k,w)/C(n,w)`; `per_iter = base(m)`.
+- **Lee-Brickell (p):** `p = C(k,p)·C(n−k,w−p)/C(n,w)`; `per_iter = base(m) +
+  C(k,p)(p+1)m`.
+- **Stern (p,l):** `p = C(k/2,p)²·C(n−k−l,w−2p)/C(n,w)`; `per_iter = base(m) +
+  2·C(k/2,p)pl + (C(k/2,p)²/2^l)(3p+1)m`. The collision term
+  `(C(k/2,p)²/2^l)(3p+1)m` is mandatory and is what makes `l=8` optimal at `w=12`.
 
 Frozen parameters: `LB p=2`; `Stern p=2, l=8`. The **locked** (two-size-smoke-calibrated)
 50% `C(ops)` are Prange `6.98×10⁹`, LB `9.59×10⁷` (≈72.8×), Stern `8.66×10⁷` (≈80.6×),
@@ -217,8 +224,9 @@ omitted the `U·H` matmul and rank-fail overhead, hence the ~5× higher calibrat
 - `manifest.json` (code = v1, `target_seed`, attacker ladder, git sha, verdict);
 - `target_manifest.json` (the decoupled `target_seed` target set; attacker-visible `z`
   and labels-only scoring fields separated; emitted before any attacker runs);
-- `prediction_lock.json` (formulas, constants, predicted `C(ops)`, tolerance,
-  smoke calibration provenance);
+- `prediction_lock.json` plus the durable copy
+  [`SUNDOG_CERTIFICATE_SYNDROME_V2_PREDICTION_LOCK.json`](SUNDOG_CERTIFICATE_SYNDROME_V2_PREDICTION_LOCK.json)
+  (formulas, constants, predicted `C(ops)`, tolerance, smoke calibration provenance);
 - `verifier_access_declaration.json` (every attacker sees only `z`; labels scoring-only);
 - `attacker_ladder_curve.csv` (per attacker, per op-budget: witness-recovery success,
   iterations, measured ops);
@@ -253,15 +261,21 @@ JSON.)
 
 ## Freeze checklist
 
-- [ ] Sample and hash the decoupled `target_seed=2026220` `T=64` target manifest;
-      confirm the code (`n,k,w,τ,code_seed`) is byte-equal to v1 and all attackers
-      consume only manifest `z`.
-- [ ] Freeze `LB p=2` and `Stern p=2, l=8`, plus `prediction_lock.json` (the Locked
-      formulas above + smoke-calibrated constants + predicted 50% `C(ops)` + tolerance).
-- [ ] Implement the three attackers (Prange reused) sharing the v1 verifier + GF(2)
-      core; smoke each on a throwaway regime (recover valid witnesses; curve matches
-      analytic) before the frozen run.
-- [ ] Re-affirm: every attacker sees only `z`; labels scoring-only; per-file outputs.
+- [x] Freeze the decoupled `target_seed=2026220` target-manifest contract; confirm the
+      code (`n,k,w,τ,code_seed`) is byte-equal to v1 and the harness emits
+      `target_manifest.json` before any frozen attacker consumes only manifest `z`.
+      Done 2026-06-05 (`run_frozen` writes the manifest before the attacker loop; verified on
+      the tiny harness-test bundle; audit dimension frozen-path-vs-spec PASS).
+- [x] Freeze `LB p=2` and `Stern p=2, l=8`, plus durable
+      [`SUNDOG_CERTIFICATE_SYNDROME_V2_PREDICTION_LOCK.json`](SUNDOG_CERTIFICATE_SYNDROME_V2_PREDICTION_LOCK.json)
+      (the Locked formulas above + smoke-calibrated constants + predicted 50%
+      `C(ops)` + tolerance). Done 2026-06-05.
+- [x] Implement the three attackers (Prange re-baselined) sharing the v1 verifier +
+      GF(2) core; smoke each on two throwaway regimes (recover valid witnesses; curve
+      matches analytic) before the frozen run. Done 2026-06-05.
+- [x] Re-affirm: every attacker sees only `z`; labels scoring-only; per-file outputs.
+      Done 2026-06-05 (audit dimensions privilege-and-witness + numerical-consistency PASS;
+      `verifier_access_declaration.json` + the 12-file bundle emitted and validated).
 
 ## Freeze rule
 

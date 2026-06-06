@@ -1,10 +1,13 @@
 # JEPA-0D — Accumulator / Count Substrate (spec)
 
-> 2026-06-05. **STATUS: mask policy LOCKED (whole-checkpoint, operator 2026-06-05);
-> self-consistency review PASSED; runner built + dev-validated; smoke operator-staged.** Model-free preflight is COMPLETE
-> and PASSED (`preflight_pass_ready_for_spec`); no model battery has been run. Implements the
-> JEPA-0D fork of `docs/SUNDOG_V_JEPA.md` per `docs/chatv2/JEPA_0D_HANDOFF.md`. Tier **R1 (toy)**.
-> Kill-gated R&D (2026-06-04 strategy pivot).
+> 2026-06-05. **STATUS: SHELVED — `blocked_by_unfaithful_jepa`.** Preflight passed and was
+> adversarially verified; the runner ran a GPU smoke + a 3-variant multi-surface diagnostic. JEPA
+> did **not** keep the count at any read surface (tick4: GEN 0.90, JEPA 0.00), robust to
+> whole-checkpoint masking, standardized targets, λ_cov anti-collapse, and causal predict-ahead.
+> The accumulator did not rescue functional retention. Full write-up + mechanism:
+> `docs/chatv2/JEPA_0D_ACCUMULATOR_RESULTS.md`. Banked R1 negative per the 2026-06-04 pivot. The
+> sections below are the (passed) pre-registration as executed; retained for provenance.
+> Implements the JEPA-0D fork of `docs/SUNDOG_V_JEPA.md` per `docs/chatv2/JEPA_0D_HANDOFF.md`.
 >
 > **DEVIATION FROM THE HANDOFF — APPROVED AT LOCK (2026-06-05, §3.1):** the handoff says "carry over
 > the 50% latent-channel mask." The preflight proved that a random latent mask reproduces the parity

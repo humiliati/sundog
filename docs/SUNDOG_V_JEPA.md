@@ -38,9 +38,17 @@ raw-linear `u_det` floored at −0.05, deterministic oracle recovers `u_t` at 0.
 and a new mask-necessity gate showed a random latent mask reproduces the parity failure (same-ckpt
 XOR shortcut det 0.56) — so the spec **re-poses the mask to whole-checkpoint** (shortcut → 0.131,
 event→`u_t` path 0.99). Spec drafted + self-consistency-reviewed at
-`docs/chatv2/JEPA_0D_ACCUMULATOR_SPEC.md`; runner built + dev-validated at
-`scripts/jepa_0d_accumulator.py`. The decisive **gate-4 `u_det ≥ 0.70`** (where parity died) is
-operator-staged and unrun. Same kill-gate discipline: if gate-4 fails again, shelve.
+`docs/chatv2/JEPA_0D_ACCUMULATOR_SPEC.md`; runner built at `scripts/jepa_0d_accumulator.py`.
+
+**JEPA-0D SHELVED (2026-06-05) — `blocked_by_unfaithful_jepa`.** The GPU smoke + a 3-variant
+multi-surface diagnostic showed JEPA keeps **no** count at any read surface (tick4: GEN 0.90, JEPA
+0.00), robust to whole-checkpoint masking, standardized targets, λ_cov anti-collapse, and causal
+predict-ahead. The accumulator did **not** rescue the parity failure mode. Mechanism (now
+understood): generative reconstruction is forced to carry the count-bearing tokens and builds `u_t`;
+JEPA's EMA-target embedding-prediction never bootstraps a count representation (no `u_c` in the
+target → none learned). Banked R1 negative; full write-up `docs/chatv2/JEPA_0D_ACCUMULATOR_RESULTS.md`.
+The kill-gate fired as designed. **Note:** the `COMPANDER_PAPER_HOOK` citation rail (autoregressive
+compander, the model class our chat result runs on) is **decoupled** from this lane and stays open.
 
 This is not a claim about AGI, world models, real LLMs, or whether LeCun is right. It is
 a measurement question about what a JEPA-trained representation keeps and discards, asked

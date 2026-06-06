@@ -52,7 +52,8 @@ Phase-4 synthesis:
   Boundary: against Prange (upper bound vs better ISD), imports decoding hardness, no
   crypto/P-vs-NP claim. A stronger attacker class / scaled regime = a new slate.
 - [`SUNDOG_CERTIFICATE_SYNDROME_V2_SLATE.md`](SUNDOG_CERTIFICATE_SYNDROME_V2_SLATE.md)
-  — **DRAFT (opened for review, NOT frozen)**: the stronger-ISD tightening. Same
+  — **FROZEN 2026-06-05** (harness implemented + GREEN pre-freeze audit; operator-gated
+  ~2.5 h run cleared, not yet executed): the stronger-ISD tightening. Same
   **code** as v1 (`[128,64] w=12`, code_seed 2026128) but **decoupled targets** (a
   fresh `target_seed=2026220` + an emitted `target_manifest.json`, fixing v1's
   interleaving of target sampling with attack draws; Prange is re-baselined in-ladder,
@@ -66,12 +67,16 @@ Phase-4 synthesis:
   **~81× (Stern, l=8)** vs Prange (`C_best = min(C_LB,C_Stern) = 8.66×10⁷` ops,
   Stern-set), with the LB→Stern margin **compressed (~1.11×)** at this small `w`
   (Stern's big win is a large-`w` phenomenon, e.g. `[256,128] w=24` — the scaled-regime
-  lever). Freeze comparator = the machine-readable `prediction_lock.json` (locked
-  formulas incl. the Stern collision term + two-size-calibrated constants + tolerance),
-  now **produced**. Ladder gate: Prange→LB must resolve; LB→Stern expected within-`T=64`-
-  noise (a pass, not a violation). The reported bound is `C_best` across the tested
-  stronger attackers; it is still an upper bound (BJMM/MMT = future slate). Awaiting
-  owner review + freeze (copy `prediction_lock.json` to a durable location first).
+  lever). Freeze comparator =
+  [`SUNDOG_CERTIFICATE_SYNDROME_V2_PREDICTION_LOCK.json`](SUNDOG_CERTIFICATE_SYNDROME_V2_PREDICTION_LOCK.json)
+  (locked formulas incl. the Stern collision term + two-size-calibrated constants +
+  tolerance; SHA-256 `4e46be88...`), now **produced and durably filed**. Ladder gate:
+  Prange→LB must resolve; LB→Stern expected within-`T=64`-noise (a pass, not a
+  violation). The reported bound is `C_best` across the tested stronger attackers; it
+  is still an upper bound (BJMM/MMT = future slate). **FROZEN 2026-06-05**; the
+  frozen-run harness (`--frozen`, manifest-before-attackers + 12-file bundle) is
+  implemented, plumbing-validated + byte-deterministic, and GREEN on a 5-dimension
+  adversarial pre-freeze audit. Operator-gated ~2.5 h run is cleared, not yet executed.
 
 Lit-pass:
 

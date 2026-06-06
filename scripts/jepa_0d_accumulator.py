@@ -58,6 +58,7 @@ class TCfg:
     patience: int = 10
     eval_every: int = 250
     mask_reads: int = 8
+    predict_ahead: bool = False        # mask ONLY the last checkpoint, summary at its event position
 
 
 def acc_cfg(n_fingerprint):
@@ -166,7 +167,8 @@ def train_jepa(acc, tcfg, device, seed):
     for step in range(tcfg.max_steps):
         bits, *_ = gen_batch(acc, tcfg.batch, rng)
         B = bits.shape[0]
-        mc = rng.integers(0, n_ckpt, B)                    # per-sample masked checkpoint
+        pa = tcfg.predict_ahead
+        mc = np.full(B, n_ckpt - 1) if pa else rng.integers(0, n_ckpt, B)   # predict-ahead: always last ckpt
         masked = bits.copy()
         for ci in range(n_ckpt):
             sel = np.where(mc == ci)[0]
@@ -174,7 +176,10 @@ def train_jepa(acc, tcfg, device, seed):
                 masked[np.ix_(sel, readout_tok[ci])] = MASK_TOKEN
         idx_ctx = torch.tensor(masked, device=device)
         idx_full = torch.tensor(bits, device=device)
-        ctx = ctx_enc(idx_ctx, return_hidden=True)[1][-1][:, -1, :]          # (B,d) context summary
+        # predict-ahead: read the summary at the last checkpoint's EVENT position (causal, before its
+        # masked readouts) so that position must integrate all events -> u_12. Else: final position.
+        sp = lay["event_pos"][-1] if pa else (lay["L"] - 1)
+        ctx = ctx_enc(idx_ctx, return_hidden=True)[1][-1][:, sp, :]          # (B,d) context summary
         with torch.no_grad():
             tgt_full = tgt_enc(idx_full, return_hidden=True)[1][-1]          # (B,L,d)
         tgt = torch.zeros(B, n_U, tcfg.d_model, device=device)
@@ -354,11 +359,12 @@ def diag_extract_jepa(model, acc, tcfg, device, seed):
     bits, e, u, *_ = gen_batch(acc, acc.n, default_rng(seed + 123))
     lay, pos, _ = _diag_positions(acc); ckpts = lay["ckpts"]; nck = len(ckpts)
     readout_tok = [np.asarray(t) for t in lay["readout_tok"]]
+    pa = tcfg.predict_ahead
     fin_all, ev_all = None, None
     fin_mc = [None] * nck; cfm = np.zeros(nck)
     ro_vis = [None] * nck; cro = np.zeros(nck)
     for p in range(tcfg.mask_reads):
-        mc = p % nck
+        mc = (nck - 1) if pa else (p % nck)                 # predict-ahead: always mask the last ckpt
         masked = bits.copy(); masked[:, readout_tok[mc]] = MASK_TOKEN
         H = _forward_positions(model, masked, device, pos)
         fin = H[:, 0]; ev = H[:, 1:1 + nck]; ro = H[:, 1 + nck:1 + 2 * nck]
@@ -368,10 +374,15 @@ def diag_extract_jepa(model, acc, tcfg, device, seed):
         for ci in range(nck):
             if ci != mc:
                 ro_vis[ci] = ro[:, ci] if ro_vis[ci] is None else ro_vis[ci] + ro[:, ci]; cro[ci] += 1
+
+    def avg(a, c, ref):                                      # None-safe (predict-ahead leaves slots empty)
+        return (a / max(c, 1)) if a is not None else np.zeros_like(ref)
+    like = fin_all / tcfg.mask_reads
     surf = {"final_all": np.repeat((fin_all / tcfg.mask_reads)[:, None], nck, axis=1),
-            "final_maskC": np.stack([fin_mc[ci] / max(cfm[ci], 1) for ci in range(nck)], axis=1),
+            "final_maskC": np.stack([avg(fin_mc[ci], cfm[ci], like) for ci in range(nck)], axis=1),
             "event": ev_all / tcfg.mask_reads,
-            "readout_vis": np.stack([ro_vis[ci] / max(cro[ci], 1) for ci in range(nck)], axis=1)}
+            "readout_vis": np.stack([avg(ro_vis[ci], cro[ci], ev_all[:, ci] / tcfg.mask_reads)
+                                     for ci in range(nck)], axis=1)}
     return surf, u_at_ckpts(u, ckpts)
 
 
@@ -439,6 +450,8 @@ def main():
     ap.add_argument("--smoke", action="store_true", help="d=128, 1 seed, full training, n_fp=1000")
     ap.add_argument("--diag", action="store_true",
                     help="diagnostic re-smoke: full training, probe u at final/event/readout surfaces")
+    ap.add_argument("--predict-ahead", action="store_true",
+                    help="JEPA masks ONLY the last checkpoint, predicts it causally from past events")
     ap.add_argument("--dev", action="store_true", help="tiny self-test: d=64, 40 steps, n_fp=300")
     ap.add_argument("--allow-cpu", action="store_true",
                     help="permit CPU execution (default: refuse, since the CPU path is hours-slow)")
@@ -446,7 +459,8 @@ def main():
 
     if args.diag:
         args.dims, args.seeds = [128], [0]
-        acc, tcfg = acc_cfg(1000), TCfg(d_model=128, mask_reads=9)   # 9 -> balanced 3 masks/ckpt
+        mr = 3 if args.predict_ahead else 9                          # pa: identical mask, fewer passes ok
+        acc, tcfg = acc_cfg(1000), TCfg(d_model=128, mask_reads=mr, predict_ahead=args.predict_ahead)
     elif args.smoke:
         args.dims, args.seeds = [128], [0]
         acc, tcfg = acc_cfg(1000), TCfg(d_model=128)
