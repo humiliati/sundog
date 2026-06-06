@@ -1,0 +1,361 @@
+{
+  "schema": "pvnp-certificate-syndrome-v3-prediction-lock",
+  "stage": "stage-2 prediction lock",
+  "base_fit": {
+    "alpha": 6.2528401090284556,
+    "beta": 2.9613763926734653,
+    "points": [
+      [
+        64,
+        1395905.6316666666
+      ],
+      [
+        96,
+        4637976.64
+      ]
+    ]
+  },
+  "T_pre": 16,
+  "succ_budget": 32,
+  "rungs": {
+    "1": {
+      "regime": {
+        "n": 128,
+        "k": 64,
+        "w": 16,
+        "tau": 16,
+        "code_seed": 20263101,
+        "target_seed": 20263102,
+        "precal_target_seed": 20263103
+      },
+      "precal_insufficient": false,
+      "lb": {
+        "p_empirical": 0.008329028925619835,
+        "wilson95": [
+          0.007376139846954213,
+          0.009403851087204783
+        ],
+        "successes": 258,
+        "valid_iters": 30976,
+        "per_iter_ops": 1782977.6316666666,
+        "C_ops_50pct": 148380553.054596,
+        "p_analytic": 0.0010335758354012704,
+        "C_analytic": 1195718665.298896,
+        "p_emp_over_p_analytic": 8.058459418593328,
+        "N_empirical_mean": 120.06201550387597,
+        "N_median_implied": 129.06666666666666,
+        "heterogeneity": [
+          14,
+          20,
+          10,
+          22,
+          8,
+          9,
+          15,
+          21,
+          23,
+          14,
+          15,
+          14,
+          22,
+          9,
+          25,
+          17
+        ]
+      },
+      "stern": {
+        "selected_l": 7,
+        "analytic_l_star": 7,
+        "l_table": [
+          {
+            "l": 5,
+            "C_ops_50pct": 131182687.67913921
+          },
+          {
+            "l": 6,
+            "C_ops_50pct": 107417681.31276782
+          },
+          {
+            "l": 7,
+            "C_ops_50pct": 96167255.80645752
+          },
+          {
+            "l": 8,
+            "C_ops_50pct": 98463999.37135573
+          },
+          {
+            "l": 9,
+            "C_ops_50pct": 95289625.65433496
+          }
+        ],
+        "p_empirical": 0.016367660764212488,
+        "wilson95": [
+          0.01457497588840761,
+          0.01837672938895722
+        ],
+        "successes": 281,
+        "valid_iters": 17168,
+        "per_iter_ops": 2270849.631666667,
+        "C_ops_50pct": 96167255.80645752,
+        "p_analytic": 0.0018641303108013008,
+        "C_analytic": 844379285.3669863,
+        "p_emp_over_p_analytic": 8.780320060981579,
+        "N_empirical_mean": 61.09608540925267,
+        "N_median_implied": 76.64285714285714,
+        "C_ops_50pct_median_implied": 120638387.86435072,
+        "heterogeneity": [
+          8,
+          11,
+          4,
+          36,
+          31,
+          20,
+          13,
+          5,
+          14,
+          10,
+          23,
+          14,
+          38,
+          9,
+          20,
+          25
+        ]
+      },
+      "prange_formula": {
+        "N_analytic": 191070.36709023232,
+        "C_ops_50pct_formula": 184873583055.72794,
+        "note": "FORMULA prediction (Prange analytic validated in v2); never a measured C"
+      },
+      "C_best_predicted": 96167255.80645752,
+      "verifier_ops": 16576,
+      "tolerance": "measured C within factor 2 of empirical C_ops_50pct"
+    },
+    "2": {
+      "regime": {
+        "n": 160,
+        "k": 80,
+        "w": 16,
+        "tau": 16,
+        "code_seed": 20263201,
+        "target_seed": 20263202,
+        "precal_target_seed": 20263203
+      },
+      "precal_insufficient": false,
+      "lb": {
+        "p_empirical": 0.0012470657276995305,
+        "wilson95": [
+          0.0008925907490536119,
+          0.0017420680643030503
+        ],
+        "successes": 34,
+        "valid_iters": 27264,
+        "per_iter_ops": 3461381.5675152848,
+        "C_ops_50pct": 1923913728.9028769,
+        "p_analytic": 0.0011738472636734882,
+        "C_analytic": 2043917423.1723104,
+        "p_emp_over_p_analytic": 1.0623747793191674,
+        "N_empirical_mean": 801.8823529411765,
+        "N_median_implied": 852.0,
+        "heterogeneity": [
+          2,
+          3,
+          2,
+          2,
+          3,
+          2,
+          2,
+          1,
+          2,
+          4,
+          1,
+          2,
+          0,
+          5,
+          0,
+          3
+        ]
+      },
+      "stern": {
+        "selected_l": 10,
+        "analytic_l_star": 8,
+        "l_table": [
+          {
+            "l": 6,
+            "C_ops_50pct": 1108928603.8164375
+          },
+          {
+            "l": 7,
+            "C_ops_50pct": 1314257787.00747
+          },
+          {
+            "l": 8,
+            "C_ops_50pct": 766998418.5409297
+          },
+          {
+            "l": 9,
+            "C_ops_50pct": 801798375.1108177
+          },
+          {
+            "l": 10,
+            "C_ops_50pct": 688489213.3473216
+          }
+        ],
+        "p_empirical": 0.0030876494023904383,
+        "wilson95": [
+          0.0024095267399527574,
+          0.003955862027072536
+        ],
+        "successes": 62,
+        "valid_iters": 20080,
+        "per_iter_ops": 3066900.3175152848,
+        "C_ops_50pct": 688489213.3473216,
+        "p_analytic": 0.0015942815419253602,
+        "C_analytic": 1333398933.7773097,
+        "p_emp_over_p_analytic": 1.9367027223194142,
+        "N_empirical_mean": 323.8709677419355,
+        "N_median_implied": 1255.0,
+        "C_ops_50pct_median_implied": 2667895701.7208714,
+        "heterogeneity": [
+          10,
+          0,
+          1,
+          0,
+          14,
+          3,
+          1,
+          9,
+          9,
+          0,
+          0,
+          1,
+          0,
+          1,
+          13,
+          0
+        ]
+      },
+      "prange_formula": {
+        "N_analytic": 150601.54949800178,
+        "C_ops_50pct_formula": 282161649409.6411,
+        "note": "FORMULA prediction (Prange analytic validated in v2); never a measured C"
+      },
+      "C_best_predicted": 688489213.3473216,
+      "verifier_ops": 25840,
+      "tolerance": "measured C within factor 2 of empirical C_ops_50pct"
+    },
+    "3": {
+      "regime": {
+        "n": 192,
+        "k": 96,
+        "w": 18,
+        "tau": 18,
+        "code_seed": 20263301,
+        "target_seed": 20263302,
+        "precal_target_seed": 20263303
+      },
+      "precal_insufficient": false,
+      "lb": {
+        "p_empirical": 0.0004155003498950315,
+        "wilson95": [
+          0.00030274990895456374,
+          0.0005702174781214602
+        ],
+        "successes": 38,
+        "valid_iters": 91456,
+        "per_iter_ops": 5951256.64,
+        "C_ops_50pct": 9928022351.477642,
+        "p_analytic": 0.0003499505419821622,
+        "C_analytic": 11787656442.649313,
+        "p_emp_over_p_analytic": 1.18731163421433,
+        "N_empirical_mean": 2406.7368421052633,
+        "N_median_implied": 2286.4,
+        "heterogeneity": [
+          4,
+          3,
+          4,
+          2,
+          3,
+          1,
+          2,
+          3,
+          2,
+          4,
+          3,
+          0,
+          2,
+          2,
+          3,
+          0
+        ]
+      },
+      "stern": {
+        "selected_l": 9,
+        "analytic_l_star": 9,
+        "l_table": [
+          {
+            "l": 7,
+            "C_ops_50pct": 5738418991.7327585
+          },
+          {
+            "l": 8,
+            "C_ops_50pct": 4571848966.804002
+          },
+          {
+            "l": 9,
+            "C_ops_50pct": 4772527498.987266
+          },
+          {
+            "l": 10,
+            "C_ops_50pct": 4690252366.541522
+          },
+          {
+            "l": 11,
+            "C_ops_50pct": 5053109880.677187
+          }
+        ],
+        "p_empirical": 0.0009220494417862839,
+        "wilson95": [
+          0.0006690555233327194,
+          0.0012705878120115432
+        ],
+        "successes": 37,
+        "valid_iters": 40128,
+        "per_iter_ops": 6348588.64,
+        "C_ops_50pct": 4772527498.987266,
+        "p_analytic": 0.0007974991006433934,
+        "C_analytic": 5517882481.3729925,
+        "p_emp_over_p_analytic": 1.156176152477674,
+        "N_empirical_mean": 1084.5405405405406,
+        "N_median_implied": 2508.0,
+        "C_ops_50pct_median_implied": 11036469841.40805,
+        "heterogeneity": [
+          0,
+          6,
+          1,
+          1,
+          1,
+          1,
+          4,
+          0,
+          4,
+          4,
+          0,
+          0,
+          0,
+          2,
+          0,
+          13
+        ]
+      },
+      "prange_formula": {
+        "N_analytic": 630902.8952377968,
+        "C_ops_50pct_formula": 2028226899856.985,
+        "note": "FORMULA prediction (Prange analytic validated in v2); never a measured C"
+      },
+      "C_best_predicted": 4772527498.987266,
+      "verifier_ops": 37152,
+      "tolerance": "measured C within factor 2 of empirical C_ops_50pct"
+    }
+  }
+}
