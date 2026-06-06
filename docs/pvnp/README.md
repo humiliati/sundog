@@ -52,8 +52,12 @@ Phase-4 synthesis:
   Boundary: against Prange (upper bound vs better ISD), imports decoding hardness, no
   crypto/P-vs-NP claim. A stronger attacker class / scaled regime = a new slate.
 - [`SUNDOG_CERTIFICATE_SYNDROME_V2_SLATE.md`](SUNDOG_CERTIFICATE_SYNDROME_V2_SLATE.md)
-  — **FROZEN 2026-06-05** (harness implemented + GREEN pre-freeze audit; operator-gated
-  ~2.5 h run cleared, not yet executed): the stronger-ISD tightening. Same
+  — **FROZEN + EXECUTED 2026-06-05 → bounded-positive + named LB↔Stern model-deviation**
+  (measured `C` all within the locked factor-2 band, but the locked Stern-best prediction
+  reversed: **Lee-Brickell is best**, `C_best=8.31×10⁷` ≈86× over Prange; Stern
+  underperforms at `w=12`. Receipt
+  [`receipts/2026-06-05_certificate_syndrome_v2.md`](receipts/2026-06-05_certificate_syndrome_v2.md)):
+  the stronger-ISD tightening. Same
   **code** as v1 (`[128,64] w=12`, code_seed 2026128) but **decoupled targets** (a
   fresh `target_seed=2026220` + an emitted `target_manifest.json`, fixing v1's
   interleaving of target sampling with attack draws; Prange is re-baselined in-ladder,
@@ -73,10 +77,12 @@ Phase-4 synthesis:
   tolerance; SHA-256 `4e46be88...`), now **produced and durably filed**. Ladder gate:
   Prange→LB must resolve; LB→Stern expected within-`T=64`-noise (a pass, not a
   violation). The reported bound is `C_best` across the tested stronger attackers; it
-  is still an upper bound (BJMM/MMT = future slate). **FROZEN 2026-06-05**; the
-  frozen-run harness (`--frozen`, manifest-before-attackers + 12-file bundle) is
-  implemented, plumbing-validated + byte-deterministic, and GREEN on a 5-dimension
-  adversarial pre-freeze audit. Operator-gated ~2.5 h run is cleared, not yet executed.
+  is still an upper bound (BJMM/MMT = future slate; the measured best is now **LB, not
+  Stern**). **EXECUTED 2026-06-05** via the `--frozen` harness (manifest-before-attackers
+  + 12-file bundle, GREEN 5-dimension pre-freeze audit, byte-deterministic): find-vs-check
+  gap holds (verifier flat 16,576 ops, gap ≈5,015× at `C_best`); the Stern work-factor
+  heuristic was optimistic at `w=12`, the named deviation. A confirmatory follow-up
+  (corrected Stern success model, or the large-`w` regime) is a future slate.
 
 Lit-pass:
 

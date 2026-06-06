@@ -454,12 +454,24 @@ sound on paper and was falsified before freeze by an actual run.
    labels only, never verifier inputs (grep-enforced), and `(n, k, w)` frozen
    before the invert-`e` curve — else the result is contaminated, exactly the
    contamination the Phase-3 receipts were built to avoid.
-4. **Hardness import, not demonstration.** A's witness-recovery hardness rests on an SIS/ISD
-   hardness *assumption*, not on an emergent property of a trained body. Legitimate
-   for an existence proof, but it must read as "imports hardness," never as a
-   cryptographic one-way-function claim (the §0 / Track A guardrail). The empirical
-   substrates (LDT, chatv2) are where hardness would be *demonstrated* rather than
-   assumed.
+4. **Hardness import, not demonstration — now a MEASURED boundary (2026-06-05).** A's
+   witness-recovery hardness rests on an SIS/ISD hardness *assumption*, not on an emergent property
+   of a trained body. Legitimate for an existence proof, but it must read as "imports hardness,"
+   never as a cryptographic one-way-function claim (the §0 / Track A guardrail). The empirical
+   substrates (LDT, chatv2) were named as where hardness might be *demonstrated* rather than assumed
+   — i.e. Direction B. **Direction B is now closed by measurement, not left open.** A design panel
+   decomposed the target into four legs — (a) state-insufficiency, (b) control-sufficiency, (c)
+   de-confound, (d) cost-asymmetry/one-wayness — and showed (a)+(b)+(c) are *already* emergent on a
+   trained body (chatv2 pair-XOR), so only leg (d) was ever in dispute, and leg (d) fights the
+   **gradient-invertibility barrier**. The Gate-0 preflight on chatv2 (D2) then measured it
+   ([`DIRECTIONB_GATE0_NOTE.md`](DIRECTIONB_GATE0_NOTE.md), `results/pvnp/directionb-gate0/`): the
+   certificate's lossiness is imported algebra (secret-from-`σ` det = −0.002, 8 preimages), and the
+   trained body **cannot** supply one-wayness because **control-sufficiency forces it to expose `z`**
+   (untrained-body z linear-recovery −0.018 → trained-body +0.31, up to 0.91; Δ ≈ +0.33, the wrong
+   sign for emergence). **Verdict: emergent capacity-relative one-wayness from a trained body is not
+   available; leg (d) is the imported leg.** The genuinely non-imported, emergent asset is the
+   (a)+(b)+(c) bundle — state-insufficiency + control-sufficiency + de-confound — already banked on
+   chatv2, which never needed leg (d) to beat Candidate A.
 5. **No measured `C` yet.** Every Phase-1 receipt reports
    `capacity_threshold = not_estimated`; A's capacity-relative clause must not imply a
    measured threshold that does not exist. The §5 curve is what supplies it.

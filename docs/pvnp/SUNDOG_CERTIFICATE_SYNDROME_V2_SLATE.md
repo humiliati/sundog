@@ -6,11 +6,15 @@ attacker parameters (`LB p=2`, `Stern p=2, l=8`), and the durable prediction loc
 (sha256 `4e46be88…`) are locked. The three attackers are implemented and two-size-smoke-validated;
 the frozen-run harness emits the per-file Required-outputs bundle with `target_manifest.json` written
 **before** any attacker, and a 5-dimension adversarial pre-freeze audit returned **GREEN** (zero
-confirmed blockers; privilege-tight, deterministic, non-p-hacked, spec-faithful). The operator-gated
-frozen run (`python scripts/pvnp-certificate-syndrome-v2.py --frozen`, ≈2.5 h wall, Prange-dominated;
-op-count is the cost signal, wall-time diagnostic-only) is cleared to execute.
+confirmed blockers; privilege-tight, deterministic, non-p-hacked, spec-faithful). **EXECUTED 2026-06-05**
+(`--frozen`, ≈2.5 h, op-count the cost signal) → **bounded-positive + a named LB↔Stern model-deviation**:
+all three measured `C(ops)@50%` within the locked factor-2 tolerance (absolute calibration confirmed), but
+the locked **Stern-best** prediction reversed — measured **Lee-Brickell is the best** (drop 86×,
+`C_best=8.31×10⁷`), Stern underperforms (drop 50×, 1.64× its locked `C`) because its success-per-iteration
+heuristic is optimistic at `w=12` (per-iter cost was accurate to 2%). Receipt:
+[`receipts/2026-06-05_certificate_syndrome_v2.md`](receipts/2026-06-05_certificate_syndrome_v2.md).
 
-Date opened: 2026-06-04 · Frozen: 2026-06-05
+Date opened: 2026-06-04 · Frozen: 2026-06-05 · Executed: 2026-06-05
 
 This is the **stronger-attacker** successor to
 [`SUNDOG_CERTIFICATE_SYNDROME_V1_SLATE.md`](SUNDOG_CERTIFICATE_SYNDROME_V1_SLATE.md)
