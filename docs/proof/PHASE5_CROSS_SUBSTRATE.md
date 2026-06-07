@@ -64,76 +64,124 @@ variable is discrete/topological *and* the shadow is genuinely lossy.
 
 ## 3. The frozen lossiness-crossover slate (the falsifier that would land Phase 5)
 
-> **STATUS: SLATE DRAFT — freeze §3.2–§3.8 before any run.** Anti-p-hack per the lane (freeze regime
-> + prediction + verdict tree before execution; labels scoring-only; report the null plainly).
+> **STATUS: SLATE DRAFT.** §3.1–§3.6 and §3.8–§3.10 (question, substrates, metrics, thresholds, void
+> gates, verdict tree, and anti-p-hack discipline) **freeze now**. §3.7 numeric constants are
+> **smoke-calibrated on throwaway seeds, then
+> frozen with the prediction** (the syndrome-lane discipline — never tune a frozen constant after
+> seeing the frozen-seed result). Anti-p-hack §3.10.
 
 ### 3.1 The single question
 As a shadow's **lossiness** (ensemble spread) increases, does recovery of a **continuous** hidden
 variable decay to chance while recovery of a **discrete** hidden variable stays exact — and does the
 **same crossover** appear across ≥2 structurally-different substrates? A yes is the measured shared
-operator (the Phase-5 Exit); the *cross-substrate sameness of the crossover* is the anti-equivocation
-content (one operator, not one word).
+operator (the Phase-5 anti-equivocation content: one operator, not one word).
 
-### 3.2 Hidden state + two probes (frozen)
-`x = (x_c, x_d)`: `x_c` continuous (a "size"-like magnitude), `x_d ∈ {±1}` discrete (a
-"handedness"-like `Z₂` parity). Shadow `σ` = ensemble-average over a population of `K` sub-units (each
-sub-unit carries its own `x_c,i`; `x_d` is **shared** — a structural property of the population). Two
-**model-free** probes (linear + one-hidden-layer MLP, the preflight discipline): a continuous-recovery
-probe (`σ → x_c`) and a discrete-recovery probe (`σ → x_d`), each scored against its own
-majority/chance baseline.
+`x = (x_c, x_d)`: `x_c` continuous, `x_d ∈ {±1}` discrete. Shadow `σ` = ensemble-average over `K`
+sub-units, each carrying its own `x_c,i = x_c* + λ·ξ_i` (`ξ_i ~ N(0,1)`); **`x_d` is shared** across
+the population (a structural property of the cloud). `λ` is the lossiness knob.
 
-### 3.3 The lossiness knob (frozen)
-`λ` = the population spread of `x_c`: `x_c,i = x_c* + λ·ξ_i`, `ξ_i ~ N(0,1)`; `x_d` shared. Swept on a
-frozen grid `λ ∈ {0, …, λ_max}`. Lossiness = how much the average smears the continuous signature.
+### 3.2 The two FROZEN substrates (S0, S1) + the staged physical one (S2)
+- **S0 — 1-D caustic toy (INLINE).** `σ(t)`, `t` on a `T`-point grid over `[−1,1]`, `=`
+  `D·bump(t; t0, w_b)` (scale-free geometric distractor, carries nothing) `+` `A·cos(2π·x_c,i·t)·env(t)`
+  (continuous: fringe **frequency** = `x_c,i`; additive average → `cos(2π x_c* t)·exp(−2π²λ²t²)`, the
+  off-centre fringes Debye–Waller-damp → frequency unrecoverable) `+` `x_d·C·sin(2π f_p·t)·env(t)`
+  (discrete: parity channel, the **sign factors out of the average**), `env(t)=exp(−t²/2w²)`. Features
+  = the `T` samples of `σ̄(t)` (+ noise). `x_c*` = fringe frequency (continuous); `x_d ∈ {±1}` = parity.
+- **S1 — 2-D vector-field substrate (INLINE; the cross-substrate leg — different in dimensionality,
+  field type, and discrete-invariant type).** On a `G×G` grid over `[−1,1]²`, sub-unit `i` field
+  `V_i(p) = A·cos(2π·f0·r(p) + x_c,i)·r̂(p) + x_d·B·τ̂(p)/(r(p)+ε)` where `r=|p−center|`, `r̂` radial
+  unit, `τ̂` tangential unit. **Continuous** `x_c` = the **phase offset** of a fixed-wavenumber radial
+  texture (washes out by additive population mixing via amplitude attenuation,
+  `→ cos(2π f0 r + x_c*)·exp(−½λ²)·r̂`, not S0-style spatial frequency cancellation and not centroid-
+  preserved). **Discrete** `x_d ∈ {±1}` = the **circulation sign / winding orientation** (the sign of
+  `∮V·dl`, with magnitude regularized by `ε`; conserved under same-sign superposition → survives any
+  `λ`). Features = the `2·G²` components `(Vx, Vy)` of `V̄(p)` (+ noise). `x_c*` = radial phase offset;
+  `x_d` = winding sign.
+- **S2 — halo physical instantiation (APPARATUS-GATED).** `x_c` = crystal **size** (off the
+  Airy/Pearcey dressing), `x_d` = **handedness** (Stokes `V` sign) or **ice phase** (halo radius),
+  swept over population spread via HaloSim **+ the wave/Stokes layer (not yet built; staged)**.
 
-### 3.4 Three substrates, staged by cost
-- **S0 — synthetic caustic toy (INLINE-runnable, model-free, ~minutes; the operator's core test).**
-  `σ(t)` = a scale-free gross feature (a fixed bump — carries *nothing*, models the geometric shadow)
-  **+** a fringe dressing `cos(x_c,i·(t−t0))·env(t)` (the size signature; averaging gives
-  `cos(x_c*·(t−t0))·exp(−½λ²(t−t0)²)` — the fringe **damps with λ**, Debye–Waller-like) **+** a parity
-  channel `x_d·sin(ω0(t−t0))·env(t)` (handedness; the **sign survives averaging**). Continuous recovery
-  rides the washing-out fringe; discrete rides the surviving parity. The faithful controlled instance.
-- **S1 — a second synthetic substrate of different mechanism (INLINE-runnable; the cross-substrate
-  leg).** A structurally-different generator — e.g. a "field" substrate where `x_d` is the **sign of a
-  circulation / a winding number** and the lossy channel is **additive mixing**, not fringe-damping. If
-  the crossover *shape* matches S0 despite the different mechanics, the operator is substrate-invariant
-  — the anti-equivocation content.
-- **S2 — the halo physical instantiation (APPARATUS-GATED; the photographable capstone).** The
-  two-tower halo version: `x_c` = crystal **size** (Shadow 2, off the Airy/Pearcey dressing), `x_d` =
-  **handedness** or **ice phase** (Shadow 3, off Stokes `V` / halo radius), swept over population
-  spread, generated by HaloSim **+ the wave/Stokes layer** (the apparatus extension — NOT yet built;
-  staged). The physical witness that makes it more than a toy.
+### 3.3 Metrics (frozen)
+- `cont(λ) = max(0, R²_cv)` — cross-validated coefficient of determination of the continuous probe
+  predicting `x_c*` from `σ`, floored at 0 (negative `R²` = worse than the mean baseline = 0).
+- `disc(λ) = (acc_cv − maj) / (1 − maj)` — recovery determinant of the discrete probe predicting `x_d`
+  (`maj` = majority-class frequency); 0 at chance, 1 perfect (the JEPA-0D / Gate-0 metric).
+- **Probe families:** linear (`LinearRegression` / `LogisticRegression`) **and** one-hidden-layer MLP.
+  **Verdict policy: BEST-OF the two for each metric** — the strongest claim on both sides (continuous
+  *resisting even the better probe* is strong resistance; discrete *recovered by the better probe* is
+  strong determination). Both families are reported separately for transparency; verdicts read best-of.
 
-### 3.5 The crossover statistic (frozen)
-Per substrate, per `λ`: `cont(λ)` and `disc(λ)` (probe recovery det above baseline). Define the
-**half-life** `λ*_c` = the `λ` where `cont` falls to half its `λ=0` value, and `λ*_d` likewise.
-**Crossover statistic = `λ*_d / λ*_c`**, predicted `≫ 1` (ideally `λ*_d` unreached on the grid). Report
-both full curves + the ratio + the analytic S0 prediction.
+### 3.4 The crossover statistic + cross-substrate identity (frozen, numerical)
+Per substrate, per `λ`: half-life `λ*_c` = smallest grid `λ` with `cont(λ) ≤ ½·cont(0)`; `λ*_d` =
+smallest grid `λ` with `disc(λ) ≤ ½·disc(0)`, else **censored** (`> λ_max`). Crossover statistic =
+`λ*_d / λ*_c` (predicted `→ ∞`, reported `> λ_max/λ*_c` when `λ*_d` censored). **"Same qualitative
+crossover" is defined numerically** (§3.5): a substrate "shows the crossover" iff it passes the
+continuous-resists gate **and** the discrete-determines gate; **cross-substrate identity holds iff S0
+AND S1 both show it.**
 
-### 3.6 Pre-registered prediction (freeze before running)
-- `cont(λ)`: high at `λ=0`, **monotone decay to chance** by a finite `λ*_c` within the grid.
-- `disc(λ)`: `≈ exact (≥ 0.95)` across the **whole** grid; `λ*_d` unreached.
-- **Same qualitative crossover on S0 AND S1.**
-- S0 quantitative: with the fringe damping `exp(−½λ²(t−t0)²)`, `λ*_c` is analytic from the `env` scale;
-  `disc` is `λ`-independent by construction (the sign factors out of the average).
+### 3.5 FROZEN thresholds (gates)
+- **Probe-power preflight (`λ=0`):** `cont(0) ≥ 0.70` AND `disc(0) ≥ 0.95` (else `void_underpowered`).
+- **Continuous-resists gate:** `cont(λ_max) ≤ 0.10` AND `λ*_c` is **in-grid** (a finite half-life).
+- **Discrete-determines gate:** `min_λ disc(λ) ≥ 0.95` across the **whole** grid (⇒ `λ*_d` censored).
+- **Pre-registered prediction (set at freeze, after calibration):** `cont(λ)` monotone-decreasing
+  (within tol) from `cont(0) ≥ 0.70` to `cont(λ_max) ≤ 0.10` with `λ*_c` in-grid; `disc(λ) ≥ 0.95` flat
+  across the grid; **the same on S0 and S1**. S0 analytic anchor: `λ*_c` follows from the
+  `exp(−2π²λ²t²)` fringe damping and the `env`/noise scale; S1 analytic anchor: the radial texture
+  amplitude decays as `exp(−½λ²)` against the fixed noise scale; `disc` is `λ`-independent by
+  construction on both substrates.
 
-### 3.7 Verdict tree (first match wins)
+### 3.6 Void / preflight gates (checked BEFORE the verdict tree)
+| void branch | trip condition |
+| --- | --- |
+| `void_not_frozen` | any §3.7 constant unset, or the constants block not finalized |
+| `void_label_leak` | `x_c*`, `x_d`, or `λ` appears in the feature vector (assert: features are exactly the `σ` components — no label/λ columns) |
+| `void_underpowered` | `cont(0) < 0.70` OR `disc(0) < 0.95` (harness too weak to even read the variables at zero lossiness) |
+| `void_class_imbalance` | `x_d` majority fraction ∉ `[0.45, 0.55]` (the `disc` baseline must be balanced) |
+| `void_probe_nonconverge` | BOTH probe families fail to converge at `λ=0` (record convergence; a single non-converged MLP still scores) |
+| `void_nondeterministic` | a re-run at the same seeds does not reproduce the curves within float tol |
+
+### 3.7 FROZEN constants (smoke-calibrate on throwaway seed, then freeze)
+Starting values (calibration targets — tune ONLY on the throwaway seed to hit §3.5's preflight + gates,
+then freeze the final values with the prediction):
+- **S0:** `T=64`, `t∈[−1,1]`, `t0=0`, `w=0.5`, `w_b=0.1`; `A=1.0`, `C=1.0`, `D=0.5`, `f_p=8`;
+  `x_c* ~ U[3,7]`; `K=64`; obs-noise `σ_n` (start `0.30`).
+- **S1:** `G=16`, `[−1,1]²`, `ε=0.10`; `A=1.0`, `B=1.0`, `f0=3.0`;
+  `x_c* ~ U[−1.0,1.0]` radians; `K=64`; obs-noise (start `0.30`).
+- **Shared:** `λ` grid `{0, 0.02, 0.05, 0.10, 0.15, 0.20, 0.30, 0.50, 0.75, 1.00, 1.50, 2.00}` (calibrate `λ_max` so
+  `cont(λ_max) ≤ 0.10`); `n = 2000` samples per `(substrate, λ)`; **CV = 4-fold**;
+  `data_seed = 20260605`, `probe_seed = 0`; **throwaway calibration seed = 999, n=500**.
+- **Probes (frozen):** linear = `LinearRegression` / `LogisticRegression(max_iter=2000)`;
+  MLP = `MLP{Regressor,Classifier}(hidden_layer_sizes=(64,), max_iter=500, random_state=0)`;
+  non-convergence is recorded, not fatal (a single non-converged MLP still contributes its score).
+- **Calibration protocol:** on seed 999 only, adjust `{σ_n, amplitudes, λ_max, x_c* range, K, n}` until
+  the preflight (`cont(0)≥0.70`, `disc(0)≥0.95`) and the gates land in-grid on BOTH S0 and S1; freeze
+  the final constants + the §3.5 prediction; then run the frozen `data_seed`. Calibration may change
+  scale/power only — not generator equations, thresholds, probe families, void gates, or verdict
+  branches. **Never tune on `data_seed`.**
+
+### 3.8 Verdict tree (after void gates; first match wins)
 | branch | condition | reading |
 | --- | --- | --- |
-| `void` | not frozen / labels leaked into probe inputs / nondeterministic | no result |
-| `law_falsified_discrete_decays` | `disc(λ)` also decays to chance | the discrete variable is NOT structurally stable as claimed — **the law is wrong** (a major banked negative) |
-| `law_falsified_continuous_survives` | `cont(λ)` does NOT decay across the grid | insufficient lossiness / the continuous signature isn't washing — re-examine the knob (NOT a confirmation) |
-| `operator_partial` | clean crossover on S0 but not reproduced on S1 | not yet substrate-invariant |
-| `operator_confirmed_synthetic` | crossover on S0 **and** S1 (cont→chance, disc→exact, same shape) | **measured shared operator on ≥2 substrates** — Phase-5 anti-equivocation met *synthetically*; the physical S2 still owed |
-| `operator_confirmed_physical` | S2 (halo) reproduces it | the full measured operator-identity — Phase-5 Exit, public-eligible after evidence-tier review |
+| `law_falsified_discrete_decays` | `disc(λ)` also decays (`min_λ disc < 0.95` with a finite `λ*_d`) on a passing-preflight substrate | the discrete variable is NOT structurally stable — **the law is wrong** (major banked negative) |
+| `law_falsified_continuous_survives` | `cont(λ_max) > 0.10` (continuous not washed across the grid) | insufficient lossiness — re-examine the knob (NOT a confirmation) |
+| `operator_partial` | gates pass on S0 but not reproduced on S1 | crossover real but not yet substrate-invariant |
+| `operator_confirmed_synthetic` | continuous-resists AND discrete-determines gates pass on **S0 AND S1** | **measured shared operator on ≥2 structurally-different synthetic substrates** — closes the *synthetic* anti-equivocation lacuna. **NOT Phase-5-complete; NOT public-eligible.** |
+| `operator_confirmed_physical` | S2 (halo) reproduces it under the wave/Stokes apparatus | the full measured operator-identity — **the Phase-5 Exit; public-eligible after evidence-tier review** |
 
-### 3.8 Anti-p-hack discipline
-Freeze §3.2–§3.7 before any run. Labels (`x_c*`, `x_d`) are **scoring-only** — the probes are
-supervised, but the generator/regime is **not** tuned to produce the crossover. Pre-register the
-prediction and the verdict branches; report `law_falsified_*` plainly if it appears (the law is a
-conjecture — the negative is the valuable outcome, and the cheapest one). Deterministic (seed-pinned).
-**S0/S1 are inline-runnable** (numpy + sklearn, the JEPA-0D / Gate-0 preflight pattern); **S2 is
-operator-staged** behind the wave/Stokes apparatus extension.
+### 3.9 Synthetic vs. physical status (load-bearing)
+`operator_confirmed_synthetic` (S0+S1) is **distinct from full Phase-5 completion.** It discharges the
+*synthetic* anti-equivocation question (the same operator on two structurally-different in-silico
+substrates) — a real, banked result. **Full Phase-5 (the roadmap Exit) and any public claim require
+S2**, the halo physical instantiation, which stays apparatus-gated behind the wave/Stokes HaloSim
+tooling (not yet built). Do not promote `operator_confirmed_synthetic` to "Phase-5 complete."
+
+### 3.10 Anti-p-hack discipline
+Labels (`x_c*`, `x_d`) are **scoring-only**; the generator/regime is **not** tuned to produce the
+crossover (only the throwaway-seed calibration tunes power, §3.7). Pre-register the prediction and the
+verdict branches before the frozen run; report `law_falsified_*` plainly (the law is a conjecture —
+the cheap negative is the valuable outcome). Deterministic (seed-pinned, byte-reproducible).
+**S0/S1 inline-runnable** (numpy + sklearn, the JEPA-0D / Gate-0 preflight pattern); **S2
+operator-staged.**
 
 ## 4. Dig-in: where alignment sits relative to the law (the founding-theorem correction)
 

@@ -103,7 +103,10 @@ locked mechanisms:
    `ΔS(B_star_pair) = Ŝ_LB(B_star_pair) − Ŝ_Stern_l(B_star_pair)`. Bootstrap CI over shared
    seed/target resample indices (2000 resamples, seed-pinned). Secondary: log-rank on pooled
    `(ops,event)` for `b≤B_common`. Pair verdict `lb_wins`/`stern_wins` only if `ΔS` CI excludes 0
-   AND log-rank `p<0.05`; else `indistinguishable_at_op_budget`.
+   AND log-rank **`p<0.025`** (Bonferroni for the 2 pairwise comparisons `LB vs stern_l8` and
+   `LB vs stern_l9`, holding the family error at α≈0.05); else `indistinguishable_at_op_budget`.
+   The dual gate (`ΔS` CI excludes 0 **and** the Bonferroni log-rank) means each pair's joint
+   significance is `≤0.025`, so the two-pair family false-positive stays `≤0.05`.
 
 R2′ family verdict derives from the pair verdicts: `stern_wins` iff at least one admissible Stern
 variant has pair verdict `stern_wins` and no admissible Stern variant has pair verdict `lb_wins`;
@@ -111,6 +114,11 @@ variant has pair verdict `stern_wins` and no admissible Stern variant has pair v
 `indistinguishable_at_op_budget` iff every admissible pair is indistinguishable; `mixed_variant`
 iff one fixed Stern variant wins and another loses. If LB or both Stern variants are
 `precal_insufficient`, R2′ is `precal_insufficient` and frozen scoring is blocked.
+
+**Reported bound (distinct from the verdict).** `C_best := min over admissible variants of the
+frozen KM-median `C@50%`` (the best attacker an adversary would pick), with its band carried
+alongside; this is the reported capacity upper bound and is computed independently of the pairwise
+`ΔS`/log-rank verdict (which only decides *whether* Stern beats LB, not the bound).
 
 ## Three falsification gates (all thresholds locked before frozen targets are seen)
 
