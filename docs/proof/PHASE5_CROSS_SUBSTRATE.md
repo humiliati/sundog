@@ -1,11 +1,14 @@
 # Phase 5 — Cross-Substrate Sameness: the Shadow-Invertibility Law (candidate operator)
 
-> **STATUS: DRAFT CANDIDATE OPERATOR, 2026-06-05. NOT the measured Exit yet.** The coarse-graining
-> roadmap's Phase 5 (`../COARSE_GRAINING_PROOF_ROADMAP.md` §"Phase 5 — Cross-substrate sameness")
-> requires a **measured** cross-substrate operator-identity table on ≥2 substrates to dissolve the
-> equivocation attack. This file supplies the **candidate operator** and the **measurable test
-> design** — the conjecture and the falsifier — not the measured table. The measured table is still
-> owed; do not cite this as Phase-5-complete. It also **reframes** the Phase-5 target: from "the same
+> **STATUS: CANDIDATE OPERATOR — SYNTHETIC LEG MEASURED 2026-06-07, PHYSICAL LEG (S2) OWED. NOT the
+> Phase-5 Exit yet.** The coarse-graining roadmap's Phase 5 (`../COARSE_GRAINING_PROOF_ROADMAP.md`
+> §"Phase 5 — Cross-substrate sameness") requires a **measured** cross-substrate operator-identity
+> table on ≥2 substrates to dissolve the equivocation attack. This file supplies the **candidate
+> operator**, the **measurable test design** (conjecture + falsifier), and now the **synthetic measured
+> table** (§3.11, `operator_confirmed_synthetic` on S0+S1 — two structurally-different *synthetic*
+> substrates, frozen + determinism-receipted). The **physical** table (S2, the halo instantiation) is
+> still owed; **do not cite this as Phase-5-complete or public-eligible.** It also **reframes** the
+> Phase-5 target: from "the same
 > sufficient statistic `Φ` recurs" to "the same *invertibility split* recurs," which directly answers
 > the resistance/inversion question the founding theorem cared about (and which the proof trunk had
 > drifted away from — see `pvnp/SUNDOG_CERTIFICATE_PROBLEM.md` and the 2026-06-05 lacuna review).
@@ -220,8 +223,9 @@ Run: `scripts/pvnp_phase5_lossiness_crossover.py --frozen`, `data_seed=20260605`
 | **S1** | 0.992 | **0.053** | 2.0 (in-grid) | **1.000** | censored | resists ✓ determines ✓ |
 
 - **Cross-substrate identity = True.** `disc(λ)=1.000` at every λ on both substrates (the
-  discrete/topological variable is exactly determined regardless of lossiness); `cont(λ)` decays
-  monotonically to ≤0.10 in-grid on both (the continuous variable is washed out by the lossy average).
+  discrete/topological variable recovered with no held-out error — at the metric ceiling, all λ; *not*
+  algebra-exactness); `cont(λ)` decays monotonically (within CV tol — sub-0.001 upticks at small λ) to
+  ≤0.10 in-grid on both (the continuous variable is washed out by the lossy average).
   **Verdict: `operator_confirmed_synthetic`** — measured shared operator on two structurally-different
   synthetic substrates. Closes the *synthetic* anti-equivocation lacuna.
 - **Prediction deviations (reported per §3.10, not re-tuned):** (1) S0 `cont(0)=0.885` vs predicted
@@ -231,26 +235,42 @@ Run: `scripts/pvnp_phase5_lossiness_crossover.py --frozen`, `data_seed=20260605`
   completes only at the last grid point. The pre-freeze λ-grid extension to 2.0 is load-bearing for the
   S1 leg. The *qualitative* law (continuous-resists / discrete-determines) held on both; the fine
   half-life estimate on S1 was off by one step.
-- **Determinism:** all stochastic components are seeded (`default_rng(seed+·)`, `KFold/StratifiedKFold
-  random_state=probe_seed`, `MLP random_state=0`) ⇒ structurally byte-reproducible; explicit re-run
-  receipt available on request.
+- **Determinism (receipt, 2026-06-07).** All stochastic components are seeded (`default_rng(seed+·)`,
+  `KFold/StratifiedKFold random_state=probe_seed`, `MLP random_state=0`). Two independent `--frozen`
+  runs (`…/phase5-lossiness-crossover/frozen.json` and `…-repro/frozen.json`) are **byte-identical** on
+  `cont`, `disc`, `maj`, `λ*_c`, `λ*_d`, the gate dict, and `cross_substrate_identity` (only wall-time
+  differs: 256.8s vs 225.1s). Byte-reproducible — receipt confirmed, not merely structural.
 - **STATUS GATE (load-bearing, §3.9):** this is **NOT Phase-5-complete and NOT public-eligible.** It
   discharges the *synthetic* question only. Full Phase-5 (the roadmap Exit) and any public claim require
   **S2** — the halo physical instantiation behind the wave/Stokes HaloSim layer (not yet built).
 
 ## 4. Dig-in: where alignment sits relative to the law (the founding-theorem correction)
 
-This is the payoff that makes the law load-bearing, not just elegant. The **founding Sundog Alignment
-Theorem bet on `x_c`** — that the *continuous, embodied body* would *resist* reward-hacking. The law
-says the continuous body is exactly the **resistant** side — and resistance went three-for-three
-marginal precisely because trained bodies are near-injective (insufficient lossiness). **The founding
-theorem bet on the wrong side of its own law.**
+This is the payoff that makes the law load-bearing, not just elegant — stated as the law's
+**prediction**, not a closed verdict. The **founding Sundog Alignment Theorem bet on `x_c`** — that the
+*continuous, embodied body* would *resist* reward-hacking. The law **predicts** the continuous body is
+the **resistant** side; the three-for-three marginal body-resistance results (mesa PR≈2 / FVE 0.97–0.99,
+NS-C1 FVE~0.99, Sabra eff-rank 1.7/30) are **consistent** with the near-injective reading — a
+near-injective body is a low-lossiness shadow, where `x_c` has not yet washed out and stays readable.
+But the causal step — that near-injectivity *caused* the marginality — is **not yet tested.** It needs
+an intervention on the actual bodies: **registered prediction** — artificially raise the ensemble
+spread (lossiness) on the mesa / NS / Sabra control shadow and the continuous-resists / discrete-
+determines separation should *sharpen*; absent that intervention this is a consistency argument, not a
+demonstrated cause. So, on the law as currently conjectured (synthetic receipt §3.11, physical S2
+owed): **the founding theorem appears to have bet on the resistant side of its own law** — a reframing
+the law predicts and the marginal results fit, pending the intervention test and S2.
 
-The mature, earned property lives on the **other** side: the alignment-relevant object is a
-**discrete/algebraic invariant** — a certificate, a coset, a parity — which is the **determinable**
-side. The certificate lane's measured positive (the syndrome's spoof-resistance, the capacity-relative
-one-way threshold) is exactly a discrete-algebraic invariant that the lossy shadow **determines** and
-that an attacker cannot forge. So:
+The mature, earned property is **far more cleanly carried by the other** side: the alignment-relevant
+object is a **discrete/algebraic invariant** — a certificate, a coset, a parity — the **determinable**
+side. ("Cleanly carried by," not "must live on": the law itself forces the hedge via §5's own
+falsifier — a continuous parameter read *through* a discrete encoding can survive averaging, so the
+discrete/continuous boundary is encoding-dependent.) Two senses of *resist* are also in play and are
+**not** the same property: the law's sense is **resistance to epistemic recovery from a lossy shadow**;
+the founding theorem's sense was **resistance to reward-hacking.** The bridge from one to the other is
+the **certificate-verifier framing** — a discrete invariant an attacker cannot forge *is* a
+hacking-robust target — not the law alone. The certificate lane's measured positive (the syndrome's
+spoof-resistance, the capacity-relative one-way threshold) is exactly such a discrete-algebraic
+invariant that the lossy shadow **determines** and that an attacker cannot forge. So:
 
 > **Founding bet:** alignment via continuous body-resistance (the `x_c` / resistant side) → marginal.
 > **Corrected claim:** alignment via discrete-invariant determination (the `x_d` / determinable side —
@@ -260,6 +280,30 @@ that an attacker cannot forge. So:
 The halo handedness layer is the *photographable proof of concept* that discrete invariants are
 cleanly determinable from a lossy shadow — the optical witness for the corrected alignment claim.
 
+**The law's mechanism now has a falsifiable synthetic receipt.** §3.11's frozen run exhibits the
+dichotomy as a measurement that *could have failed and did not* (the `law_falsified_*` branches were
+live): across the lossiness grid, on two structurally-different substrates, `disc(λ)=1.000` — the
+discrete invariant recovered with **no held-out error** (n=2000, all λ — at the metric ceiling, *not*
+the algebra-exactness of the AB/syndrome rows) — while `cont(λ)` decays to chance. Two cautions on what
+this does and does **not** show:
+> 1. The generators were **built** to instantiate the split (the discrete sign factors out of the
+>    average; the continuous part Debye–Waller / amplitude-decays). A clean crossover therefore confirms
+>    the **law's mechanism is internally coherent on a constructed example** — it contains **no trained
+>    body** and cannot, by itself, evidence that real trained bodies are near-injective or that the
+>    founding theorem's bet was wrong. That is the separate, still-untested intervention claim above.
+> 2. The measured `x_d` is a parity / winding sign — a generic topological toy. Whether a specific
+>    **alignment** invariant (certificate / coset) is `P`-structurally-stable *in the same sense* is a
+>    separate assumption, anchored by the AB/syndrome exact results, **not** demonstrated by these toys
+>    (and the syndrome's exactness is a crypto-trapdoor mechanism, distinct from structural-stability-
+>    under-averaging).
+
+So the receipt anchors the *logic* of the correction — the split is real and sharp where the mechanism
+is present — and nothing more. It is **synthetic** (S0 + S1), excludes the physical halo leg (S2), and
+even on S1 the continuous-resists gate cleared only at the last grid point (`cont=0.053` at λ=2.0 —
+boundary-tight; §3.11). The AB/syndrome exact results and the halo-handedness demo remain the
+correction's *physical* anchors; S2 remains owed (§3.9, §6) before the correction's physical claim is
+discharged.
+
 ## 5. Falsification surface
 
 - **A discrete `x_d` the lossy shadow determines but that is NOT structurally stable under `P`** (the
@@ -267,10 +311,18 @@ cleanly determinable from a lossy shadow — the optical witness for the correct
 - **A continuous `x_c` that survives averaging** via a hidden topological encoding (a continuous
   parameter read through a discrete invariant) — would blur the dichotomy; the law would need the
   "kind" defined post-encoding.
-- **No measured crossover** in §3 (continuous and discrete decay together, or neither) — kills the
-  operator on the atlas substrate.
+- **No measured crossover** (continuous and discrete decay together, or neither) — kills the operator
+  on that substrate. *This falsifier did not fire on the synthetic substrates (§3.11, both passed);
+  it remains live for S2.*
 - **Lossiness without resistance / injective with resistance** — would refute the essential-lossiness
   clause.
+
+**What the synthetic slate actually exercised:** only the third falsifier (no measured crossover) — and
+it did not fire (§3.11). Falsifiers 1, 2, and 4 are **not testable on generators built to embody the
+dichotomy** (the toy's `x_d` is shared/structurally-stable by construction, so `law_falsified_discrete_
+decays` *cannot* fire; no hidden topological encoding of `x_c` was instantiated; lossiness and
+resistance co-vary by design). They remain **entirely open**, and probing them is part of what S2 — and
+deliberately adversarial substrate design — must do. The synthetic pass is not a pass of the surface.
 
 ## 6. Honest boundary
 
@@ -279,9 +331,11 @@ The *pieces* are borrowed and known — Thom (structural stability), Nye (wave d
 operator, with one mechanism (structural stability under lossy averaging) and two knobs (lossiness,
 kind), governs the invertibility split across the whole portfolio, and that the marginal/exact
 spectrum the program measured *is that operator seen from different lossiness*. This is a **conjecture
-with a falsifier**, not a closed theorem; the measured cross-substrate crossover (§3) is owed before
-any Phase-5-complete or public claim. It REFRAMES, and does not yet discharge, the roadmap's Phase-5
-Exit.
+with a falsifier**, not a closed theorem. The measured cross-substrate crossover is now **delivered on
+the synthetic substrates** (§3.11, `operator_confirmed_synthetic` — two structurally-different
+substrates, not a shared word) and **still owed on the physical one** (S2). The physical crossover
+remains required before any Phase-5-complete or public claim. This REFRAMES, and does not yet
+discharge, the roadmap's Phase-5 Exit.
 
 ## 7. Cross-references
 
@@ -296,5 +350,6 @@ Exit.
 
 *Sundog Research Lab — Phase-5 candidate operator. The shadow-invertibility law: lossy averaged
 shadows determine the structurally-stable (discrete/topological) part of a state and resist the
-continuous part; lossiness is essential. The measured cross-substrate crossover is owed. DRAFT
-conjecture; not Phase-5-complete; no public claim until measured.*
+continuous part; lossiness is essential. Synthetic cross-substrate crossover delivered (§3.11, S0+S1,
+2026-06-07); physical (S2) crossover still owed. Conjecture with a falsifier; not Phase-5-complete; no
+public claim until the physical leg is measured.*
