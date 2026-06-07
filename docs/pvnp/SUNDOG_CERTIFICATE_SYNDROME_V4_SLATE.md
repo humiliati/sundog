@@ -1,9 +1,10 @@
 # Sundog Certificate Problem — Syndrome Certificate v4 Median-Calibration + Rung-2 Resolution Slate
 
-Status: **DRAFT — review-tuned, NOT frozen.** No v4 frozen-target run may execute
-until this slate is stage-1 frozen, the median pre-calibration has produced the stage-2
-locked prediction, and each attacker has been validated. (Freeze-before-execute, per the
-lane.)
+Status: **FROZEN — stage-1 slate contract; NOT executed.** Stage-1 sign-off 2026-06-06
+(consistency pass clean; precal `cap = 12·N_analytic` stress-tested ≈ 6.3× the v3-measured
+R2′ median, well clear of the censoring boundary). No v4 frozen-target run may execute until
+the median pre-calibration has produced the stage-2 locked prediction and each attacker has
+been validated. (Freeze-before-execute, per the lane.)
 
 Date opened: 2026-06-06
 
@@ -199,13 +200,13 @@ a new root for reruns unless a manifest says `complete=false`.
 
 Stage-1 slate contract:
 
-- [ ] Freeze R2′ + v3-rung validation regimes, seeds, and non-enumerability.
-- [ ] Freeze the median pre-cal plan (`T_pre=48`, `C_MULT=12`, insufficiency, median-locked
-      comparator, fixed Stern `l` variants).
-- [ ] Freeze the rung-2 outcome definitions (`Stern_wins` vs `LB_wins`) and the
-      method-validation gate against v3's measured rungs.
-- [ ] Confirm W14 is out-of-scope for v4 and deferred to a future slate if wanted.
-- [ ] Stage-1 sign-off recorded; frozen scoring blocked until stage-2 lock exists.
+- [x] Freeze R2′ + v3-rung validation regimes, seeds, and non-enumerability. Done 2026-06-06.
+- [x] Freeze the median pre-cal plan (`T_pre=48`, `C_MULT=12`, insufficiency, median-locked
+      comparator, fixed Stern `l` variants). Done 2026-06-06.
+- [x] Freeze the rung-2 outcome definitions (`Stern_wins` vs `LB_wins`) and the
+      method-validation gate against v3's measured rungs. Done 2026-06-06.
+- [x] Confirm W14 is out-of-scope for v4 and deferred to a future slate if wanted. Done.
+- [x] Stage-1 sign-off recorded 2026-06-06; frozen scoring blocked until stage-2 lock exists.
 
 Stage-2 prediction lock, after implementation:
 

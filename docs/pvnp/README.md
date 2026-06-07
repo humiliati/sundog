@@ -99,6 +99,19 @@ Phase-4 synthesis:
   [`receipts/2026-06-06_certificate_syndrome_v3.md`](receipts/2026-06-06_certificate_syndrome_v3.md).
   Next (future slate): median-based prediction lock + larger pre-cal target count; clean
   rung-2 retest at `l∈{8,9}`.
+- [`SUNDOG_CERTIFICATE_SYNDROME_V4_SLATE.md`](SUNDOG_CERTIFICATE_SYNDROME_V4_SLATE.md)
+  — **STAGE-1 FROZEN 2026-06-06; harness built + validated, NOT executed**: median-calibration
+  + rung-2 (R2′) resolution. Closes v3's two self-named flaws: **(1)** locks a
+  **directly-measured censored median** ops-to-first-success (the exact analog of the frozen
+  `C@50%`, replacing v3's mean-based formula that missed rung-2 by 5.3×; `T_pre` 16→48), and
+  **(2)** re-measures `[160,80]w16` (same code as v3 rung-2 via a `code_digest` identity gate,
+  fresh targets) with fixed Stern `l∈{8,9}`, `C_Stern=min`, vs LB → **`Stern_wins`** (crossover
+  monotone, the v3 `l=10` was the handicap) or **`LB_wins`** (genuine 2-D feature). Method
+  validated zero-frozen-cost against v3's measured rungs 1/3. W14 midpoint **deferred** to a
+  future slate. Two-stage freeze; harness `scripts/pvnp-certificate-syndrome-v4.py`
+  (`--median-precal` → `--validate-v3` → `--frozen --regime r2prime` → `--summarize`),
+  validated inline (base(m)=v3 to 0.1%, byte-deterministic, code_identity gate, full bundle).
+  Next: staged median pre-cal → stage-2 lock → operator-gated R2′ run (~7 h).
 
 Lit-pass:
 

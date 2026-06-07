@@ -45,21 +45,38 @@ The infrastructure is already there and resume-safe:
 - **Run as a long-budget job** (`workflow_dispatch` / overnight), not an agent session. Cost for the
   ON-arm: `(ON-candidate cells + OFF anchor) × 8 seeds × ~3.75 h` ≈ tens of hours. No new code.
 
-### Path B — GPU-torch port on the 1080 (real build; fast; needs a faithfulness gate)
-Reimplement only the **particle-MPC rollout** in torch on the 3.12 venv:
-- State the planar R3BP step as a batched torch op; integrate `[512 particles × K candidate actions]`
-  × 800 steps as one `(B, ...)` tensor on the 1080. Keep the **exact** Node contract: same particle
-  count, horizon, candidate-hold, resampling, action_key set, and the shard/`manifest.json` resume
-  protocol (so the merge/regret reducer is unchanged and the on/off classifier is identical).
+### Path B — GPU-torch port on the 1080 (real build; needs the RIGHT batch architecture + a faithfulness gate)
+Reimplement only the **particle-MPC rollout** in torch on the 3.12 venv. **Measured de-risk
+(2026-06-06, `scripts/proof_threebody_gpu_rollout_bench.py`, faithful port of `computeAcceleration` +
+RK4 `integrateStep`) — the architecture matters more than the GPU:**
+
+| batch B | 1080 sec/800-step batch | rollouts/s |
+| ---: | ---: | ---: |
+| 512 (one seed's particles) | **4.30** (CPU-torch: **2.62** — GPU *loses*) | 119 |
+| 5,120 | 4.28 | 1,195 |
+| 40,960 | 4.35 | 9,419 |
+| 81,920 | 4.32 | 18,963 |
+
+- **The rollout is launch-latency-bound, not throughput-bound:** 800 steps × ~24 tiny tensor ops ≈ 19k
+  kernel launches per batch, so wall time is **flat (~4.3 s) from B=5k to B=82k** while throughput
+  scales linearly. **The naive per-seed B=512 port is SLOWER than CPU** — do not build it.
+- **The win is batching across SEEDS** (and candidates × particles): stack all trials'
+  `candidates × particles × seeds` (~40k) into one wide batch **per control step**. The full 8-seed
+  run then rides ~1,600 control steps × ~4.35 s ≈ **~1.9 h for all 8 seeds** vs Node's **~30 h → ~15×**
+  (and keeps scaling with more seeds/cells until the latency plateau breaks). Per-control-step
+  sequentiality is preserved (true state + belief advance by the chosen action between steps); only
+  the within-step `candidate × particle × seed` rollout fan-out is batched.
+- **Further lever:** the 4.3 s is kernel *launches*, not compute — **CUDA graphs / `torch.compile` /
+  a fused RK4-step kernel** amortize the ~19k launches and can push well past 15×. This is the
+  optimization, not the baseline.
 - **FAITHFULNESS GATE (mandatory, before any banked number):** on a small case (1 seed, 64 particles,
   short horizon, fixed RNG) the torch port must reproduce the Node reference's per-decision
   `action_key` sequence and `T_safe`/regret **within tolerance** (ideally byte-identical action keys;
-  any divergence = the port is not the proven harness → fix before use). This is the same discipline
-  that caught the v5 "FINAL" fabrication — *the GPU run does not exist until it matches CPU on a
-  controlled case.*
-- Expected speedup: 10–50× (512-particle batch on a trivial ODE) → the full ON-arm becomes
-  single-digit hours, and future three-body Phase-4/5 work becomes tractable. **Effort: ~half a day**
-  (port + the faithfulness gate). Recommended if three-body is going to be run more than once.
+  any divergence = the port is not the proven harness → fix before use). Same discipline that caught
+  the v5 "FINAL" fabrication — *the GPU run does not exist until it matches CPU on a controlled case.*
+- **Effort: ~half a day** (the all-seeds-batched port + the particle filter/MPC tie-order +
+  resampling + the faithfulness gate). Recommended over Path A only because three-body will be run
+  more than once (ON-arm + Phase 5); the **~15×** (not 50×) is the honest figure.
 
 ## 4. The ON-arm experiment design (pre-register before the run)
 
@@ -84,7 +101,10 @@ Reimplement only the **particle-MPC rollout** in torch on the 3.12 venv:
 
 ## 5. Recommended sequence
 
-1. **Freeze §4.1 regime + partition** (operator) — the only genuine decision; everything else is pinned.
+1. **Freeze §4.1 regime + partition** (operator) — **DONE 2026-06-06:**
+   [`PHASE4_ON_ARM_THREEBODY_REGIME_PREREG.md`](PHASE4_ON_ARM_THREEBODY_REGIME_PREREG.md) (ON-candidate
+   `stable`, OFF anchor `near_escape`; canonical partition unchanged; 16 seeds/regime). The one genuine
+   decision is now pinned; everything else was already canonical.
 2. **Build Path B** (GPU torch port + faithfulness gate vs Node) — *or* skip to Path A if a one-shot
    overnight CPU run is acceptable and the port is not worth the half-day.
 3. **Stage the run** (`workflow_dispatch` / overnight) with the venv-3.12 interpreter for Path B, or the
