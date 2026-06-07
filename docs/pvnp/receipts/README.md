@@ -232,6 +232,26 @@ Filed receipts:
   threshold is against Prange (upper bound vs better ISD), imports decoding hardness,
   no crypto/P-vs-NP claim. Determinism by construction + smoke-confirmed.
 
+- [`2026-06-05_certificate_syndrome_v2.md`](2026-06-05_certificate_syndrome_v2.md):
+  Phase 4 / §5 stronger-ISD ladder; verdict = **bounded positive + named
+  LB↔Stern model-deviation**. On the same `[128,64] w=12` regime, Prange →
+  Lee-Brickell resolves cleanly and the best measured attacker is **Lee-Brickell**
+  (`C_best=8.31×10⁷` ops, gap ≈5,015×), not the locked Stern-best prediction.
+  The absolute measured costs land inside the locked factor-2 tolerance, but the
+  fine attacker ordering reverses because Stern's success heuristic is optimistic
+  at this small `w`. Boundary: upper bound against tested attackers only.
+
+- [`2026-06-06_certificate_syndrome_v3.md`](2026-06-06_certificate_syndrome_v3.md):
+  Phase 4 / §5 scaling ladder; verdict = **crossover located + measured gap
+  scaling with `n`, with caveats**. Stern overtakes Lee-Brickell at rungs 1 and 3
+  (`St/LB≈0.75,0.76`), locating the LB↔Stern crossover between `w=12` and `w=16`;
+  rung 2 reverts to LB as a named pre-calibration heavy-tail / mean-vs-median
+  model-deviation. The find-vs-check gap grows to **218,999×** at `[192,96] w18`,
+  but the frozen Claim-A gate reports `gap_scaling_not_confirmed` because the
+  fixed-`n` rung 1 misses the interior ≥5× condition. Methodology finding:
+  empirical pre-calibration is necessary, and heavy-tailed Stern needs a
+  median-implied prediction lock.
+
 Receipt filenames should use:
 
 `YYYY-MM-DD_phase-or-probe_short-slug.md`

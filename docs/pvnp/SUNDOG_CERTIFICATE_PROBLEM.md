@@ -7,14 +7,17 @@ substrate migration off mesa, and one constructed instance.
 
 Companion to [`../SUNDOG_V_P_V_NP.md`](../SUNDOG_V_P_V_NP.md) (the roadmap and the
 registered definitions §4–§6 this document tightens) and the Phase 1–3 receipts in
-[`receipts/`](receipts/). Status: **design synthesis with a measured instance.** Its
-one constructed instance (the syndrome/SIS certificate) has now been run on a frozen
-non-enumerable regime → a **measured capacity-relative one-wayness threshold against
-Prange ISD** (§5.1; receipt
-[`2026-06-04_certificate_syndrome_v1.md`](receipts/2026-06-04_certificate_syndrome_v1.md)).
-The §6 "UNVERIFIED-BY-RUN" risk is thereby resolved for this regime; the standing
-boundary is that the threshold is against a named attacker (Prange) and imports
-decoding hardness — no cryptographic one-wayness or P-vs-NP claim.
+[`receipts/`](receipts/). Status: **design synthesis with a measured instance and measured
+attacker/scaling ladders.** Its constructed syndrome/SIS certificate has now been run on
+frozen non-enumerable regimes: v1 measured the Prange-ISD threshold, v2 tightened it
+against Lee-Brickell/Stern at `[128,64]w12`, and v3 located the LB↔Stern crossover while
+scaling the find-vs-check gap to `218,999×` at `[192,96]w18` (receipts
+[`2026-06-04_certificate_syndrome_v1.md`](receipts/2026-06-04_certificate_syndrome_v1.md),
+[`2026-06-05_certificate_syndrome_v2.md`](receipts/2026-06-05_certificate_syndrome_v2.md),
+[`2026-06-06_certificate_syndrome_v3.md`](receipts/2026-06-06_certificate_syndrome_v3.md)).
+The §6 "UNVERIFIED-BY-RUN" risk is thereby resolved for these named regimes/classes; the
+standing boundary is that the thresholds are against named attackers and import decoding
+hardness — no cryptographic one-wayness or P-vs-NP claim.
 
 ---
 
@@ -299,8 +302,8 @@ witness from the shadow is capacity-hard, the shadow is control-sufficient but
 provably lossy, and the failure branches are pre-named.** (Spoof — a passing
 certificate for a truly-unsafe body — is *structurally* impossible here under the
 distance-to-code safety predicate; the capacity-hard probe is witness recovery /
-invert-`e`, not spoof.) It is an **existence proof / design**, not a measured
-receipt — its capacity curve is unrun (§6, RISK 1).
+invert-`e`, not spoof.) It began as an **existence proof / design** and is now a
+measured receipt series (§5.1) against named ISD attackers on bounded regimes.
 
 ### 4.1 Candidate A — the syndrome / SIS certificate (recommended)
 
@@ -367,11 +370,11 @@ witness-recovery hard.
 
 ---
 
-## 5. The next experiment (return to empirics with a stronger falsifier)
+## 5. Measured experiments (return to empirics with stronger falsifiers)
 
-The constructed instance is a design; the **win** is the measured two-sided curve.
-Once `(n, k, w)` and the predicate are **frozen**, run a capacity ladder whose single
-question is the P-vs-NP-shaped one:
+The constructed instance is a design; the **win** is the measured two-sided curve. The
+capacity ladder asks the P-vs-NP-shaped question after `(n, k, w)` and the predicate are
+**frozen**:
 
 > *Can a stronger finder/inverter break the certificate before the verifier loses
 > cheapness?*
@@ -389,10 +392,10 @@ question is the P-vs-NP-shaped one:
   one-wayness threshold, the thing every Phase-1 receipt reported as
   `capacity_threshold = not_estimated`.
 
-This run is what would convert §4 from existence proof to receipt. It must obey the
-same anti-p-hack discipline the Phase-3 receipts earned: freeze the regime before
-the attacker runs, keep planted `e`, `wt(e)`, and `s` as scoring labels only
-(never verifier inputs), and pre-register the verdict branches.
+The v1-v3 runs below are what converted §4 from existence proof to receipt. They obey the
+same anti-p-hack discipline the Phase-3 receipts earned: freeze the regime before the
+attacker runs, keep planted `e`, `wt(e)`, and `s` as scoring labels only (never verifier
+inputs), and pre-register the verdict branches.
 
 ### 5.1 Prototype result (2026-06-04)
 
@@ -409,8 +412,7 @@ witness-recovery attacker, imported decoding hardness, and a degenerate
 cheap-reject branch (RISK 1). See
 [`SUNDOG_CERTIFICATE_SYNDROME_PROTOTYPE_NOTE.md`](SUNDOG_CERTIFICATE_SYNDROME_PROTOTYPE_NOTE.md)
 and `scripts/pvnp-certificate-syndrome.py`. The frozen, scaled, ISD-attacker run
-remains the step that earns a measured capacity threshold — pre-registered in the
-draft slate
+was then pre-registered in
 [`SUNDOG_CERTIFICATE_SYNDROME_V1_SLATE.md`](SUNDOG_CERTIFICATE_SYNDROME_V1_SLATE.md)
 (frozen regime `[128,64] w=12`, non-enumerable `C(128,12)≈2.4×10¹⁶`; a Prange-ISD
 capacity ladder with a pre-registered breakpoint at ~5,000 iterations / ~2.6×10⁹
@@ -429,6 +431,25 @@ Sundog receipt. The threshold is against Prange ISD (an upper bound vs better IS
 the rank-valid `B` convention was audited (1,191,143 rank-fail draws). Receipt:
 [`receipts/2026-06-04_certificate_syndrome_v1.md`](receipts/2026-06-04_certificate_syndrome_v1.md).
 
+**Stronger-attacker ladder executed (2026-06-05) → bounded positive with named
+model-deviation.** v2 re-baselined the same `[128,64]w12` targets against Prange →
+Lee-Brickell(p=2) → Stern(p=2,l=8). The measured best attacker was **Lee-Brickell**,
+`C_best=8.31×10⁷` ops with a find-vs-check gap ≈5,015×. The absolute costs landed inside
+the locked factor-2 tolerance, but the locked Stern-best ordering reversed: Stern's
+success heuristic was optimistic at this small `w`. Receipt:
+[`receipts/2026-06-05_certificate_syndrome_v2.md`](receipts/2026-06-05_certificate_syndrome_v2.md).
+
+**Scaling ladder executed (2026-06-06) → crossover located, gap scales with `n`, caveats
+disclosed.** v3 measured LB + Stern at `[128,64]w16`, `[160,80]w16`, and `[192,96]w18`
+with empirical pre-calibration. Stern overtook LB at rungs 1 and 3 (`St/LB≈0.75,0.76`),
+locating the crossover between `w=12` and `w=16`; rung 2 reverted to LB as a named
+heavy-tail / mean-vs-median model-deviation. The top rung reaches `C_best=8.136×10⁹` ops
+and a `218,999×` find-vs-check gap. The frozen Claim-A gate itself reports
+`gap_scaling_not_confirmed` because the fixed-`n` rung 1 misses the interior ≥5× condition;
+the honest claim is therefore scaling with `n`, not a clean all-gates Claim-A pass.
+Receipt:
+[`receipts/2026-06-06_certificate_syndrome_v3.md`](receipts/2026-06-06_certificate_syndrome_v3.md).
+
 ---
 
 ## 6. Open risks and what would falsify this
@@ -436,14 +457,14 @@ the rank-valid `B` convention was audited (1,191,143 rank-fail draws). Receipt:
 Led by the biggest, because the lane's last design (the v4 basin channel) *looked*
 sound on paper and was falsified before freeze by an actual run.
 
-1. **~~UNVERIFIED-BY-RUN~~ RESOLVED for the frozen `[128,64]` regime (2026-06-04).**
-   The §5 two-sided capacity curve has now been run: the Prange-ISD invert-`e` curve
-   matched the pre-registered prediction (breakpoint on target, max |Δ|=0.031) — the
-   verify-first PASS, contrasting the v4-A precedent where a paper-sound mechanism was
-   killed by measurement. Residual scope: the threshold is against **Prange** (an
-   upper bound vs better ISD), on a non-enumerable but bounded-scale regime, and
-   imports decoding hardness — so the capacity-relative claim is measured-but-bounded,
-   not asymptotic. A stronger attacker class or scaled regime is a new slate.
+1. **~~UNVERIFIED-BY-RUN~~ RESOLVED and extended (2026-06-04 → 2026-06-06).**
+   The §5 capacity curves have now been run: v1 matched the Prange prediction, v2 tightened
+   the bound against LB/Stern at `[128,64]w12`, and v3 measured the scaling ladder to
+   `[192,96]w18`. Residual scope: the thresholds are against **named attacker classes**
+   (upper bounds vs BJMM/MMT and future ISD), on non-enumerable but bounded-scale regimes,
+   and import decoding hardness — so the capacity-relative claim is measured-but-bounded,
+   not asymptotic. The v3 Claim-A gate and rung-2 model-deviation are disclosed caveats,
+   not hidden promotions.
 2. **The cheap weight bound may be as hard as decoding.** A *tight*
    `dist(y, Code(G)) ≤ τ` bound from the syndrome can itself be decoding-hard
    (reopening 6.4). Mitigation:
@@ -491,15 +512,15 @@ sound on paper and was falsified before freeze by an actual run.
   instance** (§4) with all four target properties and pre-named failure branches.
 
 **Not established (explicit non-goals):** no cryptographic one-wayness; no claim that
-verification is "polynomial" or "in P"; no general alignment verification; no
-wall-time cheapness; no body-resistance / Sundog-regime-2 result; no progress on P vs
-NP; and **no asymptotic / best-attacker capacity threshold** — §5 earned a *measured*
-threshold against Prange ISD on a bounded-scale regime (`C ≈ 5,007` trials,
-gap ≈2.7×10⁵×), which is an upper bound, not an asymptotic security claim.
+verification is "polynomial" or "in P"; no general alignment verification; no wall-time
+cheapness; no progress on P vs NP; and **no asymptotic / all-attacker capacity threshold**
+— §5 earned *measured* thresholds against named ISD classes on bounded-scale regimes
+(Prange, Lee-Brickell, Stern), which remain upper bounds, not asymptotic security claims.
 
 The honest endpoint: Sundog has a precise object, three cleanly separated and
 correctly-bounded claims, a reasoned migration off the marginal mesa substrate, and a
-constructed instance where checking is cheap by structure, recovering a light
-deviation witness from the shadow is capacity-hard by an imported assumption
-(spoofing a truly-unsafe body is structurally impossible), and the shadow loses the
-secret by algebra. The next win is the measured curve of §5 — not another definition.
+constructed instance where checking is cheap by structure, recovering a light deviation
+witness from the shadow is capacity-hard by an imported assumption (spoofing a
+truly-unsafe body is structurally impossible), the shadow loses the secret by algebra,
+and the measured attacker/scaling ladders now expose the boundary where the methodology
+itself must improve: median-implied prediction locks for heavy-tailed attackers.

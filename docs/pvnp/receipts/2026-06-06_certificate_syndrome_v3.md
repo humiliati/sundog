@@ -17,10 +17,11 @@
 
 ## Verdict
 
-**Bounded-positive scaling result with the LB↔Stern crossover LOCATED — Stern's high-`w`
+**Measured scaling/crossover result with the LB↔Stern crossover LOCATED — Stern's high-`w`
 advantage is confirmed at scale — carrying (a) a named rung-2 model-deviation (a
 pre-calibration heavy-tail / mean-vs-median artifact) and (b) a Claim-A gate-calibration
-caveat (the frozen gate was mis-fit to the fixed-`n` rung-1).** Four results:
+caveat (the frozen gate was mis-fit to the fixed-`n` rung-1 and reports
+`gap_scaling_not_confirmed`).** Four results:
 
 1. **Crossover located (Claim B).** At both cleanly-calibrated higher-`w` rungs — rung 1
    `[128,64] w16` (St/LB = **0.75**) and rung 3 `[192,96] w18` (St/LB = **0.76**) — **Stern

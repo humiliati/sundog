@@ -101,6 +101,15 @@ available Medium cells and passes the same-artifact op-count comparator
 source manifests have `trial_logs_saved=false`; signature accept floor is 2/4
 against a required 3/4. Fixed-attractor false accepts, capacity-breach false
 accepts, and mixed-objective laundering are all 0.
+The later certificate-syndrome branch now gives the lane its measured capacity
+thresholds: v1 measured Prange on `[128,64]w12`, v2 tightened the same regime
+against Lee-Brickell/Stern (`C_best=8.31×10⁷` ops, gap ≈5,015×, with a named
+LB↔Stern ordering deviation), and v3 scaled the LB/Stern ladder, locating the
+crossover between `w=12` and `w=16` and reaching a top-rung gap of `218,999×`
+at `[192,96]w18`. The v3 Claim-A frozen gate still reports
+`gap_scaling_not_confirmed` because the fixed-`n` rung-1 missed the interior
+condition; the honest claim is measured scaling with `n`, plus a methodology
+finding that heavy-tailed Stern needs a median-implied prediction lock.
 No complexity-theoretic result claimed. This document is a research bridge from
 Sundog mesa, ARC, Faraday, and signature-sufficiency work into the language of
 verification hardness, certificates, reductions, promise envelopes, and
@@ -678,13 +687,13 @@ baselines, reproduced metrics, and archived artifacts.
   pass, citation spine, gap map, and probe-ranking disposition.
 - [`SUNDOG_V_P_V_NP.md`](SUNDOG_V_P_V_NP.md): this roadmap.
 - [`pvnp/SUNDOG_CERTIFICATE_PROBLEM.md`](pvnp/SUNDOG_CERTIFICATE_PROBLEM.md):
-  Phase-4 theorem-shaped synthesis (2026-06-04). Formal promise problem tightening
-  §4–§6; the three separated claims (op-count cheap verification; bounded+fragile
-  capacity-relative spoof resistance; the v3 disclosure-robustness null); the
-  substrate migration off marginal mesa toward an AB/topological-style design; and
-  one constructed instance (the syndrome/SIS certificate — check-cheap, spoof
-  capacity-hard, shadow lossy-by-algebra, failure branches pre-named). A design /
-  existence note; the capacity curve is unrun (§5 = the next experiment).
+  Phase-4 theorem-shaped synthesis (2026-06-04; updated through the 2026-06-06
+  scaling ladder). Formal promise problem tightening §4–§6; the three separated
+  claims (op-count cheap verification; bounded+fragile capacity-relative spoof
+  resistance; the v3 disclosure-robustness null); the substrate migration off
+  marginal mesa; and one constructed instance (the syndrome/SIS certificate —
+  check-cheap, witness-recovery capacity-hard, shadow lossy-by-algebra, failure
+  branches pre-named). The §5 capacity curve is now measured through v3.
 - [`pvnp/README.md`](pvnp/README.md): project index and artifact map.
 - [`pvnp/PHASE1_TOY_VERIFIER_SPEC.md`](pvnp/PHASE1_TOY_VERIFIER_SPEC.md):
   draft formal toy verifier spec.
@@ -741,11 +750,22 @@ baselines, reproduced metrics, and archived artifacts.
   in code + on disk). The OR term never fires, so v4 would collapse to v3. Path A
   was tested verify-first and paused: basin-observation is action-visible but
   non-specific, so the retrain is not justified.
+- [`pvnp/SUNDOG_CERTIFICATE_SYNDROME_V1_SLATE.md`](pvnp/SUNDOG_CERTIFICATE_SYNDROME_V1_SLATE.md),
+  [`pvnp/SUNDOG_CERTIFICATE_SYNDROME_V2_SLATE.md`](pvnp/SUNDOG_CERTIFICATE_SYNDROME_V2_SLATE.md),
+  [`pvnp/SUNDOG_CERTIFICATE_SYNDROME_V3_SLATE.md`](pvnp/SUNDOG_CERTIFICATE_SYNDROME_V3_SLATE.md):
+  Phase-4 syndrome certificate slates. v1 measured the Prange capacity threshold; v2
+  tightened against LB/Stern and found the w12 model-deviation; v3 located the LB↔Stern
+  crossover and measured scaling with `n`.
+- [`pvnp/receipts/2026-06-04_certificate_syndrome_v1.md`](pvnp/receipts/2026-06-04_certificate_syndrome_v1.md),
+  [`pvnp/receipts/2026-06-05_certificate_syndrome_v2.md`](pvnp/receipts/2026-06-05_certificate_syndrome_v2.md),
+  [`pvnp/receipts/2026-06-06_certificate_syndrome_v3.md`](pvnp/receipts/2026-06-06_certificate_syndrome_v3.md):
+  Phase-4 syndrome certificate receipts; v3 top rung reaches gap `218,999×` with the
+  Claim-A gate caveat and rung-2 model-deviation disclosed.
 - [`pvnp/RECEIPT_TEMPLATE.md`](pvnp/RECEIPT_TEMPLATE.md): receipt template
   for phase and probe results.
 - [`pvnp/receipts/README.md`](pvnp/receipts/README.md): receipt index —
-  Phase 1 v0–v5 named-quarantine receipts plus the v6 and Phase 2 v1
-  bounded-positive receipts.
+  Phase 1 v0–v5 named-quarantine receipts plus the v6, Phase 2 v1, Phase 3, and
+  Phase-4 syndrome certificate receipts.
 - [`pvnp/DIRECTIONB_GATE0_NOTE.md`](pvnp/DIRECTIONB_GATE0_NOTE.md): Direction-B
   ("demonstrate, not import" the certificate hardness as an emergent property of a trained body)
   — closed by measurement (2026-06-05); emergent leg-(d) one-wayness not available; one-wayness is

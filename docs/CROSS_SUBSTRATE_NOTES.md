@@ -111,23 +111,26 @@ theme-matching.
   the lane's first measured capacity-relative one-wayness threshold: `C ~ 5,007` rank-valid
   trials, find-vs-check gap `~ 2.7x10^5x`, the 50%-breakpoint landing *on* the
   pre-registered prediction. **v2** tightened it against a Prange -> Lee-Brickell(p=2) ->
-  Stern(p=2,l=8) ladder and produced a **bounded-positive with a NAMED MODEL-DEVIATION** -
-  a new sub-pattern of the bounded-positive disposition. All three measured `C(ops)` land
-  within the locked factor-2 tolerance (the two-size-smoke calibration was accurate to ~2%
-  per-iteration), confirming the *absolute* work factors; but the locked *Stern-best*
-  ordering **reversed** - measured **Lee-Brickell is the best attacker** (`C_best =
-  8.31x10^7` ops, ~86x over Prange, find-vs-check gap `~5,015x` even against the strongest
-  tested attacker), while Stern *under*-performs (1.64x its locked `C`) because its ISD
-  work-factor *success* heuristic is optimistic at `w=12` while its per-iteration *cost*
-  model was right (to ~1%). Cross-substrate lesson: a frozen, calibrated, measured ladder
-  can confirm the magnitude of a separation and *simultaneously falsify the fine ordering
-  inside it* - the heuristic that a "stronger" algorithm wins can fail at a specific regime,
-  and only the measurement says so. The resistance is **imported** (the SIS/decoding
-  assumption), not proved, and `C_best` is an **upper bound** against the *tested* attacker
-  classes (BJMM/MMT = a future slate) - a constructed-substrate, certificate-discipline
-  *measurement*, not a complexity-theoretic claim. Receipts:
+  Stern(p=2,l=8) ladder and produced a **bounded-positive with a NAMED MODEL-DEVIATION**:
+  the magnitude held, but the fine ordering reversed at `w=12` - measured
+  **Lee-Brickell is the best attacker** (`C_best = 8.31x10^7` ops, gap `~5,015x`), while
+  Stern under-performs because its success heuristic is optimistic. **v3** then scaled
+  the ladder and resolved the open question: Stern's win is a large-`w` phenomenon,
+  overtaking LB at rungs 1 and 3 (`St/LB ~0.75, 0.76`) and locating the crossover between
+  `w=12` and `w=16`; the top find-vs-check gap reaches `218,999x` at `[192,96] w18`.
+  Two caveats are part of the result, not footnotes: rung 2 is a named pre-calibration
+  heavy-tail / mean-vs-median model-deviation, and the frozen Claim-A gate reports
+  `gap_scaling_not_confirmed` because the fixed-`n` rung 1 was mis-fit to an interior
+  `>=5x` condition. Cross-substrate lesson: a frozen, calibrated, measured ladder can
+  confirm the magnitude of a separation and *simultaneously falsify the fine ordering or
+  prediction statistic inside it*; only the measurement says so. The resistance is
+  **imported** (the SIS/decoding assumption), not proved, and `C_best` is an **upper
+  bound** against the *tested* attacker classes (BJMM/MMT = a future slate) - a
+  constructed-substrate, certificate-discipline *measurement*, not a complexity-theoretic
+  claim. Receipts:
   [`pvnp/receipts/2026-06-04_certificate_syndrome_v1.md`](pvnp/receipts/2026-06-04_certificate_syndrome_v1.md),
-  [`pvnp/receipts/2026-06-05_certificate_syndrome_v2.md`](pvnp/receipts/2026-06-05_certificate_syndrome_v2.md).
+  [`pvnp/receipts/2026-06-05_certificate_syndrome_v2.md`](pvnp/receipts/2026-06-05_certificate_syndrome_v2.md),
+  [`pvnp/receipts/2026-06-06_certificate_syndrome_v3.md`](pvnp/receipts/2026-06-06_certificate_syndrome_v3.md).
   -> [`SUNDOG_V_P_V_NP.md`](SUNDOG_V_P_V_NP.md).
 - **ARC-AGI - CONVERGENCE-TO-NULL on the signature *shadow*; CAPABILITY-FLOOR on
   the *body*; body-resistance probe + v2 expansion ran 2026-06-01 -> the
@@ -527,7 +530,7 @@ discarded.
 | Faraday / EM (homogeneous) | EM field history on a contractible patch (smooth `A`, `dF = 0`) | plaquette holonomy `∮A = ∫F` - **zero body-resistance *by identity***: closure is the Bianchi identity `dF = d(dA) = 0`, so the shadow reconstructs the body exactly. The exact-zero anchor of the axis (§8.1) |
 | Aharonov-Bohm / EM (topological) [EARNED] | EM field config on a non-contractible patch (`H^1 != 0`) | loop holonomy `∮A = Φ` - **exact *topological* body-resistance**: one flux number is state-insufficient (cannot rebuild interior `B`) yet control-sufficient (fixes the AB phase); local `F` is control-blind. Portfolio's first *exact* regime-2 witness; earned by Phase 7 case 3 (§8.2) |
 | Sourced EM / Maxwell (inhomogeneous) [EARNED] | full sourced field on a patch | dual-shadow `∮*F = Q_enc` (Gauss / Ampere-Maxwell) - **determined, not resisting**: by the uniqueness theorem the field is fixed by (sources, boundary, harmonic periods); the low-dim shadow is a lossy Gauss summary with no sharp objective-free regime-2. All exact regime-2 is the harmonic/AB sector above. Marginal by *determinacy* (Phase 8, §8.4) |
-| P-vs-NP syndrome/SIS cert [CONSTRUCTED, MEASURED] | secret `s` + light deviation `e` in `y=sG+e`; recovering `e` from `z` alone is syndrome decoding (NP-hard) | syndrome `z = Hy = He` - **computational/capacity resistance** (a third axis beyond dimensional/topological): `s` lost by algebra (`2^64`/syndrome, exact-lossy), the deviation *capacity-hard* to find, yet `Safe(y):=∃e*:He*=Hy∧wt≤τ` cheap+flat to check (16,576 ops). The only substrate with a **measured** find-vs-check threshold: `C_best=8.31×10⁷` ops (Lee-Brickell, v2), gap `≈5,015×`; imported hardness, upper bound vs tested attackers (§ failure-map P-vs-NP Phase-4 update) |
+| P-vs-NP syndrome/SIS cert [CONSTRUCTED, MEASURED] | secret `s` + light deviation `e` in `y=sG+e`; recovering `e` from `z` alone is syndrome decoding (NP-hard) | syndrome `z = Hy = He` - **computational/capacity resistance** (a third axis beyond dimensional/topological): `s` lost by algebra (`2^64`/syndrome, exact-lossy), the deviation *capacity-hard* to find, yet `Safe(y):=∃e*:He*=Hy∧wt≤τ` cheap+flat to check (16,576-37,152 ops across measured rungs). Measured thresholds: v2 `C_best=8.31×10⁷` ops (Lee-Brickell, gap `≈5,015×`), v3 top rung `C_best=8.136×10⁹` ops (Stern at `[192,96]w18`, gap `≈218,999×`); imported hardness, upper bound vs tested attackers, Claim-A frozen gate caveat disclosed (§ failure-map P-vs-NP Phase-4 update) |
 
 The columns are the same operator. The substrate-specificity in row
 3-5 is what bounds the operating envelope; the cross-substrate

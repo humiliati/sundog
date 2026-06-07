@@ -16,8 +16,8 @@ Phase-4 synthesis:
   disclosure robustness = the v3 null), the substrate migration off marginal mesa
   toward an AB/topological-style design, and **one constructed instance** (the
   syndrome/SIS certificate: check-cheap, witness-recovery capacity-hard, shadow lossy-by-algebra,
-  failure branches pre-named). It is a **design / existence note** — §5 names the
-  next experiment (an ISD invert-`e` curve on a frozen `(n,k,w)` regime).
+  failure branches pre-named). It began as a **design / existence note** and now carries
+  the measured v1→v3 ISD ladder (§5).
 - [`SUNDOG_CERTIFICATE_SYNDROME_PROTOTYPE_NOTE.md`](SUNDOG_CERTIFICATE_SYNDROME_PROTOTYPE_NOTE.md)
   — the constructed instance **built + mechanism verified** (2026-06-04,
   `scripts/pvnp-certificate-syndrome.py`, deterministic). On a real `[48,24]` GF(2)
@@ -27,9 +27,9 @@ Phase-4 synthesis:
   stays flat).
   The verify-first PASS v4 never got. Honest limits: toy regime, naive non-ISD
   forger, imported hardness, degenerate cheap-reject (RISK 1). Frozen scaled
-  ISD-attacker run is the step that earns a measured capacity threshold.
+  ISD-attacker runs v1→v3 are the measured threshold series below.
 - [`SUNDOG_CERTIFICATE_SYNDROME_V1_SLATE.md`](SUNDOG_CERTIFICATE_SYNDROME_V1_SLATE.md)
-  — **DRAFT (opened for review, NOT frozen)**: the §5 capacity experiment
+  — **FROZEN + EXECUTED 2026-06-04 → bounded positive**: the §5 capacity experiment
   pre-registered. Frozen regime `[128,64] w=12 τ=12` (non-enumerable
   `C(128,12)≈2.4×10¹⁶`, answering the toy critique); capacity probe = recover the
   valid light deviation witness `e*` from the syndrome `z` (= syndrome decoding)
@@ -68,8 +68,9 @@ Phase-4 synthesis:
   **Locked** work-factor ladder (two-size throwaway-smoke calibration; per-iter =
   `base(m)=3.95·m^3.07` incl. rank-fail ρ≈3.46 + analytic enum): all three attackers
   smoke-validated (curves track analytic at both sizes); `C` drops **~73× (LB)** and
-  **~81× (Stern, l=8)** vs Prange (`C_best = min(C_LB,C_Stern) = 8.66×10⁷` ops,
-  Stern-set), with the LB→Stern margin **compressed (~1.11×)** at this small `w`
+  **~81× (Stern, l=8)** vs Prange (locked predicted `C_best =
+  min(C_LB,C_Stern) = 8.66×10⁷` ops, Stern-set), with the LB→Stern margin
+  **compressed (~1.11×)** at this small `w`
   (Stern's big win is a large-`w` phenomenon, e.g. `[256,128] w=24` — the scaled-regime
   lever). Freeze comparator =
   [`SUNDOG_CERTIFICATE_SYNDROME_V2_PREDICTION_LOCK.json`](SUNDOG_CERTIFICATE_SYNDROME_V2_PREDICTION_LOCK.json)

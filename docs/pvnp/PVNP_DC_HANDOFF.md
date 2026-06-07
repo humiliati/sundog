@@ -1,24 +1,18 @@
-# SUNDOG_V_P_V_NP — Tracks D & C Handoff (post-v2)
+# SUNDOG_V_P_V_NP — Tracks D & C Handoff (post-v3 syndrome ladder)
 
-> 2026-06-05. **Scaffold/roadmap, NOT execution.** This hands the P-vs-NP team two on-pivot next
+> 2026-06-06. **Scaffold/roadmap, NOT execution.** This hands the P-vs-NP team two on-pivot next
 > moves — **Track D** (wire the certificate framework to the flagship + compander thread) and
-> **Track C** (assemble the portfolio paper) — to run **after** the live v2 stronger-ISD frozen run
-> completes. Direction B is closed (`DIRECTIONB_GATE0_NOTE.md`); A (v2) is in flight; D & C are what
-> remain. House template: `docs/chatv2/JEPA_0D_HANDOFF.md`. Parent: `../SUNDOG_V_P_V_NP.md` +
+> **Track C** (assemble the portfolio paper). Direction B is closed (`DIRECTIONB_GATE0_NOTE.md`);
+> the syndrome/ISD v1→v3 capacity ladder is now filed. House template:
+> `docs/chatv2/JEPA_0D_HANDOFF.md`. Parent: `../SUNDOG_V_P_V_NP.md` +
 > `SUNDOG_CERTIFICATE_PROBLEM.md`.
 
-## 0. Do not step on the live run (read first)
+## 0. Current state (read first)
 
-The **v2 stronger-ISD frozen run is in flight / operator-gated** (`python
-scripts/pvnp-certificate-syndrome-v2.py --frozen`, ~2.5 h). It **owns**
-`results/pvnp/certificate-syndrome-v2/`, the frozen slate
-`SUNDOG_CERTIFICATE_SYNDROME_V2_SLATE.md`, the scorer/harness, and
-`SUNDOG_CERTIFICATE_SYNDROME_V2_PREDICTION_LOCK.json`. **Until the operator files the v2 receipt: do
-not edit, re-run, re-interpret, or touch any of those.** This handoff adds only NEW docs.
-
-**First action of this handoff (the single dependency):** read the v2 receipt when it lands, then
-fold its measured C-ladder (Prange → Lee-Brickell → Stern) into the Claim-1/Claim-2 figures in
-Track C §C2 and the Track D spine note. Nothing else here depends on v2.
+The **v2 stronger-ISD run and v3 scaling ladder have both landed**. Treat their receipts
+as the source of truth; do not re-run or reinterpret the frozen artifacts unless a new
+slate explicitly asks for it. This handoff now starts from the filed ladder, not a pending
+operator run.
 
 ## 1. What is already banked (the material D & C draw on)
 
@@ -30,10 +24,10 @@ All figures are read from dated receipts; cite the receipt, never a remembered n
 | **Claim 1 — cheap verification (op-count)** | banked | v6 ≈**0.879** honest / **0.948587** conservative; Phase-2 v1 **0.7376** (weaker, non-comparable comparator) | receipts `2026-05-31_phase1_toy_verifier_v6.md`, `..._phase2_mesa_bridge_v1.md` |
 | **Claim 2 — capacity-relative spoof resistance** | bounded + **seed-fragile** | v0 falsified → v1 consensus-only → v2b bounded-positive (frozen seeds); `source_block_safety_claim_allowed=false` | receipts `..._phase3_..._v1/v2b.md` |
 | **Claim 3 — disclosure robustness** | pre-registered **NULL** | anchor `clean_consensus` on all 3 fresh batteries (v3) | receipt `2026-06-04_phase3_capacity_one_wayness_v3.md` |
-| **Measured boundary 1 — syndrome/ISD certificate** | banked positive | first measured capacity-relative one-wayness threshold (vs **Prange**): C≈**5007** trials, verifier flat **16,576** ops, find-vs-check gap **≈2.7×10⁵×** | receipt `2026-06-04_certificate_syndrome_v1.md` |
+| **Measured boundary 1 — syndrome/ISD certificate** | banked measured ladder | v1 Prange threshold C≈**5007** trials; v2 best tested attacker **Lee-Brickell** (`C_best=8.31×10⁷`, gap ≈5,015×); v3 locates the LB↔Stern crossover and reaches top gap **218,999×** at `[192,96]w18` with Claim-A gate caveat + rung-2 model-deviation disclosed | receipts `2026-06-04/05/06_certificate_syndrome_v{1,2,3}.md` |
 | **Measured boundary 2 — Direction-B Gate-0** | banked negative | emergent leg-(d) one-wayness from a trained body **NOT available**: σ lossy by algebra (secret-from-σ ≈ **−0.002**); trained body **exposes** z (z-det −0.018 → **+0.31**, Δ wrong sign) | `DIRECTIONB_GATE0_NOTE.md`, `results/pvnp/directionb-gate0/` |
 | Substrate migration off mesa (three-for-three marginal → AB/topological) | banked reasoning | mesa FVE 0.97–0.99 / PR≈2; NSE-C1 0.99; Sabra 1.7/30 | `SUNDOG_CERTIFICATE_PROBLEM.md` §3, `../CROSS_SUBSTRATE_NOTES.md` |
-| **v2 stronger-ISD C-ladder** | **IN FLIGHT — fold in when filed** | predicted C_best ≈ 8.66×10⁷ ops (Stern), ~81× tighter than Prange | (pending) `2026-06-…_certificate_syndrome_v2.md` |
+| **Syndrome methodology finding** | banked | empirical pre-calibration is necessary; analytic ISD heuristics are wrong in both directions, and heavy-tailed Stern needs a median-implied prediction lock | receipt `2026-06-06_certificate_syndrome_v3.md` |
 
 **The one-line framing both tracks must preserve:** *the one-wayness leg is imported (by H_pub
 algebra); the emergent, non-imported, trained-body prize is the state-insufficiency + control-
@@ -63,9 +57,9 @@ the provocation (roadmap §8 exit criterion).
 4. **The three claims, separated** (§2) — cost (op-count, earned), spoof-resistance (bounded +
    seed-fragile), disclosure-robustness (the measured null). **Do not conflate; do not average the
    two non-comparable op-count comparators.**
-5. The constructed instance + **measured boundary 1** (syndrome/ISD): the find-vs-check curve, the
-   measured C — **fold in the v2 C-ladder** (Prange → Stern) once the v2 receipt lands; state C is an
-   upper bound against the named attacker.
+5. The constructed instance + **measured boundary 1** (syndrome/ISD): the v1 Prange curve,
+   v2 stronger-ISD ladder, and v3 scaling/crossover ladder; state every `C_best` as an
+   upper bound against the named tested attackers.
 6. **Measured boundary 2** (Direction-B Gate-0): the import-vs-demonstrate line, resolved by
    measurement — one-wayness is imported, the (a)+(b)+(c) bundle is the emergent prize.
 7. Faraday receipt grammar (structural zero / named quarantine) as the discipline model.
@@ -136,15 +130,13 @@ measured-not-asymptotic boundary. Compander framing stays internal until the pub
 ## 4. Sequencing & dependencies
 
 ```text
-[v2 frozen run completes + receipt filed]   <-- the only hard prerequisite (operator-gated)
+[v1-v3 syndrome ladder filed]   <-- complete; use receipts, no rerun
         |
-   Step 1: fold v2 C-ladder into Claim 1/2 figures (tighten C toward C_Stern)
+   Step 1: Track C  — assemble CERTIFICATE_PAPER_NOTE.md (uses the now-complete claim set)
         |
-   Step 2: Track C  — assemble CERTIFICATE_PAPER_NOTE.md (uses the now-complete claim set)
+   Step 2: Track D  — CERTIFICATE_AS_WIDGET_SPINE.md (internal; reuses C's framing)
         |
-   Step 3: Track D  — CERTIFICATE_AS_WIDGET_SPINE.md (internal; reuses C's framing)
-        |
-   Step 4: Track D  — staged public-copy upgrade + portfolio placement (DO NOT DEPLOY)
+   Step 3: Track D  — staged public-copy upgrade + portfolio placement (DO NOT DEPLOY)
                       gated on: owner sign-off  AND  (for the compander half) the COMPANDER_PAPER_HOOK
                       publication trigger — an INDEPENDENT external gate that may never trip.
 ```
