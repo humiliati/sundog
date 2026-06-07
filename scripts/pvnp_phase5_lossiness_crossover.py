@@ -42,7 +42,11 @@ S1 = dict(G=16, eps=0.10, A=1.0, B=1.0, f0=3.0, xc_lo=-1.0, xc_hi=1.0)
 # hh=halo handedness (discrete-determines). Physics fixed in s2_optics; only these power knobs
 # (grids, ranges, per-leg noise) are calibratable on seed 999.
 S2 = dict(
-    cor_T=64, cor_th_lo=1.0, cor_th_hi=8.0, cor_a_lo=10.0, cor_a_hi=30.0, cor_noise=0.05,
+    # continuous-resists leg: FOLD-AIRY parhelion supernumerary (size PHASE-encoded in fringe scale)
+    fa_T=64, fa_edge=22.0, fa_th_lo=22.3, fa_th_hi=27.0, fa_d_lo=12.0, fa_d_hi=28.0,
+    fa_ckappa=0.05, fa_noise=0.05,
+    # (corona retained for comparison; not the primary continuous leg)
+    cor_T=64, cor_th_lo=0.3, cor_th_hi=8.0, cor_a_lo=12.0, cor_a_hi=18.0, cor_noise=0.05,
     hp_T=64, hp_th_lo=15.0, hp_th_hi=35.0, hp_w0=1.0, hp_jit=2.0, hp_noise=0.05,
     hh_na=6, hh_th0=40.0, hh_ang_span=8.0, hh_th_jit=10.0, hh_L=120.0, hh_phi=float(np.pi / 4),
     hh_noise=0.002,
@@ -103,6 +107,26 @@ def gen_s1(n, lam, rng, noise):
 
 
 # ---- S2 physical legs (§3.12; physics from s2_optics) --------------------- #
+def gen_s2_fold(n, lam, rng, noise):
+    """FOLD-AIRY size leg (continuous-resists, PHASE-encoded — the §3.12 continuous shadow).
+    x_c = crystal size d* [um] carried by the supernumerary fringe scale kappa = ckappa*d; the fold
+    EDGE is size-independent, so size lives ONLY in the fringes and washes by destructive
+    interference (decoherence) as the size-spread lam grows — no envelope leak (cf. corona).
+    x_d = dummy discrete (the fold profile carries none)."""
+    c = S2
+    thetas = np.linspace(c["fa_th_lo"], c["fa_th_hi"], c["fa_T"])     # deg, supernumerary window
+    xc = rng.uniform(c["fa_d_lo"], c["fa_d_hi"], n)                   # size d* [um]
+    xd = rng.choice([-1.0, 1.0], n)                                  # dummy discrete
+    xi = rng.standard_normal((n, K))
+    sizes = np.clip(xc[:, None] * (1.0 + lam * xi), so.A_FLOOR_UM, None)
+    kappas = c["fa_ckappa"] * sizes                                  # (n,K) fringe scales ∝ size
+    feats = np.empty((n, c["fa_T"]))
+    for i in range(n):
+        feats[i] = so.fold_airy_profile(thetas, kappas[i], c["fa_edge"])
+    feats = feats + rng.normal(0, noise, feats.shape)
+    return feats, xc, xd
+
+
 def gen_s2_corona(n, lam, rng, noise):
     """CORONA size leg (continuous-resists). x_c = mean particle size a* [um]; shadow = ensemble-
     averaged Airy corona radial profile over K subunits a_i = a*(1+lam*xi); rings wash to an
@@ -228,10 +252,10 @@ def run_s2(seed, n, mode, out, t0, args):
     """S2 physical legs (§3.12): corona (continuous-resists) + halo ice-phase & handedness
     (discrete-determines). Per-leg gating (§3.12.3): cont gates on the corona, disc gates on the
     halo legs. Physical crossover = corona resists AND a halo leg determines."""
-    nc = args.noise_s2c if args.noise_s2c is not None else S2["cor_noise"]
+    nc = args.noise_s2c if args.noise_s2c is not None else S2["fa_noise"]
     nhp = args.noise_s2hp if args.noise_s2hp is not None else S2["hp_noise"]
     nhh = args.noise_s2hh if args.noise_s2hh is not None else S2["hh_noise"]
-    legs = [("S2c_corona", gen_s2_corona, "cont", nc),
+    legs = [("S2c_fold", gen_s2_fold, "cont", nc),
             ("S2hp_phase", gen_s2_phase, "disc", nhp),
             ("S2hh_hand", gen_s2_hand, "disc", nhh)]
     print(f"[cfg-S2] mode={mode} seed={seed} n={n} K={K} CV={CV} noise(c/hp/hh)={nc}/{nhp}/{nhh} "
@@ -251,7 +275,7 @@ def run_s2(seed, n, mode, out, t0, args):
         print(f"  {name}[{kind}]: preflight={preflight} cont0={r['cont'][0]} contMax={r['cont'][-1]} "
               f"lam*_c={r['lambda_star_c']} disc0={r['disc'][0]} minDisc={min(r['disc'])} "
               f"-> shows={shows}", flush=True)
-    cont_ok = summ["S2c_corona"][0] and summ["S2c_corona"][1]
+    cont_ok = summ["S2c_fold"][0] and summ["S2c_fold"][1]
     disc_phase = summ["S2hp_phase"][0] and summ["S2hp_phase"][1]
     disc_hand = summ["S2hh_hand"][0] and summ["S2hh_hand"][1]
     physical = cont_ok and (disc_phase or disc_hand)

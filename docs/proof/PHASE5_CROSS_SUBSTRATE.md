@@ -261,10 +261,18 @@ be tuned**; only power knobs `{obs-noise, n, K, λ_max, population-width, x_c ra
 and *discrete* observables are physically distinct phenomena, so S2 does **not** reproduce S0/S1's
 single-shadow simultaneity (both variables on one shadow). It demonstrates **each half of the law on
 its appropriate physical substrate**, under population-spread lossiness:
-- **S2c — corona (continuous-resists leg).** `x_c` = particle size `a*`. Shadow `σ̄(θ)` = ensemble-
-  averaged corona radial intensity `Ī(θ) = mean_i [2J₁(x_i)/x_i]²`, `x_i = (2π a_i/λ_light)·sinθ`,
-  subunit sizes `a_i = a*·(1 + λ·ξ_i)` (`ξ_i~N(0,1)`; λ = relative size-spread = the lossiness knob).
-  As λ grows the rings smear (corona → iridescence → featureless aureole), so `cont(λ)` must decay.
+- **S2c — fold-Airy parhelion supernumerary (continuous-resists leg; size PHASE-encoded).** `x_c` =
+  crystal size `d*`, carried by the supernumerary fringe scale `κ = c_κ·d` of a fold caustic dressed
+  by the Airy function, `Ī(θ) = mean_i Ai(−κ_i·(θ−θ_edge))²`, subunit sizes `d_i = d*·(1+λ·ξ_i)`
+  (λ = relative size-spread = lossiness knob). The fold **edge `θ_edge` is size-independent**, so size
+  lives only in the fringes and washes by destructive interference as λ grows (Berry & Upstill; Berry
+  1994 parhelion supernumeraries, faint, contrast ~0.178). **Calibration finding (the graded-resistance
+  refinement):** the fringes wash fully, but `cont` **plateaus at ~0.31** rather than → 0, because size
+  is a *scale/magnitude* and the Airy envelope's decay-scale near the edge (`∝ 1/√d`) leaks a *rough*
+  size that ensemble-averaging cannot erase. Pushing below the 0.10 gate requires a contrivance (a
+  near-floor size range so the spread piles at the Mishchenko–Macke existence floor) — **rejected as
+  engineered**; the honest reading is *partial* resistance. (The corona is identical in this respect —
+  both diffraction size-readouts plateau at ~0.31.)
 - **S2h — refraction halo (discrete-determines leg).** `x_d ∈ {±1}` **shared** across the population.
   Primary: **ice phase** (`+1` = hexagonal, 22° radius; `−1` = pyramidal/odd-radius, ~28°), read off
   the halo radius via min-deviation `δ_min(n,A)` — pure geometry, robust. Secondary (flagged
@@ -277,30 +285,35 @@ its appropriate physical substrate**, under population-spread lossiness:
 **3.12.2 Metrics + features.** Metrics unchanged (§3.3): `cont = max(0,R²_cv)`, `disc =
 (acc−maj)/(1−maj)`, best-of {linear, MLP}. Features `σ̄` are exactly the shadow-profile samples — **no
 size value, no parity sign, no λ column** (`void_label_leak`, §3.6). Probes read `x_d` off V's **sign
-pattern** / the radius class, `x_c` off the ring structure.
+pattern** / the radius class, `x_c` off the supernumerary fringe structure.
 
 **3.12.3 Gates (re-spec for the split — the one deviation from §3.5's single-shadow form).** Because the
 two halves live on different legs, the preflight + gates apply **per leg**:
 - **S2c:** preflight `cont(0) ≥ 0.70`; continuous-resists `cont(λ_max) ≤ 0.10` AND `λ*_c` in-grid.
 - **S2h:** preflight `disc(0) ≥ 0.95`; discrete-determines `min_λ disc(λ) ≥ 0.95` (`λ*_d` censored).
-- Void gates (§3.6) carry per leg; add **`void_size_floor`** — every corona subunit size must satisfy
+- Void gates (§3.6) carry per leg; add **`void_size_floor`** — every size-leg subunit must satisfy
   the halo/diffraction existence floor `2π a/λ_light ≳ 100` ⇒ `a ≳ 10 µm` (Mishchenko–Macke 1999),
   else the leg is physically meaningless.
 
-**3.12.4 Frozen prediction (shape; numbers set at freeze, post-seed-999).** `cont_S2c(λ)` monotone
-(within tol) from `≥0.70` to `≤0.10` with in-grid `λ*_c` (anchor: corona ring contrast collapses as the
-size-spread exceeds the `σ_a/a ≲ 1/(2n)` legibility band — the `1/(2n)` factor is **SYNTHESIS**, used
-only to *predict* `λ*_c`, never as a gate); `disc_S2h(λ)` flat `≥0.95` (radius class / V-sign
-λ-independent by physics).
+**3.12.4 Frozen prediction (shape; numbers locked at freeze, post-seed-999).** `cont_S2c(λ)` monotone
+(within tol) from `cont(0) ≈ 0.96` **decaying to a plateau `≈ 0.30` at `λ_max`** (NOT ≤0.10 — the
+magnitude scale-leak; the strict continuous-resists gate is *predicted to FAIL*), `λ*_c ≈ 1.5`;
+`disc_S2hp(λ)` and `disc_S2hh(λ)` flat `= 1.00` (radius class / V-sign λ-independent by physics).
+**Graded-resistance refinement (pre-registered reading):** phase-*offset* continuous variables (S1)
+wash to ~0; *scale/magnitude* variables (size, here) resist only partially. Expected verdict =
+**partial physical leg** (continuous-physical partial, discrete-physical confirmed).
 
 **3.12.5 Verdict (extends §3.8).** `operator_confirmed_physical` requires **S2c passes continuous-
 resists AND S2h passes discrete-determines.** Sub-cases, reported honestly:
 - ice-phase S2h passes ⇒ the **discrete physical anchor** §4 leans on is banked (robust, geometric).
 - handedness S2h passes ⇒ a **predicted, not previously observed** physical effect is exhibited (own
   the novelty; no halo-Stokes-V observation exists in the literature — §3.12.6).
+- S2c passes preflight but `cont(λ_max) > 0.10` (washes only to the magnitude-scale-leak plateau ~0.31)
+  ⇒ **continuous-physical PARTIAL** ⇒ S2 is a **partial physical leg** (discrete-physical confirmed,
+  continuous-physical *partial — strong but not full resistance*); do **not** promote to full
+  `operator_confirmed_physical`. This is the **pre-registered expected outcome** (§3.12.4).
 - S2c fails preflight (size not legible even monodisperse) ⇒ `void_underpowered` on the continuous leg
-  ⇒ S2 is a **partial physical leg** (discrete-physical confirmed, continuous-physical *owed*); do not
-  promote to full `operator_confirmed_physical`.
+  ⇒ partial physical leg (continuous-physical *owed*).
 
 **3.12.6 Honest status (load-bearing).** (a) S2 is a **two-leg** demonstration, weaker than S0/S1's
 single-shadow crossover — the relaxation is forced by physics and is disclosed, not hidden. (b) The

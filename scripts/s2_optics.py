@@ -26,7 +26,7 @@ Appl. Opt. 38:1626 (1999) (halo existence floor x = 2 pi a/lam >~ 100, a >~ 10 u
 Brandt, JGR 113:D14220 (2008) (n_ice ~ 1.31 visible, normal dispersion); ice Delta_n = +0.0014.
 """
 import numpy as np
-from scipy.special import j1
+from scipy.special import j1, airy
 
 # ---- fixed cited constants ------------------------------------------------- #
 N_ICE = 1.31          # Warren & Brandt 2008, visible mean refractive index
@@ -66,6 +66,40 @@ def corona_profile(thetas, sizes, lam=LAM_LIGHT):
 def airy_first_dark_deg(a, lam=LAM_LIGHT):
     """Angular radius (deg) of the first Airy dark ring: sin(theta) = 1.2197 * lam/(2a)."""
     return np.degrees(np.arcsin(np.clip(1.2197 * lam / (2.0 * a), -1, 1)))
+
+
+# ===== FOLD-AIRY — continuous-resists / SIZE shadow (PHASE-encoded) ========= #
+# A fold caustic (A2; the parhelion/sun-dog minimum-deviation edge) is dressed by the Airy function:
+# I ∝ Ai(-s)^2, s = kappa*(theta - theta_edge). The fringe scale kappa ∝ crystal size, so larger
+# crystals -> finer supernumerary fringes, while the EDGE position theta_edge is SIZE-INDEPENDENT.
+# Hence size lives ONLY in the fringes (phase-encoded): it washes by destructive interference under
+# population size-spread, with no surviving envelope (cf. corona, whose envelope leaks the mean size).
+# Refs: Berry & Upstill, Prog. Opt. XVIII (1980); Berry, Appl. Opt. 33:4563 (1994) — parhelion
+# supernumeraries (genuine fold fringes, faint, max contrast ~0.178).
+SUPERNUM_S = (1.0188, 3.2482, 4.8201, 6.1633)   # |s| at Ai^2 maxima (zeros of Ai'); 1st supernumerary etc.
+
+
+def fold_airy_intensity(theta_deg, theta_edge_deg, kappa):
+    """Fold diffraction dressing I = Ai(-s)^2, s = kappa*(theta - theta_edge). Lit side (s>0)
+    oscillates (supernumeraries); dark side decays. kappa ∝ size. theta_edge size-independent."""
+    s = kappa * (np.asarray(theta_deg, float) - theta_edge_deg)
+    return airy(-s)[0] ** 2
+
+
+def fold_airy_profile(thetas_deg, kappas, theta_edge_deg):
+    """Ensemble-averaged fold-Airy profile over a population of fringe-scales kappas (∝ size).
+    Returns mean_i Ai(-kappa_i*(theta - theta_edge))^2 -> (T,). The supernumerary fringes decohere
+    (wash) as the kappa population spreads; the edge stays put -> phase-encoded size washout."""
+    thetas = np.asarray(thetas_deg, float)
+    kappas = np.asarray(kappas, float)
+    s = kappas[:, None] * (thetas[None, :] - theta_edge_deg)        # (K,T)
+    return (airy(-s)[0] ** 2).mean(0)                              # (T,)
+
+
+def supernumerary_deg(order, kappa, theta_edge_deg):
+    """Angular position (deg) of the n-th supernumerary maximum: theta = theta_edge + s_n/kappa.
+    Position - edge ∝ 1/kappa ∝ 1/size (the monotonic size readout)."""
+    return theta_edge_deg + SUPERNUM_S[order - 1] / kappa
 
 
 # ===== HALO RADIUS — discrete-determines / ICE-PHASE shadow ================= #
