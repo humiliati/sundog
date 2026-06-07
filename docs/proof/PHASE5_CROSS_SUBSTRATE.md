@@ -112,9 +112,14 @@ the population (a structural property of the cloud). `λ` is the lossiness knob.
   `∮V·dl`, with magnitude regularized by `ε`; conserved under same-sign superposition → survives any
   `λ`). Features = the `2·G²` components `(Vx, Vy)` of `V̄(p)` (+ noise). `x_c*` = radial phase offset;
   `x_d` = winding sign.
-- **S2 — halo physical instantiation (APPARATUS-GATED).** `x_c` = crystal **size** (off the
-  Airy/Pearcey dressing), `x_d` = **handedness** (Stokes `V` sign) or **ice phase** (halo radius),
-  swept over population spread via HaloSim **+ the wave/Stokes layer (not yet built; staged)**.
+- **S2 — halo physical instantiation (APPARATUS-GATED; pre-registered slate in §3.12).** `x_c` =
+  crystal/droplet **size**, `x_d` = **ice phase** (halo radius, robust) or **handedness** (Stokes-`V`
+  sign, *predicted/novel*). **Lit-pass outcome (2026-06-07, `docs/atlas/S2_LITPASS_E_G.md`):** HaloSim
+  (closed ray-tracer) cannot host the apparatus → a **standalone real-physics forward model** is
+  required; and "size off the refraction-halo fringe" is physically **dead** (Berry 1994, zero-contrast
+  step edge) → the size shadow lives on the **corona** (Airy `[2J₁(x)/x]²`, `θ∝λ/a`). S2 therefore runs
+  as **two halo/diffraction-family legs** (corona = continuous-resists; refraction halo =
+  discrete-determines) — see §3.12.
 
 ### 3.3 Metrics (frozen)
 - `cont(λ) = max(0, R²_cv)` — cross-validated coefficient of determination of the continuous probe
@@ -243,6 +248,68 @@ Run: `scripts/pvnp_phase5_lossiness_crossover.py --frozen`, `data_seed=20260605`
 - **STATUS GATE (load-bearing, §3.9):** this is **NOT Phase-5-complete and NOT public-eligible.** It
   discharges the *synthetic* question only. Full Phase-5 (the roadmap Exit) and any public claim require
   **S2** — the halo physical instantiation behind the wave/Stokes HaloSim layer (not yet built).
+
+### 3.12 S2 — physical slate (PRE-REGISTERED, 2026-06-07; apparatus not yet run)
+Structural pre-registration of the halo physical leg, written **before** the forward model is built or
+calibrated. Grounded in `docs/atlas/S2_LITPASS_E_G.md` (Stage-0 lit-pass). Numeric constants + the
+frozen prediction are set later, on throwaway seed 999, and frozen before the `data_seed` run (§3.7
+discipline carries verbatim). **Binding rule:** the forward-model *physics equations* (corona Airy,
+min-deviation halo radius, Fresnel×retarder Mueller chain) are **fixed by cited literature and may NOT
+be tuned**; only power knobs `{obs-noise, n, K, λ_max, population-width, x_c range}` calibrate.
+
+**3.12.1 Architecture — two halo/diffraction-family legs (honest relaxation).** The legible *continuous*
+and *discrete* observables are physically distinct phenomena, so S2 does **not** reproduce S0/S1's
+single-shadow simultaneity (both variables on one shadow). It demonstrates **each half of the law on
+its appropriate physical substrate**, under population-spread lossiness:
+- **S2c — corona (continuous-resists leg).** `x_c` = particle size `a*`. Shadow `σ̄(θ)` = ensemble-
+  averaged corona radial intensity `Ī(θ) = mean_i [2J₁(x_i)/x_i]²`, `x_i = (2π a_i/λ_light)·sinθ`,
+  subunit sizes `a_i = a*·(1 + λ·ξ_i)` (`ξ_i~N(0,1)`; λ = relative size-spread = the lossiness knob).
+  As λ grows the rings smear (corona → iridescence → featureless aureole), so `cont(λ)` must decay.
+- **S2h — refraction halo (discrete-determines leg).** `x_d ∈ {±1}` **shared** across the population.
+  Primary: **ice phase** (`+1` = hexagonal, 22° radius; `−1` = pyramidal/odd-radius, ~28°), read off
+  the halo radius via min-deviation `δ_min(n,A)` — pure geometry, robust. Secondary (flagged
+  *predicted/novel*): **handedness** = sign of population Stokes-`V` from the Fresnel×birefringent-
+  retarder Mueller chain (`V/I ∝ sin2φ·sinδ`, `δ=2πΔn·L/λ_light`, ice `Δn=+0.0014`, `n≈1.31`). Shadow
+  `σ̄` = ensemble-averaged halo radial profile (ice-phase) or stacked `(Ī,Q̄,Ū,V̄)` (handedness) over
+  `K` subunits sharing `x_d`, with orientation/size spread λ. The shared discrete sign survives the
+  average (the S0/S1 mechanism), so `disc(λ)` must stay flat.
+
+**3.12.2 Metrics + features.** Metrics unchanged (§3.3): `cont = max(0,R²_cv)`, `disc =
+(acc−maj)/(1−maj)`, best-of {linear, MLP}. Features `σ̄` are exactly the shadow-profile samples — **no
+size value, no parity sign, no λ column** (`void_label_leak`, §3.6). Probes read `x_d` off V's **sign
+pattern** / the radius class, `x_c` off the ring structure.
+
+**3.12.3 Gates (re-spec for the split — the one deviation from §3.5's single-shadow form).** Because the
+two halves live on different legs, the preflight + gates apply **per leg**:
+- **S2c:** preflight `cont(0) ≥ 0.70`; continuous-resists `cont(λ_max) ≤ 0.10` AND `λ*_c` in-grid.
+- **S2h:** preflight `disc(0) ≥ 0.95`; discrete-determines `min_λ disc(λ) ≥ 0.95` (`λ*_d` censored).
+- Void gates (§3.6) carry per leg; add **`void_size_floor`** — every corona subunit size must satisfy
+  the halo/diffraction existence floor `2π a/λ_light ≳ 100` ⇒ `a ≳ 10 µm` (Mishchenko–Macke 1999),
+  else the leg is physically meaningless.
+
+**3.12.4 Frozen prediction (shape; numbers set at freeze, post-seed-999).** `cont_S2c(λ)` monotone
+(within tol) from `≥0.70` to `≤0.10` with in-grid `λ*_c` (anchor: corona ring contrast collapses as the
+size-spread exceeds the `σ_a/a ≲ 1/(2n)` legibility band — the `1/(2n)` factor is **SYNTHESIS**, used
+only to *predict* `λ*_c`, never as a gate); `disc_S2h(λ)` flat `≥0.95` (radius class / V-sign
+λ-independent by physics).
+
+**3.12.5 Verdict (extends §3.8).** `operator_confirmed_physical` requires **S2c passes continuous-
+resists AND S2h passes discrete-determines.** Sub-cases, reported honestly:
+- ice-phase S2h passes ⇒ the **discrete physical anchor** §4 leans on is banked (robust, geometric).
+- handedness S2h passes ⇒ a **predicted, not previously observed** physical effect is exhibited (own
+  the novelty; no halo-Stokes-V observation exists in the literature — §3.12.6).
+- S2c fails preflight (size not legible even monodisperse) ⇒ `void_underpowered` on the continuous leg
+  ⇒ S2 is a **partial physical leg** (discrete-physical confirmed, continuous-physical *owed*); do not
+  promote to full `operator_confirmed_physical`.
+
+**3.12.6 Honest status (load-bearing).** (a) S2 is a **two-leg** demonstration, weaker than S0/S1's
+single-shadow crossover — the relaxation is forced by physics and is disclosed, not hidden. (b) The
+**handedness leg is a novel predicted observable**: there is *no* published measurement of nonzero
+Stokes-`V` in a visible ice halo, and "net-`V` = population handedness" is an uncited Sundog framing
+(`SYNTHESIS`); ice-phase is the robust primary, handedness the flagged deep target. (c) S2 remains a
+**forward-model simulation** of real optics (not photographs) — `operator_confirmed_physical` via S2 is
+the apparatus tier; measured-sky polarimetry would be a further, higher tier. (d) Until run, S2 is
+unstarted; nothing here promotes Phase-5 past §3.9's status gate.
 
 ## 4. Dig-in: where alignment sits relative to the law (the founding-theorem correction)
 

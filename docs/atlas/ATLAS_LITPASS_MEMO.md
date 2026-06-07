@@ -31,20 +31,27 @@ is the instrument that closes it before any tier-3 outreach.
 - **Track D — Determinacy / inverse problem.** Prior art on the halo inverse problem (recovering
   crystal populations from a display) and on what a display *does* and *does not* determine — the
   determining-shadow-set framing in optics terms.
-- **Track E — Crystal size from diffraction / Shadow 2 (Phase 8.5).** Prior art on reading particle
-  size off diffraction structure: coronae (pure forward diffraction, ring radius ∝ λ/a — the
-  *existence proof* and calibration anchor); rainbow supernumeraries → drop size (Airy theory; modern
-  rainbow refractometry); halo edge sharpness ↔ rough size (diamond-dust diffuseness). Establish the
-  ice-halo *fine-fringe* analogue and its monodispersity limit, and that the existing apparatus
-  (HaloSim, ray-optics) cannot generate diffraction — a wave-optical dressing layer is required.
-- **Track G — Polarization / handedness / Shadow 3 (Phases 8.6–8.7).** Können, *Polarized Light in
-  Nature* — the anchor; circular polarization in halos and its handedness signature *(to-verify:
-  Können + recent atmospheric-optics work)*; ice Ih **birefringence** (uniaxial, c-axis optic axis)
-  and its halo-polarization role. Settle: (1) that the handedness read is **ray-path parity + c-axis
-  class via birefringence, NOT bulk molecular chirality** (ice is not optically active like quartz) —
-  a hard honesty gate; (2) whether a Stokes/Mueller polarization ray-tracer exists or must be built
-  (HaloSim does not track polarization); (3) prior treatment of *net* circular polarization as a
-  population-chirality diagnostic.
+- **Track E — Crystal size from diffraction / Shadow 2 (Phase 8.5). ✅ READ 2026-06-07 →
+  `docs/atlas/S2_LITPASS_E_G.md`.** Prior art on reading particle size off diffraction structure:
+  coronae (pure forward diffraction, ring radius ∝ λ/a — the *existence proof* and calibration anchor);
+  rainbow supernumeraries → drop size (Airy theory). **BANKED FINDING:** the ice-halo *fine-fringe*
+  analogue is essentially **NEGATIVE** — the 22° halo edge is a *step* singularity whose diffraction
+  function has **zero-contrast shoulders, no maxima** (Berry, Appl. Opt. 33:4563, 1994 — "rarely if ever
+  seen"); parhelia fringes have only 0.178 contrast. **The size shadow's legible home is the CORONA**
+  (Airy `[2J₁(x)/x]²`, `θ∝λ/a`, monodisperse→aureole washout), NOT refraction-halo fringes. HaloSim
+  (ray-optics) cannot generate either — a standalone wave layer is required.
+- **Track G — Polarization / handedness / Shadow 3 (Phases 8.6–8.7). ✅ READ 2026-06-07 →
+  `docs/atlas/S2_LITPASS_E_G.md`.** Können, *Polarized Light in Nature* — the anchor. **BANKED
+  FINDINGS:** (1) **honesty gate confirmed** — ice Ih is achiral (`P6₃/mmc`, optically positive
+  uniaxial, `Δn=+0.0014`); halo circular polarization is **ray-path parity × c-axis birefringent
+  retardance, NOT molecular chirality**. (2) The minimal **Mueller chain** (Fresnel diattenuator ×
+  retarder `δ=2πΔn·L/λ`) gives `V/I ∝ sin(2φ)·sin(δ)` that sign-flips with parity — physically real,
+  ~1% magnitude. No Stokes/Mueller ray-tracer exists; must be built standalone. (3) **⚠ `SYNTHESIS`:**
+  there is **NO published observation of nonzero Stokes-V in a visible ice halo** (Können measures
+  *linear* only), and "*net* circular polarization = population handedness imbalance" is a **novel,
+  uncited Sundog framing** — net-V also cancels in mirror-symmetric populations. The handedness leg is a
+  **PREDICTED, not observed, observable** and must be framed so. Ice-phase (halo radius) is the robust
+  discrete anchor instead.
 - **Track F — Attribution & priority map.** A per-claim ledger: for every statement the atlas will
   make, name the source it rests on, and flag any that read as a Sundog priority claim for demotion.
 
@@ -90,14 +97,19 @@ don't claim), **SYNTHESIS** (Sundog's recombination of standard parts — defens
 5. "Invisible halos live at the higher-codimension strata (swallowtail/umbilic)." — check prior
    predictions of rare halos via higher catastrophes (Können/Tape may have geometric versions);
    expected **STANDARD-or-SYNTHESIS** — the *directed forward search* is the Sundog move.
-6. "Crystal size readable off the diffraction dressing of a halo fold." — Track E; expected
-   **STANDARD for rainbows, OPEN/bounded for ice halos**.
+6. "Crystal size readable off the diffraction dressing of a halo fold." — Track E; **SETTLED
+   2026-06-07: STANDARD for coronae/rainbows (Airy size law); NEGATIVE for the 22° ice halo** (a step,
+   not a fold — zero-contrast diffraction shoulders, Berry 1994). The size shadow's legible home is the
+   corona, not refraction-halo fringes.
 7. "Polarization reads a discrete handedness/parity (Stokes V sign) that the intensity cannot, and is
    the *cleanly-invertible* layer of the shadow tower (invertibility tracks the hidden-variable kind:
    continuous magnitudes resist, discrete parities invert)." — Track G + §1.2; the *polarization reads
    handedness* part is expected **STANDARD** (Können); the *invertibility-tracks-kind tower framing*
    and the AB-exact-analog placement are expected **SYNTHESIS** (Sundog vocabulary over standard
-   optics) — the genuinely new framing to defend, never the polarization physics.
+   optics) — the genuinely new framing to defend, never the polarization physics. **SETTLED 2026-06-07:
+   the linear-polarization halo physics is STANDARD (Können); but *circular*-V handedness in halos is
+   UNOBSERVED, and the "net-V = population handedness" diagnostic is SYNTHESIS/novel — a predicted
+   observable, not established. Ice-phase (halo radius) is the safer discrete invertible layer.**
 
 ## 4. Disposition (precondition for the lane)
 
