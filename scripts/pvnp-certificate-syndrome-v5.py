@@ -249,6 +249,9 @@ def _family_verdict(pairs):
         return "lb_wins"
     if any(wins) and not any(losses):
         return "stern_wins"
+    # uncovered combos (e.g. [lb_wins, indistinguishable]) conservatively default to
+    # indistinguishable: no Stern win, no clean LB sweep. Applied identically to locked and
+    # frozen pairs, so GATE-3's match check is unaffected (see slate family-verdict note).
     return "indistinguishable_at_op_budget"
 
 
@@ -346,14 +349,21 @@ def run_frozen_r2prime(lock, out_dir, git_sha):
     # GATE-1
     scored = {vk: v for vk, v in per_variant.items() if not v.get("precal_insufficient")}
     gate1 = all(v["inside_band"] for v in scored.values()) if scored else False
-    # GATE-3 cross-attacker on frozen data
+    # GATE-3 cross-attacker on frozen data. B_star is the LOCKED precal scalar (NOT recomputed
+    # from the frozen draw — that would tune the op budget to the data being judged).
+    locked_bstar = {pp["pair"]: pp["B_star"] for pp in reg.get("cross_attacker", {}).get("pairs", []) if "B_star" in pp}
     frozen_pairs = []
     for (akd, al), (bkd, bl) in cfg["cross_pairs"]:
         avk, bvk = vk_of(akd, al), vk_of(bkd, bl)
+        pk = f"{avk}_vs_{bvk}"
         if avk not in pooled or bvk not in pooled:
-            frozen_pairs.append({"pair": f"{avk}_vs_{bvk}", "verdict": "precal_insufficient"}); continue
+            frozen_pairs.append({"pair": pk, "verdict": "precal_insufficient"}); continue
         med_a = per_variant[avk]["frozen_median"]; med_b = per_variant[bvk]["frozen_median"]
-        B_star = min(1.5 * max(med_a, med_b), 0.75 * B_common)
+        if med_a is None or med_b is None:  # censored frozen median -> already fails GATE-1; skip pair
+            frozen_pairs.append({"pair": pk, "verdict": "precal_insufficient"}); continue
+        if pk not in locked_bstar:
+            frozen_pairs.append({"pair": pk, "verdict": "void_run_no_locked_bstar"}); continue
+        B_star = locked_bstar[pk]  # locked at precal, per slate "no retuning after the frozen draw"
         oa, ea = pooled[avk]["ops"], pooled[avk]["event"]; ob, eb = pooled[bvk]["ops"], pooled[bvk]["event"]
         dS = km_survival_at(oa, ea, B_star) - km_survival_at(ob, eb, B_star)
         rng = np.random.default_rng(_pair_seed(avk, bvk, "frozen"))
@@ -363,7 +373,7 @@ def run_frozen_r2prime(lock, out_dir, git_sha):
         ci = [float(np.percentile(boots, 2.5)), float(np.percentile(boots, 97.5))]
         p, _ = logrank_p(oa, ea, ob, eb, B_common); ci0 = (ci[0] > 0 or ci[1] < 0); sig = ci0 and p < BONFERRONI_P
         verdict = "indistinguishable_at_op_budget" if not sig else ("lb_wins" if dS < 0 else "stern_wins")
-        frozen_pairs.append({"pair": f"{avk}_vs_{bvk}", "B_star": B_star, "dS": dS, "dS_ci": ci, "logrank_p": p, "verdict": verdict})
+        frozen_pairs.append({"pair": pk, "B_star_locked": B_star, "dS": dS, "dS_ci": ci, "logrank_p": p, "verdict": verdict})
     frozen_fam = _family_verdict(frozen_pairs)
     locked_fam = reg.get("cross_attacker", {}).get("family_verdict")
     gate3 = (frozen_fam == locked_fam)
@@ -379,6 +389,12 @@ def run_frozen_r2prime(lock, out_dir, git_sha):
         verdict = f"cross_attacker_falsified (locked {locked_fam} vs frozen {frozen_fam})"
     else:
         verdict = "band_validated"
+    # reported bound (slate def): C_best := min over admissible variants of the FROZEN KM-median
+    adm_med = {vk: v for vk, v in scored.items() if v.get("frozen_median") is not None}
+    C_best = None
+    if adm_med:
+        bvk = min(adm_med, key=lambda kk: adm_med[kk]["frozen_median"])
+        C_best = {"variant": bvk, "C_ops_50pct": adm_med[bvk]["frozen_median"], "band": adm_med[bvk]["locked_band"]}
 
     def wj(name, obj):
         (out_dir / name).write_text(json.dumps(obj, indent=2) + "\n", encoding="utf-8")
@@ -386,7 +402,7 @@ def run_frozen_r2prime(lock, out_dir, git_sha):
     wj("code_identity.json", {"precal_code_digest": reg["code_digest"], "frozen_code_digest": dig, "match": code_id_ok})
     wj("manifest.json", {"schema": "pvnp-certificate-syndrome-v5-run-manifest", "complete": True, "regime": "r2prime",
                          "git_sha": git_sha, "target_manifest_sha256": msha, "suggested_verdict": verdict,
-                         "gate1_coverage": gate1, "gate3_cross_attacker_match": gate3,
+                         "gate1_coverage": gate1, "gate3_cross_attacker_match": gate3, "C_best": C_best,
                          "code_valid_GHt0": code_valid, "labels_wt_ok": labels_wt_ok})
     wj("gate_results.json", {"GATE1_coverage": {vk: {kk: v.get(kk) for kk in ("frozen_median", "locked_band", "inside_band", "n_censored", "nearest_edge_ratio")} for vk, v in per_variant.items()},
                              "GATE3_cross_attacker": {"locked_family": locked_fam, "frozen_family": frozen_fam, "match": gate3,

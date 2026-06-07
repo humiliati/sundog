@@ -81,12 +81,24 @@ sub-units, each carrying its own `x_c,i = x_c* + λ·ξ_i` (`ξ_i ~ N(0,1)`); **
 the population (a structural property of the cloud). `λ` is the lossiness knob.
 
 ### 3.2 The two FROZEN substrates (S0, S1) + the staged physical one (S2)
-- **S0 — 1-D caustic toy (INLINE).** `σ(t)`, `t` on a `T`-point grid over `[−1,1]`, `=`
-  `D·bump(t; t0, w_b)` (scale-free geometric distractor, carries nothing) `+` `A·cos(2π·x_c,i·t)·env(t)`
-  (continuous: fringe **frequency** = `x_c,i`; additive average → `cos(2π x_c* t)·exp(−2π²λ²t²)`, the
-  off-centre fringes Debye–Waller-damp → frequency unrecoverable) `+` `x_d·C·sin(2π f_p·t)·env(t)`
-  (discrete: parity channel, the **sign factors out of the average**), `env(t)=exp(−t²/2w²)`. Features
-  = the `T` samples of `σ̄(t)` (+ noise). `x_c*` = fringe frequency (continuous); `x_d ∈ {±1}` = parity.
+- **S0 — 1-D caustic toy (INLINE; v2 = band-pass fringe).** `σ(t)`, `t` on a `T`-point grid over
+  `[−1,1]`, `=` `D·bump(t; t0, w_b)` (scale-free **central** geometric halo, carries nothing) `+`
+  `A·cos(2π·x_c,i·t)·env_f(t)` (continuous: fringe **frequency** = `x_c,i`, carried by a **band-pass**
+  envelope `env_f(t)=exp(−(|t|−t0_f)²/2w_f²)` that **vanishes at `t=0`** so the size lives *only* in the
+  off-centre fringes; additive average → `cos(2π x_c* t)·exp(−2π²λ²t²)` on that off-centre band →
+  Debye–Waller-damps to nothing, frequency fully unrecoverable, **no central survivor**) `+`
+  `x_d·C·sin(2π f_p·t)·env_g(t)` (discrete: parity channel on the central Gaussian
+  `env_g(t)=exp(−t²/2w²)`, fixed `f_p` outside `[x_c]` range, the **sign factors out of the average**).
+  Features = the `T` samples of `σ̄(t)` (+ noise). `x_c*` = fringe frequency (continuous);
+  `x_d ∈ {±1}` = parity.
+  **v2 rationale (calibration-caught, pre-registered amendment).** v1 used the *central* Gaussian `env`
+  for the fringe; the frequency leaked through the surviving `t≈0` region (`cont` floored at ~0.68 and
+  **no obs-noise threaded `cont(0)≥0.70` AND `cont(λ_max)≤0.10`** — the window was empty). The band-pass
+  `env_f` removes the central leak so the washout completes, and it is *more faithful to the halo*: in
+  real optics the **size** lives in the off-centre supernumerary fringes while the central peak is the
+  **scale-free geometric halo** — exactly the Shadow-1 (scale-free geometry) vs Shadow-2 (off-centre,
+  size-bearing) split. This is a frozen-generator **amendment (slate v2)**, not a power tweak; it is
+  re-calibrated on the throwaway seed and re-predicted before any frozen run.
 - **S1 — 2-D vector-field substrate (INLINE; the cross-substrate leg — different in dimensionality,
   field type, and discrete-invariant type).** On a `G×G` grid over `[−1,1]²`, sub-unit `i` field
   `V_i(p) = A·cos(2π·f0·r(p) + x_c,i)·r̂(p) + x_d·B·τ̂(p)/(r(p)+ε)` where `r=|p−center|`, `r̂` radial
@@ -130,6 +142,18 @@ AND S1 both show it.**
   amplitude decays as `exp(−½λ²)` against the fixed noise scale; `disc` is `λ`-independent by
   construction on both substrates.
 
+> **FROZEN PREDICTION — locked from seed-999 calibration (2026-06-07; S0 v2, `t0_f=0.50, w_f=0.18`,
+> `σ_n=0.30`).** Committed *before* the `data_seed=20260605` run. On the `data_seed`, n=2000:
+> - **S0:** `cont(0) ≈ 0.75` (plateau through `λ≤0.15`), monotone decay to `cont(λ=2.0) = 0`, `λ*_c =
+>   0.75` (in-grid); `disc(λ)` flat `= 1.00` across the whole grid, `λ*_d` censored.
+> - **S1:** `cont(0) ≈ 0.98`, monotone decay to `cont(λ=2.0) = 0`, `λ*_c = 1.5` (in-grid); `disc(λ)`
+>   flat `= 1.00`, `λ*_d` censored.
+> - **Cross-substrate identity = True** ⇒ expected verdict `operator_confirmed_synthetic` (closes the
+>   *synthetic* anti-equivocation lacuna; **NOT Phase-5-complete, NOT public-eligible** — S2 still gated).
+>
+> Any deviation is read against §3.8 as-is — a falsified prediction is the cheap, valuable negative,
+> not a thing to re-tune. Calibration is now CLOSED; no constant changes past this line.
+
 ### 3.6 Void / preflight gates (checked BEFORE the verdict tree)
 | void branch | trip condition |
 | --- | --- |
@@ -143,8 +167,10 @@ AND S1 both show it.**
 ### 3.7 FROZEN constants (smoke-calibrate on throwaway seed, then freeze)
 Starting values (calibration targets — tune ONLY on the throwaway seed to hit §3.5's preflight + gates,
 then freeze the final values with the prediction):
-- **S0:** `T=64`, `t∈[−1,1]`, `t0=0`, `w=0.5`, `w_b=0.1`; `A=1.0`, `C=1.0`, `D=0.5`, `f_p=8`;
-  `x_c* ~ U[3,7]`; `K=64`; obs-noise `σ_n` (start `0.30`).
+- **S0 (v2):** `T=64`, `t∈[−1,1]`, `t0=0`, `w=0.5` (parity `env_g`), `w_b=0.1`; **band-pass fringe
+  `t0_f=0.50`, `w_f=0.18`** (size-bearing fringe off-centre, `≈0` at `t=0`, ~1.8 cycles in-band for
+  preflight headroom); `A=1.0`, `C=1.0`, `D=0.5`, `f_p=8`; `x_c* ~ U[3,7]`; `K=64`; obs-noise
+  `σ_n = 0.30` (calibrated).
 - **S1:** `G=16`, `[−1,1]²`, `ε=0.10`; `A=1.0`, `B=1.0`, `f0=3.0`;
   `x_c* ~ U[−1.0,1.0]` radians; `K=64`; obs-noise (start `0.30`).
 - **Shared:** `λ` grid `{0, 0.02, 0.05, 0.10, 0.15, 0.20, 0.30, 0.50, 0.75, 1.00, 1.50, 2.00}` (calibrate `λ_max` so
@@ -182,6 +208,35 @@ verdict branches before the frozen run; report `law_falsified_*` plainly (the la
 the cheap negative is the valuable outcome). Deterministic (seed-pinned, byte-reproducible).
 **S0/S1 inline-runnable** (numpy + sklearn, the JEPA-0D / Gate-0 preflight pattern); **S2
 operator-staged.**
+
+### 3.11 FROZEN RESULT (2026-06-07) — `operator_confirmed_synthetic`
+Run: `scripts/pvnp_phase5_lossiness_crossover.py --frozen`, `data_seed=20260605`, `n=2000`, `K=64`,
+`CV=4`, `σ_n=0.30`, S0 v2 (`t0_f=0.50, w_f=0.18`). Artifact:
+`results/pvnp/phase5-lossiness-crossover/frozen.json`.
+
+| substrate | `cont(0)` | `cont(λ=2.0)` | `λ*_c` | `min_λ disc` | `λ*_d` | gates |
+| --- | --- | --- | --- | --- | --- | --- |
+| **S0** | 0.885 | **0.000** | 0.75 (in-grid) | **1.000** | censored | resists ✓ determines ✓ |
+| **S1** | 0.992 | **0.053** | 2.0 (in-grid) | **1.000** | censored | resists ✓ determines ✓ |
+
+- **Cross-substrate identity = True.** `disc(λ)=1.000` at every λ on both substrates (the
+  discrete/topological variable is exactly determined regardless of lossiness); `cont(λ)` decays
+  monotonically to ≤0.10 in-grid on both (the continuous variable is washed out by the lossy average).
+  **Verdict: `operator_confirmed_synthetic`** — measured shared operator on two structurally-different
+  synthetic substrates. Closes the *synthetic* anti-equivocation lacuna.
+- **Prediction deviations (reported per §3.10, not re-tuned):** (1) S0 `cont(0)=0.885` vs predicted
+  ≈0.75 — more probe power at n=2000, gate passes with more margin (favorable). (2) S1 `λ*_c=2.0` vs
+  predicted 1.5 — the continuous variable resisted one grid-step longer; `cont` = 0.669 (λ=1.5) → 0.053
+  (λ=2.0). The `cont(λ_max)≤0.10` gate passes (0.053), but the S1 washout is **boundary-tight**: it
+  completes only at the last grid point. The pre-freeze λ-grid extension to 2.0 is load-bearing for the
+  S1 leg. The *qualitative* law (continuous-resists / discrete-determines) held on both; the fine
+  half-life estimate on S1 was off by one step.
+- **Determinism:** all stochastic components are seeded (`default_rng(seed+·)`, `KFold/StratifiedKFold
+  random_state=probe_seed`, `MLP random_state=0`) ⇒ structurally byte-reproducible; explicit re-run
+  receipt available on request.
+- **STATUS GATE (load-bearing, §3.9):** this is **NOT Phase-5-complete and NOT public-eligible.** It
+  discharges the *synthetic* question only. Full Phase-5 (the roadmap Exit) and any public claim require
+  **S2** — the halo physical instantiation behind the wave/Stokes HaloSim layer (not yet built).
 
 ## 4. Dig-in: where alignment sits relative to the law (the founding-theorem correction)
 
