@@ -367,6 +367,35 @@ Run: `scripts/pvnp_phase5_lossiness_crossover.py --frozen --s2`, `data_seed=2026
   variables), and the handedness leg remains a **predicted/unobserved** observable (no halo-Stokes-`V`
   measurement exists). Forward-model tier; measured-sky polarimetry is a further tier.
 
+### 3.14 Measured-sky scope + handedness reframe (2026-06-07)
+A 5-agent web-confirmed recon (→ `docs/atlas/S2_MEASURED_SKY_SCOPE.md`) scoped the forward-model →
+*observed* jump and produced two corrections that tighten the handedness leg's honesty.
+
+- **Stage-A: the Mueller chain is now validated against MEASURED-SKY linear polarimetry.** A real
+  archival dataset exists — **Können & Tinbergen, *Polarimetry of a 22° halo*, Appl. Opt. 30:3382
+  (1991)** (linear Stokes I,Q,U, 7 wavelengths). `scripts/s2_konnen_validate.py` confirms the
+  `s2_optics` Mueller chain reproduces it: **Fresnel-floor DoP 3.65% vs 3.71%**, **birefringent
+  two-image split 0.106° vs 0.11°**, **fully-polarized inner ledge across the split window** (Können's
+  ~100% ledge), **U=0 / radial E**, convolved peak DoP in Können's ~9% range. This is a model-credibility
+  GATE — *the same code that predicts the handedness Stokes-V reproduces measured Q*, so the
+  refraction+birefringence **linear-pol physics moves to validated-against-observation**. It does **not**
+  validate V (Können measured none; his U=0 cancellation is the direct net-V-cancels analog), so
+  **V/handedness stays forward-model.**
+- **Stage-B reframe: the handedness claim splits in two (replaces the old "net-V = handedness, novel"
+  framing).**
+  - **Per-feature V — DEFENSIBLE, MEASURABLE.** Stokes-V on total-internal-reflection features (parhelic
+    circle, subhelic/anthelic arcs) is physically sound (the *rainbow* TIR-circular-polarization is the
+    web-confirmed precedent; ice birefringence adds to it). A spatially-resolved sky measurement would
+    likely **confirm** a ~1% per-feature V — a genuine first (no halo Stokes-V is published).
+  - **Net-V = "population handedness imbalance" — DISFAVORED, QUARANTINED.** No mechanism breaks
+    ice-crystal handedness symmetry (ice Ih achiral; E/B-field alignment is not a pseudoscalar; Können's
+    `U=0` proof is the exact linear analog). A display-integrated net-V most likely returns ~0 →
+    **falsifies** this (uncited) framing. Do not assert it.
+  - **Pre-registered measured-sky target:** an azimuthally **antisymmetric `±V(θ,φ)`** pattern that
+    **integrates to ~0** — confirms the per-feature mechanism *and* demonstrates net cancellation in one
+    observation. Best acquisition path = bolt a quarter-wave retarder onto LMU Munich's specMACS DoFP
+    halo camera; Können = falsification referee. **Scope-and-hold** (months, external); nothing executed.
+
 ## 4. Dig-in: where alignment sits relative to the law (the founding-theorem correction)
 
 This is the payoff that makes the law load-bearing, not just elegant — stated as the law's

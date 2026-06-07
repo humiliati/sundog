@@ -99,6 +99,22 @@ def corona_intensity(theta, a, lam):      # a=radius[µm], lam[µm], theta[rad]
     (legitimate — it is the law's "shared discrete variable" — but it is a *predicted*, not *observed*,
     physical effect, and must be framed that way).
 
+> **SHARPENED 2026-06-07 (measured-sky recon → `S2_MEASURED_SKY_SCOPE.md`).** The handedness claim
+> splits in two, with opposite fates — use this framing, not the old flat "net-V = handedness, novel":
+> - **Per-feature V (DEFENSIBLE, MEASURABLE):** Stokes-V on TIR features (parhelic circle,
+>   subhelic/anthelic arcs) is physically sound — the *rainbow* TIR circular polarization is the
+>   web-confirmed precedent; ice birefringence adds to it. A spatially-resolved measurement would
+>   likely *confirm* a ~1% per-feature V (a genuine first; no halo Stokes-V is published).
+> - **Net-V = population handedness (DISFAVORED, QUARANTINE):** no mechanism breaks ice handedness
+>   symmetry (achiral; E/B not pseudoscalar; Können's `U=0` is the exact net-V-cancels analog). An
+>   integrated measurement most likely returns ~0 → *falsifies* this framing. Do not assert it.
+> - Pre-registered measured-sky target = an antisymmetric `±V(θ,φ)` integrating to ~0 (confirms the
+>   mechanism + demonstrates cancellation in one shot).
+> - **Linear-pol physics now validated against MEASURED SKY:** `scripts/s2_konnen_validate.py` shows
+>   the Mueller chain reproduces Können 1991 (Fresnel floor 3.65%≈3.71%, birefringent split
+>   0.106°≈0.11°, ~100% inner ledge, U=0). The *same code* generates the V prediction — a credibility
+>   gate the chain passes — but V itself stays forward-model (Können measured none).
+
 ### Track-G minimal model (handedness Mueller core + ice-phase geometry)
 ```python
 def stokes_after_prism(theta_i, n, L, dn, phi, lam):  # returns (I,Q,U,V)

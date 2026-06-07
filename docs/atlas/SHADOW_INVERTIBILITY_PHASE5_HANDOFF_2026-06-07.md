@@ -79,9 +79,19 @@ From `docs/atlas/ATLAS_LITPASS_MEMO.md` §4 (no-priority rule) + the S2 lit-pass
 - `docs/README.md` → register the atlas lane pointers **only when public promotion is authorized** (it is
   not yet) — keep internal until the §3 gates clear.
 
-## 8. Forward pointer — the "full physical discharge"
+## 8. Forward pointer — the "full physical discharge" (scoped 2026-06-07)
 S2 is a *partial* physical leg. A **full** physical discharge (which would change the eligibility
-calculus) is being scoped separately and would require: (a) a clean continuous-physical washout — likely
-a true boundary of the law for magnitude variables, not just a tuning gap; and (b) **measured-sky
-polarimetry** (real instruments/photographs), the tier above forward-model. Until both land, treat the
-lane exactly as §3 states. **This hand-off must be re-issued if/when that status changes.**
+calculus) is scoped in `docs/atlas/S2_MEASURED_SKY_SCOPE.md` and would require: (a) a clean
+continuous-physical washout — likely a true boundary of the law for magnitude variables, not just a
+tuning gap; and (b) **measured-sky polarimetry** (real instruments), the tier above forward-model.
+Updates from the measured-sky recon that the promo team should fold into any framing:
+- **The handedness landmine is now sharper.** It splits into **per-feature V** (TIR + birefringence —
+  physically *defensible* and *measurable*, the rainbow is the precedent) vs **net-V = population
+  handedness** (*disfavored, likely-null*, quarantined). Even per-feature V is **unmeasured** today, so
+  it stays DO-NOT-SAY-as-observed; but "net-V = handedness" is the specific overreach to never assert.
+- **One modest sayable gained:** the polarization *model* is now **validated against measured-sky LINEAR
+  polarimetry** (Können 1991 — Fresnel floor + birefringence split + inner ledge reproduced, via
+  `scripts/s2_konnen_validate.py`). This is a real (linear-pol, archival) anchor — but it validates the
+  *linear* physics only; it says nothing about the V/handedness claim, which stays forward-model.
+Until a measured-sky V lands, treat the lane exactly as §3 states. **Re-issue this hand-off if status
+changes.**
