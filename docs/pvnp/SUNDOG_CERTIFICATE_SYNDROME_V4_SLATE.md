@@ -1,10 +1,16 @@
 # Sundog Certificate Problem — Syndrome Certificate v4 Median-Calibration + Rung-2 Resolution Slate
 
-Status: **FROZEN — stage-1 slate contract; NOT executed.** Stage-1 sign-off 2026-06-06
-(consistency pass clean; precal `cap = 12·N_analytic` stress-tested ≈ 6.3× the v3-measured
-R2′ median, well clear of the censoring boundary). No v4 frozen-target run may execute until
-the median pre-calibration has produced the stage-2 locked prediction and each attacker has
-been validated. (Freeze-before-execute, per the lane.)
+Status: **EXECUTED 2026-06-07** (stage-2 median-precal lock → R2′ frozen + v3 method-validation;
+adversarially audited, 5-dimension Workflow). → **DUAL result, neither half a clean pass:**
+**(A)** the median fix is validated only as an *in-sample retrofit* on v3 rungs 1/3 (ratios
+1.00–1.33, closing v3's 5.32× mean miss) but is **`method_still_off`** on the fresh R2′ regime
+(median missed Stern `l8` by 2.77× → `model_deviation`); **(B)** R2′ `[160,80]w16` is a
+**near-tie** (St/LB=0.978, within the regime's 1.43–2.77× seed-noise floor + a Stern-flattering
+censoring asymmetry) that dissolves v3's dramatic `l=10` LB-win artifact **down to a dead heat**
+— NOT a clean Stern crossover (no "monotone in w"). v3's measured ladder is untouched; integrity
+clean. Receipt:
+[`receipts/2026-06-07_certificate_syndrome_v4.md`](receipts/2026-06-07_certificate_syndrome_v4.md).
+(Stage-1 frozen 2026-06-06; consistency pass clean; precal cap stress-tested ≈ 6.3× the median.)
 
 Date opened: 2026-06-06
 

@@ -159,8 +159,13 @@ def run_validate_v3(lock, out_dir):
             all_ok = all_ok and ok
             rows.append({"regime": rid, "variant": vk, "v4_median_pred": pred, "v3_measured": meas,
                          "pred_over_measured": ratio, "within_factor2": ok})
-    res = {"schema": "pvnp-certificate-syndrome-v4-method-validation", "all_within_factor2": all_ok,
-           "verdict": "method_validated" if all_ok else "method_still_off", "points": rows}
+    # NOTE: this checks ONLY the v3 ground-truth regimes (an in-sample retrofit). The slate's
+    # reserved word "method_validated" requires ALL points incl. the fresh R2' retest; that
+    # all-points verdict is computed in run_summarize. Emit a scoped label here so the reserved
+    # word is not minted from an in-sample-only check.
+    res = {"schema": "pvnp-certificate-syndrome-v4-method-validation", "scope": "v3 ground-truth rungs 1/3 only (in-sample retrofit)",
+           "all_within_factor2": all_ok,
+           "verdict": "v3_ground_truth_validated" if all_ok else "v3_ground_truth_off", "points": rows}
     (out_dir / "method_validation.json").write_text(json.dumps(res, indent=2) + "\n", encoding="utf-8")
     return res
 
@@ -293,24 +298,49 @@ def run_summarize(root, lock):
     root = Path(root)
     mv = json.loads((root / "method-validation" / "method_validation.json").read_text(encoding="utf-8")) if (root / "method-validation" / "method_validation.json").exists() else None
     r2 = json.loads((root / "r2prime" / "rung2_resolution.json").read_text(encoding="utf-8")) if (root / "r2prime" / "rung2_resolution.json").exists() else None
+    r2pm = json.loads((root / "r2prime" / "prediction_vs_measured.json").read_text(encoding="utf-8")) if (root / "r2prime" / "prediction_vs_measured.json").exists() else None
+    r2mf = json.loads((root / "r2prime" / "manifest.json").read_text(encoding="utf-8")) if (root / "r2prime" / "manifest.json").exists() else None
+    r2va = json.loads((root / "r2prime" / "valid_iteration_audit.json").read_text(encoding="utf-8")) if (root / "r2prime" / "valid_iteration_audit.json").exists() else None
+    # ALL-POINTS method verdict per the slate's binding definition: v3 retrofit AND fresh R2'.
+    r2_within = all(v.get("within_factor2") for v in r2pm.values()) if r2pm else None
+    v3_ok = (mv and mv.get("all_within_factor2"))
+    all_points = "method_validated" if (v3_ok and r2_within) else "method_still_off"
+    # near-tie / model_deviation flags
+    st_lb = r2["St_over_LB"] if r2 else None
+    near_tie = (st_lb is not None and 0.95 <= st_lb <= 1.05)
+    r2_verdict = (r2mf["suggested_verdict"] if r2mf else None)
     summary = {"schema": "pvnp-certificate-syndrome-v4-summary",
-               "method_validation": (mv["verdict"] if mv else "not_run"),
-               "method_validation_points": (mv["points"] if mv else None),
-               "rung2_outcome": (r2["outcome"] if r2 else "not_run"),
-               "rung2_detail": r2}
+               "method_verdict_all_points": all_points,
+               "method_verdict_note": "slate's binding all-points def (incl. fresh R2'); R2' Stern l8 missed 2.77x => method_still_off",
+               "v3_retrofit_verdict": (mv["verdict"] if mv else "not_run"),
+               "v3_retrofit_points": (mv["points"] if mv else None),
+               "r2prime": {"frozen_verdict": r2_verdict, "outcome_binary": (r2["outcome"] if r2 else None),
+                           "St_over_LB": st_lb, "near_tie": near_tie,
+                           "prediction_vs_measured": r2pm, "censoring": ({vk: {"n_censored": r2va[vk]["n_censored"], "max_B": r2va[vk]["max_B"]} for vk in r2va} if r2va else None),
+                           "honest_reading": "near-tie (St/LB~0.98 within seed-noise + Stern-flattering censoring asymmetry); "
+                                             "dissolves v3's l=10 LB-win artifact DOWN to a dead heat, NOT a clean Stern crossover"}}
     (root).mkdir(parents=True, exist_ok=True)
     (root / "scaling_summary_v4.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
-    lines = ["# v4 summary", "",
-             f"**Method validation (median lock vs v3 measured):** {summary['method_validation']}"]
+    lines = ["# v4 summary (honest; see receipt 2026-06-07_certificate_syndrome_v4.md)", "",
+             f"**Method verdict (slate all-points, incl. fresh R2'): {all_points}**",
+             f"- v3 ground-truth retrofit: {summary['v3_retrofit_verdict']}" + (" (rungs 1/3, all within factor 2)" if v3_ok else "")]
     if mv:
         for p in mv["points"]:
-            lines.append(f"- {p['regime']}/{p['variant']}: pred {p['v4_median_pred']:.3e} vs measured {p['v3_measured']:.3e} "
+            lines.append(f"  - {p['regime']}/{p['variant']}: pred {p['v4_median_pred']:.3e} vs measured {p['v3_measured']:.3e} "
                          f"(ratio {p['pred_over_measured']:.2f}, within2x {p['within_factor2']})")
-    lines += ["", f"**R2' rung-2 resolution:** {summary['rung2_outcome']}"]
-    if r2:
-        lines.append(f"- C_LB={r2['C_LB']:.3e}, C_Stern=min(l8,l9)={r2['C_Stern_min']:.3e} (best l={r2['best_stern_l']}), "
-                     f"St/LB={r2['St_over_LB']:.2f} -> {r2['outcome']}")
-        lines.append(f"- {r2['interpretation']}")
+    if r2pm:
+        lines.append(f"- fresh R2' (prospective) — median lock vs measured:")
+        for vk, v in r2pm.items():
+            lines.append(f"  - {vk}: measured {v['measured']:.3e} vs predicted_median {v['predicted_median']:.3e} "
+                         f"(ratio {v['ratio']:.2f}, within2x {v['within_factor2']})")
+        lines.append(f"  => R2' frozen verdict: **{r2_verdict}**")
+    lines += ["", f"**R2' rung-2 resolution (HONEST):** near-tie (St/LB={st_lb:.3f}); binary label `{r2['outcome'] if r2 else '?'}` on a ~2% margin"]
+    if r2 and r2va:
+        lines.append(f"- C_LB={r2['C_LB']:.3e} (cens {r2va['lb']['n_censored']}/64), C_Stern(l8)={r2['C_Stern_l8']:.3e} "
+                     f"(cens {r2va['stern_l8']['n_censored']}/64), C_Stern(l9)={r2['C_Stern_l9']:.3e} (cens {r2va['stern_l9']['n_censored']}/64)")
+        lines.append(f"- caveats: 2% margin within seed-noise (median wanders 1.43-2.77x on seed flip) + Stern-flattering "
+                     f"censoring asymmetry (LB 0 censored vs Stern 10/13 capped below LB's max_B); model_deviation flagged.")
+        lines.append(f"- reading: dissolves v3's dramatic l=10 LB-win (St/LB=1.96) DOWN to a dead heat; NOT a clean Stern crossover.")
     (root / "V4_SUMMARY.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     return summary
 
@@ -376,7 +406,8 @@ def main():
     if args.summarize:
         lock = json.loads(Path(args.prediction_lock).read_text(encoding="utf-8")) if Path(args.prediction_lock).exists() else {}
         s = run_summarize(REPO / args.root, lock)
-        print(f"=== v4 summary ===  method: {s['method_validation']}  rung2: {s['rung2_outcome']}")
+        print(f"=== v4 summary ===  method(all-points): {s['method_verdict_all_points']}  "
+              f"rung2: {s['r2prime']['outcome_binary']} (near_tie={s['r2prime']['near_tie']}, frozen={s['r2prime']['frozen_verdict']})")
         return
     print("Pass: --stage1-smoke | --median-precal | --validate-v3 | --frozen --regime r2prime | --summarize | --harness-test")
 

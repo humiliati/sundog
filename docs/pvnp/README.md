@@ -100,18 +100,29 @@ Phase-4 synthesis:
   Next (future slate): median-based prediction lock + larger pre-cal target count; clean
   rung-2 retest at `l∈{8,9}`.
 - [`SUNDOG_CERTIFICATE_SYNDROME_V4_SLATE.md`](SUNDOG_CERTIFICATE_SYNDROME_V4_SLATE.md)
-  — **STAGE-1 FROZEN 2026-06-06; harness built + validated, NOT executed**: median-calibration
-  + rung-2 (R2′) resolution. Closes v3's two self-named flaws: **(1)** locks a
-  **directly-measured censored median** ops-to-first-success (the exact analog of the frozen
-  `C@50%`, replacing v3's mean-based formula that missed rung-2 by 5.3×; `T_pre` 16→48), and
-  **(2)** re-measures `[160,80]w16` (same code as v3 rung-2 via a `code_digest` identity gate,
-  fresh targets) with fixed Stern `l∈{8,9}`, `C_Stern=min`, vs LB → **`Stern_wins`** (crossover
-  monotone, the v3 `l=10` was the handicap) or **`LB_wins`** (genuine 2-D feature). Method
-  validated zero-frozen-cost against v3's measured rungs 1/3. W14 midpoint **deferred** to a
-  future slate. Two-stage freeze; harness `scripts/pvnp-certificate-syndrome-v4.py`
-  (`--median-precal` → `--validate-v3` → `--frozen --regime r2prime` → `--summarize`),
-  validated inline (base(m)=v3 to 0.1%, byte-deterministic, code_identity gate, full bundle).
-  Next: staged median pre-cal → stage-2 lock → operator-gated R2′ run (~7 h).
+  — **EXECUTED 2026-06-07 → dual result, neither half a clean pass (adversarially audited)**:
+  median-calibration + rung-2 (R2′) resolution. **(A)** the directly-measured censored-median
+  fix is validated as an *in-sample retrofit* on v3 rungs 1/3 (ratios 1.00–1.33, closing v3's
+  5.32× mean miss) but is **`method_still_off`** on the fresh R2′ regime — the median missed
+  Stern `l8` by **2.77×** (`model_deviation`), so it is **not** a proven universal predictor.
+  **(B)** R2′ `[160,80]w16` (same code as v3 rung-2 via `code_digest`, fresh targets, fixed
+  `l∈{8,9}`) is a **near-tie** (St/LB=0.978, inside the regime's 1.43–2.77× seed-noise floor +
+  a Stern-flattering censoring asymmetry) — it **dissolves v3's dramatic `l=10` LB-win artifact
+  down to a dead heat**, NOT a clean Stern crossover; "monotone in w" is withdrawn. The
+  load-bearing claim: v3's off-pattern point was an `l`-selection artifact, not a 2-D LB feature;
+  the v3 ladder is untouched. Integrity clean (code_identity, witnesses, privilege, determinism).
+  Open: heavy-tail prediction (neither mean nor median nails R2′ Stern), a `near_tie` outcome bin,
+  the slate's Gates-vs-verdict scope inconsistency. Receipt
+  [`receipts/2026-06-07_certificate_syndrome_v4.md`](receipts/2026-06-07_certificate_syndrome_v4.md)
+  (supersedes the auto `V4_SUMMARY.md`). W14 midpoint deferred.
+- [`SUNDOG_CERTIFICATE_SYNDROME_V5_SLATE.md`](SUNDOG_CERTIFICATE_SYNDROME_V5_SLATE.md)
+  — **STAGE-1 FROZEN 2026-06-07; not executed**: MHK-v5 distributional-band repair for
+  v4's heavy-tail miss. Freezes a Kaplan-Meier median-in-op-units band over `K=8` same-size
+  precal seeds (`g=1.25`, `W_max=3.0`) with an honest `precal_insufficient` decline rather than
+  widening to pass; fixes v4's cross-attacker asymmetry with a common op horizon plus pairwise
+  `LB vs stern_l8` / `LB vs stern_l9` survival-difference + log-rank verdicts and a near-tie
+  bin. R2′ `[160,80]w16` remains the primary fresh resolution; v3 rungs 1/3 are method-validation
+  only; R0 is out of scope. No v5 precal or frozen scoring has run.
 
 Lit-pass:
 

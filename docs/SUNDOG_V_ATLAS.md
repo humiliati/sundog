@@ -135,6 +135,25 @@ polarization layer is where the flip happens. So the atlas embodies not just "th
 body" but the full **boundary** of *when* it resists (continuous bodies) and *when* it determines
 (discrete/topological variables) — the lab's mature thesis, physical and photographable.
 
+### 1.3 The atlas instantiates the Shadow-Invertibility Law (and is its cleanest test bed)
+
+The tower of §1.2 is the optical instance of a candidate **cross-substrate operator** — the
+**Shadow-Invertibility Law**: *a lossy averaged shadow determines the structurally-stable
+(discrete/topological) part of a hidden state and resists the continuous-magnitude part; the lossiness
+is essential.* Full statement, the portfolio instantiation table (AB / syndrome / mesa-marginal /
+Gate-0-null / the halo layers), and the alignment-side correction it implies live in
+[`proof/PHASE5_CROSS_SUBSTRATE.md`](proof/PHASE5_CROSS_SUBSTRATE.md) — the candidate operator for the
+coarse-graining roadmap's long-missing Phase 5.
+
+**Why the atlas is the test bed:** the optics gives discrete variables (handedness, ice phase, halo
+radius, optical-vortex index) and continuous variables (position, size, `n`, `C_n²`) **side by side,
+photographable, forward-generable, with the lossiness (population spread) tunable** — which mesa and
+turbulence do not. The **lossiness-crossover experiment** (sweep the population spread; watch the
+continuous coordinates wash out at a measured threshold while the discrete ones hold exact, the *same*
+crossover on both towers) is what would convert the candidate operator into the roadmap's required
+*measured* cross-substrate identity. The prettiest page in the lab may be where its deepest theorem
+gets measured.
+
 ## 2. What is honest vs. what is reach
 
 **Honest:** a forward-generated complete atlas (invisible halos as falsifiable forward predictions); a
