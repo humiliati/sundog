@@ -237,7 +237,7 @@ catastrophe-optics literature; asserting a specific catastrophe type without the
 | 4 | The parametric workbench — "draws the parhelion from the math"; the rendering *is* the proof | grounded (`SUNDOG_V_GEOMETRY.md`) |
 | 5 | Determining-shadow-set on the optics — what the display determines vs. resists; bank the halo as a physical read-off resister | advanced — lossiness-crossover RUN (`proof/PHASE5_CROSS_SUBSTRATE.md` §3.11–3.14): discrete *determines*, continuous magnitude *resists partially* |
 | 6 | The global-invariant search — the determining invariants beyond elevation (habit class, orientation symmetry, optical-path topology) | open |
-| **6.5** | **Compute the bifurcation set** — from the ray-optics deviation map: caustics (`∂δ=0`), their coalescences (cusp `∂²δ=0`, swallowtail `∂³δ=0`) = component (A); TIR/grazing admissibility walls = component (B). Predict the transition elevations + types; verify 29° (A-cusp), 32°/58° (B-walls) fall out vs. the apparatus | **6.5-A LANDED** (2026-06-07, `calibration/PHASE65_BIFURCATION_SET.md`): component-B walls **derived** — CZA 32.196°, CHA 57.804° (=90°−CZA), + 22°/46° A₂ folds, all within ±1° of documented, recompute-from-n verified (`scripts/atlas_bifurcation_set.py`). **6.5-B STAGED**: the 29° A₃ cusp (2-D orientation→sky map). |
+| **6.5** | **Compute the bifurcation set** — from the ray-optics deviation map: caustics (`∂δ=0`), their coalescences (cusp `∂²δ=0`, swallowtail `∂³δ=0`) = component (A); TIR/grazing admissibility walls = component (B). Predict the transition elevations + types; verify 29° (A-cusp), 32°/58° (B-walls) fall out vs. the apparatus | **COMPLETE (computation), 2026-06-07** (`calibration/PHASE65_BIFURCATION_SET.md`): all transitions **derived**, none hardcoded — component-B walls CZA **32.196°** + CHA **57.804°** (=90°−CZA) + 22°/46° A₂ folds (`scripts/atlas_bifurcation_set.py`); component-A **29.7° A₃ cusp** from the horizontal-column halo-function caustic, gap-closure of `det J=0` (`scripts/atlas_caustic_map.py`); all within ±1° of documented, recompute-from-n. §6 armchair gate cleared. Remaining: optional HaloSim cross-render + lit-pass Track B (A₃-cusp identity = SYNTHESIS). |
 | 7 | The forward sweep — generate the complete atlas; the higher-codim strata are the directed search for the invisible halos | open |
 | 8 | Invisible-halo predictions — each generated rare halo (higher catastrophe) as a falsifiable forward claim | open |
 | **8.5** | **Shadow 2 — diffraction → crystal SIZE** — read size off the Airy dressing, calibrated by the corona. **Dressing layer BUILT** (`scripts/s2_optics.py`, standalone — HaloSim can't host it). **Corrected:** size lives on the corona / parhelion-fold, NOT the 22° step edge (Berry 1994); and size **resists only PARTIALLY** (magnitude scale-leak, §3.13). | built — partial-resister, not a clean washout |
@@ -251,9 +251,11 @@ Phases 1–4 are grounded/done; Phase 0.5 (lit-pass) gates everything outward-fa
 arc is 5–11, anchored on the 6.5 bifurcation-set computation. **Status note (2026-06-07):** the
 **determining-shadow-tower sub-thread (8.5–8.7)** advanced substantially — the diffraction + Stokes/
 Mueller layers are built (`scripts/s2_optics.py`), the polarization model is archival-validated against
-Können 1991, and the lossiness-crossover ran (forward-model tier). The atlas's **structural CORE — the
-bifurcation-set computation (6.5) and the capstone (11)** — remains entirely open and is untouched by
-this work.
+Können 1991, and the lossiness-crossover ran (forward-model tier). **The structural CORE advanced too:
+Phase 6.5 (the bifurcation-set computation) is now COMPLETE on the computation side (2026-06-07,
+`calibration/PHASE65_BIFURCATION_SET.md`) — the 22/29/32/46/58 transitions all DERIVED (component-B
+walls + the 29.7° A₃ cusp), §6 armchair gate cleared.** Still open: the optional HaloSim cross-render,
+Phase 7 (forward sweep), Phase 8 (invisible halos), and the **capstone (Phase 11)**.
 
 ## 5. Phase 11 — the platonic-solid model, except holograms (the capstone)
 
