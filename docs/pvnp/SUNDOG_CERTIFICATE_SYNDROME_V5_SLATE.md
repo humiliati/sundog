@@ -114,6 +114,10 @@ variant has pair verdict `stern_wins` and no admissible Stern variant has pair v
 `indistinguishable_at_op_budget` iff every admissible pair is indistinguishable; `mixed_variant`
 iff one fixed Stern variant wins and another loses. If LB or both Stern variants are
 `precal_insufficient`, R2′ is `precal_insufficient` and frozen scoring is blocked.
+Any pair-verdict combination not matched by the four clauses above (e.g. one Stern pair `lb_wins`
+and the other `indistinguishable`) conservatively defaults to `indistinguishable_at_op_budget` — it
+asserts no Stern win and no clean LB sweep. This default is applied identically to the locked and
+the frozen pair verdicts, so GATE-3's locked==frozen match check is unaffected.
 
 **Reported bound (distinct from the verdict).** `C_best := min over admissible variants of the
 frozen KM-median `C@50%`` (the best attacker an adversary would pick), with its band carried
