@@ -1,7 +1,11 @@
 # Phase 5 — Cross-Substrate Sameness: the Shadow-Invertibility Law (candidate operator)
 
-> **STATUS: CANDIDATE OPERATOR — SYNTHETIC LEG MEASURED 2026-06-07, PHYSICAL LEG (S2) OWED. NOT the
-> Phase-5 Exit yet.** The coarse-graining roadmap's Phase 5 (`../COARSE_GRAINING_PROOF_ROADMAP.md`
+> **STATUS: CANDIDATE OPERATOR — SYNTHETIC LEG MEASURED + PHYSICAL LEG (S2) PARTIAL, 2026-06-07. NOT the
+> Phase-5 Exit yet.** S2 ran as a `partial physical leg` (§3.13): discrete-determines CONFIRMED on real
+> halo physics (ice-phase + handedness, `disc=1.000` flat); continuous-physical PARTIAL (size resists
+> 0.97→0.45 — magnitude scale-leak). Full physical discharge (clean continuous washout + measured-sky
+> polarimetry) still owed; handedness is a predicted/unobserved observable. The coarse-graining
+> roadmap's Phase 5 (`../COARSE_GRAINING_PROOF_ROADMAP.md`
 > §"Phase 5 — Cross-substrate sameness") requires a **measured** cross-substrate operator-identity
 > table on ≥2 substrates to dissolve the equivocation attack. This file supplies the **candidate
 > operator**, the **measurable test design** (conjecture + falsifier), and now the **synthetic measured
@@ -324,6 +328,45 @@ Stokes-`V` in a visible ice halo, and "net-`V` = population handedness" is an un
 the apparatus tier; measured-sky polarimetry would be a further, higher tier. (d) Until run, S2 is
 unstarted; nothing here promotes Phase-5 past §3.9's status gate.
 
+### 3.13 S2 FROZEN RESULT (2026-06-07) — `partial physical leg`
+Run: `scripts/pvnp_phase5_lossiness_crossover.py --frozen --s2`, `data_seed=20260605`, `n=2000`, `K=64`,
+`CV=4`. Forward model: `scripts/s2_optics.py` (physics fixed, unit-tested). Artifact:
+`results/pvnp/phase5-lossiness-crossover/frozen_s2.json`.
+
+| leg | metric(0) | metric(λ=2.0) | `λ*` | gate |
+| --- | --- | --- | --- | --- |
+| **S2c_fold** (continuous, size) | `cont0 = 0.968` | `cont = 0.450` | `λ*_c = 2.0` | resists **✗ (partial)** |
+| **S2hp_phase** (discrete, ice-phase) | `disc0 = 1.000` | `min disc = 1.000` | `λ*_d` censored | determines **✓** |
+| **S2hh_hand** (discrete, handedness) | `disc0 = 1.000` | `min disc = 1.000` | `λ*_d` censored | determines **✓** |
+
+- **Verdict: `partial physical leg`** (the §3.12.5 pre-registered expected outcome). **Discrete-physical
+  CONFIRMED** — `disc(λ)=1.000` flat across the whole grid on BOTH the ice-phase (robust geometry) and
+  the handedness (Stokes-`V`) legs: the discrete/topological invariant is exactly determined from the
+  lossy halo shadow, regardless of population spread. This is the **physical anchor §4 leans on**, now
+  on real halo optics (min-deviation geometry + Fresnel×birefringent Mueller chain). **Continuous-
+  physical PARTIAL** — size `cont` decays 0.968 → 0.450 (monotone, `λ*_c=2.0`) but does **not** reach the
+  `≤0.10` continuous-resists gate.
+- **Graded-resistance refinement (the banked finding):** *phase-offset* continuous variables wash to ~0
+  (S1: cont 0.992→0.053); *scale/magnitude* variables resist only **partially** (size: cont 0.968→0.450,
+  residual scale-leak in the diffraction envelope `∝1/√d`). The law's "continuous resists" is **graded
+  by encoding**, not absolute. Confirmed identically on the corona and the fold-Airy substrates.
+- **Prediction deviations (reported per §3.10, not re-tuned):** the continuous plateau is **0.45 vs the
+  predicted ~0.30** (it resisted *less*; the linear probe reads the residual envelope better at n=2000),
+  and `λ*_c=2.0 vs predicted 1.5`. The *qualitative* prediction (continuous partial, discrete flat,
+  verdict = partial physical leg) held exactly.
+- **Receipts.** (1) **Determinism:** two independent `--frozen --s2` runs
+  (`…/frozen_s2.json` and `…-s2repro/frozen_s2.json`) are **byte-identical** on all `cont`/`disc`/`maj`/
+  `λ*` curves + the verdict (only wall-time differs, 471.8 vs 495.2 s). (2) **Shuffled-parity null**
+  (`scripts/s2_null_check.py`): on both discrete legs at λ=0 and λ=2, `disc(true)=1.000` while
+  `disc(shuffled)≈0` (0.045, −0.031, −0.005, 0.031) — the `disc=1.000` is a **real** x_d↔shadow
+  correlation, not a label leak.
+- **STATUS GATE (load-bearing).** S2 is a **PARTIAL** physical leg, **NOT** full
+  `operator_confirmed_physical`, **NOT** Phase-5-complete, **NOT** public-eligible. It banks: (i) the
+  discrete-determines half on real halo physics (the §4 anchor); (ii) the graded-resistance refinement.
+  It does **not** bank a full continuous washout (owed, or accepted as physically partial for magnitude
+  variables), and the handedness leg remains a **predicted/unobserved** observable (no halo-Stokes-`V`
+  measurement exists). Forward-model tier; measured-sky polarimetry is a further tier.
+
 ## 4. Dig-in: where alignment sits relative to the law (the founding-theorem correction)
 
 This is the payoff that makes the law load-bearing, not just elegant — stated as the law's
@@ -380,9 +423,21 @@ this does and does **not** show:
 So the receipt anchors the *logic* of the correction — the split is real and sharp where the mechanism
 is present — and nothing more. It is **synthetic** (S0 + S1), excludes the physical halo leg (S2), and
 even on S1 the continuous-resists gate cleared only at the last grid point (`cont=0.053` at λ=2.0 —
-boundary-tight; §3.11). The AB/syndrome exact results and the halo-handedness demo remain the
-correction's *physical* anchors; S2 remains owed (§3.9, §6) before the correction's physical claim is
-discharged.
+boundary-tight; §3.11). The AB/syndrome exact results and the halo-handedness demo are the correction's
+*physical* anchors.
+
+**S2 update (2026-06-07, §3.13): a partial physical leg, and it lands on the correction's load-bearing
+side.** The halo forward model ran as a `partial physical leg`: the **discrete-determines half is now
+anchored on real halo physics** — `disc(λ)=1.000` flat on both the ice-phase (min-deviation geometry)
+and handedness (Fresnel×birefringent Mueller, Stokes-`V`) legs, shuffled-parity-null-verified and
+determinism-receipted. That is precisely the side §4 says alignment-relevant structure lives on, now
+measured (in forward-model simulation) on a third, physical substrate. The **continuous side resisted
+only partially** (size `cont` 0.97→0.45, magnitude scale-leak) — which *refines* rather than weakens the
+correction: "continuous resists" is **graded by encoding** (phase-offsets wash to ~0; magnitudes resist
+partially, their mean surviving averaging), and the determinable discrete invariant is the clean,
+robust side on every substrate tried. Still owed for a *full* physical discharge: a clean continuous-
+physical washout and measured-sky (not forward-model) polarimetry; the handedness leg also remains a
+*predicted, unobserved* observable.
 
 ## 5. Falsification surface
 
