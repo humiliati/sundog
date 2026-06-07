@@ -108,6 +108,33 @@ one or the other:
 Pinning each transition to (A) or (B) — and, for (A), to a Thom catastrophe type — is the Phase-6.5
 receipt, not an armchair claim.
 
+### 1.2 The determining-shadow tower (invertibility tracks the hidden-variable KIND)
+
+The atlas does not have one shadow — it has a **tower**, each layer reading a different hidden
+variable, and the **invertibility changes as you climb because the *kind* of variable changes**:
+
+- **Shadow 1 — geometry (caustic position).** Reads `{habit, orientation symmetry, elevation}`.
+  Continuous, scale-free. **RESISTS** — many crystal populations give the same display (the founding
+  non-invertibility).
+- **Shadow 2 — diffraction (the dressing of the caustic).** Reads crystal **size** — a continuous
+  scalar the geometric shadow is structurally blind to. Conditionally legible (monodispersity gate),
+  richest at the cusps (Pearcey). Still **RESISTS** the full population (a size distribution washes
+  out).
+- **Shadow 3 — polarization (the Stokes structure).** Reads a **discrete/structural** variable: the
+  **handedness/parity** of the ray-path-plus-crystal configuration (Stokes `V` sign), and the c-axis
+  class via ice **birefringence**. A different *kind* of hidden variable — a sign, not a magnitude.
+  **This is the layer where the shadow may INVERT**: a discrete `Z₂` variable is robust to the
+  distribution-smearing that defeats Shadows 1–2, and is the optical analog of the program's one
+  *exact* regime-2 (Aharonov–Bohm: a discrete/topological invariant exactly determined by its shadow).
+
+**The structural finding: invertibility tracks the hidden-variable's kind.** Continuous magnitudes
+(position, size) → *resisting* shadows (the founding thesis). Discrete parities / topological
+invariants (handedness) → *invertible* shadows (the AB-exact analog). The tower climbs from the
+most-resisting (continuous, scale-free) to the cleanly-invertible (discrete, topological); the
+polarization layer is where the flip happens. So the atlas embodies not just "the shadow resists the
+body" but the full **boundary** of *when* it resists (continuous bodies) and *when* it determines
+(discrete/topological variables) — the lab's mature thesis, physical and photographable.
+
 ## 2. What is honest vs. what is reach
 
 **Honest:** a forward-generated complete atlas (invisible halos as falsifiable forward predictions); a
@@ -139,6 +166,18 @@ catastrophe-optics literature; asserting a specific catastrophe type without the
   forward claim ("this arc appears under *this* habit at *this* elevation").
 - **Read-off resister.** A body whose shadow cannot reconstruct it, read off rather than controlled —
   the atlas's class.
+- **Stokes vector / polarization shadow.** The 4-component `(I, Q, U, V)` description of the light at
+  each halo point — a 4× richer shadow than intensity. `Q, U` = linear polarization (reads the
+  refraction geometry / Fresnel angles); `V` = circular polarization (a *signed parity* reading
+  handedness).
+- **Handedness (the discrete hidden variable).** The parity of a chiral ray-path-plus-crystal
+  configuration (left vs right), read off the sign of Stokes `V` — a `Z₂` variable, the optical analog
+  of a topological invariant. **Honest caveat:** ice Ih is **not** optically active like quartz; the
+  handedness read here is ray-path parity + the c-axis (optic-axis) class via ice **birefringence**,
+  not bulk molecular chirality.
+- **The determining-shadow tower.** The stratified decomposition (geometry → diffraction →
+  polarization) whose layers read hidden variables of different kinds (continuous magnitude → discrete
+  parity), with invertibility tracking the kind (§1.2).
 
 ## 4. The phase arc (built to the capstone)
 
@@ -155,7 +194,9 @@ catastrophe-optics literature; asserting a specific catastrophe type without the
 | **6.5** | **Compute the bifurcation set** — from the ray-optics deviation map: caustics (`∂δ=0`), their coalescences (cusp `∂²δ=0`, swallowtail `∂³δ=0`) = component (A); TIR/grazing admissibility walls = component (B). Predict the transition elevations + types; verify 29° (A-cusp), 32°/58° (B-walls) fall out vs. the apparatus | **open — the key receipt** |
 | 7 | The forward sweep — generate the complete atlas; the higher-codim strata are the directed search for the invisible halos | open |
 | 8 | Invisible-halo predictions — each generated rare halo (higher catastrophe) as a falsifiable forward claim | open |
-| **8.5** | **The diffraction dressing as a finer shadow** — read crystal *size* off the supernumerary/Airy structure dressing a halo fold (a measurement the geometric catalog cannot make) | open — candidate |
+| **8.5** | **Shadow 2 — diffraction → crystal SIZE** — read size off the Airy(fold)/Pearcey(cusp) dressing; richest at the bifurcation cusps; gated by population monodispersity; calibrated by the corona (pure-diffraction size law). **Needs a wave-optical dressing layer (HaloSim is ray-optics, no diffraction).** | open — receipt |
+| **8.6** | **Shadow 3 — polarization → crystal HANDEDNESS** — read the parity/handedness of the ray-path+crystal configuration off the Stokes structure (circular polarization `V` sign), and the c-axis class off ice birefringence. The cleanly-invertible shadow (discrete `Z₂`, robust to distribution-smearing; the AB-exact analog). **Needs a Stokes/Mueller polarization ray-tracer.** | open — the invertible shadow |
+| **8.7** | **Net circular polarization → population handedness imbalance** — a nonzero net Stokes `V` over a display would reveal a chirally-biased crystal population (a symmetry-breaking nothing else sees); usually ~0 (balanced), so a detection is a striking hidden-variable receipt | open — candidate |
 | 9 | The verification layer — photographed displays as verifier; geometry-confirmation receipts; named falsifiers | open |
 | 10 | Substrate-rhyme / certificate placement — the atlas as the physical forward-easy/inverse-hard card | open |
 | **11** | **THE CAPSTONE — the classified bifurcation diagram (platonic-solid model, except holograms)** | aspirational |

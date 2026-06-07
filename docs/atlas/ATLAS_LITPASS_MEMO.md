@@ -31,9 +31,20 @@ is the instrument that closes it before any tier-3 outreach.
 - **Track D — Determinacy / inverse problem.** Prior art on the halo inverse problem (recovering
   crystal populations from a display) and on what a display *does* and *does not* determine — the
   determining-shadow-set framing in optics terms.
-- **Track E — Crystal size from diffraction (Phase 8.5).** Prior art on reading particle size off
-  diffraction structure (rainbow supernumeraries → drop size is textbook; the halo / ice-crystal
-  analogue and its limits).
+- **Track E — Crystal size from diffraction / Shadow 2 (Phase 8.5).** Prior art on reading particle
+  size off diffraction structure: coronae (pure forward diffraction, ring radius ∝ λ/a — the
+  *existence proof* and calibration anchor); rainbow supernumeraries → drop size (Airy theory; modern
+  rainbow refractometry); halo edge sharpness ↔ rough size (diamond-dust diffuseness). Establish the
+  ice-halo *fine-fringe* analogue and its monodispersity limit, and that the existing apparatus
+  (HaloSim, ray-optics) cannot generate diffraction — a wave-optical dressing layer is required.
+- **Track G — Polarization / handedness / Shadow 3 (Phases 8.6–8.7).** Können, *Polarized Light in
+  Nature* — the anchor; circular polarization in halos and its handedness signature *(to-verify:
+  Können + recent atmospheric-optics work)*; ice Ih **birefringence** (uniaxial, c-axis optic axis)
+  and its halo-polarization role. Settle: (1) that the handedness read is **ray-path parity + c-axis
+  class via birefringence, NOT bulk molecular chirality** (ice is not optically active like quartz) —
+  a hard honesty gate; (2) whether a Stokes/Mueller polarization ray-tracer exists or must be built
+  (HaloSim does not track polarization); (3) prior treatment of *net* circular polarization as a
+  population-chirality diagnostic.
 - **Track F — Attribution & priority map.** A per-claim ledger: for every statement the atlas will
   make, name the source it rests on, and flag any that read as a Sundog priority claim for demotion.
 
@@ -81,6 +92,12 @@ don't claim), **SYNTHESIS** (Sundog's recombination of standard parts — defens
    expected **STANDARD-or-SYNTHESIS** — the *directed forward search* is the Sundog move.
 6. "Crystal size readable off the diffraction dressing of a halo fold." — Track E; expected
    **STANDARD for rainbows, OPEN/bounded for ice halos**.
+7. "Polarization reads a discrete handedness/parity (Stokes V sign) that the intensity cannot, and is
+   the *cleanly-invertible* layer of the shadow tower (invertibility tracks the hidden-variable kind:
+   continuous magnitudes resist, discrete parities invert)." — Track G + §1.2; the *polarization reads
+   handedness* part is expected **STANDARD** (Können); the *invertibility-tracks-kind tower framing*
+   and the AB-exact-analog placement are expected **SYNTHESIS** (Sundog vocabulary over standard
+   optics) — the genuinely new framing to defend, never the polarization physics.
 
 ## 4. Disposition (precondition for the lane)
 
