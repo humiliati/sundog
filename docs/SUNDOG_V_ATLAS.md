@@ -9,6 +9,15 @@
 > lit-pass (Phase 0.5) lands and attribution is prominent. The public atlas already lives at
 > `/sundog` (`atlas.html` is a legacy redirect). No new public surface or claim beyond established
 > atmospheric / catastrophe optics without owner sign-off + evidence-tier review.
+>
+> **Update 2026-06-07 — the determining-shadow-tower thread (§1.2–1.3, Phases 8.5–8.7) advanced from
+> roadmap to a banked forward-model result.** The lossiness-crossover ran (synthetic
+> `operator_confirmed_synthetic` + an S2 **partial physical leg** on real halo optics); the diffraction
+> + Stokes/Mueller layers are built (`scripts/s2_optics.py`, standalone — HaloSim can't host them) and
+> the polarization model is archival-validated against Können 1991. The structural **CORE** (bifurcation
+> diagram, Phases 6.5/11) is unchanged. See §1.2–1.3, the Phase-4 table, `proof/PHASE5_CROSS_SUBSTRATE.md`
+> §3.11–3.14, `atlas/S2_MEASURED_SKY_SCOPE.md`, and the public-eligibility gate in
+> `atlas/SHADOW_INVERTIBILITY_PHASE5_HANDOFF_2026-06-07.md`. **Still unpromoted, NOT public-eligible.**
 
 Working hook:
 
@@ -118,20 +127,30 @@ variable, and the **invertibility changes as you climb because the *kind* of var
   non-invertibility).
 - **Shadow 2 — diffraction (the dressing of the caustic).** Reads crystal **size** — a continuous
   scalar the geometric shadow is structurally blind to. Conditionally legible (monodispersity gate),
-  richest at the cusps (Pearcey). Still **RESISTS** the full population (a size distribution washes
-  out).
+  richest at the cusps (Pearcey). **RESISTS — but only PARTIALLY** (2026-06-07 forward-model finding,
+  `proof/PHASE5_CROSS_SUBSTRATE.md` §3.13): size is *magnitude*-encoded, so ensemble-averaging preserves
+  the mean and the diffraction envelope leaks a rough size (`cont` 0.97→0.45, not →0); only *phase-
+  offset* continuous variables wash fully, a scale/size does not. *(Also corrected: the size dressing is
+  **not** on the 22° refraction-halo edge — that edge is a zero-contrast step, Berry 1994 — but on the
+  **corona / parhelion-fold** Airy structure; see §3, Phase 8.5.)*
 - **Shadow 3 — polarization (the Stokes structure).** Reads a **discrete/structural** variable: the
   **handedness/parity** of the ray-path-plus-crystal configuration (Stokes `V` sign), and the c-axis
   class via ice **birefringence**. A different *kind* of hidden variable — a sign, not a magnitude.
-  **This is the layer where the shadow may INVERT**: a discrete `Z₂` variable is robust to the
-  distribution-smearing that defeats Shadows 1–2, and is the optical analog of the program's one
-  *exact* regime-2 (Aharonov–Bohm: a discrete/topological invariant exactly determined by its shadow).
+  **This is the layer where the shadow INVERTS** — confirmed in the forward model (2026-06-07): a
+  discrete `Z₂` (ice-phase halo-radius, handedness `V`-sign) is *determined* `disc=1.000` flat across
+  the whole lossiness grid, robust to the distribution-smearing that defeats Shadows 1–2 — the optical
+  analog of the program's one *exact* regime-2 (Aharonov–Bohm). The **linear**-pol half of the Mueller
+  model is archival-validated against Können 1991; the **circular** `V`/handedness is reframed into
+  *per-feature V* (defensible, measurable) vs *net-V = population handedness* (disfavored, quarantined),
+  and stays forward-model pending a sky measurement (§3.14, `atlas/S2_MEASURED_SKY_SCOPE.md`).
 
-**The structural finding: invertibility tracks the hidden-variable's kind.** Continuous magnitudes
-(position, size) → *resisting* shadows (the founding thesis). Discrete parities / topological
-invariants (handedness) → *invertible* shadows (the AB-exact analog). The tower climbs from the
-most-resisting (continuous, scale-free) to the cleanly-invertible (discrete, topological); the
-polarization layer is where the flip happens. So the atlas embodies not just "the shadow resists the
+**The structural finding: invertibility tracks the hidden-variable's kind** — now forward-model-tested
+(2026-06-07) and *graded*. Continuous magnitudes (position, size) → *resisting* shadows, but the
+resistance is **graded by encoding**: phase-offset continuous variables wash to ~0, while a
+scale/magnitude (size) resists only *partially* (its mean survives averaging). Discrete parities /
+topological invariants (handedness, ice-phase) → *determined* shadows, exactly (`disc=1.000`), the
+AB-exact analog. The tower climbs from the partial-resisting (continuous magnitude) to the
+cleanly-determined (discrete, topological); the polarization layer is where the flip happens. So the atlas embodies not just "the shadow resists the
 body" but the full **boundary** of *when* it resists (continuous bodies) and *when* it determines
 (discrete/topological variables) — the lab's mature thesis, physical and photographable.
 
@@ -149,10 +168,15 @@ coarse-graining roadmap's long-missing Phase 5.
 radius, optical-vortex index) and continuous variables (position, size, `n`, `C_n²`) **side by side,
 photographable, forward-generable, with the lossiness (population spread) tunable** — which mesa and
 turbulence do not. The **lossiness-crossover experiment** (sweep the population spread; watch the
-continuous coordinates wash out at a measured threshold while the discrete ones hold exact, the *same*
-crossover on both towers) is what would convert the candidate operator into the roadmap's required
-*measured* cross-substrate identity. The prettiest page in the lab may be where its deepest theorem
-gets measured.
+continuous coordinates wash out while the discrete ones hold exact, the *same* crossover across
+substrates) **has now been RUN** (§3.11/§3.13/§3.14 of `proof/PHASE5_CROSS_SUBSTRATE.md`):
+`operator_confirmed_synthetic` on two synthetic substrates (S0+S1) + an **S2 partial physical leg** on
+real halo optics — discrete-determines confirmed (`disc=1.000`), continuous-resists *partial* (the
+magnitude scale-leak). That converts the candidate operator into a *measured* (forward-model-tier)
+cross-substrate identity on the synthetic side and a *partial* one on the physical side; a full physical
+discharge (a clean continuous washout + measured-sky circular-`V`) is scoped (`atlas/S2_MEASURED_SKY_
+SCOPE.md`) and owed. The prettiest page in the lab is, at last, where its deepest theorem **began to get
+measured** — at forward-model tier, not yet public.
 
 ## 2. What is honest vs. what is reach
 
@@ -177,8 +201,11 @@ catastrophe-optics literature; asserting a specific catastrophe type without the
   the caustic structure is degenerate — the transitions. Two components: **(A)** caustic catastrophes
   (cusp A₃ / swallowtail A₄ / butterfly / umbilic D₄), **(B)** ray-admissibility boundaries.
 - **Diffraction catastrophe.** The wave dressing of a geometric caustic (Berry–Upstill): the fold
-  dressed by the **Airy** function, the cusp by **Pearcey**. The supernumerary fringe structure on a
-  halo edge — a *finer* shadow (§ Phase 8.5).
+  dressed by the **Airy** function, the cusp by **Pearcey**. A *finer* shadow (§ Phase 8.5).
+  **Caveat (2026-06-07 lit-pass, `atlas/S2_LITPASS_E_G.md`):** the 22° refraction-halo edge is **not** a
+  fold but a *step* (zero-contrast diffraction shoulders, no supernumeraries — Berry, Appl. Opt. 33:4563,
+  1994), so the size-bearing Airy dressing lives on the **corona** (pure diffraction, `θ∝λ/a`) and the
+  **parhelion fold** (faint supernumeraries, contrast 0.178), not the 22° ring.
 - **Determining shadow (of the atlas topology).** The bifurcation set: low-dim, determining for the
   transition structure, non-invertible to the full display.
 - **Invisible-halo prediction.** A generated rare halo at a higher-codimension stratum — a falsifiable
@@ -203,25 +230,30 @@ catastrophe-optics literature; asserting a specific catastrophe type without the
 | phase | goal | status |
 | ---: | --- | --- |
 | 0 | Scope + the founding-loop reframe (this doc) | open |
-| **0.5** | **Lit-pass + cite list** — formal `ATLAS_LITPASS_MEMO.md`; ground every claim against the giants; prominent attribution (the apparatus = Cowley/Schroeder; geometry = Greenler/Tape/Können/Cowley; catastrophe optics = Thom/Arnold/Berry/Nye) | **open — hard precondition** |
+| **0.5** | **Lit-pass + cite list** — formal `ATLAS_LITPASS_MEMO.md`; ground every claim against the giants; prominent attribution (the apparatus = Cowley/Schroeder; geometry = Greenler/Tape/Können/Cowley; catastrophe optics = Thom/Arnold/Berry/Nye) | **Tracks E+G READ** (2026-06-07, `atlas/S2_LITPASS_E_G.md`); A–D/F still open; attribution gate still a hard precondition |
 | 1 | The elevation relationship — the global handle that organizes the display | grounded (Tape) |
 | 2 | The forward apparatus — HaloSim geometry→halo, sun-altitude sweeps | DONE (HS-0 proven) |
 | 3 | The known-phenomena catalog — verification anchors + documented merge/morph relationships | grounded (`HALO_PHENOMENA_ACCOUNTING.md`) |
 | 4 | The parametric workbench — "draws the parhelion from the math"; the rendering *is* the proof | grounded (`SUNDOG_V_GEOMETRY.md`) |
-| 5 | Determining-shadow-set on the optics — what the display determines vs. resists; bank the halo as a physical read-off resister | open |
+| 5 | Determining-shadow-set on the optics — what the display determines vs. resists; bank the halo as a physical read-off resister | advanced — lossiness-crossover RUN (`proof/PHASE5_CROSS_SUBSTRATE.md` §3.11–3.14): discrete *determines*, continuous magnitude *resists partially* |
 | 6 | The global-invariant search — the determining invariants beyond elevation (habit class, orientation symmetry, optical-path topology) | open |
 | **6.5** | **Compute the bifurcation set** — from the ray-optics deviation map: caustics (`∂δ=0`), their coalescences (cusp `∂²δ=0`, swallowtail `∂³δ=0`) = component (A); TIR/grazing admissibility walls = component (B). Predict the transition elevations + types; verify 29° (A-cusp), 32°/58° (B-walls) fall out vs. the apparatus | **open — the key receipt** |
 | 7 | The forward sweep — generate the complete atlas; the higher-codim strata are the directed search for the invisible halos | open |
 | 8 | Invisible-halo predictions — each generated rare halo (higher catastrophe) as a falsifiable forward claim | open |
-| **8.5** | **Shadow 2 — diffraction → crystal SIZE** — read size off the Airy(fold)/Pearcey(cusp) dressing; richest at the bifurcation cusps; gated by population monodispersity; calibrated by the corona (pure-diffraction size law). **Needs a wave-optical dressing layer (HaloSim is ray-optics, no diffraction).** | open — receipt |
-| **8.6** | **Shadow 3 — polarization → crystal HANDEDNESS** — read the parity/handedness of the ray-path+crystal configuration off the Stokes structure (circular polarization `V` sign), and the c-axis class off ice birefringence. The cleanly-invertible shadow (discrete `Z₂`, robust to distribution-smearing; the AB-exact analog). **Needs a Stokes/Mueller polarization ray-tracer.** | open — the invertible shadow |
-| **8.7** | **Net circular polarization → population handedness imbalance** — a nonzero net Stokes `V` over a display would reveal a chirally-biased crystal population (a symmetry-breaking nothing else sees); usually ~0 (balanced), so a detection is a striking hidden-variable receipt | open — candidate |
+| **8.5** | **Shadow 2 — diffraction → crystal SIZE** — read size off the Airy dressing, calibrated by the corona. **Dressing layer BUILT** (`scripts/s2_optics.py`, standalone — HaloSim can't host it). **Corrected:** size lives on the corona / parhelion-fold, NOT the 22° step edge (Berry 1994); and size **resists only PARTIALLY** (magnitude scale-leak, §3.13). | built — partial-resister, not a clean washout |
+| **8.6** | **Shadow 3 — polarization → crystal HANDEDNESS** — Stokes `V` sign + c-axis class via birefringence; the cleanly-determined shadow (discrete `Z₂`, AB-exact analog). **Mueller layer BUILT** (`scripts/s2_optics.py`); **linear-pol archival-validated vs Können 1991** (`scripts/s2_konnen_validate.py`); handedness *determines* in forward-model (`disc=1.000`). Circular-`V` reframed (per-feature defensible vs net-V quarantined), sky-measurement scope-and-hold. | built + linear-validated; circular-V forward-model, sky owed |
+| **8.7** | **Net circular polarization → population handedness imbalance** — **DEMOTED (2026-06-07):** net-`V` is **~0 by symmetry** — no mechanism breaks ice-crystal handedness (ice achiral; E/B not pseudoscalar; Können's `U=0` is the exact net-V-cancellation analog). The measurable signal is a **per-feature antisymmetric `±V(θ,φ)` integrating to ~0**, not net-CP. | demoted — likely-null; per-feature V is the real target |
 | 9 | The verification layer — photographed displays as verifier; geometry-confirmation receipts; named falsifiers | open |
 | 10 | Substrate-rhyme / certificate placement — the atlas as the physical forward-easy/inverse-hard card | open |
 | **11** | **THE CAPSTONE — the classified bifurcation diagram (platonic-solid model, except holograms)** | aspirational |
 
 Phases 1–4 are grounded/done; Phase 0.5 (lit-pass) gates everything outward-facing; the new structural
-arc is 5–11, anchored on the 6.5 bifurcation-set computation.
+arc is 5–11, anchored on the 6.5 bifurcation-set computation. **Status note (2026-06-07):** the
+**determining-shadow-tower sub-thread (8.5–8.7)** advanced substantially — the diffraction + Stokes/
+Mueller layers are built (`scripts/s2_optics.py`), the polarization model is archival-validated against
+Können 1991, and the lossiness-crossover ran (forward-model tier). The atlas's **structural CORE — the
+bifurcation-set computation (6.5) and the capstone (11)** — remains entirely open and is untouched by
+this work.
 
 ## 5. Phase 11 — the platonic-solid model, except holograms (the capstone)
 
