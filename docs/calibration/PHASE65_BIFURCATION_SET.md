@@ -37,12 +37,22 @@ derivation, not a constant); the CHA=90°−CZA complement identity holds to mac
 chromatic band is reported for each (the transition is a ~1–2° smeared band, not a sharp edge — the
 real edge is the smoothed image under the sun's 0.5° disk + tilt-spread + dispersion).
 
-## 6.5-B — Component A (the 29° UTA+LTA→circumscribed cusp) — STAGED, DE-RISKED 2026-06-07
-The A₃ cusp does **not** fall out of a scalar `δ(θ)`, but the scoping (web recon) resolved the
-dimensionality risk: it is **Walter Tape's published 1980 framework** (*Analytic foundations of halo
-theory*, JOSA 70:1175 — the "halo function" `(orientation) → (celestial-sphere point)`; the caustic is
-the image of its singular set, located by the **Jacobian kernel**). It is a reimplementation of a
-published method, **not** an open-ended 3-D problem. **Minimal sufficient computation (≈1–2 days):**
+## 6.5-B — Component A (the 29° UTA+LTA→circumscribed cusp) — LANDED 2026-06-07
+**Derived merge elevation = 29.7° (white-light n=1.31; chromatic band 29.5–30.3° across the visible,
+= the documented "29–32°" spread), within ±1.0° of the documented ~29°.** The 29° transition is now a
+DERIVED output of the horizontal-column halo-function caustic — replacing the hardcoded
+`TANGENT_ARC_CIRCUMSCRIBED_H=29` in `parhelion-geometry.mjs`. **The §6 armchair-catastrophe gate is now
+FULLY cleared (22/29/32/46/58 all derived).** Sanity: the caustic touches 21.84° at the top (the 22°
+fold); the caustic is two separate arcs below the merge and a connected circumscribed loop above (the
+A₃ topology change). Scripts: `scripts/atlas_caustic_map.py` + `scripts/test_atlas_caustic_map.py`
+(all pass). **Caustic locator (implemented):** `delta_min(ψ)` — the per-azimuth minimum deviation, which
+is the fold-caustic envelope; the **merge = where its mid-ψ GAP closes** (the UTA/LTA wing-tips touch).
+The gap is real inadmissibility (robust to the `dmax` cap: identical at dmax 46/70/89° — the column
+produces no rays beyond ~48°), not an artifact.
+
+**Method** (the de-risk-confirmed minimal sufficient model — **Walter Tape's 1980 framework**,
+*Analytic foundations of halo theory*, JOSA 70:1175 — caustic = the image of the halo-function's
+singular set, the **Jacobian kernel**; 2 orientation DOF suffice, **no full-3-D, no Monte-Carlo**):
 - **State:** `(γ, α)` ∈ 2-torus — the horizontal column's **two** orientation DOF (γ = c-axis azimuth
   about vertical; α = roll about the c-axis). The "c-axis horizontal" constraint removes the tilt DOF,
   leaving a **square 2-DOF→2-sky-DOF map** (which is why a clean `det J = 0` fold theory exists). Sun
@@ -68,8 +78,13 @@ published method, **not** an open-ended 3-D problem. **Minimal sufficient comput
   fall out cleanly, that is a model-insufficiency finding, never a number to tune to.
 
 ## Status + downstream
-6.5-A makes 32°/58° (and the 22°/46° folds) **derived outputs** — a clean, non-armchair component-B
-receipt. 6.5-B (the cusp) is the remaining component-A half. On both landing, Phase 6.5 unblocks Phase 7
-(forward sweep — cells between walls), Phase 8 (invisible halos — higher-codim strata), Phase 11
-(capstone — the classified bifurcation diagram). Atlas §6 promotion gate ("6.5 lands + 29/32/58 fall
-out") is **half-cleared** (B done, A staged).
+**Phase 6.5 COMPLETE (2026-06-07): both components landed.** Component B (CZA 32.196°, CHA 57.804°) and
+component A (the 29.7° A₃ cusp), plus the 22°/46° A₂ fold primitives, are all **derived outputs** of one
+computation from `{n, crystal-face geometry, sun elevation}` — the documented 22/29/32/46/58 fall out,
+none hardcoded. The atlas §6 promotion gate ("6.5 lands + 29/32/58 fall out vs. the apparatus") is
+**cleared on the computation side**; the remaining piece is the optional HaloSim apparatus cross-render
+(the on-disk circumscribed/CZA/CHA frames) and the Phase-0.5 lit-pass (Track B, the A₃-cusp identity is
+SYNTHESIS) before any outward claim. Phase 6.5 now unblocks **Phase 7** (forward sweep — the walls
+partition `(elevation × habit)` into cells), **Phase 8** (invisible halos — higher-codim strata of the
+same caustic map: swallowtail A₄ / umbilic D₄), and **Phase 11** (capstone — the classified bifurcation
+diagram). **NOT public-eligible.**
