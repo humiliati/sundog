@@ -1,0 +1,54 @@
+{
+  "schema": "sundog.proof.phase4.on_arm.finite_pomdp.v1",
+  "slate": "docs/proof/PHASE4_ON_ARM_FINITE_POMDP_SLATE.md",
+  "generatedAt_note": "deterministic given BOOTSTRAP_SEED; no wall-clock in receipt",
+  "frozen_knobs": {
+    "T": 6,
+    "eps": 0.15,
+    "n_episodes": 2000,
+    "fiberMinSamples": 20,
+    "bootstrap_iterations": 2000,
+    "bootstrap_seed": 40604,
+    "classSeedRule": "bootstrap_seed + classIndex*1009 over [on,off,undecidable]"
+  },
+  "regret": {
+    "formula": "return_bayes - return_signature (per paired decision)",
+    "n_on_decisions_per_episode": 5,
+    "n_off_decisions_per_episode": 1
+  },
+  "labels": {
+    "rule": "Phase-2 Theorem 1: cell is ON iff intersection of optimal-action sets over its fiber is non-empty (fiber-constant optimal action)",
+    "on": "signpost+corridor (A*={advance} both modes)",
+    "off": "fork (A*={go0} vs {go1}, disjoint -- Phase-2 flip counterexample)"
+  },
+  "controllers": {
+    "signature": "best memoryless Phi-measurable g:Sigma->A",
+    "bayes_floor": "optimal policy on belief over m from same Phi history (exact)"
+  },
+  "gate_frozen": "regret->0 within CI ON; CI excludes 0 (bounded away) OFF (COARSE_GRAINING_PROOF_ROADMAP.md Phase 4, verbatim, not retuned)",
+  "result": {
+    "on": {
+      "row_count": 2000,
+      "mean": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "neg_rate": 0.0
+    },
+    "off": {
+      "row_count": 2000,
+      "mean": 0.3525,
+      "lo": 0.325975,
+      "hi": 0.3795,
+      "neg_rate": 0.076
+    },
+    "undecidable": {
+      "row_count": 0,
+      "mean": null,
+      "lo": null,
+      "hi": null,
+      "neg_rate": null
+    }
+  },
+  "verdict": "on_arm_pass_two_sided_gate_fired",
+  "scope": "sufficiency ON-arm on a CONSTRUCTED finite POMDP; provable measurability; NOT body-resistance/regime-2, NOT real/high-dim, NOT a trained body. Discrimination (->0 ON vs bounded-away OFF) is the content, not the ON value alone."
+}

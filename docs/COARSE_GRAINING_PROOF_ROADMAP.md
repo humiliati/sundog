@@ -220,6 +220,19 @@ redirects the campaign, fixed *before* the phase runs, per AGENTS.md ▸
   the measurable set, sufficiency-for-control is empirically false on a real
   substrate → halt and falsify. If regret → 0 *off* the measurable set, the
   boundary (Phase 3) is wrong → reopen Phase 3.
+- **ON-arm populated (2026-06-06).** The committed three-body receipt had `on=0`
+  (the gate's ON arm never populated; Balance measured only the OFF-direction
+  "Φ-accessible" positive). The ON arm is now populated on the substrate where
+  measurability is *provable* (Phase-2 Theorem 1): on a constructed finite POMDP
+  the two-sided gate **fires** — `on` regret `0.0`, CI `[0,0]`; `off` regret
+  `0.3525`, CI `[0.326, 0.380]` (excludes 0); verdict
+  `on_arm_pass_two_sided_gate_fired`. FROZEN slate + receipt:
+  [`proof/PHASE4_ON_ARM_FINITE_POMDP_SLATE.md`](proof/PHASE4_ON_ARM_FINITE_POMDP_SLATE.md),
+  `results/proof/phase4-on-arm/`. **Scope:** this is the *sufficiency* ON-arm on
+  a constructed substrate (provable measurability, not fit); it does NOT
+  establish body-resistance/regime-2, a real/high-dim substrate, or a trained
+  body. The real-substrate ON cell (the thing three-body could not produce)
+  remains open.
 - **Compute discipline (AGENTS.md ▸ ~10-minute rule, load-bearing).** This leg
   exceeds the ~10-min inline budget. Do **not** run it inline. Stage the exact
   invocation in `docs/proof/PHASE4_THREEBODY.md` as runnable PowerShell anchored

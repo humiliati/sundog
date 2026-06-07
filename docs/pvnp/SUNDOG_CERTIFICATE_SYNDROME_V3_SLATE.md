@@ -1,10 +1,15 @@
 # Sundog Certificate Problem — Syndrome Certificate v3 Scaling-Ladder Slate
 
-Status: **FROZEN — stage-1 slate contract; NOT executed.** No v3 frozen-target attacker
-run may execute until the empirical pre-calibration has produced the stage-2 locked
-prediction and each attacker has been validated. (Freeze-before-execute, per the lane.)
+Status: **EXECUTED 2026-06-06** (stage-2 lock produced by `--precal`, then all three rungs
+scored overnight). → **Crossover LOCATED: Stern overtakes LB at the higher-`w` rungs 1 & 3
+(St/LB ≈ 0.75, 0.76), reversing the v2 `w12` result — confirming Stern's win is a large-`w`
+phenomenon.** Non-monotone (rung-2 reverted to LB as a named pre-cal heavy-tail
+model-deviation); the find-vs-check gap scales with `n` to `218,999×` (Claim-A frozen gate
+mis-fit to the fixed-`n` rung-1). Receipt:
+[`receipts/2026-06-06_certificate_syndrome_v3.md`](receipts/2026-06-06_certificate_syndrome_v3.md).
+(Stage-1 slate contract was frozen 2026-06-05 before any frozen-target run.)
 
-Date opened: 2026-06-05
+Date opened: 2026-06-05 · Stage-1 frozen: 2026-06-05 · Executed: 2026-06-06
 
 This is the **scaling-ladder** successor to
 [`SUNDOG_CERTIFICATE_SYNDROME_V2_SLATE.md`](SUNDOG_CERTIFICATE_SYNDROME_V2_SLATE.md)

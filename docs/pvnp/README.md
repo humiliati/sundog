@@ -84,19 +84,20 @@ Phase-4 synthesis:
   heuristic was optimistic at `w=12`, the named deviation. A confirmatory follow-up
   (corrected Stern success model + the large-`w` regime) is the v3 slate below.
 - [`SUNDOG_CERTIFICATE_SYNDROME_V3_SLATE.md`](SUNDOG_CERTIFICATE_SYNDROME_V3_SLATE.md)
-  — **FROZEN (stage-1 slate contract; NOT executed)**: the **scaling-ladder** successor. A 4-rung
-  ladder (`[128,64]w12` anchor reuse → `[128,64]w16` → `[160,80]w16` → `[192,96]w18`)
-  measuring **LB + Stern at each** (Prange is unmeasurable at scale — measured at the
-  anchor, formula-predicted at the rungs). Two pre-registered claims: **(A)** the
-  find-vs-check gap **scales** (predicted ~5,200× → ~153,000× anchor→top), and **(B)** the
-  **LB↔Stern crossover** — does Stern overtake LB as `w` grows, or does the measured
-  optimism/overhead curve explain why LB keeps winning? The v2 lesson is baked in: the
-  prediction is **empirically pre-calibrated** (Stern's true per-iteration success
-  measured on disjoint throwaway targets, the analytic carried only as the v2-falsified
-  reference), with fixed per-rung `l` candidate sets and deterministic tie-breaks. ~11 h
-  new frozen scoring (LB+Stern), staged by PowerShell command contract; regime selection
-  via `scripts/pvnp-certificate-syndrome-v3-regime-scan.py`. Next: implement harness →
-  empirical pre-cal → stage-2 prediction lock → operator-gated rung runs.
+  — **EXECUTED 2026-06-06 → crossover LOCATED + gap scales with `n`**: the **scaling-ladder**
+  successor. 4-rung ladder (`[128,64]w12` anchor reuse → `w16` → `[160,80]w16` →
+  `[192,96]w18`), **LB + Stern measured at each** (Prange formula-predicted at scale),
+  empirically pre-calibrated. **Claim B:** Stern **overtakes LB at the higher-`w` rungs 1 & 3**
+  (St/LB 0.75, 0.76) — confirming v2's "Stern wins at large `w`" (the `w12` LB-win reverses
+  by `w16`); winner non-monotone in `(n,w)`, with rung-2 a named pre-cal heavy-tail
+  model-deviation (mean-vs-median; the median-implied diagnostic nails all 3 Stern rungs
+  within factor 2). **Claim A:** find-vs-check gap scales with `n` to **218,999×** (5,015×→
+  219k×, 43.7×), though the frozen "interior ≥5×" gate was mis-fit to the fixed-`n` rung-1.
+  Empirical pre-cal caught the analytic wrong **both ways** (LB ~8× easier at `w16`); base(`m`)
+  re-validated to v2 within 0.1%. Receipt
+  [`receipts/2026-06-06_certificate_syndrome_v3.md`](receipts/2026-06-06_certificate_syndrome_v3.md).
+  Next (future slate): median-based prediction lock + larger pre-cal target count; clean
+  rung-2 retest at `l∈{8,9}`.
 
 Lit-pass:
 
