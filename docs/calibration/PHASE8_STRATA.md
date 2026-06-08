@@ -180,14 +180,31 @@ cusp-CREATION in the whole halo search** (the column is flat at 2) — a genuine
 - **Caveats (weighed heavily — same bar that refuted Wegener):** (1) **α0-specificity (corrects the earlier
   "α0=30/60/105"):** the clean 2→4→2 birth occurs **only at α0≈60°**, the **NON-canonical FACE-aligned**
   rotation axis; the canonical edge-Lowitz rolls FAIL (α0=90° flat at 2 like the column, α0=30° grid-
-  unstable). Whether a real Lowitz population samples α0≈60° is **not established**. (2) **Doubly
+  unstable). Refined to a finite ~8° band on the m-axis by the rigor upgrade below. (2) **Doubly
   non-canonical:** column-Lowitz frame (c horizontal) + face axis; the textbook Lowitz crystal is the
   c-vertical PLATE. (3) **Plate-Lowitz cross-check NEGATIVE** (`scripts/plate_lowitz_check.py`): the classic
   c-vertical plate-Lowitz does NOT reproduce it (cusp count flat at 5, all at parhelion flanks, none on the
   bottom meridian) → **parameterization-specific, not habit-robust.** (4) The **"death" half is a grid-
-  unstable boundary exit** — only the BIRTH carries catastrophe weight. (5) The reduced-jet A₄ discriminator
-  was **retracted as numerically unsound** (returns ~0.9 on KNOWN column A₃ cusps); the A₄ refutation rests
-  on the topological self-intersection test, not the jet.
+  unstable boundary exit** — only the BIRTH carries catastrophe weight. (5) The prior reduced-jet A₄
+  discriminator was retracted as unsound — **now superseded by a sound test (rigor upgrade below).**
+- **RIGOR UPGRADE (2026-06-07) — a SOUND, CALIBRATED jet test independently confirms A₃-lips, and the
+  α0-band is mapped.** (`scripts/atlas_jet_classify.py` + `test_atlas_jet_classify.py`.)
+  - **The jet classifier rebuilt soundly:** the Morin/Thom-Boardman iterated-kernel discriminant
+    `c₃ = K·∇(K·∇ det DF)` with the **smooth, sign-consistent row-kernel `K=(Xα,−Xγ)`** (the prior unsound
+    test used the sign-ambiguous SVD eigenvector). A₄ ⟺ `c₃→0`; A₃ ⟺ `c₃` bounded away from 0.
+  - **Calibrated on BOTH controls:** (+) the **Morin A₄ normal form** `F_h=(γ, α⁴+hα²+γα)` — `|c₃|` DIVES to
+    0 as the two cusps merge into the A₄ (ratio 1.00→0.16, the √(−h) law) → the test *registers* an A₄;
+    (−) the **column apex A₃ cusps** — `|c₃|≈9` bounded away from 0 → registers A₃.
+  - **Lowitz verdict:** at the birth (h→16.5⁺) `|c₃|≈8` (ratio **0.82** of generic), comparable to the
+    column-A₃ control and **NOT diving** — where a true A₄ gives ratio <0.25. So **the sound jet test
+    independently confirms A₃-lips, agreeing with the topological self-intersection test** (two independent
+    methods concur; the methodological gap is closed).
+  - **α0-band mapped:** the clean 2→4 birth is a **finite ~8° band (α0≈58–66°)**, not a razor-thin value
+    (good for a population spread) — but it sits on the **m-axis (face-aligned) rotation**, the boundary
+    between a 2-cusp and a 4-cusp α0-regime. The **canonical Lowitz axis is the a-axis through opposite
+    edges (α0=90°, which shows NO birth)**. So the metamorphosis requires the *non-canonical* m-axis
+    rotation; whether a real Lowitz population realizes that orientation is the one **residual, honest
+    caveat** (the rest is now closed). The catastrophe ORDER (A₃, not A₄) is unaffected.
 - **Lit:** the Lowitz-arc transformation in the 15–30° window is documented QUALITATIVELY (Mueller & Greenler
   JOSA 69:1103 1979; Tape; Riikonen; Cowley/atoptics) but **never in cusp/lips/catastrophe terms** — the
   catastrophe LABELING is uncatalogued, the underlying arc physics known. **Berry's A₄ remains open.**
