@@ -1,11 +1,12 @@
-# Sundog Lean Certificate - Three Machine-Checked Cores
+# Sundog Lean Certificate - Four Machine-Checked Cores
 
 > **Deductive complement to the public Sundog lanes.** The public Lean repo now
-> carries three worked examples of the same discipline: machine-check the
+> carries four worked examples of the same discipline: machine-check the
 > deductive core, then name the imported wall. The first is the
 > [P-vs-NP certificate-syndrome lane](SUNDOG_V_P_V_NP.md); the second is a
 > real-analysis shadow-decay example; the third is the halo minimum-deviation
-> geometry behind the 22-degree halo.
+> geometry behind the 22-degree halo; the fourth is the Aharonov-Bohm
+> gauge-invariance (a gradient's closed-loop circulation is zero).
 
 **Public and reproducible:**
 [`github.com/humiliati/sundogcert`](https://github.com/humiliati/sundogcert) -
@@ -18,13 +19,14 @@ Working hook:
 > A claim gets smaller and cleaner when its proof goes into Lean and its
 > assumptions stay outside the proof, named in plain view.
 
-## Three worked examples
+## Four worked examples
 
 | Lean surface | kind of math | checked deductive core | imported wall |
 |---|---|---|---|
 | `Certificate` / `Instance` / `Scaling` / `Looseness` / `Degradation` / `CheckCost` | finite-field algebra | syndrome-certificate soundness, exact algebraic lossiness, reject-bound behavior, and check-cost scaling | decoding hardness / SIS one-wayness |
 | `ShadowDecay` | real analysis | a lossy averaged shadow washes out a continuous variable while keeping a shared discrete label | that a real system instantiates the averaging model |
 | `HaloGeometry` | geometric optics / calculus | `dev_value`, `min_deviation_stationary`, and a conditional local-min wrapper for the symmetric ray | 60-degree ice-prism geometry, measured `n ~= 1.31`, Snell refraction, ray exit, and the observed bright ring at the deviation extremum |
+| `FaradayAB` | vector calculus / topology | `gauge_circulation_zero`, `gauge_integrand_eq`, and `gauge_invariant_loop` — a gradient (gauge) field's closed-loop circulation is zero, so the loop observable is gauge-invariant | that the vector potential `A` enters as a loop integral, `grad chi` is the gauge freedom, the Aharonov-Bohm phase / Faraday loop EMF *is* that integral, and the loop encloses the flux (the `H^1` period) |
 
 The third example matters because it breaks the first two examples' shared
 shape. The certificate and shadow-decay examples both involve a lossy shadow
@@ -39,6 +41,15 @@ is stationary at the symmetric ray `r = A/2`, under the explicit no-total-
 internal-reflection differentiability hypothesis. So the demonstrated method is
 not "one motif formalized once"; it is a portable way to separate deduction
 from import across different mathematical shapes.
+
+The fourth example, the Aharonov-Bohm gauge-invariance, *rejoins* that shared
+shape — but topologically: a gradient (gauge) field's circulation around a
+closed loop is exactly zero, so the loop observable keeps only the enclosed
+flux (an `H^1` period) while the gauge freedom `grad chi` washes out. So three
+of the four share the deeper shape across a finite-field coset, a
+measure-theoretic label, and a topological period, and the halo stands apart as
+the pure-extremization breaker — the method is tied neither to one motif nor to
+one mathematical structure.
 
 ## P-vs-NP certificate core
 
@@ -108,16 +119,17 @@ green. This ledger is the **deductive** complement: the soundness and lossiness
 those receipts rely on are machine-checked, axiom-clean. The two are orthogonal,
 and neither proves the decoding hardness - which both import.
 
-The newer `ShadowDecay` and `HaloGeometry` modules are method demonstrations,
-not extra P-vs-NP evidence. They show that the same public Lean discipline spans
-finite-field algebra, real analysis, and geometric optics without turning any
-one imported wall into a theorem.
+The newer `ShadowDecay`, `HaloGeometry`, and `FaradayAB` modules are method
+demonstrations, not extra P-vs-NP evidence. They show that the same public Lean
+discipline spans finite-field algebra, real analysis, geometric optics, and
+vector calculus / topology without turning any one imported wall into a theorem.
 
 ## Status
 
-**PUBLIC, REPRODUCIBLE, THREE-EXAMPLE LEAN METHOD CORE.** The P-vs-NP
-certificate soundness + lossiness are machine-checked; the shadow-decay and
-halo minimum-deviation examples extend the method to two more mathematical
-shapes. Hardness, model realization, and physical optics remain imported. Not a
-cryptographic one-wayness claim; not a claim about P versus NP; not a claim that
-Lean proves the sky realizes the halo.
+**PUBLIC, REPRODUCIBLE, FOUR-EXAMPLE LEAN METHOD CORE.** The P-vs-NP
+certificate soundness + lossiness are machine-checked; the shadow-decay, halo
+minimum-deviation, and Aharonov-Bohm gauge-invariance examples extend the method
+to three more mathematical shapes. Hardness, model realization, physical optics,
+and the physical gauge field remain imported. Not a cryptographic one-wayness
+claim; not a claim about P versus NP; not a claim that Lean proves the sky
+realizes the halo or that nature realizes the Aharonov-Bohm effect.

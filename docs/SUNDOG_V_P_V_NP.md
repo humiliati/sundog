@@ -15,8 +15,9 @@
 > [Machine-Checked Method Core ledger](SUNDOG_V_CERTIFICATE_LEAN.md). This is the
 > *deductive* complement to the empirical v1-v6 cost receipts; neither proves
 > the decoding hardness, which both import. The same public Lean repo now also
-> includes real-analysis shadow decay and halo minimum-deviation geometry; those
-> are method examples, not extra P-vs-NP evidence.
+> includes real-analysis shadow decay, halo minimum-deviation geometry, and an
+> Aharonov-Bohm gauge-invariance core (vector calculus); those are method
+> examples, not extra P-vs-NP evidence.
 
 Working hook:
 

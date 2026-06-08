@@ -23,7 +23,8 @@ gone, `|F|ᵏ`/syndrome) are now **machine-checked in Lean 4** — `sorry`-free,
 public at [github.com/humiliati/sundogcert](https://github.com/humiliati/sundogcert) (see
 [`../SUNDOG_V_CERTIFICATE_LEAN.md`](../SUNDOG_V_CERTIFICATE_LEAN.md)). This is the deductive complement to
 the empirical attacker/scaling ladders; the imported hardness is unchanged. The same Lean repo now includes
-real-analysis shadow decay and halo minimum-deviation geometry as method examples, not P-vs-NP evidence.
+real-analysis shadow decay, halo minimum-deviation geometry, and an Aharonov-Bohm gauge-invariance core
+(vector calculus) as method examples, not P-vs-NP evidence.
 The Lean characterization also closes the prototype note's **degenerate cheap-reject (RISK 1)**: the
 non-degenerate column-weight reject bound fires at `τ > 0`, and its basis-dependence is proved to be the
 shadow of the imported hardness.

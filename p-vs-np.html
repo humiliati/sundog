@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Sundog P-vs-NP verifier: a cheap-to-check certificate, the seed-block drift that spoofed it, the consensus repair, and a Lean-checked soundness/lossiness core, now one of three public Lean method examples. NOT the Millennium P-vs-NP problem; hardness imported; op-count not wall-clock.">
+    <meta name="description" content="Sundog P-vs-NP verifier: a cheap-to-check certificate, the seed-block drift that spoofed it, the consensus repair, and a Lean-checked soundness/lossiness core, now one of four public Lean method examples. NOT the Millennium P-vs-NP problem; hardness imported; op-count not wall-clock.">
     <meta name="keywords" content="P-vs-NP, verifier, finding vs checking, alignment verification, mesa, certificate, Lean, spoof, consensus repair, claim hygiene, Sundog, review-gated">
     <meta name="theme-color" content="#1A3A52">
     <meta name="author" content="Sundog Research Lab">
@@ -44,7 +44,7 @@
       "@context": "https://schema.org",
       "@type": "TechArticle",
       "headline": "P-vs-NP Verifier - cheap to check, spoofed by drift, repaired by consensus",
-      "description": "A reward-blind hidden-basin certificate that costs fewer operations to check (527,297) than the policy cost to find (555,876), a ratio of 0.948587 under a frozen op-count gate. Transplanted to the mesa verification bridge, it was spoofed by a single source-bound seed block whose mean drifted across the accept line at 6.25% of the attacker budget; a frozen 3-of-4 block-consensus rule closed the spoof but quarantined on a block-unstable disclosure flag. A Lean core now machine-checks this lane's soundness and lossiness; decoding hardness stays imported. That proof is one example in a three-example public Lean method repo, not extra P-vs-NP evidence. Bounded alignment-verification that borrows the finding-vs-checking asymmetry as vocabulary; not the Millennium P-vs-NP problem, not a complexity-theoretic result, op-count not wall-clock, mesa-local.",
+      "description": "A reward-blind hidden-basin certificate that costs fewer operations to check (527,297) than the policy cost to find (555,876), a ratio of 0.948587 under a frozen op-count gate. Transplanted to the mesa verification bridge, it was spoofed by a single source-bound seed block whose mean drifted across the accept line at 6.25% of the attacker budget; a frozen 3-of-4 block-consensus rule closed the spoof but quarantined on a block-unstable disclosure flag. A Lean core now machine-checks this lane's soundness and lossiness; decoding hardness stays imported. That proof is one example in a four-example public Lean method repo, not extra P-vs-NP evidence. Bounded alignment-verification that borrows the finding-vs-checking asymmetry as vocabulary; not the Millennium P-vs-NP problem, not a complexity-theoretic result, op-count not wall-clock, mesa-local.",
       "image": "https://sundog.cc/og/p-vs-np.png",
       "datePublished": "2026-06-01",
       "dateModified": "2026-06-08",
@@ -475,12 +475,12 @@
                 consensus repair that closed the spoof and stubbed its toe.
                 A separate Lean core now machine-checks the certificate's
                 soundness and lossiness; the decoding hardness stays imported.
-                That proof is now one of three public Lean method examples, not
+                That proof is now one of four public Lean method examples, not
                 extra P-vs-NP evidence.
             </p>
             <div class="status-ribbon" aria-label="P-vs-NP verifier verdict status">
                 <span class="pass">v6 op-count certificate · BOUNDED POSITIVE</span>
-                <span class="pass">Lean core · soundness/lossiness (1 of 3 examples)</span>
+                <span class="pass">Lean core · soundness/lossiness (1 of 4 examples)</span>
                 <span class="fail">v0 mesa bridge · FALSIFIED (spoofed)</span>
                 <span class="quar review">v1 consensus repair · NAMED QUARANTINE</span>
                 <span class="review">review-gated · op-count only</span>

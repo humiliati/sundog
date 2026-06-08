@@ -13,8 +13,9 @@ Machine-checked deductive core (Lean, 2026-06-08):
   **referee-free**). Public and reproducible at
   [github.com/humiliati/sundogcert](https://github.com/humiliati/sundogcert) (`lake build` re-certifies
   every theorem). The *deductive* complement to the empirical v1-v6 cost receipts below; hardness stays
-  imported, never proven. The same public repo now also carries real-analysis shadow decay and halo
-  minimum-deviation geometry as method examples, not P-vs-NP evidence. Includes the full characterization of the `colWeightLb` reject bound
+  imported, never proven. The same public repo now also carries real-analysis shadow decay, halo
+  minimum-deviation geometry, and an Aharonov-Bohm gauge-invariance core (vector calculus) as method
+  examples, not P-vs-NP evidence. Includes the full characterization of the `colWeightLb` reject bound
   (sound / tight-scaling / basis-loose / degradation), closing the **degenerate cheap-reject (RISK 1)**
   question from the prototype note: the non-degenerate column-weight bound rejects at `τ > 0`, with its
   basis-dependence proved to be the shadow of the imported hardness.
