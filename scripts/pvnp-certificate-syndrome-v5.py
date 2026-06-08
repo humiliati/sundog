@@ -155,7 +155,7 @@ def run_one_target(kind, H, z, n, k, w, tau, max_B, rng, l):
     return (ops, 1 if ok else 0)
 
 
-def precal_regime(cfg, alpha, beta, K, g):
+def precal_regime(rid, cfg, alpha, beta, K, g, cache_dir):
     n, k, w, tau = cfg["n"], cfg["k"], cfg["w"], cfg["tau"]; m = n - k
     G, H = v2.make_code(n, k, cfg["code_seed"]); dig = code_digest(G, H)
     per_iter = {vk_of(kd, l): v4.per_iter_for(kd, n, k, l, alpha, beta) for kd, l in cfg["variants"]}
@@ -169,12 +169,28 @@ def precal_regime(cfg, alpha, beta, K, g):
         M_seed, censored_seeds, het = [], 0, []
         pooled_ops, pooled_ev = [], []
         for s_i, seed in enumerate(cfg["precal_target_seeds"][:K]):
-            tgts = v2.sample_frozen_manifest(G, H, n, k, w, T_PRE, seed)
-            rng = np.random.default_rng(seed ^ (0xA0 if kd == "lb" else (0xB0 + l)))
-            ops_arr, ev_arr = [], []
-            for t in tgts:
-                o, e = run_one_target(kd, H, t["z"], n, k, w, tau, max_B[vk], rng, l)
-                ops_arr.append(o); ev_arr.append(e)
+            # per-(regime,seed,variant) checkpoint: each slice (~30-60min) cached so a death
+            # costs <=1 slice and a re-run resumes. Cache is profile-independent (max_B is fixed).
+            cpath = cache_dir / f"{rid}__{vk}__s{seed}.json"
+            cd = None
+            if cpath.exists():
+                try:
+                    cd = json.loads(cpath.read_text())
+                    if cd.get("max_B") != max_B[vk] or len(cd.get("ops", [])) != T_PRE:
+                        cd = None  # stale cache -> recompute
+                except Exception:
+                    cd = None
+            if cd is not None:
+                ops_arr, ev_arr = cd["ops"], cd["event"]
+            else:
+                tgts = v2.sample_frozen_manifest(G, H, n, k, w, T_PRE, seed)
+                rng = np.random.default_rng(seed ^ (0xA0 if kd == "lb" else (0xB0 + l)))
+                ops_arr, ev_arr = [], []
+                for t in tgts:
+                    o, e = run_one_target(kd, H, t["z"], n, k, w, tau, max_B[vk], rng, l)
+                    ops_arr.append(o); ev_arr.append(e)
+                cache_dir.mkdir(parents=True, exist_ok=True)
+                cpath.write_text(json.dumps({"ops": ops_arr, "event": ev_arr, "max_B": max_B[vk]}))
             med, cens = km_median(ops_arr, ev_arr)
             if cens:
                 censored_seeds += 1
@@ -255,16 +271,29 @@ def _family_verdict(pairs):
     return "indistinguishable_at_op_budget"
 
 
-def run_precal(out_dir, lock_out, profile):
+def run_precal(out_dir, lock_out, profile, regimes_filter=None):
+    """Resumable: per-regime incremental lock + per-(regime,seed,variant) slice cache.
+    regimes_filter (list of rids) lets R2' run as its own job before the validation regimes;
+    the lock accumulates across jobs. base_fit is locked on first write and reused thereafter."""
     out_dir.mkdir(parents=True, exist_ok=True)
+    cache_dir = out_dir / "_cache"
     K, g = PROFILES[profile]["K"], PROFILES[profile]["g"]
-    alpha, beta, base_pts = v3.fit_base()
-    lock = {"schema": "pvnp-certificate-syndrome-v5-prediction-lock", "stage": "stage-2",
-            "estimator": "km_median_op_units_common_cap", "profile": profile, "K": K, "g": g,
-            "T_pre": T_PRE, "T_frozen": T_FROZEN, "C_MULT": C_MULT, "W_max": W_MAX,
-            "bonferroni_p": BONFERRONI_P, "base_fit": dict(alpha=alpha, beta=beta, points=base_pts), "regimes": {}}
-    for rid, cfg in REGIMES.items():
-        reg = precal_regime(cfg, alpha, beta, K, g)
+    lock_path = Path(lock_out)
+    if lock_path.exists():
+        lock = json.loads(lock_path.read_text(encoding="utf-8"))
+        if lock.get("profile") != profile:
+            raise SystemExit(f"existing lock profile {lock.get('profile')!r} != {profile!r}; refusing to mix profiles")
+        alpha, beta = lock["base_fit"]["alpha"], lock["base_fit"]["beta"]
+    else:
+        alpha, beta, base_pts = v3.fit_base()
+        lock = {"schema": "pvnp-certificate-syndrome-v5-prediction-lock", "stage": "stage-2",
+                "estimator": "km_median_op_units_common_cap", "profile": profile, "K": K, "g": g,
+                "T_pre": T_PRE, "T_frozen": T_FROZEN, "C_MULT": C_MULT, "W_max": W_MAX,
+                "bonferroni_p": BONFERRONI_P, "base_fit": dict(alpha=alpha, beta=beta, points=base_pts), "regimes": {}}
+    rids = list(REGIMES) if not regimes_filter else [r for r in regimes_filter if r in REGIMES]
+    for rid in rids:
+        cfg = REGIMES[rid]
+        reg = precal_regime(rid, cfg, alpha, beta, K, g, cache_dir)
         entry = {"role": cfg["role"], "code_digest": reg["code_digest"], "B_common": reg["B_common"],
                  "frozen_target_seed": cfg["frozen_target_seed"],
                  "variants": {vk: {kk: v[kk] for kk in ("kind", "l", "N_analytic", "per_iter_ops", "max_B",
@@ -274,14 +303,13 @@ def run_precal(out_dir, lock_out, profile):
         if cfg["cross_pairs"]:
             pairs, fam = cross_attacker_precal(reg, cfg)
             entry["cross_attacker"] = {"pairs": pairs, "family_verdict": fam}
-        # reported bound: min over admissible variants of (band-low / median proxy)
         adm = [v for v in reg["variants"].values() if not v["precal_insufficient"]]
         if adm:
             best = min(adm, key=lambda v: v["locked_band"][0])
             entry["C_best_predicted"] = {"variant": vk_of(best["kind"], best["l"]), "band": best["locked_band"]}
         lock["regimes"][rid] = entry
-    Path(lock_out).write_text(json.dumps(lock, indent=2) + "\n", encoding="utf-8")
-    (out_dir / "precal_report.json").write_text(json.dumps({"profile": profile, "regimes": list(REGIMES)}, indent=2) + "\n", encoding="utf-8")
+        lock_path.write_text(json.dumps(lock, indent=2) + "\n", encoding="utf-8")  # incremental: survive death between regimes
+    (out_dir / "precal_report.json").write_text(json.dumps({"profile": profile, "regimes_done": list(lock["regimes"])}, indent=2) + "\n", encoding="utf-8")
     return lock
 
 
@@ -465,6 +493,7 @@ def main():
     ap.add_argument("--lock-out", default="docs/pvnp/SUNDOG_CERTIFICATE_SYNDROME_V5_PREDICTION_LOCK.json")
     ap.add_argument("--prediction-lock", default="docs/pvnp/SUNDOG_CERTIFICATE_SYNDROME_V5_PREDICTION_LOCK.json")
     ap.add_argument("--root", default="results/pvnp/certificate-syndrome-v5")
+    ap.add_argument("--regimes", default="all", help="comma-separated rids (r2prime,v3r1,v3r3) or 'all'; lock accumulates")
     args = ap.parse_args()
     lp = lambda pth: Path(pth) if Path(pth).is_absolute() else REPO / pth
 
@@ -490,9 +519,12 @@ def main():
     if args.precal:
         if args.profile not in PROFILES:
             raise SystemExit("--profile must be primary|fallback")
-        lock = run_precal(REPO / args.out, lp(args.lock_out), args.profile)
-        print(f"=== v5 precal (profile {args.profile}, K={PROFILES[args.profile]['K']}) ===")
-        for rid in REGIMES:
+        rf = None if args.regimes == "all" else [r.strip() for r in args.regimes.split(",")]
+        lock = run_precal(REPO / args.out, lp(args.lock_out), args.profile, rf)
+        print(f"=== v5 precal (profile {args.profile}, K={PROFILES[args.profile]['K']}, regimes={args.regimes}) ===")
+        for rid in (rf or list(REGIMES)):
+            if rid not in lock["regimes"]:
+                continue
             for vk, v in lock["regimes"][rid]["variants"].items():
                 b = v["locked_band"]; print(f"  {rid}/{vk}: band={b} W={v['W']} insufficient={v['precal_insufficient']}" if b
                                             else f"  {rid}/{vk}: PRECAL_INSUFFICIENT (cens {v['seeds_censored']})")
