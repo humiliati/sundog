@@ -273,8 +273,22 @@ control (`scripts/atlas_jet_classify.py` §4 + `test_atlas_jet_classify.py`):
 - **NEGATIVE — the A₄ swallowtail** (`synthetic_swallowtail`, a corank-1 cuspoid): `s1_min_rel = 0.81`,
   corank-1 — the detector **distinguishes a D₄ umbilic from an A₄ swallowtail** (and from the ice halos at
   `s1_min_rel ≈ 0.2–0.3`).
-- **Verdict: the "no-D₄" null is UPGRADED from CONFIRMED to VALIDATED** — the tool genuinely *can* see a D₄
-  (it fires at 0.0036 on a known one); ice halos demonstrably lack one. (Next, optionally: feed the detector
-  a real **spheroidal-raindrop** forward chart at the Berry/Nye/Marston hyperbolic-umbilic aspect ratio — a
-  literature-established physical D₄ — as an independent-referee, physics-grounded validation. NOT a
-  new-physics claim; attribute the raindrop D₄ to Berry/Nye 1980 + Marston.)
+- **Step 1 verdict: the "no-D₄" null is UPGRADED from CONFIRMED to VALIDATED** — the tool genuinely *can*
+  see a D₄ (it fires at 0.0036 on the synthetic normal form); ice halos demonstrably lack one.
+- **Step 2 — the REAL physical D₄ (DONE 2026-06-07; `scripts/drop_umbilic.py` + `test_drop_umbilic.py`):**
+  an independent-referee test against a *literature-established* physical umbilic. A genuine **oblate-raindrop
+  primary-rainbow** forward chart (oblate spheroid semi-axes a,a,c; horizontal +x beam; enter → ONE internal
+  reflection → exit; n=1.333) was traced and fed to `corank_from_chart`. Sweeping the aspect ratio D/H = a/c,
+  the detector **fires corank-2 precisely in the band D/H ∈ [1.295, 1.320]** (grid-stable across ng
+  256/320/400; min `s1_min_rel`≈0.016) — essentially identical to the **Marston & Trinh / Nye 1984
+  hyperbolic-umbilic value D/H = 1.305 ± 0.016**. The **sphere (D/H=1) is corank-1** (`s1_min_rel`=0.93, the
+  axisymmetric rainbow fold) and the **over-flattened drop (D/H=1.5) is corank-1** (the umbilic unfolds).
+  (Confounds excluded: the backscattering-**glory** axial focus and the grazing silhouette edge — both
+  corank-2 at *every* aspect ratio — are removed by restricting to the rainbow annulus + eroding the
+  admissibility mask; `corank_from_chart` gained a `good` param.) **The raindrop D₄ at D/H=1.305 is Marston &
+  Trinh / Nye 1984's (Nature 312:529 + 312:531); the lab independently reproduces it from ray optics — NOT a
+  new-physics claim — validating the corank-2 detector on a real physical D₄.**
+- **Net: the "no-D₄" null is VALIDATED on BOTH a synthetic normal form AND a real physical D₄.** The detector
+  fires on (i) the synthetic hyperbolic umbilic (`s1_min_rel`=0.0036) and (ii) the Marston/Nye raindrop
+  umbilic at D/H≈1.305, and correctly stays corank-1 on the sphere, the A₄ swallowtail, and all five
+  ice-halo families. The tool genuinely sees D₄; ice halos genuinely lack one.

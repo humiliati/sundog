@@ -91,11 +91,13 @@ def synthetic_swallowtail(h, ng=420, L=1.1):
 
 
 # ---- the corank-2 / D4 (umbilic) detector ON A CHART + its synthetic-D4 positive control ---------- #
-def corank_from_chart(X, Y, dg, da, edge=3, corank2_rel=0.05):
+def corank_from_chart(X, Y, dg, da, good=None, edge=3, corank2_rel=0.05):
     """Chart-based twin of atlas_strata_map.corank_on_caustic: on the caustic (det J sign-change) the
     smaller singular value s2→0; s1 is the OTHER one — corank-2 (a D4 UMBILIC) iff min(s1)/scale <
-    corank2_rel. Returns {s1_min_rel, corank, scale, n_caustic} (None if no caustic). This is the Atlas's
-    NEVER-FIRED corank-2 branch, here exercised on an arbitrary map so it can finally be calibrated."""
+    corank2_rel. Returns {s1_min_rel, corank, scale, n_caustic} (None if no caustic). `good` = optional
+    admissibility mask (its interior boundary is ERODED by `edge` cells, like corank_on_caustic, so a
+    chart with NaN/zero-filled inadmissible regions — e.g. a drop silhouette — doesn't fake a corank-2 at
+    its edge). This is the Atlas's never-fired corank-2 branch, here exercised so it can be calibrated."""
     Xg, Xa = np.gradient(X, dg, da); Yg, Ya = np.gradient(Y, dg, da)
     detJ = Xg * Ya - Xa * Yg
     fro2 = Xg ** 2 + Xa ** 2 + Yg ** 2 + Ya ** 2
@@ -107,12 +109,16 @@ def corank_from_chart(X, Y, dg, da, edge=3, corank2_rel=0.05):
         idx = np.abs(np.diff(np.sign(detJ), axis=ax)) > 0
         s0 = [slice(None)] * 2; s1s = [slice(None)] * 2; s0[ax] = slice(0, -1); s1s[ax] = slice(1, None)
         caustic[tuple(s0)] |= idx; caustic[tuple(s1s)] |= idx
-    good = np.ones(detJ.shape, bool)
-    good[:edge, :] = good[-edge:, :] = good[:, :edge] = good[:, -edge:] = False
-    caustic &= good & np.isfinite(s1) & np.isfinite(s2)
+    g = (np.ones(detJ.shape, bool) if good is None else np.asarray(good, bool)).copy()
+    g[:edge, :] = g[-edge:, :] = g[:, :edge] = g[:, -edge:] = False        # grid border (one-sided diffs)
+    for _ in range(edge):                                                 # erode the admissibility boundary
+        g2 = g.copy()
+        g2[1:, :] &= g[:-1, :]; g2[:-1, :] &= g[1:, :]; g2[:, 1:] &= g[:, :-1]; g2[:, :-1] &= g[:, 1:]
+        g = g2
+    caustic &= g & np.isfinite(s1) & np.isfinite(s2)
     if not caustic.any():
         return None
-    scale = float(np.nanmedian(s1[good]))
+    scale = float(np.nanmedian(s1[g & np.isfinite(s1)]))
     return {"s1_min_rel": float(np.nanmin(s1[caustic]) / scale), "scale": scale,
             "corank": 2 if float(np.nanmin(s1[caustic]) / scale) < corank2_rel else 1,
             "n_caustic": int(caustic.sum())}
