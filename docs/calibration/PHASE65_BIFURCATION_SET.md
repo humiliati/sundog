@@ -71,11 +71,15 @@ singular set, the **Jacobian kernel**; 2 orientation DOF suffice, **no full-3-D,
   figures.
 - **Replaces:** the empirical hardcode in `public/js/parhelion-geometry.mjs` (`TANGENT_ARC_CIRCUMSCRIBED_H
   =29`, single-cell-calibrated `A(h)=A₀(29−18.6)/(29−h)`) — the §6 armchair-gate violation for the cusp.
-- **Lit-pass flag (Track B, SYNTHESIS):** Tape frames the merge as "singular points / Jacobian kernel";
-  the explicit **"A₃ cusp"** label is the Berry–Upstill/Nye catastrophe classification applied on top —
-  correct and standard, but *our* synthesis (no single source says "circumscribed merge = A₃ cusp"
-  verbatim). Confirm corank-1 (A₃) vs corank-2 (D₄) numerically. **Honest off-ramp:** if 29° does not
-  fall out cleanly, that is a model-insufficiency finding, never a number to tune to.
+- **Lit-pass flag (Track B, RESOLVED 2026-06-07):** Tape frames the merge as "singular points / Jacobian
+  kernel"; the **"A₃ cusp"** label is the catastrophe classification applied on top. **Prior-art (Berry
+  1994):** the halo map is *non-gradient*, so the Thom taxonomy doesn't transfer wholesale — but folds +
+  **cusps survive by Whitney's theorem** (generic for any smooth 2-D map), and Berry records "some halos
+  do show cusps," so the **A₃ Whitney-cusp label is defensible** (not "first" — Berry pre-empts the idea).
+  The corank-1 (A₃) vs corank-2 (D₄) question is **CONFIRMED corank-1 = A₃** numerically in Phase 8-A
+  (`scripts/atlas_strata_map.py`; `calibration/PHASE8_STRATA.md`); no D₄ found, confirming Berry's
+  no-umbilic prediction. **Honest off-ramp (held):** 29.7° fell out cleanly; had it not, that is a
+  model-insufficiency finding, never a number to tune to.
 
 ## Status + downstream
 **Phase 6.5 COMPLETE (2026-06-07): both components landed.** Component B (CZA 32.196°, CHA 57.804°) and

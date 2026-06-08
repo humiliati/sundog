@@ -21,10 +21,18 @@ is the instrument that closes it before any tier-3 outreach.
 - **Track A — Halo geometry & simulation (the body).** The ray-optics theory of halos and the
   Monte-Carlo simulators. Establish exactly what is canonical, what is each author's, and what the
   apparatus (HaloSim) already computes, so Sundog claims nothing already standard as novel.
-- **Track B — Catastrophe / caustic optics (the skeleton).** The classification of caustics and their
-  diffraction dressing. Establish that "a halo is a fold," "merges are cusps," and "the diffraction
-  fringe encodes scale" are *known structure*, and isolate what (if anything) about the **bifurcation
-  set of the halo control space (elevation × habit × orientation)** is not already explicitly written.
+- **Track B — Catastrophe / caustic optics (the skeleton). ✅ READ 2026-06-07 →
+  `docs/calibration/PHASE8_STRATA.md`.** **BANKED FINDINGS (prior-art resolution):** (1) **Tape 1980**
+  (JOSA 70:1175) established caustic = Jacobian-kernel (fold level); **Tape & Können 1999** (Appl. Opt.
+  38:1552, full text read) is pure *parameterization* — no caustic/catastrophe/bifurcation classification
+  (it even dissolves the UTA/LTA merge into "one halo"). (2) **Berry 1994** (Appl. Opt. 33:4563) is the
+  decisive prior art: it *raised* catastrophe-typing of ice halos, recorded "some halos do show cusps"
+  (Tape), flagged the halo map as **NON-GRADIENT** (Thom A_n/D_n taxonomy does not transfer wholesale),
+  **predicted no umbilics (D₄)**, and left the **swallowtail (A₄) as an open question**. (3) **Verdict:
+  the systematic *stratification* is genuine bounded-novelty (taking up Berry's question, addressing
+  non-gradient); NOT "first catastrophe classification" of halos.** Whitney's theorem rescues the
+  fold/cusp (A₂/A₃) labels (generic for any 2-D map); higher strata need the jet-determinacy check, not
+  corank alone. The 29.7° merge = A₃ Whitney cusp; no D₄ found (confirms Berry).
 - **Track C — The two-component wall taxonomy.** Confirm the literature's treatment of (A) caustic
   catastrophes vs (B) ray-admissibility / TIR boundaries, and whether the *union* is named as the
   organizing structure of the complete atlas anywhere.
@@ -78,6 +86,14 @@ is the instrument that closes it before any tier-3 outreach.
   *(to-verify.)*
 - Berry, M. V. — rainbow-as-fold / "Waves and Thom's theorem"; diffraction catastrophes (Airy on the
   fold, Pearcey on the cusp). *(to-verify the cleanest citation.)*
+- **Berry, M. V. — "Supernumerary ice-crystal halos?", Appl. Opt. 33(21):4563 (1994). ✅ READ — the
+  decisive ice-halo prior art:** non-gradient halo map → Thom taxonomy doesn't transfer wholesale; cusps
+  occur; **no umbilics predicted**; swallowtail open. (Also: 22° edge = step, not fold — `S2_LITPASS_E_G`.)
+- **Tape, W. — "Analytic foundations of halo theory", JOSA 70(10):1175 (1980). ✅** caustic = image of
+  the halo function's singular set = Jacobian kernel (the fold-level machinery; no A_n/D_n typing).
+- **Tape, W. & Können, G. P. — "A general setting for halo theory", Appl. Opt. 38(9):1552 (1999). ✅
+  READ (full text):** the oriented-wedge atlas (wedge angle × spin-vector) — pure *parameterization*, NO
+  caustic/catastrophe/bifurcation classification (dissolves the UTA/LTA merge into "one halo").
 
 ## 3. Gap map (what the pass is looking for)
 
