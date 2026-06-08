@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Sundog Geometry gathers the public geometry workbenches: cap sets, halo geometry, h-of-x, and bounded apparatus notes for new discrete-geometry discoveries.">
+    <meta name="description" content="Sundog Geometry gathers the public geometry workbenches: cap sets, halo geometry, h-of-x, and bounded apparatus notes, including the Lean-checked halo minimum-deviation core.">
     <meta name="theme-color" content="#142b3a">
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -15,7 +15,7 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Sundog">
     <meta property="og:title" content="Sundog Geometry — Hidden Structure Workbenches">
-    <meta property="og:description" content="Cap sets, halo geometry, h(x), and bounded apparatus notes for new discrete-geometry discoveries. A shelf of workbenches.">
+    <meta property="og:description" content="Cap sets, halo geometry, h(x), and bounded apparatus notes. The halo shelf now points to the Lean-checked minimum-deviation core.">
     <meta property="og:image" content="https://sundog.cc/og/geometry.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -23,7 +23,7 @@
     <meta property="og:url" content="https://sundog.cc/geometry">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Sundog Geometry — Hidden Structure Workbenches">
-    <meta name="twitter:description" content="Cap sets, halo geometry, h(x), and bounded apparatus notes for new discrete-geometry discoveries. A shelf of workbenches.">
+    <meta name="twitter:description" content="Cap sets, halo geometry, h(x), and bounded apparatus notes, including the Lean-checked halo minimum-deviation core.">
     <meta name="twitter:image" content="https://sundog.cc/og/geometry.png">
     <meta name="twitter:image:alt" content="Geometry shelf card: three workbench tiles for cap-set, halo atlas, and the h(x) equation.">
     <script type="application/ld+json">
@@ -31,7 +31,7 @@
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "Sundog Geometry \u2014 Hidden Structure Workbenches",
-  "description": "Cap sets, halo geometry, h(x), and bounded apparatus notes for new discrete-geometry discoveries. A shelf of workbenches.",
+  "description": "Cap sets, halo geometry, h(x), and bounded apparatus notes, including the Lean-checked halo minimum-deviation core.",
   "image": "https://sundog.cc/og/geometry.png",
   "url": "https://sundog.cc/geometry",
   "publisher": {
@@ -229,7 +229,7 @@
 
         .geometry-band {
             display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
             gap: 0.8rem;
             padding: 0 0 2rem;
         }
@@ -476,14 +476,16 @@
                     This is the public shelf for geometry workbenches: small
                     visual problems where the visible pattern is not the whole
                     story. Cap sets are the live demo. The unit-distance
-                    disproof is the fresh external discovery. Sundog's role is
-                    the apparatus beside them: source credit, hidden structure,
+                    disproof is the fresh external discovery. Halo minimum
+                    deviation now has a public Lean core. Sundog's role is the
+                    apparatus beside them: source credit, hidden structure,
                     visible signature, and named boundaries.
                 </p>
                 <div class="hero-actions" aria-label="Primary actions">
                     <a class="button-link primary" href="/capset">Open Capset Workbench</a>
                     <a class="button-link" href="/sundog">Open Halo Atlas</a>
                     <a class="button-link" href="/h-of-x">Open h-of-x</a>
+                    <a class="button-link" href="/docs/SUNDOG_V_CERTIFICATE_LEAN.md">Lean cores</a>
                 </div>
             </div>
 
@@ -564,6 +566,14 @@
                 <p>
                     The cap-set demo points to Croot-Lev-Pach and
                     Ellenberg-Gijswijt's 2016 polynomial-method breakthrough.
+                </p>
+            </div>
+            <div class="credit-pill">
+                <strong>Lean halo core</strong>
+                <p>
+                    The public Lean repo checks the 22-degree halo's
+                    minimum-deviation stationarity; the physical optics wall
+                    stays named outside the proof.
                 </p>
             </div>
             <div class="credit-pill">

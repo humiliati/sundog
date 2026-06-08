@@ -123,18 +123,18 @@ const projects = [
     transferQuestion:
       "Can a compact signature behave like a cheaper certificate for a bounded alignment-verification problem?",
     currentRead:
-      "The verifier reached bounded-positive at v6 on the frozen op-count gate. The mesa transplant was spoofed at small capacity, then closed by 3-of-4 consensus with a block-unstable quarantine. A Lean core now verifies soundness and lossiness; decoding hardness stays imported.",
+      "v6 op-count is bounded-positive. The mesa transplant was spoofed, then consensus-repaired with a quarantine. Lean checks this lane's soundness/lossiness; the public method repo now spans 3 math kinds. Hardness imported.",
     blocker:
       "The v1 consensus rule closes unsafe promotion, but the mixed-objective disclosure flag inherits block-drift on a protected anchor.",
     nextAction:
       "Implement the frozen Phase 3 v2/v2b disclosure-consensus harness, then score the v1 regression set and corrected v2b fresh holdout.",
     publicBoundary:
       "No complexity-class result, polynomial certificate, or P-vs-NP progress is claimed.",
-    chartHeadline: "v6 positive; Lean core fenced",
+    chartHeadline: "v6 positive; 3 Lean cores fenced",
     metrics: [
       { label: "filed receipts", value: 11, unit: "incl p3v1" },
       { label: "v6 false accepts", value: 0, unit: "items" },
-      { label: "Lean core", value: 1, unit: "sound+lossy" },
+      { label: "Lean cores", value: 3, unit: "examples" },
     ],
     sources: [
       "docs/SUNDOG_V_P_V_NP.md",

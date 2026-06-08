@@ -1,73 +1,123 @@
-# Sundog Certificate — Machine-Checked Core (Lean)
+# Sundog Lean Certificate - Three Machine-Checked Cores
 
-> **Deductive core of the [P-vs-NP certificate-syndrome lane](SUNDOG_V_P_V_NP.md).**
-> The certificate's **soundness and lossiness** are machine-checked in Lean 4 — `sorry`-free,
-> axiom-clean, **referee-free**. The kernel re-checks every theorem in seconds, so the *validity* of
-> this core is author-independent. The decoding-hardness assumption (information-set decoding / SIS) is
-> **imported, not proven** — Lean certifies the deductive core, never the hardness.
+> **Deductive complement to the public Sundog lanes.** The public Lean repo now
+> carries three worked examples of the same discipline: machine-check the
+> deductive core, then name the imported wall. The first is the
+> [P-vs-NP certificate-syndrome lane](SUNDOG_V_P_V_NP.md); the second is a
+> real-analysis shadow-decay example; the third is the halo minimum-deviation
+> geometry behind the 22-degree halo.
 
 **Public and reproducible:**
-[`github.com/humiliati/sundogcert`](https://github.com/humiliati/sundogcert) — `lake build` re-certifies
-every theorem; `#print axioms` shows only `[propext, Classical.choice, Quot.sound]` (no `sorry`, no
-`native_decide`, no trusted compiler step). Lean `v4.30.0`, mathlib `v4.30.0`.
+[`github.com/humiliati/sundogcert`](https://github.com/humiliati/sundogcert) -
+`lake build` re-certifies every theorem; `#print axioms` shows only
+`[propext, Classical.choice, Quot.sound]` (no `sorry`, no `native_decide`, no
+trusted compiler step). Lean `v4.30.0`, mathlib `v4.30.0`.
 
 Working hook:
 
-> Safe policies may be hard to find, but a sound certificate of safety is cheap to check — and now its
-> soundness is something a *machine* checks, not a referee.
+> A claim gets smaller and cleaner when its proof goes into Lean and its
+> assumptions stay outside the proof, named in plain view.
 
-## What is machine-checked
+## Three worked examples
 
-- **Lossiness by algebra.** The syndrome `H(sG + e) = He` is independent of the secret `s`
-  (`syndrome_independent_of_secret`); every message maps to the same syndrome; there are `|F|ᵏ` bodies
-  per syndrome (`secret_bits_lost`). The shadow discards `k·log|F|` bits — forced by the algebra, not
-  assumed.
-- **Soundness.** `accept ⟹ Safe` — the only route to *accept* is an exhibited light witness, which *is*
-  the proof (`accept_sound`); no accepted body is unsafe (`no_passing_unsafe`); `reject ⟹ ¬Safe` under a
-  sound lower bound (`reject_sound`).
+| Lean surface | kind of math | checked deductive core | imported wall |
+|---|---|---|---|
+| `Certificate` / `Instance` / `Scaling` / `Looseness` / `Degradation` / `CheckCost` | finite-field algebra | syndrome-certificate soundness, exact algebraic lossiness, reject-bound behavior, and check-cost scaling | decoding hardness / SIS one-wayness |
+| `ShadowDecay` | real analysis | a lossy averaged shadow washes out a continuous variable while keeping a shared discrete label | that a real system instantiates the averaging model |
+| `HaloGeometry` | geometric optics / calculus | `dev_value`, `min_deviation_stationary`, and a conditional local-min wrapper for the symmetric ray | 60-degree ice-prism geometry, measured `n ~= 1.31`, Snell refraction, ray exit, and the observed bright ring at the deviation extremum |
 
-The trust surface is ~30 lines: the scheme definitions and the meaning of *Safe*. Everything above them
-is kernel-checked. Peer review shrinks from "trust the proof" to "audit the statement."
+The third example matters because it breaks the first two examples' shared
+shape. The certificate and shadow-decay examples both involve a lossy shadow
+that keeps one invariant while losing another. The halo proof is not that. It
+is a pure extremization statement: the deviation
+
+```text
+dev n A r = arcsin (n * sin r) + arcsin (n * sin (A - r)) - A
+```
+
+is stationary at the symmetric ray `r = A/2`, under the explicit no-total-
+internal-reflection differentiability hypothesis. So the demonstrated method is
+not "one motif formalized once"; it is a portable way to separate deduction
+from import across different mathematical shapes.
+
+## P-vs-NP certificate core
+
+The first Lean surface is still the deductive core of the P-vs-NP
+certificate-syndrome lane. It machine-checks the certificate's **soundness and
+lossiness** in Lean 4 - `sorry`-free, axiom-clean, **referee-free**. The kernel
+re-checks every theorem in seconds, so the *validity* of this core is
+author-independent. The decoding-hardness assumption (information-set decoding
+/ SIS) is **imported, not proven** - Lean certifies the deductive core, never
+the hardness.
+
+## What is machine-checked in the certificate
+
+- **Lossiness by algebra.** The syndrome `H(sG + e) = He` is independent of the
+  secret `s` (`syndrome_independent_of_secret`); every message maps to the same
+  syndrome; there are `|F|^k` bodies per syndrome (`secret_bits_lost`). The
+  shadow discards `k*log|F|` bits - forced by the algebra, not assumed.
+- **Soundness.** `accept -> Safe` - the only route to *accept* is an exhibited
+  light witness, which *is* the proof (`accept_sound`); no accepted body is
+  unsafe (`no_passing_unsafe`); `reject -> not Safe` under a sound lower bound
+  (`reject_sound`).
+
+The trust surface is small: the scheme definitions and the meaning of *Safe*.
+Everything above them is kernel-checked. Peer review shrinks from "trust the
+proof" to "audit the statement."
 
 ## The wall, named
 
-Lean certifies **soundness + lossiness only.** The certificate's security rests on a decoding-hardness
-assumption that is **imported, not proven** — hardness is not a mathlib theorem. Every "Lean-verified"
-here means the deductive core, never the hardness.
+Lean certifies **soundness + lossiness only** for the certificate lane. The
+certificate's security rests on a decoding-hardness assumption that is
+**imported, not proven** - hardness is not a mathlib theorem. Every
+"Lean-verified" claim here means the deductive core, never the hardness.
 
 ## The reject bound, fully characterized
 
-The load-bearing reject bound `colWeightLb` is pinned down from every direction, each fact kernel-verified:
+The load-bearing reject bound `colWeightLb` is pinned down from every direction,
+each fact kernel-verified:
 
 | regime | behavior | theorem |
 |---|---|---|
-| any basis | **sound** — never exceeds the true witness weight | `colWeightLb_sound` |
-| uniform `H` | **tight** — equals the true distance; reject threshold scales linearly, `τ = n/2 − 1` | `scaling_law` |
-| denser `H`, same code | **loose** — collapses to `0`, purely from the basis | `looseness` |
-| general | capped by `‖syndrome‖ / density` | `colWeightLb_le_card_div` |
+| any basis | **sound** - never exceeds the true witness weight | `colWeightLb_sound` |
+| uniform `H` | **tight** - equals the true distance; reject threshold scales linearly, `tau = n/2 - 1` | `scaling_law` |
+| denser `H`, same code | **loose** - collapses to `0`, purely from the basis | `looseness` |
+| general | capped by `||syndrome|| / density` | `colWeightLb_le_card_div` |
 
-Items (loose) and (general) are **completeness** phenomena, not soundness breaks: a collapsed bound still
-never over-claims — it quarantines where it cannot reject. Soundness never depends on the basis; only the
-bound's *strength* does.
+Items (loose) and (general) are **completeness** phenomena, not soundness
+breaks: a collapsed bound still never over-claims - it quarantines where it
+cannot reject. Soundness never depends on the basis; only the bound's *strength*
+does.
 
-## The frontier: the looseness is the shadow of the hardness
+## The frontier
 
-A *cheap, basis-robust, tight* reject bound — one that doesn't degrade when the parity-check is chosen
-adversarially — would return the true minimum coset weight on every basis. That **would be a fast
-decoder**: it would solve the very problem (information-set decoding) whose hardness the certificate
-imports. So the basis-dependence of `colWeightLb` is not a defect to be patched away — it is the *shadow*
-of the hardness assumption. The honest open question is quantitative: how large is the gap between a cheap
-bound and the true coset weight, as a function of the decoding margin.
+A *cheap, basis-robust, tight* reject bound - one that does not degrade when the
+parity-check is chosen adversarially - would return the true minimum coset
+weight on every basis. That **would be a fast decoder**: it would solve the very
+problem (information-set decoding) whose hardness the certificate imports. So
+the basis-dependence of `colWeightLb` is not a defect to be patched away - it is
+the visible edge of the hardness assumption. The honest open question is
+quantitative: how large is the gap between a cheap bound and the true coset
+weight, as a function of the decoding margin.
 
 ## Relation to the P-vs-NP lane
 
-The certificate-syndrome receipts (v1–v6) measure the **empirical** side — cheaper to check than to find
-(op-count cost certificate `0.949 ≤ 1.0`), safety green. This ledger is the **deductive** complement: the
-soundness and lossiness those receipts rely on are now machine-checked, axiom-clean. The two are
-orthogonal, and neither proves the decoding hardness — which both import.
+The certificate-syndrome receipts (v1-v6) measure the **empirical** side -
+cheaper to check than to find (op-count cost certificate `0.949 <= 1.0`), safety
+green. This ledger is the **deductive** complement: the soundness and lossiness
+those receipts rely on are machine-checked, axiom-clean. The two are orthogonal,
+and neither proves the decoding hardness - which both import.
+
+The newer `ShadowDecay` and `HaloGeometry` modules are method demonstrations,
+not extra P-vs-NP evidence. They show that the same public Lean discipline spans
+finite-field algebra, real analysis, and geometric optics without turning any
+one imported wall into a theorem.
 
 ## Status
 
-**BOUNDED-POSITIVE deductive core.** Soundness + lossiness: machine-checked, axiom-clean, referee-free.
-Hardness: imported. Not a cryptographic one-wayness claim; not a claim about P versus NP — a verification
-*methodology* whose validity anyone can reproduce, and a clean coding-theory characterization of one bound.
+**PUBLIC, REPRODUCIBLE, THREE-EXAMPLE LEAN METHOD CORE.** The P-vs-NP
+certificate soundness + lossiness are machine-checked; the shadow-decay and
+halo minimum-deviation examples extend the method to two more mathematical
+shapes. Hardness, model realization, and physical optics remain imported. Not a
+cryptographic one-wayness claim; not a claim about P versus NP; not a claim that
+Lean proves the sky realizes the halo.

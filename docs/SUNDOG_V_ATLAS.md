@@ -253,7 +253,7 @@ catastrophe-optics literature; asserting a specific catastrophe type without the
 | **8.7** | **Net circular polarization → population handedness imbalance** — **DEMOTED (2026-06-07):** net-`V` is **~0 by symmetry** — no mechanism breaks ice-crystal handedness (ice achiral; E/B not pseudoscalar; Können's `U=0` is the exact net-V-cancellation analog). The measurable signal is a **per-feature antisymmetric `±V(θ,φ)` integrating to ~0**, not net-CP. | demoted — likely-null; per-feature V is the real target |
 | 9 | The verification layer — photographed displays as verifier; geometry-confirmation receipts; named falsifiers | open |
 | 10 | Substrate-rhyme / certificate placement — the atlas as the physical forward-easy/inverse-hard card | open |
-| **11** | **THE CAPSTONE — the classified bifurcation diagram (platonic-solid model, except holograms)** | aspirational |
+| **11** | **THE CAPSTONE — the classified bifurcation diagram (platonic-solid model, except holograms)** | **DONE 2026-06-07** (`calibration/PHASE11_CAPSTONE.md`, `scripts/atlas_model.py`): the small-parameter structural model — the whole classified atlas forward-generated from **~1 free continuous physical parameter (n=1.31)** + the fixed ice lattice + the ~7 discrete habits; **recompute-from-n** demonstration (every radius + wall shifts with n); a **match scorecard** (all forward predictions match the documented catalog + Berry's no-A₄/D₄) + **named failure boundaries** (multi-scattering, rare-habit trio, the §0.2 ray-optics limit, coverage gaps). §6 falsification gates audited. Kepler's instinct on the object where it's true. |
 
 Phases 1–4 are grounded/done; Phase 0.5 (lit-pass) gates everything outward-facing; the new structural
 arc is 5–11, anchored on the 6.5 bifurcation-set computation. **Status note (2026-06-07):** the
@@ -303,6 +303,16 @@ small-parameter structural model whose forward predictions (transition elevation
 the higher-stratum invisible halos) match the apparatus and the photographed catalog, with named
 failure boundaries where the reduction breaks (multiple-scattering displays, rare habits, the
 ray-optics-limit caveat of §0.2).
+
+> **REALIZED 2026-06-07 — `docs/calibration/PHASE11_CAPSTONE.md` + `scripts/atlas_model.py`.** The
+> small-parameter model is stated precisely (1 free continuous physical parameter `n`; the ice lattice
+> fixed; ~7 discrete habits) and **code-backed**: the whole classified atlas recomputes from `n` (vary
+> `n` → every radius and wall shifts; CZA+CHA = 90° at every `n`). The **match scorecard** is uniformly
+> green (all forward predictions match the documented catalog; the invisible-halo search confirmed Berry's
+> *absence*), and the **failure boundaries are named** (multiple-scattering, the Moilanen/elliptical/
+> Bottlinger trio, the §0.2 ray-optics limit, the forward-model coverage gaps). The §6 gates below were
+> audited in the capstone (no inversion, no physics/priority, no armchair catastrophe). The remaining
+> optional step is the HaloSim forward cross-render of the cells (the apparatus-verifies-it-forward leg).
 
 ## 6. Falsification surface / scope gates
 

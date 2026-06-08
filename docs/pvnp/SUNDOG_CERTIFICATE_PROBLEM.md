@@ -17,14 +17,16 @@ scaling the find-vs-check gap to `218,999×` at `[192,96]w18` (receipts
 [`2026-06-06_certificate_syndrome_v3.md`](receipts/2026-06-06_certificate_syndrome_v3.md)).
 The §6 "UNVERIFIED-BY-RUN" risk is thereby resolved for these named regimes/classes; the
 standing boundary is that the thresholds are against named attackers and import decoding
-hardness — no cryptographic one-wayness or P-vs-NP claim. **Deductive core (2026-06-08):** the
+hardness — no cryptographic one-wayness or P-vs-NP claim. **Deductive core (2026-06-08):** this
 instance's *soundness* (accept ⟹ safe; spoofing structurally impossible) and *lossiness* (`z=He`, `s`
 gone, `|F|ᵏ`/syndrome) are now **machine-checked in Lean 4** — `sorry`-free, axiom-clean, referee-free,
 public at [github.com/humiliati/sundogcert](https://github.com/humiliati/sundogcert) (see
 [`../SUNDOG_V_CERTIFICATE_LEAN.md`](../SUNDOG_V_CERTIFICATE_LEAN.md)). This is the deductive complement to
-the empirical attacker/scaling ladders; the imported hardness is unchanged. The Lean characterization also
-closes the prototype note's **degenerate cheap-reject (RISK 1)**: the non-degenerate column-weight reject
-bound fires at `τ > 0`, and its basis-dependence is proved to be the shadow of the imported hardness.
+the empirical attacker/scaling ladders; the imported hardness is unchanged. The same Lean repo now includes
+real-analysis shadow decay and halo minimum-deviation geometry as method examples, not P-vs-NP evidence.
+The Lean characterization also closes the prototype note's **degenerate cheap-reject (RISK 1)**: the
+non-degenerate column-weight reject bound fires at `τ > 0`, and its basis-dependence is proved to be the
+shadow of the imported hardness.
 
 ---
 

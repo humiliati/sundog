@@ -19,6 +19,18 @@ The public question is small enough to defend:
 > recognisable halo display from a small set of physically meaningful
 > sliders, while staying interactive in the browser?
 
+**Machine-checked halo core (2026-06-08):** the public Lean repo now includes
+`HaloGeometry.lean`, a textbook geometric-optics proof of the 22-degree halo's
+minimum-deviation principle. It proves `dev_value` and
+`min_deviation_stationary` for
+`dev n A r = arcsin(n * sin r) + arcsin(n * sin(A - r)) - A`, with the
+no-total-internal-reflection differentiability condition carried explicitly.
+The imported wall is named outside the proof: 60-degree prism geometry, measured
+ice index, Snell refraction, ray exit, and the observed bright ring at the
+deviation extremum. See
+[`SUNDOG_V_CERTIFICATE_LEAN.md`](SUNDOG_V_CERTIFICATE_LEAN.md) and
+[github.com/humiliati/sundogcert](https://github.com/humiliati/sundogcert).
+
 The workbench should live as `sundog-workbench.html` until the static pose is
 locked, then promote to `index.html` as the hero. A short snapshot of the
 locked composition with subtle idle scintillation can serve as the public
