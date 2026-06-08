@@ -131,6 +131,11 @@ theme-matching.
   [`pvnp/receipts/2026-06-04_certificate_syndrome_v1.md`](pvnp/receipts/2026-06-04_certificate_syndrome_v1.md),
   [`pvnp/receipts/2026-06-05_certificate_syndrome_v2.md`](pvnp/receipts/2026-06-05_certificate_syndrome_v2.md),
   [`pvnp/receipts/2026-06-06_certificate_syndrome_v3.md`](pvnp/receipts/2026-06-06_certificate_syndrome_v3.md).
+  **Deductive core (2026-06-08):** the instance's *soundness* and *lossiness* (the `z=He` drop of `s`)
+  are now **machine-checked in Lean** (axiom-clean, referee-free; public at
+  [github.com/humiliati/sundogcert](https://github.com/humiliati/sundogcert),
+  [`SUNDOG_V_CERTIFICATE_LEAN.md`](SUNDOG_V_CERTIFICATE_LEAN.md)) — the deductive complement to the
+  measured ladders; the imported resistance is unchanged.
   -> [`SUNDOG_V_P_V_NP.md`](SUNDOG_V_P_V_NP.md).
 - **ARC-AGI - CONVERGENCE-TO-NULL on the signature *shadow*; CAPABILITY-FLOOR on
   the *body*; body-resistance probe + v2 expansion ran 2026-06-01 -> the

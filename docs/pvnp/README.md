@@ -6,6 +6,17 @@ Main roadmap:
 
 - [`../SUNDOG_V_P_V_NP.md`](../SUNDOG_V_P_V_NP.md)
 
+Machine-checked deductive core (Lean, 2026-06-08):
+
+- [`../SUNDOG_V_CERTIFICATE_LEAN.md`](../SUNDOG_V_CERTIFICATE_LEAN.md) — the certificate's **soundness +
+  lossiness**, proved in Lean 4 (`sorry`-free, axiom-clean, **referee-free**). Public and reproducible at
+  [github.com/humiliati/sundogcert](https://github.com/humiliati/sundogcert) (`lake build` re-certifies
+  every theorem). The *deductive* complement to the empirical v1→v6 cost receipts below; hardness stays
+  imported, never proven. Includes the full characterization of the `colWeightLb` reject bound
+  (sound / tight-scaling / basis-loose / degradation), closing the **degenerate cheap-reject (RISK 1)**
+  question from the prototype note: the non-degenerate column-weight bound rejects at `τ > 0`, with its
+  basis-dependence proved to be the shadow of the imported hardness.
+
 Phase-4 synthesis:
 
 - [`SUNDOG_CERTIFICATE_PROBLEM.md`](SUNDOG_CERTIFICATE_PROBLEM.md) — theorem-shaped

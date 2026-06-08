@@ -8,6 +8,12 @@
 > [`CROSS_SUBSTRATE_NOTES.md`](CROSS_SUBSTRATE_NOTES.md)
 > "Cross-Substrate Generality Failure Map".
 
+> **Machine-checked deductive core (2026-06-08):** the certificate's *soundness and lossiness* are now
+> proved in Lean 4 — `sorry`-free, axiom-clean, **referee-free** — and public at
+> [github.com/humiliati/sundogcert](https://github.com/humiliati/sundogcert). See the
+> [Machine-Checked Core ledger](SUNDOG_V_CERTIFICATE_LEAN.md). This is the *deductive* complement to the
+> empirical v1–v6 cost receipts; neither proves the decoding hardness, which both import.
+
 Working hook:
 
 > Safe policies may be hard to find, but their shadows may be easier to verify.
