@@ -91,7 +91,10 @@
         }
 
         .eyebrow {
-            color: var(--primary-mid);
+            /* Darkened from var(--primary-mid) #7396a8 (3.0:1) to clear WCAG AA
+               on the light hero. The .lead-framing/.non-claims/.fellowship-invite
+               variants override this for their own contexts. */
+            color: #466b80;
             font-size: 0.78rem;
             font-weight: 800;
             letter-spacing: 0.14em;
@@ -177,7 +180,7 @@
 
         section.result > .section-note,
         section.content-section > .section-note {
-            color: #6A7A86;
+            color: #5a6772; /* was #6A7A86 (4.22:1) — darkened to clear WCAG AA */
             font-size: 0.95rem;
             margin-bottom: 1.6rem;
         }
@@ -319,7 +322,7 @@
 
         .severe-example .pane .meta {
             font-size: 0.78rem;
-            color: #6A7A86;
+            color: #5a6772; /* was #6A7A86 (4.45:1 on the white panes) — AA */
             margin-top: 0.6rem;
             font-family: var(--sd-font-data, "IBM Plex Mono", ui-monospace, monospace);
         }
@@ -335,7 +338,7 @@
         }
 
         .non-claims .eyebrow {
-            color: #8B6B1A;
+            color: #7a5c12; /* was #8B6B1A (4.31:1 on the cream aside) — AA */
             margin-bottom: 0.4rem;
         }
 
