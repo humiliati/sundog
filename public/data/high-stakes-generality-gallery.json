@@ -173,11 +173,11 @@
       "category": "math-ledger",
       "status": "draft-handoff",
       "transferQuestion": "Can a compact signature behave like a cheaper certificate for a bounded alignment-verification problem?",
-      "currentRead": "The v0-v6 chain is safety-complete and v6 op-count positive; Phase 2 v1 earned a bounded-positive mesa bridge receipt; Phase 3 v0 falsified at small capacity; Phase 3 v1 named-quarantined as a consensus-only repair; Phase 3 v2 is provenance-corrected and frozen, and the successor v2b fresh holdout is complete but unscored.",
+      "currentRead": "The verifier reached bounded-positive at v6 on the frozen op-count gate. The mesa transplant was spoofed at small capacity, then closed by 3-of-4 consensus with a block-unstable quarantine. A Lean core now verifies soundness and lossiness; decoding hardness stays imported.",
       "blocker": "The v1 consensus rule closes unsafe promotion, but the mixed-objective disclosure flag inherits block-drift on a protected anchor.",
       "nextAction": "Implement the frozen Phase 3 v2/v2b disclosure-consensus harness, then score the v1 regression set and corrected v2b fresh holdout.",
       "publicBoundary": "No complexity-class result, polynomial certificate, or P-vs-NP progress is claimed.",
-      "chartHeadline": "op-count positive; wall-time diagnostic",
+      "chartHeadline": "v6 positive; Lean core fenced",
       "metrics": [
         {
           "label": "filed receipts",
@@ -190,13 +190,14 @@
           "unit": "items"
         },
         {
-          "label": "p3 threshold",
+          "label": "Lean core",
           "value": 1,
-          "unit": "<= small"
+          "unit": "sound+lossy"
         }
       ],
       "sources": [
         "docs/SUNDOG_V_P_V_NP.md",
+        "docs/SUNDOG_V_CERTIFICATE_LEAN.md",
         "docs/pvnp/README.md",
         "docs/pvnp/PHASE1_V6_SLATE.md",
         "docs/pvnp/PHASE2_MESA_BRIDGE_V0_SLATE.md",

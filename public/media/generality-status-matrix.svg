@@ -58,8 +58,8 @@
     <text x="464" y="544" fill="#214B36" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">DRAFT HANDOFF</text>
   </g>
     <text x="82" y="544" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="24" font-weight="850" letter-spacing="0">P-vs-NP</text>
-    <text x="82" y="572" fill="#C9972F" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" font-weight="800" text-anchor="start" letter-spacing="0"><tspan x="82" dy="0">op-count positive; wall-time</tspan><tspan x="82" dy="17">diagnostic</tspan></text>
-    <text x="82" y="620" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="400" text-anchor="start" letter-spacing="0"><tspan x="82" dy="0">The v0-v6 chain is safety-complete and v6</tspan><tspan x="82" dy="19">op-count positive; Phase 2 v1 earned a</tspan><tspan x="82" dy="19">bounded-positive mesa bridge receipt; Phase 3</tspan><tspan x="82" dy="19">v0 falsified at small capacity; Phase 3 v1</tspan><tspan x="82" dy="19">named-quarantined as a consensus-only repair;</tspan><tspan x="82" dy="19">Phase 3 v2 is provenance-corrected and frozen,</tspan><tspan x="82" dy="19">and the successor v2b fresh holdout is complete</tspan><tspan x="82" dy="19">but unscored.</tspan></text>
+    <text x="82" y="572" fill="#C9972F" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" font-weight="800" text-anchor="start" letter-spacing="0"><tspan x="82" dy="0">v6 positive; Lean core fenced</tspan></text>
+    <text x="82" y="620" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="400" text-anchor="start" letter-spacing="0"><tspan x="82" dy="0">The verifier reached bounded-positive at v6 on</tspan><tspan x="82" dy="19">the frozen op-count gate. The mesa transplant</tspan><tspan x="82" dy="19">was spoofed at small capacity, then closed by</tspan><tspan x="82" dy="19">3-of-4 consensus with a block-unstable</tspan><tspan x="82" dy="19">quarantine. A Lean core now verifies soundness</tspan><tspan x="82" dy="19">and lossiness; decoding hardness stays</tspan><tspan x="82" dy="19">imported.</tspan></text>
     <line x1="82" y1="666" x2="600" y2="666" stroke="#DCE6EC" stroke-width="1"/>
     <g>
         <text x="82" y="696" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="22" font-weight="850" letter-spacing="0">11</text>
@@ -69,7 +69,7 @@
         <text x="184" y="718" fill="#6B7B88" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="10" font-weight="700" text-anchor="start" letter-spacing="0"><tspan x="184" dy="0">v6 false</tspan><tspan x="184" dy="13">accepts</tspan><tspan x="184" dy="13">(items)</tspan></text>
       </g><g>
         <text x="286" y="696" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="22" font-weight="850" letter-spacing="0">1</text>
-        <text x="286" y="718" fill="#6B7B88" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="10" font-weight="700" text-anchor="start" letter-spacing="0"><tspan x="286" dy="0">p3 threshold</tspan><tspan x="286" dy="13">(&lt;= small)</tspan></text>
+        <text x="286" y="718" fill="#6B7B88" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="10" font-weight="700" text-anchor="start" letter-spacing="0"><tspan x="286" dy="0">Lean core</tspan><tspan x="286" dy="13">(sound+lossy)</tspan></text>
       </g>
   </g>
 <g class="generality-card" data-project="yang_mills">

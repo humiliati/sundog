@@ -25,6 +25,7 @@ import numpy as np
 N_ICE = 1.31
 WEDGE_DEG = 60.0          # 22deg-halo prism wedge: two prism faces 120deg apart -> 60deg apex
 FACE_SEP = math.radians(180.0 - WEDGE_DEG)   # angle between the two outward face normals (120deg)
+LOWITZ_ALPHA0 = math.radians(60.0)           # fixed reference roll for the Lowitz (gamma,phi) manifold
 
 
 def refract(d, n, eta):
@@ -104,29 +105,59 @@ def sky_grid(h_deg, n=N_ICE, ngrid=300, wedge="prism60"):
     wedge selects the face-pair (both keep the 2 orientation DOF γ,α of the horizontal column):
       'prism60' — two prism SIDE faces 120° apart (60° refracting wedge) -> the 22° / tangent-arc family.
       'basal90' — a prism side face + a BASAL (end) face (normal = c, ⟂ the side faces -> 90° wedge) ->
-                  the 46° / supralateral / infralateral family (Phase 8-B's 2-DOF swallowtail extension)."""
+                  the 46° / supralateral / infralateral family (Phase 8-B's 2-DOF swallowtail extension).
+      'wegener' — entry prism side face -> internal REFLECTION off a basal end face (TIR) -> exit the
+                  other prism side face (60° wedge + one basal bounce) -> the Wegener anthelic arc.
+      'lowitz60' — the LOWITZ manifold: the column frame ROTATED by φ about the horizontal a-axis u
+                  (so the c-axis tilts out of horizontal, c_z=sin φ — a geometrically DISTINCT 2-surface
+                  in SO(3), meeting the column torus only at φ=0). The 2 DOF are (γ, φ) with the roll
+                  FIXED at LOWITZ_ALPHA0; the SAME 60° prism side-face pair. -> the Lowitz arcs."""
     su = sun_dir(h_deg)
     d0 = -su
     g = np.linspace(0.0, 2 * math.pi, ngrid, endpoint=False)
     a = np.linspace(0.0, 2 * math.pi, ngrid, endpoint=False)
     G, A = np.meshgrid(g, a, indexing="ij")
     G, A = G.ravel(), A.ravel()
-    cg, sg, cA, sA = np.cos(G), np.sin(G), np.cos(A), np.sin(A)
-    n1 = np.stack([cA * sg, -cA * cg, sA], axis=-1)                  # entry: prism side face (roll α)
-    if wedge == "prism60":
-        cA2, sA2 = np.cos(A + FACE_SEP), np.sin(A + FACE_SEP)
-        n2 = np.stack([cA2 * sg, -cA2 * cg, sA2], axis=-1)          # exit: other side face (60° wedge)
-    elif wedge == "basal90":
-        n2 = np.stack([cg, sg, np.zeros_like(cg)], axis=-1)         # exit: basal end face, normal = c (90°)
+    cg, sg = np.cos(G), np.sin(G)
+    reflect_basal = False
+    if wedge == "lowitz60":
+        # A = φ (Lowitz rotation about u); roll fixed at a0. Frame: u=(sg,-cg,0) [horizontal a-axis],
+        # w' = w·cosφ − c·sinφ = (−cg·sinφ, −sg·sinφ, cosφ). n_k = cos(a0+kΔ)·u + sin(a0+kΔ)·w'.
+        phi = A
+        sphi, cphi = np.sin(phi), np.cos(phi)
+        wpx, wpy, wpz = -cg * sphi, -sg * sphi, cphi
+        c0, s0 = math.cos(LOWITZ_ALPHA0), math.sin(LOWITZ_ALPHA0)
+        c0b, s0b = math.cos(LOWITZ_ALPHA0 + FACE_SEP), math.sin(LOWITZ_ALPHA0 + FACE_SEP)
+        n1 = np.stack([c0 * sg + s0 * wpx, -c0 * cg + s0 * wpy, s0 * wpz], axis=-1)
+        n2 = np.stack([c0b * sg + s0b * wpx, -c0b * cg + s0b * wpy, s0b * wpz], axis=-1)
     else:
-        raise ValueError(f"unknown wedge {wedge!r}")
+        cA, sA = np.cos(A), np.sin(A)
+        n1 = np.stack([cA * sg, -cA * cg, sA], axis=-1)             # entry: prism side face (roll α)
+        cA2, sA2 = np.cos(A + FACE_SEP), np.sin(A + FACE_SEP)
+        n2_side = np.stack([cA2 * sg, -cA2 * cg, sA2], axis=-1)     # the OTHER prism side face
+        nb = np.stack([cg, sg, np.zeros_like(cg)], axis=-1)        # basal end face, normal = c
+        if wedge == "prism60":
+            n2 = n2_side                                           # 60° wedge: two side faces
+        elif wedge == "basal90":
+            n2 = nb                                                # 90° wedge: side + basal
+        elif wedge == "wegener":
+            n2 = n2_side; reflect_basal = True                    # side -> basal reflection -> side
+        else:
+            raise ValueError(f"unknown wedge {wedge!r}")
     M = G.shape[0]
     d0b = np.broadcast_to(d0, (M, 3))
     entry_ok = (n1 @ d0) < 0
     d1, v1 = _refract_vec(d0b, n1, 1.0 / n)
-    exit_ok = np.sum(d1 * n2, axis=-1) > 0
-    d2, v2 = _refract_vec(d1, n2, n)
-    ok = entry_ok & v1 & exit_ok & v2
+    if reflect_basal:
+        dn = np.sum(d1 * nb, axis=-1, keepdims=True)
+        d_int = d1 - 2.0 * dn * nb                                  # internal reflection off the basal plane
+        tir_ok = np.abs(dn[:, 0]) < math.cos(math.asin(1.0 / n))   # incidence > critical angle => TIR
+    else:
+        d_int = d1
+        tir_ok = np.ones(M, dtype=bool)
+    exit_ok = np.sum(d_int * n2, axis=-1) > 0
+    d2, v2 = _refract_vec(d_int, n2, n)
+    ok = entry_ok & v1 & tir_ok & exit_ok & v2
     sky = -d2
     sky[~ok] = np.nan
     return G, A, sky, ok, su

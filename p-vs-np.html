@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Sundog P-vs-NP verifier: a cheap-to-check certificate, the seed-block drift that spoofed it, and the consensus repair that half-held. Bounded alignment-verification borrowing the finding-vs-checking asymmetry as vocabulary. NOT the Millennium P-vs-NP problem; op-count not wall-clock; mesa-local.">
-    <meta name="keywords" content="P-vs-NP, verifier, finding vs checking, alignment verification, mesa, certificate, spoof, consensus repair, claim hygiene, Sundog, review-gated">
+    <meta name="description" content="Sundog P-vs-NP verifier: a cheap-to-check certificate, the seed-block drift that spoofed it, the consensus repair, and a Lean-checked soundness/lossiness core. NOT the Millennium P-vs-NP problem; hardness imported; op-count not wall-clock.">
+    <meta name="keywords" content="P-vs-NP, verifier, finding vs checking, alignment verification, mesa, certificate, Lean, spoof, consensus repair, claim hygiene, Sundog, review-gated">
     <meta name="theme-color" content="#1A3A52">
     <meta name="author" content="Sundog Research Lab">
     <link rel="icon" href="/favicon.ico" sizes="any">
@@ -18,23 +18,24 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Sundog">
     <meta property="og:title" content="P-vs-NP Verifier - cheap to check, spoofed by drift, repaired by consensus">
-    <meta property="og:description" content="A reward-blind certificate that costs fewer ops to check than the policy cost to find (0.948587). Transplanted to the mesa bridge it was spoofed by a single drifting seed block; a 3-of-4 consensus rule closed the spoof and stubbed its toe on a disclosure flag. Bounded alignment-verification, NOT the Millennium problem.">
+    <meta property="og:description" content="A reward-blind certificate cheaper to check than to find (0.948587), spoofed by drift, repaired by consensus, with soundness/lossiness now Lean-checked. Hardness imported; NOT the Millennium problem.">
     <meta property="og:image" content="https://sundog.cc/og/p-vs-np.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="P-vs-NP verifier card: the finding-vs-checking asymmetry and the seed-block drift spoof.">
     <meta property="og:url" content="https://sundog.cc/p-vs-np">
     <meta property="article:published_time" content="2026-06-01T00:00:00Z">
-    <meta property="article:modified_time" content="2026-06-01T00:00:00Z">
+    <meta property="article:modified_time" content="2026-06-08T00:00:00Z">
     <meta property="article:section" content="Research">
     <meta property="article:tag" content="P-vs-NP">
     <meta property="article:tag" content="verifier">
     <meta property="article:tag" content="alignment verification">
+    <meta property="article:tag" content="Lean">
     <meta property="article:tag" content="claim hygiene">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="P-vs-NP Verifier - cheap to check, spoofed by drift, repaired by consensus">
-    <meta name="twitter:description" content="A reward-blind certificate cheaper to check than to find (0.948587 op-count), spoofed by one drifting seed block, repaired by 3-of-4 consensus. Bounded alignment-verification, review-gated, NOT the Millennium problem.">
+    <meta name="twitter:description" content="A reward-blind certificate cheaper to check than to find, spoofed by drift, repaired by consensus, with soundness/lossiness now Lean-checked. Hardness imported; NOT the Millennium problem.">
     <meta name="twitter:image" content="https://sundog.cc/og/p-vs-np.png">
     <meta name="twitter:image:alt" content="P-vs-NP verifier card: finding-vs-checking asymmetry and the drift spoof.">
 
@@ -43,10 +44,10 @@
       "@context": "https://schema.org",
       "@type": "TechArticle",
       "headline": "P-vs-NP Verifier - cheap to check, spoofed by drift, repaired by consensus",
-      "description": "A reward-blind hidden-basin certificate that costs fewer operations to check (527,297) than the policy cost to find (555,876), a ratio of 0.948587 under a frozen op-count gate. Transplanted to the mesa verification bridge, it was spoofed by a single source-bound seed block whose mean drifted across the accept line at 6.25% of the attacker budget; a frozen 3-of-4 block-consensus rule closed the spoof but quarantined on a block-unstable disclosure flag. Bounded alignment-verification that borrows the finding-vs-checking asymmetry as vocabulary; not the Millennium P-vs-NP problem, not a complexity-theoretic result, op-count not wall-clock, mesa-local.",
+      "description": "A reward-blind hidden-basin certificate that costs fewer operations to check (527,297) than the policy cost to find (555,876), a ratio of 0.948587 under a frozen op-count gate. Transplanted to the mesa verification bridge, it was spoofed by a single source-bound seed block whose mean drifted across the accept line at 6.25% of the attacker budget; a frozen 3-of-4 block-consensus rule closed the spoof but quarantined on a block-unstable disclosure flag. A Lean core now machine-checks soundness and lossiness; decoding hardness stays imported. Bounded alignment-verification that borrows the finding-vs-checking asymmetry as vocabulary; not the Millennium P-vs-NP problem, not a complexity-theoretic result, op-count not wall-clock, mesa-local.",
       "image": "https://sundog.cc/og/p-vs-np.png",
       "datePublished": "2026-06-01",
-      "dateModified": "2026-06-01",
+      "dateModified": "2026-06-08",
       "inLanguage": "en",
       "isAccessibleForFree": true,
       "author": {
@@ -66,10 +67,11 @@
       "about": [
         { "@type": "Thing", "name": "Verification vs search" },
         { "@type": "Thing", "name": "Alignment verification" },
+        { "@type": "Thing", "name": "Lean theorem proving" },
         { "@type": "Thing", "name": "Mesa-optimization" },
         { "@type": "Thing", "name": "Claim hygiene" }
       ],
-      "keywords": "P-vs-NP, verifier, finding vs checking, alignment verification, mesa, claim hygiene"
+      "keywords": "P-vs-NP, verifier, finding vs checking, alignment verification, Lean, mesa, claim hygiene"
     }
     </script>
     <!-- OG-BLOCK-END -->
@@ -460,7 +462,7 @@
     </header>
     <main>
         <section class="pvnp-hero">
-            <p class="eyebrow">High-Stakes Generality · P-vs-NP Verifier · 2026-06-01</p>
+            <p class="eyebrow">High-Stakes Generality · P-vs-NP Verifier · 2026-06-08</p>
             <h1>Cheap to check. So someone tried to spoof it.</h1>
             <p class="lede">
                 A reward-blind certificate decides whether a controller is
@@ -471,9 +473,12 @@
                 attacking. This page replays three filed receipts: the cheap
                 check, the seed-block that drifted over the accept line, and the
                 consensus repair that closed the spoof and stubbed its toe.
+                A separate Lean core now machine-checks the certificate's
+                soundness and lossiness; the decoding hardness stays imported.
             </p>
             <div class="status-ribbon" aria-label="P-vs-NP verifier verdict status">
                 <span class="pass">v6 op-count certificate · BOUNDED POSITIVE</span>
+                <span class="pass">Lean core · soundness/lossiness verified</span>
                 <span class="fail">v0 mesa bridge · FALSIFIED (spoofed)</span>
                 <span class="quar review">v1 consensus repair · NAMED QUARANTINE</span>
                 <span class="review">review-gated · op-count only</span>
@@ -761,6 +766,7 @@
                     <a href="docs/pvnp/receipts/2026-05-31_phase1_toy_verifier_v6.md">v6 bounded-positive receipt</a>
                     <a href="docs/pvnp/receipts/2026-05-31_phase3_capacity_one_wayness_v0.md">v0 falsified-cell receipt</a>
                     <a href="docs/pvnp/receipts/2026-06-01_phase3_capacity_one_wayness_v1.md">v1 consensus-repair receipt</a>
+                    <a href="docs/SUNDOG_V_CERTIFICATE_LEAN.md">Machine-checked core</a>
                     <a href="docs/SUNDOG_V_P_V_NP.md">P-vs-NP ledger</a>
                 </div>
             </div>

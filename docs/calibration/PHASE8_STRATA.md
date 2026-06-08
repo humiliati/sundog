@@ -114,14 +114,66 @@ locator + corank classifier run unchanged on the second 2-DOF caustic family. Re
 - **Both 2-DOF column families (60°-wedge tangent arcs + 90°-wedge 46° arcs) now CONFIRM Berry 1994** — no
   swallowtail, no umbilic. The swallowtail search is **complete for the column habit**.
 
-**STILL STAGED:** **plate** (parhelia/CZA) and **Parry** are **1-DOF** (azimuth only) — their caustics are
-**folds only** (no cusps in a 1-DOF map), so they get a fold-classification, *not* a swallowtail search.
-The remaining genuine 2-DOF case is **pyramidal** (Tape AH-CH10/SAX-CH11 odd-wedge families). **The A₄
-target needs the 3-jet check** (`∂δ=∂²δ=∂³δ=0`, `∂⁴δ≠0`) where the cusp-count method is ambiguous; the
-**D₄ search EXPECTS NONE** (Berry; the anthelic-X is generically two A₂ folds). Every higher stratum →
-Gate-2 catalog cross-check; any bucket-(ii) candidate is the only "prediction," capped P1/P2 internal.
-Expected: A₄ absent / coincident with a named locus; D₄ confirmed-absent → contribution = the systematic
-stratification + the engagement of Berry's open questions, not a new halo.
+**REMAINING GENUINE 2-DOF TARGETS** (a 30-agent enumeration + adversarial DOF-verification, 2026-06-07;
+**corrects the earlier "pyramidal is the only/last 2-DOF case"**). The cusp/swallowtail search needs a 2-D
+orientation manifold (`F: T²→sky`, a square map); THREE single-crystal targets remain, ranked:
+1. **LOWITZ orientation (the strongest, NEXT).** The crystal rocks by the Lowitz angle φ about a
+   horizontal a-axis (⟂ c); orientation params (γ = axis azimuth, φ = Lowitz rotation), the **same 60°
+   prism side-face pair** as the 22° family. Uniquely it is a **geometrically DISTINCT square map in
+   SO(3)** — the c-axis tilts out of horizontal (`c_z = sin φ`; meets the done column torus only on the
+   φ=0 curve) — so its A₃/A₄ inventory is **independent of the column nulls** → the best venue to genuinely
+   *engage* (not just re-confirm) Berry's A₄ question. Implement: `wedge='lowitz60'` — Rodrigues-rotate the
+   column frame by φ about `u`; φ=0 must reduce to `cm._column_normals` exactly.
+2. **Pyramidal-capped horizontal column.** Same (γ,α) column manifold, **new odd Galle wedge** (prism
+   side + pyramid {10-11} cap face) → oriented odd-radius arcs (9/18.3/19.9/23.8/34.9°). `n2 =
+   sin(x)·inplane + cos(x)·c`; x=0 recovers `basal90`.
+3. **Wegener-arc ray path.** Same column torus, **new path** (one internal reflection off a basal face);
+   a workflow agent reported a *grid-stable cusp-count change 4→5* = a **CANDIDATE A₄ signature** —
+   **UNVERIFIED** (needs the eroded robust-regime + 3-jet audit; may be an admissibility-boundary cusp,
+   not a true A₄). The one column path whose A₄ is not a foregone null.
+
+**NOT targets (corrected):** **RANDOM pyramidal** = the odd-radius CIRCULAR halos (9/18/20/23/24/35°) = a
+**3-DOF RING** family (A₂ fold circles, the pyramidal analog of the 22°/46° halos), **NOT** a cusp target;
+oriented pyramidal **plates / Parry** = 1-DOF folds. **Plate & Parry confirmed 1-DOF** (the Parry
+roll-wobble is a *smearing* of the 1-DOF fold curve — 14–24° short of the column's cusp rolls — not a 2nd
+DOF). **D₄ expected absent GENERICALLY** (Berry; the anthelic X-crossing = two transverse A₂ folds from
+*distinct* populations, NOT a single-map D₄ umbilic — the anthelic point is not a D₄ candidate). **The A₄
+target needs the 3-jet check** (`∂δ=∂²δ=∂³δ=0`, `∂⁴δ≠0`) where the cusp-count is ambiguous. Every higher
+stratum → Gate-2 catalog cross-check; bucket-(ii) candidate capped P1/P2 internal. Expected: A₄ absent /
+coincident with a named locus; D₄ confirmed-absent → contribution = the systematic stratification.
+
+## 8-C — Lowitz + Wegener builds (2026-06-07)
+Two of the three remaining 2-DOF targets were built (`sky_grid` gained `wedge='wegener'` and
+`wedge='lowitz60'`) and searched.
+
+**WEGENER (`wedge='wegener'`) — SEARCHED → candidate-A₄ REFUTED, confirms Berry.** Entry prism side →
+internal TIR reflection off a basal face → exit other side face (same (γ,α) column torus). A prior
+workflow agent had flagged a "grid-stable cusp-count change = candidate A₄." Reproduced with our own code
+and **refuted it** by the same audit that the column passed:
+- The extra cusp is a **single, on-meridian (ψ=0) cusp sitting AT the admissibility wall** —
+  boundary-distance **1.0–2.6 cells** (vs the genuine Wegener cusps at bd 13–20, deep interior) — so it is
+  a **component-B admissibility cusp** (the caustic meeting the basal-TIR wall), NOT an intrinsic A₄.
+- The **corank-2 flag at h≈8–11 is marginal** (`s1/scale` floors at 0.024 then recovers; never the clean
+  `s1→0` of a true umbilic) — a low-sun boundary effect, **not a D₄**.
+- The genuine inventory is **6 interior A₃ cusps** (2 apex at 22° ⊕ 4 anthelic at 88°, ψ-symmetric),
+  corank-1, **no A₄, no D₄ → confirms Berry** (the third 2-DOF column family to do so).
+- Lesson: the corank-2 threshold (0.05) over-flags near a TIR boundary; the decisive test is
+  interior-survival + clean `s1→0`, not the threshold alone.
+
+**LOWITZ (`wedge='lowitz60'`) — BUILT → a CANDIDATE higher-catastrophe (the first non-null), UNDER RIGOROUS
+CHARACTERIZATION (not yet banked).** The column frame rotated by φ about the horizontal a-axis u (so the
+c-axis tilts out of horizontal, `c_z=sin φ` — a geometrically DISTINCT 2-surface in SO(3); φ=0 reduces to
+`_column_normals` exactly, verified). The 2 DOF are (γ, φ); roll fixed at `LOWITZ_ALPHA0`. The caustic
+lands at δ≈23°, ψ≈±84° (the Lowitz arcs through the parhelia). **Unlike the column (cusp count flat at 2),
+Lowitz shows a grid-stable, DEEP-INTERIOR (boundary-distance 26.9 cells) cusp-PAIR born at h≈16.5** (at
+δ≈33°, ψ≈±173°, straddling the bottom meridian) **and annihilated at the boundary near h≈31** — an *even*
+(pair) change, the genuine signature of a higher catastrophe (A₃-lips or A₄-swallowtail). It occurs for
+the edge-aligned reference rolls (α0=30/60/105°), not all — consistent with the metamorphosis living on a
+specific Lowitz sub-arc. **This is held as a CANDIDATE, to the same bar that just refuted Wegener.** Open
+before banking: (1) the **A₃-lips vs A₄-swallowtail label** (the 3-jet `∂δ=∂²δ=∂³δ=0` check at the birth);
+(2) tie the α0-dependence to the **physical upper/middle/lower Lowitz arcs**; (3) a **plate-Lowitz
+cross-check** (the classic c-vertical construction) to confirm it isn't specific to the column-Lowitz
+parameterization. A characterization workflow is running.
 
 ## Lit-pass Track B — RESOLVED 2026-06-07
 **Tape & Können 1999 (Appl. Opt. 38:1552, full 74-pp text read): pure parameterization, no caustic/
@@ -139,7 +191,8 @@ catastrophe-stratum corank is now a **computed** property of the halo caustic (t
 cleared), the **A₃-vs-D₄ question is closed (corank-1, A₃-class)**, the cusp locator places the **A₃
 point-cusps** (apexes for the 60°-wedge tangent arcs; lateral pairs for the 90°-wedge 46° arcs) and the
 **29.7° merge as the A₃-class metamorphosis**, and the **A₄ swallowtail search is a clean NULL on both
-families** (cusp counts stable — confirms Berry 1994), **no D₄** anywhere. 8-B's remaining leg = the
-**pyramidal** habit (the other genuine 2-DOF case; plate/Parry are 1-DOF → folds only, a fold-
-classification not a swallowtail search) + the optional A₄ 3-jet refinement. **NOT public-eligible**
-(Phase 0.5 lit-pass, incl. the Tape & Können 1999 prior-art check, gates any claim).
+families** (cusp counts stable — confirms Berry 1994), **no D₄** anywhere. 8-B's remaining legs (ranked
+by the 2026-06-07 enumeration) = **Lowitz** (the strongest — a geometrically distinct SO(3) square map,
+NEXT), the **pyramidal-capped column** (new odd Galle wedge), and the **Wegener path** (an unverified
+candidate-A₄ signature) — see "REMAINING GENUINE 2-DOF TARGETS" above. **NOT public-eligible** (Phase 0.5
+lit-pass, incl. the Tape & Können 1999 prior-art check, gates any claim).
