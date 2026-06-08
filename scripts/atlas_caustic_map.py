@@ -95,6 +95,32 @@ def _refract_vec(d, n, eta):
     return t, valid
 
 
+def sky_grid(h_deg, n=N_ICE, ngrid=300):
+    """Vectorized column halo function over the (gamma,alpha) torus. Returns G,A (M,) orientation grids;
+    sky (M,3) apparent-source unit vectors (NaN where inadmissible); valid (M,) bool; su (3,) sun dir.
+    M = ngrid*ngrid. (Shared kernel for the Phase-8 Jacobian/strata classifier.)"""
+    su = sun_dir(h_deg)
+    d0 = -su
+    g = np.linspace(0.0, 2 * math.pi, ngrid, endpoint=False)
+    a = np.linspace(0.0, 2 * math.pi, ngrid, endpoint=False)
+    G, A = np.meshgrid(g, a, indexing="ij")
+    G, A = G.ravel(), A.ravel()
+    cg, sg, cA, sA = np.cos(G), np.sin(G), np.cos(A), np.sin(A)
+    cA2, sA2 = np.cos(A + FACE_SEP), np.sin(A + FACE_SEP)
+    n1 = np.stack([cA * sg, -cA * cg, sA], axis=-1)
+    n2 = np.stack([cA2 * sg, -cA2 * cg, sA2], axis=-1)
+    M = G.shape[0]
+    d0b = np.broadcast_to(d0, (M, 3))
+    entry_ok = (n1 @ d0) < 0
+    d1, v1 = _refract_vec(d0b, n1, 1.0 / n)
+    exit_ok = np.sum(d1 * n2, axis=-1) > 0
+    d2, v2 = _refract_vec(d1, n2, n)
+    ok = entry_ok & v1 & exit_ok & v2
+    sky = -d2
+    sky[~ok] = np.nan
+    return G, A, sky, ok, su
+
+
 def caustic_coverage(h_deg, n=N_ICE, ngrid=360, dmax=46.0):
     """Sweep (gamma,alpha) vectorized; return per-psi minimum deviation delta_min(psi) of the lit
     region near the sun. The tangent-arc caustic is delta_min(psi); a finite value means the arc
