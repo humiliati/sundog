@@ -76,5 +76,46 @@ counts_b = [sm.cusp_count(h, wedge="basal90")[0] for h in (12.0, 18.0, 22.0, 25.
 check("NO A₄ swallowtail on the 46° family: cusp count stable at 2 (confirms Berry on the 2nd family)",
       set(counts_b) == {2}, f"counts over h≲28: {counts_b}")
 
-print(f"\n{'ALL PASS — corank + cusps DERIVED on BOTH 2-DOF families; 29.7° = A₃-class metamorphosis, apex/lateral point-cusps, no A₄/D₄' if fail == 0 else str(fail) + ' FAILED'}")
+print("\nPhase 8-C — Lowitz manifold (wedge='lowitz60'): the A₃-lips metamorphosis, NOT Berry's A₄:")
+import numpy as np
+from scipy import ndimage
+import atlas_caustic_map as cm
+import math as _math
+
+
+def _interior_cusps(h, wedge, ng=320, bd=5.0):
+    cusp, detJ, gg, good, X, Y, su = sm.cusp_field(h, wedge=wedge, ngrid=ng)
+    dist = ndimage.distance_transform_edt(good)
+    lab, nl = ndimage.label(cusp, structure=np.ones((3, 3)))
+    return sum(1 for i in range(1, nl + 1) if np.mean(dist[tuple(np.where(lab == i))]) >= bd)
+
+
+# (i) construction sound: at φ=0 the lowitz60 entry normal == the column normal at roll LOWITZ_ALPHA0
+G, A, sky, ok, su = cm.sky_grid(20.0, wedge="lowitz60", ngrid=6)
+i0 = int(np.argmin(np.abs(A)))            # a cell with φ≈0
+g0 = float(G[i0])
+n1c, _ = cm._column_normals(g0, cm.LOWITZ_ALPHA0)
+c0, s0 = _math.cos(cm.LOWITZ_ALPHA0), _math.sin(cm.LOWITZ_ALPHA0)
+n1L = np.array([c0 * _math.sin(g0), -c0 * _math.cos(g0), s0])   # lowitz n1 at φ=0
+check("lowitz60 construction sound: φ=0 reduces to the column normal exactly", np.allclose(n1c, n1L),
+      f"|Δ|={np.max(np.abs(n1c - n1L)):.2e}")
+
+# (ii) the A₃-lips cusp-pair birth: interior count 2→4→2 at the (non-canonical) α0=60° face axis
+cm.LOWITZ_ALPHA0 = _math.radians(60.0)
+below, peak, above = _interior_cusps(14, "lowitz60"), _interior_cusps(22, "lowitz60"), _interior_cusps(33, "lowitz60")
+check("Lowitz A₃-lips: an interior cusp PAIR is born (2→4→2) — the search's 1st cusp-creation",
+      below == 2 and peak == 4 and above == 2, f"interior counts h14/h22/h33 = {below}/{peak}/{above}")
+rl = sm.corank_on_caustic(22.0, wedge="lowitz60")
+check("Lowitz is corank-1 (no D₄ umbilic) through the birth", rl is not None and rl["corank"] == 1,
+      f"s1_min/scale={rl['s1_min_rel']:.3f}" if rl else "None")
+
+# (iii) specificity: the canonical edge axis α0=90° AND the column are FLAT at 2 (the birth is distinct, α0-specific)
+cm.LOWITZ_ALPHA0 = _math.radians(90.0)
+edge_flat = _interior_cusps(14, "lowitz60") == 2 and _interior_cusps(22, "lowitz60") == 2
+col_flat = all(sm.cusp_count(h)[0] == 2 for h in (22.0, 30.0, 40.0))   # column robust regime (h≥22)
+check("the birth is α0-specific: canonical edge-Lowitz (α0=90°) + the column both stay flat at 2",
+      edge_flat and col_flat, f"edge-flat={edge_flat}, column-flat={col_flat}")
+cm.LOWITZ_ALPHA0 = _math.radians(60.0)            # restore the documented value
+
+print(f"\n{'ALL PASS — corank + cusps DERIVED on 4 maps (2 column wedges + Wegener + Lowitz); 29.7° A₃ metamorphosis; Lowitz A₃-lips (NOT A₄); no D₄; confirms Berry' if fail == 0 else str(fail) + ' FAILED'}")
 sys.exit(1 if fail else 0)

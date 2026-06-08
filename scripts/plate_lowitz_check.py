@@ -4,20 +4,23 @@
 Constructs the CLASSIC plate-Lowitz orientation family from scratch (NOT reusing the repo's
 'lowitz60' wedge, which is the column-Lowitz: c starts HORIZONTAL). Here:
 
-  - A hexagonal PLATE crystal: c-axis VERTICAL at rest (beta=0). The six prism SIDE faces have
-    outward normals in the horizontal plane, at azimuths 0,60,120,...; the sun-dog (parhelion)
-    path refracts through an ALTERNATE side-face pair separated by 120deg (a 60deg refracting
-    wedge, == cm.FACE_SEP), with n=cm.N_ICE.
-  - The LOWITZ rotation: tilt the whole crystal by angle beta about a HORIZONTAL axis L lying in
-    the basal plane (the plate's c=0 plane), at azimuth psi. Classic plate-Lowitz: L passes
-    through opposite prism EDGES. The 2 DOF are (psi, beta).
+  - A hexagonal PLATE crystal: c-axis VERTICAL at rest. The six prism SIDE faces have outward
+    normals in the horizontal plane at azimuths 0,60,...,300; the prism EDGES bisect them at
+    30,90,... The sun-dog (parhelion) path refracts through an ALTERNATE side-face pair separated
+    by 120deg (a 60deg refracting wedge == cm.FACE_SEP), n=cm.N_ICE.
+  - 2 DOF (theta, beta):
+        theta = crystal spin about its own c-axis (the fast variable that draws the parhelion);
+        beta  = LOWITZ tilt about a BODY-FIXED horizontal axis L that lies in the basal plane and
+                passes through opposite prism EDGES (azimuth 30deg in the body frame). L spins with
+                the crystal: the tilt is applied AFTER the spin, about R_z(theta)·L0.
+    This is the classic plate-Lowitz: at beta=0 the family is the ordinary plate parhelion; beta
+    tilts the crystal about an edge, lofting the image into the Lowitz arcs.
 
-At beta=0 this must reproduce the plate PARHELION (~22deg from the sun, in the sun's almucantar).
+At beta=0 this reproduces the plate PARHELION (~22deg from the sun, in the almucantar) — verified.
 Then we run the SAME interior cusp-count + boundary-distance metamorphosis search across sun
-elevation h that detected the column-Lowitz 2->4->2 birth, and ask whether the plate-Lowitz
-reproduces it.
+elevation h that detected the column-Lowitz 2->4->2 birth, and ask whether plate-Lowitz reproduces it.
 
-Reuses cm._refract_vec / cm.sun_dir / cm.FACE_SEP / cm.N_ICE. Does NOT touch existing wedges.
+Reuses cm._refract_vec / cm.refract / cm.sun_dir / cm.FACE_SEP / cm.N_ICE. Touches no existing wedge.
 """
 import math
 import sys
@@ -28,11 +31,24 @@ from scipy import ndimage
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import atlas_caustic_map as cm
 
+ERODE = 3  # match atlas_strata_map.ERODE
+
+# Resting hex-plate geometry (c vertical = +z):
+_FA0 = np.array([1.0, 0.0, 0.0])                                  # prism side face A, azimuth 0
+_FB0 = np.array([math.cos(cm.FACE_SEP), math.sin(cm.FACE_SEP), 0.0])  # side face B, azimuth 120
+# Body Lowitz axis through opposite prism EDGES (edges bisect faces -> azimuth 30deg), in basal plane:
+_LEDGE_AZ = math.radians(30.0)
+_L0 = np.array([math.cos(_LEDGE_AZ), math.sin(_LEDGE_AZ), 0.0])
+
+
+def _rot_z(t):
+    c, s = math.cos(t), math.sin(t)
+    return np.array([[c, -s, 0.0], [s, c, 0.0], [0.0, 0.0, 1.0]])
+
 
 def _rot_axis(axis, theta):
-    """Rotation matrix for angle theta about unit axis (Rodrigues), axis shape (...,3) or (3,)."""
-    axis = np.asarray(axis, float)
-    ax = axis / np.linalg.norm(axis)
+    ax = np.asarray(axis, float)
+    ax = ax / np.linalg.norm(ax)
     x, y, z = ax
     c, s = math.cos(theta), math.sin(theta)
     C = 1.0 - c
@@ -43,74 +59,72 @@ def _rot_axis(axis, theta):
     ])
 
 
-# The two refracting prism side-face outward normals of a RESTING hex plate (c vertical).
-# Side-face normals lie in the horizontal plane. A free crystal-azimuth phase 'theta_az' would
-# rotate them about the vertical; for the plate parhelion the sun-relative geometry is set by the
-# face pair, so we expose the azimuth as the 2nd usable DOF only via the Lowitz axis (psi). The
-# resting face pair: normal A at azimuth 0, normal B at azimuth 120deg (== 180-WEDGE = FACE_SEP).
-_FA0 = np.array([1.0, 0.0, 0.0])
-_FB0 = np.array([math.cos(cm.FACE_SEP), math.sin(cm.FACE_SEP), 0.0])
-_CVERT = np.array([0.0, 0.0, 1.0])
-
-
-def plate_lowitz_normals(psi, beta):
-    """Outward normals (n1,n2) of the sun-dog refracting prism-face pair for a plate-Lowitz crystal
-    tilted by beta about the horizontal axis L at azimuth psi (L in the resting basal plane).
-    psi,beta scalars -> (n1,n2) each (3,)."""
-    L = np.array([math.cos(psi), math.sin(psi), 0.0])   # horizontal Lowitz axis in the basal plane
-    R = _rot_axis(L, beta)
+def plate_lowitz_normals(theta, beta, ledge_az=_LEDGE_AZ):
+    """Outward normals (n1,n2) of the sun-dog face pair for a plate-Lowitz crystal spun by theta
+    about c then Lowitz-tilted by beta about the body edge axis L (spun with the crystal)."""
+    Rz = _rot_z(theta)
+    L0 = np.array([math.cos(ledge_az), math.sin(ledge_az), 0.0])
+    L = Rz @ L0
+    Rl = _rot_axis(L, beta)
+    R = Rl @ Rz
     return R @ _FA0, R @ _FB0
 
 
-def sky_grid_platelowitz(h_deg, n=cm.N_ICE, ngrid=300, az0_deg=0.0):
-    """Plate-Lowitz halo function over the (psi, beta) torus. Mirrors cm.sky_grid's contract:
-    returns G(=psi), A(=beta) (M,), sky (M,3) apparent-source unit (NaN where inadmissible),
-    ok (M,) bool, su (3,). 60deg side-face pair, single basal-plane Lowitz tilt axis.
-
-    psi spans [0,2pi); beta spans [0,2pi) to match the torus convention of the column search
-    (the physics is pi-periodic in beta up to face relabeling, but a full 2pi sweep keeps the
-    grid topology identical to the lowitz60 comparison and never misses a cusp)."""
+def sky_grid_platelowitz(h_deg, n=cm.N_ICE, ngrid=300, az0_deg=0.0, ledge_az=_LEDGE_AZ):
+    """Plate-Lowitz halo function over the (theta, beta) torus. Mirrors cm.sky_grid's contract:
+    returns G(=theta), A(=beta) (M,), sky (M,3) apparent-source unit (NaN where inadmissible),
+    ok (M,) bool, su (3,). 60deg side-face pair, body-fixed Lowitz edge axis.
+    theta in [0,2pi); beta in [0,2pi) (full sweep keeps grid topology identical to the lowitz60
+    comparison and never misses a cusp; the physics is pi-periodic in beta up to face relabeling)."""
     su = cm.sun_dir(h_deg, az0_deg)
     d0 = -su
-    psi = np.linspace(0.0, 2 * math.pi, ngrid, endpoint=False)
-    beta = np.linspace(0.0, 2 * math.pi, ngrid, endpoint=False)
-    P, B = np.meshgrid(psi, beta, indexing="ij")
-    P, B = P.ravel(), B.ravel()
-    M = P.shape[0]
-    cP, sP = np.cos(P), np.sin(P)
+    th = np.linspace(0.0, 2 * math.pi, ngrid, endpoint=False)
+    be = np.linspace(0.0, 2 * math.pi, ngrid, endpoint=False)
+    T, B = np.meshgrid(th, be, indexing="ij")
+    T, B = T.ravel(), B.ravel()
+    M = T.shape[0]
+    cT, sT = np.cos(T), np.sin(T)
     cB, sB = np.cos(B), np.sin(B)
-    # Rodrigues rotation of the two resting face normals about L=(cP,sP,0) by B, vectorized.
-    # For a vector v and axis L (unit), R v = v cosB + (L x v) sinB + L (L.v)(1-cosB).
-    def rot(v):
-        vx, vy, vz = v
-        # L.v
-        Ldv = cP * vx + sP * vy  # vz term is 0 since L_z=0
-        # L x v = (sP*vz - 0*vy, 0*vx - cP*vz, cP*vy - sP*vx)
-        crx = sP * vz
-        cry = -cP * vz
-        crz = cP * vy - sP * vx
-        rx = vx * cB + crx * sB + cP * Ldv * (1 - cB)
-        ry = vy * cB + cry * sB + sP * Ldv * (1 - cB)
-        rz = vz * cB + crz * sB + 0.0 * Ldv * (1 - cB)
+    # Body edge axis spun by theta:  L = R_z(theta) L0
+    cL0, sL0 = math.cos(ledge_az), math.sin(ledge_az)
+    Lx = cT * cL0 - sT * sL0
+    Ly = sT * cL0 + cT * sL0
+    Lz = np.zeros_like(Lx)
+
+    def spin_then_tilt(v0):
+        # v_spun = R_z(theta) v0
+        v0x, v0y, v0z = v0
+        vx = cT * v0x - sT * v0y
+        vy = sT * v0x + cT * v0y
+        vz = np.full_like(cT, v0z)
+        # Rodrigues tilt by beta about L=(Lx,Ly,Lz): R v = v cosB + (L x v) sinB + L (L.v)(1-cosB)
+        Ldv = Lx * vx + Ly * vy + Lz * vz
+        crx = Ly * vz - Lz * vy
+        cry = Lz * vx - Lx * vz
+        crz = Lx * vy - Ly * vx
+        rx = vx * cB + crx * sB + Lx * Ldv * (1 - cB)
+        ry = vy * cB + cry * sB + Ly * Ldv * (1 - cB)
+        rz = vz * cB + crz * sB + Lz * Ldv * (1 - cB)
         return np.stack([rx, ry, rz], axis=-1)
-    n1 = rot(_FA0)
-    n2 = rot(_FB0)
+
+    n1 = spin_then_tilt(_FA0)
+    n2 = spin_then_tilt(_FB0)
     d0b = np.broadcast_to(d0, (M, 3))
-    entry_ok = np.sum(n1 * d0b, axis=-1) < 0          # ray enters through face 1
-    d1, v1 = cm._refract_vec(d0b, n1, 1.0 / n)        # air -> ice
-    exit_ok = np.sum(d1 * n2, axis=-1) > 0            # ray leaves through face 2
-    d2, v2 = cm._refract_vec(d1, n2, n)               # ice -> air (TIR -> v2 False)
+    entry_ok = np.sum(n1 * d0b, axis=-1) < 0
+    d1, v1 = cm._refract_vec(d0b, n1, 1.0 / n)
+    exit_ok = np.sum(d1 * n2, axis=-1) > 0
+    d2, v2 = cm._refract_vec(d1, n2, n)
     ok = entry_ok & v1 & exit_ok & v2
     sky = -d2
     sky[~ok] = np.nan
-    return P, B, sky, ok, su
+    return T, B, sky, ok, su
 
 
-def cusp_field_platelowitz(h_deg, n=cm.N_ICE, ngrid=300):
-    """Cusp locator for the plate-Lowitz family — same construction as atlas_strata_map.cusp_field
-    (caustic detJ=0 ∩ K·∇(detJ)=0), but driven by sky_grid_platelowitz."""
+def cusp_field_platelowitz(h_deg, n=cm.N_ICE, ngrid=300, ledge_az=_LEDGE_AZ):
+    """Cusp locator for plate-Lowitz — identical construction to atlas_strata_map.cusp_field
+    (caustic detJ=0 ∩ K·∇(detJ)=0), driven by sky_grid_platelowitz."""
     ng = ngrid
-    G, A, sky, ok, su = sky_grid_platelowitz(h_deg, n, ng)
+    G, A, sky, ok, su = sky_grid_platelowitz(h_deg, n, ng, ledge_az=ledge_az)
     z = np.array([0.0, 0.0, 1.0])
     up = z - np.dot(z, su) * su
     up = up / np.linalg.norm(up)
@@ -137,7 +151,7 @@ def cusp_field_platelowitz(h_deg, n=cm.N_ICE, ngrid=300):
     dJg, dJa = np.gradient(detJ, d, d)
     g = Kg * dJg + Ka * dJa
     good = validg.copy()
-    for _ in range(cm_ERODE + 1):
+    for _ in range(ERODE + 1):
         g2 = good.copy()
         g2[1:, :] &= good[:-1, :]; g2[:-1, :] &= good[1:, :]
         g2[:, 1:] &= good[:, :-1]; g2[:, :-1] &= good[:, 1:]
@@ -156,30 +170,38 @@ def cusp_field_platelowitz(h_deg, n=cm.N_ICE, ngrid=300):
     return cusp, detJ, g, good, X, Y, su
 
 
-cm_ERODE = 3  # match atlas_strata_map.ERODE
-
-
-def ninterior_platelowitz(h, ng=320, bd=5.0):
-    """Count interior cusp clusters whose mean distance-to-boundary >= bd cells (deep-interior,
-    not admissibility-wall artifacts) — IDENTICAL metric to the column-Lowitz reproducer."""
-    cusp, detJ, g, good, X, Y, su = cusp_field_platelowitz(h, ngrid=ng)
+def ninterior_platelowitz(h, ng=320, bd=5.0, ledge_az=_LEDGE_AZ, return_locs=False):
+    """Count interior cusp clusters with mean distance-to-boundary >= bd cells — IDENTICAL metric to
+    the column-Lowitz reproducer. If return_locs, also return their (delta_deg,psi_deg,meandist)."""
+    cusp, detJ, g, good, X, Y, su = cusp_field_platelowitz(h, ngrid=ng, ledge_az=ledge_az)
     dist = ndimage.distance_transform_edt(good)
     lab, nlab = ndimage.label(cusp, structure=np.ones((3, 3)))
-    return sum(1 for i in range(1, nlab + 1)
-               if np.mean(dist[tuple(np.where(lab == i))]) >= bd)
+    n_int = 0
+    locs = []
+    for i in range(1, nlab + 1):
+        ys, xs = np.where(lab == i)
+        md = float(np.mean(dist[ys, xs]))
+        if md >= bd:
+            n_int += 1
+            if return_locs:
+                Xc = float(np.nanmean(X[ys, xs])); Yc = float(np.nanmean(Y[ys, xs]))
+                delta = math.degrees(math.asin(min(1.0, math.hypot(Xc, Yc))))
+                psi = math.degrees(math.atan2(Xc, Yc))
+                locs.append((round(delta, 1), round(psi, 1), round(md, 1)))
+    if return_locs:
+        return n_int, locs
+    return n_int
 
 
-def verify_parhelion(ng=600):
-    """At beta=0 (plate flat) the admissible rays must land at the plate parhelion: ~22deg from the
-    sun, in the almucantar (same elevation as the sun). Check across a few sun elevations."""
-    print("Plate-parhelion check (beta=0 slice): apparent deviation from the sun + elevation offset")
-    for h in (10.0, 20.0, 30.0):
-        su = cm.sun_dir(h)
-        # sample beta near 0 (use the resting face pair directly)
+def verify_parhelion(ng=2000):
+    """At beta=0 the family must draw the plate PARHELION: ~22deg from the sun, in the almucantar
+    (sky elevation == sun elevation). Sweep theta at beta=0."""
+    print("Plate-parhelion check (beta=0, sweep crystal azimuth theta):")
+    for h in (5.0, 10.0, 20.0, 30.0):
+        su = cm.sun_dir(h); d0 = -su
         best = None
-        for psi in np.linspace(0, 2 * math.pi, 720, endpoint=False):
-            n1, n2 = plate_lowitz_normals(psi, 0.0)
-            d0 = -su
+        for th in np.linspace(0, 2 * math.pi, ng, endpoint=False):
+            n1, n2 = plate_lowitz_normals(th, 0.0)
             if np.dot(n1, d0) >= 0:
                 continue
             d1 = cm.refract(d0, n1, 1.0 / cm.N_ICE)
@@ -192,29 +214,28 @@ def verify_parhelion(ng=600):
             dev = math.degrees(math.acos(np.clip(np.dot(sky, su), -1, 1)))
             elev = math.degrees(math.asin(np.clip(sky[2], -1, 1)))
             if best is None or abs(dev - 22.0) < abs(best[0] - 22.0):
-                best = (dev, elev, math.degrees(psi))
+                best = (dev, elev)
         if best:
-            print(f"  h={h:>4.1f}: closest-to-22deg ray  dev={best[0]:.2f}deg  "
-                  f"sky_elev={best[1]:.2f}deg (sun_elev={h:.1f})  at psi={best[2]:.1f}deg")
+            print(f"  h={h:>4.1f}: parhelion dev={best[0]:.2f}deg (expect ~22)  "
+                  f"sky_elev={best[1]:.2f}deg (sun_elev={h:.1f}, expect equal -> almucantar)")
         else:
-            print(f"  h={h:>4.1f}: NO admissible ray")
+            print(f"  h={h:>4.1f}: NO admissible ray (!)")
 
 
 def main():
     print("LINE 3 — PLATE-LOWITZ independent cross-check\n")
     verify_parhelion()
-    print("\nInterior cusp-cluster count vs sun elevation (deep-interior, dist>=5 cells), ng=320:")
-    print("  (column-Lowitz baseline for comparison: 2,2,4,4,4,4,4,2 at h=14,16,17,18,20,25,30,31)")
-    print(f"  {'h':>5}{'#interior_cusps':>18}")
+    print("\nInterior cusp-cluster count vs sun elevation (deep-interior, dist>=5 cells), ng=320,")
+    print("Lowitz edge axis at 30deg (through opposite prism edges):")
+    print("  (column-Lowitz baseline: 2,2,4,4,4,4,4,2 at h=14,16,17,18,20,25,30,31)")
+    print(f"  {'h':>5}{'#interior':>11}   interior cusp sky-positions (delta,psi,dist)")
     res = {}
     for h in (12, 14, 16, 17, 18, 20, 22, 25, 28, 30, 31, 33, 35):
-        ni = ninterior_platelowitz(h)
+        ni, locs = ninterior_platelowitz(h, return_locs=True)
         res[h] = ni
-        print(f"  {h:>5}{ni:>18}")
+        print(f"  {h:>5}{ni:>11}   {locs}")
     counts = list(res.values())
-    born = max(counts) > min(counts) and max(counts) >= min(counts) + 2
     print(f"\n  plate-Lowitz interior cusp range: {min(counts)}..{max(counts)}")
-    print(f"  reproduces a 2->4->2-style interior cusp-pair birth: {born}")
     return res
 
 

@@ -117,13 +117,11 @@ locator + corank classifier run unchanged on the second 2-DOF caustic family. Re
 **REMAINING GENUINE 2-DOF TARGETS** (a 30-agent enumeration + adversarial DOF-verification, 2026-06-07;
 **corrects the earlier "pyramidal is the only/last 2-DOF case"**). The cusp/swallowtail search needs a 2-D
 orientation manifold (`F: T²→sky`, a square map); THREE single-crystal targets remain, ranked:
-1. **LOWITZ orientation (the strongest, NEXT).** The crystal rocks by the Lowitz angle φ about a
-   horizontal a-axis (⟂ c); orientation params (γ = axis azimuth, φ = Lowitz rotation), the **same 60°
-   prism side-face pair** as the 22° family. Uniquely it is a **geometrically DISTINCT square map in
-   SO(3)** — the c-axis tilts out of horizontal (`c_z = sin φ`; meets the done column torus only on the
-   φ=0 curve) — so its A₃/A₄ inventory is **independent of the column nulls** → the best venue to genuinely
-   *engage* (not just re-confirm) Berry's A₄ question. Implement: `wedge='lowitz60'` — Rodrigues-rotate the
-   column frame by φ about `u`; φ=0 must reduce to `cm._column_normals` exactly.
+1. **LOWITZ orientation — DONE 2026-06-07 → A₃-lips, confirms Berry (see §8-C).** `wedge='lowitz60'`, a
+   geometrically distinct SO(3) square map (c tilts out of horizontal). It produced the search's **first
+   cusp-CREATION** (a 2→4→2 interior pair-birth at h≈16.5) — a genuine codim-1 higher catastrophe — but the
+   topological test shows it is an **A₃-lips metamorphosis, NOT Berry's A₄ swallowtail**, and it is
+   parameterization-specific (α0≈60° only; plate-Lowitz negative). **Confirms Berry's no-A₄, no D₄.**
 2. **Pyramidal-capped horizontal column.** Same (γ,α) column manifold, **new odd Galle wedge** (prism
    side + pyramid {10-11} cap face) → oriented odd-radius arcs (9/18.3/19.9/23.8/34.9°). `n2 =
    sin(x)·inplane + cos(x)·c`; x=0 recovers `basal90`.
@@ -160,20 +158,38 @@ and **refuted it** by the same audit that the column passed:
 - Lesson: the corank-2 threshold (0.05) over-flags near a TIR boundary; the decisive test is
   interior-survival + clean `s1→0`, not the threshold alone.
 
-**LOWITZ (`wedge='lowitz60'`) — BUILT → a CANDIDATE higher-catastrophe (the first non-null), UNDER RIGOROUS
-CHARACTERIZATION (not yet banked).** The column frame rotated by φ about the horizontal a-axis u (so the
-c-axis tilts out of horizontal, `c_z=sin φ` — a geometrically DISTINCT 2-surface in SO(3); φ=0 reduces to
-`_column_normals` exactly, verified). The 2 DOF are (γ, φ); roll fixed at `LOWITZ_ALPHA0`. The caustic
-lands at δ≈23°, ψ≈±84° (the Lowitz arcs through the parhelia). **Unlike the column (cusp count flat at 2),
-Lowitz shows a grid-stable, DEEP-INTERIOR (boundary-distance 26.9 cells) cusp-PAIR born at h≈16.5** (at
-δ≈33°, ψ≈±173°, straddling the bottom meridian) **and annihilated at the boundary near h≈31** — an *even*
-(pair) change, the genuine signature of a higher catastrophe (A₃-lips or A₄-swallowtail). It occurs for
-the edge-aligned reference rolls (α0=30/60/105°), not all — consistent with the metamorphosis living on a
-specific Lowitz sub-arc. **This is held as a CANDIDATE, to the same bar that just refuted Wegener.** Open
-before banking: (1) the **A₃-lips vs A₄-swallowtail label** (the 3-jet `∂δ=∂²δ=∂³δ=0` check at the birth);
-(2) tie the α0-dependence to the **physical upper/middle/lower Lowitz arcs**; (3) a **plate-Lowitz
-cross-check** (the classic c-vertical construction) to confirm it isn't specific to the column-Lowitz
-parameterization. A characterization workflow is running.
+**LOWITZ (`wedge='lowitz60'`) — CHARACTERIZED 2026-06-07 → an A₃-class cusp-pair-creation (lips-type),
+DECISIVELY NOT Berry's A₄ swallowtail. BANKED.** (9-agent workflow `w6pwapt6l`: 4 characterization lines +
+4 adversarial re-runs + synthesis; load-bearing facts independently reproduced.) The column frame rotated
+by φ about the horizontal a-axis u (so the c-axis tilts out of horizontal, `c_z=sin φ` — a geometrically
+DISTINCT 2-surface in SO(3); φ=0 reduces to `_column_normals` exactly). 2 DOF (γ, φ); roll fixed at
+`LOWITZ_ALPHA0`. The caustic is the Lowitz arcs (δ≈23°, ψ≈±84°, the parhelia). **It is the FIRST non-null
+cusp-CREATION in the whole halo search** (the column is flat at 2) — a genuine codim-1 higher catastrophe —
+**but A₃, not A₄ → it CONFIRMS Berry's "swallowtail conspicuously absent," it does not answer his question.**
+- **The event:** interior cusp count **2 (h≤16) → 4 (17–30) → 2 (h≥31)** (ng=320, bd=5); the born pair at
+  δ≈32–33°, ψ≈±173° (straddling the bottom meridian), **deep interior** (boundary-distance ≈27 cells at
+  h=18, scaling with grid → genuine, not a fixed-pixel artifact); **corank-1 throughout** (`s1/scale`≈0.63
+  ≫ 0.05, `s2/scale`≈0.01 → **no D₄**). Column `prism60` flat at 2 in the same window.
+- **Decisively NOT A₄ (the load-bearing call):** the image caustic stays **single-valued / non-self-
+  intersecting through the entire birth window** (h=16.2–28; confirmed 3 coordinate-free ways: ψ-bin
+  δ-multiplicity=1, segment-crossing=0, ng=1000 sheet-count=1) — a swallowtail *is* a self-crossing
+  caustic. The **fold set stays ONE connected component** (no reconnection → not beak-to-beak, no A₄ oval).
+  The pair nucleates symmetrically at the bottom-meridian mirror point (γ=90°, φ=180°, detJ=0 ∀h by the Z₂
+  symmetry) and separates as **Δγ ~ √(h−h\*)**, h\*≈16.15 — the codim-1 A₃ normal-form opening.
+- **Caveats (weighed heavily — same bar that refuted Wegener):** (1) **α0-specificity (corrects the earlier
+  "α0=30/60/105"):** the clean 2→4→2 birth occurs **only at α0≈60°**, the **NON-canonical FACE-aligned**
+  rotation axis; the canonical edge-Lowitz rolls FAIL (α0=90° flat at 2 like the column, α0=30° grid-
+  unstable). Whether a real Lowitz population samples α0≈60° is **not established**. (2) **Doubly
+  non-canonical:** column-Lowitz frame (c horizontal) + face axis; the textbook Lowitz crystal is the
+  c-vertical PLATE. (3) **Plate-Lowitz cross-check NEGATIVE** (`scripts/plate_lowitz_check.py`): the classic
+  c-vertical plate-Lowitz does NOT reproduce it (cusp count flat at 5, all at parhelion flanks, none on the
+  bottom meridian) → **parameterization-specific, not habit-robust.** (4) The **"death" half is a grid-
+  unstable boundary exit** — only the BIRTH carries catastrophe weight. (5) The reduced-jet A₄ discriminator
+  was **retracted as numerically unsound** (returns ~0.9 on KNOWN column A₃ cusps); the A₄ refutation rests
+  on the topological self-intersection test, not the jet.
+- **Lit:** the Lowitz-arc transformation in the 15–30° window is documented QUALITATIVELY (Mueller & Greenler
+  JOSA 69:1103 1979; Tape; Riikonen; Cowley/atoptics) but **never in cusp/lips/catastrophe terms** — the
+  catastrophe LABELING is uncatalogued, the underlying arc physics known. **Berry's A₄ remains open.**
 
 ## Lit-pass Track B — RESOLVED 2026-06-07
 **Tape & Können 1999 (Appl. Opt. 38:1552, full 74-pp text read): pure parameterization, no caustic/
@@ -191,8 +207,10 @@ catastrophe-stratum corank is now a **computed** property of the halo caustic (t
 cleared), the **A₃-vs-D₄ question is closed (corank-1, A₃-class)**, the cusp locator places the **A₃
 point-cusps** (apexes for the 60°-wedge tangent arcs; lateral pairs for the 90°-wedge 46° arcs) and the
 **29.7° merge as the A₃-class metamorphosis**, and the **A₄ swallowtail search is a clean NULL on both
-families** (cusp counts stable — confirms Berry 1994), **no D₄** anywhere. 8-B's remaining legs (ranked
-by the 2026-06-07 enumeration) = **Lowitz** (the strongest — a geometrically distinct SO(3) square map,
-NEXT), the **pyramidal-capped column** (new odd Galle wedge), and the **Wegener path** (an unverified
-candidate-A₄ signature) — see "REMAINING GENUINE 2-DOF TARGETS" above. **NOT public-eligible** (Phase 0.5
-lit-pass, incl. the Tape & Können 1999 prior-art check, gates any claim).
+families** (cusp counts stable — confirms Berry 1994), **no D₄** anywhere. Two further 2-DOF maps are now
+searched (§8-C): **Wegener** (candidate-A₄ refuted — a component-B wall cusp) and **Lowitz** (the search's
+first cusp-CREATION, but an **A₃-lips metamorphosis, not Berry's A₄** — parameterization-specific). **Every
+2-DOF map searched so far CONFIRMS Berry: no A₄ swallowtail, no D₄ umbilic** — and the lab found + labelled
+its first higher-catastrophe (the A₃-lips) and refuted its own two candidate-A₄ false alarms by code. The
+last enumerated standard-habit target is the **pyramidal-capped column** (odd Galle wedge). **NOT
+public-eligible** (Phase 0.5 lit-pass, incl. the Tape & Können 1999 prior-art check, gates any claim).
