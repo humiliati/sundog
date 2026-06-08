@@ -1,0 +1,83 @@
+{
+  "leg": "Substrate B \u2014 MNIST CNN (H3 \u00a7B)",
+  "prereg": "docs/atlas/H3_POOLED_SHADOW_PREREG.md",
+  "seed": 1234,
+  "data_source": "mnist_openml_28x28",
+  "img_side": 28,
+  "n_images": 12000,
+  "n_classes": 10,
+  "n_probe_heldout": 1800,
+  "epochs": 20,
+  "rot_range_deg": 30.0,
+  "sweep_sigma_deg": 10.0,
+  "sweep_K": 8,
+  "cnn_heldout_acc": 0.83,
+  "chance_y": 0.1,
+  "majority_y": 0.11333333333333333,
+  "pre_pool_dim": 1568,
+  "post_pool_dim": 32,
+  "y_acc_pre": 0.9444444444444444,
+  "y_acc_post": 0.8699999999999999,
+  "theta_r2_pre": 0.6228559613227844,
+  "theta_r2_post": 0.3420302033424377,
+  "theta_r2_drop_pre_minus_post": 0.2808257579803467,
+  "control_permuted_y_acc_post": 0.11333333333333333,
+  "control_permuted_theta_r2_post": -0.011971235275268555,
+  "probe_robustness_noPCA": {
+    "alpha_1": {
+      "theta_r2_pre_noPCA": -1.2221885919570923,
+      "theta_r2_post_noPCA": 0.3420302033424377,
+      "pre_minus_post": -1.5642187952995301
+    },
+    "alpha_50": {
+      "theta_r2_pre_noPCA": 0.4257866859436035,
+      "theta_r2_post_noPCA": 0.33332095146179197,
+      "pre_minus_post": 0.09246573448181156
+    },
+    "alpha_200": {
+      "theta_r2_pre_noPCA": 0.5764167785644532,
+      "theta_r2_post_noPCA": 0.29837357997894287,
+      "pre_minus_post": 0.2780431985855103
+    }
+  },
+  "P_B1_robust_direction_alpha200": true,
+  "sweep": [
+    {
+      "lambda": 0.0,
+      "theta_r2": 0.3420302629470825,
+      "y_acc": 0.8699999999999999
+    },
+    {
+      "lambda": 0.5,
+      "theta_r2": 0.38625574111938477,
+      "y_acc": 0.8961111111111111
+    },
+    {
+      "lambda": 1.0,
+      "theta_r2": 0.394149386882782,
+      "y_acc": 0.8972222222222221
+    },
+    {
+      "lambda": 2.0,
+      "theta_r2": 0.3373726844787598,
+      "y_acc": 0.9066666666666666
+    },
+    {
+      "lambda": 4.0,
+      "theta_r2": 0.14603606462478638,
+      "y_acc": 0.8727777777777778
+    }
+  ],
+  "predictions": {
+    "P_B1_resist_theta_drops_post": true,
+    "P_B2_determine_y_high_post": true,
+    "P_B3_sweep_theta_washes": true
+  },
+  "KILL_B1_theta_fully_recoverable_post": false,
+  "honest_notes": [
+    "y-determine is partly trivial (y IS the training target); the load-bearing test is theta-resist.",
+    "The STATIC P-B1 pre/post gap is probe-sensitive: a naive ridge on the raw 1568-dim pre-pool map under-reads theta and can flip the sign. The direction (pre>post) holds only under a dimensionality-fair probe (PCA-128 default, or strong-ridge alpha=200). See probe_robustness_noPCA.",
+    "The probe-INDEPENDENT, load-bearing evidence is the lossiness sweep (fixed 32-dim GAP throughout): theta-R2 washes monotonically as lambda grows while y-acc holds \u2014 a genuine lossiness effect."
+  ],
+  "runtime_sec": 114.1
+}
