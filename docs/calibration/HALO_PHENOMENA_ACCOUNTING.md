@@ -95,7 +95,7 @@ This ledger is organized into three lenses, matching the Phase 14 directive:
 
 | phenomenon / family | lens | Sundog status | generator source | proof tier |
 | --- | --- | --- | --- | --- |
-| 22° halo | §A/§B | `rendered-core` | Tape AH-CH10 p6 (3–5 wedge 62°→21.8°); `22deg halo.sim` | proven core |
+| 22° halo | §A/§B | `rendered-core` | Tape AH-CH10 p6 (3–5 wedge 60°→21.8°); `22deg halo.sim` | proven core |
 | Sundog / parhelion | §A | `rendered-core` | Code `phase3.daggerOffset`; `Parhelia.sim`; Pass A1 | proven core · sole inverse handle |
 | Upper tangent arc | §A/§B | `rendered-optional` | Code `tangentArcLocus` (Pass C7); Tape AH-CH06 p62; `Tangent arcs.sim` | bounded (single-cell) |
 | Circumzenithal arc | §A/§B | `rendered-core` | Code `czaVisible` h≤32°; Tape AH-CH06 p63; `Circumzenithal arc.sim` | proven core (coverage-gated inverse) |
@@ -111,6 +111,7 @@ This ledger is organized into three lenses, matching the Phase 14 directive:
 | Antisolar features | §C | `named-only`, `not-modeled` | multi-internal-reflection, rear sky; `Anthelic Point display.sim` | P0 |
 | Subhorizon halos | §C | `named-only`, `not-modeled` | reflection off horizontal plates, observer-above | P0 |
 | Circumhorizon arc | §C | `named-only`, `not-modeled`, `halosim-reproducible` | 90° side→bottom face, plate/Parry, h>58°; `Circumhorizon arc.sim` | P2 simulated candidate; P3 not met |
+| 44°/46° parhelia | §C | `named-only`, `not-modeled` | rare plate feature flanking the 46° halo (Greenler/Cowley). **Added 2026-06-07 as a known catalog gap** (the atlas Phase-7 verify pass flagged its absence; [`../atlas/ATLAS_PHASE7_PHASE_DIAGRAM.md`](../atlas/ATLAS_PHASE7_PHASE_DIAGRAM.md)) | P0 |
 
 ## §A — Anchor: what we know
 
@@ -343,11 +344,19 @@ here** — every line is a citation.
   | 3–26 | 28.0° | **9.0°** | 9.1° |
   | 13–25 | 52.4° | **18.3°** | 18.0° |
   | 23–26 | 56.0° | **19.9°** | 20.1° |
-  | 3–5 (prism) | 62.0° | **21.8°** | 22.0° |
-  | 1–25 | 60.0° | **22.9°** | — |
+  | 3–5 (prism) | 60.0° | **21.8°** | 22.0° |
+  | 1–25 | 62.0° | **22.9°** | — |
   | 3–25 | 63.8° | **23.8°** | 23.6° |
   | 23–25 | 80.2° | **34.9°** | 35.5° |
   | 1–5 (basal+prism) | 90.0° | **45.7°** | — |
+
+  > **Correction 2026-06-07 (galvanized from the Sundog Atlas Phase-7 verify
+  > pass, [`../atlas/ATLAS_PHASE7_PHASE_DIAGRAM.md`](../atlas/ATLAS_PHASE7_PHASE_DIAGRAM.md)):**
+  > the `3–5 (prism)` and `1–25` rows had their **wedge angles transposed**.
+  > A **60.0°** prism gives `halo_min_deviation(60)` = **21.839°** (the canonical
+  > 22° halo — matching line ~219's "inclined 60°"), and a **62.0°** wedge gives
+  > **22.862°** ≈ 22.9°. The earlier "62.0° → 21.8°" pairing was the error;
+  > corrected above (radii unchanged, both verified against `s2_optics.halo_min_deviation`).
 
   The pyramid-face inclination *x* to the c-axis sets the wedge angles via
   the **Galle relation α = 180 − 2x** (SAX-CH11 p2); the **Rational

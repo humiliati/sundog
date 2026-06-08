@@ -15,8 +15,8 @@ reference this lane. **No public claim is authorized by this document.**
 ## 2. What's banked (artifact map — internal)
 | result | what | status | files |
 | --- | --- | --- | --- |
-| **Synthetic** | Lossiness-crossover on 2 structurally-different in-silico substrates (S0 1-D caustic toy, S1 2-D vector field). `disc=1.000` flat; `cont`→chance. | `operator_confirmed_synthetic` — frozen, determinism-receipted, adversarially reviewed | `docs/proof/PHASE5_CROSS_SUBSTRATE.md` §3.11; `scripts/pvnp_phase5_lossiness_crossover.py`; `results/pvnp/phase5-lossiness-crossover/frozen.json` |
-| **Physical (S2)** | Standalone real-physics halo forward model. Discrete-determines CONFIRMED (ice-phase halo-radius + handedness Stokes-V, `disc=1.000` flat, null+determinism receipted); continuous-resists PARTIAL (size 0.97→0.45). | **`partial physical leg`** — forward-model tier, NOT measured sky | `docs/proof/PHASE5_CROSS_SUBSTRATE.md` §3.12–3.13; `scripts/s2_optics.py`; `docs/atlas/S2_LITPASS_E_G.md` |
+| **Synthetic** | Lossiness-crossover on 2 structurally-different in-silico substrates (S0 1-D caustic toy, S1 2-D vector field). `disc=1.000` flat; `cont`→chance. | `operator_confirmed_synthetic` — frozen, determinism-receipted, adversarially reviewed | `ATLAS_PHASE5_CROSS_SUBSTRATE.md` §3.11; `scripts/pvnp_phase5_lossiness_crossover.py`; `results/pvnp/phase5-lossiness-crossover/frozen.json` |
+| **Physical (S2)** | Standalone real-physics halo forward model. Discrete-determines CONFIRMED (ice-phase halo-radius + handedness Stokes-V, `disc=1.000` flat, null+determinism receipted); continuous-resists PARTIAL (size 0.97→0.45). | **`partial physical leg`** — forward-model tier, NOT measured sky | `ATLAS_PHASE5_CROSS_SUBSTRATE.md` §3.12–3.13; `scripts/s2_optics.py`; `docs/atlas/S2_LITPASS_E_G.md` |
 
 **Plain-language snapshot (for understanding, NOT for copy):** A simulation study of ice-crystal halos
 found that *which* halo / crystal-habit class (a discrete feature) is cleanly recoverable from a
@@ -75,7 +75,7 @@ From `docs/atlas/ATLAS_LITPASS_MEMO.md` §4 (no-priority rule) + the S2 lit-pass
 - `AGENTS.md` → "## Key docs under `docs/`" — add this hand-off + `docs/atlas/S2_LITPASS_E_G.md`.
 - `CLAUDE.md` → "## Key docs under `docs/`" — same (the two files mirror each other).
 - `docs/SUNDOG_V_ATLAS.md` → add/extend a **Document Map** at the top pointing to
-  `ATLAS_LITPASS_MEMO.md`, `S2_LITPASS_E_G.md`, this hand-off, and `docs/proof/PHASE5_CROSS_SUBSTRATE.md`.
+  `ATLAS_LITPASS_MEMO.md`, `S2_LITPASS_E_G.md`, this hand-off, and `ATLAS_PHASE5_CROSS_SUBSTRATE.md`.
 - `docs/README.md` → register the atlas lane pointers **only when public promotion is authorized** (it is
   not yet) — keep internal until the §3 gates clear.
 

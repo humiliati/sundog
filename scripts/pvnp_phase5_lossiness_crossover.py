@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Phase-5 lossiness-crossover slate — S0/S1 harness.
 
-Implements docs/proof/PHASE5_CROSS_SUBSTRATE.md §3. Model-free (numpy + sklearn). Tests the candidate
+Implements docs/atlas/ATLAS_PHASE5_CROSS_SUBSTRATE.md §3. Model-free (numpy + sklearn). Tests the candidate
 Shadow-Invertibility operator: as ensemble lossiness lambda grows, does CONTINUOUS recovery decay to
 chance while DISCRETE recovery stays exact, on BOTH a 1-D caustic toy (S0) and a 2-D vector field (S1)?
 

@@ -1,7 +1,7 @@
 # S2 — Measured-Sky Polarimetry: Scope
 
 > **Date:** 2026-06-07 · **Status:** SCOPE (forward-looking; nothing here is executed or public). The S2
-> handedness leg is currently forward-model tier (`docs/proof/PHASE5_CROSS_SUBSTRATE.md` §3.13). This
+> handedness leg is currently forward-model tier (`ATLAS_PHASE5_CROSS_SUBSTRATE.md` §3.13). This
 > memo scopes the jump to *observed* (or clean falsification). Grounded in a 5-agent web-confirmed recon
 > (2026-06-07). Lane remains **NOT public-eligible**.
 

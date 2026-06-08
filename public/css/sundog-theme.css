@@ -225,7 +225,6 @@ body {
 .sd-chat-launch:hover,
 .sd-chat-launch:focus-visible {
   border-color: var(--sd-signal);
-  outline: none;
 }
 
 .sd-chat-panel {
@@ -287,7 +286,6 @@ body {
 .sd-chat-close:hover,
 .sd-chat-close:focus-visible {
   border-color: var(--accent-gold);
-  outline: none;
 }
 
 .sd-chat-body {
@@ -348,7 +346,6 @@ body {
 .sd-chat-faq:hover,
 .sd-chat-faq:focus-visible {
   border-color: var(--sd-copper);
-  outline: none;
 }
 
 .sd-chat-tier-rail {
@@ -470,7 +467,6 @@ body {
 
 .sd-chat-input:focus {
   border-color: var(--sd-copper);
-  outline: none;
 }
 
 .sd-chat-submit {
@@ -485,7 +481,26 @@ body {
 .sd-chat-submit:hover,
 .sd-chat-submit:focus-visible {
   border-color: var(--sd-signal);
-  outline: none;
+}
+
+/* Visible keyboard focus — distinct from hover. The rules above previously set
+   `outline: none`, which left keyboard focus invisible AND identical to hover
+   (a 1px border-color swap). A 2px ring at offset restores WCAG 2.4.7/2.4.11:
+   dark ring on the light page/body/form; the close button (on the dark header)
+   gets a light ring so both stay ≥3:1 against their adjacent surfaces. */
+.sd-chat-launch:focus-visible,
+.sd-chat-faq:focus-visible,
+.sd-chat-submit:focus-visible,
+.sd-chat-input:focus-visible,
+.sd-chat-trace summary:focus-visible,
+.sd-chat-next:focus-visible {
+  outline: 2px solid var(--sd-ink-strong, #0b1720);
+  outline-offset: 2px;
+}
+
+.sd-chat-close:focus-visible {
+  outline: 2px solid var(--text-light, #f8fbfc);
+  outline-offset: 2px;
 }
 
 @media (max-width: 760px) {

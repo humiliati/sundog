@@ -344,13 +344,16 @@
 .sd-chat-chip--state-label {
   background: transparent;
   border-style: dotted;
-  border-color: rgba(80, 90, 100, 0.45);
-  color: rgba(80, 90, 100, 0.78);
+  border-color: rgba(38, 63, 78, 0.5);
+  /* Solid #5e6c78 (~5.4:1 on the light bubbles) replaces the old
+     rgba(80,90,100,0.78) + opacity:0.92, which composited to ~3.55:1 and
+     failed WCAG 1.4.3 at this 0.62rem size. Still reads as supplementary via
+     the italic + small size + dotted border, not via sub-AA contrast. */
+  color: #5e6c78;
   font-style: italic;
   font-size: 0.62rem;
   letter-spacing: 0.04em;
   text-transform: none;
-  opacity: 0.92;
 }
 
 /* ------------------------------------------------------------------ */

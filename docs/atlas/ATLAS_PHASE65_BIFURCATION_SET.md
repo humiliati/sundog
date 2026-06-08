@@ -77,7 +77,7 @@ singular set, the **Jacobian kernel**; 2 orientation DOF suffice, **no full-3-D,
   **cusps survive by Whitney's theorem** (generic for any smooth 2-D map), and Berry records "some halos
   do show cusps," so the **A₃ label is defensible** (not "first" — Berry pre-empts the idea).
   The corank-1 vs corank-2 (D₄) question is **CONFIRMED corank-1** numerically in Phase 8-A
-  (`scripts/atlas_strata_map.py`; `calibration/PHASE8_STRATA.md`); no D₄ found, confirming Berry's
+  (`scripts/atlas_strata_map.py`; `ATLAS_PHASE8_STRATA.md`); no D₄ found, confirming Berry's
   no-umbilic prediction. **LABEL SHARPENED by Phase 8-B's cusp locator (`cusp_field`):** the persistent A₃
   **point-cusps** are the **UTA/LTA apexes** (top/bottom of the 22° circle); this **29.7° merge** is the
   A₃-class **caustic METAMORPHOSIS** — the two arc components reconnect as the mid-ψ gap closes (the

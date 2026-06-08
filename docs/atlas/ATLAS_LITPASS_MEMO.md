@@ -22,7 +22,7 @@ is the instrument that closes it before any tier-3 outreach.
   Monte-Carlo simulators. Establish exactly what is canonical, what is each author's, and what the
   apparatus (HaloSim) already computes, so Sundog claims nothing already standard as novel.
 - **Track B — Catastrophe / caustic optics (the skeleton). ✅ READ 2026-06-07 →
-  `docs/calibration/PHASE8_STRATA.md`.** **BANKED FINDINGS (prior-art resolution):** (1) **Tape 1980**
+  `ATLAS_PHASE8_STRATA.md`.** **BANKED FINDINGS (prior-art resolution):** (1) **Tape 1980**
   (JOSA 70:1175) established caustic = Jacobian-kernel (fold level); **Tape & Können 1999** (Appl. Opt.
   38:1552, full text read) is pure *parameterization* — no caustic/catastrophe/bifurcation classification
   (it even dissolves the UTA/LTA merge into "one halo"). (2) **Berry 1994** (Appl. Opt. 33:4563) is the

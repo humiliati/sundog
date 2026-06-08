@@ -62,6 +62,23 @@ not an apology surface but a **prediction surface** — each item is a
 falsifiable prediction the 7-formula field makes when extended along its
 own generators.
 
+> **Galvanized from the Sundog Atlas project (2026-06-07) — the prediction
+> surface is now bounded on one side.** The [Sundog Atlas](SUNDOG_V_ATLAS.md)
+> ran the directed search for *higher-catastrophe* invisible halos to completion
+> ([`atlas/ATLAS_PHASE8_STRATA.md`](atlas/ATLAS_PHASE8_STRATA.md): the full 2-DOF
+> single-crystal sweep — column 60°/90°, Wegener, Lowitz, pyramidal). It came
+> back **empty: no A₄ swallowtail, no D₄ umbilic anywhere**, confirming Berry
+> 1994 (the one higher catastrophe found is the Lowitz A₃-lips — an A₃, not a new
+> arc; two candidate-A₄ false alarms were refuted by code). **So the
+> "invisible-halo" part of this prediction surface is NOT a new rare *arc* from a
+> higher caustic** — that direction is closed. The genuine candidates are the
+> **sub-visible / diffraction-dressing / sub-threshold-continuation** features of
+> the *known* halos (exactly the dispersion / orientation-mixing / crystal-size /
+> sub-visible-continuation items this roadmap instruments). The atlas's classified
+> phase diagram ([`atlas/ATLAS_PHASE7_PHASE_DIAGRAM.md`](atlas/ATLAS_PHASE7_PHASE_DIAGRAM.md))
+> is the forward map of *which* known halos are present at *which* elevations —
+> the structural backdrop the instrument extends along.
+
 This roadmap commits to the reframe: the atlas predicts; the instrument
 confirms or falsifies. Pre-registration discipline is mandatory because
 without it, "we extended the atlas and it matched" is indistinguishable

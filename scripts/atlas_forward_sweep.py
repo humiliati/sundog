@@ -5,7 +5,7 @@ Assembles the derived phase-boundary elevations of the (sun-elevation x crystal-
 RUNNING the repo machinery (the §6 armchair-catastrophe gate: derive, never assert). Each boundary is
 classified component-A (caustic catastrophe) or component-B (ray-admissibility wall); the random rings are
 a third kind (horizon-clip occlusion of an always-present A2 fold, NOT a bifurcation). §0.2: every boundary
-is a ~1-2° smeared band. NOT public-eligible. Companion doc: docs/calibration/PHASE7_PHASE_DIAGRAM.md.
+is a ~1-2° smeared band. NOT public-eligible. Companion doc: docs/atlas/ATLAS_PHASE7_PHASE_DIAGRAM.md.
 
 Reproduces the Phase-7 workflow synthesis (run wsktxxxg9), including its TWO refuted/removed transitions
 (the Wegener-reaches-anthelion and the pyramidal-lower-branch-at-20° fabrications), kept here as explicit

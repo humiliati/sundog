@@ -259,7 +259,7 @@ redirects the campaign, fixed *before* the phase runs, per AGENTS.md ▸
   Optional third: the vortex/wishing-well toy
   ([`internal/theory/postulations.md`](../internal/theory/postulations.md) ▸ Postulate 5).
 - **Exit.** A cross-substrate operator-identity table (same `Φ` up to
-  isomorphism of the coarse-graining) in `docs/proof/PHASE5_CROSS_SUBSTRATE.md`,
+  isomorphism of the coarse-graining) in `docs/atlas/ATLAS_PHASE5_CROSS_SUBSTRATE.md`,
   hedged at settled strength.
 - **Pre-registered negative.** If the substrates do **not** share the operator
   structure under measurement, the cross-substrate convergence *was* the

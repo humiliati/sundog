@@ -97,6 +97,16 @@ code, experiments, prior theorem materials, and application bridges.
 - [Sundog Geometry roadmap](SUNDOG_V_GEOMETRY.md): parhelion-derived
   geometry workbench shelf — parametric halo render, parhelion-offset
   inverse, calibration boundaries, and the path-to-promotion phases.
+- [Sundog Atlas roadmap](SUNDOG_V_ATLAS.md): the halo possibility-space as a
+  **classified bifurcation diagram** — forward-generate halos from the crystal
+  geometry, classify the transition walls (A: caustic catastrophes; B:
+  ray-admissibility). Structural arc complete (6.5 bifurcation set → 8 strata,
+  Berry-confirmed → 7 phase diagram → 11 capstone small-parameter model);
+  frozen-as-portfolio, NOT public-eligible.
+- [Sundog Atlas project folder](atlas/README.md): the atlas's banked receipts
+  (`ATLAS_PHASE65/7/8/11`), the determining-shadow (S2) tower, and the lit-pass
+  memo. Atlas phases carry the `ATLAS_PHASE…` prefix (distinct from the geometry
+  workbench's `calibration/PHASE…` scheme).
 - [SEO and social-readiness roadmap](site/SEO_AND_SOCIAL_READINESS_ROADMAP.md):
   per-page OG/Twitter/JSON-LD matrix, Phase 1 cleared 2026-05-21 across
   thirteen Class A pages; Phase 2 staged.

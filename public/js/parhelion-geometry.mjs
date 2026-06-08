@@ -810,7 +810,11 @@ function applyLowerTangentArc(svg, intensity, altitudeDeg, columnTiltDispDeg) {
 // refinement); the locus center is ~tilt-independent to first order, so the
 // parameter does not yet shift the curve.
 
-const TANGENT_ARC_CIRCUMSCRIBED_H = 29; // deg; upper+lower merge above this
+const TANGENT_ARC_CIRCUMSCRIBED_H = 29.7; // deg; upper+lower merge above this.
+// DERIVED by the Sundog Atlas (Phase 6.5, atlas_caustic_map.merge_elevation() = 29.7°,
+// the A₃-class caustic metamorphosis where the UTA/LTA fold caustics reconnect into the
+// circumscribed loop). Promoted 2026-06-07 from the earlier round-number 29° (the A(h)
+// asymptote moves to 29.7°; the h=18.6° Pass-C7 anchor is preserved). §0.2 band ~29.5–30.3°.
 const TANGENT_ARC_A_ANCHOR = 0.031;     // deg^-0.5, Pass C7 h=18.6° fit
 const TANGENT_ARC_A_ANCHOR_H = 18.6;    // deg, the HaloSim-validated cell
 
@@ -963,9 +967,13 @@ function applyInfralateralArc(svg, intensity) {
 // These are the math-derived defaults the doc's Phase 3 roadmap calls for.
 
 function czaVisibleAtAltitude(altitudeDeg) {
-  // The CZA is visible only when the sun is BELOW ~32° altitude. Above that
-  // the circumzenithal-arc circle moves outside the visible hemisphere.
-  return altitudeDeg <= 32;
+  // The CZA is visible only when the sun is below the CZA-disappearance wall.
+  // DERIVED by the Sundog Atlas (Phase 6.5): the 90°-wedge top→side ray goes
+  // total-internal-reflection when cos h < √(n²−1), i.e. h > arccos(√(n²−1)) =
+  // 32.196° at n=1.31 — a component-B admissibility wall. Promoted 2026-06-07
+  // from the earlier round-number 32° (see docs/atlas/ATLAS_PHASE65_BIFURCATION_SET.md;
+  // §0.2 smeared band ~31.0–32.9°). Its complement is the CHA wall, 90 − 32.196 = 57.804°.
+  return altitudeDeg <= 32.196;
 }
 
 function parhelicCurvatureFromAltitude(altitudeDeg) {

@@ -146,6 +146,16 @@ distributed so no document trampolines another's decisions.
   parhelic continuation, intersection enhancement, color-order
   inversion at tangencies) ranked by apparatus cost. Inherits mesa
   Phase 6 pre-registration discipline.
+- [`SUNDOG_V_ATLAS.md`](SUNDOG_V_ATLAS.md) — the **Sundog Atlas** project (the
+  halo possibility-space as a **classified bifurcation diagram**; folder
+  [`atlas/`](atlas/README.md)). It is the **structural / derivation backing**
+  for this workbench: where this roadmap renders halos and hardcodes their
+  transition boundaries empirically, the atlas **derives** those boundaries
+  from `{n, crystal geometry}` (CZA 32.196°, the 29.7° tangent-arc merge, CHA
+  57.804°, the plate-parhelia limit 60.74°) and classifies every transition by
+  mechanism. *Do not conflate it with this workbench's `halo_atlas` render
+  mode* — same subject (halos), different layer (structure vs. rendering). The
+  galvanized cross-link is in **Phase 3** below (the `czaVisible` boundary).
 - [`SUNDOG_V_CHAT.md`](SUNDOG_V_CHAT.md) — the public assistant /
   claim-boundary roadmap. Phase 13 below borrows its update discipline:
   when `sundog.html` adds or sharpens halo vocabulary, Ask Sundog must
@@ -561,6 +571,29 @@ visibly correct parhelion-offset shift; setting altitude > 32° hides the
 CZA arcs automatically." First clause: passes by construction across all
 seven calibration photos. Second clause: passes — atlas mode emits empty
 paths for the CZA family when `h > 32°`.
+
+> **Galvanized from the Sundog Atlas project (2026-06-07) — the workbench's
+> transition boundaries are now DERIVED, not empirical.** The
+> [Sundog Atlas](SUNDOG_V_ATLAS.md) bifurcation-diagram lane (distinct from
+> *this* workbench's `halo_atlas` render mode) computed the transition
+> elevations this workbench hardcodes, from `{n=1.31, crystal geometry}` with
+> nothing tuned (`docs/atlas/ATLAS_PHASE65_BIFURCATION_SET.md`):
+> - the **`czaVisible(h) → h ≤ 32°`** boundary is the atlas's **CZA-disappearance
+>   wall at 32.196° = arccos(√(n²−1))** (total internal reflection; a
+>   component-B admissibility wall), with a chromatic band 31.0–32.9°;
+> - the **tangent-arc → circumscribed-halo merge** (the Upper/Lower Tangent
+>   primitives) is the atlas's **29.7° A₃-class caustic metamorphosis**;
+> - the **circumhorizon arc appears at 57.804° = 90° − 32.196°** (the exact
+>   complement); the **plate parhelia detach near 60.74°**.
+> So the §6 "armchair catastrophe" gate is cleared for these numbers: the
+> workbench can promote its hardcoded `h ≤ 32°` to the derived `32.196°` (or
+> the smeared 31–33° band per §0.2). The atlas's **classified (elevation ×
+> habit) phase diagram** (`docs/atlas/ATLAS_PHASE7_PHASE_DIAGRAM.md`, 21 cells)
+> is the structural map of *which* halos are present at *which* sun elevations —
+> a forward source for the workbench's per-altitude primitive-visibility logic.
+> (Atlas Phase 8 also confirmed Berry 1994: **no invisible higher-catastrophe
+> halos** — no A₄ swallowtail, no D₄ umbilic — so the §What-the-atlas-does-NOT-
+> model prediction surface gains no new arc from that search.)
 
 **Phase 3 polish items landed (2026-05-12):**
 

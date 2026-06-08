@@ -1,6 +1,6 @@
 # S2 Lit-Pass — Track E (size shadow) + Track G (handedness shadow)
 
-> **Stage-0 deliverable for the S2 halo physical leg** (`docs/proof/PHASE5_CROSS_SUBSTRATE.md` §3.2 S2).
+> **Stage-0 deliverable for the S2 halo physical leg** (`ATLAS_PHASE5_CROSS_SUBSTRATE.md` §3.2 S2).
 > Real lit-pass (2026-06-07), every claim confidence-tagged. Purpose: settle the smallest defensible
 > per-shadow forward model and decide the **size-legibility kill-gate**. **Outcome: the naïve "size off
 > the refraction-halo fringe" is physically dead; the corona is the live home for the size shadow.**
