@@ -117,5 +117,21 @@ check("the birth is α0-specific: canonical edge-Lowitz (α0=90°) + the column 
       edge_flat and col_flat, f"edge-flat={edge_flat}, column-flat={col_flat}")
 cm.LOWITZ_ALPHA0 = _math.radians(60.0)            # restore the documented value
 
-print(f"\n{'ALL PASS — corank + cusps DERIVED on 4 maps (2 column wedges + Wegener + Lowitz); 29.7° A₃ metamorphosis; Lowitz A₃-lips (NOT A₄); no D₄; confirms Berry' if fail == 0 else str(fail) + ' FAILED'}")
+print("\nPhase 8-D — pyramidal-capped column (wedge='pyrcol', odd Galle wedge): confirms Berry:")
+for dphi, expect in ((120.0, 23.82), (180.0, 8.96)):     # the validated odd-radius halos
+    cm.PYR_DPHI = _math.radians(dphi)
+    G, A, sky, ok, su = cm.sky_grid(25.0, wedge="pyrcol", ngrid=400)
+    dmin = float(np.degrees(np.arccos(np.clip(sky[ok] @ su, -1, 1))).min())
+    check(f"pyrcol dφ={int(dphi)}° caustic lands on the odd radius (~{expect}°)", abs(dmin - expect) < 0.3,
+          f"caustic min-deviation = {dmin:.2f}°")
+cm.PYR_DPHI = _math.radians(180.0)                       # the 9° arc — the ψ-symmetric clean test
+counts_p = [sm.cusp_count(h, wedge="pyrcol")[0] for h in (10.0, 16.0, 22.0, 28.0, 34.0)]
+check("9° arc: cusp count FLAT at 2 across h (no A₄ swallowtail — confirms Berry)",
+      set(counts_p) == {2}, f"counts = {counts_p}")
+rp = sm.corank_on_caustic(20.0, wedge="pyrcol")
+check("9° arc is corank-1 (no D₄ umbilic)", rp is not None and rp["corank"] == 1,
+      f"s1_min/scale={rp['s1_min_rel']:.3f}" if rp else "None")
+cm.PYR_DPHI = _math.radians(120.0)                       # restore the default
+
+print(f"\n{'ALL PASS — 5 2-DOF maps swept (2 column wedges + Wegener + Lowitz + pyramidal); 29.7° A₃ metamorphosis; Lowitz A₃-lips; no A₄, no D₄ on any → confirms Berry' if fail == 0 else str(fail) + ' FAILED'}")
 sys.exit(1 if fail else 0)

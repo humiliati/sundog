@@ -122,9 +122,10 @@ orientation manifold (`F: T²→sky`, a square map); THREE single-crystal target
    cusp-CREATION** (a 2→4→2 interior pair-birth at h≈16.5) — a genuine codim-1 higher catastrophe — but the
    topological test shows it is an **A₃-lips metamorphosis, NOT Berry's A₄ swallowtail**, and it is
    parameterization-specific (α0≈60° only; plate-Lowitz negative). **Confirms Berry's no-A₄, no D₄.**
-2. **Pyramidal-capped horizontal column.** Same (γ,α) column manifold, **new odd Galle wedge** (prism
-   side + pyramid {10-11} cap face) → oriented odd-radius arcs (9/18.3/19.9/23.8/34.9°). `n2 =
-   sin(x)·inplane + cos(x)·c`; x=0 recovers `basal90`.
+2. **Pyramidal-capped horizontal column — DONE 2026-06-07 → confirms Berry (§8-D).** `wedge='pyrcol'`,
+   same (γ,α) column manifold, exit = pyramid {10-11} cap (x=62° from c); validated at the 9°/23.8° odd
+   radii. The 9° arc is a clean flat ψ-symmetric 2-cusp pair; the 23.8° arc has no grid-stable interior
+   A₄. **No A₄, no D₄.**
 3. **Wegener-arc ray path.** Same column torus, **new path** (one internal reflection off a basal face);
    a workflow agent reported a *grid-stable cusp-count change 4→5* = a **CANDIDATE A₄ signature** —
    **UNVERIFIED** (needs the eroded robust-regime + 3-jet audit; may be an admissibility-boundary cusp,
@@ -191,6 +192,32 @@ cusp-CREATION in the whole halo search** (the column is flat at 2) — a genuine
   JOSA 69:1103 1979; Tape; Riikonen; Cowley/atoptics) but **never in cusp/lips/catastrophe terms** — the
   catastrophe LABELING is uncatalogued, the underlying arc physics known. **Berry's A₄ remains open.**
 
+## 8-D — Pyramidal-capped column (the last enumerated 2-DOF target) — 2026-06-07 → confirms Berry
+`sky_grid` gained `wedge='pyrcol'`: the singly-oriented horizontal column (same (γ,α) 2-torus) but the
+EXIT face is a **pyramid {10-11} cap face** — normal at `PYR_X` = **61.99°** from the c-axis (computed from
+ice's c/a=1.628, the textbook ice pyramid angle) and azimuthal facet offset `PYR_DPHI`. The odd "Galle"
+wedge: `n2 = cos(x)·c + sin(x)·(cos(α+dφ)·u + sin(α+dφ)·w)`, giving `n1·n2 = sin(x)·cos(dφ)` = a constant
+wedge over the whole (γ,α) sweep. **Validated against the documented odd radii:** dφ=120° → caustic
+min-deviation **23.82°** (the 23° halo); dφ=180° → **8.96°** (the 9° halo); the other facet offsets are
+correctly TIR-blocked. **corank-1 throughout → no D₄.**
+- **9° arc (dφ=180°, the ψ-symmetric facet):** a clean **2-cusp ψ-symmetric pair at (δ≈9°, ψ≈±88°), FLAT
+  across h=8–35°** (merge-corrected `cusp_count`), corank-1. **No A₄, no D₄.** The cleanest test.
+- **23.8° arc (dφ=120°):** a single pyramid facet breaks the ψ→−ψ symmetry → a **one-sided** arc (cusps at
+  ψ≈+150° only; the mirror is the dφ=240° facet). It carries **~1 robust deep-interior A₃ cusp per facet**
+  (symmetric union ≈ 2); the apparent 1↔2 flicker is **grid-unstable cluster-splitting** (~1° separation),
+  not a pair-birth, and the arc **vanishes off-sky at h≥28°** (a component-B admissibility wall). **No
+  grid-stable interior A₄** (contrast Lowitz's clean 2→4→2 across every grid).
+- **Verdict: confirms Berry** — no A₄ swallowtail, no D₄ umbilic, on both the 9° and 23.8° oriented
+  odd-radius arcs.
+
+**THE 2-DOF SWEEP IS COMPLETE.** Every enumerated genuine 2-DOF single-crystal map — column 60° (tangent
+arcs), column 90° (46°/supralateral), Wegener (anthelic), Lowitz, pyramidal-capped column (9°/23.8°
+odd-radius) — has been searched. **All confirm Berry 1994: no A₄ swallowtail, no D₄ umbilic.** The single
+non-trivial higher catastrophe found anywhere is the **Lowitz A₃-lips** (the search's first cusp-creation,
+§8-C) — and it is A₃, not A₄. Berry's "swallowtail conspicuously absent from halo simulations" is now
+**computationally confirmed across the full 2-DOF target set** (and two candidate-A₄ false alarms —
+Wegener's and the initial Lowitz read — were refuted by code).
+
 ## Lit-pass Track B — RESOLVED 2026-06-07
 **Tape & Können 1999 (Appl. Opt. 38:1552, full 74-pp text read): pure parameterization, no caustic/
 catastrophe/bifurcation classification** (it dissolves the merge into "one halo"). **Berry 1994 (Appl.
@@ -211,6 +238,7 @@ families** (cusp counts stable — confirms Berry 1994), **no D₄** anywhere. T
 searched (§8-C): **Wegener** (candidate-A₄ refuted — a component-B wall cusp) and **Lowitz** (the search's
 first cusp-CREATION, but an **A₃-lips metamorphosis, not Berry's A₄** — parameterization-specific). **Every
 2-DOF map searched so far CONFIRMS Berry: no A₄ swallowtail, no D₄ umbilic** — and the lab found + labelled
-its first higher-catastrophe (the A₃-lips) and refuted its own two candidate-A₄ false alarms by code. The
-last enumerated standard-habit target is the **pyramidal-capped column** (odd Galle wedge). **NOT
-public-eligible** (Phase 0.5 lit-pass, incl. the Tape & Können 1999 prior-art check, gates any claim).
+its first higher-catastrophe (the A₃-lips) and refuted its own two candidate-A₄ false alarms by code. **The
+2-DOF target sweep is now COMPLETE (§8-D — the pyramidal-capped column also confirms Berry): all five
+enumerated 2-DOF single-crystal maps show no A₄ swallowtail and no D₄ umbilic.** **NOT public-eligible**
+(Phase 0.5 lit-pass, incl. the Tape & Können 1999 prior-art check, gates any claim).

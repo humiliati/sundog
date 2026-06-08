@@ -26,6 +26,8 @@ N_ICE = 1.31
 WEDGE_DEG = 60.0          # 22deg-halo prism wedge: two prism faces 120deg apart -> 60deg apex
 FACE_SEP = math.radians(180.0 - WEDGE_DEG)   # angle between the two outward face normals (120deg)
 LOWITZ_ALPHA0 = math.radians(60.0)           # fixed reference roll for the Lowitz (gamma,phi) manifold
+PYR_X = math.radians(61.99)                  # ice {10-11} pyramid-face normal angle from the c-axis
+PYR_DPHI = math.radians(120.0)               # pyramid-facet azimuthal offset (120deg -> 23.8deg; 180deg -> 9deg)
 
 
 def refract(d, n, eta):
@@ -111,7 +113,10 @@ def sky_grid(h_deg, n=N_ICE, ngrid=300, wedge="prism60"):
       'lowitz60' — the LOWITZ manifold: the column frame ROTATED by φ about the horizontal a-axis u
                   (so the c-axis tilts out of horizontal, c_z=sin φ — a geometrically DISTINCT 2-surface
                   in SO(3), meeting the column torus only at φ=0). The 2 DOF are (γ, φ) with the roll
-                  FIXED at LOWITZ_ALPHA0; the SAME 60° prism side-face pair. -> the Lowitz arcs."""
+                  FIXED at LOWITZ_ALPHA0; the SAME 60° prism side-face pair. -> the Lowitz arcs.
+      'pyrcol' — PYRAMIDAL-CAPPED horizontal column: same (γ,α) column manifold, but the exit face is a
+                  PYRAMID {10-11} cap face (normal at PYR_X=62° from c, facet offset PYR_DPHI). The odd
+                  Galle wedge (dphi=120deg -> 23.8deg / dphi=180deg -> 9deg) -> the oriented odd-radius arcs."""
     su = sun_dir(h_deg)
     d0 = -su
     g = np.linspace(0.0, 2 * math.pi, ngrid, endpoint=False)
@@ -142,6 +147,12 @@ def sky_grid(h_deg, n=N_ICE, ngrid=300, wedge="prism60"):
             n2 = nb                                                # 90° wedge: side + basal
         elif wedge == "wegener":
             n2 = n2_side; reflect_basal = True                    # side -> basal reflection -> side
+        elif wedge == "pyrcol":
+            # exit = pyramid {10-11} cap face: n2 = cos(x)·c + sin(x)·(cos(α+dφ)·u + sin(α+dφ)·w),
+            # c=(cg,sg,0), u=(sg,-cg,0), w=(0,0,1). |n2|=1 (c ⟂ inplane). Odd Galle wedge (PYR_X, PYR_DPHI).
+            cx, sx = math.cos(PYR_X), math.sin(PYR_X)
+            cAd, sAd = np.cos(A + PYR_DPHI), np.sin(A + PYR_DPHI)
+            n2 = np.stack([cx * cg + sx * cAd * sg, cx * sg - sx * cAd * cg, sx * sAd], axis=-1)
         else:
             raise ValueError(f"unknown wedge {wedge!r}")
     M = G.shape[0]
