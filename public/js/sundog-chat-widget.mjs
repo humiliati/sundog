@@ -45,7 +45,7 @@ async function initAskSundog() {
         <div class="sd-chat-message sd-chat-message-assistant">
           <p>Ready.</p>
         </div>
-        <div class="sd-chat-faqs" aria-label="Suggested questions"></div>
+        <div class="sd-chat-faqs" role="group" aria-label="Suggested questions"></div>
         <div class="sd-chat-answer-stack"></div>
       </div>
       <form class="sd-chat-form">

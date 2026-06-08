@@ -274,6 +274,7 @@ body {
 .sd-chat-close {
   width: 2.25rem;
   height: 2.25rem;
+  flex-shrink: 0;
   border: 1px solid rgba(247, 250, 248, 0.32);
   border-radius: var(--sd-radius-sm);
   background: transparent;
@@ -454,6 +455,9 @@ body {
 .sd-chat-submit {
   min-height: 2.65rem;
   border-radius: var(--sd-radius-sm);
+  /* 16px (not the inherited ~13px) keeps iOS Safari from auto-zooming the page
+     when the field is focused — the input must be >=16px to suppress that zoom. */
+  font-size: 16px;
 }
 
 .sd-chat-input {
@@ -536,6 +540,13 @@ body {
   .sd-chat-panel {
     width: calc(100vw - 1.5rem);
     max-height: calc(100vh - 5rem);
+  }
+
+  /* Comfortable 44px touch target for the close button on touch viewports
+     (the 36px desktop size passes AA 2.5.8 but is small for a thumb). */
+  .sd-chat-close {
+    width: 2.75rem;
+    height: 2.75rem;
   }
 }
 

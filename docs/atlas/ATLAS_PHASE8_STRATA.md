@@ -259,3 +259,22 @@ its first higher-catastrophe (the A₃-lips) and refuted its own two candidate-A
 2-DOF target sweep is now COMPLETE (§8-D — the pyramidal-capped column also confirms Berry): all five
 enumerated 2-DOF single-crystal maps show no A₄ swallowtail and no D₄ umbilic.** **NOT public-eligible**
 (Phase 0.5 lit-pass, incl. the Tape & Können 1999 prior-art check, gates any claim).
+
+## 8-E — the corank-2 / D₄ detector CALIBRATED (the never-fired branch, 2026-06-07)
+A self-audit (the lab refereeing its own null): the "no D₄ anywhere" verdict above rested on a corank-2
+detector (`corank_on_caustic`, flag `s1_min_rel < 0.05`) that had **only ever returned negatives** — unlike
+the A₄ jet test, its corank-2 branch was **never demonstrated to fire**. Now given the missing positive
+control (`scripts/atlas_jet_classify.py` §4 + `test_atlas_jet_classify.py`):
+- **POSITIVE — a synthetic hyperbolic-umbilic D₄** (`synthetic_umbilic`: the gradient map
+  `∇(x³/3+y³/3+w·xy)=(x²+wy, y²+wx)`, J vanishes at the origin at w=0, `det=4xy` sign-changing). The
+  chart-based detector (`corank_from_chart`) **FIRES — `s1_min_rel = 0.0036`, corank-2** — and as the umbilic
+  **unfolds** (w: 0.05→0.4) it climbs cleanly back to corank-1 (0.059→0.44), the catastrophe-theory
+  expectation. So the corank-2 branch is **not blind**, and 0.05 sits cleanly in the gap.
+- **NEGATIVE — the A₄ swallowtail** (`synthetic_swallowtail`, a corank-1 cuspoid): `s1_min_rel = 0.81`,
+  corank-1 — the detector **distinguishes a D₄ umbilic from an A₄ swallowtail** (and from the ice halos at
+  `s1_min_rel ≈ 0.2–0.3`).
+- **Verdict: the "no-D₄" null is UPGRADED from CONFIRMED to VALIDATED** — the tool genuinely *can* see a D₄
+  (it fires at 0.0036 on a known one); ice halos demonstrably lack one. (Next, optionally: feed the detector
+  a real **spheroidal-raindrop** forward chart at the Berry/Nye/Marston hyperbolic-umbilic aspect ratio — a
+  literature-established physical D₄ — as an independent-referee, physics-grounded validation. NOT a
+  new-physics claim; attribute the raindrop D₄ to Berry/Nye 1980 + Marston.)

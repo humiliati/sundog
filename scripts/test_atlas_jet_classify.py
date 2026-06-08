@@ -49,5 +49,26 @@ check("Lowitz birth is A3-lips: |c3| at the birth stays bounded (ratio > 0.5, vs
 check("Lowitz |c3| is in the A3 range (comparable to the column A3 control, not ~0)",
       low_birth > 2.0, f"Lowitz |c3|(birth)={low_birth:.3f} vs column A3 |c3|={top_c3(col):.3f}")
 
-print(f"\n{'ALL PASS — jet classifier calibrated (A4 control dives, A3 control bounded); Lowitz = A3-lips, NOT A4' if fail == 0 else str(fail) + ' FAILED'}")
+print("corank-2 / D4 detector calibration — the Atlas's never-fired corank-2 branch, exercised on a known D4:")
+
+
+def corank(chart):
+    X, Y, d = chart
+    return jc.corank_from_chart(X, Y, d, d)
+
+
+d4 = corank(jc.synthetic_umbilic(0.0))               # the hyperbolic-umbilic D4 at the umbilic point
+d4_unfolded = corank(jc.synthetic_umbilic(0.2))      # the SAME family, umbilic unfolded -> corank-1
+a4 = corank(jc.synthetic_swallowtail_chart(0.0))     # the A4 swallowtail -> a corank-1 cuspoid
+check("POSITIVE control: the corank-2 branch FIRES on a synthetic D4 umbilic (s1_min_rel < 0.05)",
+      d4["corank"] == 2 and d4["s1_min_rel"] < 0.05, f"s1_min_rel={d4['s1_min_rel']:.4f}")
+check("the D4 UNFOLDS to corank-1 as w grows (catastrophe-theory expectation; threshold not trivially low)",
+      d4_unfolded["corank"] == 1 and d4_unfolded["s1_min_rel"] > 0.05,
+      f"w=0.2: s1_min_rel={d4_unfolded['s1_min_rel']:.4f}")
+check("NEGATIVE control: the A4 swallowtail does NOT fire corank-2 (detector distinguishes D4 from A4)",
+      a4["corank"] == 1 and a4["s1_min_rel"] > 0.5, f"A4 s1_min_rel={a4['s1_min_rel']:.4f}")
+check("the 0.05 threshold cleanly separates D4 (≪0.05) from A4 (≫0.05) — validates the Atlas no-D4 null",
+      d4["s1_min_rel"] < 0.05 < a4["s1_min_rel"], f"D4={d4['s1_min_rel']:.4f} < 0.05 < A4={a4['s1_min_rel']:.4f}")
+
+print(f"\n{'ALL PASS — jet classifier calibrated (A4 dives, A3 bounded), Lowitz = A3-lips; AND the corank-2/D4 branch FIRES on a known D4 (validates the Atlas no-D4 null)' if fail == 0 else str(fail) + ' FAILED'}")
 sys.exit(1 if fail else 0)

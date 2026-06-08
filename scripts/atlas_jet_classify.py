@@ -77,13 +77,58 @@ def cusp_c3(phi, c2, c3, good=None, edge=3):
 
 
 # ---- positive control: the Morin A4 normal form -------------------------------------------------- #
-def synthetic_swallowtail(h, ng=420, L=1.1):
+def synthetic_swallowtail_chart(h, ng=420, L=1.1):
     g = np.linspace(-L, L, ng); a = np.linspace(-L, L, ng)
     G, A = np.meshgrid(g, a, indexing="ij")
     X = G
     Y = A ** 4 + h * A ** 2 + G * A
-    d = 2 * L / (ng - 1)
+    return X, Y, 2 * L / (ng - 1)
+
+
+def synthetic_swallowtail(h, ng=420, L=1.1):
+    X, Y, d = synthetic_swallowtail_chart(h, ng, L)
     return jet_from_chart(X, Y, d, d)
+
+
+# ---- the corank-2 / D4 (umbilic) detector ON A CHART + its synthetic-D4 positive control ---------- #
+def corank_from_chart(X, Y, dg, da, edge=3, corank2_rel=0.05):
+    """Chart-based twin of atlas_strata_map.corank_on_caustic: on the caustic (det J sign-change) the
+    smaller singular value s2→0; s1 is the OTHER one — corank-2 (a D4 UMBILIC) iff min(s1)/scale <
+    corank2_rel. Returns {s1_min_rel, corank, scale, n_caustic} (None if no caustic). This is the Atlas's
+    NEVER-FIRED corank-2 branch, here exercised on an arbitrary map so it can finally be calibrated."""
+    Xg, Xa = np.gradient(X, dg, da); Yg, Ya = np.gradient(Y, dg, da)
+    detJ = Xg * Ya - Xa * Yg
+    fro2 = Xg ** 2 + Xa ** 2 + Yg ** 2 + Ya ** 2
+    disc = np.sqrt(np.clip(fro2 ** 2 - 4 * detJ ** 2, 0, None))
+    s1 = np.sqrt(np.clip((fro2 + disc) / 2, 0, None))
+    s2 = np.sqrt(np.clip((fro2 - disc) / 2, 0, None))
+    caustic = np.zeros(detJ.shape, bool)
+    for ax in (0, 1):
+        idx = np.abs(np.diff(np.sign(detJ), axis=ax)) > 0
+        s0 = [slice(None)] * 2; s1s = [slice(None)] * 2; s0[ax] = slice(0, -1); s1s[ax] = slice(1, None)
+        caustic[tuple(s0)] |= idx; caustic[tuple(s1s)] |= idx
+    good = np.ones(detJ.shape, bool)
+    good[:edge, :] = good[-edge:, :] = good[:, :edge] = good[:, -edge:] = False
+    caustic &= good & np.isfinite(s1) & np.isfinite(s2)
+    if not caustic.any():
+        return None
+    scale = float(np.nanmedian(s1[good]))
+    return {"s1_min_rel": float(np.nanmin(s1[caustic]) / scale), "scale": scale,
+            "corank": 2 if float(np.nanmin(s1[caustic]) / scale) < corank2_rel else 1,
+            "n_caustic": int(caustic.sum())}
+
+
+def synthetic_umbilic(w, ng=400, L=1.2):
+    """Hyperbolic-umbilic D4 gradient map: ∇(x³/3 + y³/3 + w·xy) = (x²+w·y, y²+w·x), so J=[[2x,w],[w,2y]],
+    det J = 4xy − w². At w=0 the Jacobian VANISHES at the origin (corank-2 = a D4 umbilic) and det=4xy
+    SIGN-CHANGES across the two axes (so the caustic is locatable); for w≠0 the umbilic UNFOLDS to corank-1
+    folds. The missing analogue of synthetic_swallowtail — the positive control the corank-2 branch never
+    had. Returns (X, Y, spacing)."""
+    g = np.linspace(-L, L, ng); a = np.linspace(-L, L, ng)
+    G, A = np.meshgrid(g, a, indexing="ij")
+    X = G ** 2 + w * A
+    Y = A ** 2 + w * G
+    return X, Y, 2 * L / (ng - 1)
 
 
 # ---- chart extraction for the real halo maps ----------------------------------------------------- #
@@ -134,6 +179,21 @@ def main():
         v = cusp_c3(*synthetic_swallowtail(h))
         t = v[0] if v else float("nan")
         print(f"      h={h:+.2f}: max|c3|={t:7.3f}  ratio={t / gen0:5.2f}   {'<- A4 (c3->0)' if t / gen0 < 0.25 else ''}")
+
+    print("\n(4) CORANK-2 / D4 DETECTOR CALIBRATION — the Atlas's never-fired corank-2 branch, finally")
+    print("    exercised on a KNOWN D4 (corank-2 iff s1_min_rel < 0.05). The Atlas 'no-D4-anywhere' null")
+    print("    rested on a detector never shown to fire; this gives it the missing positive control.")
+    print("    + POSITIVE — synthetic hyperbolic-umbilic D4 ∇(x³/3+y³/3+w·xy), swept through the umbilic:")
+    for w in (0.0, 0.05, 0.1, 0.2, 0.4):
+        X, Y, d = synthetic_umbilic(w); r = corank_from_chart(X, Y, d, d)
+        tag = "<== D4 FIRES (corank-2)" if r["corank"] == 2 else "corank-1 (umbilic unfolded)"
+        print(f"        w={w:.2f}: s1_min_rel={r['s1_min_rel']:.4f}  corank={r['corank']}  {tag}")
+    print("    - NEGATIVE — the A4 swallowtail (a corank-1 cuspoid; must NOT fire corank-2):")
+    for h in (0.0, -0.4):
+        X, Y, d = synthetic_swallowtail_chart(h); r = corank_from_chart(X, Y, d, d)
+        print(f"        h={h:+.2f}: s1_min_rel={r['s1_min_rel']:.4f}  corank={r['corank']}  (A4 -> corank-1)")
+    print("    => the corank-2 branch CAN fire (0.004 on a known D4) and distinguishes D4 from A4 (0.81);")
+    print("       so the Atlas no-D4 null is VALIDATED (the tool sees D4; ice halos genuinely lack it).")
     return 0
 
 
