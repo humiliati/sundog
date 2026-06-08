@@ -37,14 +37,14 @@ derivation, not a constant); the CHA=90°−CZA complement identity holds to mac
 chromatic band is reported for each (the transition is a ~1–2° smeared band, not a sharp edge — the
 real edge is the smoothed image under the sun's 0.5° disk + tilt-spread + dispersion).
 
-## 6.5-B — Component A (the 29° UTA+LTA→circumscribed cusp) — LANDED 2026-06-07
+## 6.5-B — Component A (the 29° UTA+LTA→circumscribed merge metamorphosis) — LANDED 2026-06-07
 **Derived merge elevation = 29.7° (white-light n=1.31; chromatic band 29.5–30.3° across the visible,
 = the documented "29–32°" spread), within ±1.0° of the documented ~29°.** The 29° transition is now a
 DERIVED output of the horizontal-column halo-function caustic — replacing the hardcoded
 `TANGENT_ARC_CIRCUMSCRIBED_H=29` in `parhelion-geometry.mjs`. **The §6 armchair-catastrophe gate is now
 FULLY cleared (22/29/32/46/58 all derived).** Sanity: the caustic touches 21.84° at the top (the 22°
 fold); the caustic is two separate arcs below the merge and a connected circumscribed loop above (the
-A₃ topology change). Scripts: `scripts/atlas_caustic_map.py` + `scripts/test_atlas_caustic_map.py`
+A₃-class metamorphosis — a topology change of the elevation family; the point-cusps are the apexes, 8-B). Scripts: `scripts/atlas_caustic_map.py` + `scripts/test_atlas_caustic_map.py`
 (all pass). **Caustic locator (implemented):** `delta_min(ψ)` — the per-azimuth minimum deviation, which
 is the fold-caustic envelope; the **merge = where its mid-ψ GAP closes** (the UTA/LTA wing-tips touch).
 The gap is real inadmissibility (robust to the `dmax` cap: identical at dmax 46/70/89° — the column
@@ -75,11 +75,17 @@ singular set, the **Jacobian kernel**; 2 orientation DOF suffice, **no full-3-D,
   kernel"; the **"A₃ cusp"** label is the catastrophe classification applied on top. **Prior-art (Berry
   1994):** the halo map is *non-gradient*, so the Thom taxonomy doesn't transfer wholesale — but folds +
   **cusps survive by Whitney's theorem** (generic for any smooth 2-D map), and Berry records "some halos
-  do show cusps," so the **A₃ Whitney-cusp label is defensible** (not "first" — Berry pre-empts the idea).
-  The corank-1 (A₃) vs corank-2 (D₄) question is **CONFIRMED corank-1 = A₃** numerically in Phase 8-A
+  do show cusps," so the **A₃ label is defensible** (not "first" — Berry pre-empts the idea).
+  The corank-1 vs corank-2 (D₄) question is **CONFIRMED corank-1** numerically in Phase 8-A
   (`scripts/atlas_strata_map.py`; `calibration/PHASE8_STRATA.md`); no D₄ found, confirming Berry's
-  no-umbilic prediction. **Honest off-ramp (held):** 29.7° fell out cleanly; had it not, that is a
-  model-insufficiency finding, never a number to tune to.
+  no-umbilic prediction. **LABEL SHARPENED by Phase 8-B's cusp locator (`cusp_field`):** the persistent A₃
+  **point-cusps** are the **UTA/LTA apexes** (top/bottom of the 22° circle); this **29.7° merge** is the
+  A₃-class **caustic METAMORPHOSIS** — the two arc components reconnect as the mid-ψ gap closes (the
+  codim-2 topology change), *not* a point-cusp (the locator finds no cusp at the side reconnection). The
+  derived **29.7° number is unaffected**; only the catastrophe label is refined (metamorphosis vs apex
+  point-cusps). 8-B's A₄-swallowtail search on the column is a **clean NULL** (cusp count stable at 2),
+  confirming Berry's "swallowtail absent from sims." **Honest off-ramp (held):** 29.7° fell out cleanly;
+  had it not, that is a model-insufficiency finding, never a number to tune to.
 
 ## Status + downstream
 **Phase 6.5 COMPLETE (2026-06-07): both components landed.** Component B (CZA 32.196°, CHA 57.804°) and

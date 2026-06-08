@@ -23,9 +23,10 @@
 >   hexagonal-ice halo bifurcation set, taking up Berry's (1994) question and addressing the non-gradient
 >   map." Cite Tape 1980 + Tape & Können 1999 + Berry 1994 + Berry-Upstill/Nye.
 > - **The A₂/A₃ labels survive the non-gradient objection** by **Whitney's theorem**: folds and cusps
->   are the generic stable singularities of *any* smooth 2-D map (gradient or not). So the 29.7° merge =
->   A₃ Whitney cusp is valid (and Berry confirms cusps occur). It is the *higher* strata where
->   gradient-vs-non-gradient bites.
+>   are the generic stable singularities of *any* smooth 2-D map (gradient or not). The column's A₃
+>   point-cusps are the **UTA/LTA apexes** (8-B locator); the **29.7° merge is the A₃-class
+>   *metamorphosis*** (two A₂ folds coalesce — also a Whitney event, valid in the non-gradient map; Berry
+>   confirms cusps occur). It is the *higher* strata (A₄/D₄) where gradient-vs-non-gradient bites.
 > - **`corank-1` alone does NOT fix A₃ vs A₄** — that needs the 3-jet/4-jet determinacy conditions. The
 >   29.7° merge is A₃ by the **two-fold-coalescence topology** (the 6.5-B gap-closure = Whitney cusp),
 >   not by corank alone; an A₄ claim would require the higher-jet check.
@@ -56,15 +57,19 @@ cells to exclude wing-tip artifacts).
 | stratum | feature | corank | `s1/scale` on caustic | label |
 | --- | --- | ---: | ---: | --- |
 | **A₂ fold** | 22°/46° edges + tangent-arc folds (all h) | 1 | 0.14–0.40 | generic caustic |
-| **A₃ cusp** | the **29.7° UTA+LTA→circumscribed merge** | 1 | **0.26** | two A₂ folds coalesce |
+| **A₃ point-cusp** | the **UTA/LTA apexes** (top/bottom, 8-B locator) | 1 | — | Whitney cusp, all h |
+| **A₃-class metamorphosis** | the **29.7° UTA+LTA→circumscribed merge** | 1 | **0.26** | two A₂ folds coalesce |
 | A₄ / D₄ | — none on the column — | — | — | honest null |
 
-- **OPEN QUESTION CLOSED (PHASE65 §6.5-B):** the 29.7° merge is **corank-1 → an A₃ (Whitney) cusp, NOT a
-  D₄ umbilic** (`s1/scale = 0.26`, cleanly bounded away from 0). The two UTA/LTA fold branches coalesce
-  (the gap-closure of 6.5-B) — the A₃ identification rests on the **two-fold-coalescence topology** (a
-  Whitney cusp, valid for any smooth 2-D map per Whitney's theorem, gradient or not — so it survives
-  Berry's non-gradient objection), not on corank alone (`corank-1` does not by itself separate A₃ from
-  A₄). Consistent with Berry 1994 ("some halos do show cusps").
+- **OPEN QUESTION CLOSED (PHASE65 §6.5-B), label SHARPENED by 8-B:** the 29.7° merge is **corank-1, NOT a
+  D₄ umbilic** (`s1/scale = 0.26`, cleanly bounded away from 0) — so it is an A_k cuspoid, not an umbilic.
+  **8-B's cusp locator sharpens *which* A₃ object it is:** the merge is a **caustic METAMORPHOSIS** (the
+  two UTA/LTA arc components reconnect as the gap of 6.5-B closes), the codim-2 topology change of the
+  elevation family — *A₃-class* (two A₂ folds coalesce, a Whitney event valid for any smooth 2-D map, so
+  it survives Berry's non-gradient objection), but **not a point-cusp** (the locator finds no cusp at the
+  side reconnection). The persistent **A₃ point-cusps are the UTA/LTA apexes** (top/bottom). The derived
+  29.7° number is unaffected; only the label is refined (metamorphosis vs apex point-cusps). Consistent
+  with Berry 1994 ("some halos do show cusps").
 - **Honest null:** corank-1 **everywhere** on the column (min `s1/scale = 0.062` at low sun — a
   wing-tip-near-admissibility-boundary closest-approach, still corank-1). The 2-DOF→2-sky square map
   exposes **only corank-1 (A_k) strata**; **D₄ needs ≥2 control DOF** (the elevation × habit grid of
@@ -72,19 +77,51 @@ cells to exclude wing-tip artifacts).
 - **Derive-not-assert verified:** the Jacobian/singular values recompute from n (scale 0.467→0.489 as
   n 1.31→1.40) while the corank label correctly stays structurally 1.
 
-## 8-B — other habits + the SWALLOWTAIL search (STAGED; reframed by the Berry prior-art)
-Extend `atlas_strata_map.py` (reusing the Snell kernel + `sky_grid`) to: **plate** (1-DOF azimuthal),
-**Parry** (2-DOF tilt+azimuth), **pyramidal** (discrete wedge families, Tape AH-CH10/SAX-CH11). Run the
-corank classifier across the `(elevation × habit)` grid. **The genuine target is the SWALLOWTAIL (A₄) —
-Berry 1994's explicit open question** (stable in non-gradient R³→R³ maps, yet "conspicuously absent from
-numerous halo simulations"). A₄ needs the 3-jet check (`∂δ=∂²δ=∂³δ=0` with `∂⁴δ≠0`), not just corank.
-**The umbilic (D₄) search EXPECTS NONE** — Berry predicts no umbilics in the non-gradient halo map, so a
-flagged corank-2 point is most likely a boundary artifact (or would need extraordinary justification
-against Berry); the anthelic-point X-crossing is *generically two A₂ folds*, not an umbilic. Frame the
-D₄ search as **testing/confirming Berry's no-umbilic prediction**, not finding one. Every higher stratum
-→ Gate-2 catalog cross-check; any bucket-(ii) candidate is the only "prediction," capped P1/P2 internal.
-Expected: A₄ absent or coincident with a named locus; D₄ confirmed-absent → contribution = the
-systematic stratification + the engagement of Berry's open questions, not a new halo.
+## 8-B — the swallowtail search (column LANDED 2026-06-07; other habits staged)
+Added a **cusp locator** (`cusp_field`/`cusp_count` in `atlas_strata_map.py`): on the caustic the A₃
+cusps are where the kernel direction `K` (small-singular-value eigenvector of `J`) is **tangent** to the
+caustic, i.e. `g := K·∇(det J) = 0` (a fold has `K` transverse, `g≠0`). Cusps = `{det J = 0} ∩ {g = 0}`.
+
+**Column result — and it sharpens the 8-A label:**
+- **The A₃ point-cusps are the UTA/LTA APEXES** — exactly **2**, at (δ≈21.3°, ψ=0° top) and (21.3°,
+  180° bottom), **stable across all h ≥ 22°**. These (not the merge) are the rigorously-located A₃ cusps.
+- **LABEL SHARPENED (corrects 8-A / 6.5-B):** the **29.7° UTA+LTA merge is a caustic METAMORPHOSIS** —
+  the two arc components reconnect (their admissibility-bounded wing-tips meet, closing the 6.5-B gap) as
+  the sun-elevation control varies. It is the codim-2 **topology change** (A₃-*class*), **not a point-
+  cusp** (the cusp locator finds NO cusp at the side reconnection). The **derived 29.7° number is
+  unaffected and correct**; only the catastrophe *label* is refined: metamorphosis (merge) vs the
+  persistent point-cusps (apexes).
+- **NO A₄ SWALLOWTAIL — confirms Berry 1994.** The cusp count is stable at 2 across the robust regime
+  (no pair born/annihilated → no A₄ event). The apparent low-sun (h<22°) proliferation (11–19 cusps) is a
+  **numerical artifact**: grid-dependent (h=18 gives 11/13/19 at ngrid 240/300/400; h=20 gives 4/26/17),
+  the signature of a fragmented caustic near the admissibility boundary — excluded. This **computationally
+  confirms Berry's observation** that the swallowtail is "conspicuously absent from… numerous halo
+  simulations" (for the column habit). Honest null, the intended Berry-engagement.
+
+**90°-WEDGE FAMILY (46° / supralateral / infralateral arcs) — LANDED 2026-06-07.** `cm.sky_grid` gained
+a `wedge` param: `'basal90'` swaps the exit face for a **basal (end) face** (normal = `c`, ⟂ the prism
+side faces → a **90° refracting wedge**), keeping the **same 2 orientation DOF (γ,α)** — so the cusp
+locator + corank classifier run unchanged on the second 2-DOF caustic family. Result:
+- **The caustic is the 46° family** — cusps at δ≈47°→58° (h 10°→28°), i.e. the supralateral / 46°-tangent
+  arcs (min-deviation 45.7° for the 90° wedge, n=1.31).
+- **corank-1 throughout** (`s1/scale ≈ 0.69–0.82 ≫ 0.05`) → **no D₄ umbilic** on this family either.
+- **2 cusps — a ψ-symmetric pair at the sides** (ψ≈±75–85°, the lateral-arc cusps), **stable across
+  grids** (240/300/400) for h≲28°. **No A₄ swallowtail:** the cusp count never changes. The caustic
+  **vanishes off-sky near h~30°** (the supralateral-arc elevation limit — a **component-B admissibility
+  wall**, like the CZA at 32°, *not* a cusp-pair annihilation). (Robustness: the labeler can split one
+  cusp into adjacent cells → spurious ψ-asymmetric odd counts; `cusp_count` merges centroids within 4° to
+  fix it.)
+- **Both 2-DOF column families (60°-wedge tangent arcs + 90°-wedge 46° arcs) now CONFIRM Berry 1994** — no
+  swallowtail, no umbilic. The swallowtail search is **complete for the column habit**.
+
+**STILL STAGED:** **plate** (parhelia/CZA) and **Parry** are **1-DOF** (azimuth only) — their caustics are
+**folds only** (no cusps in a 1-DOF map), so they get a fold-classification, *not* a swallowtail search.
+The remaining genuine 2-DOF case is **pyramidal** (Tape AH-CH10/SAX-CH11 odd-wedge families). **The A₄
+target needs the 3-jet check** (`∂δ=∂²δ=∂³δ=0`, `∂⁴δ≠0`) where the cusp-count method is ambiguous; the
+**D₄ search EXPECTS NONE** (Berry; the anthelic-X is generically two A₂ folds). Every higher stratum →
+Gate-2 catalog cross-check; any bucket-(ii) candidate is the only "prediction," capped P1/P2 internal.
+Expected: A₄ absent / coincident with a named locus; D₄ confirmed-absent → contribution = the systematic
+stratification + the engagement of Berry's open questions, not a new halo.
 
 ## Lit-pass Track B — RESOLVED 2026-06-07
 **Tape & Können 1999 (Appl. Opt. 38:1552, full 74-pp text read): pure parameterization, no caustic/
@@ -97,8 +134,12 @@ pre-empts the idea, Tape the cusp). Mandatory: cite Berry 1994 + engage the non-
 A_n/D_n labels need the jet-determinacy check, not corank alone; the no-D₄ result confirms Berry.
 
 ## Status
-8-A is a clean, defensible component: the catastrophe-stratum corank is now a **computed** property of
-the halo caustic (the §6 armchair gate cleared for the column), the **A₃-vs-D₄ question is closed (A₃)**,
-and the column carries no higher strata (honest null). 8-B (other habits + the umbilic candidate) is the
-remaining directed search. **NOT public-eligible** (Phase 0.5 lit-pass, incl. the Tape & Können 1999
-prior-art check, gates any claim).
+8-A + the full 8-B column habit (BOTH 2-DOF wedge families) are clean, defensible components: the
+catastrophe-stratum corank is now a **computed** property of the halo caustic (the §6 armchair gate
+cleared), the **A₃-vs-D₄ question is closed (corank-1, A₃-class)**, the cusp locator places the **A₃
+point-cusps** (apexes for the 60°-wedge tangent arcs; lateral pairs for the 90°-wedge 46° arcs) and the
+**29.7° merge as the A₃-class metamorphosis**, and the **A₄ swallowtail search is a clean NULL on both
+families** (cusp counts stable — confirms Berry 1994), **no D₄** anywhere. 8-B's remaining leg = the
+**pyramidal** habit (the other genuine 2-DOF case; plate/Parry are 1-DOF → folds only, a fold-
+classification not a swallowtail search) + the optional A₄ 3-jet refinement. **NOT public-eligible**
+(Phase 0.5 lit-pass, incl. the Tape & Können 1999 prior-art check, gates any claim).

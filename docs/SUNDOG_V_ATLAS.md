@@ -107,11 +107,15 @@ one or the other:
 - **(A) Caustic catastrophes** — caustics *coalescing / changing type* (the *merges*). Folds meeting
   is a **cusp (A₃)**; higher coincidences give swallowtails (A₄), butterflies, umbilics (D₄).
   *Candidate:* the **UTA + LTA → circumscribed-halo merge near elevation ≈ 29°** (Tape AH-CH06 p62) —
-  two caustics coalescing (Phase 8-A: a corank-1 **A₃ Whitney cusp** at 29.7°). **Caveat (Berry 1994):**
-  the halo orientation→deflection map is **non-gradient**, so the standard Thom A_n/D_n taxonomy does not
-  transfer wholesale — folds + cusps survive (Whitney), but **umbilics (D₄) are predicted absent** and
-  the **swallowtail (A₄) is an open question**; any higher-stratum label needs the jet-determinacy check,
-  not corank alone (`calibration/PHASE8_STRATA.md`).
+  two caustics coalescing (Phase 8-A/8-B: corank-1 at **29.7°**, an **A₃-class caustic metamorphosis** —
+  the two arc components reconnect; the persistent A₃ **point-cusps** are the **UTA/LTA apexes**, located
+  by 8-B's cusp finder). **Caveat (Berry 1994):** the halo orientation→deflection map is **non-gradient**,
+  so the standard Thom A_n/D_n taxonomy does not transfer wholesale — folds + cusps survive (Whitney), but
+  **umbilics (D₄) are predicted absent** and the **swallowtail (A₄) is an open question**; any higher-
+  stratum label needs the jet-determinacy check, not corank alone. **8-B: the A₄ search is a clean NULL on
+  both 2-DOF column families** (the 60°-wedge tangent arcs + the 90°-wedge 46°/supralateral arcs; cusp
+  counts stable) — *computationally confirming* Berry's "swallowtail absent from sims"
+  (`calibration/PHASE8_STRATA.md`).
 - **(B) Ray-admissibility boundaries** — a face-pair ray path *appearing/disappearing* because of TIR,
   grazing incidence, or geometric admissibility (the *domain walls* of the catastrophe, where the
   generating family ceases to be defined). *Candidates:* the **circumzenithal arc disappearing above
@@ -241,9 +245,9 @@ catastrophe-optics literature; asserting a specific catastrophe type without the
 | 4 | The parametric workbench — "draws the parhelion from the math"; the rendering *is* the proof | grounded (`SUNDOG_V_GEOMETRY.md`) |
 | 5 | Determining-shadow-set on the optics — what the display determines vs. resists; bank the halo as a physical read-off resister | advanced — lossiness-crossover RUN (`proof/PHASE5_CROSS_SUBSTRATE.md` §3.11–3.14): discrete *determines*, continuous magnitude *resists partially* |
 | 6 | The global-invariant search — the determining invariants beyond elevation (habit class, orientation symmetry, optical-path topology) | open |
-| **6.5** | **Compute the bifurcation set** — from the ray-optics deviation map: caustics (`∂δ=0`), their coalescences (cusp `∂²δ=0`, swallowtail `∂³δ=0`) = component (A); TIR/grazing admissibility walls = component (B). Predict the transition elevations + types; verify 29° (A-cusp), 32°/58° (B-walls) fall out vs. the apparatus | **COMPLETE (computation), 2026-06-07** (`calibration/PHASE65_BIFURCATION_SET.md`): all transitions **derived**, none hardcoded — component-B walls CZA **32.196°** + CHA **57.804°** (=90°−CZA) + 22°/46° A₂ folds (`scripts/atlas_bifurcation_set.py`); component-A **29.7° A₃ cusp** from the horizontal-column halo-function caustic, gap-closure of `det J=0` (`scripts/atlas_caustic_map.py`); all within ±1° of documented, recompute-from-n. §6 armchair gate cleared. Remaining: optional HaloSim cross-render + lit-pass Track B (A₃-cusp identity = SYNTHESIS). |
+| **6.5** | **Compute the bifurcation set** — from the ray-optics deviation map: caustics (`∂δ=0`), their coalescences (cusp `∂²δ=0`, swallowtail `∂³δ=0`) = component (A); TIR/grazing admissibility walls = component (B). Predict the transition elevations + types; verify 29° (A-cusp), 32°/58° (B-walls) fall out vs. the apparatus | **COMPLETE (computation), 2026-06-07** (`calibration/PHASE65_BIFURCATION_SET.md`): all transitions **derived**, none hardcoded — component-B walls CZA **32.196°** + CHA **57.804°** (=90°−CZA) + 22°/46° A₂ folds (`scripts/atlas_bifurcation_set.py`); component-A **29.7° merge** (an A₃-class caustic metamorphosis) from the horizontal-column halo-function caustic, gap-closure of `det J=0` (`scripts/atlas_caustic_map.py`); all within ±1° of documented, recompute-from-n. §6 armchair gate cleared. Remaining: optional HaloSim cross-render + lit-pass Track B (A₃ identity = SYNTHESIS). |
 | 7 | The forward sweep — generate the complete atlas; the higher-codim strata are the directed search for the invisible halos | open |
-| 8 | Invisible-halo predictions — each generated rare halo (higher catastrophe) as a falsifiable forward claim. **Reframed 2026-06-07 (`calibration/PHASE8_STRATA.md`): the defensible form is the systematic catastrophe STRATIFICATION, taking up Berry 1994's open question + addressing the non-gradient halo map — NOT "first catastrophe classification" (Berry pre-empts the idea, Tape the cusp); discovery a low-confidence rider.** | **8-A LANDED:** corank classifier (`scripts/atlas_strata_map.py`) — the **29.7° merge = A₃ Whitney cusp (corank-1), NOT D₄** (PHASE65 open Q closed); column carries only corank-1 (no A₄/D₄ — honest null, and the no-D₄ result CONFIRMS Berry's no-umbilic prediction). **8-B STAGED:** other habits + the **swallowtail (A₄) search = Berry's genuine open question** (umbilic search expects none, per Berry). Lit-pass Track B RESOLVED (Berry 1994 decisive). |
+| 8 | Invisible-halo predictions — each generated rare halo (higher catastrophe) as a falsifiable forward claim. **Reframed 2026-06-07 (`calibration/PHASE8_STRATA.md`): the defensible form is the systematic catastrophe STRATIFICATION, taking up Berry 1994's open question + addressing the non-gradient halo map — NOT "first catastrophe classification" (Berry pre-empts the idea, Tape the cusp); discovery a low-confidence rider.** | **8-A LANDED:** corank classifier (`scripts/atlas_strata_map.py`) — the **29.7° merge is corank-1, NOT D₄** (PHASE65 open Q closed); column carries only corank-1 (no A₄/D₄ — honest null; the no-D₄ result CONFIRMS Berry's no-umbilic prediction). **8-B (column) LANDED:** cusp locator (`cusp_field`) — the A₃ **point-cusps are the UTA/LTA apexes**, the **29.7° merge is the A₃-class *metamorphosis*** (label sharpened); the **swallowtail (A₄) search is a clean NULL on BOTH 2-DOF column families** — the 60°-wedge tangent arcs *and* the 90°-wedge 46°/supralateral arcs (`wedge='basal90'`), cusp counts stable, *computationally confirming* Berry's "swallowtail absent from sims"; **no D₄** either. **8-B remaining:** the pyramidal habit (plate/Parry are 1-DOF → folds only). Lit-pass Track B RESOLVED (Berry 1994 decisive). |
 | **8.5** | **Shadow 2 — diffraction → crystal SIZE** — read size off the Airy dressing, calibrated by the corona. **Dressing layer BUILT** (`scripts/s2_optics.py`, standalone — HaloSim can't host it). **Corrected:** size lives on the corona / parhelion-fold, NOT the 22° step edge (Berry 1994); and size **resists only PARTIALLY** (magnitude scale-leak, §3.13). | built — partial-resister, not a clean washout |
 | **8.6** | **Shadow 3 — polarization → crystal HANDEDNESS** — Stokes `V` sign + c-axis class via birefringence; the cleanly-determined shadow (discrete `Z₂`, AB-exact analog). **Mueller layer BUILT** (`scripts/s2_optics.py`); **linear-pol archival-validated vs Können 1991** (`scripts/s2_konnen_validate.py`); handedness *determines* in forward-model (`disc=1.000`). Circular-`V` reframed (per-feature defensible vs net-V quarantined), sky-measurement scope-and-hold. | built + linear-validated; circular-V forward-model, sky owed |
 | **8.7** | **Net circular polarization → population handedness imbalance** — **DEMOTED (2026-06-07):** net-`V` is **~0 by symmetry** — no mechanism breaks ice-crystal handedness (ice achiral; E/B not pseudoscalar; Können's `U=0` is the exact net-V-cancellation analog). The measurable signal is a **per-feature antisymmetric `±V(θ,φ)` integrating to ~0**, not net-CP. | demoted — likely-null; per-feature V is the real target |
@@ -258,8 +262,13 @@ Mueller layers are built (`scripts/s2_optics.py`), the polarization model is arc
 Können 1991, and the lossiness-crossover ran (forward-model tier). **The structural CORE advanced too:
 Phase 6.5 (the bifurcation-set computation) is now COMPLETE on the computation side (2026-06-07,
 `calibration/PHASE65_BIFURCATION_SET.md`) — the 22/29/32/46/58 transitions all DERIVED (component-B
-walls + the 29.7° A₃ cusp), §6 armchair gate cleared.** Still open: the optional HaloSim cross-render,
-Phase 7 (forward sweep), Phase 8 (invisible halos), and the **capstone (Phase 11)**.
+walls + the 29.7° merge), §6 armchair gate cleared.** Phase 8 advanced: **8-A + the full 8-B column habit
+(both 2-DOF wedge families) landed** — the corank classifier + cusp locator place the A₃ point-cusps
+(apexes for the 60°-wedge tangent arcs, lateral pairs for the 90°-wedge 46° arcs), the 29.7° merge as the
+A₃-class metamorphosis, and the A₄-swallowtail search returns a clean null on both families with no D₄
+(confirming Berry 1994). Still open: the optional HaloSim cross-render, Phase 7 (forward sweep), Phase
+8-B's pyramidal habit, and the
+**capstone (Phase 11)**.
 
 ## 5. Phase 11 — the platonic-solid model, except holograms (the capstone)
 

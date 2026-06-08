@@ -4,7 +4,8 @@
 Implements Tape's halo-function caustic computation (Tape 1980, JOSA 70:1175) for singly-oriented
 HORIZONTAL COLUMN crystals (2 orientation DOF), so the ~29 deg tangent-arc MERGE elevation falls OUT
 as a DERIVED output (replacing the hardcoded TANGENT_ARC_CIRCUMSCRIBED_H=29 in parhelion-geometry.mjs
--- the §6 armchair-catastrophe gate). The merge is an A3 cusp: two fold caustics coalescing.
+-- the §6 armchair-catastrophe gate). The merge is an A3-class caustic metamorphosis: two fold caustics
+coalescing as the elevation control varies (Phase 8-B sharpens this — the point-cusps are the apexes).
 
 Model (de-risk-confirmed minimal sufficient):
   - State: (gamma, alpha) on the 2-torus. gamma = c-axis azimuth about vertical; alpha = roll about
@@ -12,7 +13,7 @@ Model (de-risk-confirmed minimal sufficient):
   - Forward map: 3-D vector Snell ray trace through the 60deg prism wedge (faces 120deg apart),
     n=1.31. sky = apparent source direction (-outgoing). NO Monte-Carlo, NO 3rd DOF.
   - Caustic = where the (gamma,alpha)->sky map folds (ray density diverges). The tangent arc is this
-    caustic; the merge is where it closes into a loop around the sun (the cusp).
+    caustic; the merge is where it closes into a loop around the sun (the A3-class metamorphosis).
 
 SCOPE (atlas §0.2): ray-optics skeleton; the real arc is the smoothed image (sun 0.5deg disk + tilt +
 dispersion). Physics fixed by Snell + Tape geometry; nothing tuned. NOT public-eligible.
@@ -95,10 +96,15 @@ def _refract_vec(d, n, eta):
     return t, valid
 
 
-def sky_grid(h_deg, n=N_ICE, ngrid=300):
+def sky_grid(h_deg, n=N_ICE, ngrid=300, wedge="prism60"):
     """Vectorized column halo function over the (gamma,alpha) torus. Returns G,A (M,) orientation grids;
     sky (M,3) apparent-source unit vectors (NaN where inadmissible); valid (M,) bool; su (3,) sun dir.
-    M = ngrid*ngrid. (Shared kernel for the Phase-8 Jacobian/strata classifier.)"""
+    M = ngrid*ngrid. (Shared kernel for the Phase-8 Jacobian/strata/cusp classifiers.)
+
+    wedge selects the face-pair (both keep the 2 orientation DOF γ,α of the horizontal column):
+      'prism60' — two prism SIDE faces 120° apart (60° refracting wedge) -> the 22° / tangent-arc family.
+      'basal90' — a prism side face + a BASAL (end) face (normal = c, ⟂ the side faces -> 90° wedge) ->
+                  the 46° / supralateral / infralateral family (Phase 8-B's 2-DOF swallowtail extension)."""
     su = sun_dir(h_deg)
     d0 = -su
     g = np.linspace(0.0, 2 * math.pi, ngrid, endpoint=False)
@@ -106,9 +112,14 @@ def sky_grid(h_deg, n=N_ICE, ngrid=300):
     G, A = np.meshgrid(g, a, indexing="ij")
     G, A = G.ravel(), A.ravel()
     cg, sg, cA, sA = np.cos(G), np.sin(G), np.cos(A), np.sin(A)
-    cA2, sA2 = np.cos(A + FACE_SEP), np.sin(A + FACE_SEP)
-    n1 = np.stack([cA * sg, -cA * cg, sA], axis=-1)
-    n2 = np.stack([cA2 * sg, -cA2 * cg, sA2], axis=-1)
+    n1 = np.stack([cA * sg, -cA * cg, sA], axis=-1)                  # entry: prism side face (roll α)
+    if wedge == "prism60":
+        cA2, sA2 = np.cos(A + FACE_SEP), np.sin(A + FACE_SEP)
+        n2 = np.stack([cA2 * sg, -cA2 * cg, sA2], axis=-1)          # exit: other side face (60° wedge)
+    elif wedge == "basal90":
+        n2 = np.stack([cg, sg, np.zeros_like(cg)], axis=-1)         # exit: basal end face, normal = c (90°)
+    else:
+        raise ValueError(f"unknown wedge {wedge!r}")
     M = G.shape[0]
     d0b = np.broadcast_to(d0, (M, 3))
     entry_ok = (n1 @ d0) < 0
