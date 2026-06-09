@@ -58,6 +58,11 @@
       "publicLaunchIntent": "Public Pressure Mines workbench interface."
     },
     {
+      "entry": "mirages.html",
+      "kind": "workbench",
+      "publicLaunchIntent": "Public Mirages interactive ray-tracing explainer: atmospheric refraction, inferior/superior mirages, Fata Morgana, ducting and the Novaya Zemlya effect, and the effective Earth radius."
+    },
+    {
       "entry": "origin.html",
       "kind": "origin",
       "publicLaunchIntent": "Public origin and provenance story."

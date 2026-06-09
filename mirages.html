@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="An interactive ray-tracing explainer for atmospheric mirages: inferior and superior mirages, Fata Morgana, ducting and the Novaya Zemlya effect, and why the horizon sits farther than geometry alone predicts.">
+    <meta name="theme-color" content="#142b3a">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="canonical" href="https://sundog.cc/mirages">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <title>Mirages — an interactive ray-tracing explainer | Sundog</title>
+    <!-- OG-BLOCK-START (managed by public/og/_patch_meta.py) -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Sundog">
+    <meta property="og:title" content="Mirages — an interactive ray-tracing explainer">
+    <meta property="og:description" content="Trace light through a warm or cold air layer and watch inferior mirages, superior mirages, Fata Morgana, and Novaya-Zemlya ducting appear over the horizon.">
+    <meta property="og:image" content="https://sundog.cc/og/mirages.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="A side-view ray diagram: light rays bending through a temperature inversion over a curving sea surface, forming a superior mirage.">
+    <meta property="og:url" content="https://sundog.cc/mirages">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Mirages — an interactive ray-tracing explainer">
+    <meta name="twitter:description" content="Trace light through a warm or cold air layer and watch inferior mirages, superior mirages, Fata Morgana, and Novaya-Zemlya ducting appear over the horizon.">
+    <meta name="twitter:image" content="https://sundog.cc/og/mirages.png">
+    <meta name="twitter:image:alt" content="A side-view ray diagram of a superior mirage forming over a curving sea surface.">
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Mirages — an interactive ray-tracing explainer",
+  "description": "How atmospheric refraction makes mirages: inferior and superior mirages, Fata Morgana, ducting, the Novaya Zemlya effect, and the effective Earth radius, with an interactive ray-tracing diagram.",
+  "image": "https://sundog.cc/og/mirages.png",
+  "url": "https://sundog.cc/mirages",
+  "publisher": { "@type": "Organization", "name": "Stellar Aqua LLC", "url": "https://sundog.cc" },
+  "inLanguage": "en",
+  "isAccessibleForFree": true,
+  "about": [
+    { "@type": "Thing", "name": "Atmospheric refraction" },
+    { "@type": "Thing", "name": "Mirage" },
+    { "@type": "Thing", "name": "Atmospheric optics" }
+  ],
+  "author": { "@type": "Organization", "name": "Sundog Research Lab", "url": "https://sundog.cc" },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://sundog.cc/mirages" }
+}
+    </script>
+    <!-- OG-BLOCK-END -->
+    <link rel="stylesheet" href="/css/sundog-theme.css">
+    <style>
+      :root { --mir-ink: var(--primary-dark, #142b3a); --mir-mid: var(--primary-mid, #2e6f95); }
+      * { box-sizing: border-box; }
+      body.mirages-page { margin: 0; color: var(--mir-ink);
+        font-family: var(--sd-font-body, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+        background: #f6f9fb; line-height: 1.65; }
+      .site-header { background: var(--mir-ink); }
+      .site-nav { display: flex; align-items: center; gap: 1rem; max-width: 1100px; margin: 0 auto;
+        padding: 0.7rem 1.2rem; }
+      .site-brand { color: #fff; font-weight: 700; text-decoration: none; font-size: 1.1rem;
+        font-family: var(--sd-font-display, inherit); letter-spacing: .02em; }
+      .site-links { display: flex; gap: 1rem; margin-left: auto; flex-wrap: wrap; }
+      .site-links a { color: #cfe1ec; text-decoration: none; font-size: .92rem; }
+      .site-links a:hover, .site-links a:focus { color: #fff; text-decoration: underline; }
+      main { max-width: 1100px; margin: 0 auto; padding: 1.5rem 1.2rem 3rem; }
+      .eyebrow { text-transform: uppercase; letter-spacing: .12em; font-size: .72rem; color: var(--mir-mid);
+        font-weight: 700; }
+      h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); margin: .2rem 0 .4rem; font-family: var(--sd-font-display, inherit); }
+      h2 { font-size: 1.35rem; margin: 2.2rem 0 .6rem; font-family: var(--sd-font-display, inherit); }
+      .lede { font-size: 1.12rem; color: #2a4a5c; max-width: 60ch; }
+      .workbench { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 1rem; margin: 1.4rem 0 1rem;
+        background: #fff; border: 1px solid #d6e2ea; border-radius: 12px; padding: 1rem; }
+      .stage { display: flex; flex-direction: column; min-width: 0; }
+      #mirage-canvas { width: 100%; height: 420px; background: #eef4f8; border-radius: 8px; display: block; }
+      .status-strip { margin-top: .6rem; font-family: var(--sd-font-data, ui-monospace, monospace);
+        font-size: .85rem; color: var(--mir-ink); background: #eef4f8; border-radius: 6px; padding: .5rem .7rem; }
+      .controls { display: flex; flex-direction: column; gap: .85rem; }
+      .controls h2 { font-size: 1rem; margin: 0 0 .2rem; }
+      .preset-row { display: flex; flex-wrap: wrap; gap: .4rem; }
+      .preset-row button { flex: 1 1 auto; cursor: pointer; border: 1px solid var(--mir-mid); background: #fff;
+        color: var(--mir-mid); border-radius: 999px; padding: .35rem .6rem; font-size: .8rem; }
+      .preset-row button[aria-pressed="true"] { background: var(--mir-mid); color: #fff; }
+      .preset-row button:focus-visible, .site-links a:focus-visible,
+      .preset-row button:hover { outline: 2px solid var(--mir-mid); outline-offset: 2px; }
+      .control-row { display: flex; flex-direction: column; gap: .2rem; font-size: .85rem; }
+      .control-row label { font-weight: 600; }
+      .control-row input[type="range"] { width: 100%; accent-color: var(--mir-mid); }
+      .control-row .val { font-family: var(--sd-font-data, monospace); color: var(--mir-mid); }
+      .prose { max-width: 68ch; }
+      .prose p, .prose li { font-size: 1.04rem; }
+      .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.6rem; }
+      .term { font-weight: 700; color: var(--mir-ink); }
+      footer { background: var(--mir-ink); color: #cfe1ec; margin-top: 2.5rem; padding: 1.5rem 1.2rem; font-size: .9rem; }
+      footer a { color: #9fc6dc; } footer p { max-width: 1100px; margin: .3rem auto; }
+      .footer-copyright { color: #8aa7b8; font-size: .82rem; }
+      @media (max-width: 760px) { .workbench { grid-template-columns: 1fr; } .grid2 { grid-template-columns: 1fr; }
+        #mirage-canvas { height: 320px; } }
+    </style>
+</head>
+<body class="mirages-page">
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="/" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="/about">About</a>
+                <a href="/sundog">Atlas</a>
+                <a href="/geometry">Geometry</a>
+                <a href="/applications-gallery">Applications</a>
+                <a href="/chat">Chat</a>
+                <a href="docs/">Docs</a>
+                <a href="https://github.com/humiliati/sundog">GitHub</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="eyebrow">Atmospheric Optics</div>
+        <h1>Mirages: bending light over a warm or cold layer of air</h1>
+        <p class="lede">A mirage is not a trick of the eye — it is refraction. Air of different temperature
+            has slightly different density, and light curves toward the denser (cooler) air. Trace a ray
+            through a temperature layer and you can watch inferior mirages, superior mirages, Fata Morgana,
+            and even light ducting <em>around</em> the curve of the Earth.</p>
+
+        <section class="workbench" aria-label="Interactive mirage ray-tracing diagram">
+            <div class="stage">
+                <canvas id="mirage-canvas" role="img"
+                    aria-label="Side-view ray diagram: light rays leave an eye on the left, bend through the chosen air layer, and reach a distant object on the right; the curving line is the Earth's surface, and highlighted rays are the images the eye sees."></canvas>
+                <div id="mirage-status" class="status-strip" aria-live="polite">Initializing the ray diagram…</div>
+            </div>
+            <aside class="controls" aria-label="Mirage controls">
+                <h2>Air layer (presets)</h2>
+                <div class="preset-row" role="group" aria-label="Temperature-profile presets">
+                    <button type="button" data-preset="standard">Standard</button>
+                    <button type="button" data-preset="hot-road">Hot road</button>
+                    <button type="button" data-preset="cold-sea">Cold sea</button>
+                    <button type="button" data-preset="strong-inv">Strong inversion</button>
+                </div>
+                <div class="control-row">
+                    <label for="mir-strength">Refraction strength <span class="val" id="mir-strength-val">0.6</span></label>
+                    <input type="range" id="mir-strength" min="0" max="1" step="0.02" value="0.6">
+                </div>
+                <div class="control-row">
+                    <label for="mir-hobs">Observer height (m) <span class="val" id="mir-hobs-val">8</span></label>
+                    <input type="range" id="mir-hobs" min="1" max="100" step="1" value="8">
+                </div>
+                <div class="control-row">
+                    <label for="mir-dist">Object distance (km) <span class="val" id="mir-dist-val">30</span></label>
+                    <input type="range" id="mir-dist" min="3" max="120" step="1" value="30">
+                </div>
+                <div class="control-row">
+                    <label for="mir-hobj">Object height <span class="val" id="mir-hobj-val">0.5</span></label>
+                    <input type="range" id="mir-hobj" min="0.05" max="1" step="0.05" value="0.5">
+                </div>
+            </aside>
+        </section>
+
+        <section class="prose">
+            <h2>What you are looking at</h2>
+            <p>The diagram is a side view. An eye sits on the left; a distant object (the dot on the pole)
+                sits on the right at the distance you choose. Faint lines are a fan of light rays leaving the
+                eye; the bold lines are the rays that actually reach the object — each one is a separate
+                <span class="term">image</span> the eye sees. The shaded band on the far left shows how the
+                air's refractivity changes with height, and the gently curving line is the surface of the
+                Earth falling away with distance.</p>
+
+            <div class="grid2">
+                <div>
+                    <h2>Inferior mirage</h2>
+                    <p>Over a hot road or desert, the air right at the surface is hottest and thinnest, so its
+                        refractivity <em>rises</em> with height. Rays skimming the ground curve upward, and the
+                        eye sees an inverted image <em>below</em> the real object — the famous "wet road" or
+                        shimmering desert pool, which is really an inverted reflection of the sky.</p>
+                </div>
+                <div>
+                    <h2>Superior mirage &amp; looming</h2>
+                    <p>When a warm layer sits over cold ground or sea (a temperature inversion), refractivity
+                        <em>drops</em> with height and rays curve downward. Objects beyond the horizon can be
+                        lifted into view (<span class="term">looming</span>), stretched (<span class="term">towering</span>),
+                        or stacked into the shifting cliffs of a <span class="term">Fata Morgana</span>.</p>
+                </div>
+                <div>
+                    <h2>The horizon is farther than it looks</h2>
+                    <p>Because rays bend gently downward in ordinary air, they follow the Earth's curve a little
+                        — so the horizon sits farther away than straight-line geometry predicts. The standard
+                        way to bookkeep this is the <span class="term">effective Earth radius</span>: refraction
+                        acts like a planet roughly four-thirds the true radius, pushing the horizon out by a few
+                        percent.</p>
+                </div>
+                <div>
+                    <h2>Ducting &amp; the Novaya Zemlya effect</h2>
+                    <p>If the inversion is strong enough that rays bend downward as sharply as the Earth curves,
+                        light becomes <span class="term">trapped</span> in a duct and can travel far beyond the
+                        normal horizon. This is how explorers have reported seeing the Sun while it was
+                        geometrically below the horizon — the <span class="term">Novaya Zemlya effect</span> — and
+                        it is a cousin of the brief <span class="term">green flash</span> at sunset.</p>
+                </div>
+            </div>
+
+            <h2>Try it</h2>
+            <ul>
+                <li>Pick <strong>Hot road</strong> and lower the observer — the inverted inferior image appears
+                    near the surface.</li>
+                <li>Pick <strong>Cold sea</strong> and push <em>Refraction strength</em> up — extra images fold
+                    in as a superior mirage develops.</li>
+                <li>Pick <strong>Strong inversion</strong> — rays duct along the surface and reach objects far
+                    past the ordinary horizon.</li>
+            </ul>
+            <p style="color:#5a7585; font-size:.95rem;">The diagram uses a paraxial ray-tracing model of a
+                horizontally layered atmosphere over a spherical Earth — the same physics textbooks use to
+                explain terrestrial refraction. It is a teaching model, not a forecast of any particular day's
+                sky.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>The Sundog Project — <a href="docs/presentation/message-house.md">Alignment Without Sight</a></p>
+        <p class="footer-links">
+            <a href="https://github.com/humiliati/sundog">GitHub</a> |
+            <a href="/sundog">Halo Atlas</a> |
+            <a href="/geometry">Geometry</a> |
+            <a href="/applications-gallery">Applications Gallery</a> |
+            <a href="docs/README.md">Documentation</a>
+        </p>
+        <p class="footer-copyright">
+            &copy; 2026 Stellar Aqua LLC. All rights reserved. Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC.
+        </p>
+    </footer>
+
+    <script type="module" src="/js/mirage.mjs?v=20260609a"></script>
+    <script type="module" src="/js/sundog-chat-widget.mjs"></script>
+</body>
+</html>
