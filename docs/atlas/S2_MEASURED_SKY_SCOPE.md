@@ -103,6 +103,26 @@ not even an upper bound). The ~1% target is at the *high* end of atmospheric cir
   Outcomes: **confirm** per-feature V (novel first) · **null** integrated net-V (falsifies Claim B,
   expected) · a clean ±V map that does both = the ideal honest result.
 
+### Stage C-Linear — the LINEAR DoP(R) ladder (the feasible near-term track) ✅ campaign-ready 2026-06-09
+A **linear**-pol campaign promoted from the Atlas `DoP(R)` observable — **far more feasible than the V
+campaign** (DoFP polarimeters measure linear Stokes natively → **no QWP, no linear↔circular crosstalk**).
+Full package: `ATLAS_HALO_POL_CAMPAIGN.md` (+ `scripts/atlas_halo_pol_campaign.py`, test 8/8).
+- **Novelty (lit-grounded 2026-06-09):** only the **22° halo** linear pol is measured (Können 1991/2003;
+  Pust & Shaw 2008). The **46° halo + the entire pyramidal family (9/18/20/23/24/35°) are UNMEASURED**,
+  and the closed-form `DoP(R)=(1−cos⁴(R/2))/(1+cos⁴(R/2))` ladder is **unpublished** (Können 1998 =
+  direction-only theory). Pre-register: it is the **floor/ordering** law (birefringence rides above; the
+  Können 22° intrinsic peak ~8.7% vs the 3.7% floor) and the **inner-edge** value (not ring-average).
+- **The clean test (adversarially sharpened):** NOT the full ladder — the **3 angularly-isolated radii
+  9°/35°/46°** (the 22/23/24° cluster is a degenerate trap, <1°/0.35 pp apart). Primary falsifier = the
+  **monotone DoP *ratio* test** (`46/35≈1.72`, `35/9≈15.4`) — common-mode calibration / sky-pedestal /
+  multiple-scattering cancel in ratios, so a null can't fake a radius-ordered staircase. Veto = the
+  **U=0 / radial-+Q sign gate** every frame. KILL the radius-only law if monotonicity breaks.
+- **Feasibility:** commodity DoFP floor 0.8% single → 0.08% stacked (all 8 halos); Shaw all-sky ~0.5%
+  (all 8, + bounds V≈0); specMACS ~5% (35°/46° only). **Easiest novel first measurement = the 46° halo**
+  (16%, 20× floor, confirmed gap). Background isolation = Können's spatial annular fit on radial-Q.
+- **Warm-data paths (owner-gated outreach):** mine **Shaw's all-sky archive** (likely-latent >22° signal,
+  ~$0); latent **specMACS** halo frames. Können = falsification-design referee.
+
 ## Decision points
 1. **Stage A (archival validation): do now?** Cheap, in-house, high-value — moves the *linear*-pol
    physics to observed-tier for free and stress-tests the Mueller chain that also generates V. Strong

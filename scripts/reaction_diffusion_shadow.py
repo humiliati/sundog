@@ -63,6 +63,7 @@ CFG = dict(
     r_bins=24, h_bins=12, thr=0.20,
     s_lo=0.70, s_hi=1.30, s_floor=0.45, s_ceil=1.50, sig_s=0.35,   # diffusion-scale (wavelength) knob
     m_kin=40, r_ic=8,                                              # library resolution per class
+    panel_n=48, panel_k=6,                                        # B-panel (secondary) sample/subunit count
 )
 
 # globals filled by build_libraries()
@@ -82,9 +83,9 @@ def gray_scott_batch(F, k, s, grid, steps, rng):
     """Integrate B Gray-Scott fields in parallel. F,k,s are (B,) per-field arrays; s scales diffusion
     (wavelength ~ sqrt(s)). Returns the v-field (B,grid,grid)."""
     B = len(F)
-    Fb = np.asarray(F)[:, None, None]; kb = np.asarray(k)[:, None, None]
-    Du = DU * np.asarray(s)[:, None, None]; Dv = DV * np.asarray(s)[:, None, None]
-    u = np.ones((B, grid, grid)); v = np.zeros((B, grid, grid))
+    Fb = np.asarray(F, np.float32)[:, None, None]; kb = np.asarray(k, np.float32)[:, None, None]
+    Du = (DU * np.asarray(s, np.float32))[:, None, None]; Dv = (DV * np.asarray(s, np.float32))[:, None, None]
+    u = np.ones((B, grid, grid), np.float32); v = np.zeros((B, grid, grid), np.float32)
     # seeded IC: random square patches of (u=0.5, v=0.25) + small noise
     for b in range(B):
         nb = int(rng.integers(8, 16))
@@ -93,7 +94,8 @@ def gray_scott_batch(F, k, s, grid, steps, rng):
             r = int(rng.integers(2, 5))
             ys = slice(max(0, cy - r), min(grid, cy + r)); xs = slice(max(0, cx - r), min(grid, cx + r))
             u[b, ys, xs] = 0.50; v[b, ys, xs] = 0.25
-    u += 0.02 * rng.standard_normal((B, grid, grid)); v += 0.02 * rng.standard_normal((B, grid, grid))
+    u += 0.02 * rng.standard_normal((B, grid, grid)).astype(np.float32)
+    v += 0.02 * rng.standard_normal((B, grid, grid)).astype(np.float32)
     for _ in range(steps):
         uvv = u * v * v
         u += Du * _laplacian(u) - uvv + Fb * (1.0 - u)
@@ -187,7 +189,7 @@ def gen_s3d(n, lam, rng, noise):
     """Discrete-determines leg: xd = class {spots +1, stripes -1}; xc = dummy diffusion-scale drawn
     from the COMMON range (class _|_ wavelength). Same K-subunit ensemble shadow as S3c."""
     K = CFG["K"]
-    xd = rng.choice([-1.0, 1.0], n)
+    xd = np.where(np.arange(n) < n // 2, 1.0, -1.0); rng.shuffle(xd)   # balanced classes (clean C5)
     xc = rng.uniform(CFG["s_lo"], CFG["s_hi"], n)           # dummy continuous (decorrelated from class)
     feats = np.empty((n, NFEAT))
     for i in range(n):
@@ -232,13 +234,14 @@ def fitzhugh_nagumo_batch(grid, steps, rng, B):
         u += dt * (Du2 * _laplacian(u) + u - u ** 3 / 3.0 - w)
         w += dt * eps * (u + a - b * w)
         np.clip(u, -2, 2, out=u)
-    return (u - u.min((1, 2), keepdims=True)) / (u.ptp((1, 2))[:, None, None] + 1e-12)
+    umin = u.min((1, 2), keepdims=True)
+    return (u - umin) / (u.max((1, 2), keepdims=True) - umin + 1e-12)
 
 
 def panel_features(n, lam, rng, noise, grid, steps):
     """Shadow features for the 4-way is-it-RD panel. Each mechanism -> n samples, each = mean of K
     subunit fields' features (same ensemble shadow). RD draws across all four basins."""
-    K = CFG["K"]
+    K = CFG["panel_k"]
     X, y = [], []
     # RD (label 0): mix basins
     rd_classes = list(BASINS)
@@ -327,6 +330,29 @@ def panel_run(seed, n, noise, grid, steps, lam):
             "rd_vs_grf_balacc": round(rdgrf, 4), "lam": lam}
 
 
+# ============================ controls (C1 non-triviality, C4 permutation) ====================== #
+def k_sweep(seed, noise, lam=0.3, ks=(1, 2, 4, 8, 16)):
+    """C1 — the ensemble IS the mechanism: at fixed lambda the wavelength-resist must DEEPEN as K grows
+    (Debye-Waller). A single field (K=1) does NOT wash to chance; the ensemble average does. Rules out
+    'trivial single-frame blur' (a static blur is K-independent)."""
+    base_K = CFG["K"]; out = {}
+    for kk in ks:
+        CFG["K"] = kk
+        X, yc, _ = gen_s3c(CFG["n"], lam, default_rng(seed + 31 + kk), noise)
+        out[str(kk)] = round(cont_recovery(X, yc)["best"], 4)
+    CFG["K"] = base_K
+    return out
+
+
+def label_permutation(seed, noise, lam=0.1):
+    """C4 — shuffle the labels: both recoveries must collapse to chance (no leakage / no overfit)."""
+    Xc, yc, _ = gen_s3c(CFG["n"], lam, default_rng(seed + 13), noise)
+    Xd, _, yd = gen_s3d(CFG["n"], lam, default_rng(seed + 17), noise)
+    p = default_rng(seed + 23)
+    return {"cont_perm": round(cont_recovery(Xc, p.permutation(yc))["best"], 4),
+            "disc_perm": round(disc_recovery(Xd, p.permutation(yd))["best"], 4)}
+
+
 # ============================ gates + verdict =================================================== #
 def gates(s3c, s3d):
     g = {
@@ -350,7 +376,8 @@ def main():
     args = ap.parse_args()
 
     if args.frozen:
-        CFG.update(grid=128, steps=6000, K=8, n=160, noise=0.04, m_kin=60, r_ic=10)
+        CFG.update(grid=128, steps=4000, K=8, n=160, noise=0.04, m_kin=40, r_ic=8,
+                   panel_n=60, panel_k=6)
         seed, mode = DATA_SEED, "frozen"
     else:
         seed, mode = CALIB_SEED, "calibrate"     # CFG defaults already the 64^2 smoke
@@ -371,11 +398,14 @@ def main():
     s3d = sweep(gen_s3d, CFG["n"], seed, CFG["noise"], "S3d")
     g = gates(s3c, s3d)
 
-    panel = None
+    panel = ctrl = None
     if not args.no_panel:
+        print("Controls (C1 K-sweep non-triviality, C4 label-permutation):", flush=True)
+        ctrl = {"k_sweep_lam0.3": k_sweep(seed, CFG["noise"]), "permutation": label_permutation(seed, CFG["noise"])}
+        print(f"  K-sweep cont@lam0.3 {ctrl['k_sweep_lam0.3']}  perm {ctrl['permutation']}", flush=True)
         print("B-panel (is-it-RD: RD/CH/GRF/FHN) @ lam=0 and lam=0.5:", flush=True)
-        panel = {"lam0": panel_run(seed, CFG["n"], CFG["noise"], CFG["grid"], CFG["steps"], 0.0),
-                 "lam_mid": panel_run(seed, CFG["n"], CFG["noise"], CFG["grid"], CFG["steps"], 0.5)}
+        panel = {"lam0": panel_run(seed, CFG["panel_n"], CFG["noise"], CFG["grid"], CFG["steps"], 0.0),
+                 "lam_mid": panel_run(seed, CFG["panel_n"], CFG["noise"], CFG["grid"], CFG["steps"], 0.5)}
         print(f"  panel balacc lam0={panel['lam0']['panel_balanced_acc']} "
               f"lam_mid={panel['lam_mid']['panel_balanced_acc']}  "
               f"RD-vs-GRF(lam0)={panel['lam0']['rd_vs_grf_balacc']}", flush=True)
@@ -392,7 +422,7 @@ def main():
 
     (out / f"{mode}.json").write_text(json.dumps(
         {"mode": mode, "seed": seed, "cfg": CFG, "lambdas": LAMBDAS,
-         "S3c": s3c, "S3d": s3d, "gates": g, "panel": panel,
+         "S3c": s3c, "S3d": s3d, "gates": g, "controls": ctrl, "panel": panel,
          "wall_s": round(time.time() - t0, 1)}, indent=2,
         default=lambda o: bool(o) if isinstance(o, np.bool_) else o))
     print(f"  wrote {out/(mode+'.json')}  ({round(time.time()-t0,1)}s)", flush=True)

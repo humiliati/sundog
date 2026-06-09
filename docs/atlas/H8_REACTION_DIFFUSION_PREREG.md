@@ -127,10 +127,18 @@ steps `T_STEPS`, subunit count `K`, sample count `n`, obs-noise `NOISE`, feature
 resolution `(M_kinetics, R_ic)`, and the `xc` range. **NOT** calibratable: the gate thresholds, the
 `λ`-grid, the honest prior, the kill criteria.
 
-> **FROZEN CONSTANTS (filled at calibration sign-off):** `GRID=___ T_STEPS=___ K=___ n=___ NOISE=___
-> R_BINS=___ H_BINS=___ DATA_SEED=___`; basins + sweep direction + library `(M,R)` + `xc` range as in the
-> frozen script header. *(This block is completed when calibration passes; the frozen run uses exactly
-> these.)*
+> **FROZEN CONSTANTS — locked 2026-06-09 after calibration passed, before the frozen run.**
+> Calibration (`--calibrate`, throwaway `CALIB_SEED=999`, 64²/`steps=3500`/`K=6`/`n=64`) cleared
+> **preflight + CROSSOVER** on the *faithful* feature (no off-centre fallback needed): S3c `cont0=0.726`
+> → washes to `0.000` by λ=0.5 (half-life λ\*_c=0.5); S3d `disc=1.000` at every λ (λ\*_d censored).
+> **Design knobs FROZEN** (passed calibration, unchanged for the frozen run): `R_BINS=24 H_BINS=12
+> thr=0.20`; diffusion-scale wavelength knob `s ~ U[0.70, 1.30]`, jitter `sig_s=0.35`, clip `[0.45, 1.50]`;
+> basins `spots=(0.030,0.062) stripes=(0.030,0.055)` [+ `labyrinth=(0.046,0.063) gaps=(0.026,0.055)` for the
+> B-panel]; `Du=0.16 Dv=0.08`; library `(M_kinetics=40, R_ic=8)` per class; float32 integration.
+> **Scale knobs for the frozen primary:** `GRID=128 T_STEPS=4000 K=8 n=160 NOISE=0.04 DATA_SEED=20260609`
+> (B-panel `panel_n=60 panel_k=6`). The frozen run uses exactly these; `T_STEPS` trimmed 6000→4000 (a
+> compute knob; patterns develop well before 3500 — calibration confirmed) and library left at the
+> calibration resolution (40×8) for tractability given the measured per-field cost.
 
 ## Honest boundaries (pre-committed)
 - **Synthetic-only Milestone-1.** Real chemistry/biology (zebrafish, CIMA, dryland imagery) is a named
