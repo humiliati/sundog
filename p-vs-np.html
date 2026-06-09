@@ -44,7 +44,7 @@
       "@context": "https://schema.org",
       "@type": "TechArticle",
       "headline": "P-vs-NP Verifier - cheap to check, spoofed by drift, repaired by consensus",
-      "description": "A reward-blind hidden-basin certificate that costs fewer operations to check (527,297) than the policy cost to find (555,876), a ratio of 0.948587 under a frozen op-count gate. Transplanted to the mesa verification bridge, it was spoofed by a single source-bound seed block whose mean drifted across the accept line at 6.25% of the attacker budget; a frozen 3-of-4 block-consensus rule closed the spoof but quarantined on a block-unstable disclosure flag. A Lean core now machine-checks this lane's soundness and lossiness; decoding hardness stays imported. That proof is one example in a five-example public Lean method repo, not extra P-vs-NP evidence. Bounded alignment-verification that borrows the finding-vs-checking asymmetry as vocabulary; not the Millennium P-vs-NP problem, not a complexity-theoretic result, op-count not wall-clock, mesa-local.",
+      "description": "A reward-blind hidden-basin certificate that costs fewer operations to check (527,297) than the policy cost to find (555,876), a ratio of 0.948587 under a frozen op-count gate. Transplanted to the mesa verification bridge, it was spoofed by a single source-bound seed block whose mean drifted across the accept line at 6.25% of the attacker budget; a frozen 3-of-4 block-consensus rule closed the spoof but quarantined on a block-unstable disclosure flag. A Lean core now machine-checks this lane's soundness and lossiness, and a machine-checked Karp reduction (3SAT to 3DM to X3C to bounded-weight decoding) now anchors the imported decoding-hardness to 3SAT -- reduction correctness only, the NP class and Cook-Levin hardness still imported. Those are part of a six-example public Lean method repo, not extra P-vs-NP evidence. Bounded alignment-verification that borrows the finding-vs-checking asymmetry as vocabulary; not the Millennium P-vs-NP problem, not a complexity-theoretic result, op-count not wall-clock, mesa-local.",
       "image": "https://sundog.cc/og/p-vs-np.png",
       "datePublished": "2026-06-01",
       "dateModified": "2026-06-08",
@@ -474,13 +474,15 @@
                 check, the seed-block that drifted over the accept line, and the
                 consensus repair that closed the spoof and stubbed its toe.
                 A separate Lean core now machine-checks the certificate's
-                soundness and lossiness; the decoding hardness stays imported.
-                That proof is now one of five public Lean method examples, not
+                soundness and lossiness, and a machine-checked Karp reduction
+                anchors the imported decoding-hardness to 3SAT &mdash; reduction
+                correctness only, with NP-hardness and Cook-Levin still imported.
+                Those are part of a six-example public Lean method repo, not
                 extra P-vs-NP evidence.
             </p>
             <div class="status-ribbon" aria-label="P-vs-NP verifier verdict status">
                 <span class="pass">v6 op-count certificate · BOUNDED POSITIVE</span>
-                <span class="pass">Lean core · soundness/lossiness (1 of 5 examples)</span>
+                <span class="pass">Lean core · soundness/lossiness (1 of 6 examples)</span>
                 <span class="fail">v0 mesa bridge · FALSIFIED (spoofed)</span>
                 <span class="quar review">v1 consensus repair · NAMED QUARANTINE</span>
                 <span class="review">review-gated · op-count only</span>
