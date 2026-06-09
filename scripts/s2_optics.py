@@ -142,6 +142,35 @@ def mueller_fresnel(theta_i_deg, n1, n2):
     ]), np.degrees(tt)
 
 
+def mueller_fresnel_reflect(theta_i_deg, n1, n2):
+    """Mueller matrix of partial Fresnel REFLECTION at an n1->n2 dielectric interface (sub-critical).
+    Returns None in total internal reflection (use mueller_tir there). s/p frame, matching
+    mueller_fresnel's block layout + 0.5 prefactor. The intensity reflectances R_s=r_s^2, R_p=r_p^2 are
+    already energy-correct (reflection keeps the medium, so NO (n2 ct)/(n1 ci) geometric factor).
+
+    Sub-critical reflection coefficients are REAL, so the s-p phase is 0 or pi (sin delta = 0): a single
+    partial reflection produces NO circular polarization -> V arises only from the TIR phase +
+    birefringence. The sign of r_s*r_p carries the Brewster phase flip, and -> +1 at the critical angle
+    (R_s,R_p -> 1), matching mueller_tir's identity there (the continuity anchor). Carry the SIGN of the
+    amplitude coefficients, never |r|: that is exactly where the V handedness would be lost."""
+    ti = np.radians(theta_i_deg)
+    st = (n1 / n2) * np.sin(ti)
+    if abs(st) >= 1.0:
+        return None                                  # total internal reflection -> use mueller_tir
+    tt = np.arcsin(st)
+    ci, ct = np.cos(ti), np.cos(tt)
+    rs = (n1 * ci - n2 * ct) / (n1 * ci + n2 * ct)   # Fresnel amplitude reflection, s
+    rp = (n2 * ci - n1 * ct) / (n2 * ci + n1 * ct)   # Fresnel amplitude reflection, p
+    Rs, Rp = rs ** 2, rp ** 2                         # intensity reflectances (energy-correct)
+    g = np.sign(rs * rp) * np.sqrt(Rs * Rp)          # signed; sin(delta)=0 sub-critical -> no V
+    return 0.5 * np.array([
+        [Rs + Rp, Rs - Rp, 0.0,   0.0],
+        [Rs - Rp, Rs + Rp, 0.0,   0.0],
+        [0.0,     0.0,     2 * g, 0.0],
+        [0.0,     0.0,     0.0,   2 * g],
+    ])
+
+
 def mueller_retarder(delta, phi):
     """Linear-retarder Mueller matrix; retardance delta [rad], fast-axis azimuth phi [rad]."""
     c2, s2 = np.cos(2 * phi), np.sin(2 * phi)
