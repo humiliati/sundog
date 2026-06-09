@@ -7,7 +7,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://sundog.cc/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-06-09</lastmod>
   </url>
   <url>
     <loc>https://sundog.cc/about</loc>
@@ -35,11 +35,11 @@
   </url>
   <url>
     <loc>https://sundog.cc/faraday</loc>
-    <lastmod>2026-06-07</lastmod>
+    <lastmod>2026-06-08</lastmod>
   </url>
   <url>
     <loc>https://sundog.cc/generality</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-06-09</lastmod>
   </url>
   <url>
     <loc>https://sundog.cc/geometry</loc>
@@ -51,23 +51,27 @@
   </url>
   <url>
     <loc>https://sundog.cc/isotrophy</loc>
-    <lastmod>2026-06-03</lastmod>
+    <lastmod>2026-06-08</lastmod>
   </url>
   <url>
     <loc>https://sundog.cc/legend</loc>
-    <lastmod>2026-06-07</lastmod>
+    <lastmod>2026-06-08</lastmod>
   </url>
   <url>
     <loc>https://sundog.cc/mesa</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-06-08</lastmod>
   </url>
   <url>
     <loc>https://sundog.cc/mines</loc>
     <lastmod>2026-05-26</lastmod>
   </url>
   <url>
+    <loc>https://sundog.cc/mirages</loc>
+    <lastmod>2026-06-09</lastmod>
+  </url>
+  <url>
     <loc>https://sundog.cc/navierstokes</loc>
-    <lastmod>2026-06-07</lastmod>
+    <lastmod>2026-06-08</lastmod>
   </url>
   <url>
     <loc>https://sundog.cc/origin</loc>
@@ -75,11 +79,11 @@
   </url>
   <url>
     <loc>https://sundog.cc/p-vs-np</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-06-09</lastmod>
   </url>
   <url>
     <loc>https://sundog.cc/safety-method</loc>
-    <lastmod>2026-05-26</lastmod>
+    <lastmod>2026-06-08</lastmod>
   </url>
   <url>
     <loc>https://sundog.cc/structural-failure</loc>
