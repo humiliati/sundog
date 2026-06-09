@@ -146,12 +146,15 @@ def sample_entry(R, normals_w, offsets, kind, areas, d_sun, aspect, a, rng):
 # the polarized ray-tree tracer                                                 #
 # ----------------------------------------------------------------------------- #
 def trace_tree(o, d_in, entry_normal, normals, offsets, c_axis, dn=0.0, size_um=100.0,
-               K=1, eps=1e-4, n=N_ICE, lam=LAM):
+               K=1, eps=1e-4, n=N_ICE, lam=LAM, include_external=False):
     """Ray-march one photon entering at `o` along `d_in` (air->crystal through `entry_normal`) and
     return the list of exit (transmitted) deposits [(d_out_world(3,), S(4,), s_ref(3,)), ...].
     Carries the Stokes vector through entry-Fresnel, per-segment birefringence, inter-interface frame
     rotations, TIR-phase retarder / partial-reflection diattenuator, with intensity (energy) living in
-    Stokes I. `K` = max internal reflections; `eps` = intensity prune. Deterministic given inputs."""
+    Stokes I. `K` = max internal reflections; `eps` = intensity prune. `include_external` also deposits
+    the EXTERNAL reflection glint off the entry face (the dominant white-parhelic-circle mechanism off
+    vertical faces — a vertical mirror preserves the ray's elevation -> a horizontal circle through the
+    sun). Deterministic given inputs."""
     r = refract(d_in, entry_normal, 1.0, n)
     if r is None:
         return []
@@ -165,6 +168,10 @@ def trace_tree(o, d_in, entry_normal, normals, offsets, c_axis, dn=0.0, size_um=
     s_prev = s_axis(d_in, entry_normal)
 
     deposits = []
+    if include_external:                              # specular glint off the outer surface (PHC)
+        Mre = so.mueller_fresnel_reflect(th_in, 1.0, n)
+        if Mre is not None:
+            deposits.append((reflect(d_in, entry_normal), Mre @ np.array([1.0, 0.0, 0.0, 0.0]), s_prev))
     stack = [(o, d1, S, s_prev, 0)]
     while stack:
         o, d, S, s_prev, k = stack.pop()
@@ -240,7 +247,7 @@ HABITS = {
 # ensemble + sky accumulation                                                   #
 # ----------------------------------------------------------------------------- #
 def run_ensemble(habit="random", e_deg=20.0, n_orient=4000, dn=0.0, size_um=100.0,
-                 K=1, a=1.0, seed=0, sigma_deg=1.5):
+                 K=1, a=1.0, seed=0, sigma_deg=1.5, include_external=False):
     """Trace an ensemble of one habit. Returns a deposit array with columns
     [scatt_deg, az_deg, el_deg, I, Q, U, V] in the world/scattering frame, intensity-weighted by the
     orientation's projected area. Deterministic given seed."""
@@ -261,7 +268,8 @@ def run_ensemble(habit="random", e_deg=20.0, n_orient=4000, dn=0.0, size_um=100.
             continue
         o0, n_entry, A_proj = ent
         deps = trace_tree(o0, d_sun, n_entry, normals_w, offsets, c_axis,
-                          dn=dn, size_um=size_um, K=K, n=N_ICE, lam=LAM)
+                          dn=dn, size_um=size_um, K=K, n=N_ICE, lam=LAM,
+                          include_external=include_external)
         for d_out, S, s_ref in deps:
             sky = -unit(d_out)                        # apparent direction (where light comes FROM)
             az = np.degrees(np.arctan2(sky[1], sky[0]))
@@ -338,7 +346,21 @@ def _report():
             az = dep[:, 1]; Vw = dep[:, 6]
             net = abs(Vw.sum()) / np.abs(Vw).sum() if np.abs(Vw).sum() > 0 else 0
             print(f"  {tag:20s}: per-ray peak |V/I|={peak*100:.2f}%   net |sumV|/sum|V|={net*100:.2f}%")
-    print("\n(see test_s2_halo_raytracer.py for the full pre-registered gate assertions)")
+    print("GATE 4 — parhelic circle (K=2 multi-bounce + external reflection, plate):")
+    dp = run_ensemble("plate", e_deg=20.0, n_orient=20000, dn=0.0, K=2, seed=8, include_external=True)
+    el, az, I = dp[:, 2], dp[:, 1], dp[:, 3]
+    eh, eed = np.histogram(el, bins=np.arange(-90, 91, 2.0), weights=I)
+    elpk = (0.5 * (eed[:-1] + eed[1:]))[np.argmax(eh)]
+    band = np.abs(el - 20.0) < 2.5
+    azcov = len(np.unique(np.round(az[band] / 15)))
+    I120 = I[band & (np.abs(np.abs(az) - 120) < 12)].sum()
+    Igap = I[band & (np.abs(az) > 55) & (np.abs(az) < 85)].sum()
+    Vw = dp[:, 6]; netP = abs(Vw[band].sum()) / np.abs(Vw[band]).sum()
+    print(f"  parhelic circle at constant elevation {elpk:.0f} deg (sun=20); azimuth coverage {azcov}/24 "
+          f"bins (full circle)")
+    print(f"  120-deg parhelia (two-internal-reflection K=2 feature): I(120 deg)={I120:.0f} vs gap I={Igap:.0f}")
+    print(f"  PHC circular V nets to ~0: |sumV|/sum|V|={netP*100:.2f}% (achiral, antisymmetric)\n")
+    print("(see test_s2_halo_raytracer.py for the full pre-registered gate assertions)")
 
 
 if __name__ == "__main__":

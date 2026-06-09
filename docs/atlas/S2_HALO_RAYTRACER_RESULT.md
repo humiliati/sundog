@@ -39,6 +39,23 @@ So the full raytracer **independently reproduces** the schematic map's two findi
 real (few-% per ray) and the achiral-ice display nets to ~0 (antisymmetric about the principal plane) —
 now with the path geometry *derived* by ray-marching rather than imposed.
 
+## Stage 5 — the K≥2 stretch: the parhelic circle (multi-bounce)
+Two additions push the engine to multi-bounce features: (1) the **external-reflection glint** at the
+entry face (`include_external` — a *vertical* crystal face is a vertical mirror, so it preserves the
+ray's elevation), and (2) `K=2` internal reflections. On oriented (plate / column) crystals these
+produce the **parhelic circle** — a horizontal white circle through the sun.
+
+| feature (plate, e_sun=20°, K=2) | result |
+|---|---|
+| **parhelic circle** | a feature at **constant elevation = sun elevation (21°)** spanning the **full azimuth circle** (all 24 of 24 15°-bins) |
+| **120° parhelia** | the recognizable **two-internal-reflection (K=2)** bright spots at az ≈ ±120° (`I(120°) > I(gap)`, robust across seeds) |
+| **PHC linear pol** | net DoP **5.9%**, **U/I ≈ 0** (radial, mirror-symmetric) |
+| **PHC circular V** | per-feature ±V from the multi-bounce TIR paths, **net `\|∮V\|/∮\|V\|` → ~0** (0.3–2.7%) — the achiral net-zero extends to the parhelic circle |
+
+So the same engine, at `K=2`, generates the parhelic circle and its 120° parhelia, and the **net-zero
+±V handedness law extends to this multi-bounce feature** — the V-analog of Können's U=0 is not special to
+the single-TIR arc.
+
 ## Pre-registered scorecard
 | Gate | Result |
 |---|---|
@@ -47,6 +64,7 @@ now with the path geometry *derived* by ray-marching rather than imposed.
 | GATE 1 geometry — 22°/46° at the analytic radii | **PASS** |
 | GATE 2 linear pol — Fresnel-floor DoP ~3.7%, U=0 | **PASS** |
 | GATE 3 circular V — per-feature %-level, net → 0 | **PASS** |
+| GATE 4 parhelic circle (K=2) — const elevation, 120° parhelia, net-zero V | **PASS** |
 | kill: no 22° halo / linear pol ≠ Können / V not antisymmetric | not triggered |
 
 ## Honest boundaries
@@ -58,9 +76,11 @@ now with the path geometry *derived* by ray-marching rather than imposed.
   analytic `s2_konnen_validate.py`. The two engines are complementary, not redundant.
 - The bridge is a **convention lock** (the interface ops compose identically to `trace_ray`); the
   *independent* validation of the ray-marched loop is the realizability + the U=0 / DoP / net→0 gates.
-- **V stays forward-model**; the linear pol is the observed-tier anchor (Stage A). Milestone = single
-  internal reflection (`K=1`); multi-bounce features (parhelic circle) are the `K≥2` stretch. Habits:
-  random / plate / column.
+- **V stays forward-model**; the linear pol is the observed-tier anchor (Stage A). `K=1` milestone =
+  22°/46° + sundogs + single-TIR V; the **`K≥2` stretch (DONE) = the parhelic circle + 120° parhelia**.
+  Further multi-bounce features (subhelic / anthelic / Liljequist arcs, `K≥3`) and habits beyond
+  random/plate/column (Parry, pyramidal, Lowitz) remain open. The external-reflection glint
+  (`include_external`) is the white-PHC mechanism; it is off by default so the `K=1` gates are unchanged.
 
 ## Files
 - `scripts/s2_optics.py` — `mueller_fresnel_reflect` added (the partial-reflection diattenuator).

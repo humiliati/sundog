@@ -159,5 +159,33 @@ check("GATE 3: the achiral display nets to ~0 (net |sumV|/sum|V| < 3% = V-analog
 check("GATE 3: V(az) is azimuthally antisymmetric about the principal plane (residual < 20%)",
       anti < 0.20, f"antisym residual={anti*100:.1f}%")
 
-print(f"\n{'ALL PASS -- one genuine ray-marched polyhedron engine reproduces the 22/46-deg halos, the Koennen Fresnel-floor linear pol (U=0), and the per-feature +/-V circular handedness map (net -> 0), removing the schematic fixed-face boundary of s2_handedness_map.' if fail == 0 else str(fail) + ' FAILED'}")
+# ===== GATE 4 — the parhelic circle (the K>=2 multi-bounce stretch) ========================= #
+# External reflection off the vertical crystal faces (a vertical mirror preserves the ray's elevation)
+# + two-internal-reflection paths produce a horizontal white circle through the sun at constant
+# elevation, with the 120-deg parhelia as the recognizable K=2 feature.
+print("\nGATE 4 — parhelic circle + 120-deg parhelia (K=2 multi-bounce, plate + external reflection):")
+dp = rt.run_ensemble("plate", e_deg=20.0, n_orient=12000, dn=0.0, K=2, seed=8, include_external=True)
+el, az, Iw, Vw2 = dp[:, 2], dp[:, 1], dp[:, 3], dp[:, 6]
+eh, eed = np.histogram(el, bins=np.arange(-90, 91, 2.0), weights=Iw)
+elpk = (0.5 * (eed[:-1] + eed[1:]))[np.argmax(eh)]
+band = np.abs(el - 20.0) < 2.5
+azcov = len(np.unique(np.round(az[band] / 15)))
+check("GATE 4: parhelic circle at constant elevation = sun elevation (|el_peak - 20| < 3 deg)",
+      abs(elpk - 20.0) < 3.0, f"el_peak={elpk:.0f} deg")
+check("GATE 4: the PHC spans the full azimuth circle (>= 18 of 24 15-deg bins populated)",
+      azcov >= 18, f"az coverage={azcov}/24 bins")
+I120 = Iw[band & (np.abs(np.abs(az) - 120) < 12)].sum()
+Igap = Iw[band & (np.abs(az) > 55) & (np.abs(az) < 85)].sum()
+check("GATE 4: the 120-deg parhelia (the two-internal-reflection K=2 feature) brighter than the gap",
+      I120 > Igap, f"I(120deg)={I120:.0f} > I(gap)={Igap:.0f}")
+mIb = band & (np.abs(Iw) > 0)
+peakVp = np.abs(Vw2[mIb] / Iw[mIb]).max()
+netVp = abs(Vw2[band].sum()) / np.abs(Vw2[band]).sum()
+check("GATE 4: the PHC carries per-feature V (>1%) that still nets to ~0 (achiral, net < 5%)",
+      peakVp > 0.01 and netVp < 0.05, f"per-ray peak|V/I|={peakVp*100:.1f}%, net={netVp*100:.2f}%")
+Ub, Ib = dp[band, 5].sum(), Iw[band].sum()
+check("GATE 4: PHC linear pol U/I ~ 0 (mirror symmetry, |U/I| < 0.5%)", abs(Ub / Ib) < 0.005,
+      f"U/I={Ub/Ib*100:+.2f}%")
+
+print(f"\n{'ALL PASS -- one genuine ray-marched polyhedron engine reproduces the 22/46-deg halos, the Koennen Fresnel-floor linear pol (U=0), the per-feature +/-V circular handedness map (net -> 0) -- removing the schematic fixed-face boundary of s2_handedness_map -- and at K>=2 the PARHELIC CIRCLE (constant elevation = sun) with the 120-deg parhelia and its own net-zero +/-V.' if fail == 0 else str(fail) + ' FAILED'}")
 sys.exit(1 if fail else 0)
