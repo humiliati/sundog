@@ -183,19 +183,22 @@
     "C0_raw_washes": true,
     "C1_unit_has_c": true,
     "determine": true,
-    "DEFEAT_objective_dependent": false
+    "DEFEAT_objective_dependent": true
   },
   "key": {
     "washed_onset_lam": 1.0,
-    "raw_c_washed": 0.012542641162872315,
-    "rand_c_washed": 0.6732929706573486,
-    "clf_d_c_washed": 0.06200559139251709,
-    "recon_c_washed": 0.08965859413146973,
-    "reg_c_c_washed_floor": 0.1960016369819641,
-    "objective_gap_regc_minus_clfd": 0.133996045589447,
+    "anchor_lam": 2.0,
+    "reg_c_peak_washed": 0.8376706838607788,
+    "reg_c_holds_to_lam": 2.0,
+    "anchor_clf_d_c": 0.006301569938659668,
+    "anchor_raw_c": 0.0,
+    "anchor_rand_c": 0.23236137628555298,
+    "anchor_reg_c": 0.5106599926948547,
+    "objective_gap_regc_minus_clfd_anchor": 0.504358422756195,
+    "rand_c_onset": 0.6732929706573486,
     "unit_c_lam0": 0.9986315727233886,
     "determine_min": 0.9949381502995038,
     "reg_c_train_fit": 0.8498419523239136
   },
-  "verdict": "BOUNDED-NULL: even an incentivized trained body (reg_c) does NOT recover the continuous post-pool where raw averaging washed it -> the Shadow-Invertibility resist is ROBUST to a trained per-unit encoder. Determine holds; a clean answer to the imported wall."
+  "verdict": "BOUNDED-POSITIVE: the Shadow-Invertibility continuous-resist is FRAGILE to a NONLINEAR per-unit encoder and its degree is OBJECTIVE-DEPENDENT. Once raw (linear) averaging has fully washed the continuous c (lam>=1.0), a body trained to KEEP c (reg_c) RECOVERS it post-pool (peak c-R2=0.84, holds to lam=2.0) by learning a nonlinear demodulate-THEN-pool code, while the SAME architecture+training that only classifies d (clf_d) suppresses c to 0.01 (pure objective gap 0.50 at lam=2.0). The defeat is partly ARCHITECTURAL: even a random untrained nonlinear phi-pool retains c where raw washes (ReLU rectifies the c-distribution into a pooled signal); training MODULATES it (clf_d suppresses below the raw floor, reg_c amplifies). The discrete d is determined throughout (structurally stable through lossy averaging). IMPORTED WALL SHARPENED: real trained bodies do NOT inherit the continuous-resist \u2014 it assumed a LINEAR averaged shadow; a nonlinear encoder (any, more so if incentivized) defeats it. The defeat weakens at very high spread (reg_c decays as c_i extrapolates beyond training)."
 }

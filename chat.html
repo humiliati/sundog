@@ -588,6 +588,37 @@
                 justify-content: center;
             }
         }
+
+        /* --- Cross-vendor demo (ship-ticket #8) ---------------------------- */
+        .sd-demo-form { display: flex; flex-wrap: wrap; gap: 0.7rem; align-items: flex-end; margin: 1rem 0 0.7rem; }
+        .sd-demo-field { display: flex; flex-direction: column; gap: 0.3rem; }
+        .sd-demo-field--grow { flex: 1 1 16rem; }
+        .sd-demo-label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #5a6772; }
+        #sd-demo-backend, #sd-demo-input { font: inherit; font-size: 16px; padding: 0.55rem 0.7rem; border: 1px solid rgba(20,43,58,0.28); border-radius: 8px; background: #fff; color: #142b3a; min-height: 2.7rem; }
+        #sd-demo-input { width: 100%; }
+        #sd-demo-backend:focus-visible, #sd-demo-input:focus-visible, .sd-demo-ask:focus-visible, .sd-demo-preset:focus-visible { outline: 2px solid #142b3a; outline-offset: 2px; }
+        .sd-demo-ask { font: inherit; font-weight: 800; font-size: 16px; padding: 0 1.1rem; min-height: 2.7rem; border: 1px solid #142b3a; border-radius: 8px; background: #142b3a; color: #f8fbfc; cursor: pointer; }
+        .sd-demo-ask:disabled { opacity: 0.6; cursor: progress; }
+        .sd-demo-presets { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 0.8rem; }
+        .sd-demo-preset { font: inherit; font-size: 0.82rem; padding: 0.3rem 0.6rem; border: 1px solid rgba(20,43,58,0.2); border-radius: 999px; background: #f7faf8; color: #2f4250; cursor: pointer; }
+        .sd-demo-preset:hover { border-color: #466b80; }
+        .sd-demo-loading { color: #5a6772; font-style: italic; }
+        .sd-demo-card { border: 1px solid rgba(20,43,58,0.16); border-left: 4px solid #466b80; border-radius: 10px; background: #fff; padding: 0.9rem 1rem; }
+        .sd-demo-card--error { border-left-color: #b14632; }
+        .sd-demo-badge { font-size: 0.78rem; font-weight: 800; margin: 0 0 0.5rem; }
+        .sd-demo-badge--det { color: #466b80; }
+        .sd-demo-badge--pass { color: #1f6b4a; }
+        .sd-demo-badge--reject { color: #9a3412; }
+        .sd-demo-badge--blocked { color: #6b4a0b; }
+        .sd-demo-answer { margin: 0 0 0.7rem; color: #1b2b36; line-height: 1.6; }
+        .sd-demo-rail { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.5rem; }
+        .sd-demo-chip { font-family: var(--sd-font-data, monospace); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.02em; padding: 0.12rem 0.45rem; border-radius: 6px; background: #f1eadc; color: #3c4f5c; border: 1px solid rgba(20,43,58,0.14); }
+        .sd-demo-sub, .sd-demo-failures-label { font-size: 0.8rem; font-weight: 700; color: #3c4f5c; margin: 0.5rem 0 0.2rem; }
+        .sd-demo-boundary, .sd-demo-failures { margin: 0.1rem 0 0; padding-left: 1.1rem; font-size: 0.85rem; color: #3c4f5c; }
+        .sd-demo-failures li { color: #9a3412; }
+        .sd-demo-source { font-size: 0.78rem; color: #5a6772; margin: 0.6rem 0 0; overflow-wrap: anywhere; }
+        .sd-demo-note { font-size: 0.78rem; color: #5a6772; margin-top: 0.8rem; }
+        @media (max-width: 560px) { .sd-demo-ask { width: 100%; } }
     </style>
     <link rel="stylesheet" href="/css/sundog-theme.css">
 </head>
@@ -849,6 +880,38 @@
                 </div>
             </section>
 
+            <section class="content-section sd-demo-section" id="sd-demo">
+                <p class="eyebrow">Try it yourself</p>
+                <h2>Run a prompt through the gate — pick a backend.</h2>
+                <p class="section-note">Deterministic runs in your browser. Hosted models run server-side; the same gate checks every draft.</p>
+                <div class="body">
+                    <form class="sd-demo-form" id="sd-demo-form">
+                        <label class="sd-demo-field">
+                            <span class="sd-demo-label">Backend</span>
+                            <select id="sd-demo-backend" name="backend">
+                                <option value="deterministic">Deterministic compositor (no model)</option>
+                                <option value="gpt-4o-mini">OpenAI · gpt-4o-mini</option>
+                                <option value="claude-haiku-4-5">Anthropic · claude-haiku-4-5</option>
+                                <option value="llama-3.3">Groq · llama-3.3-70b</option>
+                                <option value="qwen">Groq · qwen3-32b</option>
+                            </select>
+                        </label>
+                        <label class="sd-demo-field sd-demo-field--grow">
+                            <span class="sd-demo-label">Question</span>
+                            <input type="text" id="sd-demo-input" name="prompt" placeholder="Does Sundog solve alignment?" autocomplete="off" maxlength="2000">
+                        </label>
+                        <button type="submit" class="sd-demo-ask" id="sd-demo-ask">Ask</button>
+                    </form>
+                    <div class="sd-demo-presets" aria-label="Example questions">
+                        <button type="button" class="sd-demo-preset">What does Sundog claim?</button>
+                        <button type="button" class="sd-demo-preset">Does Sundog solve alignment?</button>
+                        <button type="button" class="sd-demo-preset">Why does Sundog prove the theorem?</button>
+                    </div>
+                    <div class="sd-demo-output" id="sd-demo-output" role="status" aria-live="polite" hidden></div>
+                    <p class="sd-demo-note">Hosted backends are rate-limited and run only where API keys are configured; where they aren't, the demo says so — and the deterministic backend always works.</p>
+                </div>
+            </section>
+
             <section class="content-section">
                 <h2>What we are doing next</h2>
                 <p class="section-note">Phase 12 measurement is closed; public-copy integrity is active again</p>
@@ -916,5 +979,6 @@
         </p>
     </footer>
     <script type="module" src="/js/sundog-chat-widget.mjs"></script>
+    <script type="module" src="/js/sundog-chat-demo.mjs"></script>
 </body>
 </html>

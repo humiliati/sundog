@@ -242,8 +242,9 @@ def main():
           f"clf_d {anchor['clf_d_c']:.2f} | raw {anchor['raw_c']:.2f} | recon {anchor['recon_c']:.2f} | "
           f"random-phi {anchor['rand_c']:.2f} | reg_c {anchor['reg_c_c']:.2f}")
     print(f"          PURE objective gap (reg_c - clf_d, same arch+training) @ lam={alam} = {anchor['reg_c_c'] - anchor['clf_d_c']:.2f}")
-    print(f"  NONLINEARITY FLOOR: even a RANDOM untrained phi-pool retains c (rand_c onset={washed[0]['rand_c']:.2f}) "
-          f"where raw washes -> the resist is broken by nonlinearity; training MODULATES it (clf_d suppresses, reg_c amplifies).")
+    print(f"  NONLINEARITY FLOOR (weaker, linear-probe-dependent): a RANDOM untrained phi-pool retains a c-signal "
+          f"(rand_c onset={washed[0]['rand_c']:.2f} by ridge; ~0 under a strong nonlinear probe) where raw washes. "
+          f"The robust, controlled effect is the OBJECTIVE: clf_d suppresses c to ~0 (any probe), reg_c amplifies.")
     print(f"  reg_c train-fit={fits['reg_c']:.3f} (the demodulation check: high => it learned to demodulate c per-unit)")
 
     obj_gap_anchor = anchor["reg_c_c"] - anchor["clf_d_c"]
@@ -254,10 +255,11 @@ def main():
                    f"washed the continuous c (lam>={wlam0}), a body trained to KEEP c (reg_c) RECOVERS it post-pool "
                    f"(peak c-R2={regc_max:.2f}, holds to lam={persist}) by learning a nonlinear demodulate-THEN-pool "
                    f"code, while the SAME architecture+training that only classifies d (clf_d) suppresses c to "
-                   f"{anchor['clf_d_c']:.2f} (pure objective gap {obj_gap_anchor:.2f} at lam={alam}). The defeat is "
-                   "partly ARCHITECTURAL: even a random untrained nonlinear phi-pool retains c where raw washes "
-                   "(ReLU rectifies the c-distribution into a pooled signal); training MODULATES it (clf_d "
-                   "suppresses below the raw floor, reg_c amplifies). The discrete d is determined throughout "
+                   f"{anchor['clf_d_c']:.2f} (pure objective gap {obj_gap_anchor:.2f} at lam={alam}, probe-robust: "
+                   "reg_c ~0.5 and clf_d ~0 under BOTH a linear and a strong nonlinear probe). A weaker, "
+                   "linear-probe-dependent NONLINEARITY floor exists (a random untrained phi-pool retains some c "
+                   "via ReLU rectification), but the dominant, probe-robust effect is the OBJECTIVE: clf_d "
+                   "suppresses c to ~0, reg_c amplifies it. The discrete d is determined throughout "
                    "(structurally stable through lossy averaging). IMPORTED WALL SHARPENED: real trained bodies do "
                    "NOT inherit the continuous-resist — it assumed a LINEAR averaged shadow; a nonlinear encoder "
                    "(any, more so if incentivized) defeats it. The defeat weakens at very high spread (reg_c decays "
