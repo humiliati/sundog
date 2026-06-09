@@ -154,6 +154,34 @@ def mueller_retarder(delta, phi):
     ])
 
 
+def tir_retardance(theta_i_deg, n1, n2):
+    """Fresnel total-internal-reflection s-p phase retardance [rad] at an n1->n2 interface (n1>n2).
+    On TIR (sin theta_i > n2/n1) the reflected s and p amplitudes are unit-modulus but acquire a
+    relative phase delta = delta_s - delta_p; the reflection acts as a PURE retarder (the Fresnel-rhomb
+    effect; Born & Wolf 1.5.4 / Hecht 4.7) and converts linear -> circular. This is the primary
+    linear->circular mechanism on the TIR-rich features (parhelic circle, subhelic/46-deg grazing) and
+    is exactly what the transmission-only mueller_fresnel chain (returns None on TIR) was BLIND to.
+    Returns 0.0 below the critical angle (no pure TIR retardance) and -> 0 at grazing.
+        tan(delta/2) = cos(theta) * sqrt(sin^2 theta - (n2/n1)^2) / sin^2 theta
+    Analytic anchors: max retardance delta_max = 2*arctan(cos^2 thetac / (2 sin thetac)) at
+    sin^2 theta = 2 sin^2 thetac/(1+sin^2 thetac); ice (1.31->1) delta_max=30.56 deg @ 59.1 deg;
+    glass (1.51->1) delta_max=45.9 deg, crossing 45 deg at the two Fresnel-rhomb angles ~48.6/54.6."""
+    ti = np.radians(theta_i_deg)
+    s = np.sin(ti)
+    sc = n2 / n1                                     # sin of the critical angle
+    if s <= sc:                                      # not in TIR -> partial reflection, no pure retarder
+        return 0.0
+    num = np.cos(ti) * np.sqrt(s ** 2 - sc ** 2)
+    return 2.0 * np.arctan2(num, s ** 2)
+
+
+def mueller_tir(theta_i_deg, n1, n2, phi):
+    """Mueller matrix of one total-internal-reflection bounce: a PURE retarder (no diattenuation, energy
+    conserving, |r_s|=|r_p|=1) with retardance tir_retardance(theta) and fast-axis azimuth phi [rad]
+    (the orientation of the reflection s-axis in the working frame). Identity below the critical angle."""
+    return mueller_retarder(tir_retardance(theta_i_deg, n1, n2), phi)
+
+
 def ray_stokes(theta_i_deg, phi, L_um, parity=1, n=N_ICE, dn=DN_ICE, lam=LAM_LIGHT):
     """Stokes (I,Q,U,V) after entry-Fresnel x birefringent-retarder x exit-Fresnel on unpolarized
     input (1,0,0,0). `parity` (+/-1) flips the c-axis-projection retardance sign -> flips Stokes-V
