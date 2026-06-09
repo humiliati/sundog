@@ -187,5 +187,47 @@ Ub, Ib = dp[band, 5].sum(), Iw[band].sum()
 check("GATE 4: PHC linear pol U/I ~ 0 (mirror symmetry, |U/I| < 0.5%)", abs(Ub / Ib) < 0.005,
       f"U/I={Ub/Ib*100:+.2f}%")
 
-print(f"\n{'ALL PASS -- one genuine ray-marched polyhedron engine reproduces the 22/46-deg halos, the Koennen Fresnel-floor linear pol (U=0), the per-feature +/-V circular handedness map (net -> 0) -- removing the schematic fixed-face boundary of s2_handedness_map -- and at K>=2 the PARHELIC CIRCLE (constant elevation = sun) with the 120-deg parhelia and its own net-zero +/-V.' if fail == 0 else str(fail) + ' FAILED'}")
+# ===== GATE 5 — pyramidal crystals: the odd-radius halos + their polarization ============== #
+# The {10-11} pyramid faces (normal at PYR_X=61.99 deg from c, the Atlas c/a-derived angle) make the
+# odd Galle wedges -> the 9/18/20/23/24/35-deg halos. This connects the polarimetric engine to the
+# Atlas catastrophe families and predicts (barely-studied) pyramidal-halo polarization.
+print("\nGATE 5 — pyramidal odd-radius halos + polarization (random-tumbling pyramidal crystals):")
+dpy = rt.run_ensemble("pyramidal", e_deg=20.0, n_orient=12000, dn=so.DN_ICE, K=1, seed=12)
+sc, Ipy = dpy[:, 0], dpy[:, 3]
+ch, ced = np.histogram(sc, bins=np.arange(0, 50, 1.0), weights=Ipy)
+cc = 0.5 * (ced[:-1] + ced[1:])
+def _wt(lo, hi): return Ipy[(sc >= lo) & (sc < hi)].sum()
+seg9 = (cc >= 7) & (cc < 12)
+p9 = cc[seg9][np.argmax(ch[seg9])]
+check("GATE 5: the 9-deg pyramidal halo appears (peak in [8,10.5] deg; Atlas anchor 8.96 deg)",
+      8.0 <= p9 <= 10.5, f"9-deg peak at {p9:.1f} deg")
+check("GATE 5: the 24-deg cluster dominates and the 35-deg halo sits above the far background",
+      _wt(22, 26) > _wt(8, 10.5) and _wt(34, 37) > _wt(41, 44),
+      f"I(24)={_wt(22,26):.0f} > I(9)={_wt(8,10.5):.0f}; I(35)={_wt(34,37):.0f} > bg(41-44)={_wt(41,44):.0f}")
+r9, r24, r35 = rt.ring_pol(dpy, 8, 10.5), rt.ring_pol(dpy, 22.5, 25), rt.ring_pol(dpy, 34, 37)
+check("GATE 5: pyramidal halos radially polarized, U/I ~ 0 on the 24-deg ring (mirror symmetry)",
+      abs(r24["uoi"]) < 0.01, f"U/I(24)={r24['uoi']*100:+.2f}%")
+check("GATE 5: pyramidal DoP rises with halo radius (more Fresnel diattenuation; DoP(35) > DoP(9))",
+      r35["dop"] > r9["dop"], f"DoP(9)={r9['dop']*100:.2f}% < DoP(35)={r35['dop']*100:.2f}%")
+check("GATE 5: no net circular V on the (refraction) pyramidal halos (|V/I| < 0.5%)",
+      abs(r24["voi"]) < 0.005 and abs(r35["voi"]) < 0.005,
+      f"V/I(24)={r24['voi']*100:+.2f}%, V/I(35)={r35['voi']*100:+.2f}%")
+
+# ===== GATE 6 — the Parry orientation + the K=3 antisolar growth ============================ #
+print("\nGATE 6 — Parry orientation (above-sun arc) + K=3 antisolar growth:")
+dpa = rt.run_ensemble("parry", e_deg=20.0, n_orient=9000, dn=0.0, K=1, seed=13)
+elp, azp, Ipa = dpa[:, 2], dpa[:, 1], dpa[:, 3]
+mer = np.abs(azp) < 25
+above = mer & (elp > 40)                                   # above the 22-deg halo top (el 42 for sun=20)
+fracA = Ipa[above].sum() / Ipa[mer].sum() if Ipa[mer].sum() > 0 else 0
+check("GATE 6: Parry concentrates flux above the sun near the meridian (the Parry-arc region)",
+      above.sum() > 40 and fracA > 0.02, f"above-el-40 meridian flux frac={fracA*100:.1f}%, n={above.sum()}")
+d2 = rt.run_ensemble("column", e_deg=20.0, n_orient=6000, dn=0.0, K=2, seed=14, include_external=True)
+d3 = rt.run_ensemble("column", e_deg=20.0, n_orient=6000, dn=0.0, K=3, seed=14, include_external=True)
+af2 = d2[np.abs(d2[:, 1]) > 120, 3].sum() / d2[:, 3].sum()
+af3 = d3[np.abs(d3[:, 1]) > 120, 3].sum() / d3[:, 3].sum()
+check("GATE 6: K=3 adds antisolar (subhelic/anthelic-region) flux over K=2 (same seed)",
+      af3 > af2, f"antisolar flux K2={af2*100:.1f}% -> K3={af3*100:.1f}%")
+
+print(f"\n{'ALL PASS -- one genuine ray-marched polyhedron engine reproduces the 22/46-deg halos, the Koennen Fresnel-floor linear pol (U=0), the per-feature +/-V handedness map (net->0); at K>=2 the PARHELIC CIRCLE + 120-deg parhelia; with PYRAMIDAL crystals the 9/24/35-deg odd-radius halos and their (radius-rising, U=0, V=0) polarization; the PARRY above-sun arc; and K=3 antisolar growth.' if fail == 0 else str(fail) + ' FAILED'}")
 sys.exit(1 if fail else 0)

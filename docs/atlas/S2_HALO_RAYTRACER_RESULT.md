@@ -56,6 +56,34 @@ So the same engine, at `K=2`, generates the parhelic circle and its 120° parhel
 ±V handedness law extends to this multi-bounce feature** — the V-analog of Können's U=0 is not special to
 the single-TIR arc.
 
+## Stage 6 — further extensions: pyramidal crystals, Parry, K=3 (the Atlas connection)
+### Pyramidal crystals → the odd-radius halos + their polarization (the headline)
+Adding the {10-11} pyramid faces (normal at **`PYR_X = 61.99°` from the c-axis — the same Atlas
+c/a-derived angle**, `acos(1/√((4/3)(c/a)²+1))`) to `make_crystal` gives a pyramidal-capped polyhedron.
+Random-tumbling pyramidal crystals reproduce the **classic odd-radius (Galle) halos**, and — barely
+studied in the literature — predict their **polarization**:
+
+| pyramidal halo | 9° | 18° | 20° | 23° | 24° | 35° |
+|---|---|---|---|---|---|---|
+| present (peak/flux) | ✓ peak 9.5° (Atlas 8.96°) | ✓ | ✓ | ✓ | ✓ strongest | ✓ |
+| linear DoP | 0.6% | — | 4.3% | 3.7% | 3.7% | 6.1% |
+
+The pyramidal halos are **radially polarized** (`U/I ≈ 0`, mirror-symmetric), with **DoP rising with
+radius** (a larger refraction angle ⇒ more Fresnel diattenuation), and **no net circular V** (refraction
+halos — consistent with the engine's V-only-from-TIR result). This connects the polarimetric engine
+directly to the **Atlas pyramidal catastrophe family**.
+
+### Parry orientation → an above-sun meridian arc
+`orient_parry` (a column with two prism faces horizontal). Parry-oriented columns concentrate flux
+**above the 22° halo top** near the solar meridian (el ≈ 47° for e_sun=20°) — the suncave-Parry-arc
+region. *(Cleanly separating the specific Parry arc from the tangent arcs needs finer analysis — a
+disclosed boundary.)*
+
+### K=3 → antisolar (subhelic/anthelic) growth
+A third internal reflection grows the antisolar-hemisphere flux (|az|>120°) over K=2 (5.4% → 6.2%, same
+orientations) — the subhelic / anthelic-region multi-bounce. The specific named antisolar arcs
+(subhelic, anthelic, Tricker) at K≥3 remain a further extension.
+
 ## Pre-registered scorecard
 | Gate | Result |
 |---|---|
@@ -65,6 +93,8 @@ the single-TIR arc.
 | GATE 2 linear pol — Fresnel-floor DoP ~3.7%, U=0 | **PASS** |
 | GATE 3 circular V — per-feature %-level, net → 0 | **PASS** |
 | GATE 4 parhelic circle (K=2) — const elevation, 120° parhelia, net-zero V | **PASS** |
+| GATE 5 pyramidal — 9°/24°/35° odd-radius halos + radial DoP rising with radius, no V | **PASS** |
+| GATE 6 Parry above-sun arc + K=3 antisolar growth | **PASS** |
 | kill: no 22° halo / linear pol ≠ Können / V not antisymmetric | not triggered |
 
 ## Honest boundaries
@@ -77,10 +107,11 @@ the single-TIR arc.
 - The bridge is a **convention lock** (the interface ops compose identically to `trace_ray`); the
   *independent* validation of the ray-marched loop is the realizability + the U=0 / DoP / net→0 gates.
 - **V stays forward-model**; the linear pol is the observed-tier anchor (Stage A). `K=1` milestone =
-  22°/46° + sundogs + single-TIR V; the **`K≥2` stretch (DONE) = the parhelic circle + 120° parhelia**.
-  Further multi-bounce features (subhelic / anthelic / Liljequist arcs, `K≥3`) and habits beyond
-  random/plate/column (Parry, pyramidal, Lowitz) remain open. The external-reflection glint
-  (`include_external`) is the white-PHC mechanism; it is off by default so the `K=1` gates are unchanged.
+  22°/46° + sundogs + single-TIR V; `K≥2` = the parhelic circle + 120° parhelia; **habits now =
+  random / plate / column / Parry / pyramidal**. Still open: the specific *named* antisolar arcs
+  (subhelic / anthelic / Tricker, `K≥3`), clean Parry-vs-tangent separation, and the Lowitz / bullet
+  habits. The external-reflection glint (`include_external`) is the white-PHC mechanism; off by default
+  so the `K=1` gates are unchanged.
 
 ## Files
 - `scripts/s2_optics.py` — `mueller_fresnel_reflect` added (the partial-reflection diattenuator).

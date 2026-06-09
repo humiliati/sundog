@@ -35,6 +35,9 @@ N_ICE = so.N_ICE
 DN_ICE = so.DN_ICE
 LAM = so.LAM_LIGHT
 THETA_C = np.degrees(np.arcsin(1.0 / N_ICE))
+# ice {10-11} pyramid-face normal angle from the c-axis, DERIVED from c/a=1.628 (Atlas; the same
+# acos(1/sqrt((4/3)(c/a)^2+1))). Opposite faces -> the 9-deg halo; 120-deg-apart -> the ~24-deg halo.
+PYR_X = np.radians(61.99)
 
 
 # ----------------------------------------------------------------------------- #
@@ -58,32 +61,62 @@ def quat_to_R(q):
 # ----------------------------------------------------------------------------- #
 # crystal geometry — hexagonal prism as a convex polyhedron (8 half-spaces)      #
 # ----------------------------------------------------------------------------- #
-def make_crystal(aspect, a=1.0):
-    """Hexagonal ice prism (inradius a, length L = aspect*2a). Returns body-frame
-    (normals (8,3), offsets (8,), face_kind (8,))  with inside = {x : n_i.x <= offset_i}.
-    Faces 0..5 = prism (normals at 60-deg steps, offset a); 6,7 = basal (+/-z, offset L/2).
-    Body optic/c-axis = +z. aspect<1 = plate, aspect>1 = column."""
+def make_crystal(aspect, a=1.0, pyramidal=False):
+    """Hexagonal ice crystal as a convex polyhedron, body frame, inside = {x : n_i.x <= offset_i}.
+    Body optic/c-axis = +z. `kind`: 0 prism, 1 basal, 2 upper-pyramid, 3 lower-pyramid.
+    - default (pyramidal=False): 6 prism (normals at 60-deg steps, offset a) + 2 basal (+/-z, offset L/2).
+    - pyramidal=True: 6 prism + 6 upper + 6 lower {10-11} pyramid faces (normal at PYR_X=61.99-deg from c,
+      azimuths 60-deg-steps; offset a*sinX + (L/2)*cosX caps the prism cleanly) -> the odd-radius halos."""
     L = aspect * 2.0 * a
-    normals = np.zeros((8, 3))
-    offsets = np.zeros(8)
-    kind = np.zeros(8, int)                          # 0 prism, 1 basal
+    if not pyramidal:
+        normals = np.zeros((8, 3)); offsets = np.zeros(8); kind = np.zeros(8, int)
+        for k in range(6):
+            ang = np.radians(60 * k)
+            normals[k] = [np.cos(ang), np.sin(ang), 0.0]; offsets[k] = a
+        normals[6] = [0.0, 0.0, 1.0]; offsets[6] = L / 2
+        normals[7] = [0.0, 0.0, -1.0]; offsets[7] = L / 2
+        kind[6] = kind[7] = 1
+        return normals, offsets, kind
+    cx, sx = np.cos(PYR_X), np.sin(PYR_X)
+    dp = a * sx + (L / 2) * cx
+    normals = np.zeros((18, 3)); offsets = np.zeros(18); kind = np.zeros(18, int)
     for k in range(6):
         ang = np.radians(60 * k)
-        normals[k] = [np.cos(ang), np.sin(ang), 0.0]
-        offsets[k] = a
-    normals[6] = [0.0, 0.0, 1.0]; offsets[6] = L / 2
-    normals[7] = [0.0, 0.0, -1.0]; offsets[7] = L / 2
-    kind[6] = kind[7] = 1
+        normals[k] = [np.cos(ang), np.sin(ang), 0.0]; offsets[k] = a; kind[k] = 0
+        normals[6 + k] = [sx * np.cos(ang), sx * np.sin(ang), cx]; offsets[6 + k] = dp; kind[6 + k] = 2
+        normals[12 + k] = [sx * np.cos(ang), sx * np.sin(ang), -cx]; offsets[12 + k] = dp; kind[12 + k] = 3
     return normals, offsets, kind
 
 
-def face_areas(aspect, a=1.0):
-    """Area of each face (prism rectangles a*L... edge=2a/sqrt3; basal hexagon (3*sqrt3/2)a²)."""
+def _pyr_vertices(k, up, aspect, a):
+    """The 3 vertices of pyramid face k (up=True upper cap): two prism-top corners + the apex."""
+    L = aspect * 2.0 * a
+    R = 2.0 * a / np.sqrt(3.0)                        # hexagon circumradius
+    cx, sx = np.cos(PYR_X), np.sin(PYR_X)
+    zap = (a * sx + (L / 2) * cx) / cx                # apex height on the c-axis
+    z = (L / 2) if up else -(L / 2); zapex = zap if up else -zap
+    aL = np.radians(60 * k - 30); aR = np.radians(60 * k + 30)
+    return (np.array([R * np.cos(aL), R * np.sin(aL), z]),
+            np.array([R * np.cos(aR), R * np.sin(aR), z]),
+            np.array([0.0, 0.0, zapex]))
+
+
+def face_areas(aspect, a=1.0, pyramidal=False):
+    """Area of each face: prism rectangles edge*L (edge=2a/sqrt3); basal hexagon (3*sqrt3/2)a^2;
+    pyramid faces = triangle area (two prism-top corners + apex)."""
     L = aspect * 2.0 * a
     edge = 2.0 * a / np.sqrt(3.0)
-    A = np.zeros(8)
+    if not pyramidal:
+        A = np.zeros(8)
+        A[:6] = edge * L
+        A[6] = A[7] = (3.0 * np.sqrt(3.0) / 2.0) * a * a
+        return A
+    A = np.zeros(18)
     A[:6] = edge * L
-    A[6] = A[7] = (3.0 * np.sqrt(3.0) / 2.0) * a * a
+    for k in range(6):
+        for j, up in ((6, True), (12, False)):
+            V1, V2, V3 = _pyr_vertices(k, up, aspect, a)
+            A[j + k] = 0.5 * np.linalg.norm(np.cross(V2 - V1, V3 - V1))
     return A
 
 
@@ -108,6 +141,14 @@ def exit_face(o, d, normals, offsets):
 def _point_on_face(fidx, kind, aspect, a, rng):
     """Uniform random point on body-frame face fidx."""
     L = aspect * 2.0 * a
+    if kind[fidx] in (2, 3):                          # pyramid triangle (upper k=fidx-6 / lower k=fidx-12)
+        up = kind[fidx] == 2
+        k = fidx - 6 if up else fidx - 12
+        V1, V2, V3 = _pyr_vertices(k, up, aspect, a)
+        u, v = rng.random(2)
+        if u + v > 1.0:
+            u, v = 1.0 - u, 1.0 - v
+        return V1 + u * (V2 - V1) + v * (V3 - V1)
     if kind[fidx] == 0:                              # prism rectangle
         ang = np.radians(60 * fidx)
         nrm = np.array([np.cos(ang), np.sin(ang), 0.0])
@@ -136,7 +177,7 @@ def sample_entry(R, normals_w, offsets, kind, areas, d_sun, aspect, a, rng):
     tot = w.sum()
     if tot <= 0:
         return None
-    fidx = int(rng.choice(8, p=w / tot))
+    fidx = int(rng.choice(len(w), p=w / tot))
     p_body = _point_on_face(fidx, kind, aspect, a, rng)
     p_world = R @ p_body
     return p_world, normals_w[fidx], tot
@@ -211,7 +252,7 @@ def trace_tree(o, d_in, entry_normal, normals, offsets, c_axis, dn=0.0, size_um=
 # ----------------------------------------------------------------------------- #
 # orientation samplers (seeded -> deterministic)                                #
 # ----------------------------------------------------------------------------- #
-def orient_random(rng):
+def orient_random(rng, sigma_deg=0.0):
     u1, u2, u3 = rng.random(3)
     q = np.array([np.sqrt(1 - u1) * np.sin(2 * np.pi * u2),
                   np.sqrt(1 - u1) * np.cos(2 * np.pi * u2),
@@ -236,10 +277,24 @@ def orient_column(rng, sigma_deg=1.5):
     return Rz(alpha) @ Ry(np.pi / 2 + wob) @ Rz(psi)
 
 
+def orient_parry(rng, sigma_deg=1.0):
+    """Parry: a column (c-axis horizontal) with two prism faces horizontal (the stable Parry
+    orientation). c-axis azimuth uniform; a prism-face normal locked vertical; small tumble wobble.
+    The base maps body-x (a prism normal) -> world +z and body-z (the c-axis) -> horizontal at alpha."""
+    alpha = rng.random() * 2 * np.pi
+    Rb = np.array([[0.0, np.sin(alpha), np.cos(alpha)],
+                   [0.0, -np.cos(alpha), np.sin(alpha)],
+                   [1.0, 0.0, 0.0]])
+    w1, w2 = rng.normal(0, np.radians(sigma_deg), 2)
+    return Rz(w1) @ Ry(w2) @ Rb
+
+
 HABITS = {
-    "random": (orient_random, 1.0),       # (sampler, aspect)
-    "plate": (orient_plate, 0.4),
-    "column": (orient_column, 3.0),
+    "random": (orient_random, 1.0, False),       # (sampler, aspect, pyramidal)
+    "plate": (orient_plate, 0.4, False),
+    "column": (orient_column, 3.0, False),
+    "parry": (orient_parry, 3.0, False),
+    "pyramidal": (orient_random, 1.0, True),      # randomly-tumbling pyramidal crystals -> odd radii
 }
 
 
@@ -251,16 +306,16 @@ def run_ensemble(habit="random", e_deg=20.0, n_orient=4000, dn=0.0, size_um=100.
     """Trace an ensemble of one habit. Returns a deposit array with columns
     [scatt_deg, az_deg, el_deg, I, Q, U, V] in the world/scattering frame, intensity-weighted by the
     orientation's projected area. Deterministic given seed."""
-    sampler, aspect = HABITS[habit]
-    normals_b, offsets, kind = make_crystal(aspect, a)
-    areas = face_areas(aspect, a)
+    sampler, aspect, pyr = HABITS[habit]
+    normals_b, offsets, kind = make_crystal(aspect, a, pyramidal=pyr)
+    areas = face_areas(aspect, a, pyramidal=pyr)
     e = np.radians(e_deg)
     d_sun = -np.array([np.cos(e), 0.0, np.sin(e)])    # propagation direction of sunlight
     rng = np.random.default_rng(seed)
 
     rows = []
     for _ in range(n_orient):
-        R = sampler(rng, sigma_deg) if habit != "random" else sampler(rng)
+        R = sampler(rng, sigma_deg)
         normals_w = normals_b @ R.T
         c_axis = R @ np.array([0.0, 0.0, 1.0])
         ent = sample_entry(R, normals_w, offsets, kind, areas, d_sun, aspect, a, rng)
@@ -360,6 +415,23 @@ def _report():
           f"bins (full circle)")
     print(f"  120-deg parhelia (two-internal-reflection K=2 feature): I(120 deg)={I120:.0f} vs gap I={Igap:.0f}")
     print(f"  PHC circular V nets to ~0: |sumV|/sum|V|={netP*100:.2f}% (achiral, antisymmetric)\n")
+
+    print("GATE 5 — pyramidal odd-radius halos + polarization (random pyramidal crystals):")
+    dpy = run_ensemble("pyramidal", e_deg=20.0, n_orient=18000, dn=DN_ICE, K=1, seed=12)
+    sc, Ipy = dpy[:, 0], dpy[:, 3]
+    rad = "  ".join(f"{r}:{Ipy[(sc >= r - 1.2) & (sc < r + 1.2)].sum():.0f}" for r in (9, 18, 20, 23, 24, 35))
+    print(f"  odd-radius halo weights (deg:flux):  {rad}")
+    for nm, lo, hi in (("9deg ", 8, 10.5), ("24deg", 22.5, 25), ("35deg", 34, 37)):
+        rp = ring_pol(dpy, lo, hi)
+        print(f"  {nm}: DoP={rp['dop']*100:5.2f}%  U/I={rp['uoi']*100:+.2f}%  V/I={rp['voi']*100:+.2f}%")
+    print("  -> radial pol (U=0), DoP rises with radius, no net V (refraction halos)\n")
+
+    print("GATE 6 — Parry above-sun arc + K=3 antisolar growth:")
+    dpa = run_ensemble("parry", e_deg=20.0, n_orient=12000, dn=0.0, K=1, seed=13)
+    elp, azp, Ipa = dpa[:, 2], dpa[:, 1], dpa[:, 3]
+    mer = np.abs(azp) < 25; above = mer & (elp > 40)
+    print(f"  Parry: above-sun meridian flux (el>40 deg) = {Ipa[above].sum()/Ipa[mer].sum()*100:.1f}% "
+          f"(the Parry-arc region, above the 22-deg halo top)\n")
     print("(see test_s2_halo_raytracer.py for the full pre-registered gate assertions)")
 
 
