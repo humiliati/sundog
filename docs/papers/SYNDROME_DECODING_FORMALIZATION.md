@@ -4,8 +4,8 @@
 *Working draft — venue-neutral Markdown. This file contains the full paper arc: **Abstract**, **§1
 Introduction**, **§2 Background**, **§3 The reduction chain**, **§4 The GF(2)-native decoding reduction &
 imported wall**, **§5 Engineering & experience report**, **§6 The certificate application**, **§7 Related Work**,
-**§8 Conclusion**, and **References**. Citations marked `[TODO-cite]` need their canonical bibliographic details
-confirmed before submission; verified anchors are marked ✓. Drafting notes at the end are not for submission.*
+**§8 Conclusion**, and **References**. All citations are resolved (formalization-prior-art anchors
+verified ✓; `poly-reductions` is repo-cited). Drafting notes at the end are not for submission.*
 
 ---
 
@@ -474,16 +474,20 @@ proves that decoders compute correctly, not that decoding is hard — the two ar
 latter is our subject. In Lean, mathlib provides only the Hamming metric and norm (`InformationTheory.Hamming`);
 a search of mathlib for parity-check, syndrome, generator, or linear-code primitives returns nothing. Recent
 external Lean work has begun to formalize coding-theory infrastructure in specialized domains — notably
-Lean-QEC's stabilizer-code and verified distance-certificate pipeline [ELWT26] — but that work verifies
-distance certificates rather than a syndrome-decoding NP-hardness reduction. Our development therefore
-contributes, to our knowledge, the first coding-theoretic *hardness* formalization in any system and introduces
-the bounded-weight `GF(2)` syndrome-decoding decision problem into a Lean setting.
+Lean-QEC's stabilizer-code and verified distance-certificate pipeline [ELWT26]. That work runs the *converse*
+direction to ours: it reduces a code-*distance* condition *to* SAT for verification (observing that distance
+certification is NP-hard in general, without proving it), rather than reducing SAT *to* a coding problem to
+mechanize hardness; it contains no Garey–Johnson gadget reduction and no syndrome-decoding hardness result. Our
+development therefore
+contributes, to our knowledge, the first machine-checked reduction-correctness spine for bounded-weight
+`GF(2)` syndrome-decoding hardness and introduces that decision problem into a Lean setting.
 
 **The gap.** No prior work mechanizes the hardness of syndrome decoding, the Garey–Johnson `3SAT ≤ 3DM`
-reduction, or `3DM ≤ X3C`, in any system. Lean's complexity-theory ecosystem is young: recent work includes a
-Lean 4 preprint formalizing complexity results and reduction infrastructure for a different family of decision
-problems [Sim26], while other community efforts remain definitional, specialized, or unpublished. None of these
-mechanizes any link of our chain or any syndrome-decoding hardness result. We will re-survey immediately before
+reduction, or `3DM ≤ X3C`, in any system. Lean's complexity-theory ecosystem is young but no longer empty: a
+substantial Lean 4 development [Sim26] mechanizes coNP-, Σ₂ᴾ-, PP-, and PSPACE-completeness results (with their
+reductions) for a "physical counting" problem family, so we claim no *first complexity reduction in Lean* — our
+first-ness is specific to the coding-theory hardness and the classical `3SAT ≤ 3DM ≤ X3C` gadget chain, which
+neither [Sim26] nor [ELWT26] nor any other community effort touches. We will re-survey immediately before
 submission.
 
 ---
@@ -529,7 +533,8 @@ prerequisite for that programme, not a substitute for it.
 
 ## References
 
-*(Verified anchors marked ✓; entries marked `[TODO-cite]` need canonical details confirmed.)*
+*(Verified anchors marked ✓. The two 2026 Lean preprints [ELWT26], [Sim26] were read in full and confirmed
+non-overlapping with this work; `poly-reductions` is repo-cited, as no single canonical paper was found.)*
 
 - **[BMvT78]** E. R. Berlekamp, R. J. McEliece, H. C. A. van Tilborg. *On the Inherent Intractability of
   Certain Coding Problems.* IEEE Transactions on Information Theory, 24(3):384–386, 1978.
@@ -542,13 +547,19 @@ prerequisite for that programme, not a substitute for it.
   Problems.* CADE-29, 2023 (Springer LNCS); arXiv:2306.08375; AFP entry `CVP_Hardness`.
 - **[AGS20]** ✓ R. Affeldt, J. Garrigue, T. Saikawa. *A Library for Formalization of Linear Error-Correcting
   Codes.* Journal of Automated Reasoning, 64:1123–1164, 2020. DOI 10.1007/s10817-019-09538-8. (`infotheo`.)
-- **[ELWT26]** `[TODO-cite]` M. Ehatamm, Y. Lee, X. Wu, R. Tao. *End-to-End Formalization of Quantum Error
-  Correction.* arXiv:2605.16523, 2026. (`Lean-QEC`; confirm author spellings and artifact details.)
-- **[Sim26]** `[TODO-cite]` T. Simas. *Computational Complexity of Physical Counting.* arXiv:2601.15571,
-  2026. (Lean 4 complexity/reduction infrastructure for an orthogonal decision-problem family.)
-- **[CLUP]** `[TODO-cite]` Y. Forster et al. *A Coq Library of Undecidability Proofs.* (CPP 2020 / project; confirm authors + venue.)
-- **[PolyRed]** `[TODO-cite]` The Isabelle `poly-reductions` project (`github.com/wimmers/poly-reductions`); confirm the canonical paper/authors (e.g., the associated Isabelle/HOL formalisation of poly-time Karp reductions).
-- **[mathlib]** `[TODO-cite]` The mathlib Community. *The Lean Mathematical Library.* CPP 2020; module `Mathlib.InformationTheory.Hamming` (v4.30.0).
+- **[ELWT26]** ✓ M. Ehatamm, Y. Lee, X. Wu, R. Tao. *End-to-End Formalization of Quantum Error Correction.*
+  arXiv:2605.16523 [quant-ph], May 2026. (`Lean-QEC`, Lean 4: stabilizer / CSS / Bivariate-Bicycle codes and
+  verified distance certificates — code correctness, not hardness.)
+- **[Sim26]** ✓ T. Simas. *Computational Complexity of Physical Counting.* arXiv:2601.15571 [cs.CC], Jan 2026
+  (rev. Mar 2026). (Lean 4; coNP/Σ₂ᴾ/PP/PSPACE-completeness for an orthogonal "physical counting" family —
+  ~28.9k lines, no `sorry`; touches no link of our chain.)
+- **[CLUP]** ✓ Y. Forster, D. Larchey-Wendling, A. Dudenhefner, E. Heiter, D. Kirst, F. Kunze, G. Smolka,
+  S. Spies, D. Wehr, M. Wuttke. *A Coq Library of Undecidability Proofs.* CoqPL 2020 (workshop).
+- **[PolyRed]** The `poly-reductions` project: polynomial-time Karp reductions in Isabelle/HOL,
+  `github.com/wimmers/poly-reductions`. (Repo-cited: no single canonical paper found as of writing; re-check
+  for a recent publication near submission.)
+- **[mathlib]** ✓ The mathlib Community. *The Lean Mathematical Library.* CPP 2020, pp. 367–381,
+  DOI 10.1145/3372885.3373824; module `Mathlib.InformationTheory.Hamming` (v4.30.0).
 - **[Artifact]** The public Lean development: `github.com/humiliati/sundogcert` (confirm anonymization policy for double-blind submission).
 
 ---
@@ -557,8 +568,10 @@ prerequisite for that programme, not a substitute for it.
 - *Headline claims are hedged "to the best of our knowledge / in any proof assistant" per the prior-art scout;
   re-run the negative searches near submission (the no-mechanization claims rest on repo snapshots + exhaustive
   search).*
-- *Do not claim "first complexity-reduction work in Lean": current search finds at least one 2026 Lean 4
-  complexity/reduction preprint. Keep the Lean first-claim narrowed to syndrome decoding / coding-hardness.*
+- *Do not claim "first complexity-reduction work in Lean": [Sim26] is a substantial Lean 4 complexity
+  formalization (coNP/Σ₂ᴾ/PP/PSPACE completeness, ~28.9k lines). The Lean first-claim is narrowed to the
+  coding-theory hardness reduction and the classical 3SAT≤3DM≤X3C gadgets — both 2026 preprints ([ELWT26],
+  [Sim26]) read in full and confirmed non-overlapping (§7).*
 - *Do not conflate decoding-algorithm correctness (which `infotheo` has) with decoding-hardness (which nobody
   has) — that distinction is load-bearing for (C1).*
 - *Cite mathlib's coding-theory absence by actual file content (grep), never a paraphrased docstring.*
@@ -566,3 +579,7 @@ prerequisite for that programme, not a substitute for it.
   framing — mentioned, not the spine.*
 - *Double-blind venues (CPP/ITP) require anonymizing the artifact link and the "sundogcert / Sundog" framing;
   the code-based-crypto motivation (not the lab-specific narrative) is the application anchor in §6.*
+- *Target venue: **ITP** — the formalization + named-imported-wall-discipline story, with [KN23] the direct
+  precedent. **CPP** is a viable alternative if the proof-engineering / experience-report angle (§5) is
+  sharpened. Pinning the venue fixes the LaTeX class (LIPIcs for ITP, acmart for CPP) and the double-blind
+  handling.*
