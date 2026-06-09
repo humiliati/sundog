@@ -1,14 +1,17 @@
-# Sundog Lean Certificate - Five Machine-Checked Cores
+# Sundog Lean Certificate - Six Machine-Checked Cores
 
 > **Deductive complement to the public Sundog lanes.** The public Lean repo now
-> carries five worked examples of the same discipline: machine-check the
+> carries six worked examples of the same discipline: machine-check the
 > deductive core, then name the imported wall. The first is the
 > [P-vs-NP certificate-syndrome lane](SUNDOG_V_P_V_NP.md); the second is a
 > real-analysis shadow-decay example; the third is the halo minimum-deviation
 > geometry behind the 22-degree halo; the fourth is the Aharonov-Bohm
 > gauge-invariance (a gradient's closed-loop circulation is zero); the fifth is
 > the general characteristic-function law behind the shadow decay (real analysis
-> again — five examples across four kinds of math).
+> again); and the sixth is a machine-checked Karp reduction
+> `3SAT <= 3DM <= X3C <= decoding` that anchors the certificate's
+> decoding-hardness import to 3SAT (reduction correctness only) — six examples
+> across five kinds of math.
 
 **Public and reproducible:**
 [`github.com/humiliati/sundogcert`](https://github.com/humiliati/sundogcert) -
@@ -21,7 +24,7 @@ Working hook:
 > A claim gets smaller and cleaner when its proof goes into Lean and its
 > assumptions stay outside the proof, named in plain view.
 
-## Five worked examples
+## Six worked examples
 
 | Lean surface | kind of math | checked deductive core | imported wall |
 |---|---|---|---|
@@ -30,6 +33,7 @@ Working hook:
 | `HaloGeometry` | geometric optics / calculus | `dev_value`, `min_deviation_stationary`, and `min_deviation_isLocalMin` (the symmetric ray is a genuine minimum) | 60-degree ice-prism geometry, measured `n ~= 1.31`, Snell refraction, ray exit, and the observed bright ring at the deviation extremum |
 | `FaradayAB` | vector calculus / topology | `gauge_circulation_zero`, `gauge_integrand_eq`, and `gauge_invariant_loop` — a gradient (gauge) field's closed-loop circulation is zero, so the loop observable is gauge-invariant | that the vector potential `A` enters as a loop integral, `grad chi` is the gauge freedom, the Aharonov-Bohm phase / Faraday loop EMF *is* that integral, and the loop encloses the flux (the `H^1` period) |
 | `ShadowDecayGeneral` | real analysis (generalizing example 2) | `shadow_decay_charFun` + the determine/resist corollaries — averaging over any probability measure factors through its characteristic function; resist ⟺ `‖charFun‖→0` (Riemann–Lebesgue), determine ⟺ a finite centered mean (two independent conditions); the Gaussian discharges both | that a real system instantiates the characteristic-function averaging; the Cauchy separator is named, not built (mathlib lacks `charFun_cauchy`) |
+| `SATReduction*` / `VarWheel` / `ClauseGadget` (on `MatchingNPHard` / `DecodingNPHard`) | combinatorics / computational complexity | `sat_iff_decodes` — a machine-checked Karp reduction `3SAT ≤ 3DM ≤ X3C ≤ bounded-weight GF(2) decoding`, both directions proved; a 3-CNF formula is satisfiable iff its decoding image decodes within the weight bound | the NP class, the poly-time-ness of the reduction maps, and 3SAT's own NP-hardness (Cook–Levin) — hardness imported, any "NP-hard" reading conditional on P ≠ NP, no P-vs-NP claim |
 
 The third example matters because it breaks the first two examples' shared
 shape. The certificate and shadow-decay examples both involve a lossy shadow
@@ -51,10 +55,12 @@ closed loop is exactly zero, so the loop observable keeps only the enclosed
 flux (an `H^1` period) while the gauge freedom `grad chi` washes out. The fifth,
 the general characteristic-function law, *is* the shadow-decay shape stated in
 full — it names which spectral condition of the averaging measure governs each
-half. So four of the five share the deeper shape across a finite-field coset, a
+half. So four of the six share the deeper shape across a finite-field coset, a
 measure-theoretic label and its characteristic-function spectrum, and a
-topological period, and the halo stands apart as the pure-extremization breaker
-— the method is tied neither to one motif nor to one mathematical structure.
+topological period; the halo stands apart as the pure-extremization breaker, and
+the sixth example — the `3SAT <= ... <= decoding` Karp reduction — stands apart
+too, a combinatorial equivalence whose import is hardness, not a model. The
+method is tied neither to one motif nor to one mathematical structure.
 
 ## P-vs-NP certificate core
 
@@ -116,6 +122,31 @@ the visible edge of the hardness assumption. The honest open question is
 quantitative: how large is the gap between a cheap bound and the true coset
 weight, as a function of the decoding margin.
 
+## The hardness wall, pushed inward (the reduction chain)
+
+The decoding-hardness assumption is no longer opaque. A machine-checked Karp
+reduction now connects it to the canonical NP-complete problem:
+
+> **3SAT <= 3DM <= X3C <= bounded-weight GF(2) decoding**
+
+is formalized end to end, its top-level correctness an `iff`
+(`SATReductionMain.sat_iff_decodes`): a 3-CNF formula `phi` is satisfiable **if
+and only if** the decoding instance it maps to decodes within the weight bound.
+Both directions are proved - the forward builds the perfect matching from a
+satisfying assignment (Garey-Johnson variable-wheel, clause, and garbage
+gadgets, the leftover tips absorbed by a counted bijection), the reverse reads
+an assignment back out of any perfect matching. Axiom-clean, like the rest.
+
+What is machine-checked is the reduction's **correctness** - the many-one / Karp
+equivalence between the SAT instance and its decoding image. The complexity
+wrapping stays imported, because mathlib has no complexity-theory framework: the
+**NP class** itself, the **poly-time-ness** of the reduction maps (each built and
+proved correct, but never timed), and 3SAT's **own NP-hardness** (Cook-Levin, in
+no proof assistant to date). So the certificate's "decoding is hard" import is
+now *anchored* - at least as hard as 3SAT, modulo the named wrapping - while any
+"NP-hard" reading stays **conditional on P != NP**. This is **not** a claim about
+P versus NP, and not a proof that decoding is hard.
+
 ## Relation to the P-vs-NP lane
 
 The certificate-syndrome receipts (v1-v6) measure the **empirical** side -
@@ -128,16 +159,22 @@ The newer `ShadowDecay`, `ShadowDecayGeneral`, `HaloGeometry`, and `FaradayAB`
 modules are method demonstrations, not extra P-vs-NP evidence. They show that the
 same public Lean discipline spans finite-field algebra, real analysis, geometric
 optics, and vector calculus / topology without turning any one imported wall into
-a theorem.
+a theorem. The reduction-chain modules (`SATReduction*`, on `MatchingNPHard` /
+`DecodingNPHard`) sit closer to this lane: they *anchor* the certificate's
+decoding-hardness import to 3SAT by a checked reduction. But they too leave the
+hardness imported (the NP class, poly-time-ness, and Cook-Levin), so they sharpen
+the import rather than discharge it - still not P-vs-NP evidence.
 
 ## Status
 
-**PUBLIC, REPRODUCIBLE, FIVE-EXAMPLE LEAN METHOD CORE.** The P-vs-NP
+**PUBLIC, REPRODUCIBLE, SIX-EXAMPLE LEAN METHOD CORE.** The P-vs-NP
 certificate soundness + lossiness are machine-checked; the shadow-decay (the
 concrete Gaussian decay and its general characteristic-function law), halo
 minimum-deviation, and Aharonov-Bohm gauge-invariance examples extend the method
-to three more mathematical shapes — five worked examples across four kinds of
-math. Hardness, model realization, physical optics,
-and the physical gauge field remain imported. Not a cryptographic one-wayness
-claim; not a claim about P versus NP; not a claim that Lean proves the sky
-realizes the halo or that nature realizes the Aharonov-Bohm effect.
+to three more mathematical shapes; and a machine-checked Karp reduction
+`3SAT <= 3DM <= X3C <= decoding` anchors the certificate's decoding-hardness
+import to 3SAT — six worked examples across five kinds of math. Hardness, model
+realization, physical optics, the physical gauge field, and the NP-class /
+poly-time / Cook-Levin complexity wrapping remain imported. Not a cryptographic
+one-wayness claim; not a claim about P versus NP; not a claim that Lean proves
+the sky realizes the halo or that nature realizes the Aharonov-Bohm effect.
