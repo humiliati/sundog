@@ -130,13 +130,17 @@ Phase-4 synthesis:
   [`receipts/2026-06-07_certificate_syndrome_v4.md`](receipts/2026-06-07_certificate_syndrome_v4.md)
   (supersedes the auto `V4_SUMMARY.md`). W14 midpoint deferred.
 - [`SUNDOG_CERTIFICATE_SYNDROME_V5_SLATE.md`](SUNDOG_CERTIFICATE_SYNDROME_V5_SLATE.md)
-  — **STAGE-1 FROZEN 2026-06-07; not executed**: MHK-v5 distributional-band repair for
-  v4's heavy-tail miss. Freezes a Kaplan-Meier median-in-op-units band over `K=8` same-size
-  precal seeds (`g=1.25`, `W_max=3.0`) with an honest `precal_insufficient` decline rather than
-  widening to pass; fixes v4's cross-attacker asymmetry with a common op horizon plus pairwise
-  `LB vs stern_l8` / `LB vs stern_l9` survival-difference + log-rank verdicts and a near-tie
-  bin. R2′ `[160,80]w16` remains the primary fresh resolution; v3 rungs 1/3 are method-validation
-  only; R0 is out of scope. No v5 precal or frozen scoring has run.
+  — **PAUSED / TODO 2026-06-09** (stage-1 **FROZEN**, harness built + **stats-layer audit GREEN**,
+  precal **not complete**): MHK-v5 distributional-band repair for v4's heavy-tail miss. Freezes a
+  Kaplan-Meier median-in-op-units band over `K=8` same-size precal seeds (`g=1.25`, `W_max=3.0`) with
+  an honest `precal_insufficient` decline rather than widening to pass; fixes v4's cross-attacker
+  asymmetry with a common op horizon plus pairwise `LB vs stern_l8` / `LB vs stern_l9`
+  survival-difference + log-rank (Bonferroni p<0.025) verdicts and a near-tie bin. R2′ `[160,80]w16`
+  is the primary fresh resolution; v3 rungs 1/3 method-validation only; R0 out of scope. **Shelved on
+  an environment blocker** (detached background runs get silently killed ~every 30 min; the resumable
+  precal banked only **2/24 R2′ slices**). The slice cache is preserved + resumable; resume when the
+  environment is stable (self-paced loop / detached scheduled task). **v1–v4 are the banked,
+  complete arc.**
 
 Lit-pass:
 

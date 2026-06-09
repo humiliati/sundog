@@ -1,12 +1,24 @@
 # Sundog Certificate Problem — Syndrome Certificate v5 Distributional-Band Slate (MHK-v5)
 
-Status: **FROZEN — stage-1 slate contract; NOT executed.** No v5 precal or frozen-target run may
-execute outside this contract. No v5 frozen-target run may execute until the multi-seed median
-pre-calibration has produced the stage-2 locked band, the tightness gate (W≤3.0) holds for every
-scored variant, and the v3-rung method validation passes. (Freeze-before-execute, per the lane.)
+Status: **PAUSED / parked on TODO 2026-06-09** — stage-1 **FROZEN**, harness built + **stats-layer
+audit GREEN** (`scripts/pvnp-certificate-syndrome-v5.py`, commit `db55b471`), but the precal is **NOT
+complete**. v1–v4 are **banked** as the finished arc; v5 (the deeper-distributional-model refinement)
+is shelved on an **operational blocker**: this environment silently kills detached background runs at
+~30-min intervals, so the resumable K=8 precal banked only **2/24 R2′ slices** before each death — the
+~8 h job can't complete unattended here. **Resume when the environment is stable** (or via a
+self-paced loop / a detached Windows scheduled task that survives MCP cycles): the slice cache
+(`results/pvnp/certificate-syndrome-v5/precal/_cache/`, 2 slices) is preserved and resumable —
+`python scripts/pvnp-certificate-syndrome-v5.py --precal --profile primary --regimes r2prime
+--lock-out docs/pvnp/SUNDOG_CERTIFICATE_SYNDROME_V5_PREDICTION_LOCK.json --out
+results/pvnp/certificate-syndrome-v5/precal` skips cached slices on re-run. The stage-1 contract and
+the GREEN-audited harness stand unchanged; nothing about the frozen design needs revisiting to resume.
+
+(Original frozen-status terms, still in force when resumed:) No v5 frozen-target run may execute until
+the multi-seed median pre-calibration has produced the stage-2 locked band, the tightness gate
+(W≤3.0) holds for every scored variant, and the v3-rung method validation passes.
 
 Date opened: 2026-06-07
-Stage-1 frozen: 2026-06-07
+Stage-1 frozen: 2026-06-07 · Paused: 2026-06-09
 
 This is the **deeper distributional model** v4 named as open work. It is the survival-analysis
 successor to [`SUNDOG_CERTIFICATE_SYNDROME_V4_SLATE.md`](SUNDOG_CERTIFICATE_SYNDROME_V4_SLATE.md)
