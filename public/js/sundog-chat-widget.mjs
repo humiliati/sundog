@@ -74,6 +74,9 @@ async function initAskSundog() {
   // the gate fires twice in a row on related routes.
   let lastTrace = null;
 
+  // First-visit onboarding nudge — set by maybeShowOnboarding(), cleared on dismiss.
+  let dismissOnboard = null;
+
   let claimMap = null;
   let chatIndex = null;
 
@@ -106,6 +109,8 @@ async function initAskSundog() {
       closePanel();
     }
   });
+
+  maybeShowOnboarding();
 
   async function answerQuestion(question) {
     const trace = await traceFor(question);
@@ -165,6 +170,7 @@ async function initAskSundog() {
   }
 
   function openPanel() {
+    if (dismissOnboard) dismissOnboard();
     panel.hidden = false;
     launch.setAttribute("aria-expanded", "true");
     window.setTimeout(() => input.focus({ preventScroll: true }), 0);
@@ -174,6 +180,51 @@ async function initAskSundog() {
     panel.hidden = true;
     launch.setAttribute("aria-expanded", "false");
     launch.focus({ preventScroll: true });
+  }
+
+  // First-visit onboarding nudge: a one-time hint above the launcher telling a
+  // new visitor what the assistant does. Shown once (localStorage-gated), and
+  // dismissed on panel-open / explicit "Got it" / a 12s timeout.
+  function maybeShowOnboarding() {
+    let seen;
+    try {
+      seen = localStorage.getItem("sd-chat-onboarded");
+    } catch (error) {
+      return; // storage blocked (private mode) — don't nag every visit
+    }
+    if (seen === "1") return;
+
+    const tip = document.createElement("div");
+    tip.className = "sd-chat-onboard";
+    tip.setAttribute("role", "status");
+
+    const text = document.createElement("span");
+    text.className = "sd-chat-onboard__text";
+    text.textContent = "Ask Sundog anything — I show my source and won't overclaim.";
+
+    const dismissBtn = document.createElement("button");
+    dismissBtn.className = "sd-chat-onboard__dismiss";
+    dismissBtn.type = "button";
+    dismissBtn.textContent = "Got it";
+
+    tip.append(text, dismissBtn);
+    root.appendChild(tip);
+    window.requestAnimationFrame(() => tip.classList.add("sd-chat-onboard--in"));
+
+    dismissOnboard = () => {
+      dismissOnboard = null;
+      tip.remove();
+      try {
+        localStorage.setItem("sd-chat-onboarded", "1");
+      } catch (error) {
+        /* storage blocked — already handled by the read guard above */
+      }
+    };
+
+    dismissBtn.addEventListener("click", dismissOnboard);
+    window.setTimeout(() => {
+      if (dismissOnboard) dismissOnboard();
+    }, 12000);
   }
 }
 

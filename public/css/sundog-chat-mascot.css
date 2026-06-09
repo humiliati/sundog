@@ -452,3 +452,87 @@
     transition: none;
   }
 }
+
+/* ------------------------------------------------------------------ */
+/* First-visit onboarding hint (Tier-1, shown once per visitor)        */
+/* ------------------------------------------------------------------ */
+/*
+ * A small dismissable nudge above the launcher that tells a first-time
+ * visitor what the assistant is for. localStorage-gated (shown once), and
+ * dismissed on any panel-open / explicit "Got it" / timeout. role="status"
+ * so it's announced once; the launcher already carries its own aria-label,
+ * so this is supplementary copy, not the only path to the control.
+ */
+
+.sd-chat-onboard {
+  position: absolute;
+  right: 0;
+  bottom: calc(3.4rem + 0.9rem); /* above the 3.4rem launcher */
+  width: max-content;
+  max-width: min(16.5rem, calc(100vw - 2.5rem));
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: 14px;
+  background: #142b3a;
+  color: var(--text-light, #f8fbfc);
+  box-shadow: 0 14px 34px rgba(11, 23, 32, 0.32);
+  font-size: 0.82rem;
+  line-height: 1.4;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 240ms ease, transform 240ms ease;
+}
+
+.sd-chat-onboard--in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* pointer toward the launcher (bottom-right corner of the bubble) */
+.sd-chat-onboard::after {
+  content: "";
+  position: absolute;
+  right: 1.45rem;
+  bottom: -5px;
+  width: 12px;
+  height: 12px;
+  background: #142b3a;
+  transform: rotate(45deg);
+  border-radius: 2px;
+}
+
+.sd-chat-onboard__text {
+  flex: 1;
+}
+
+.sd-chat-onboard__dismiss {
+  flex-shrink: 0;
+  font: inherit;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--text-light, #f8fbfc);
+  background: rgba(248, 251, 252, 0.12);
+  border: 1px solid rgba(248, 251, 252, 0.42);
+  border-radius: 8px;
+  padding: 0.3rem 0.55rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.sd-chat-onboard__dismiss:hover {
+  background: rgba(248, 251, 252, 0.22);
+}
+
+.sd-chat-onboard__dismiss:focus-visible {
+  outline: 2px solid var(--text-light, #f8fbfc);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sd-chat-onboard {
+    transition: none;
+    transform: none;
+  }
+}
