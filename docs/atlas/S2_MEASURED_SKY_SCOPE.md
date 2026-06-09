@@ -57,6 +57,22 @@ null up front: aperture-integrated full-display V consistent with zero (within i
 falsifies "population handedness imbalance." This corrects the lane's biggest honesty landmine *before*
 any outreach.
 
+### Stage C′ — In-house forward ±V(φ) map (cheap, in-house) ✅ DONE 2026-06-09
+The pre-registered ±V map (the "ideal honest result" named below) **computed in-house** — the one
+deliverable that did not need the measured sky. Receipt: `S2_HANDEDNESS_MAP_RESULT.md`; pre-reg:
+`S2_HANDEDNESS_MAP_PREREG.md`; code: `scripts/s2_handedness_map.py` (+ 16/16 frozen test).
+- **Found + fixed the blind spot:** the transmission-only chain returned **V≡0 on every TIR ray** (it
+  never modeled the **Fresnel-rhomb TIR phase** — the *primary* linear→circular mechanism on the
+  TIR-rich features). `s2_optics.tir_retardance` / `mueller_tir` add it; validated to the analytic
+  anchors (ice δ_max=30.57°@59.1°; glass 45° rhomb pair 48.6°/54.6°).
+- **Claim A confirmed:** per-feature ±V is real — per-ray `|V/I|` 3.8% (pure TIR) → 11.8% (with
+  birefringence); flux-averaged feature observable 0.8–2.6% (robust over sun-elev 10–35°).
+- **Claim B confirmed (structural null):** the achiral-ice display is azimuthally **antisymmetric**,
+  `∮V→0` (net 0.00%, residual 0.00%) — the **V-analog of Können's U=0** — while a single chiral
+  sub-path keeps net handedness 100% (so the cancellation is mirror-partner physics, not averaging).
+- **Still owed to Stage C (unchanged):** the measured-sky detection itself + a full per-habit raytrace;
+  V stays forward-model, linear pol remains the observed-tier anchor.
+
 ### Stage C — Measured-sky V campaign (the real jump; collaboration-gated; months)
 The genuinely-novel observation: **no published visible-halo Stokes-V measurement exists** (confirmed —
 not even an upper bound). The ~1% target is at the *high* end of atmospheric circular polarization
