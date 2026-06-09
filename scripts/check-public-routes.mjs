@@ -25,6 +25,11 @@ const canonicalRoutes = [
   "/paper-theme-demo",
   "/sundog-workbench",
   "/phase3-tests",
+  "/generality",
+  "/isotrophy",
+  "/navierstokes",
+  "/p-vs-np",
+  "/unit-distance",
 ];
 
 const legacyRoutes = [
@@ -50,6 +55,11 @@ const legacyRoutes = [
   ["/paper-theme-demo.html", "/paper-theme-demo"],
   ["/sundog-workbench.html", "/sundog-workbench"],
   ["/phase3-tests.html", "/phase3-tests"],
+  ["/generality.html", "/generality"],
+  ["/isotrophy.html", "/isotrophy"],
+  ["/navierstokes.html", "/navierstokes"],
+  ["/p-vs-np.html", "/p-vs-np"],
+  ["/unit-distance.html", "/unit-distance"],
   ["/atlas.html", "/sundog"],
   ["/atlas", "/sundog"],
 ];
