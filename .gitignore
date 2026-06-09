@@ -85,3 +85,7 @@ scripts/_halosim_calib*.png
 /_tmp_vite.err.log
 /_tmp_vite.out.log
 /_v6prov2.txt
+
+# Local Cloudflare Pages Functions secrets — NEVER commit
+.dev.vars
+.dev.vars.*
