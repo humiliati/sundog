@@ -120,6 +120,22 @@ def halo_radial_profile(thetas_deg, radius_deg, width_deg):
     return np.exp(-0.5 * ((thetas_deg - radius_deg) / width_deg) ** 2)
 
 
+def halo_pol_dop(radius_deg):
+    """Predicted linear degree-of-polarization of a minimum-deviation REFRACTION halo of angular
+    radius R, as a function of R ALONE:
+        DoP(R) = (1 - cos^4(R/2)) / (1 + cos^4(R/2)),
+    radially oriented (E in the scattering plane), with U = 0 (mirror symmetry) and no net circular
+    V (refraction halo). Derivation: at minimum deviation the internal/external incidence difference
+    equals half the deviation, theta_i - theta_t = R/2, and the Fresnel transmittance ratio through the
+    two faces is T_p/T_s = 1/cos^2(theta_i - theta_t) per face -> cos^4(R/2) for the pair (the n- and
+    apex-dependence cancels via Snell, leaving R alone). Generalizes Können & Tinbergen 1991's 22-deg
+    Fresnel-floor (R=21.84 -> 3.7%) to ANY refraction-halo radius -> the unifying polarization
+    observable across the Atlas's classified halos (incl. the pyramidal 9/18/20/23/24/35-deg family).
+    Independent of refractive index and habit GIVEN the observed radius R."""
+    f = np.cos(np.radians(np.asarray(radius_deg, float) / 2.0)) ** 4
+    return (1.0 - f) / (1.0 + f)
+
+
 # ===== HANDEDNESS — discrete-determines / STOKES-V shadow ================== #
 def mueller_fresnel(theta_i_deg, n1, n2):
     """Mueller matrix of Fresnel transmission (partial linear diattenuator) at n1->n2 interface.

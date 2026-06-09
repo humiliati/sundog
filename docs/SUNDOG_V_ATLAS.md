@@ -18,6 +18,17 @@
 > diagram, Phases 6.5/11) is unchanged. See §1.2–1.3, the Phase-4 table, `atlas/ATLAS_PHASE5_CROSS_SUBSTRATE.md`
 > §3.11–3.14, `atlas/S2_MEASURED_SKY_SCOPE.md`, and the public-eligibility gate in
 > `atlas/SHADOW_INVERTIBILITY_PHASE5_HANDOFF_2026-06-07.md`. **Still unpromoted, NOT public-eligible.**
+>
+> **Update 2026-06-09 — a PREDICTED OBSERVABLE added to the classified set: halo polarization.** The
+> polarized halo raytracer (`atlas/S2_HALO_RAYTRACER_RESULT.md` — a genuine ray-marched polyhedron
+> engine reproducing the 22°/46° halos, the parhelic circle + 120° parhelia, and the **pyramidal {10-11}
+> odd-radius family** 9/18/20/23/24/35°) was connected back to the atlas as a **smooth observable on the
+> classified set**: every refraction-halo fold of radius R carries linear polarization
+> **DoP(R) = (1−cos⁴(R/2))/(1+cos⁴(R/2))** (radial, U=0, no circular V) — habit- and n-independent given
+> R, generalizing Können 1991's 22° Fresnel floor (3.7%) to the whole atlas. The pyramidal family is a
+> falsifiable **0.6%→9.5% DoP ladder** (9°→35°); the raytracer confirms the law at the clean 9°/22° halos
+> (to ~0.1%). Receipt `atlas/ATLAS_HALO_POLARIZATION_OBSERVABLE.md`; code `scripts/atlas_halo_polarization.py`
+> + `s2_optics.halo_pol_dop`. **Still unpromoted, NOT public-eligible.**
 
 Working hook:
 
