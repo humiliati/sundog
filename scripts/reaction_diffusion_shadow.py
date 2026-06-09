@@ -124,7 +124,10 @@ def feature(v):
         s = np.bincount(flat_idx, P[b].ravel(), minlength=rb) / (RAD_COUNT + 1e-12)
         s[0] = 0.0                                        # drop DC
         radial[b] = s / (s.sum() + 1e-12)                 # spectral SHAPE (peak location = wavelength)
-    hist = np.stack([np.histogram(v[b], bins=hb, range=(0.0, v.max() + 1e-9), density=True)[0]
+    # per-FIELD-normalized histogram (fixed [0,1] range after dividing by the field's own max) so the
+    # range is per-field-independent and CONTRAST-invariant — removes the per-batch v.max() s-correlated
+    # leak the adversarial review flagged (different chunk composition was changing the same field's hist).
+    hist = np.stack([np.histogram(v[b] / (v[b].max() + 1e-9), bins=hb, range=(0.0, 1.0), density=True)[0]
                      for b in range(B)])
     hist = hist / (hist.sum(1, keepdims=True) + 1e-12)
     cc = np.array([ndimage.label(v[b] > thr)[1] for b in range(B)], float)[:, None]
@@ -331,16 +334,32 @@ def panel_run(seed, n, noise, grid, steps, lam):
 
 
 # ============================ controls (C1 non-triviality, C4 permutation) ====================== #
-def k_sweep(seed, noise, lam=0.3, ks=(1, 2, 4, 8, 16)):
-    """C1 — the ensemble IS the mechanism: at fixed lambda the wavelength-resist must DEEPEN as K grows
-    (Debye-Waller). A single field (K=1) does NOT wash to chance; the ensemble average does. Rules out
-    'trivial single-frame blur' (a static blur is K-independent)."""
+def k_dependence(seed, noise, ks=(1, 2, 8, 32, 128)):
+    """C1 / THE DECISIVE MECHANISM TEST. The charFun law distinguishes a genuine RESIST from a finite-K
+    artifact by the K-dependence of the wavelength-recovery half-life:
+      * GENUINE charFun/Debye-Waller resist (S0/S1/S2): the population's charFun decays, so the wash is
+        K-INVARIANT — half-life saturates regardless of how many subunits you average.
+      * FINITE-MEAN (DETERMINE-type) latent washed only by finite-K LLN slack: half-life moves OUTWARD as
+        K grows — a bigger ensemble RECOVERS the latent (it concentrates by the law of large numbers).
+    H8's diffusion-scale s has a finite centered mean, so the charFun law PREDICTS it determines; this
+    test reads the half-life vs K to confirm which regime S3c is in. Returns {K: (half_life, cont@lam1)}."""
     base_K = CFG["K"]; out = {}
     for kk in ks:
         CFG["K"] = kk
-        X, yc, _ = gen_s3c(CFG["n"], lam, default_rng(seed + 31 + kk), noise)
-        out[str(kk)] = round(cont_recovery(X, yc)["best"], 4)
+        cont = []
+        for lam in LAMBDAS:
+            X, yc, _ = gen_s3c(CFG["n"], lam, default_rng(seed + int(round(lam * 1000)) + kk + 31), noise)
+            cont.append(round(cont_recovery(X, yc)["best"], 4))
+        lc = half_life(cont, LAMBDAS)
+        i1 = LAMBDAS.index(1.0) if 1.0 in LAMBDAS else len(LAMBDAS) - 1
+        out[str(kk)] = {"half_life": lc, "cont_lam1": cont[i1]}
     CFG["K"] = base_K
+    # verdict: is the half-life K-INVARIANT (charFun resist) or GROWING with K (LLN / determine-type)?
+    hl = [out[str(k)]["half_life"] for k in ks]
+    hl_num = [h if h is not None else (max(LAMBDAS) + 1) for h in hl]
+    grows = all(hl_num[i] <= hl_num[i + 1] for i in range(len(hl_num) - 1)) and hl_num[-1] > hl_num[0]
+    out["is_charfun_resist"] = not grows          # genuine resist iff NOT growing with K
+    out["half_life_grows_with_K"] = bool(grows)
     return out
 
 
@@ -362,7 +381,8 @@ def gates(s3c, s3d):
         "G4_discrete_determines": (min(s3d["disc"]) >= DISC_MIN_MIN) and (s3d["lambda_star_d"] is None),
         "C5_class_balanced": all(0.45 <= m <= 0.55 for m in s3d["maj"]),
     }
-    g["G5_CROSSOVER"] = g["G3_continuous_resists"] and g["G4_discrete_determines"]
+    # C5 folded in (the review's consistency point): an imbalanced determine cannot report CROSSOVER.
+    g["G5_CROSSOVER"] = g["G3_continuous_resists"] and g["G4_discrete_determines"] and g["C5_class_balanced"]
     g["preflight_ok"] = g["G1_preflight_c"] and g["G2_preflight_d"]
     return g
 
@@ -398,11 +418,21 @@ def main():
     s3d = sweep(gen_s3d, CFG["n"], seed, CFG["noise"], "S3d")
     g = gates(s3c, s3d)
 
+    print("DECISIVE mechanism test — K-dependence of the wavelength 'resist' (charFun-invariant vs LLN-growing):",
+          flush=True)
+    kdep = k_dependence(seed, CFG["noise"])
+    for k in ["1", "2", "8", "32", "128"]:
+        if k in kdep:
+            print(f"    K={k:>3}: half-life lam*_c={kdep[k]['half_life']}  cont@lam1={kdep[k]['cont_lam1']}", flush=True)
+    print(f"    half-life grows with K = {kdep['half_life_grows_with_K']}  => "
+          f"{'GENUINE charFun resist' if kdep['is_charfun_resist'] else 'finite-mean LLN slack (DETERMINE-type) — NOT a Shadow-law resist'}",
+          flush=True)
+
     panel = ctrl = None
     if not args.no_panel:
-        print("Controls (C1 K-sweep non-triviality, C4 label-permutation):", flush=True)
-        ctrl = {"k_sweep_lam0.3": k_sweep(seed, CFG["noise"]), "permutation": label_permutation(seed, CFG["noise"])}
-        print(f"  K-sweep cont@lam0.3 {ctrl['k_sweep_lam0.3']}  perm {ctrl['permutation']}", flush=True)
+        print("Controls (C4 label-permutation):", flush=True)
+        ctrl = {"permutation": label_permutation(seed, CFG["noise"])}
+        print(f"  perm {ctrl['permutation']}", flush=True)
         print("B-panel (is-it-RD: RD/CH/GRF/FHN) @ lam=0 and lam=0.5:", flush=True)
         panel = {"lam0": panel_run(seed, CFG["panel_n"], CFG["noise"], CFG["grid"], CFG["steps"], 0.0),
                  "lam_mid": panel_run(seed, CFG["panel_n"], CFG["noise"], CFG["grid"], CFG["steps"], 0.5)}
@@ -415,15 +445,19 @@ def main():
           f"-> resists={g['G3_continuous_resists']}")
     print(f"  S3d: disc0={s3d['disc'][0]} minDisc={min(s3d['disc'])} lam*_d={s3d['lambda_star_d']} "
           f"-> determines={g['G4_discrete_determines']}")
-    print(f"  preflight_ok={g['preflight_ok']}  CROSSOVER={g['G5_CROSSOVER']}")
-    if mode == "calibrate":
-        ok = g["preflight_ok"] and g["G5_CROSSOVER"]
-        print(f"  CALIBRATION {'PASSES -> freeze constants + run --frozen' if ok else 'NEEDS TUNING (power knobs only)'}")
+    # HONEST verdict: a genuine Shadow-law crossover requires (i) preflight power (both latents recoverable
+    # at lambda=0 -- else the charFun check reads noise), (ii) the gate-level crossover, AND (iii) the resist
+    # is a charFun resist (K-invariant half-life), not finite-K LLN slack. The diffusion-scale wavelength
+    # fails (iii) -> NULL.
+    genuine = g["preflight_ok"] and g["G5_CROSSOVER"] and kdep["is_charfun_resist"]
+    print(f"  gate-CROSSOVER={g['G5_CROSSOVER']}  charFun-resist={kdep['is_charfun_resist']}  "
+          f"=> GENUINE crossover={genuine}")
+    print(f"  VERDICT: {'GENUINE determine/resist crossover on RD' if genuine else 'NULL — the wavelength is a finite-mean DETERMINE-type latent (charFun law predicts it concentrates by LLN); the gate-level wash is a finite-K artifact, NOT a Shadow-law resist. A genuine RD resist needs a phase (charFun-decaying) latent.'}")
 
     (out / f"{mode}.json").write_text(json.dumps(
         {"mode": mode, "seed": seed, "cfg": CFG, "lambdas": LAMBDAS,
-         "S3c": s3c, "S3d": s3d, "gates": g, "controls": ctrl, "panel": panel,
-         "wall_s": round(time.time() - t0, 1)}, indent=2,
+         "S3c": s3c, "S3d": s3d, "gates": g, "k_dependence": kdep, "genuine_crossover": bool(genuine),
+         "controls": ctrl, "panel": panel, "wall_s": round(time.time() - t0, 1)}, indent=2,
         default=lambda o: bool(o) if isinstance(o, np.bool_) else o))
     print(f"  wrote {out/(mode+'.json')}  ({round(time.time()-t0,1)}s)", flush=True)
 

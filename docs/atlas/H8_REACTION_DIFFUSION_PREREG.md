@@ -127,6 +127,13 @@ steps `T_STEPS`, subunit count `K`, sample count `n`, obs-noise `NOISE`, feature
 resolution `(M_kinetics, R_ic)`, and the `xc` range. **NOT** calibratable: the gate thresholds, the
 `λ`-grid, the honest prior, the kill criteria.
 
+> **⚠ CORRECTION (2026-06-09, post-review):** the "calibration passed / CROSSOVER" recorded below was a
+> **premature positive** — an n=64 under-powered probe on a *stale* receipt (superseded `gen_s3d`). The
+> adversarial review + a verified K-dependence diagnostic showed the "resist" is finite-K LLN slack on a
+> finite-mean (DETERMINE-type) latent, and G3 fails at n=160. **Outcome = NULL (KILL-1 + KILL-3).** The
+> design/prior/gates/kill-criteria above stand as the contract the NULL is judged against. See
+> `H8_REACTION_DIFFUSION_RESULT.md`. The block below is retained verbatim as the record of the premature call.
+>
 > **FROZEN CONSTANTS — locked 2026-06-09 after calibration passed, before the frozen run.**
 > Calibration (`--calibrate`, throwaway `CALIB_SEED=999`, 64²/`steps=3500`/`K=6`/`n=64`) cleared
 > **preflight + CROSSOVER** on the *faithful* feature (no off-centre fallback needed): S3c `cont0=0.726`
