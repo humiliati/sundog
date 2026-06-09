@@ -135,9 +135,10 @@ theme-matching.
   are now **machine-checked in Lean** (axiom-clean, referee-free; public at
   [github.com/humiliati/sundogcert](https://github.com/humiliati/sundogcert),
   [`SUNDOG_V_CERTIFICATE_LEAN.md`](SUNDOG_V_CERTIFICATE_LEAN.md)) — the deductive complement to the
-  measured ladders; the imported resistance is unchanged. The same Lean repo now spans four method
-  examples (finite-field algebra, real analysis, halo minimum-deviation geometry, and vector-calculus
-  Aharonov-Bohm gauge-invariance); the latter three are method context, not P-vs-NP evidence.
+  measured ladders; the imported resistance is unchanged. The same Lean repo now spans five method
+  examples (finite-field algebra, real analysis, halo minimum-deviation geometry, vector-calculus
+  Aharonov-Bohm gauge-invariance, and the general characteristic-function law); the latter four are method
+  context, not P-vs-NP evidence.
   -> [`SUNDOG_V_P_V_NP.md`](SUNDOG_V_P_V_NP.md).
 - **ARC-AGI - CONVERGENCE-TO-NULL on the signature *shadow*; CAPABILITY-FLOOR on
   the *body*; body-resistance probe + v2 expansion ran 2026-06-01 -> the
