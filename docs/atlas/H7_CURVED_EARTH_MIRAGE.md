@@ -50,7 +50,21 @@ lives over a *real horizon*, with ducting as the curved-Earth regime the flat mo
   interactive, not a research-grade full-atmosphere model); SEO payoff scales with overall site
   authority; the build is real front-end work, not free.
 
+## Build status — the public workbench is BUILT (2026-06-09), pending owner review/deploy
+The product play above was built: **`mirages.html`** (public explainer + interactive) + **`public/js/mirage.mjs`**
+(the curved-Earth tracer ported to ESM + a side-view ray-diagram renderer). Presets (Standard / Hot road /
+Cold sea / Strong inversion) each jump to their natural viewing geometry; sliders for refraction strength,
+observer height, object distance/height; a live status line (effective Earth radius k, image count, regime).
+Defaults open on a 2-image **superior mirage**; Hot road shows the 2-image **inferior mirage**; Strong
+inversion shows ducting/looming. Verified: `vite build` clean (no manifest throw), emitted to `dist/`,
+registered in `site-pages.json` + `public/_redirects`, **auto-added to the sitemap** (`/mirages`, 24 URLs),
+**public-copy claim-gate 0 FAIL**, **0 frozen-research-vocab** leak, physics node-tested vs the Python
+(k=4/3, ducting threshold, multi-image), **no JS console errors on load**, a11y to spec (labels, aria,
+role=img canvas, aria-live, focus-visible). Browser render-screenshot is blocked by the known site-wide
+chat-widget halo-animation hang (not this page). NOT committed/deployed — owner-gated (`npm run deploy`).
+
 ## Files
 - `scripts/mirage_curved.py` (+ `test_mirage_curved.py`, 7/7) — the curved-Earth ray-tracer + validation.
 - `docs/atlas/H5_MIRAGE_LADDER_RESULT.md` — the flat-Earth catastrophe ladder this deepens.
-- (deferred) `public/js/mirage.mjs` + a `mirages.html` explainer — the public product play.
+- `mirages.html` + `public/js/mirage.mjs` — the PUBLIC interactive explainer (built); `site-pages.json` +
+  `public/_redirects` updated.
