@@ -105,6 +105,34 @@ now charFun decay (K-invariant), not the finite-K LLN slack v1 mistook for a res
 - Calibrate (throwaway seed, small grid) → freeze power knobs → frozen (data seed) — the apparatus discipline;
   power knobs (grid, steps, K, n, noise, k0, harmonics, library res) calibratable; gates/λ-grid/prior/kills NOT.
 
+## FROZEN CONSTANTS — locked 2026-06-09 after calibration passed, before the frozen run
+Calibration (`--calibrate`, throwaway `CALIB_SEED=999`, 64²) cleared the FULL crossover: G1 cont₀=0.992,
+G3 resist (washes to 0, λ\*_c=0.2), G4 chirality determine (disc₀=1.0, min 0.983, censored), **G-KINV
+charFun-resist=True** (cont(λ=2.0) vs K = {8:0, 64:0, 512:0} — flat-zero, the phase is destroyed not
+LLN-recovered), C-NONTRIVIAL (handedness-blind disc=0.033 ≤ 0.60; only the winding separates ±q).
+- **Design knobs FROZEN:** CGL `b1=0.5, c1=-0.8, dt=0.05, r0=0.15`; phase range `phi ~ U[0,1.5]` rad;
+  jitter `jit_rad=2.5` rad/λ; phase block = polar resampling `pr=6 × pt=24` (per-ring DC-removed);
+  chirality block = boundary winding at all 3 radii `(0.30,0.45,0.60)`; blind block = radial power
+  (`r_bins=16`) + intensity histogram (`h_bins=10`) + component count; `noise=0.15`.
+- **Scale knobs (frozen primary):** `GRID=88 steps=2000 K=8 n=200 m_angles=180 r_bases=10
+  DATA_SEED=20260609`.
+- **HONEST refinement note (transparent):** the pre-reg locked the *concepts* (phase resists charFun-ly,
+  chirality determines, the non-triviality + K-invariance gates) and the *thresholds*; calibration on the
+  throwaway seed refined the *operationalization* — (i) the phase-sensitive feature (azimuthal coeffs →
+  downsample → **polar resampling**, for rotation-sensitivity + noise-robustness); (ii) the jitter scale
+  (to sharpen the charFun decay); (iii) the **G-KINV test form**: from "half-life saturates with K" to
+  "cont(λ_max) stays ≤0.15 and does not rise across K∈{8,64,512}".
+  - **⚠ CORRECTION (post-review, honest):** the original half-life-saturation form **FAILS** on v2 — the
+    phase half-life *grows* with K (≈0.05→0.75 over K=1→512). This is **not** because v2 is LLN; it is
+    because at *finite* λ the charFun envelope `φ_μ(λ)` is **nonzero**, so a larger ensemble recovers the
+    attenuated-but-present signal up to the noise-set λ-asymptote — the half-life-vs-K metric *structurally
+    cannot* separate charFun from LLN at finite λ (S0 only appears to saturate because its envelope dies by
+    λ≈1). The decisive separation lives at λ where `φ_μ→0` exactly: there a genuine charFun resist is
+    **dead for all K**, while a finite-mean LLN latent **recovers with K** (verified: at λ=2.0, v2 phase
+    stays {8:0,…,4096:0}; a finite-mean control rises {8:0.22,…,4096:0.96}). The fixed-λ form tests exactly
+    that and IS the correct discriminator — but the swap turned a failing gate into a passing one and must
+    be **owned, not buried**. The earlier "feature redundancy" justification was wrong. See the RESULT doc.
+
 ## Files (to be produced)
 - `scripts/reaction_diffusion_phase_shadow.py` — the S3φ probe (FHN/CGL spiral library; phase-resist +
   chirality-determine; the K-invariance diagnostic as a first-class gate; the hardened CDF-matched null).

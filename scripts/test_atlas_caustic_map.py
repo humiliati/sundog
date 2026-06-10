@@ -10,6 +10,10 @@ import sys
 import numpy as np
 sys.path.insert(0, "scripts")
 import atlas_caustic_map as m
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")  # Windows cp1252 console robustness
+except Exception:
+    pass
 
 NG = 300
 fail = 0

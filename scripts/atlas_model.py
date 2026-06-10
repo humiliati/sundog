@@ -27,6 +27,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from s2_optics import halo_min_deviation
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")  # Windows cp1252 console robustness
+except Exception:
+    pass
 
 ICE_A, ICE_C = 4.519, 7.357          # ice Ih lattice constants (Angstrom); c/a = 1.628 (a FIXED input)
 ICE_CA = ICE_C / ICE_A

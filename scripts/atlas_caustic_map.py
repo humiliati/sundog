@@ -21,6 +21,10 @@ dispersion). Physics fixed by Snell + Tape geometry; nothing tuned. NOT public-e
 import math
 import sys
 import numpy as np
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")  # Windows cp1252 console robustness
+except Exception:
+    pass
 
 N_ICE = 1.31
 WEDGE_DEG = 60.0          # 22deg-halo prism wedge: two prism faces 120deg apart -> 60deg apex

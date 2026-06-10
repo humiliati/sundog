@@ -12,6 +12,10 @@ import warnings
 warnings.filterwarnings("ignore")
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import atlas_halo_pol_campaign as cmp  # noqa: E402
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")  # Windows cp1252 console robustness
+except Exception:
+    pass
 
 fail = 0
 

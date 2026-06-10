@@ -28,6 +28,10 @@ from scipy import ndimage
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import atlas_caustic_map as cm
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")  # Windows cp1252 console robustness
+except Exception:
+    pass
 
 
 def jet_from_chart(X, Y, dg, da):

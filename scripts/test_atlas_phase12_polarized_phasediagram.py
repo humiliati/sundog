@@ -14,6 +14,10 @@ warnings.filterwarnings("ignore")
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import s2_optics as so                              # noqa: E402
 import atlas_phase12_polarized_phasediagram as p12  # noqa: E402
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")  # Windows cp1252 console robustness
+except Exception:
+    pass
 
 fail = 0
 

@@ -12,6 +12,10 @@ Run: python scripts/test_atlas_strata_map.py  (~20-40 s).
 import sys
 sys.path.insert(0, "scripts")
 import atlas_strata_map as sm
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")  # Windows cp1252 console robustness
+except Exception:
+    pass
 
 fail = 0
 

@@ -30,6 +30,10 @@ from scipy import ndimage
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import atlas_caustic_map as cm
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")  # Windows cp1252 console robustness
+except Exception:
+    pass
 
 CORANK2_REL = 0.05   # s1/scale below this on the caustic => corank-2 (D₄) candidate
 ERODE = 3            # cells to erode off the admissibility boundary before the caustic search

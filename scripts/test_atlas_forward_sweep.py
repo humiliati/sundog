@@ -9,6 +9,10 @@ import sys
 sys.path.insert(0, "scripts")
 import atlas_forward_sweep as fs
 from s2_optics import halo_min_deviation
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")  # Windows cp1252 console robustness
+except Exception:
+    pass
 
 fail = 0
 

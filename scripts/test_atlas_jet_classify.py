@@ -13,6 +13,10 @@ import sys
 sys.path.insert(0, "scripts")
 import atlas_jet_classify as jc
 import atlas_caustic_map as cm
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")  # Windows cp1252 console robustness
+except Exception:
+    pass
 
 fail = 0
 

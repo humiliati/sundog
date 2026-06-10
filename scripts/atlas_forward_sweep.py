@@ -21,6 +21,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import atlas_caustic_map as cm
 import atlas_strata_map as sm
 from s2_optics import halo_min_deviation
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")  # Windows cp1252 console robustness
+except Exception:
+    pass
 
 N = cm.N_ICE
 SQ = math.sqrt(N * N - 1.0)

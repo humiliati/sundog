@@ -1,0 +1,181 @@
+{
+  "mode": "frozen",
+  "seed": 20260609,
+  "cfg": {
+    "grid": 88,
+    "steps": 2000,
+    "K": 8,
+    "n": 200,
+    "noise": 0.15,
+    "b1": 0.5,
+    "c1": -0.8,
+    "dt": 0.05,
+    "r0": 0.15,
+    "phase_lo": 0.0,
+    "phase_hi": 1.5,
+    "jit_rad": 2.5,
+    "m_angles": 180,
+    "r_bases": 10,
+    "radii": [
+      0.3,
+      0.45,
+      0.6
+    ],
+    "m_modes": [
+      1,
+      2
+    ],
+    "pr": 6,
+    "pt": 24,
+    "r_bins": 16,
+    "h_bins": 10,
+    "thr": 0.0,
+    "n_theta": 180
+  },
+  "lambdas": [
+    0.0,
+    0.02,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.3,
+    0.5,
+    0.75,
+    1.0,
+    1.5,
+    2.0
+  ],
+  "blocks": {
+    "phase": [
+      0,
+      144
+    ],
+    "chir": [
+      144,
+      147
+    ],
+    "blind": [
+      147,
+      174
+    ]
+  },
+  "S3phi_c": {
+    "cont": [
+      0.9902,
+      0.9746,
+      0.8907,
+      0.6902,
+      0.2541,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "disc": [
+      -0.0202,
+      -0.0737,
+      -0.0667,
+      -0.0412,
+      0.03,
+      0.051,
+      0.011,
+      -0.069,
+      0.0825,
+      -0.0941,
+      0.06,
+      0.0112
+    ],
+    "maj": [
+      0.505,
+      0.525,
+      0.55,
+      0.515,
+      0.5,
+      0.51,
+      0.545,
+      0.565,
+      0.515,
+      0.575,
+      0.5,
+      0.555
+    ],
+    "lambda_star_c": 0.15,
+    "lambda_star_d": null
+  },
+  "S3phi_d": {
+    "cont": [
+      0.9828,
+      0.9674,
+      0.854,
+      0.7622,
+      0.0442,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "disc": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      0.99,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "maj": [
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5
+    ],
+    "lambda_star_c": 0.15,
+    "lambda_star_d": null
+  },
+  "k_dependence": {
+    "lam_test": 2.0,
+    "cont_vs_K": {
+      "8": 0.0,
+      "64": 0.0,
+      "512": 0.0
+    },
+    "is_charfun_resist": true,
+    "rises_with_K": false
+  },
+  "nontrivial": {
+    "blind_block_disc": 0.03,
+    "chir_block_disc": 1.0,
+    "nontrivial_ok": true
+  },
+  "gates": {
+    "G1_preflight_c": true,
+    "G2_preflight_d": true,
+    "G3_continuous_resists": true,
+    "G4_discrete_determines": true,
+    "G_KINV_charfun_resist": true,
+    "C_NONTRIVIAL": true,
+    "C5_class_balanced": true,
+    "G5_CROSSOVER": true
+  },
+  "wall_s": 48.6
+}
