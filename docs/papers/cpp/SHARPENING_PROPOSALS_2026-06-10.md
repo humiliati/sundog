@@ -3,8 +3,14 @@
 **STATUS: P1–P4 APPROVED by owner and APPLIED 2026-06-10** (P4 in the prose-only
 variant) to all three sources — MD master, LIPIcs tex, CPP tex. Both PDFs rebuilt
 clean afterward: CPP 8 pp (limit 12 excl. bib), LIPIcs 13 pp; zero overfull/undefined;
-new sections visually verified. **P5 (scoped anonymized artifact) remains OPEN** —
-approved direction, not yet built.
+new sections visually verified. **P5 (scoped anonymized artifact) BUILT + VERIFIED 2026-06-10:**
+local export `C:\Users\hughe\Dev\decodecert-artifact` (15 closure modules + trimmed
+AxiomAudit, 21 guards; identity rename `Sundog`→`Decode` / `Sundogcert`→`DecodeCert`,
+length-preserving so guard strings survive byte-identically); `lake build` green from
+scratch (1,852 jobs, AxiomAudit passed, headline pinned to the foundational triple);
+identifying-string sweep = 0 hits; zipped to
+`C:\Users\hughe\Dev\decodecert-artifact-review.zip` (22 files, ~62 KB, byte-verified
+round-trip). **Upload to the anonymized host = owner-gated, not done.**
 
 Why these exist: the drafting notes gate CPP on "sharpening the proof-engineering /
 experience-report angle (§5)". CPP's CFP names "mechanized (un)decidability and
