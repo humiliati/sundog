@@ -1,0 +1,188 @@
+ 12 
+ 1 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+random.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 40 
+ 2 
+ .8
+ 2 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+Horiz column .3 deg disp.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 22 
+ 2 
+ 2
+ 3 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+plate .3 deg disp.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 35 
+ 2 
+ .3
+ 4 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+Parry 1 - 1 deg disp.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 3 
+ 2 
+ 2
+ 5 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 6 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 7 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 8 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 9 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 10 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 11 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 12 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 26
+ 5             10000000        16            6 
+ 7952945 
+ 2             1             0             0 
+Type9
+ 14737632      0             9843250       0             16777215      0             16777215 
+ 2 
+ 7.3           .39           1
+True
+False
+False
+True
+"1"
+"not tested"
+"3,4,5,6,7,8"
+"2"
+"2"
+ 60
+ 0             0
+ 1
+ 1             1             0             0
+ 3 
+420   0    510    1     600    0.4      680    0
+ 0.5          -1            -1            -1            -1             1             1             1             0             1 
+-1            -1            -1            -1            -1             1             1             1             1            42
+*#*#*#*#*#* description follows *
+The most beautiful and one of the purest coloured of the halos.  It partly circles the zenith but never completely.
+
+The simulation is a split-sky filtered fisheye view.   The zenith is at centre.
+
+Plate crystals falling with their large prism end faces horizontal form the CZA.   Sunlight enters the top horizontal face - numbered one - click 'Crystal View' on the ray filter panel to see the crystal - and leaves through one of the six vertical side faces.   The ray filters are set to transmit only these rays.
+
+Change the solar altitude and see how the appearance of the CZA alters.    What is the maximum solar altitude that the CZA can be seen?
+
+The simulation inludes some poorly oriented crystals to form the 22 degree circular halo and singly oriented columns which produce the Upper Tangent Arc.   The plate crystals form the parhelia and most of the parhelic circle.   
+
+Turn off the ray filters and run the simulation again to show the CZA in the context of the other halos.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

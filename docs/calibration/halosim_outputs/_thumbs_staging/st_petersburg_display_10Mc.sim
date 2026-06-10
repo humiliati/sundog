@@ -1,0 +1,177 @@
+ 12 
+ 1 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+random.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 35 
+ 2 
+ .8
+ 2 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+Horiz column .2 deg disp.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 20 
+ 2 
+ 2
+ 3 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+plate .5 deg disp.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 2 
+ .2
+ 4 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+Lowitz .5 deg disp.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 30 
+ 2 
+ .2
+ 5 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+plate 1 deg disp.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 15 
+ 2 
+ .2
+ 6 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 2 
+ 1
+ 7 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 2 
+ 1
+ 8 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 2 
+ 1
+ 9 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 2 
+ 1
+ 10 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 2 
+ 1
+ 11 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 2 
+ 1
+ 12 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 2 
+ 1
+ 51
+ 4             10000000        64            6 
+ 10186799 
+ 2             1             0             0 
+Type9
+ 11578532      0             9843250       0             16777215      0             16777215 
+ 2 
+ 3.9           .55           1
+False
+True
+True
+False
+"not tested"
+"not tested"
+"not tested"
+"2"
+"6"
+ 60
+ 0             0
+ 1
+ 1             1             0             0
+ 3 
+420   0    510    1     600    0.4      680    0
+ 0.5          -1            -1            -1            -1             1             1             1             0             1 
+-1            -1            -1            -1            -1             1             1             1             1            42
+*#*#*#*#*#* description follows *
+The famous and long time controversial display observed June 18,   1790 by Lowitz. 
+
+The non controversial parts are formed by randomly oriented crystals (22 and 46 deg halos), plates (parhelia, parhelic circle, 120 deg parhelia) and singly oriented columns (circumscribed halo, infralateral arcs,  Wegener arcs, subhelic arcs).
+
+The unusual features are the small and faint arcs extending sunwards from near the parhelia then becoming tangential to the 22 deg halo.   These are called 'Lowitz' arcs although Lowitz drew only the lower components in the St Petersburg display.  
+
+The Lowitz arcs are simulated by plate crystals that take different orientations about a horizontal axis passing through diametrically opposite prism edges.   Rays enter and leave through side faces (3,5) inclined at 60 degrees to each other.
+
+Only recently have unambiguous photographs become available that show Lowitz arcs.  
+
+ Always carry a camera!
+
+
+
+
+
+
+

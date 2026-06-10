@@ -45,14 +45,21 @@ Every classified Atlas feature now carries a polarization signature, split by me
 So the same bifurcation point now reads as a *geometry × polarization* cell: a refraction fold is a
 radius **and** a radial DoP; a TIR feature is a locus **and** a net-zero ±V handedness map.
 
-## Honest boundary (what stays with the Phase-7 machinery)
-The **orientation-driven derived boundary elevations** — 60.74° plate-parhelia off, 29.71° column
-UTA+LTA merge, 32.20°/57.80° CZA/CHA — remain the authority of the Phase-7 caustic-map / admissibility
-machinery (`atlas_caustic_map`, `atlas_forward_sweep`). The raytracer **forward-generates** those
-features, but does not cleanly re-derive the exact boundary *elevation* by simple flux-windowing (the
-plate parhelion's disappearance needs a targeted Können-style feature fit, not a scattering-angle
-window). Phase 12 therefore *closes the generator/occlusion gaps and adds polarization*; it does not
-supersede the derived B-walls. The two are complementary.
+## Honest boundary — REFINED by the orientation-boundary fits (`ATLAS_ORIENTATION_BOUNDARIES.md`)
+A follow-up pass tested whether the raytracer can re-derive the **orientation-driven** boundary
+elevations with targeted feature detectors. The result is partial and honest:
+- **2 of 4 now raytracer-CONFIRMED — the TIR admissibility walls.** The **CZA off (32.196°)** and
+  **CHA on (57.804°)** show as a sharp collapse / appearance of the near-zenith / near-horizon 90°-wedge
+  flux right at the derived elevations (the full ray-marcher independently reproduces these
+  component-B walls).
+- **2 of 4 stay with the caustic-map machinery.** The **29.71° column merge** (a topological
+  A₃-metamorphosis — its connecting sides are intrinsically faint, three detectors flat) and the
+  **60.74° plate-parhelia off** (the disappearance is masked by wobble-broadened 22°-ring background)
+  do **not** extract cleanly from MC flux. The raytracer *generates* those features but not the wall.
+
+So Phase 12 *closes the generator/occlusion gaps and adds polarization*; the orientation-boundary pass
+then *confirms the TIR walls* and *honestly bounds where the forward instrument's reach ends*. The
+raytracer and the caustic-map machinery are complementary, not redundant.
 
 ## Files
 - `scripts/atlas_phase12_polarized_phasediagram.py` — the polarization layer + the horizon-clip

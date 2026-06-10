@@ -1,0 +1,61 @@
+{
+  "mode": "frozen",
+  "seed": 20260609,
+  "cfg": {
+    "grid": 80,
+    "b1": 0.0,
+    "c1": -1.4,
+    "dt": 0.05,
+    "r0": 0.15,
+    "settle": 1500,
+    "nframes": 50,
+    "stride": 5,
+    "K": 8,
+    "n": 200,
+    "noise": 0.1,
+    "down": 10,
+    "r_amp": 20,
+    "t_lo": 0.0,
+    "t_hi": 12.0,
+    "jit": 5.0,
+    "r_bases": 14
+  },
+  "cont": [
+    0.9021,
+    0.9248,
+    0.8931,
+    0.891,
+    0.7816,
+    0.7681,
+    0.398,
+    0.4514,
+    0.0,
+    0.0
+  ],
+  "lambda_star": 0.75,
+  "k_invariance": {
+    "cont_vs_K": {
+      "8": 0.0,
+      "64": 0.1686,
+      "512": 0.5269
+    },
+    "is_charfun_resist": false
+  },
+  "ablations": {
+    "static_cont0": 0.0,
+    "rotation_own_cont0": 0.9349442742970664,
+    "rotation_cross_r2": 0.0,
+    "timewarp_cross_r2": 0.04910632749174848
+  },
+  "gates": {
+    "G1_preflight": true,
+    "G3_resists": true,
+    "G_KINV_charfun": false,
+    "LB_static_fails": true,
+    "LB_rotation_fails": true,
+    "LB_timewarp_fails": true,
+    "LB_cont": true,
+    "LOADBEARING_RESIST": false
+  },
+  "wall_s": 69.6
+}
