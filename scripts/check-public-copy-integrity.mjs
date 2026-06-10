@@ -48,7 +48,7 @@ const DOCS_NO_PUBLISH = new Set([
   "501c3", "chatv2", "deconfound",
   "SUNDOG_V_DECONFOUND.md", "DECONFOUND_REAL_DATA_MEMO.md",
   "SUNDOG_V_JEPA.md", "JEPA_LIT_PASS_MEMO.md",
-  "SUNDOG_V_ALLELOPATHY.md", "CROSS_SUBSTRATE_NOTES.md",
+  "SUNDOG_V_ALLELOPATHY.md",
 ]);
 function isNoPublish(doc) {
   const rel = String(doc || "").replace(/^docs\//, "");

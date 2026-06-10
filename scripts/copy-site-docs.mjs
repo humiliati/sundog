@@ -48,7 +48,10 @@ const DOCS_NO_PUBLISH = new Set([
   "SUNDOG_V_JEPA.md",
   "JEPA_LIT_PASS_MEMO.md",
   "SUNDOG_V_ALLELOPATHY.md",
-  "CROSS_SUBSTRATE_NOTES.md",
+  // CROSS_SUBSTRATE_NOTES.md was removed from this set 2026-06-09 (owner
+  // decision): 14 Ask Sundog routes cite it as visible trace support, the
+  // file is git-tracked in the public repo (already disclosed), and
+  // withholding it only made the cited evidence unreachable on the site.
 ]);
 
 async function copyPublicDocs(sourceDir, targetDir, noPublish = new Set(), relBase = "") {
