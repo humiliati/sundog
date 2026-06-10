@@ -1,0 +1,10 @@
+# LaTeX build outputs (the sundog repo is public; keep build junk and the
+# rendered draft PDF out of it -- this paper is headed to double-blind review)
+*.aux
+*.log
+*.out
+*.vtc
+*.toc
+*.synctex.gz
+syndrome-decoding.pdf
+_preview/

@@ -16,7 +16,11 @@
 %     \supplement artifact URL before submission (placeholders flagged below).
 % =====================================================================
 
-\documentclass[a4paper,UKenglish,cleveref,autoref,thm-restate]{lipics-v2021}
+% NOTE: the thm-restate class option is omitted -- this paper declares no theorem
+% environments, and under TeX Live 2026 that option's thmtools/cleveref counter
+% aliasing breaks lipics-v2021.cls v3.1.3 ("\c@lemma already defined"). Re-add it
+% only if restatable theorems are introduced (and re-test the build).
+\documentclass[a4paper,UKenglish,cleveref,autoref]{lipics-v2021}
 
 \usepackage{amsmath,amssymb}
 \usepackage{listings}
@@ -49,11 +53,15 @@
 \newunicodechar{ₘ}{\textsubscript{m}}     \newunicodechar{ⱼ}{\textsubscript{j}}
 \newunicodechar{ᴾ}{\textsuperscript{P}}   \newunicodechar{¹}{\textsuperscript{1}}
 \newunicodechar{⁻}{\textsuperscript{-}}   \newunicodechar{̄}{}% combining macron (t-bar handled in code)
+\newunicodechar{ᵢ}{\textsubscript{i}}     \newunicodechar{…}{\ldots}
 
 % --- Lean code listings style: literate unicode for pdflatex ---
 \lstdefinestyle{lean}{
   basicstyle=\ttfamily\small, columns=fullflexible, keepspaces=true,
-  showstringspaces=false, breaklines=false,
+  showstringspaces=false,
+  % breaklines lets \lstinline wrap at spaces (displayed blocks are wrapped by
+  % hand so the wrapping shown is always faithful Lean style, never a soft wrap)
+  breaklines=true, breakatwhitespace=true,
   literate=
     {t̄}{{\ensuremath{\bar{\mathtt t}}}}1
     {≤}{{$\leq$}}1 {≥}{{$\geq$}}1 {≠}{{$\neq$}}1 {→}{{$\to$}}1
@@ -67,8 +75,14 @@
     {⟨}{{$\langle$}}1 {⟩}{{$\rangle$}}1 {ᵥ}{{$_{\mathrm v}$}}1
     {₀}{{$_0$}}1 {₁}{{$_1$}}1 {₂}{{$_2$}}1 {₃}{{$_3$}}1
     {¹}{{$^1$}}1 {⁻}{{$^{-}$}}1 {̄}{{}}1
+    {ᵢ}{{$_i$}}1 {ⱼ}{{$_j$}}1 {ₘ}{{$_m$}}1 {…}{{\ldots}}1
+    {⇒}{{$\Rightarrow$}}1 {μ}{{$\mu$}}1 {ᴾ}{{$^{\mathrm P}$}}1
 }
 \lstset{style=lean}
+
+% \doi is normally supplied by the plainurl BibTeX flow; the bibliography here is
+% an inline thebibliography, so provide it (hyperref is loaded by the class).
+\providecommand{\doi}[1]{\href{https://doi.org/#1}{\texttt{doi:#1}}}
 
 % =====================================================================
 \bibliographystyle{plainurl}
@@ -266,7 +280,7 @@ validated examples---a satisfiable and an unsatisfiable formula---exercising bot
 A variable's wheel of size $m$ owns, per spoke \lstinline{j : Fin m}, two internal nodes \lstinline{a j}, \lstinline{b j}
 and two tips, with a positive triple \lstinline{t_j = (posTip j, a j, b j)} and a negative triple
 \lstinline{t̄_j = (negTip j, a (j+1), b j)}, where \lstinline{j+1} is cyclic in \lstinline{Fin m}. Since
-\lstinline{b j} lies only in \lstinline{{t_j, t̄_j}}, any internal cover selects one triple per spoke---a
+\lstinline{b j} lies only in \lstinline|{t_j, t̄_j}|, any internal cover selects one triple per spoke---a
 \lstinline{Selection σ : Fin m → Bool}. Node \lstinline{a j} is covered exactly once iff exactly one of
 $\{\sigma\,j = \mathtt{true},\ \sigma\,(j{-}1) = \mathtt{false}\}$ holds; by the Boolean identity
 $\mathtt{xor}\ a\ (\lnot b) = (a = b)$, that collapses to $\sigma\,j = \sigma\,(j{-}1)$. The engine of the
@@ -331,7 +345,8 @@ The clause gadget's internal pair is coverable iff some literal's tip is free (\
 The \emph{polarity bridge} connects the wheel's raw free-tip predicate---under the convention that a variable
 assigned \lstinline{aᵢ} runs the constant selection \lstinline{fun _ => ¬aᵢ}---to literal evaluation:
 \begin{lstlisting}
-theorem litTipFree_iff_eval (a : Assignment n) (l : Literal n) {m} [NeZero m] (j : Fin m) :
+theorem litTipFree_iff_eval (a : Assignment n) (l : Literal n)
+    {m} [NeZero m] (j : Fin m) :
     litTipFree a l j ↔ evalLiteral a l = true
 \end{lstlisting}
 A tip is free exactly when its literal is true. This discharges the truth-value labelling and is the one place
@@ -341,8 +356,8 @@ $(\mathit{sign} \times a_i)$ \lstinline{decide}.
 \subsection{Global assembly}\label{sec:assembly}
 
 The three coordinate sets are the tips \lstinline{Tip = Fin n × Fin m × Bool} (the $W$-part) and
-\lstinline{XNode = YNode = (Fin n × Fin m) ⊕ Fin m ⊕ Fin (m·(n-1))}---variable-internal nodes, clause-internal
-nodes, and garbage. Each has cardinality $2mn$; the garbage count $m(n{-}1)$ is exactly what balances the
+\lstinline{XNode = YNode}, the disjoint sum \lstinline{(Fin n × Fin m) ⊕ Fin m ⊕ Fin (m·(n-1))} of
+variable-internal nodes, clause-internal nodes, and garbage. Each has cardinality $2mn$; the garbage count $m(n{-}1)$ is exactly what balances the
 books, and the equality $n m + m + m(n{-}1) = 2mn$ requires $n \ge 1$. A triple family \lstinline{tripleFn}
 emits each gadget triple, and \lstinline{reduce φ} re-indexes it along the canonical finite equivalence into the
 \lstinline{Fin s → W×X×Y} shape the matching problem expects. Cardinality lemmas feed
@@ -403,8 +418,10 @@ reduction's failure mode: a wrong source problem yields a wrong reduction.)
 An X3C instance \lstinline{c : Fin s → Finset X} becomes the parity-check matrix whose column $i$ is the GF(2)
 indicator of the 3-set \lstinline{c i}, with the all-ones syndrome:
 \begin{lstlisting}
-def Hmat : Matrix X (Fin s) (ZMod 2) := Matrix.of (fun x i => if x ∈ c i then 1 else 0)
-def Decodes : Prop := ∃ e : Fin s → ZMod 2, Hmat c *ᵥ e = allOnes c ∧ hammingNorm e ≤ q
+def Hmat : Matrix X (Fin s) (ZMod 2) :=
+  Matrix.of (fun x i => if x ∈ c i then 1 else 0)
+def Decodes : Prop :=
+  ∃ e : Fin s → ZMod 2, Hmat c *ᵥ e = allOnes c ∧ hammingNorm e ≤ q
 \end{lstlisting}
 The connection lemma makes the encoding exact: for the 0/1 indicator \lstinline{eOf T} of a selection $T$, the
 syndrome coordinate at point $x$ is the mod-2 cast of its cover count,
@@ -473,8 +490,9 @@ Mechanizing the chain met several walls worth recording.
 
 The chain is roughly 2,050 lines across eleven modules (1,638 in the nine new reduction modules; the X3C and
 decoding endpoints supply the remainder), comprising on the order of fifty theorems and lemmas. Every headline
-result depends only on $[\mathtt{propext}, \mathtt{Classical.choice}, \mathtt{Quot.sound}]$ or a subset, and the
-development rebuilds via \lstinline{lake build} atop a cached mathlib, reproducible from the public artifact.
+result depends only on \lstinline{propext}, \lstinline{Classical.choice}, and \lstinline{Quot.sound} (or a
+subset), and the development rebuilds via \lstinline{lake build} atop a cached mathlib, reproducible from the
+public artifact.
 
 \subsection{A note on the workflow}\label{sec:workflow}
 
@@ -516,9 +534,10 @@ Our development depends on exactly this result and treats it as the terminal imp
 formalization addresses 3DM, X3C, or decoding.
 
 \paragraph*{Mechanized Karp reductions.} Downstream of SAT, the Isabelle \lstinline{poly-reductions}
-project~\cite{PolyRed} formalizes a family of reductions---3CNF-SAT to independent set, vertex cover, clique,
-and set cover, together with Hamiltonian-cycle variants and vertex cover to feedback node set---with explicit
-polynomial running-time bounds, going beyond reduction correctness to \emph{poly-time} reductions. The Coq
+project~\cite{PolyRed} formalizes, with explicit polynomial running-time bounds, a family of
+reductions---3CNF-SAT to independent set, vertex cover, clique, and set cover, together with
+Hamiltonian-cycle variants and vertex cover to feedback node set---going beyond reduction correctness to
+\emph{poly-time} reductions. The Coq
 complexity library contributes $k$SAT to clique. None of these touches 3-dimensional matching, exact cover,
 subset-sum, or any coding problem; the gadget reductions we mechanize are disjoint from this corpus. As
 of~\cite{GK21} (2021), the downstream Karp reductions---including 3DM and exact cover---were listed explicitly
