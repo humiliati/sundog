@@ -1,0 +1,11 @@
+# LaTeX/BibTeX build outputs (public repo; double-blind paper -- keep the
+# rendered submission PDF untracked too)
+*.aux
+*.log
+*.out
+*.bbl
+*.blg
+*.toc
+*.synctex.gz
+syndrome-decoding-cpp.pdf
+pg-*.png

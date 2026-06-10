@@ -58,8 +58,15 @@ all pages + the TikZ wheel figure visually verified.
   searching distinctive phrases can de-anonymize; check the venue's prior-public
   / preprint policy, and use an anonymized artifact mirror
   (e.g. anonymous.4open.science) for the `\supplement` link.
-- **Re-run** the negative prior-art searches (the "to our knowledge, first" hedges).
+- ~~**Re-run** the negative prior-art searches~~ **DONE 2026-06-10** — receipt at
+  [`../PRIOR_ART_RECHECK_2026-06-10.md`](../PRIOR_ART_RECHECK_2026-06-10.md); all
+  first-ness claims stand; "no machine model" wording corrected; Cotoleta + ArkLib
+  added to §7. **Re-run once more in the week before the actual deadline.**
 - **Pin** the related-version / artifact DOI once the repo is archived.
-- `poly-reductions` is repo-cited; re-check for a canonical paper near submission.
-- Check the **ITP CFP page limit** (recent ITPs: ~16 pp + references, LIPIcs
-  style); the draft is 11 pp incl. bibliography — comfortably inside.
+- `poly-reductions` is repo-cited; re-checked 2026-06-10 (still no canonical paper);
+  re-check once more near submission. Same for an ArkLib paper.
+- **Venue timeline (2026-06-10):** ITP 2026 deadline PASSED (was 2026-02-19).
+  Nearest double-blind: **CPP 2027** (POPL 2027, Mexico City; expect abstracts
+  ~Sep 9–10 / papers ~Sep 16–17, 2026; needs acmart conversion) or **ITP 2027**
+  (~Feb 2027 deadline; this LIPIcs build is ready as-is). The draft is 12 pp incl.
+  bibliography — comfortably inside recent ITP/CPP limits.

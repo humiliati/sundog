@@ -1,32 +1,35 @@
 % =====================================================================
-%  Mechanising the Hardness of Syndrome Decoding  --  LIPIcs (ITP) draft
-%  Converted from SYNDROME_DECODING_FORMALIZATION.md (venue-neutral MD).
+%  Mechanising the Hardness of Syndrome Decoding -- CPP (acmart) version
+%  Converted from the LIPIcs build (../lipics/syndrome-decoding.tex),
+%  which is itself converted from ../SYNDROME_DECODING_FORMALIZATION.md.
 %
-%  BUILD NOTES (read me):
-%   * Requires the Dagstuhl LIPIcs author kit: lipics-v2021.cls (+ cc-by.pdf,
-%     lipics-logo-bw.pdf). Drop them in this directory, or install the kit.
-%   * Engine: pdflatex (LIPIcs requirement). The unicode in prose is handled by
-%     `newunicodechar`; the unicode in Lean code blocks by the `listings`
-%     literate map below. If pdflatex reports "Unicode character X not set up",
-%     add one more \newunicodechar line (prose) or one more literate pair (code).
-%   * Build: pdflatex -> bibtex (if you switch to .bib) -> pdflatex x2.
-%     As written the bibliography is an inline thebibliography (no bibtex needed).
-%   * The figure uses TikZ + the `calc` library (loaded below).
-%   * DOUBLE-BLIND: ITP is double-blind -- anonymise the \author block and the
-%     \supplement artifact URL before submission (placeholders flagged below).
+%  BUILD NOTES:
+%   * Engine: pdflatex. acmart ships with TeX Live.
+%   * Build: pdflatex -> bibtex -> pdflatex x2 (BibTeX, ACM-Reference-Format).
+%   * Submission mode: [sigplan,review,anonymous] per the CPP CFP
+%     (lightweight double-blind; 12pp max excl. bibliography).
+%     Camera-ready: drop review+anonymous, fill \acmConference/\acmDOI etc.
+%   * Displayed Lean listings are re-wrapped BY HAND for the two-column
+%     measure (~48 chars at \footnotesize tt) in faithful Lean style --
+%     never introduce a soft wrap; token content must match the artifact.
+%   * Unicode handling is identical to the LIPIcs build: prose via
+%     newunicodechar, code via the listings literate table. Every non-ASCII
+%     char inside lstinline/lstlisting MUST be in the literate table.
 % =====================================================================
 
-% NOTE: the thm-restate class option is omitted -- this paper declares no theorem
-% environments, and under TeX Live 2026 that option's thmtools/cleveref counter
-% aliasing breaks lipics-v2021.cls v3.1.3 ("\c@lemma already defined"). Re-add it
-% only if restatable theorems are introduced (and re-test the build).
-\documentclass[a4paper,UKenglish,cleveref,autoref]{lipics-v2021}
+\documentclass[sigplan,review,anonymous]{acmart}
+\settopmatter{printfolios=true,printccs=false,printacmref=false}
 
-\usepackage{amsmath,amssymb}
+%% TODO CPP 2027: update from the CFP once posted (placeholders).
+\acmConference[CPP '27]{Certified Programs and Proofs}{January 2027}{Mexico City, Mexico}
+\acmYear{2027}
+\setcopyright{none}
+
 \usepackage{listings}
 \usepackage{tikz}
 \usetikzlibrary{calc}
 \usepackage{newunicodechar}
+\usepackage[capitalise,noabbrev]{cleveref}
 
 % --- prose unicode -> LaTeX (pdflatex-safe) ---
 \newunicodechar{≤}{\ensuremath{\le}}      \newunicodechar{≥}{\ensuremath{\ge}}
@@ -79,21 +82,21 @@
     {⇒}{{$\Rightarrow$}}1 {μ}{{$\mu$}}1 {ᴾ}{{$^{\mathrm P}$}}1
 }
 \lstset{style=lean}
+% Displayed blocks drop to \footnotesize for the two-column measure.
+\lstdefinestyle{leandisplay}{style=lean, basicstyle=\ttfamily\footnotesize}
 
-% \doi is normally supplied by the plainurl BibTeX flow; the bibliography here is
-% an inline thebibliography, so provide it (hyperref is loaded by the class).
-\providecommand{\doi}[1]{\href{https://doi.org/#1}{\texttt{doi:#1}}}
+% Long unbreakable code identifiers + the narrow two-column measure make some
+% lines unfixable by rewording alone; let TeX loosen interword glue instead of
+% overflowing into the column gutter.
+\emergencystretch=2em
 
 % =====================================================================
-\bibliographystyle{plainurl}
-
 \title{Mechanising the Hardness of Syndrome Decoding}
-\titlerunning{Mechanising the Hardness of Syndrome Decoding}
 
-% TODO double-blind: anonymise before submission.
-\author{Anonymous Author(s)}{Affiliation \and Country}{anon@example.org}{}{}
-\authorrunning{Anonymous Author(s)}
-\Copyright{Anonymous Author(s)}
+%% Anonymous for review; fill for camera-ready.
+\author{Anonymous Author(s)}
+\affiliation{\institution{Anonymous Institution}\country{}}
+\email{anon@example.org}
 
 \ccsdesc[500]{Theory of computation~Logic and verification}
 \ccsdesc[300]{Theory of computation~Problems, reductions and completeness}
@@ -102,13 +105,7 @@
 \keywords{Interactive theorem proving, Lean 4, mathlib, NP-hardness, Karp reduction,
   syndrome decoding, coding theory, 3-dimensional matching, exact cover}
 
-\category{}
-\relatedversion{}
-% TODO double-blind: anonymise / withhold for review.
-\supplement{Lean development (anonymised for review).}
-
 \begin{document}
-\maketitle
 
 \begin{abstract}
 The security of code-based cryptography---including McEliece-style systems, a long-standing post-quantum
@@ -131,10 +128,12 @@ the surrounding complexity-theoretic apparatus---the class NP, the polynomial-ti
 A central lesson is a subtlety the textbook construction glosses over: the ``obvious'' route to bounded-weight
 decoding via subset-sum is \textbf{unsound over GF(2)}, where the parity check is a sum modulo~2 that discards
 carries (XOR-subset-sum is in P). We route instead through a covering / odd-cover construction native to GF(2).
-Every theorem depends only on Lean's three foundational axioms, build-enforced by a \lstinline{#guard_msgs}
-gate; the development---roughly 2,050 lines across eleven modules---is public and reproducible by
-\lstinline{lake build}.
+Every theorem depends only on Lean's three foundational axioms, build-enforced by a \texttt{\#guard\_msgs}
+gate; the development---roughly 2,050 lines across eleven modules---is publicly available (anonymized for
+review as supplementary material) and reproducible by \texttt{lake build}.
 \end{abstract}
+
+\maketitle
 
 % =====================================================================
 \section{Introduction}\label{sec:intro}
@@ -166,7 +165,10 @@ parity-check matrices.
 This paper closes part of that gap. We give a complete, machine-checked formalization, in Lean~4 with mathlib,
 of the reduction-correctness chain
 \[
-  \textsc{3sat} \;\le\; \textsc{3dm} \;\le\; \textsc{x3c} \;\le\; \text{bounded-weight GF(2) syndrome decoding,}
+  \begin{gathered}
+    \textsc{3sat} \;\le\; \textsc{3dm} \;\le\; \textsc{x3c} \;\le\;\\
+    \text{bounded-weight GF(2) syndrome decoding,}
+  \end{gathered}
 \]
 where \textbf{3DM} is 3-dimensional matching and \textbf{X3C} is exact-cover-by-3-sets. Each link is proved as a
 \emph{both-directions} equivalence---a satisfying assignment exists iff a perfect matching exists iff an exact
@@ -182,11 +184,12 @@ are pure combinatorics and the substance of every gadget argument. We do \textbf
 complexity-theoretic \emph{wrapping}: the class NP, the polynomial-time bound on the reduction functions, and
 the NP-hardness of \textsc{3sat} itself (Cook--Levin). These are \emph{imported}---named explicitly as the
 assumptions a hardness reading depends on, rather than smuggled into the development. mathlib offers no
-complexity-theoretic scaffolding with which to formalize them. Consequently, the Lean theorem is an unconditional reduction-correctness
-theorem, while the \textbf{NP-hardness label} imports the usual Cook--Levin and polynomial-time wrapping. Any
-\emph{intractability} reading is further conditional on $\mathrm P \neq \mathrm{NP}$; we make no claim about P
-versus NP. This is the same boundary Kreuzer and Nipkow draw for the lattice problems, where
-polynomial-time-ness is ``discussed but not formalized'' and base-problem hardness is taken as given.
+complexity-theoretic scaffolding with which to formalize them. Consequently, the Lean theorem is an
+unconditional reduction-correctness theorem, while the \textbf{NP-hardness label} imports the usual Cook--Levin
+and polynomial-time wrapping. Any \emph{intractability} reading is further conditional on
+$\mathrm P \neq \mathrm{NP}$; we make no claim about P versus NP. This is the same boundary Kreuzer and Nipkow
+draw for the lattice problems, where polynomial-time-ness is ``discussed but not formalized'' and base-problem
+hardness is taken as given.
 
 Mechanization repays the effort by surfacing a subtlety the textbook construction passes over. The standard
 route from exact-cover-style problems to \emph{bounded-weight decoding} runs through subset-sum; but
@@ -216,31 +219,31 @@ Our contributions are:
     development.
 \end{itemize}
 
-The full development is public and reproducible by \lstinline{lake build}; every headline theorem's axiom
-footprint is pinned by a \lstinline{#guard_msgs} gate, so a \lstinline{sorry}, a \lstinline{native_decide}, or
-any stray axiom fails the build. \Cref{sec:bg} fixes the four problems and the Lean/mathlib setting.
-\Cref{sec:chain} develops the reduction chain. \Cref{sec:gf2} presents the GF(2)-native decoding reduction and
-what the development imports. \Cref{sec:eng} is the engineering and experience report. \Cref{sec:app} relates
-the result to its motivating application. \Cref{sec:related} surveys related work and \Cref{sec:concl}
-concludes.
+The full development is available (anonymized for review) as supplementary material and is reproducible by
+\lstinline{lake build}; every headline theorem's axiom footprint is pinned by a \lstinline{#guard_msgs} gate, so
+a \lstinline{sorry}, a \lstinline{native_decide}, or any stray axiom fails the build. \Cref{sec:bg} fixes the
+four problems and the Lean/mathlib setting. \Cref{sec:chain} develops the reduction chain. \Cref{sec:gf2}
+presents the GF(2)-native decoding reduction and what the development imports. \Cref{sec:eng} is the engineering
+and experience report. \Cref{sec:app} relates the result to its motivating application. \Cref{sec:related}
+surveys related work and \Cref{sec:concl} concludes.
 
 % =====================================================================
 \section{Background}\label{sec:bg}
 
 \subsection{The four decision problems}\label{sec:problems}
 
-\paragraph*{3SAT.} A 3-CNF formula over $n$ Boolean variables and $m$ clauses, each clause an ordered triple of
+\paragraph{3SAT} A 3-CNF formula over $n$ Boolean variables and $m$ clauses, each clause an ordered triple of
 literals; \lstinline{Satisfiable φ} holds when some assignment satisfies every clause. We represent a literal
 as a variable index with a sign (\lstinline{Fin n × Bool}), a clause as \lstinline{Fin 3 → Literal}, and a
 formula as \lstinline{Fin m → Clause}.
 
-\paragraph*{3-Dimensional Matching (3DM).} Given a family of triples over three ground sets $W, X, Y$, a
+\paragraph{3-Dimensional Matching (3DM)} Given a family of triples over three ground sets $W, X, Y$, a
 \emph{perfect matching} is a selection covering each element of each ground set exactly once.
 
-\paragraph*{Exact Cover by 3-Sets (X3C).} Given a family \lstinline{c : Fin s → Finset X} of 3-element subsets
+\paragraph{Exact Cover by 3-Sets (X3C)} Given a family \lstinline{c : Fin s → Finset X} of 3-element subsets
 of a ground set $X$, an \emph{exact cover} is a selection covering each point exactly once.
 
-\paragraph*{Bounded-weight syndrome decoding.} Given a parity-check matrix $H$ over GF(2), a syndrome, and a
+\paragraph{Bounded-weight syndrome decoding} Given a parity-check matrix $H$ over GF(2), a syndrome, and a
 weight bound $q$, decide whether some error $e$ of Hamming weight $\le q$ satisfies $H \cdot e = s$. This is the
 decision form of minimum-distance decoding---the problem~\cite{BMvT78} showed NP-complete.
 
@@ -280,17 +283,19 @@ validated examples---a satisfiable and an unsatisfiable formula---exercising bot
 
 \subsection{The variable-wheel gadget}\label{sec:wheel}
 
-A variable's wheel of size $m$ owns, per spoke \lstinline{j : Fin m}, two internal nodes \lstinline{a j}, \lstinline{b j}
-and two tips, with a positive triple \lstinline{t_j = (posTip j, a j, b j)} and a negative triple
-\lstinline{t̄_j = (negTip j, a (j+1), b j)}, where \lstinline{j+1} is cyclic in \lstinline{Fin m}. Since
+A variable's wheel of size $m$ owns, per spoke \lstinline{j : Fin m}, two internal nodes \lstinline{a j},
+\lstinline{b j} and two tips, with a positive triple \lstinline{t_j = (posTip j, a j, b j)} and a negative
+triple \lstinline{t̄_j = (negTip j, a (j+1), b j)}, where \lstinline{j+1} is cyclic in \lstinline{Fin m}. Since
 \lstinline{b j} lies only in \lstinline|{t_j, t̄_j}|, any internal cover selects one triple per spoke---a
 \lstinline{Selection σ : Fin m → Bool}. Node \lstinline{a j} is covered exactly once iff exactly one of
 $\{\sigma\,j = \mathtt{true},\ \sigma\,(j{-}1) = \mathtt{false}\}$ holds; by the Boolean identity
 $\mathtt{xor}\ a\ (\lnot b) = (a = b)$, that collapses to $\sigma\,j = \sigma\,(j{-}1)$. The engine of the
 gadget is then:
-\begin{lstlisting}
-theorem validCover_iff_const (hm : 0 < m) (σ : Selection m) :
-    ValidCover σ ↔ (σ = fun _ => true) ∨ (σ = fun _ => false)
+\begin{lstlisting}[style=leandisplay]
+theorem validCover_iff_const (hm : 0 < m)
+    (σ : Selection m) :
+    ValidCover σ ↔
+      (σ = fun _ => true) ∨ (σ = fun _ => false)
 \end{lstlisting}
 A valid internal cover is \emph{constant}---and the two constants are the variable's two truth values. The
 forward direction is a strong induction showing a cyclic equal-neighbour selection is constant. Geometrically
@@ -298,7 +303,7 @@ forward direction is a strong induction showing a cyclic equal-neighbour selecti
 vertices, its $2m$ triples the cycle edges, and a valid internal cover is a perfect matching of that
 cycle---of which an even cycle has exactly two.
 
-\begin{figure}[t]
+\begin{figure*}[t]
 \centering
 \begin{tikzpicture}[scale=1.7,
     anode/.style={circle, draw, fill=white, inner sep=1.3pt, font=\footnotesize},
@@ -340,16 +345,17 @@ selected matching (bold, all $t_j$) covers every internal node once, consumes th
 the reverse. The negative triple's $a$-node is the cyclic successor $a_{j+1}$---the $+1$ shift responsible for
 the $a$-/$b$-node asymmetry in the incidence lemmas (\Cref{sec:assembly}).}
 \label{fig:wheel}
-\end{figure}
+\end{figure*}
 
 \subsection{The clause gadget and the polarity bridge}\label{sec:clause}
 
 The clause gadget's internal pair is coverable iff some literal's tip is free (\lstinline{clauseCoverable}).
 The \emph{polarity bridge} connects the wheel's raw free-tip predicate---under the convention that a variable
 assigned \lstinline{aᵢ} runs the constant selection \lstinline{fun _ => ¬aᵢ}---to literal evaluation:
-\begin{lstlisting}
-theorem litTipFree_iff_eval (a : Assignment n) (l : Literal n)
-    {m : ℕ} [NeZero m] (j : Fin m) :
+\begin{lstlisting}[style=leandisplay]
+theorem litTipFree_iff_eval (a : Assignment n)
+    (l : Literal n) {m : ℕ} [NeZero m]
+    (j : Fin m) :
     litTipFree a l j ↔ evalLiteral a l = true
 \end{lstlisting}
 A tip is free exactly when its literal is true. This discharges the truth-value labelling and is the one place
@@ -360,12 +366,12 @@ $(\mathit{sign} \times a_i)$ \lstinline{decide}.
 
 The three coordinate sets are the tips \lstinline{Tip = Fin n × Fin m × Bool} (the $W$-part) and
 \lstinline{XNode = YNode}, the disjoint sum \lstinline{(Fin n × Fin m) ⊕ Fin m ⊕ Fin (m·(n-1))} of
-variable-internal nodes, clause-internal nodes, and garbage. Each has cardinality $2mn$; the garbage count $m(n{-}1)$ is exactly what balances the
-books, and the equality $n m + m + m(n{-}1) = 2mn$ requires $n \ge 1$. A triple family \lstinline{tripleFn}
-emits each gadget triple, and \lstinline{reduce φ} re-indexes it along the canonical finite equivalence into the
-\lstinline{Fin s → W×X×Y} shape the matching problem expects. Cardinality lemmas feed
-\lstinline{reduce_chain_connects}, wiring \lstinline{reduce φ} onto the already-formalized
-$\textsc{3dm} \le \textsc{x3c} \le$ decoding tail.
+variable-internal nodes, clause-internal nodes, and garbage. Each has cardinality $2mn$; the garbage count
+$m(n{-}1)$ is exactly what balances the books, and the equality $n m + m + m(n{-}1) = 2mn$ requires $n \ge 1$.
+A triple family \lstinline{tripleFn} emits each gadget triple, and \lstinline{reduce φ} re-indexes it along the
+canonical finite equivalence into the \lstinline{Fin s → W×X×Y} shape the matching problem expects.
+Cardinality lemmas feed \lstinline{reduce_chain_connects}, wiring \lstinline{reduce φ} onto the
+already-formalized $\textsc{3dm} \le \textsc{x3c} \le$ decoding tail.
 
 To keep the heavy counting over the structured sum-type index rather than an opaque \lstinline{Fin s}, we prove
 a generic reindexing bridge \lstinline{ThreeDM_I t ↔ ThreeDM (t ∘ e.symm)} (along
@@ -395,12 +401,13 @@ assignment out of a given one.
 \subsection{Composition}\label{sec:compose}
 
 Both directions are packaged as \lstinline{sat_iff_threeDM_I}, the pair \lstinline{⟨forward φ, reverse φ⟩};
-transported through the reindexing bridge to the real \lstinline{Fin s}-indexed \lstinline{ThreeDM}, then through
-\lstinline{reduce_chain_connects}, this yields the headline:
-\begin{lstlisting}
+transported through the reindexing bridge to the real \lstinline{Fin s}-indexed \lstinline{ThreeDM}, then
+through \lstinline{reduce_chain_connects}, this yields the headline:
+\begin{lstlisting}[style=leandisplay]
 theorem sat_iff_decodes (φ : Formula n m) :
     Satisfiable φ ↔
-      DecodingNPHard.Decodes (reduce3DM (reduce φ)) (2 * m * n)
+      DecodingNPHard.Decodes
+        (reduce3DM (reduce φ)) (2 * m * n)
 \end{lstlisting}
 $\textsc{3sat} \le \textsc{3dm} \le \textsc{x3c} \le$ decoding, closed end to end. (The
 $\textsc{3dm} \le \textsc{x3c}$ and $\textsc{x3c} \le$ decoding endpoints, \Cref{sec:gf2}, supply the tail.)
@@ -421,25 +428,30 @@ reduction's failure mode: a wrong source problem yields a wrong reduction.)
 
 An X3C instance \lstinline{c : Fin s → Finset X} becomes the parity-check matrix whose column $i$ is the GF(2)
 indicator of the 3-set \lstinline{c i}, with the all-ones syndrome:
-\begin{lstlisting}
+\begin{lstlisting}[style=leandisplay]
 def Hmat : Matrix X (Fin s) (ZMod 2) :=
   Matrix.of (fun x i => if x ∈ c i then 1 else 0)
 def Decodes : Prop :=
-  ∃ e : Fin s → ZMod 2, Hmat c *ᵥ e = allOnes c ∧ hammingNorm e ≤ q
+  ∃ e : Fin s → ZMod 2,
+    Hmat c *ᵥ e = allOnes c ∧ hammingNorm e ≤ q
 \end{lstlisting}
 The connection lemma makes the encoding exact: for the 0/1 indicator \lstinline{eOf T} of a selection $T$, the
 syndrome coordinate at point $x$ is the mod-2 cast of its cover count,
-\begin{lstlisting}
-theorem syndrome_eq_coverCount_cast (T : Finset (Fin s)) (x : X) :
-    (Hmat c *ᵥ eOf c T) x = ((coverCount c T x : ℕ) : ZMod 2)
+\begin{lstlisting}[style=leandisplay]
+theorem syndrome_eq_coverCount_cast
+    (T : Finset (Fin s)) (x : X) :
+    (Hmat c *ᵥ eOf c T) x
+      = ((coverCount c T x : ℕ) : ZMod 2)
 \end{lstlisting}
 so ``syndrome $=$ all-ones'' says exactly ``every point is covered an \emph{odd} number of times''. An exact
 cover (count one) is odd; conversely a weight-$q$ odd cover must be exact, because the weight bound
 $q = |X|/3$ and the 3-uniformity, via the double-count $\sum_x \mathit{coverCount} = 3 \cdot |T|$, pin
 $|T| = q$ and then force every count to one. Both directions are machine-checked (the iff carries the
 structural hypotheses the prose uses---that every set has three elements and that $|X| = 3q$):
-\begin{lstlisting}
-theorem reduction_iff (hc : ∀ i, (c i).card = 3) (hX : Fintype.card X = 3 * q) :
+\begin{lstlisting}[style=leandisplay]
+theorem reduction_iff
+    (hc : ∀ i, (c i).card = 3)
+    (hX : Fintype.card X = 3 * q) :
     X3C c ↔ Decodes c q
 \end{lstlisting}
 At the chain's head these hypotheses are discharged by the reduction's own cardinality lemmas, so
@@ -485,13 +497,13 @@ message lands in the captured text and spuriously fails the gate.
 Mechanizing the chain met several walls worth recording.
 \begin{itemize}
   \item \textbf{Decidable equality on a four-way sum.} The triple-index type is a four-way nested
-    \lstinline{Sum} of products; \lstinline{DecidableEq} exceeds the default \lstinline{synthInstance.maxSize}
-    inside large proof contexts (where the filter-rewrites force the search). A scoped
+    \lstinline{Sum} of products; inside large proof contexts (where the filter-rewrites force the search),
+    \lstinline{DecidableEq} synthesis exceeds the default \lstinline{synthInstance.maxSize}. A scoped
     \lstinline{set_option synthInstance.maxSize 512} clears it.
-  \item \textbf{Rewriting a filter predicate.} Rewriting a \lstinline{Finset.filter}'s predicate through an
-    incidence lemma fails directly---\lstinline{DecidablePred} cannot be synthesized at the rewrite site---so we
-    name the rewritten Finset in an explicit \lstinline{have heq := Finset.filter_congr …; rw [heq]}, forcing
-    elaboration with the instance in scope.
+  \item \textbf{Rewriting a filter predicate.} Rewriting the predicate of a \lstinline{Finset.filter} through
+    an incidence lemma fails directly---\lstinline{DecidablePred} cannot be synthesized at the rewrite
+    site---so we name the rewritten Finset in an explicit
+    \lstinline{have heq := Finset.filter_congr …; rw [heq]}, forcing elaboration with the instance in scope.
   \item \textbf{The garbage bijection.} The forward construction needs a bijection from the index set
     \lstinline{Fin (m(n-1))} onto the assignment-dependent set of unclaimed free tips; its existence follows
     from a cardinality equality supplied non-constructively by \lstinline{Fintype.equivFinOfCardEq}, and the
@@ -508,7 +520,7 @@ The chain is roughly 2,050 lines across eleven modules (1,638 in the nine new re
 decoding endpoints supply the remainder), comprising on the order of fifty theorems and lemmas. Every headline
 result depends only on \lstinline{propext}, \lstinline{Classical.choice}, and \lstinline{Quot.sound} (or a
 subset), and the development rebuilds via \lstinline{lake build} atop a cached mathlib, reproducible from the
-public artifact.
+artifact.
 
 The artifact is the development itself: from a clean checkout, \lstinline{lake exe cache get} followed by
 \lstinline{lake build} re-elaborates every proof and re-runs the axiom gate atop the cached mathlib, in minutes
@@ -520,7 +532,7 @@ is the Lean kernel, the three foundational axioms, and the pinned toolchain (Lea
 
 Three pieces of this development are reduction-agnostic.
 
-\paragraph*{The reindexing bridge.} Decision problems are conventionally stated over an opaque index
+\paragraph{The reindexing bridge} Decision problems are conventionally stated over an opaque index
 (\lstinline{Fin s → W×X×Y}), but gadget arguments live over structured indexes---here, a four-way sum of
 products. The generic bridge \lstinline{ThreeDM_I t ↔ ThreeDM (t ∘ e.symm)} (along
 \lstinline{e := Fintype.equivFin _}) lets the entire correctness proof run over the natural index and
@@ -528,13 +540,13 @@ transports the result to the opaque statement at the end. Any mechanized gadget 
 has structure---which is to say, any gadget reduction---needs exactly this bridge, and it is independent of
 3DM.
 
-\paragraph*{The counted-bijection pattern.} Gadget constructions routinely end with ``absorb the leftovers with
+\paragraph{The counted-bijection pattern} Gadget constructions routinely end with ``absorb the leftovers with
 garbage''---an informal step that, mechanized, becomes: partition the resource (here, tips) into consumed /
 claimed / unclaimed classes, prove the three cardinalities, and obtain the absorbing bijection
 non-constructively from \lstinline{Fintype.equivFinOfCardEq}. The shape (three-way partition count, then a
 counted bijection) is the reusable unit; the 543-line forward proof is mostly instances of it.
 
-\paragraph*{The encoding lock.} Before any gadget depends on the 3SAT encoding, two kernel-\lstinline{decide}
+\paragraph{The encoding lock} Before any gadget depends on the 3SAT encoding, two kernel-\lstinline{decide}
 examples (one satisfiable, one unsatisfiable, exercising both literal signs) pin its semantics; the polarity
 bridge is additionally locked by a four-case $(\mathit{sign} \times a_i)$ \lstinline{decide}. Locking an
 encoding with decidable concrete instances \emph{before} building on it is cheap insurance against the silent
@@ -584,7 +596,7 @@ and we claim no such thing.
 % =====================================================================
 \section{Related Work}\label{sec:related}
 
-\paragraph*{Cook--Levin and the complexity wrapping.} The foundational result we import---that SAT is
+\paragraph{Cook--Levin and the complexity wrapping} The foundational result we import---that SAT is
 NP-hard---has two from-scratch mechanizations. Gäher and Kunze~\cite{GK21} formalized the Cook--Levin theorem in
 Coq over the weak call-by-value $\lambda$-calculus $L$, building the classes P and NP, polynomial-time many-one
 (Karp) reductions, and NP-completeness, as part of the Coq Library of Complexity Theory atop the Coq Library of
@@ -594,17 +606,16 @@ complexity-theoretic concepts and the polynomiality of the reduction use the \em
 Our development depends on exactly this result and treats it as the terminal imported wall; neither
 formalization addresses 3DM, X3C, or decoding.
 
-\paragraph*{Mechanized Karp reductions.} Downstream of SAT, the Isabelle \lstinline{poly-reductions}
+\paragraph{Mechanized Karp reductions} Downstream of SAT, the Isabelle \lstinline{poly-reductions}
 project~\cite{PolyRed} formalizes, with explicit polynomial running-time bounds, a family of
 reductions---3CNF-SAT to independent set, vertex cover, clique, and set cover, together with
 Hamiltonian-cycle variants and vertex cover to feedback node set---going beyond reduction correctness to
-\emph{poly-time} reductions. The Coq
-complexity library contributes $k$SAT to clique. None of these touches 3-dimensional matching, exact cover,
-subset-sum, or any coding problem; the gadget reductions we mechanize are disjoint from this corpus. As
-of~\cite{GK21} (2021), the downstream Karp reductions---including 3DM and exact cover---were listed explicitly
-as enabled-but-not-yet-undertaken future work.
+\emph{poly-time} reductions. The Coq complexity library contributes $k$SAT to clique. None of these touches
+3-dimensional matching, exact cover, subset-sum, or any coding problem; the gadget reductions we mechanize are
+disjoint from this corpus. As of~\cite{GK21} (2021), the downstream Karp reductions---including 3DM and exact
+cover---were listed explicitly as enabled-but-not-yet-undertaken future work.
 
-\paragraph*{Lattice hardness---the methodological precedent.} Closest in genre is Kreuzer and
+\paragraph{Lattice hardness---the methodological precedent} Closest in genre is Kreuzer and
 Nipkow's~\cite{KN23} Isabelle/HOL verification of NP-hardness reduction functions for the exact lattice problems
 CVP and SVP (in the $\ell_\infty$ norm), via reductions from subset-sum and partition. The scope matches ours
 almost exactly: they verify reduction correctness, take the base problems' NP-hardness \emph{as given}, and
@@ -615,7 +626,7 @@ this work \emph{coding-adjacent}; but it is a distinct problem domain over a dif
 does not subsume the syndrome-decoding result, and we adopt its honest experience-report framing rather than
 competing with it.
 
-\paragraph*{Formalized coding theory.} The most developed formalized coding theory in any assistant is the
+\paragraph{Formalized coding theory} The most developed formalized coding theory in any assistant is the
 Coq/MathComp \lstinline{infotheo} library~\cite{AGS20}, which formalizes linear error-correcting codes and
 Hamming, Reed--Solomon, BCH, Reed--Muller, and cyclic codes, with LDPC sum-product decoding and an extracted
 verified decoder, alongside Shannon's theorems. Crucially, this is decoding-\emph{algorithm correctness}, not
@@ -633,7 +644,7 @@ contains no Garey--Johnson gadget reduction and no syndrome-decoding hardness re
 contributes, to our knowledge, the first machine-checked reduction-correctness spine for bounded-weight GF(2)
 syndrome-decoding hardness and introduces that decision problem into a Lean setting.
 
-\paragraph*{The gap.} No prior work mechanizes the hardness of syndrome decoding, the Garey--Johnson
+\paragraph{The gap} No prior work mechanizes the hardness of syndrome decoding, the Garey--Johnson
 $\textsc{3sat} \le \textsc{3dm}$ reduction, or $\textsc{3dm} \le \textsc{x3c}$, in any system. Lean's
 complexity-theory ecosystem is young but no longer empty: a substantial Lean~4 development~\cite{Sim26}
 mechanizes coNP-, $\Sigma_2^{\mathrm P}$-, PP-, and PSPACE-completeness results (with their reductions) for a
@@ -658,7 +669,7 @@ and imported, not proved, following Kreuzer and Nipkow. The discipline repaid it
 the open: bounded-weight decoding over GF(2) is reached not through subset-sum (unsound over a carry-free field)
 but through a covering construction native to mod-2 arithmetic.
 
-\paragraph*{Pushing the wall inward.} The imported wall is not immovable; it is a sequence of further
+\paragraph{Pushing the wall inward} The imported wall is not immovable; it is a sequence of further
 mechanization targets of increasing difficulty. The polynomial-time-ness of our reductions is the nearest---the
 maps are visibly local, and a cost model (a Lean cost monad, or the resource-bounded Turing machines now
 appearing in community developments) would let it be \emph{discharged} rather than asserted. NP membership of
@@ -667,13 +678,13 @@ NP-hardness, the Cook--Levin theorem: mechanized in Coq and Isabelle/HOL but not
 that, once ported or re-proved, would let the entire chain stand on formalized foundations within a single
 system. Each such step converts a named assumption into a theorem without disturbing what is already proved.
 
-\paragraph*{Growing the corpus.} The reduction-agnostic parts of this development---the generic reindexing
+\paragraph{Growing the corpus} The reduction-agnostic parts of this development---the generic reindexing
 bridge between \lstinline{Fintype}-indexed and \lstinline{Fin s}-indexed matchings, the gadget-counting
 patterns, and the build-enforced axiom-clean gate---could seed a wider Lean library of complexity reductions, an
 area where mathlib is currently bare. On the coding side, the vocabulary introduced here is a starting point for
 further coding-theoretic hardness results.
 
-\paragraph*{The honest distance to cryptography.} Finally, we restate the gap of \Cref{sec:app}. Worst-case
+\paragraph{The honest distance to cryptography} Finally, we restate the gap of \Cref{sec:app}. Worst-case
 NP-hardness is the standard complexity baseline for code-based cryptography, but the security of McEliece-style
 systems rests on the \emph{average-case} hardness of decoding random codes---a strictly stronger assumption that
 worst-case hardness does not establish. Mechanizing an average-case reduction, or the worst-case-to-average-case
@@ -681,77 +692,7 @@ connections studied for related problems, would be a substantial undertaking; th
 here is a prerequisite for that programme, not a substitute for it.
 
 % =====================================================================
-\begin{thebibliography}{10}
-
-\bibitem{AGS20}
-Reynald Affeldt, Jacques Garrigue, and Takafumi Saikawa.
-\newblock A library for formalization of linear error-correcting codes.
-\newblock \emph{Journal of Automated Reasoning}, 64:1123--1164, 2020.
-\newblock \doi{10.1007/s10817-019-09538-8}. (\texttt{infotheo}.)
-
-\bibitem{ArkLib}
-The \texttt{ArkLib} development: formally verified arguments of knowledge in Lean~4.
-\newblock \url{https://github.com/Verified-zkEVM/ArkLib}. (Repo-cited.)
-
-\bibitem{Bal23}
-Frank J. Balbach.
-\newblock The Cook--Levin theorem.
-\newblock \emph{Archive of Formal Proofs}, 2023.
-
-\bibitem{BMvT78}
-Elwyn R. Berlekamp, Robert J. McEliece, and Henk C.~A. van Tilborg.
-\newblock On the inherent intractability of certain coding problems.
-\newblock \emph{IEEE Transactions on Information Theory}, 24(3):384--386, 1978.
-
-\bibitem{ELWT26}
-Mattias Ehatamm, Yi Lee, Xiaodi Wu, and Runzhou Tao.
-\newblock End-to-end formalization of quantum error correction.
-\newblock \emph{arXiv:2605.16523 [quant-ph]}, 2026. (\texttt{Lean-QEC}.)
-
-\bibitem{CLUP}
-Yannick Forster, Dominique Larchey-Wendling, Andrej Dudenhefner, Edith Heiter, Dominik Kirst, Fabian Kunze,
-Gert Smolka, Simon Spies, Dominik Wehr, and Maximilian Wuttke.
-\newblock A Coq library of undecidability proofs.
-\newblock In \emph{CoqPL 2020} (workshop).
-
-\bibitem{GK21}
-Lennard Gäher and Fabian Kunze.
-\newblock Mechanising complexity theory: The Cook--Levin theorem in Coq.
-\newblock In \emph{12th International Conference on Interactive Theorem Proving (ITP 2021)}, volume 193 of
-\emph{LIPIcs}, pages 20:1--20:18, 2021.
-
-\bibitem{GJ79}
-Michael R. Garey and David S. Johnson.
-\newblock \emph{Computers and Intractability: A Guide to the Theory of NP-Completeness}.
-\newblock W.~H. Freeman, 1979. (Theorem 3.2, $\textsc{3sat} \le \textsc{3dm}$.)
-
-\bibitem{HNK16}
-Manabu Hagiwara, Kyosuke Nakano, and Justin Kong.
-\newblock Formalization of coding theory using Lean.
-\newblock In \emph{International Symposium on Information Theory and Its Applications (ISITA 2016)}, IEEE,
-2016. (\texttt{Cotoleta}.)
-
-\bibitem{KN23}
-Katharina Kreuzer and Tobias Nipkow.
-\newblock Verification of NP-hardness reduction functions for exact lattice problems.
-\newblock In \emph{29th International Conference on Automated Deduction (CADE-29)}, Springer LNCS, 2023.
-\newblock \emph{arXiv:2306.08375}; AFP entry \texttt{CVP\_Hardness}.
-
-\bibitem{mathlib}
-The mathlib Community.
-\newblock The Lean mathematical library.
-\newblock In \emph{Certified Programs and Proofs (CPP 2020)}, pages 367--381, 2020.
-\newblock \doi{10.1145/3372885.3373824}. Module \texttt{Mathlib.InformationTheory.Hamming} (v4.30.0).
-
-\bibitem{PolyRed}
-The \texttt{poly-reductions} project: polynomial-time Karp reductions in Isabelle/HOL.
-\newblock \url{https://github.com/wimmers/poly-reductions}.
-
-\bibitem{Sim26}
-Tristan Simas.
-\newblock Computational complexity of physical counting.
-\newblock \emph{arXiv:2601.15571 [cs.CC]}, 2026.
-
-\end{thebibliography}
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{refs}
 
 \end{document}

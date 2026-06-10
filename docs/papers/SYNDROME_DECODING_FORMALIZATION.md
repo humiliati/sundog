@@ -56,8 +56,11 @@ formalized Karp reductions, the Isabelle `poly-reductions` project [PolyRed], co
 vertex cover, clique, set cover, and Hamiltonian cycle; the Coq complexity library adds *k*SAT to clique. The
 classical gadget reductions to *3-dimensional matching* and *exact cover*, and the reductions into *coding
 theory*, have — to the best of our knowledge — not been mechanized at all. In Lean 4 the situation is starker
-still: mathlib, the standard library, contains no notion of P, NP, SAT, or polynomial-time reduction, and no
-coding theory beyond the Hamming metric and norm — no linear codes, syndromes, or parity-check matrices.
+still: mathlib, the standard library, contains no notion of P, NP, SAT, or polynomial-time reduction — its
+`Computability` library provides Turing-machine models and a stand-alone definition of polynomial-time
+computable functions (`TM2ComputableInPolyTime`, whose composition theorem is still `proof_wanted`), but no
+complexity classes and no reduction framework over them — and no coding theory beyond the Hamming metric and
+norm: no linear codes, syndromes, or parity-check matrices.
 
 This paper closes part of that gap. We give a complete, machine-checked formalization, in Lean 4 with mathlib,
 of the reduction-correctness chain
@@ -76,7 +79,7 @@ equivalences `inst ∈ A ⟺ reduce(inst) ∈ B`, which are pure combinatorics a
 argument. We do **not** mechanize the complexity-theoretic *wrapping*: the class NP, the polynomial-time bound
 on the reduction functions, and the NP-hardness of 3SAT itself (Cook–Levin). These are *imported* — named
 explicitly as the assumptions a hardness reading depends on, rather than smuggled into the development.
-mathlib offers no machine model with which to formalize them. Consequently, the Lean theorem is an unconditional
+mathlib offers no complexity-theoretic scaffolding with which to formalize them. Consequently, the Lean theorem is an unconditional
 reduction-correctness theorem, while the **NP-hardness label** imports the usual Cook–Levin and polynomial-time
 wrapping. Any *intractability* reading is further conditional on `P ≠ NP`; we make no claim about P versus NP.
 This is the same boundary Kreuzer and Nipkow draw for the lattice problems, where polynomial-time-ness is
@@ -263,7 +266,7 @@ The clause gadget's internal pair is coverable iff some literal's tip is free (`
 `aᵢ` runs the constant selection `fun _ => ¬aᵢ` — to literal evaluation:
 
 ```lean
-theorem litTipFree_iff_eval (a : Assignment n) (l : Literal n) {m} [NeZero m] (j : Fin m) :
+theorem litTipFree_iff_eval (a : Assignment n) (l : Literal n) {m : ℕ} [NeZero m] (j : Fin m) :
     litTipFree a l j ↔ evalLiteral a l = true
 ```
 
@@ -306,12 +309,12 @@ one.
 
 ### 3.6 Composition (`SATReductionMain`)
 
-`sat_iff_threeDM_I = ⟨forward, reverse⟩` packages both directions; transported through the reindexing bridge to
+Both directions are packaged as `sat_iff_threeDM_I`, the pair `⟨forward φ, reverse φ⟩`; transported through the reindexing bridge to
 the real `Fin s`-indexed `ThreeDM`, then through `reduce_chain_connects`, this yields the headline:
 
 ```lean
 theorem sat_iff_decodes (φ : Formula n m) :
-    Satisfiable φ ↔ Decodes (reduce3DM (reduce φ)) (2 * m * n)
+    Satisfiable φ ↔ DecodingNPHard.Decodes (reduce3DM (reduce φ)) (2 * m * n)
 ```
 
 — `3SAT ≤ 3DM ≤ X3C ≤ decoding`, closed end to end. (The `3DM ≤ X3C` and `X3C ≤ decoding` endpoints, §4, supply
@@ -344,7 +347,7 @@ The connection lemma makes the encoding exact: for the 0/1 indicator `eOf T` of 
 coordinate at point `x` is the mod-2 cast of its cover count,
 
 ```lean
-theorem syndrome_eq_coverCount_cast (T) (x) :
+theorem syndrome_eq_coverCount_cast (T : Finset (Fin s)) (x : X) :
     (Hmat c *ᵥ eOf c T) x = ((coverCount c T x : ℕ) : ZMod 2)
 ```
 
@@ -367,7 +370,9 @@ syndrome certificate's soundness assumes (§6).
 
 What we do *not* prove is the complexity-theoretic wrapping. The reduction functions are visibly local — each
 gadget index maps to one triple, each triple to one 3-set, each 3-set to one matrix column — but
-"polynomial-time" is unformalized, as mathlib offers no machine model. NP membership, and 3SAT's own
+"polynomial-time" is unformalized: mathlib's lone polynomial-time notion (`TM2ComputableInPolyTime`) is a
+stand-alone definition, its composition theorem still `proof_wanted`, with no reduction framework built on it.
+NP membership, and 3SAT's own
 NP-hardness (Cook–Levin), are likewise imported. We name this boundary in the development: a `CertWall` module
 *types* the imported quantity, and every module's documentation states the limit. The Lean output is therefore
 an *unconditional reduction-correctness theorem*; the NP-hardness reading attaches the imported wrapping
@@ -383,6 +388,15 @@ Every headline theorem is axiom-clean. We make this *self-checking*: an `AxiomAu
 `#print axioms` output with `#guard_msgs`, so a regression — a stray `sorry`, a `native_decide`, any extra
 axiom — changes the captured message and fails `lake build`. The referee-free promise can no longer silently
 regress.
+
+The pattern is small and project-agnostic: one audit module imports every load-bearing module and pins one
+`#guard_msgs in #print axioms` block per exported theorem; extending the gate is one block per new result, and
+guarding the top-level `sat_iff_decodes` transitively protects the whole chain (its axiom set would change if
+any dependency's did). Before the gate, axiom-cleanliness was checked by a human reading `#print axioms`
+output; now the kernel's own output is the regression test, with no CI scripting outside the build. One
+practical subtlety: `#guard_msgs` captures *every* message the command emits, so the gate interacts with active
+linters — under a full `lake build` the mathlib whitespace linter also fires, and each `#print axioms` must sit
+on its own line at column 0, or the linter's message lands in the captured text and spuriously fails the gate.
 
 ### 5.2 Proof-engineering walls
 
@@ -408,7 +422,36 @@ decoding endpoints supply the remainder), comprising on the order of fifty theor
 result depends only on `[propext, Classical.choice, Quot.sound]` or a subset, and the development rebuilds via
 `lake build` atop a cached mathlib, reproducible from the public artifact.
 
-### 5.4 A note on the workflow
+The artifact is the development itself: from a clean checkout, `lake exe cache get` followed by `lake build`
+re-elaborates every proof and re-runs the axiom gate atop the cached mathlib, in minutes on commodity hardware;
+we re-verified exactly this flow from a fresh clone for this submission. There is nothing else to trust: no
+vendored binaries, no extracted code, no `native_decide` — the trusted base is the Lean kernel, the three
+foundational axioms, and the pinned toolchain (Lean and mathlib v4.30.0).
+
+### 5.4 What ports out of this development
+
+Three pieces of this development are reduction-agnostic.
+
+**The reindexing bridge.** Decision problems are conventionally stated over an opaque index
+(`Fin s → W×X×Y`), but gadget arguments live over structured indexes — here, a four-way sum of products. The
+generic bridge `ThreeDM_I t ↔ ThreeDM (t ∘ e.symm)` (along `e := Fintype.equivFin _`) lets the entire
+correctness proof run over the natural index and transports the result to the opaque statement at the end. Any
+mechanized gadget reduction whose instance space has structure — which is to say, any gadget reduction — needs
+exactly this bridge, and it is independent of 3DM.
+
+**The counted-bijection pattern.** Gadget constructions routinely end with "absorb the leftovers with
+garbage" — an informal step that, mechanized, becomes: partition the resource (here, tips) into consumed /
+claimed / unclaimed classes, prove the three cardinalities, and obtain the absorbing bijection
+non-constructively from `Fintype.equivFinOfCardEq`. The shape (three-way partition count, then a counted
+bijection) is the reusable unit; the 543-line forward proof is mostly instances of it.
+
+**The encoding lock.** Before any gadget depends on the 3SAT encoding, two kernel-`decide` examples (one
+satisfiable, one unsatisfiable, exercising both literal signs) pin its semantics; the polarity bridge is
+additionally locked by a four-case (sign × aᵢ) `decide`. Locking an encoding with decidable concrete instances
+*before* building on it is cheap insurance against the silent sign error — the class of bug a reduction cannot
+recover from — and costs the kernel milliseconds.
+
+### 5.5 A note on the workflow
 
 The development was produced with substantial AI assistance, under a fixed discipline: each module was scoped
 and reconnoitred against the live toolchain, drafted, adversarially reviewed for correctness and over-claim,
@@ -427,6 +470,20 @@ equivalence between this decoding problem and a canonical NP-hard source problem
 "decoding is hard" intuition to 3SAT, and the landed `Decodes` instance is exactly the decision form of the
 minimum-coset-weight quantity a syndrome certificate's soundness rests on — so the development connects, in one
 formal artifact, that certificate's imported hardness wall to the canonical source problem.
+
+The wall is typed, not only named. The artifact's `CertWall` module defines the semantic quantity behind the
+certificate — `minCosetWeight`, the least Hamming weight over a syndrome's coset, whose bounded decision form
+is exactly the `Decodes` our chain lands on — and proves the *shape* of the import from the consumer's side.
+The true quantity is a code invariant: a change of parity-check basis (left-multiplication by an invertible
+matrix) leaves it unchanged (`minCosetWeight_rowEquiv`). The verifier's cheap sound bound provably is not: on
+two bases of the *same* code it returns the true distance on one and collapses to zero on the other
+(`colWeightLb_not_basis_invariant`, a witnessed counterexample). And a conditional theorem
+(`tight_bound_decodes`) types the closing observation: a cheap bound that is *tight* on a syndrome computes the
+decoding distance there. Jointly: a cheap, basis-robust, tight bound would *be* a decoder, so the cheap bound's
+basis-dependence is the visible edge of the imported hardness — now machine-checked on both sides, anchored
+below by this paper's chain (decoding is at least as hard as 3SAT, modulo the named wrapping) and bounded above
+by the typed conditional (anything that closed the gap would discharge the import). No hardness is proved on
+either side; what is kernel-checked is where the assumption lives.
 
 We are careful about the boundary. [BMvT78] worst-case NP-hardness is the standard complexity baseline every
 account of the problem routes through, but it is **not an average-case security proof**: McEliece's security
@@ -472,10 +529,12 @@ Reed–Muller, and cyclic codes, with LDPC sum-product decoding and an extracted
 Shannon's theorems. Crucially, this is decoding-*algorithm correctness*, not decoding-*hardness*: `infotheo`
 proves that decoders compute correctly, not that decoding is hard — the two are orthogonal, and only the
 latter is our subject. In Lean, mathlib provides only the Hamming metric and norm (`InformationTheory.Hamming`);
-a search of mathlib for parity-check, syndrome, generator, or linear-code primitives returns nothing. Recent
-external Lean work has begun to formalize coding-theory infrastructure in specialized domains — notably
-Lean-QEC's stabilizer-code and verified distance-certificate pipeline [ELWT26]. That work runs the *converse*
-direction to ours: it reduces a code-*distance* condition *to* SAT for verification (observing that distance
+a search of mathlib for parity-check, syndrome, generator, or linear-code primitives returns nothing (re-verified
+by grep on the pinned v4.30.0 and by code search on current master, 2026-06-10). External Lean coding-theory work
+is likewise correctness-oriented: the early Cotoleta library formalized repetition and Hamming(7,4) codes [HNK16],
+the ArkLib SNARK-verification effort is building Reed–Solomon proximity infrastructure [ArkLib], and — nearest
+our subject — Lean-QEC provides a stabilizer-code and verified distance-certificate pipeline [ELWT26]. Lean-QEC
+runs the *converse* direction to ours: it reduces a code-*distance* condition *to* SAT for verification (observing that distance
 certification is NP-hard in general, without proving it), rather than reducing SAT *to* a coding problem to
 mechanize hardness; it contains no Garey–Johnson gadget reduction and no syndrome-decoding hardness result. Our
 development therefore
@@ -547,6 +606,11 @@ non-overlapping with this work; `poly-reductions` is repo-cited, as no single ca
   Problems.* CADE-29, 2023 (Springer LNCS); arXiv:2306.08375; AFP entry `CVP_Hardness`.
 - **[AGS20]** ✓ R. Affeldt, J. Garrigue, T. Saikawa. *A Library for Formalization of Linear Error-Correcting
   Codes.* Journal of Automated Reasoning, 64:1123–1164, 2020. DOI 10.1007/s10817-019-09538-8. (`infotheo`.)
+- **[HNK16]** ✓ M. Hagiwara, K. Nakano, J. Kong. *Formalization of Coding Theory Using Lean.* ISITA 2016,
+  IEEE. (`Cotoleta` — repetition + Hamming(7,4) codes, early Lean; correctness, not hardness.)
+- **[ArkLib]** ✓ The `ArkLib` development: formally verified arguments of knowledge in Lean 4.
+  `github.com/Verified-zkEVM/ArkLib`. (Repo-cited: Reed–Solomon proximity infrastructure for SNARKs,
+  in progress; no decision problems / hardness. Re-check for a canonical paper near submission.)
 - **[ELWT26]** ✓ M. Ehatamm, Y. Lee, X. Wu, R. Tao. *End-to-End Formalization of Quantum Error Correction.*
   arXiv:2605.16523 [quant-ph], May 2026. (`Lean-QEC`, Lean 4: stabilizer / CSS / Bivariate-Bicycle codes and
   verified distance certificates — code correctness, not hardness.)
@@ -565,9 +629,17 @@ non-overlapping with this work; `poly-reductions` is repo-cited, as no single ca
 ---
 
 *Drafting notes (not for submission):*
+- *Prior-art re-search RE-RUN 2026-06-10 — full receipt at
+  [`../PRIOR_ART_RECHECK_2026-06-10.md`](../PRIOR_ART_RECHECK_2026-06-10.md). All first-ness claims STAND
+  (no mechanization of GJ 3SAT≤3DM, 3DM≤X3C, or syndrome-decoding hardness found anywhere;
+  `poly-reductions` scope unchanged + still no canonical paper; [Sim26] now v4 (2026-03-01) and [ELWT26]
+  still v1 — both still non-overlapping). Two corrections applied: the "mathlib offers no machine model"
+  sentences were WRONG (mathlib has TM models + `TM2ComputableInPolyTime`, composition `proof_wanted`) and
+  are now precise; Cotoleta [HNK16] + ArkLib added to §7 for survey completeness. mathlib coding-theory
+  absence verified by grep on pinned v4.30.0 AND GitHub code search on master (0 hits ×4 terms). Re-run
+  once more in the week before the actual deadline.*
 - *Headline claims are hedged "to the best of our knowledge / in any proof assistant" per the prior-art scout;
-  re-run the negative searches near submission (the no-mechanization claims rest on repo snapshots + exhaustive
-  search).*
+  the no-mechanization claims rest on repo snapshots + exhaustive search.*
 - *Do not claim "first complexity-reduction work in Lean": [Sim26] is a substantial Lean 4 complexity
   formalization (coNP/Σ₂ᴾ/PP/PSPACE completeness, ~28.9k lines). The Lean first-claim is narrowed to the
   coding-theory hardness reduction and the classical 3SAT≤3DM≤X3C gadgets — both 2026 preprints ([ELWT26],
@@ -579,7 +651,9 @@ non-overlapping with this work; `poly-reductions` is repo-cited, as no single ca
   framing — mentioned, not the spine.*
 - *Double-blind venues (CPP/ITP) require anonymizing the artifact link and the "sundogcert / Sundog" framing;
   the code-based-crypto motivation (not the lab-specific narrative) is the application anchor in §6.*
-- *Target venue: **ITP** — the formalization + named-imported-wall-discipline story, with [KN23] the direct
-  precedent. **CPP** is a viable alternative if the proof-engineering / experience-report angle (§5) is
-  sharpened. Pinning the venue fixes the LaTeX class (LIPIcs for ITP, acmart for CPP) and the double-blind
-  handling.*
+- *Target venue (UPDATED 2026-06-10): **ITP 2026 is gone** — its deadline was 2026-02-19 (conference
+  2026-07-26/29, Lisbon, FLoC). Nearest double-blind targets: **CPP 2027** (with POPL 2027, Mexico City,
+  ~mid-Jan 2027; CFP not yet posted — by the CPP 2025/2026 pattern expect abstracts ~Sep 9–10 and papers
+  ~Sep 16–17, 2026; requires acmart conversion + sharpening the §5 experience-report angle) or **ITP 2027**
+  (deadline ~Feb 2027; the LIPIcs build is ready as-is; best topical fit, [KN23]-style). CADE-31 (~2027) is
+  the [KN23] venue but is not double-blind. Watch the CPP 2027 page once POPL 2027 announces.*
