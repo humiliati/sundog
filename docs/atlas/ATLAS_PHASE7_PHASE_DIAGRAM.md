@@ -136,11 +136,24 @@ CZA"), Lowitz arcs, Parry suncave/sunvex, Wegener/Hastings, the antisolar P0 blo
 corrections (above) are the only discrepancies; all flagged, none fabricated-and-passed-as-real.
 
 ## Forward-model gaps (the honest edges)
+> **Update 2026-06-09 (Phase 12) — several of these are now CLOSED by the polarized halo raytracer**
+> (`scripts/s2_halo_raytracer.py`; `ATLAS_PHASE12_POLARIZATION_PHASEDIAGRAM.md`). The raytracer **is** the
+> random/plate/column/Parry/pyramidal forward generator these cells lacked, it **reproduces the
+> random-ring horizon-clip occlusion** (22° ring below-horizon flux 36%→0% across e=21.84°), and it adds
+> a **polarization layer** to every feature (refraction folds → radial `DoP(R)`; TIR features →
+> antisymmetric ±V, net→0). The orientation-driven boundary *elevations* (60.74/29.71/32.20/57.80°)
+> still belong to the caustic-map/admissibility machinery below (the raytracer generates the features
+> but does not re-derive those exact walls by flux-windowing).
 - No **random-orientation** sky_grid model (ring cells from `halo_min_deviation` + horizon geometry).
+  *(Phase 12: CLOSED — raytracer reproduces the horizon-clip occlusion.)*
 - No **plate** model beyond the parhelion (reflection/multi-path features have no derived wall).
+  *(Phase 12: PARTIAL — raytracer generates the parhelic circle / 120° parhelia / sundogs + their
+  polarization, but the 60.74° parhelia-off elevation stays a Phase-7 derived B-wall.)*
 - `wedge='wegener'` is a **prism60-subset artifact** — not a faithful side→basal-TIR→side anthelic model;
   yields no reliable column anthelic window (a faithful model changes the EXIT face after a real basal bounce).
 - No **Parry** wedge (`ValueError`); Parry-specific onsets are catalog-not-derived.
+  *(Phase 12: PARTIAL — raytracer has a Parry habit generating the above-sun meridian arc; the specific
+  onset elevations remain catalog.)*
 - No **bullet-rosette** wedge (feature set inferred from random+oriented column generators).
 - **Moilanen / elliptical / Bottlinger** — no forward model, no catalog row, mechanism unresolved.
 
