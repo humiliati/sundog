@@ -343,7 +343,11 @@ function renderTrace(trace) {
   details.append(meta);
 
   if (trace.support?.length) {
-    details.append(traceList("Sources", trace.support.map((support) => `${support.doc} - ${support.section} (${support.status})`)));
+    details.append(traceList("Sources", trace.support.map((support) => ({
+      href: support.href || null,
+      label: support.doc,
+      suffix: ` - ${support.section} (${support.status})`
+    }))));
   }
 
   if (trace.earned || trace.earnedDetail) {
@@ -355,12 +359,20 @@ function renderTrace(trace) {
   }
 
   if (trace.retrieved?.length) {
-    details.append(traceList("Retrieved", trace.retrieved.map((match) => `${match.doc} - ${match.section} [${match.tier}; score ${match.score}]`)));
+    details.append(traceList("Retrieved", trace.retrieved.map((match) => ({
+      href: match.href || null,
+      label: match.doc,
+      suffix: ` - ${match.section} [${match.tier}; score ${match.score}]`
+    }))));
   }
 
   return details;
 }
 
+// Items are plain strings, or { href, label, suffix } doc citations. A
+// citation only carries `href` when the build determined the doc actually
+// ships to the public site (build-chat-index.mjs), so a missing href means
+// "cite as text, do not link" — never synthesize one here.
 function traceList(label, items) {
   const section = document.createElement("section");
   const heading = document.createElement("h4");
@@ -368,7 +380,22 @@ function traceList(label, items) {
   const list = document.createElement("ul");
   for (const item of items) {
     const entry = document.createElement("li");
-    entry.textContent = item;
+    if (item && typeof item === "object") {
+      if (item.href) {
+        const link = document.createElement("a");
+        link.className = "sd-chat-source-link";
+        link.href = item.href;
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.textContent = item.label;
+        entry.append(link);
+      } else {
+        entry.append(document.createTextNode(item.label));
+      }
+      entry.append(document.createTextNode(item.suffix || ""));
+    } else {
+      entry.textContent = item;
+    }
     list.append(entry);
   }
   section.append(heading, list);

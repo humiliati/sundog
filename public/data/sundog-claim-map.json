@@ -83,12 +83,14 @@
         {
           "doc": "docs/SCIENTIFIC_CRITERIA.md",
           "section": "Research Object / Scientific Criteria Met",
-          "status": "primary"
+          "status": "primary",
+          "href": "/docs/SCIENTIFIC_CRITERIA.md"
         },
         {
           "doc": "docs/presentation/claims-and-scope.md",
           "section": "Safe Claims / Sundog Core Repo",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/presentation/claims-and-scope.md"
         }
       ],
       "boundaries": [
@@ -125,22 +127,26 @@
         {
           "doc": "docs/SCIENTIFIC_CRITERIA.md",
           "section": "Research Object / Scientific Criteria Met",
-          "status": "primary"
+          "status": "primary",
+          "href": "/docs/SCIENTIFIC_CRITERIA.md"
         },
         {
           "doc": "docs/SUNDOG_V_CHAT.md",
           "section": "Section 13 claim ratchet",
-          "status": "supporting"
+          "status": "supporting",
+          "href": "/docs/SUNDOG_V_CHAT.md"
         },
         {
           "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
           "section": "Cross-Substrate Generality Failure Map",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/CROSS_SUBSTRATE_NOTES.md"
         },
         {
           "doc": "docs/APPLICATIONS.md",
           "section": "Evidence Tiers",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/APPLICATIONS.md"
         }
       ],
       "boundaries": [
@@ -188,17 +194,20 @@
         {
           "doc": "docs/APPLICATIONS.md",
           "section": "Shared Pattern",
-          "status": "supporting"
+          "status": "supporting",
+          "href": "/docs/APPLICATIONS.md"
         },
         {
           "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
           "section": "Top-Level Machinery Vocabulary",
-          "status": "supporting"
+          "status": "supporting",
+          "href": "/docs/CROSS_SUBSTRATE_NOTES.md"
         },
         {
           "doc": "docs/presentation/claims-and-scope.md",
           "section": "Framework Characteristics / Research Status",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/presentation/claims-and-scope.md"
         }
       ],
       "boundaries": [
@@ -242,12 +251,14 @@
         {
           "doc": "sundog.html",
           "section": "The full atlas / Named in the literature, beyond the rendered set",
-          "status": "primary"
+          "status": "primary",
+          "href": "/sundog"
         },
         {
           "doc": "docs/site/WEBSITE_DEVELOPMENT.md",
           "section": "Ask Sundog / Claim-boundary checks before publishing",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/site/WEBSITE_DEVELOPMENT.md"
         }
       ],
       "boundaries": [
@@ -288,17 +299,20 @@
         {
           "doc": "geometry.html",
           "section": "Claim boundary / Sources and credit",
-          "status": "primary"
+          "status": "primary",
+          "href": "/geometry"
         },
         {
           "doc": "capset.html",
           "section": "Cap-set interactive workbench / Inspection Trail",
-          "status": "supporting"
+          "status": "supporting",
+          "href": "/capset"
         },
         {
           "doc": "docs/SUNDOG_V_CAPSET.md",
           "section": "Claim Boundary / Falsification Surface",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/SUNDOG_V_CAPSET.md"
         }
       ],
       "boundaries": [
@@ -356,22 +370,26 @@
         {
           "doc": "isotrophy.html",
           "section": "The Load-Bearing Statement / Audit Chain / Named Quarantine",
-          "status": "primary"
+          "status": "primary",
+          "href": "/isotrophy"
         },
         {
           "doc": "docs/isotrophy/SUNDOG_V_ISOTROPHY_KFACET.md",
           "section": "Load-bearing statement / Standing rules / Falsification surface",
-          "status": "ledger"
+          "status": "ledger",
+          "href": "/docs/isotrophy/SUNDOG_V_ISOTROPHY_KFACET.md"
         },
         {
           "doc": "docs/isotrophy/kfacet/kfacet_v11_m3_conditional_vf_rank_form.md",
           "section": "Execution receipt / Claim Boundary",
-          "status": "conditional-catalog-signal"
+          "status": "conditional-catalog-signal",
+          "href": "/docs/isotrophy/kfacet/kfacet_v11_m3_conditional_vf_rank_form.md"
         },
         {
           "doc": "legend.html",
           "section": "Three-Body & K_facet Vocabulary",
-          "status": "vocabulary"
+          "status": "vocabulary",
+          "href": "/legend"
         }
       ],
       "boundaries": [
@@ -417,12 +435,14 @@
         {
           "doc": "docs/APPLICATIONS.md",
           "section": "Evidence Tiers / Cross-Application Comparison",
-          "status": "primary"
+          "status": "primary",
+          "href": "/docs/APPLICATIONS.md"
         },
         {
           "doc": "docs/SCIENTIFIC_CRITERIA.md",
           "section": "Criteria Not Yet Met",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/SCIENTIFIC_CRITERIA.md"
         }
       ],
       "boundaries": [
@@ -452,17 +472,20 @@
         {
           "doc": "docs/threebody/PHASE18_RESULTS.md",
           "section": "Branch A - Reduces to radius",
-          "status": "primary"
+          "status": "primary",
+          "href": "/docs/threebody/PHASE18_RESULTS.md"
         },
         {
           "doc": "docs/SUNDOG_V_THREEBODY.md",
           "section": "Phase 18 - Radius-Only Controller Control",
-          "status": "supporting"
+          "status": "supporting",
+          "href": "/docs/SUNDOG_V_THREEBODY.md"
         },
         {
           "doc": "docs/presentation/claims-and-scope.md",
           "section": "Three-Body Dynamics Workbench",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/presentation/claims-and-scope.md"
         }
       ],
       "boundaries": [
@@ -500,17 +523,20 @@
         {
           "doc": "docs/APPLICATIONS.md",
           "section": "Sundog Balance Workbench",
-          "status": "primary"
+          "status": "primary",
+          "href": "/docs/APPLICATIONS.md"
         },
         {
           "doc": "docs/sundog_v_balance.md",
           "section": "Phase 10 / Phase 11 roadmap",
-          "status": "supporting"
+          "status": "supporting",
+          "href": "/docs/sundog_v_balance.md"
         },
         {
           "doc": "docs/presentation/claims-and-scope.md",
           "section": "Sundog Balance Workbench",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/presentation/claims-and-scope.md"
         }
       ],
       "boundaries": [
@@ -539,17 +565,20 @@
         {
           "doc": "docs/APPLICATIONS.md",
           "section": "Sundog Pressure Mines Workbench",
-          "status": "primary"
+          "status": "primary",
+          "href": "/docs/APPLICATIONS.md"
         },
         {
           "doc": "docs/sundog_v_minesweeper.md",
           "section": "Roadmap and operating envelope",
-          "status": "supporting"
+          "status": "supporting",
+          "href": "/docs/sundog_v_minesweeper.md"
         },
         {
           "doc": "docs/presentation/claims-and-scope.md",
           "section": "Sundog Pressure Mines Workbench",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/presentation/claims-and-scope.md"
         }
       ],
       "boundaries": [
@@ -581,17 +610,20 @@
         {
           "doc": "docs/APPLICATIONS.md",
           "section": "EyesOnly / Gone Rogue",
-          "status": "primary"
+          "status": "primary",
+          "href": "/docs/APPLICATIONS.md"
         },
         {
           "doc": "docs/runners.md",
           "section": "Gone Rogue / EyesOnly runner integration",
-          "status": "supporting"
+          "status": "supporting",
+          "href": "/docs/runners.md"
         },
         {
           "doc": "docs/presentation/claims-and-scope.md",
           "section": "EyesOnly / Gone Rogue",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/presentation/claims-and-scope.md"
         }
       ],
       "boundaries": [
@@ -620,12 +652,14 @@
         {
           "doc": "docs/APPLICATIONS.md",
           "section": "Dungeon Gleaner",
-          "status": "primary"
+          "status": "primary",
+          "href": "/docs/APPLICATIONS.md"
         },
         {
           "doc": "docs/presentation/claims-and-scope.md",
           "section": "Dungeon Gleaner",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/presentation/claims-and-scope.md"
         }
       ],
       "boundaries": [
@@ -654,12 +688,14 @@
         {
           "doc": "docs/APPLICATIONS.md",
           "section": "Money Bags / Claim Boundary",
-          "status": "primary"
+          "status": "primary",
+          "href": "/docs/APPLICATIONS.md"
         },
         {
           "doc": "docs/presentation/claims-and-scope.md",
           "section": "Money Bags",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/presentation/claims-and-scope.md"
         }
       ],
       "boundaries": [
@@ -693,12 +729,14 @@
         {
           "doc": "docs/SUNDOG_V_MESA.md",
           "section": "What's Honest vs. What's Reach",
-          "status": "primary"
+          "status": "primary",
+          "href": "/docs/SUNDOG_V_MESA.md"
         },
         {
           "doc": "docs/SUNDOG_V_MESA.md",
           "section": "Ratified Hook Language",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/SUNDOG_V_MESA.md"
         }
       ],
       "boundaries": [
@@ -740,12 +778,14 @@
         {
           "doc": "docs/SUNDOG_V_CHAT.md",
           "section": "Core Experiment Question / What Is Honest vs. What Is Reach",
-          "status": "primary"
+          "status": "primary",
+          "href": "/docs/SUNDOG_V_CHAT.md"
         },
         {
           "doc": "docs/SUNDOG_V_CHAT.md",
           "section": "Claim Ratchet Candidates",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/SUNDOG_V_CHAT.md"
         }
       ],
       "boundaries": [
@@ -788,17 +828,20 @@
         {
           "doc": "docs/presentation/claims-and-scope.md",
           "section": "Risky Claims",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/presentation/claims-and-scope.md"
         },
         {
           "doc": "docs/SUNDOG_V_MESA.md",
           "section": "What's Honest vs. What's Reach",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/SUNDOG_V_MESA.md"
         },
         {
           "doc": "docs/SUNDOG_V_CHAT.md",
           "section": "What Is Honest vs. What Is Reach",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/SUNDOG_V_CHAT.md"
         }
       ],
       "boundaries": [
@@ -832,7 +875,8 @@
         {
           "doc": "docs/presentation/claims-and-scope.md",
           "section": "Name and Source Confusion",
-          "status": "primary"
+          "status": "primary",
+          "href": "/docs/presentation/claims-and-scope.md"
         }
       ],
       "boundaries": [
@@ -862,12 +906,14 @@
         {
           "doc": "about.html",
           "section": "Current Legal Structure",
-          "status": "primary"
+          "status": "primary",
+          "href": "/about"
         },
         {
           "doc": "COPYRIGHT.md",
           "section": "Copyright and Ownership",
-          "status": "supporting"
+          "status": "supporting",
+          "href": "/COPYRIGHT.md"
         }
       ],
       "boundaries": [
@@ -905,17 +951,20 @@
         {
           "doc": "LICENSE",
           "section": "Sundog Rights Notice",
-          "status": "primary"
+          "status": "primary",
+          "href": "/LICENSE"
         },
         {
           "doc": "CITATION.cff",
           "section": "Citation metadata",
-          "status": "primary"
+          "status": "primary",
+          "href": "/CITATION.cff"
         },
         {
           "doc": "README.md",
           "section": "License and citation",
-          "status": "supporting"
+          "status": "supporting",
+          "href": "/README.md"
         }
       ],
       "boundaries": [
@@ -948,7 +997,8 @@
         {
           "doc": "docs/presentation/claims-and-scope.md",
           "section": "Safe Claims",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/presentation/claims-and-scope.md"
         }
       ],
       "boundaries": [
@@ -981,12 +1031,14 @@
         {
           "doc": "docs/SUNDOG_V_CHAT.md",
           "section": "Phase 1 - Static Site Helper",
-          "status": "primary"
+          "status": "primary",
+          "href": "/docs/SUNDOG_V_CHAT.md"
         },
         {
           "doc": "chat/claim_map.json",
           "section": "claims",
-          "status": "supporting"
+          "status": "supporting",
+          "href": "/chat/claim_map.json"
         }
       ],
       "boundaries": [
@@ -1018,12 +1070,14 @@
         {
           "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
           "section": "Cross-Substrate Generality Failure Map",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/CROSS_SUBSTRATE_NOTES.md"
         },
         {
           "doc": "docs/presentation/claims-and-scope.md",
           "section": "Risky Claims",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/presentation/claims-and-scope.md"
         }
       ],
       "boundaries": [
@@ -1056,12 +1110,14 @@
         {
           "doc": "docs/SUNDOG_V_FARADAY.md",
           "section": "Claim Boundary",
-          "status": "primary"
+          "status": "primary",
+          "href": "/docs/SUNDOG_V_FARADAY.md"
         },
         {
           "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
           "section": "Cross-Substrate Generality Failure Map",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/CROSS_SUBSTRATE_NOTES.md"
         }
       ],
       "boundaries": [
@@ -1095,12 +1151,14 @@
         {
           "doc": "docs/SUNDOG_V_FARADAY.md",
           "section": "Aharonov-Bohm boundary",
-          "status": "primary"
+          "status": "primary",
+          "href": "/docs/SUNDOG_V_FARADAY.md"
         },
         {
           "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
           "section": "Cross-Substrate Generality Failure Map",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/CROSS_SUBSTRATE_NOTES.md"
         }
       ],
       "boundaries": [
@@ -1136,12 +1194,14 @@
         {
           "doc": "docs/SUNDOG_V_NAVIERSTOKES.md",
           "section": "C1",
-          "status": "primary"
+          "status": "primary",
+          "href": "/docs/SUNDOG_V_NAVIERSTOKES.md"
         },
         {
           "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
           "section": "Cross-Substrate Generality Failure Map",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/CROSS_SUBSTRATE_NOTES.md"
         }
       ],
       "boundaries": [
@@ -1175,12 +1235,14 @@
         {
           "doc": "docs/SUNDOG_V_NAVIERSTOKES.md",
           "section": "C2",
-          "status": "primary"
+          "status": "primary",
+          "href": "/docs/SUNDOG_V_NAVIERSTOKES.md"
         },
         {
           "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
           "section": "Cross-Substrate Generality Failure Map",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/CROSS_SUBSTRATE_NOTES.md"
         }
       ],
       "boundaries": [
@@ -1214,12 +1276,14 @@
         {
           "doc": "docs/SUNDOG_V_YANG_MILLS.md",
           "section": "Phase 2 bounded null",
-          "status": "primary"
+          "status": "primary",
+          "href": "/docs/SUNDOG_V_YANG_MILLS.md"
         },
         {
           "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
           "section": "Cross-Substrate Generality Failure Map",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/CROSS_SUBSTRATE_NOTES.md"
         }
       ],
       "boundaries": [
@@ -1255,12 +1319,14 @@
         {
           "doc": "docs/SUNDOG_V_RIEMANN.md",
           "section": "Probe 01",
-          "status": "primary"
+          "status": "primary",
+          "href": "/docs/SUNDOG_V_RIEMANN.md"
         },
         {
           "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
           "section": "Cross-Substrate Generality Failure Map",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/CROSS_SUBSTRATE_NOTES.md"
         }
       ],
       "boundaries": [
@@ -1296,12 +1362,14 @@
         {
           "doc": "docs/SUNDOG_V_P_V_NP.md",
           "section": "Cross-substrate failure-map entry",
-          "status": "primary"
+          "status": "primary",
+          "href": "/docs/SUNDOG_V_P_V_NP.md"
         },
         {
           "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
           "section": "Cross-Substrate Generality Failure Map",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/CROSS_SUBSTRATE_NOTES.md"
         }
       ],
       "boundaries": [
@@ -1337,12 +1405,14 @@
         {
           "doc": "docs/SUNDOG_V_ARC.md",
           "section": "Phase 3 / Phase 4",
-          "status": "primary"
+          "status": "primary",
+          "href": "/docs/SUNDOG_V_ARC.md"
         },
         {
           "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
           "section": "Cross-Substrate Generality Failure Map",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/CROSS_SUBSTRATE_NOTES.md"
         }
       ],
       "boundaries": [
@@ -1376,12 +1446,14 @@
         {
           "doc": "docs/SUNDOG_V_KAKEYA.md",
           "section": "Claim boundary",
-          "status": "primary"
+          "status": "primary",
+          "href": "/docs/SUNDOG_V_KAKEYA.md"
         },
         {
           "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
           "section": "Cross-Substrate Generality Failure Map",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/CROSS_SUBSTRATE_NOTES.md"
         }
       ],
       "boundaries": [
@@ -1417,12 +1489,14 @@
         {
           "doc": "docs/SUNDOG_V_HODGE.md",
           "section": "Claim boundary",
-          "status": "primary"
+          "status": "primary",
+          "href": "/docs/SUNDOG_V_HODGE.md"
         },
         {
           "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
           "section": "Cross-Substrate Generality Failure Map",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/CROSS_SUBSTRATE_NOTES.md"
         }
       ],
       "boundaries": [
@@ -1458,12 +1532,14 @@
         {
           "doc": "docs/SUNDOG_V_LATTICE.md",
           "section": "Phase 1 build-gate",
-          "status": "primary"
+          "status": "primary",
+          "href": "/docs/SUNDOG_V_LATTICE.md"
         },
         {
           "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
           "section": "Cross-Substrate Generality Failure Map",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/CROSS_SUBSTRATE_NOTES.md"
         }
       ],
       "boundaries": [
@@ -1502,7 +1578,8 @@
         {
           "doc": "docs/CROSS_SUBSTRATE_NOTES.md",
           "section": "Cross-Substrate Generality Failure Map",
-          "status": "boundary"
+          "status": "boundary",
+          "href": "/docs/CROSS_SUBSTRATE_NOTES.md"
         }
       ],
       "boundaries": [
@@ -1535,12 +1612,14 @@
         {
           "doc": "docs/README.md",
           "section": "Reading Order",
-          "status": "navigation"
+          "status": "navigation",
+          "href": "/docs/README.md"
         },
         {
           "doc": "docs/APPLICATIONS.md",
           "section": "Suggested Inspection Order",
-          "status": "navigation"
+          "status": "navigation",
+          "href": "/docs/APPLICATIONS.md"
         }
       ],
       "nextAction": {

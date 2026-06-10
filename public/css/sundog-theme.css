@@ -442,6 +442,16 @@ body {
   overflow-wrap: anywhere;
 }
 
+/* Clickable doc citation inside the trace (only rendered when the cited doc
+   ships to the public site). Same ink as .sd-chat-next; underlined so it
+   reads as a link without relying on color alone. */
+.sd-chat-source-link {
+  color: #285e77;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .sd-chat-form {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
@@ -497,6 +507,7 @@ body {
 .sd-chat-submit:focus-visible,
 .sd-chat-input:focus-visible,
 .sd-chat-trace summary:focus-visible,
+.sd-chat-source-link:focus-visible,
 .sd-chat-next:focus-visible {
   outline: 2px solid var(--sd-ink-strong, #0b1720);
   outline-offset: 2px;

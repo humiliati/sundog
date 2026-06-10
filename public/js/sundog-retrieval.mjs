@@ -89,6 +89,7 @@ export function buildRetrievalTrace(index, prompt) {
       section: chunk.section,
       tier: chunk.tier,
       freshness: chunk.freshness,
+      href: chunk.href,
       score,
       overlap
     })),
@@ -109,6 +110,7 @@ export function attachRetrievedMatches(index, prompt, trace) {
       section: chunk.section,
       tier: chunk.tier,
       freshness: chunk.freshness,
+      href: chunk.href,
       score,
       overlap
     }))

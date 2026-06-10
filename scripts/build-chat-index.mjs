@@ -1,5 +1,6 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
+import { isNoPublish } from "./docs-no-publish.mjs";
 
 const root = process.cwd();
 const claimMapPath = join(root, "chat", "claim_map.json");
@@ -20,7 +21,9 @@ const chunks = routes.flatMap((route) => {
     id: `${route.id}:${index + 1}`,
     routeId: route.id,
     doc: entry.doc,
-    href: toHref(entry.doc),
+    // Withheld docs keep their textual citation but never get a link target —
+    // the public site would 404.
+    href: isNoPublish(entry.doc) ? null : toHref(entry.doc),
     section: entry.section || route.id,
     tier: route.evidenceTier || "unknown",
     disposition: route.disposition || "allow",
@@ -64,7 +67,20 @@ const boundaryRules = {
   }))
 };
 
-await writeJson(join(publicDataDir, "sundog-claim-map.json"), claimMap);
+// The public copy of the claim map carries an `href` on every support entry
+// whose doc actually ships to dist/ — the widget linkifies exactly those.
+// Withheld docs keep their textual citation (no href, so no 404 link). The
+// chat/claim_map.json source stays href-free; href is derived data.
+const withSupportHrefs = (route) => !route.support?.length ? route : {
+  ...route,
+  support: route.support.map((entry) =>
+    entry.doc && !isNoPublish(entry.doc) ? { ...entry, href: toHref(entry.doc) } : entry),
+};
+const publicClaimMap = { ...claimMap };
+if (publicClaimMap.claims) publicClaimMap.claims = publicClaimMap.claims.map(withSupportHrefs);
+if (publicClaimMap.nonClaimRoutes) publicClaimMap.nonClaimRoutes = publicClaimMap.nonClaimRoutes.map(withSupportHrefs);
+
+await writeJson(join(publicDataDir, "sundog-claim-map.json"), publicClaimMap);
 await writeJson(join(publicDataDir, "sundog-chat-index.json"), chatIndex);
 await writeJson(join(publicDataDir, "sundog-evidence-tiers.json"), evidenceTiers);
 await writeJson(join(publicDataDir, "sundog-boundary-rules.json"), boundaryRules);

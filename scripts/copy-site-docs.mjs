@@ -1,5 +1,6 @@
 import { cp, mkdir, readdir, rm } from "node:fs/promises";
 import { dirname, join } from "node:path";
+import { DOCS_NO_PUBLISH } from "./docs-no-publish.mjs";
 
 const root = process.cwd();
 const dist = join(root, "dist");
@@ -23,36 +24,8 @@ const publicChatArtifacts = [
   "prompts/gold-differential.jsonl"
 ];
 
-// Docs withheld from the public site (dist/docs/). A path that names a
-// directory withholds the whole subtree. IMPORTANT: this guard operates on the
-// working tree (readdir), so it withholds files even when they are gitignored
-// but still present on disk — which is exactly the case for the confidential
-// material below after the 2026-06-03 leak remediation. Keep this set in sync
-// with the /docs/* entries in .gitignore.
-//   501c3 = confidential patent / counsel material + 501(c)(3) governance
-//           drafts. Public accessibility can itself count as a patent
-//           disclosure, so this MUST never reach dist/.
-const DOCS_NO_PUBLISH = new Set([
-  "501c3",
-  // White-box "representational" instrument R&D (kill-gated; each carries an
-  // explicit "No public surface" stamp). These describe the same
-  // determining-shadow-set / body-shadow method that is the subject of the 501c3
-  // invention disclosure, so a public (even unlinked) copy bears on patent
-  // enabling-disclosure timing. Held until BOTH the research freeze lifts
-  // (LATTICE + threebody v0.19) AND counsel clears. A bare filename withholds that
-  // file; "chatv2" (no slash) withholds the whole docs/chatv2/ subtree.
-  "chatv2",
-  "deconfound",
-  "SUNDOG_V_DECONFOUND.md",
-  "DECONFOUND_REAL_DATA_MEMO.md",
-  "SUNDOG_V_JEPA.md",
-  "JEPA_LIT_PASS_MEMO.md",
-  "SUNDOG_V_ALLELOPATHY.md",
-  // CROSS_SUBSTRATE_NOTES.md was removed from this set 2026-06-09 (owner
-  // decision): 14 Ask Sundog routes cite it as visible trace support, the
-  // file is git-tracked in the public repo (already disclosed), and
-  // withholding it only made the cited evidence unreachable on the site.
-]);
+// The withheld-docs set lives in scripts/docs-no-publish.mjs (single source
+// of truth, shared with the integrity check and the chat-index build).
 
 async function copyPublicDocs(sourceDir, targetDir, noPublish = new Set(), relBase = "") {
   const entries = await readdir(sourceDir, { withFileTypes: true });

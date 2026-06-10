@@ -31,6 +31,7 @@ import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { join, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { gateFailures } from "../public/js/sundog-claim-gate.mjs";
+import { isNoPublish } from "./docs-no-publish.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -40,20 +41,6 @@ const COUPLED_SURFACES = ["index.html", "sundog.html"];
 // A neutral trace so gateFailures runs ONLY its content checks (no structural
 // failures like missing_trace / refusal-route rules) on static copy.
 const NEUTRAL_TRACE = { traceVisible: true, routeId: "__public_copy__", disposition: "allow" };
-
-// Mirror of scripts/copy-site-docs.mjs DOCS_NO_PUBLISH — KEEP IN SYNC. A route
-// that cites one of these as a visible `support` source names evidence the build
-// withholds from dist/, so a visitor reading the trace cannot reach it.
-const DOCS_NO_PUBLISH = new Set([
-  "501c3", "chatv2", "deconfound",
-  "SUNDOG_V_DECONFOUND.md", "DECONFOUND_REAL_DATA_MEMO.md",
-  "SUNDOG_V_JEPA.md", "JEPA_LIT_PASS_MEMO.md",
-  "SUNDOG_V_ALLELOPATHY.md",
-]);
-function isNoPublish(doc) {
-  const rel = String(doc || "").replace(/^docs\//, "");
-  return DOCS_NO_PUBLISH.has(rel.split("/")[0]) || DOCS_NO_PUBLISH.has(rel);
-}
 
 // ---------------------------------------------------------------- helpers ----
 

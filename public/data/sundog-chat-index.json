@@ -2323,7 +2323,7 @@
       "id": "chatv2_boundary:1",
       "routeId": "chatv2_boundary",
       "doc": "docs/chatv2/LANE_CHARTER.md",
-      "href": "/docs/chatv2/LANE_CHARTER.md",
+      "href": null,
       "section": "The claim this lane makes falsifiable",
       "tier": "roadmap",
       "disposition": "allow_with_boundary",
