@@ -89,5 +89,33 @@ r1 = ah.retention_acc(uh, ys[:50])
 r2 = ah.retention_acc(uh, ys[:50])
 check("retention probe deterministic across calls", r1 == r2, f"{r1:.4f} vs {r2:.4f}")
 
+# ---- BANKED PINS (post-verdict, full run of 2026-06-11; KILL = clean strengthening null) ----
+# Asserted against the committed verdict JSON (no retraining in-test). Headline: no guarded
+# trained arm below 0.90 pooled d-acc at any eval lambda, on a substrate where A3 PROVES
+# hide-with-retention exists -- the existence/trainability gap is the banked sentence.
+import json                                     # noqa: E402
+from pathlib import Path                        # noqa: E402
+
+_jp = Path("results/atlas/h10/adv_hide_d_result.json")
+if _jp.exists():
+    r = json.loads(_jp.read_text())
+    a = r["arms"]
+    check("banked verdict = kill (no break arms, frozen prior confirmed)",
+          r["verdict"] == "kill" and r["break_arms"] == [] and r["frozen_guarded_breaks"] == [])
+    check("banked guarded arms (hide) all >= 0.99 pooled d-acc",
+          min(a[k]["min_d_best"] for k in
+              ("A1_0.1[hide]", "A1_1.0[hide]", "A2_0.1[hide]", "A2_1.0[hide]")) >= 0.99)
+    check("banked A3 existence demo: pooled [0.5018, 0.5344], ret 0.7385",
+          abs(a["A3[hide]"]["min_d_best"] - 0.5017701770177018) < 1e-9
+          and abs(a["A3[hide]"]["max_d_best"] - 0.5343848515204779) < 1e-9
+          and abs(a["A3[hide]"]["retention"] - 0.7385040451791894) < 1e-9)
+    check("banked d-free c-pathway: b0_rffonly pooled d-acc ~0.51",
+          abs(a["b0_rffonly[hide]"]["min_d_best"] - 0.509677723743264) < 1e-9)
+    check("banked competence cost at ladv=10 (hide): train fit -0.611, primary 0.560, d stays 0.981",
+          abs(a["A1_10.0[hide]"]["train_fit"] - (-0.6106135845184326)) < 1e-9
+          and abs(a["A1_10.0[hide]"]["min_d_best"] - 0.9805830583058306) < 1e-9)
+else:
+    print("  [SKIP] banked pins (verdict JSON not present)")
+
 print(f"\n{'ALL PASS -- apparatus pinned; ready for smoke, then the verdict run.' if fail == 0 else str(fail) + ' FAILED'}")
 sys.exit(1 if fail else 0)
