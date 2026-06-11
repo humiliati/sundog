@@ -7,6 +7,16 @@
 > public-eligible.** Attribution: the Shadow-Invertibility Law (`ATLAS_PHASE5_CROSS_SUBSTRATE.md`);
 > Debye–Waller; DeepSets (Zaheer 2017); random Fourier features (Rahimi & Recht 2007).
 
+> **CORRECTION (2026-06-11, H3-PC / slate-2026-06-10 HS4 — `H3_PROBE_CEILING_RESULT.md`):** the
+> clause "clf_d suppresses c to ~0 (probe-robust under any probe)" is RESCOPED. A calibrated battery
+> at n=20k recovers residual c from the same clf_d reps at R² = 0.1256 (Nyström kernel ridge,
+> replicated on a once-touched split) and 0.067 (plain ridge), with independent KSG-MI confirmation;
+> the ≈0.006 readout below is an N=2000 artifact (the learning curve passes through it at n=2000),
+> and the "strong MLP" probe underwriting "probe-robust" is demonstrably blind to 0.20-ridge-equivalent
+> calibrated injections (MEMBER-BLIND — its silence certifies nothing). **Correct reading: partial
+> concealment, not destruction-to-zero.** The objective gap survives rescoped (reg_c 0.51 vs clf_d
+> ceiling ≈0.126); the DETERMINE half and the objective-dependence headline are unaffected.
+
 ## Headline (BOUNDED-POSITIVE, reproducible)
 
 **A trained body's mean-pooled activation does NOT generically inherit the Shadow-Invertibility
