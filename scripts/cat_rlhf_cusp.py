@@ -182,8 +182,12 @@ def hess_fd(th, beta, eps, h=1e-6):
 
 # ---- convergence (Armijo ascent + Newton polish), prereg-pinned ------------- #
 def converge(th0, beta, eps, max_steps=MAX_STEPS):
+    # D2 (pre-verdict, apparatus power; see receipt): eta cap 1.0 -> 256.0. The prereg's cap
+    # made small-beta runs crawl through tanh-saturation plateaus and exhaust the step budget
+    # uncertified (smoke evidence). Armijo validates every step as genuine ascent, so a larger
+    # cap changes reachability/speed, never the certificates. Thresholds/budgets unchanged.
     th = th0.copy()
-    eta, ETA0, C = 0.5, 0.5, 1e-4
+    eta, ETA_MAX, C = 0.5, 256.0, 1e-4
     J, g = j_and_grad(th, beta, eps)
     steps = 0
     while steps < max_steps and np.max(np.abs(g)) > 1e-8:
@@ -195,7 +199,7 @@ def converge(th0, beta, eps, max_steps=MAX_STEPS):
                 break
             eta *= 0.5
         th, J, g = th_n, J_n, g_n
-        eta = min(eta * 1.5, 1.0)
+        eta = min(eta * 1.5, ETA_MAX)
         steps += 1
     # Newton polish to GRAD_TOL. D1: the Hessian is rank-deficient at functional optima
     # (rank <= 6), so use a damped PSEUDO-INVERSE step (g lies in the Jacobian range, where
