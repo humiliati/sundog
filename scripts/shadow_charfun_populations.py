@@ -43,9 +43,11 @@ KIND = {"gaussian": "AC", "uniform": "AC", "cauchy": "AC", "lattice": "lattice"}
 T_REF = h.S0["t0_f"]                                   # the off-centre fringe peak (dominant size probe)
 
 
-def draw_pop(rng, shape, pop):
+def draw_pop(rng, shape, pop, eps=0.0):
     """Unit-scale per-subunit spread draws. gaussian/uniform/lattice have unit VARIANCE; cauchy has
-    unit SCALE (gamma=1) -- its variance is infinite, which is the entire point of including it."""
+    unit SCALE (gamma=1) -- its variance is infinite, which is the entire point of including it.
+    `eps` is used only by pop='lattice_jitter' (HS10): xi = +-1 + eps*N(0,1), drawn lat-then-gz in
+    a FIXED order so the stream is identical for every eps at a given rng state (paired design)."""
     if pop == "gaussian":
         return rng.standard_normal(shape)
     if pop == "uniform":
@@ -54,10 +56,14 @@ def draw_pop(rng, shape, pop):
         return rng.standard_cauchy(shape)                            # scale gamma = 1, no mean/var
     if pop == "lattice":
         return rng.choice([-1.0, 1.0], shape)                        # Var = 1, phi = cos(s)
+    if pop == "lattice_jitter":                                       # HS10: jittered lattice
+        lat = rng.choice([-1.0, 1.0], shape)
+        gz = rng.standard_normal(shape)
+        return lat + eps * gz                                         # phi = cos(s)*exp(-eps^2 s^2/2)
     raise ValueError(pop)
 
 
-def charfun_re(pop, s):
+def charfun_re(pop, s, eps=0.0):
     """Analytic Re[phi_mu(s)] = E[cos(s*xi)] for the unit-scale populations -- the theoretical
     Debye-Waller envelope the empirical cont curve must track."""
     s = np.asarray(s, float)
@@ -70,12 +76,14 @@ def charfun_re(pop, s):
         return np.exp(-np.abs(s))
     if pop == "lattice":
         return np.cos(s)
+    if pop == "lattice_jitter":                                       # HS10: convolution => product
+        return np.cos(s) * np.exp(-(eps * s) ** 2 / 2.0)
     raise ValueError(pop)
 
 
-def gen_s0_pop(n, lam, rng, noise, pop):
+def gen_s0_pop(n, lam, rng, noise, pop, eps=0.0):
     """gen_s0 (frozen) with ONLY the averaging population swapped. pop='gaussian' reproduces the frozen
-    gen_s0 code path exactly (the control)."""
+    gen_s0 code path exactly (the control). `eps` only affects pop='lattice_jitter' (HS10)."""
     c = h.S0
     t = np.linspace(-1, 1, c["T"])
     env_g = np.exp(-t ** 2 / (2 * c["w"] ** 2))
@@ -83,7 +91,7 @@ def gen_s0_pop(n, lam, rng, noise, pop):
     bump = np.exp(-(t - c["t0"]) ** 2 / (2 * c["w_b"] ** 2))
     xc = rng.uniform(c["xc_lo"], c["xc_hi"], n)            # continuous label (fringe freq / size)
     xd = rng.choice([-1.0, 1.0], n)                       # discrete label (parity sign)
-    xi = draw_pop(rng, (n, h.K), pop)                    # <-- the only change vs gen_s0
+    xi = draw_pop(rng, (n, h.K), pop, eps)               # <-- the only change vs gen_s0
     xci = xc[:, None] + lam * xi
     fringe = np.cos(2 * np.pi * xci[:, :, None] * t[None, None, :]).mean(1)
     parity = (xd[:, None] * np.sin(2 * np.pi * c["f_p"] * t)[None, :])
@@ -94,15 +102,15 @@ def gen_s0_pop(n, lam, rng, noise, pop):
     return sig, xc, xd
 
 
-def sweep_pop(pop, n=600, seed=20260608, noise=None, lams=None):
+def sweep_pop(pop, n=600, seed=20260608, noise=None, lams=None, eps=0.0):
     """Frozen cont/disc sweep over `lams` (default h.LAMBDAS) for one population (per-lambda
-    deterministic draw, matching the harness convention)."""
+    deterministic draw, matching the harness convention). `eps` only affects 'lattice_jitter'."""
     noise = h.NOISE if noise is None else noise
     lams = h.LAMBDAS if lams is None else lams
     cont, disc = [], []
     for lam in lams:
         rng = np.random.default_rng(seed + int(round(lam * 1000)) + 7)
-        X, yc, yd = gen_s0_pop(n, lam, rng, noise, pop)
+        X, yc, yd = gen_s0_pop(n, lam, rng, noise, pop, eps)
         cont.append(round(h.cont_recovery(X, yc)["best"], 4))
         disc.append(round(h.disc_recovery(X, yd)["best"], 4))
     return cont, disc
