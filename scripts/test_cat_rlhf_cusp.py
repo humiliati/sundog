@@ -108,5 +108,32 @@ xs = np.array([0.02, 0.05, 0.1, 0.2, 0.3])
 slope, r2 = cc.ols_loglog(xs, 3.0 * xs ** 1.5)
 check("ols_loglog recovers a 3/2 power law exactly", abs(slope - 1.5) < 1e-10 and r2 > 0.999999)
 
+# ---- BANKED PINS (post-verdict, full run of 2026-06-12; KILL(i) clean informative null) ----
+# Asserted against the committed verdict JSON (no recompute in-test). Headline: 128/128 fresh-init
+# endpoints symmetric (max |m| 2.8e-5 over ALL points, 6.9e-11 over the 41 certified); certified
+# points sit ON the Gibbs optimum (dJ <= 2.2e-16); every certification failure is 'grad'
+# (convergence rate), never an unstable Hessian or a failed dynamical certificate.
+import json                                     # noqa: E402
+from pathlib import Path                        # noqa: E402
+
+_jp = Path("results/atlas/h12/cat_rlhf_cusp_result.json")
+if _jp.exists():
+    r = json.loads(_jp.read_text())
+    c = r["coarse"]
+    cert = [x for x in c if x["certified"]]
+    check("banked verdict = kill_i (no breaking; tabular gate + representability pass)",
+          r["verdict"] == "kill_i" and not r["breaking"] and r["gate_tabular"]
+          and r["rep_ok"])
+    check("banked coverage: 128 points, 41 certified, all failures 'grad'",
+          len(c) == 128 and len(cert) == 41
+          and all(x.get("fail") == "grad" for x in c if not x["certified"]))
+    check("banked symmetry: max |m| = 2.798e-5 over ALL endpoints (certified: 6.9e-11)",
+          abs(max(abs(x["m"]) for x in c) - 2.798167559947551e-05) < 1e-12
+          and max(abs(x["m"]) for x in cert) < 1e-10)
+    check("banked Gibbs identity: certified points ON the analytic optimum (dJ <= 2.3e-16)",
+          max(x["dJ_gibbs"] for x in cert) <= 2.3e-16)
+else:
+    print("  [SKIP] banked pins (verdict JSON not present)")
+
 print(f"\n{'ALL PASS -- apparatus pinned; instrument calibrated; ready for smoke, then verdict.' if fail == 0 else str(fail) + ' FAILED'}")
 sys.exit(1 if fail else 0)
