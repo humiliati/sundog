@@ -433,22 +433,41 @@ def main():
     print(f"[CTRL iv] representability @ beta={beta_grid[0]}: TV(distill, Gibbs) = {tv_lo:.2e} "
           f"(<= 1e-3) -> {'PASS' if rep_ok else 'FAIL (capacity-collapse downgrade)'}")
 
-    # ---- coarse sweep ---- #
+    # ---- coarse sweep (per-row CHECKPOINTED: external kills cost at most one row) ---- #
+    ckpt_path = Path("results/atlas/h12/coarse_ckpt.json")
+    ckpt = (json.loads(ckpt_path.read_text())
+            if (not args.smoke and ckpt_path.exists()) else {"rows": {}})
     print(f"\nCOARSE SWEEP ({len(beta_grid)} beta x {n_inits} inits, eps=0):")
     coarse, broken = [], []
     for b in beta_grid:
-        ms = []
+        key = f"{b}"
+        if key in ckpt["rows"]:
+            rows_b = ckpt["rows"][key]
+            coarse.extend(rows_b)
+            for r in rows_b:
+                if r["certified"] and abs(r["m"]) >= M_BREAK:
+                    broken.append((b, r["seed"], r["m"], np.array(r["theta"])))
+            print(f"  beta={b:<8} [resumed from checkpoint, {len(rows_b)} points]", flush=True)
+            continue
+        ms, rows_b = [], []
         for s in range(n_inits):
             th, J, g, steps = converge(init_theta(s), b, 0.0)
             ok, info = certify(th, b, 0.0, full=not args.smoke,
                                pr_seed=int(b * 10000) + s)
             mm = m_of(th)
             dj = j_of_pi(gibbs_pi(b, 0.0), b, 0.0) - J
-            coarse.append({"beta": b, "seed": s, "m": mm, "J": J, "dJ_gibbs": dj,
-                           "certified": bool(ok), "steps": steps, **info})
-            ms.append((mm, ok))
+            row = {"beta": b, "seed": s, "m": mm, "J": J, "dJ_gibbs": dj,
+                   "certified": bool(ok), "steps": steps, **info}
             if ok and abs(mm) >= M_BREAK:
+                row["theta"] = [float(x) for x in th]
                 broken.append((b, s, mm, th))
+            rows_b.append(row)
+            coarse.append(row)
+            ms.append((mm, ok))
+        if not args.smoke:
+            ckpt["rows"][key] = rows_b
+            ckpt_path.parent.mkdir(parents=True, exist_ok=True)
+            ckpt_path.write_text(json.dumps(ckpt))
         summ = " ".join(f"{m:+.3f}{'*' if ok else '!'}" for m, ok in ms)
         print(f"  beta={b:<8} m: {summ}   (m_gibbs=0; * certified, ! uncertified)", flush=True)
     breaking = len(broken) > 0
