@@ -38,6 +38,10 @@ export const DOCS_NO_PUBLISH = new Set([
   // publication decision; remove from this set only after sanitization.
   "atlas/MOILANEN_POL_DISCRIMINATOR_PREREG.md",
   "atlas/MOILANEN_POL_DISCRIMINATOR_RESULT.md",
+  // Lattice-lane research dataset (75.7 MiB test.csv): research data, not site
+  // content, and over Cloudflare Pages' 25 MiB per-file limit — it hard-blocks
+  // every deploy. Withheld 2026-06-11.
+  "lattice/Soduko-Extreme",
 ]);
 
 // True when a doc path (with or without a leading "docs/" or "/docs/")
