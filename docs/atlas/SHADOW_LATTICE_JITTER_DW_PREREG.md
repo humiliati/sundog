@@ -1,7 +1,7 @@
 # HS10 PREREG — LATTICE-FRAG: the jittered-lattice recovery horizon obeys the 1/ε Debye-Waller law
 
 **Frozen:** 2026-06-11, before any HS10 code exists. Lane: charFun determine/resist law (red team,
-lattice clause). Internal slate ref: HS10 in `internal/slates/HYP_SLATE_2026-06-10.md` (gitignored).
+lattice clause). Internal slate ref: HS10 of slate 2026-06-10 (gitignored internal document).
 
 **Standing discipline (binds this prereg):** pre-registered KILL criterion — a clean null is a
 SUCCESS; forward-generate only (the prediction is the analytic charFun pushed through the frozen

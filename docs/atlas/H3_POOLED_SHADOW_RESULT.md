@@ -3,8 +3,9 @@
 > **Run against the LOCKED pre-registration** (`H3_POOLED_SHADOW_PREREG.md`). Hypothesis #3 of slate
 > `ww6koomb1`. The Shadow-Invertibility Law's mechanism was proved synthetically (S0/S1), on halo physics
 > (S2 partial), and in Lean (the charFun law) — but whether a **real trained body** instantiates the
-> lossy-averaging split was the standing *imported wall* ("named, not proved"). H3 answers it. **NOT
-> public-eligible.** Attribution: the Shadow-Invertibility Law (`ATLAS_PHASE5_CROSS_SUBSTRATE.md`);
+> lossy-averaging split was the standing *imported wall* ("named, not proved"). H3 answers it.
+> **Published as a verification receipt (owner decision 2026-06-11; un-promoted; not peer-reviewed).**
+> Attribution: the Shadow-Invertibility Law (`ATLAS_PHASE5_CROSS_SUBSTRATE.md`);
 > Debye–Waller; DeepSets (Zaheer 2017); random Fourier features (Rahimi & Recht 2007).
 
 > **CORRECTION (2026-06-11, H3-PC / slate-2026-06-10 HS4 — `H3_PROBE_CEILING_RESULT.md`):** the

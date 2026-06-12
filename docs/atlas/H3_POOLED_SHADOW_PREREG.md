@@ -6,7 +6,8 @@
 > *"a real trained body instantiates this averaging"* is **named, not proved** (the registered-but-
 > untested synthetic→real step). A trained net's **pooled (mean-over-units) activation IS a lossy
 > averaged shadow.** Does it **determine** a discrete latent and **resist** a continuous one, and does
-> the split **sharpen with lossiness λ** and **depend on the training objective**? NOT public-eligible.
+> the split **sharpen with lossiness λ** and **depend on the training objective**? Published as a
+> verification receipt (owner decision 2026-06-11; un-promoted; not peer-reviewed).
 > Attribution: the Shadow-Invertibility Law (`ATLAS_PHASE5_CROSS_SUBSTRATE.md`); Debye–Waller; DeepSets
 > (Zaheer et al. 2017); the charFun-spectrum law (`SHADOW_CHARFUN_DETERMINE_RESIST_LAW.md`).
 

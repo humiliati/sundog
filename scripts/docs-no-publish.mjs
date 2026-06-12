@@ -32,6 +32,12 @@ export const DOCS_NO_PUBLISH = new Set([
   "SUNDOG_V_JEPA.md",
   "JEPA_LIT_PASS_MEMO.md",
   "SUNDOG_V_ALLELOPATHY.md",
+  // Moilanen pol-discriminator pair (S3 external-anchors workstream): not yet
+  // sanitized for publication — the RESULT carries an UNSENT outreach plan with
+  // named third parties. Withheld 2026-06-11 pending that workstream's own
+  // publication decision; remove from this set only after sanitization.
+  "atlas/MOILANEN_POL_DISCRIMINATOR_PREREG.md",
+  "atlas/MOILANEN_POL_DISCRIMINATOR_RESULT.md",
 ]);
 
 // True when a doc path (with or without a leading "docs/" or "/docs/")

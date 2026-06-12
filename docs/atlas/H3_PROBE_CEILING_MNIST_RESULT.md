@@ -3,7 +3,8 @@
 > Run against the FROZEN addendum `H3_PROBE_CEILING_MNIST_ADDENDUM.md` (2026-06-11; second leg of HS4,
 > slate 2026-06-10). Frozen test `test_h3_probe_ceiling_mnist.py` ALL PASS before the run; result JSON
 > `results/atlas/h3/probe_ceiling_mnist_result.json` (data receipts sha256(X)=d27fb913…,
-> arff=fe4410d8…). NOT public-eligible. Language rule: probe-access asymmetries in a ground-truth
+> arff=fe4410d8…). Published as a verification receipt (owner decision 2026-06-11; un-promoted; not
+> peer-reviewed). Language rule: probe-access asymmetries in a ground-truth
 > substrate — no claims about introspection as a mental phenomenon.
 
 ## Verdict: (c) BOUNDED-PARTIAL — ceiling raised to 0.561; the banked attenuation was MOSTLY probe-relative

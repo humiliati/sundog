@@ -3,7 +3,8 @@
 > **Run 2026-06-11 against the FROZEN pre-registration** (`H3_PROBE_CEILING_PREREG.md`, frozen
 > 2026-06-10 post-adversarial-review). HS4 of slate 2026-06-10 — the slate's TOP PICK. Exact unchanged
 > commands: `python scripts/h3_probe_ceiling.py` · `python scripts/test_h3_probe_ceiling.py` (7/7).
-> NOT public-eligible... language rule: this is a **probe-access** result in a ground-truth synthetic
+> Published as a verification receipt (owner decision 2026-06-11; un-promoted; not peer-reviewed).
+> Language rule: this is a **probe-access** result in a ground-truth synthetic
 > substrate — no claims about introspection/confabulation as mental phenomena. Attribution: H3 v2;
 > amnesic probing (Elazar & Goldberg); V-information (Xu et al. 2020); LEACE (Belrose et al. 2023);
 > KSG (Kraskov et al. 2004).
@@ -75,4 +76,4 @@ The objective-dependence headline and the DETERMINE half are unaffected.
 - `scripts/h3_probe_ceiling.py` (battery) + `scripts/test_h3_probe_ceiling.py` (apparatus pins, 7/7).
 - `results/atlas/h3/probe_ceiling_result.json` (full readouts, floors, MI, learning curve, seeds).
 - `docs/atlas/H3_PROBE_CEILING_PREREG.md` (FROZEN 2026-06-10; reviewer B1–B7 + pilot disclosure).
-- Slate: `internal/slates/HYP_SLATE_2026-06-10.md` (HS4).
+- Slate: internal hypothesis slate 2026-06-10, HS4 (gitignored internal document).

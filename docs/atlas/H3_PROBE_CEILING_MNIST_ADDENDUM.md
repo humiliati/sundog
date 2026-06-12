@@ -8,7 +8,8 @@ after this stamp — addenda only.)
 
 > Second leg of HS4 (slate 2026-06-10), named-but-fenced in `H3_PROBE_CEILING_PREREG.md` §7. Audits
 > the banked Substrate-B claim of `H3_POOLED_SHADOW_RESULT.md` ("GAP only *partially* attenuates θ")
-> with the leg-1 calibrated battery. **BINDING once frozen.** NOT public-eligible. A clean null is a
+> with the leg-1 calibrated battery. **BINDING once frozen.** Published as a verification receipt
+> (owner decision 2026-06-11; un-promoted; not peer-reviewed). A clean null is a
 > SUCCESS; forward-generate only. Language rule: probe-access asymmetries in a ground-truth substrate —
 > no claims about introspection as a mental phenomenon. Attribution as leg 1 (amnesic probing;
 > V-information; LEACE; KSG) + the H3 Substrate-B leg (`scripts/shadow_pooled_mnist.py`).

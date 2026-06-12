@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="description" content="Verification receipts — pre-registrations, frozen tests, and result artifacts for four completed studies of probe-access asymmetries and certified recoverability in AI systems. Research artifacts, not peer-reviewed publications.">
+    <title>Measurement-floor receipts — verification surface (NOT PEER REVIEWED)</title>
+    <link rel="stylesheet" href="/css/sundog-theme.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        main { max-width: 880px; margin: 0 auto; padding: 1.5rem 1.5rem 4rem; }
+        .npr-banner {
+            position: sticky; top: 0; z-index: 50;
+            background: repeating-linear-gradient(135deg, rgba(181,58,44,0.14) 0 12px, rgba(181,58,44,0.07) 12px 24px);
+            border-bottom: 2px solid rgba(181,58,44,0.55);
+            color: #B53A2C; font-family: var(--sd-font-data, ui-monospace, monospace);
+            font-size: 0.8rem; font-weight: 800; letter-spacing: 0.1em;
+            text-align: center; padding: 0.6rem 1rem; text-transform: uppercase;
+        }
+        h1 { color: var(--primary-dark, #1A3A52); font-family: var(--sd-font-display, Georgia, serif); font-size: clamp(1.8rem, 5vw, 2.4rem); line-height: 1.1; margin: 1.5rem 0 0.6rem; }
+        .lede { color: #40505C; font-size: 1.12rem; line-height: 1.7; }
+        h2 { color: var(--primary-dark, #1A3A52); font-size: 1.3rem; margin: 2.2rem 0 0.6rem; }
+        h3 { color: var(--primary-dark, #1A3A52); font-size: 1.05rem; margin: 0 0 0.4rem; }
+        p { color: #40505C; line-height: 1.7; }
+        .card { border: 1px solid var(--line, #d8e0e4); border-radius: 8px; padding: 1.1rem 1.25rem; margin: 1rem 0; background: #fff; }
+        .card.warn { border-color: rgba(181,58,44,0.4); background: rgba(181,58,44,0.03); }
+        .card.ok { border-color: rgba(46,125,90,0.4); background: rgba(46,125,90,0.03); }
+        ul { line-height: 1.7; color: #40505C; }
+        a { color: var(--primary-mid, #2C5F7F); font-weight: 700; }
+        code { background: rgba(244,196,48,0.12); padding: 0.1rem 0.35rem; border-radius: 3px; font-size: 0.95em; }
+        .links { font-size: 0.92rem; line-height: 1.9; }
+        .links a { margin-right: 0.9rem; white-space: nowrap; }
+        .finding { color: #40505C; line-height: 1.65; margin: 0.35rem 0 0.6rem; }
+        .fine { font-family: var(--sd-font-data, ui-monospace, monospace); font-size: 0.8rem; color: #6A7680; }
+        .forbidden li { color: #B53A2C; }
+    </style>
+</head>
+<body>
+    <div class="npr-banner" role="status">NOT PEER REVIEWED · verification receipts · pre-registered research artifacts</div>
+    <main>
+        <p class="fine">Sundog · verification surface · un-promoted · published 2026-06-11 by owner decision</p>
+        <h1>Measurement-floor receipts</h1>
+        <p class="lede">Pre-registrations, frozen tests, and result artifacts for four completed studies of
+        <strong>probe-access asymmetries and certified recoverability</strong> in trained systems: what is
+        actually recoverable from a system's aggregated internals, at what calibrated sensitivity floor,
+        and what any "nothing detected" is worth. Each study was pre-registered with kill criteria
+        <em>before</em> code ran, frozen after adversarial review, and is deterministic to the byte —
+        re-run the exact commands in each receipt and you get the same numbers. Two of the receipts
+        <strong>correct our own earlier claims</strong>; the corrections are part of the record.</p>
+
+        <div class="card warn">
+            <strong>What this is NOT.</strong>
+            <ul>
+                <li>Not peer-reviewed publications — these are research receipts, published so claims can be checked against artifacts rather than taken on trust.</li>
+                <li>Not claims about consciousness, valenced experience, or introspection as mental phenomena. Every result here concerns <em>probe-access</em>: which variables are recoverable from observables, by which probes, at which calibrated floors.</li>
+                <li>Not frontier-model results — substrates are ground-truth synthetic constructions plus one small vision model, chosen so every claim is exactly checkable.</li>
+            </ul>
+        </div>
+
+        <h2>The four bundles</h2>
+
+        <div class="card">
+            <h3>1 · Probe-ceiling audit, synthetic leg — is a "suppressed" variable destroyed or just hidden from weak probes?</h3>
+            <p class="finding">A representation we had recorded as carrying ≈0 of a suppressed continuous variable
+            ("probe-robustly") yields <strong>at least R² ≈ 0.13</strong> to a kernel probe under an
+            injection-calibrated battery (replicated on a held-out split evaluated exactly once; confirmed by a
+            mutual-information estimator). The original silence was a sample-size artifact plus a probe that the
+            calibration showed to be blind to its own detection target. Verdict (c) of three pre-registered outcomes;
+            a correction was issued to the earlier receipt.</p>
+            <p class="links">
+                <a href="docs/atlas/H3_PROBE_CEILING_PREREG.md">pre-registration (frozen)</a>
+                <a href="docs/atlas/H3_PROBE_CEILING_RESULT.md">result receipt</a>
+                <a href="https://github.com/humiliati/sundog/blob/main/results/atlas/h3/probe_ceiling_result.json">result JSON</a>
+                <a href="https://github.com/humiliati/sundog/blob/main/scripts/h3_probe_ceiling.py">script</a>
+                <a href="https://github.com/humiliati/sundog/blob/main/scripts/test_h3_probe_ceiling.py">frozen test</a>
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>2 · Probe-ceiling audit, real-model leg — the same battery on a small vision model's pooled activations</h3>
+            <p class="finding">A recorded "rotation attenuated to 0.34" reading on a TinyCNN's global-average-pool
+            shadow rises to <strong>at least 0.56 certified recoverable</strong> under the calibrated battery — the
+            attenuation was mostly probe-relative, and the uncalibrated readout under-read recoverability by
+            0.22&nbsp;R². The pattern across both legs is uniform: <strong>uncalibrated silences certify little until
+            you measure what the probe could have heard.</strong></p>
+            <p class="links">
+                <a href="docs/atlas/H3_PROBE_CEILING_MNIST_ADDENDUM.md">pre-registration addendum (frozen)</a>
+                <a href="docs/atlas/H3_PROBE_CEILING_MNIST_RESULT.md">result receipt</a>
+                <a href="https://github.com/humiliati/sundog/blob/main/results/atlas/h3/probe_ceiling_mnist_result.json">result JSON</a>
+                <a href="https://github.com/humiliati/sundog/blob/main/scripts/h3_probe_ceiling_mnist.py">script</a>
+                <a href="https://github.com/humiliati/sundog/blob/main/scripts/test_h3_probe_ceiling_mnist.py">frozen test</a>
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>3 · Adversarial concealment — can an incentivized system learn to hide a discrete internal variable from aggregated oversight?</h3>
+            <p class="finding">Across gradient-reversal adversaries with competence guards, the discrete variable
+            stayed readable (<strong>≥ 0.996</strong>) in every condition where the encoder retained task competence;
+            under extreme hiding pressure the system destroyed its own competence rather than conceal. Yet a
+            hand-built encoder hides the same variable to statistical chance (0.50–0.53) on the same substrate —
+            <strong>existence of concealment ≠ trainability of concealment</strong>, a named gap that oversight design
+            can exploit. Pre-registered KILL branch fired: the clean strengthening null.</p>
+            <p class="links">
+                <a href="docs/atlas/H10_ADV_HIDE_D_PREREG.md">pre-registration (frozen before any code)</a>
+                <a href="docs/atlas/H10_ADV_HIDE_D_RESULT.md">result receipt</a>
+                <a href="https://github.com/humiliati/sundog/blob/main/results/atlas/h10/adv_hide_d_result.json">result JSON</a>
+                <a href="https://github.com/humiliati/sundog/blob/main/scripts/shadow_adv_hide_d.py">script</a>
+                <a href="https://github.com/humiliati/sundog/blob/main/scripts/test_shadow_adv_hide_d.py">frozen test</a>
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>4 · Stale-reporter projection — what does a frozen reporter output once its target is no longer recoverable?</h3>
+            <p class="finding">A reporter trained where its target was readable, frozen, then deployed where the
+            target has washed out of its inputs does <strong>not</strong> lock onto the still-recoverable variables
+            (partial R² ≤ 0.0034 on the live discrete channel, 10/10 cells, two architectures): it collapses its
+            output spread <strong>~9× toward the prior</strong>. Correlation audits have nothing to find;
+            <strong>variance collapse against a calibrated baseline is the staleness signature.</strong>
+            Pre-registered clean-null branch fired.</p>
+            <p class="links">
+                <a href="docs/atlas/H3_STALE_PROJECTION_PREREG.md">pre-registration (frozen)</a>
+                <a href="docs/atlas/H3_STALE_PROJECTION_RESULT.md">result receipt</a>
+                <a href="https://github.com/humiliati/sundog/blob/main/results/atlas/h3/stale_projection_result.json">result JSON</a>
+                <a href="https://github.com/humiliati/sundog/blob/main/scripts/shadow_stale_projection.py">script</a>
+                <a href="https://github.com/humiliati/sundog/blob/main/scripts/test_shadow_stale_projection.py">frozen test</a>
+            </p>
+        </div>
+
+        <h2>Context: the corrected baseline and the machine-checked backbone</h2>
+        <div class="card ok">
+            <ul>
+                <li><strong>The corrected baseline study</strong> — the receipt the audits in bundles 1–2 corrected,
+                with both dated corrections in place: <a href="docs/atlas/H3_POOLED_SHADOW_PREREG.md">pre-registration</a> ·
+                <a href="docs/atlas/H3_POOLED_SHADOW_RESULT.md">result receipt (carries the corrections)</a>.</li>
+                <li><strong>The machine-checked backbone</strong> — the determine/resist theorems (when lossy
+                aggregation makes a discrete variable recoverable and a continuous one unrecoverable), the
+                audit-cost theorem (≤ 3n+2), and the for-all-verifier blindness theorem live in a public Lean 4
+                repository; every theorem re-verifies with <code>lake build</code>:
+                <a href="https://github.com/humiliati/sundogcert">github.com/humiliati/sundogcert</a>.</li>
+            </ul>
+        </div>
+
+        <h2>Claim-language discipline (binding on this page and every receipt)</h2>
+        <div class="card warn forbidden">
+            <strong>Forbidden:</strong>
+            <ul>
+                <li>"These studies measure consciousness / valence / introspection." (They measure probe-access.)</li>
+                <li>"A probe silence shows the state is absent." (A silence is worth its calibrated floor, no more.)</li>
+                <li>"These results transfer to frontier models." (Substrates: ground-truth synthetic + one small CNN.)</li>
+                <li>"Peer-reviewed." (Receipts, not publications; validity rests on re-runnable artifacts.)</li>
+            </ul>
+        </div>
+
+        <p class="fine">Verification surface · <code>noindex</code> · re-run commands are stated inside each receipt ·
+        repository: <a href="https://github.com/humiliati/sundog">github.com/humiliati/sundog</a></p>
+    </main>
+</body>
+</html>

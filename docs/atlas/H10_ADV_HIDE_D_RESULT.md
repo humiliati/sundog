@@ -4,6 +4,7 @@
 smoke at `9494969e`). **Prereg:** `docs/atlas/H10_ADV_HIDE_D_PREREG.md`. Slate HS3.
 **Outcome: KILL — the pre-registered clean strengthening null.** No deviation; all gates passed;
 the full run (120 epochs, N_TRAIN 8000, N_PROBE 2000, eval λ ∈ {0, 1, 2, 3}, wall 6634 s) decided.
+Published as a verification receipt (owner decision 2026-06-11; un-promoted; not peer-reviewed).
 
 ---
 

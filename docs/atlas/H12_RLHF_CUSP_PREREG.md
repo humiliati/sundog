@@ -1,7 +1,7 @@
 # H12 PREREG — KL-bandit symmetry breaking despite a representable analytic optimum
 
 **Frozen:** 2026-06-11, before any H12 code exists. Lane: cat-learning / RLHF-toy dynamics.
-Internal slate ref: HS12 in `internal/slates/HYP_SLATE_2026-06-10.md` (gitignored).
+Internal slate ref: HS12 of slate 2026-06-10 (gitignored internal document).
 
 **Standing discipline:** pre-registered KILL — a clean null is a SUCCESS; forward-generate only;
 deterministic seeded runs + frozen tests; CPU-only, exact expected gradients (no sampling), no

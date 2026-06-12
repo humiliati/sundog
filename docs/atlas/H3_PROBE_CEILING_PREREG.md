@@ -3,7 +3,7 @@
 **STATUS: FROZEN 2026-06-10** (post-review B1–B7 + N1–N7 applied; liveness pilot disclosed in §4; no
 edits below this line after this stamp — addenda only).
 
-> **HS4 of slate 2026-06-10** (`internal/slates/HYP_SLATE_2026-06-10.md`; workflow `wf_f50ff2d1-983`).
+> **HS4 of slate 2026-06-10** (internal hypothesis slate, gitignored; workflow `wf_f50ff2d1-983`).
 > Red-team of the banked H3 v2 claim (`H3_POOLED_SHADOW_RESULT.md`). **This document is BINDING once
 > frozen: the battery, gates, seeds, and verdict precedence below may not change after the first run.**
 > Adversarially reviewed pre-freeze (agent `acd0d501b922b4828`, 2026-06-10): blocking findings B1–B7
@@ -11,7 +11,8 @@ edits below this line after this stamp — addenda only).
 > replication, full seed enumeration, binding reduced-test wording, MI-leg hardening) + non-blocking
 > N1–N7. A pre-freeze **liveness pilot** (injected reps ONLY — the battery never touched the real-rep
 > readouts) gauged member detectability; its numbers are disclosed in §4.
-> NOT public-eligible. A clean null is a SUCCESS; forward-generate only.
+> Published as a verification receipt (owner decision 2026-06-11; un-promoted; a research artifact,
+> not a peer-reviewed publication). A clean null is a SUCCESS; forward-generate only.
 >
 > Attribution / prior-art lineage (named per slate discipline): amnesic probing (Elazar & Goldberg
 > 2018→2021); V-information / probe-quality framing (Xu et al. 2020; Pimentel et al. 2020); concept

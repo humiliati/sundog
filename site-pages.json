@@ -146,6 +146,11 @@
       "entry": "kakeya.html",
       "kind": "math",
       "publicLaunchIntent": "REVIEW-ONLY reviewer surface, NOT a public launch. Finite-field Kakeya reader + tiny F_q^2 workbench + body-resistance framing; Sundog claims NO Kakeya result, no finite-field->Euclidean transfer, nothing about open n>=4, and explicitly fences it as NOT a regime-2/control-sufficiency witness. Deployed unlinked at /kakeya with a visible NOT PEER REVIEWED banner and noindex; NO public inbound path from index/legend/nav and excluded from the sitemap until an external finite-field-incidence sanity check clears it (Bucket 1 + sign-off). Interactive surfaces at /kakeya/workbench.html and /kakeya/gallery.html are also unlinked. Packet: docs/kakeya/EXTERNAL_REVIEW_PACKET.md."
+    },
+    {
+      "entry": "receipts.html",
+      "kind": "evidence-page",
+      "publicLaunchIntent": "VERIFICATION SURFACE (owner decision 2026-06-11), un-promoted. Receipt hub for four completed pre-registered studies of probe-access asymmetries and certified recoverability (probe-ceiling audits synthetic + real-model, adversarial concealment, stale-reporter projection) plus the corrected baseline and the public Lean backbone (sundogcert). Deployed unlinked at /receipts.html with a visible NOT PEER REVIEWED banner and noindex; no public inbound path from index/legend/nav; sitemap-excluded. Every claim is checkable: frozen pre-registrations and result receipts ship in dist (docs/atlas/*), scripts and result JSONs link to the public GitHub repo. Explicit claim-language discipline on-page: probe-access only — no consciousness/valence/introspection-as-mental-phenomena claims, no frontier-model transfer claims."
     }
   ]
 }

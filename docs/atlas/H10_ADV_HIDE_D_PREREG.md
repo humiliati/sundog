@@ -1,8 +1,9 @@
 # H10 PREREG — ADV-HIDE-D: can an incentivized body conceal the determine latent, and at what cost?
 
 **Frozen:** 2026-06-11, before any H10 code exists. Lane: Shadow-Invertibility / H3 pooled-shadow
-(red team, determine half). Internal slate ref: HS3 in `internal/slates/HYP_SLATE_2026-06-10.md`
-(gitignored).
+(red team, determine half). Internal slate ref: HS3 of slate 2026-06-10 (gitignored internal
+document). Published as a verification receipt (owner decision 2026-06-11; un-promoted; not
+peer-reviewed).
 
 **Standing discipline:** pre-registered KILL — a clean null is a SUCCESS; forward-generate only;
 deterministic seeded runs (torch single-thread, fixed integer seeds) + frozen tests; CPU-only,

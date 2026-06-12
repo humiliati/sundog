@@ -3,9 +3,10 @@
 **STATUS: FROZEN 2026-06-11** (post-review rewrite B1–B6 + pilot disclosed in §6; no edits below this
 line after this stamp — addenda only).
 
-> **HS2 of slate 2026-06-10** (`internal/slates/HYP_SLATE_2026-06-10.md`). Third leg of the
-> pooled-shadow triptych (HS4 → verdict (c); HS3/H10 → clean kill). **BINDING once frozen.** NOT
-> public-eligible. A clean null is a SUCCESS; forward-generate only. **Language rule:** this measures
+> **HS2 of slate 2026-06-10** (internal hypothesis slate, gitignored). Third leg of the
+> pooled-shadow triptych (HS4 → verdict (c); HS3/H10 → clean kill). **BINDING once frozen.**
+> Published as a verification receipt (owner decision 2026-06-11; un-promoted; not peer-reviewed).
+> A clean null is a SUCCESS; forward-generate only. **Language rule:** this measures
 > the projection structure of a STALE DEMODULATOR's output in a ground-truth synthetic substrate — no
 > claims about confabulation/introspection as mental phenomena (hence `stale_projection` filenames);
 > the probe-vs-introspection gap is the standing limitation. Adversarially reviewed pre-freeze (agent
