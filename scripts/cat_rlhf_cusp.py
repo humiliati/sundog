@@ -193,6 +193,12 @@ def converge(th0, beta, eps, max_steps=MAX_STEPS):
     # 60k steps, exit early; the point is reported uncertified exactly as the prereg's
     # "non-converged runs carry no weight" clause anticipates. Hyperbolic-attractor convergence
     # is geometric (steady improvement) and never trips this. Thresholds/battery unchanged.
+    # D4 (pre-verdict, wall-clock only; see receipt): (a) eta grows only after a CLEAN
+    # (no-backtrack) step -- the previous grow-every-step policy re-paid ~15 backtracking
+    # evaluations per step collapsing eta from the cap; (b) the stall criterion tightens to
+    # "best ||grad||inf improved < 25% over the trailing 60k steps" (geometric convergence to a
+    # hyperbolic attractor improves by orders of magnitude per 60k; slow saturation crawls do
+    # not). Certificates, thresholds, budgets unchanged.
     th = th0.copy()
     eta, ETA_MAX, C = 0.5, 256.0, 1e-4
     J, g = j_and_grad(th, beta, eps)
@@ -201,18 +207,21 @@ def converge(th0, beta, eps, max_steps=MAX_STEPS):
     best_at_ckpt = best_g
     while steps < max_steps and np.max(np.abs(g)) > 1e-8:
         gn2 = float(g @ g)
+        n_bt = 0
         while True:
             th_n = th + eta * g
             J_n, g_n = j_and_grad(th_n, beta, eps)
             if J_n >= J + C * eta * gn2 or eta < 1e-16:
                 break
             eta *= 0.5
+            n_bt += 1
         th, J, g = th_n, J_n, g_n
-        eta = min(eta * 1.5, ETA_MAX)
+        if n_bt == 0:
+            eta = min(eta * 1.5, ETA_MAX)
         steps += 1
         best_g = min(best_g, float(np.max(np.abs(g))))
         if steps % 60_000 == 0:
-            if best_g > best_at_ckpt / 1.02:
+            if best_g > best_at_ckpt / 1.25:
                 break                            # stalled: uncertifiable plateau, stop paying
             best_at_ckpt = best_g
     # Newton polish to GRAD_TOL. D1: the Hessian is rank-deficient at functional optima
