@@ -186,10 +186,19 @@ def converge(th0, beta, eps, max_steps=MAX_STEPS):
     # made small-beta runs crawl through tanh-saturation plateaus and exhaust the step budget
     # uncertified (smoke evidence). Armijo validates every step as genuine ascent, so a larger
     # cap changes reachability/speed, never the certificates. Thresholds/budgets unchanged.
+    # D3 (pre-verdict, wall-clock only; see receipt): EARLY STALL-EXIT. Saturation-plateau
+    # points crawl with negligible ||grad|| improvement and were burning the entire step budget
+    # (~20+ min each) to end exactly where they stall: reported UNCERTIFIED with the same
+    # endpoint character. If the best ||grad||inf has not improved by >= 2% over the trailing
+    # 60k steps, exit early; the point is reported uncertified exactly as the prereg's
+    # "non-converged runs carry no weight" clause anticipates. Hyperbolic-attractor convergence
+    # is geometric (steady improvement) and never trips this. Thresholds/battery unchanged.
     th = th0.copy()
     eta, ETA_MAX, C = 0.5, 256.0, 1e-4
     J, g = j_and_grad(th, beta, eps)
     steps = 0
+    best_g = float(np.max(np.abs(g)))
+    best_at_ckpt = best_g
     while steps < max_steps and np.max(np.abs(g)) > 1e-8:
         gn2 = float(g @ g)
         while True:
@@ -201,6 +210,11 @@ def converge(th0, beta, eps, max_steps=MAX_STEPS):
         th, J, g = th_n, J_n, g_n
         eta = min(eta * 1.5, ETA_MAX)
         steps += 1
+        best_g = min(best_g, float(np.max(np.abs(g))))
+        if steps % 60_000 == 0:
+            if best_g > best_at_ckpt / 1.02:
+                break                            # stalled: uncertifiable plateau, stop paying
+            best_at_ckpt = best_g
     # Newton polish to GRAD_TOL. D1: the Hessian is rank-deficient at functional optima
     # (rank <= 6), so use a damped PSEUDO-INVERSE step (g lies in the Jacobian range, where
     # curvature is strict); reject steps that grow ||g||.
