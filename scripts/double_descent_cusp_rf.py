@@ -290,7 +290,8 @@ def main():
     a4_near_l = jc.cusp_c3(*jc.synthetic_swallowtail(-0.02))
     a4_near = a4_near_l[0] if a4_near_l else float("nan")
     a4_ratio = a4_near / a4_gen
-    col = jc.cusp_c3(*jc.halo_chart(30.0, "prism60")[:3], jc.halo_chart(30.0, "prism60")[3])
+    hc = jc.halo_chart(30.0, "prism60")
+    col = jc.cusp_c3(*hc[:3], hc[3])
     col_top = col[0] if col else float("nan")
     Xu, Yu, du = jc.synthetic_umbilic(0.0); ru = jc.corank_from_chart(Xu, Yu, du, du)
     Xs, Ys, ds = jc.synthetic_swallowtail_chart(0.0); rs = jc.corank_from_chart(Xs, Ys, ds, ds)
