@@ -112,20 +112,33 @@ objective gap ≥0.30, probe-robustness (both directions), DETERMINE, and reprod
 
 ## Substrate B — real MNIST CNN (external validity; from the v1 workflow, honest read)
 
+> **CORRECTION (2026-06-11, H3-PC-B / slate-2026-06-10 HS4 second leg —
+> `H3_PROBE_CEILING_MNIST_RESULT.md`):** P-B1's "partial attenuation" is RESCOPED to the LINEAR
+> readout. On a continuity-gated re-derivation of this body, the calibrated battery recovers θ from
+> the GAP shadow at **R² = 0.5651 (pool-CV) / 0.5606 (once-touched split, Nyström)** vs a pre-GAP
+> linearly-readable anchor of 0.6239 — residual attenuation ≈ 0.06, and the pre-registered
+> "attenuation illusory" bar was missed by 0.009. The "~0.47 strong-probe" figure below (never
+> receipted in the banked JSON) is adjudicated **superseded upward**. The linear statement
+> (0.62 → 0.34) stands; the determine half is untouched. The ceiling is a lower bound (learning curve
+> unconverged at n=20k).
+
 A tiny CNN (2 conv → **global average pool = shadow** → FC), trained to classify digit `y` on MNIST
 with an applied rotation nuisance `θ ~ U[−30°,30°]`; held-out CNN acc 0.83.
 
 - **Determine (P-B2): PASS** — post-GAP `y`-acc 0.87 (8.7× chance); permutation control → chance.
   *Partly trivial* (y is the training target).
-- **Resist (P-B1): PARTIAL** — `θ`-R² 0.62 (pre-GAP) → 0.34 (post-GAP, linear) but **~0.47 under a
-  strong nonlinear probe**, so GAP only *partially* attenuates θ (true drop ~0.15, not a wash).
+- **Resist (P-B1): PARTIAL** *(rescoped — see the 2026-06-11 correction above: a linear-probe
+  statement only)* — `θ`-R² 0.62 (pre-GAP) → 0.34 (post-GAP, linear) but **~0.47 under a strong
+  nonlinear probe**, so GAP only *partially* attenuates θ (true drop ~0.15, not a wash).
 - **Sweep (P-B3): endpoint-positive, non-monotone** — ensemble-spread over augmentations washes θ-R²
   0.34→0.15 (λ=0→4) while `y` holds, but the curve rises through λ≤1 and the λ=4 point uses rotations
   beyond the trained domain (partly distribution-shift). KILL-B1 not fired (θ not fully recoverable).
 
-So a real CNN's GAP shadow **determines** the class and **partially resists** a continuous nuisance —
-consistent with v2: a trained nonlinear body neither fully inherits nor fully defeats the resist; where
-it lands depends on architecture and on whether the latent is incentivized.
+So a real CNN's GAP shadow **determines** the class and — per the 2026-06-11 correction — only
+**thinly attenuates** the continuous nuisance against its linearly-readable content (≈0.06 residual;
+the apparent 0.62→0.34 drop was mostly probe-relative). Consistent with v2's sharpened reading: a
+trained nonlinear body does not inherit the linear-averaging resist; what the shadow "hides" depends
+on the probe class brought to it.
 
 ---
 
