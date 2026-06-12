@@ -111,4 +111,4 @@ publication are strategic, owner-gated decisions. This package is the campaign-r
 4. Pust & Shaw 2008, *Appl. Opt.* 47, H190 — all-sky imaging polarimetry; only imaging halo (22°) detection.
 5. Forster & Mayer 2022, *ACP* 22, 15179 — 22°/46° imaging, radiance-only (proves the pol gap).
 6. Weber et al. 2024, *AMT* 17, 1419 + PANGAEA 10.1594/PANGAEA.965546 — specMACS DoFP linear-Stokes (public).
-7. Maciejewski et al. 2024, arXiv:2405.07864 — sub-percent IMX250MZR DoFP characterization (floors).
+7. Stockmans et al. 2024, arXiv:2405.07864 — "Sub-percent Characterization and Polarimetric Performance Analysis of Commercial Micro-polarizer Array Detectors" (the IMX250MZR-class DoFP floors). *(Author attribution corrected 2026-06-11 — was wrongly listed as "Maciejewski et al."; caught by the S3-A3 pre-manuscript verification sweep.)*

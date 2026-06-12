@@ -82,7 +82,17 @@ at the pinned 1 % RMS; consistent with observed Moilanen arcs being conspicuous 
 Per prereg §1 PASS rule: the pre-registered Applied Optics-style note + discrimination table
 ("Polarization signatures of candidate Moilanen-arc mechanisms") is now WRITABLE before next
 diamond-dust season, with the pre-manuscript absence re-verification list binding (JQSRT 2022 full
-text, Können 1998 target list, Tape & Moilanen 2006, post-1998 Können reviews). Measurement ask:
+text, Können 1998 target list, Tape & Moilanen 2006, post-1998 Können reviews).
+**UPDATE 2026-06-11 (same day): BOTH DONE.** The absence gate was executed against FULL TEXTS of all
+four sources — verdict: claim survives, scoped (Können 1998 = the umbrella identification program;
+the M-arc absent from its target list; Tape & Moilanen 2006 endorses the technique in App. C while
+leaving the M-arc "an open problem" in Ch. 18). Receipt:
+`internal/manuscripts/moilanen_pol_note/ABSENCE_REVERIFICATION_2026-06-11.md`. The manuscript draft
+(v0.2, 6 pp., 3 pgfplots figures regenerated from the frozen apparatus, verified 14-ref bibliography)
+is at `internal/manuscripts/moilanen_pol_note/moilanen_pol_note.tex|.pdf` — NOT submitted;
+author-contact block, submission, and the optional Können/Moilanen courtesy email all owner-gated.
+Bonus catch: arXiv:2405.07864 is Stockmans et al., not "Maciejewski et al." — corrected here in
+`ATLAS_HALO_POL_CAMPAIGN.md` ref 7. Measurement ask:
 single calibrated DoFP camera on one display (community: Riikonen/Moilanen orbit, AKM/Hinz;
 Gritsevich senior-author shape per the scout dossier). Citation discipline: Können 1983 + 1998
 ancestors named.
