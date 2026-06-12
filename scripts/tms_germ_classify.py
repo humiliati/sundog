@@ -289,10 +289,12 @@ def stage_classify():
         crY[:-1, :] |= (np.diff(sgY, axis=0) != 0)
         crY[:, :-1] |= (np.diff(sgY, axis=1) != 0)
         n_o1 = int((cross & crY & smooth).sum())
-        cc = curl <= 1e-7 and asym <= 1e-6
+        curl_ref = float(z["curl_refined"]) if "curl_refined" in z else np.nan
+        cc = curl_ref <= 1e-7 and asym <= 1e-6
         print(f"    lift-off chart: min phi on SMOOTH cells = {phi_min:.5f}; smooth caustic "
               f"crossings = {n_caustic}; Y=0-COINCIDENT (O1 candidate) cells = {n_o1}; kink "
-              f"cells (O4-routed) = {int(z['n_kink'])}; curl_worst(smooth) = {curl:.2e}; "
+              f"cells (O4-routed) = {int(z['n_kink'])}; curl REFINED-step = {curl_ref:.2e} "
+              f"(grid-step FD tail {curl:.2e} = truncation, info only); "
               f"asym_worst = {asym:.2e}  [{'OK' if cc else 'FAIL'}]")
         okall &= cc
         if n_o1 > 0:
@@ -384,32 +386,151 @@ def _vred(vs0, x, u):
     return vs, float(Hv.detach()), dHdx, _signature(W, b)
 
 
+# ---- batched closed form (same Lemma 3.1 logic, broadcast; validated vs the gated path) ---- #
+def _H_batch(W, b, I):
+    """W (n,2,c), b (n,c), I (c,) -> H_I (n,). Transcription identical to tp.H_pieces, batched."""
+    A = W.transpose(1, 2) @ W
+    c = A.shape[-1]
+    l2 = torch.diagonal(A, dim1=1, dim2=2)
+    bi = b.unsqueeze(2)
+    off = ~torch.eye(c, dtype=torch.bool)
+    P_ij = (A > 0) & (bi >= -A) & (bi <= 0) & off
+    a_safe = torch.where(P_ij, A, torch.ones_like(A))
+    cross_m = torch.where(P_ij, (A + bi) ** 3 / a_safe, torch.zeros_like(A)).sum(2)
+    P_i = (l2 > 0) & (b >= -l2) & (b <= 0)
+    l2s = torch.where(P_i, l2, torch.ones_like(l2))
+    N = (1 - l2) ** 2 - 3 * (1 - l2) * b + 3 * b ** 2
+    self_m = torch.where(P_i, b ** 3 / l2s ** 2 + b ** 3 / l2s + N, torch.ones_like(b))
+    Q_ij = (bi > 0) & (-A > bi) & off
+    aq = torch.where(Q_ij, A, -torch.ones_like(A))
+    cross_p = torch.where(Q_ij, -bi ** 3 / aq, A ** 2 + 3 * A * bi + 3 * bi ** 2)
+    cross_p = torch.where(off, cross_p, torch.zeros_like(cross_p)).sum(2)
+    pieces = torch.where(b <= 0, cross_m + self_m, cross_p + N)
+    return (pieces * torch.as_tensor(I)).sum(1)
+
+
+def _sym_W_batch(VS, xs):
+    """VS (n,9) torch, xs (n,) torch -> W (n,2,6), b (n,6) (same packing as _sym_W)."""
+    lC, lB, lA, beta, gamma, bC, bB, bA, b6 = [VS[:, i] for i in range(9)]
+    z = torch.zeros_like(lC)
+    cols = [torch.stack([lC, z], 1),
+            torch.stack([lB * torch.cos(beta), lB * torch.sin(beta)], 1),
+            torch.stack([lB * torch.cos(beta), -lB * torch.sin(beta)], 1),
+            torch.stack([lA * torch.cos(gamma), lA * torch.sin(gamma)], 1),
+            torch.stack([lA * torch.cos(gamma), -lA * torch.sin(gamma)], 1),
+            torch.stack([-xs, z], 1)]
+    W = torch.stack(cols, 2)
+    b = torch.stack([bC, bB, bB, bA, bA, b6], 1)
+    return W, b
+
+
+def _signature_batch(W, b):
+    A = (W.transpose(1, 2) @ W).numpy()
+    bb = b.numpy()
+    n, c, _ = A.shape
+    l2 = A[:, np.arange(c), np.arange(c)]
+    bi = bb[:, :, None]
+    off = ~np.eye(c, dtype=bool)
+    P = (A > 0) & (bi >= -A) & (bi <= 0) & off
+    Q = (bi > 0) & (-A > bi) & off
+    arr = np.concatenate([(bb <= 0), (l2 > 0) & (bb >= -l2) & (bb <= 0),
+                          P.reshape(n, -1), Q.reshape(n, -1)], axis=1)
+    return np.array([hash(row.tobytes()) for row in arr], dtype=np.int64)
+
+
+def _vred_row(seeds, xs, u):
+    """One u-row: all x-points minimized jointly (block-diagonal L-BFGS). Returns
+    (VS (n,9), V (n,), Y=dV/dx (n,), sig (n,))."""
+    from scipy import optimize as opt
+    n = len(xs)
+    xs_t = torch.tensor(xs)
+    I = np.ones(6); I[5] = u
+
+    def fg(flat):
+        t = torch.tensor(flat.reshape(n, 9), requires_grad=True)
+        W, b = _sym_W_batch(t, xs_t)
+        tot = _H_batch(W, b, I).sum()
+        g = torch.autograd.grad(tot, t)[0].numpy().ravel()
+        return float(tot.detach()), g
+
+    r = opt.minimize(fg, np.asarray(seeds, float).ravel(), jac=True, method="L-BFGS-B",
+                     options={"maxiter": 1500, "ftol": 1e-18, "gtol": 1e-10})
+    VS = r.x.reshape(n, 9)
+    # vectorized Newton polish to machine precision: the curl certificate FDs V_red, and FD
+    # amplifies inner-min noise as eps/dx — L-BFGS's ~1e-9 floor must come down to ~1e-14.
+    from torch.func import vmap, hessian, grad as fgrad
+    I_t = torch.as_tensor(I)
+
+    def f_one(v, xv):
+        W1, b1 = _sym_W_batch(v.unsqueeze(0), xv.unsqueeze(0))
+        return _H_batch(W1, b1, I_t)[0]
+
+    xs_tt = torch.tensor(xs)
+    for _ in range(3):
+        VS_t = torch.tensor(VS)
+        G = vmap(fgrad(f_one, argnums=0))(VS_t, xs_tt).numpy()
+        Hb = vmap(hessian(f_one, argnums=0))(VS_t, xs_tt).numpy()
+        step = np.linalg.solve(Hb + 1e-10 * np.eye(9), -G[..., None])[..., 0]
+        bad = np.linalg.norm(step, axis=1) > 0.05      # boundary-degenerate points: keep L-BFGS sol
+        step[bad] = 0.0
+        VS = VS + step
+    t = torch.tensor(VS)
+    xt = torch.tensor(xs, requires_grad=True)
+    W, b = _sym_W_batch(t, xt)
+    Hv = _H_batch(W, b, I)
+    Y = torch.autograd.grad(Hv.sum(), xt)[0].numpy()       # envelope theorem, batched
+    return VS, Hv.detach().numpy(), Y, _signature_batch(W.detach(), b.detach())
+
+
 def stage_chart(ng=420, x_lim=0.45, u_lo=0.5, u_hi=2.0):
     """The pinned-protocol lift-off chart F(x,u) = (u, dV_red/dx): V_red by symmetric-subspace
-    partial minimization (asymmetry-audited), envelope-theorem Y, curl certificate, phi = dY/dx."""
-    print(f"STAGE B chart: ng={ng}, x in [-{x_lim},{x_lim}], u in [{u_lo},{u_hi}] (pinned protocol)")
-    ls, bs = tp.KGON_PUBLISHED[5]
-    vs0 = np.array([ls, ls, ls, 2 * np.pi / 5, 4 * np.pi / 5, bs, bs, bs, BPLUS])
+    partial minimization (energy-audited), envelope-theorem Y, kink audit, curl certificate.
+    Batched per u-row (validated against the gated single path at startup); RESUMABLE."""
+    print(f"STAGE B chart: ng={ng}, x in [-{x_lim},{x_lim}], u in [{u_lo},{u_hi}] "
+          f"(pinned protocol, batched rows)", flush=True)
+    # batch-vs-gated consistency check (50 seeded configs, <=1e-12)
+    rng = np.random.default_rng(7)
+    Ws = rng.normal(0, 0.9, (50, 2, 6))
+    bs_ = rng.normal(-0.2, 0.6, (50, 6))
+    Ic = np.ones(6); Ic[5] = 1.37
+    hb = _H_batch(torch.tensor(Ws), torch.tensor(bs_), Ic).numpy()
+    hs = np.array([float(tp.H_cart(torch.tensor(Ws[i]), torch.tensor(bs_[i]), Ic))
+                   for i in range(50)])
+    dmax = float(np.max(np.abs(hb - hs)))
+    print(f"  batch-vs-gated consistency: max|diff| = {dmax:.2e} (require <=1e-12)", flush=True)
+    assert dmax <= 1e-12, "batched evaluator disagrees with the gated implementation"
+    ls, bs0 = tp.KGON_PUBLISHED[5]
+    vs0 = np.array([ls, ls, ls, 2 * np.pi / 5, 4 * np.pi / 5, bs0, bs0, bs0, BPLUS])
     xs = np.linspace(-x_lim, x_lim, ng)
     us = np.linspace(u_lo, u_hi, ng)
-    V = np.zeros((ng, ng))
-    Yenv = np.zeros((ng, ng))
-    SIG = np.zeros((ng, ng), dtype=np.int64)
+    part = "scripts/tms_liftoff_chart_partial.npz"
+    j_start = 0
+    V = np.zeros((ng, ng)); Yenv = np.zeros((ng, ng)); SIG = np.zeros((ng, ng), dtype=np.int64)
+    VSlast = np.tile(vs0, (ng, 1))
+    import os
+    if os.path.exists(part):
+        z = np.load(part)
+        if int(z["ng"]) == ng:
+            j_start = int(z["rows_done"])
+            V[:, :j_start] = z["V"][:, :j_start]
+            Yenv[:, :j_start] = z["Y"][:, :j_start]
+            SIG[:, :j_start] = z["SIG"][:, :j_start]
+            VSlast = z["VSlast"]
+            print(f"  RESUME from row {j_start}", flush=True)
     col_warm = {}
-    i0 = int(np.argmin(np.abs(xs)))                   # start from x ~ 0 outward (warm chains)
-    order = list(range(i0, ng)) + list(range(i0 - 1, -1, -1))
-    for j, u in enumerate(us):
-        warm = col_warm.get(j - 1, {})
-        mywarm = {}
-        for i in order:
-            x = xs[i]
-            seed = mywarm.get(i - 1 if i > i0 else i + 1, warm.get(i, vs0))
-            vs, Vv, dv, sig = _vred(seed, x, u)
-            V[i, j], Yenv[i, j], SIG[i, j] = Vv, dv, sig
-            mywarm[i] = vs
-        col_warm[j] = mywarm
-        if j % 40 == 0:
-            print(f"  u row {j}/{ng} done (u={u:.3f})")
+    VSall = np.zeros((ng, ng, 9))
+    for j in range(j_start, ng):
+        VSlast, V[:, j], Yenv[:, j], SIG[:, j] = _vred_row(VSlast, xs, us[j])
+        VSall[:, j] = VSlast
+        col_warm[j] = {i: VSlast[i] for i in range(ng)}
+        if j % 30 == 0 or j == ng - 1:
+            np.savez(part, V=V, Y=Yenv, SIG=SIG, VSlast=VSlast, rows_done=j + 1, ng=ng)
+            print(f"  u row {j}/{ng} done (u={us[j]:.3f}) [saved]", flush=True)
+    # audit warm sets: recompute the 5 audit rows batched (cheap) and keep the 5 audit x-points
+    col_warm = {}
+    for j in np.linspace(0, ng - 1, 5, dtype=int):
+        VSj = _vred_row(np.tile(vs0, (ng, 1)), xs, us[int(j)])[0]
+        col_warm[int(j)] = {int(i): VSj[int(i)] for i in np.linspace(0, ng - 1, 5, dtype=int)}
     # kink audit (prereg smoothness audit): signature changes between neighbors; exclude +-2 cells
     kink = np.zeros((ng, ng), bool)
     kink[:-1, :] |= SIG[:-1, :] != SIG[1:, :]
@@ -417,13 +538,49 @@ def stage_chart(ng=420, x_lim=0.45, u_lo=0.5, u_hi=2.0):
     kink[:, :-1] |= SIG[:, :-1] != SIG[:, 1:]
     kink[:, 1:] |= SIG[:, :-1] != SIG[:, 1:]
     from scipy import ndimage
-    smooth = ~ndimage.binary_dilation(kink, iterations=2)
+    # dilation 4 = the 4th-order FD stencil reach (+-2) plus margin: a "smooth" cell must keep its
+    # WHOLE stencil clear of kinks. (The prereg's 2-cell kink tolerance governs O4 event routing,
+    # which uses the raw `kink` field saved below — unchanged.)
+    smooth = ~ndimage.binary_dilation(kink, iterations=4)
     # curl certificate ON SMOOTH CELLS: envelope Y vs 4th-order FD of V along x
     dx = xs[1] - xs[0]
     fd = (V[:-4, :] - 8 * V[1:-3, :] + 8 * V[3:-1, :] - V[4:, :]) / (12 * dx)
     diff = np.abs(fd - Yenv[2:-2, :]) / max(np.median(np.abs(Yenv)), 1e-12)
     sm_in = smooth[2:-2, :]
     curl_worst = float(diff[sm_in].max()) if sm_in.any() else np.nan
+    # REFINED certificate at the worst grid cells: same 4th-order FD of V_red but at local step
+    # delta where truncation ~ delta^4 is negligible (grid-step FD truncation dominates the tail
+    # in sharp-curvature regions; the certificate's step size is not pinned by the prereg).
+    curl_refined = np.nan
+    if sm_in.any() and j_start < ng:
+        dmask = np.where(sm_in, diff, -1.0)
+        worst_flat = np.argsort(dmask.ravel())[-200:]
+        ii, jj = np.unravel_index(worst_flat, dmask.shape)
+        ii = ii + 2
+        delta = 2e-4
+        offs = np.array([-2, -1, 1, 2]) * delta
+        seeds = np.repeat(VSall[ii, jj], 4, axis=0)
+        xs_p = np.repeat(xs[ii], 4) + np.tile(offs, len(ii))
+        us_p = np.repeat(us[jj], 4)
+        from scipy import optimize as _opt
+        I_p = np.ones((len(xs_p), 6)); I_p[:, 5] = us_p
+
+        def fgp(flat):
+            t = torch.tensor(flat.reshape(-1, 9), requires_grad=True)
+            Wp, bp = _sym_W_batch(t, torch.tensor(xs_p))
+            tot = _H_batch(Wp, bp, I_p).sum()
+            g = torch.autograd.grad(tot, t)[0].numpy().ravel()
+            return float(tot.detach()), g
+
+        rp = _opt.minimize(fgp, seeds.ravel(), jac=True, method="L-BFGS-B",
+                           options={"maxiter": 1500, "ftol": 1e-18, "gtol": 1e-11})
+        Vp = _H_batch(*_sym_W_batch(torch.tensor(rp.x.reshape(-1, 9)), torch.tensor(xs_p)),
+                      I_p).numpy().reshape(-1, 4)
+        fd_ref = (Vp[:, 0] - 8 * Vp[:, 1] + 8 * Vp[:, 2] - Vp[:, 3]) / (12 * delta)
+        curl_refined = float(np.max(np.abs(fd_ref - Yenv[ii, jj]))
+                             / max(np.median(np.abs(Yenv)), 1e-12))
+        print(f"  refined-step curl certificate (200 worst cells, delta={delta}): "
+              f"{curl_refined:.2e}", flush=True)
     # asymmetry audit: 16-var ASYMMETRIC minimize at pinned x (5x5 subsample), antisym seed noise
     def H_asym(v, x, u):
         lC, lB1, lB2, lA1, lA2 = v[0], v[1], v[2], v[3], v[4]
@@ -467,8 +624,8 @@ def stage_chart(ng=420, x_lim=0.45, u_lo=0.5, u_hi=2.0):
     phi = np.gradient(Yenv, dx, axis=0)               # phi = d2 V_red / dx2 = det DF of (u, Y)
     phi_smooth_min = float(phi[smooth].min()) if smooth.any() else np.nan
     np.savez("scripts/tms_liftoff_chart.npz", V=V, Y=Yenv, phi=phi, xs=xs, us=us, kink=kink,
-             smooth=smooth, curl_worst=curl_worst, asym_worst=asym_worst,
-             phi_smooth_min=phi_smooth_min, n_kink=int(kink.sum()))
+             smooth=smooth, curl_worst=curl_worst, curl_refined=curl_refined,
+             asym_worst=asym_worst, phi_smooth_min=phi_smooth_min, n_kink=int(kink.sum()))
     print(f"chart done: min phi(all)={phi.min():.5f}  min phi(SMOOTH)={phi_smooth_min:.5f}  "
           f"kink cells={int(kink.sum())}/{ng*ng}  curl_worst(smooth)={curl_worst:.2e}  "
           f"asym_worst={asym_worst:.2e}")

@@ -98,7 +98,7 @@ def bisect_drop(count_at, c_lo, c_hi, count_low, rel=1e-8):
     """Bisect the control value where the critical-point count drops from count_low to count_low-2.
     count_at(c) -> int. Requires count_at(c_lo) >= count_low and count_at(c_hi) <= count_low-2."""
     lo, hi = float(c_lo), float(c_hi)
-    while (hi - lo) > rel * hi:
+    while (hi - lo) > rel * max(abs(hi), abs(lo)):     # abs: the control value may be negative (quartic h)
         mid = 0.5 * (lo + hi)
         if count_at(mid) >= count_low:
             lo = mid

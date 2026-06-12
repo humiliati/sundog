@@ -1,0 +1,15 @@
+============================================================================================
+H12 -- KL-bandit symmetry breaking vs representable Gibbs optimum   [FULL (verdict run)]
+  trunk 2-8-8-1 tanh, no final bias (104 params); exact gradients; battery: grad<=1e-10, lam_max<=-1e-8, step-halving, perturb-return
+============================================================================================
+[GATE iii] tabular control: global convergence to Gibbs at all beta -> PASS
+[CTRL iv] representability @ beta=0.05: TV(distill, Gibbs) = 2.06e-08 (<= 1e-3) -> PASS
+
+COARSE SWEEP (16 beta x 8 inits, eps=0):
+  beta=0.05     m: +0.000! -0.000! -0.000! +0.000! -0.000! +0.000! +0.000! +0.000!   (m_gibbs=0; * certified, ! uncertified)
+  beta=0.0627   m: -0.000! -0.000! +0.000! +0.000! -0.000! +0.000! +0.000! -0.000!   (m_gibbs=0; * certified, ! uncertified)
+  beta=0.0787   m: +0.000! -0.000! +0.000! +0.000! +0.000! +0.000! -0.000! +0.000!   (m_gibbs=0; * certified, ! uncertified)
+  beta=0.0987   m: +0.000! +0.000! +0.000! +0.000! +0.000! +0.000! +0.000! -0.000!   (m_gibbs=0; * certified, ! uncertified)
+  beta=0.1238   m: -0.000! -0.000! -0.000! +0.000! +0.000! +0.000! -0.000! +0.000!   (m_gibbs=0; * certified, ! uncertified)
+  beta=0.1554   m: +0.000! -0.000! -0.000! +0.000! -0.000! +0.000! +0.000! -0.000!   (m_gibbs=0; * certified, ! uncertified)
+  beta=0.1949   m: +0.000! -0.000! -0.000! -0.000! +0.000! -0.000! +0.000! -0.000!   (m_gibbs=0; * certified, ! uncertified)
