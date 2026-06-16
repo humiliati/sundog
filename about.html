@@ -37,7 +37,7 @@
   "publisher": {
     "@type": "Organization",
     "name": "Stellar Aqua LLC",
-    "url": "https://sundog.cc"
+    "url": "https://stellaraqua.com"
   },
   "inLanguage": "en",
   "isAccessibleForFree": true,
@@ -333,6 +333,8 @@
         }
 
         .resource-card {
+            position: relative;
+            overflow: hidden;
             display: block;
             min-height: 100%;
             padding: 1.25rem;
@@ -362,6 +364,31 @@
             font-size: 0.95rem;
             line-height: 1.55;
             margin-bottom: 0;
+        }
+
+        .resource-card.stellaraqua-card {
+            border-color: rgba(159, 106, 56, 0.42);
+            background:
+                linear-gradient(135deg, rgba(159, 106, 56, 0.16), rgba(5, 201, 120, 0.12)),
+                rgba(255, 255, 255, 0.78);
+        }
+
+        .resource-card.stellaraqua-card::after {
+            content: "";
+            position: absolute;
+            right: -2rem;
+            bottom: -2.5rem;
+            width: 8.5rem;
+            aspect-ratio: 1;
+            background: url("/media/stellar-aqua-logo.png") center / contain no-repeat;
+            opacity: 0.14;
+            pointer-events: none;
+        }
+
+        .resource-card.stellaraqua-card h3,
+        .resource-card.stellaraqua-card p {
+            position: relative;
+            z-index: 1;
         }
 
         .legal-note {
@@ -674,6 +701,10 @@
                         <a href="/applications-gallery" class="resource-card">
                             <h3>Applications</h3>
                             <p>Working systems across research, workbench, prototype, and product tiers.</p>
+                        </a>
+                        <a href="https://stellaraqua.com/about-us/#projects" class="resource-card stellaraqua-card" target="_blank" rel="noopener">
+                            <h3>StellarAqua</h3>
+                            <p>The controls and environmental-systems company sponsoring Sundog, plus the portfolio bridge back to the field work.</p>
                         </a>
                         <a href="/alignment" class="resource-card">
                             <h3>Alignment Primer</h3>
