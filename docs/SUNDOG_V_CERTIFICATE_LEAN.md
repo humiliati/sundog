@@ -1,17 +1,19 @@
-# Sundog Lean Certificate - Six Machine-Checked Cores
+# Sundog Lean Certificate - Seven Machine-Checked Cores
 
 > **Deductive complement to the public Sundog lanes.** The public Lean repo now
-> carries six worked examples of the same discipline: machine-check the
+> carries seven worked examples of the same discipline: machine-check the
 > deductive core, then name the imported wall. The first is the
 > [P-vs-NP certificate-syndrome lane](SUNDOG_V_P_V_NP.md); the second is a
 > real-analysis shadow-decay example; the third is the halo minimum-deviation
 > geometry behind the 22-degree halo; the fourth is the Aharonov-Bohm
 > gauge-invariance (a gradient's closed-loop circulation is zero); the fifth is
 > the general characteristic-function law behind the shadow decay (real analysis
-> again); and the sixth is a machine-checked Karp reduction
+> again); the sixth is a machine-checked Karp reduction
 > `3SAT <= 3DM <= X3C <= decoding` that anchors the certificate's
-> decoding-hardness import to 3SAT (reduction correctness only) — six examples
-> across five kinds of math.
+> decoding-hardness import to 3SAT (reduction correctness only); and the seventh
+> is a finite audit game — a proved-cheap full-access audit paired with
+> ∀-verifier blindness of the pooled-mean channel — seven examples across six
+> kinds of math.
 
 **Public and reproducible:**
 [`github.com/humiliati/sundogcert`](https://github.com/humiliati/sundogcert) -
@@ -24,7 +26,7 @@ Working hook:
 > A claim gets smaller and cleaner when its proof goes into Lean and its
 > assumptions stay outside the proof, named in plain view.
 
-## Six worked examples
+## Seven worked examples
 
 | Lean surface | kind of math | checked deductive core | imported wall |
 |---|---|---|---|
@@ -34,6 +36,7 @@ Working hook:
 | `FaradayAB` | vector calculus / topology | `gauge_circulation_zero`, `gauge_integrand_eq`, and `gauge_invariant_loop` — a gradient (gauge) field's closed-loop circulation is zero, so the loop observable is gauge-invariant | that the vector potential `A` enters as a loop integral, `grad chi` is the gauge freedom, the Aharonov-Bohm phase / Faraday loop EMF *is* that integral, and the loop encloses the flux (the `H^1` period) |
 | `ShadowDecayGeneral` | real analysis (generalizing example 2) | `shadow_decay_charFun` + the determine/resist corollaries — averaging over any probability measure factors through its characteristic function; resist ⟺ `‖charFun‖→0` (Riemann–Lebesgue), determine ⟺ a finite centered mean (two independent conditions); the Gaussian discharges both | that a real system instantiates the characteristic-function averaging; the Cauchy separator is named, not built (mathlib lacks `charFun_cauchy`) |
 | `SATReduction*` / `VarWheel` / `ClauseGadget` (on `MatchingNPHard` / `DecodingNPHard`) | combinatorics / computational complexity | `sat_iff_decodes` — a machine-checked Karp reduction `3SAT ≤ 3DM ≤ X3C ≤ bounded-weight GF(2) decoding`, both directions proved; a 3-CNF formula is satisfiable iff its decoding image decodes within the weight bound | the NP class, the poly-time-ness of the reduction maps, and 3SAT's own NP-hardness (Cook–Levin) — hardness imported, any "NP-hard" reading conditional on P ≠ NP, no P-vs-NP claim |
+| `AuditCost` | finite decidability / audit game | `pooled_channel_blind` + `no_verifier_checks_perUnit` — a proved-cheap full-access audit (sound + complete against an adversarial reporter at `auditCost ≤ 3n+2`) paired with ∀-verifier blindness: an explicit same-mean fiber pair defeats *every* decidable channel verifier at any prescribed per-unit `δ` | that the pooled-mean channel is the operative observation model (non-vacuity proved: `n = 1` determines; the second moment separates the blind pair) |
 
 The third example matters because it breaks the first two examples' shared
 shape. The certificate and shadow-decay examples both involve a lossy shadow
@@ -55,12 +58,13 @@ closed loop is exactly zero, so the loop observable keeps only the enclosed
 flux (an `H^1` period) while the gauge freedom `grad chi` washes out. The fifth,
 the general characteristic-function law, *is* the shadow-decay shape stated in
 full — it names which spectral condition of the averaging measure governs each
-half. So four of the six share the deeper shape across a finite-field coset, a
-measure-theoretic label and its characteristic-function spectrum, and a
-topological period; the halo stands apart as the pure-extremization breaker, and
-the sixth example — the `3SAT <= ... <= decoding` Karp reduction — stands apart
-too, a combinatorial equivalence whose import is hardness, not a model. The
-method is tied neither to one motif nor to one mathematical structure.
+half. So five of the seven share the deeper shape across a finite-field coset, a
+measure-theoretic label and its characteristic-function spectrum, a topological
+period, and a pooled-mean audit channel that loses every per-unit claim; the
+halo stands apart as the pure-extremization breaker, and the Karp reduction —
+`3SAT <= ... <= decoding` — stands apart too, a combinatorial equivalence whose
+import is hardness, not a model. The method is tied neither to one motif nor to
+one mathematical structure.
 
 ## P-vs-NP certificate core
 
@@ -155,11 +159,11 @@ green. This ledger is the **deductive** complement: the soundness and lossiness
 those receipts rely on are machine-checked, axiom-clean. The two are orthogonal,
 and neither proves the decoding hardness - which both import.
 
-The newer `ShadowDecay`, `ShadowDecayGeneral`, `HaloGeometry`, and `FaradayAB`
-modules are method demonstrations, not extra P-vs-NP evidence. They show that the
-same public Lean discipline spans finite-field algebra, real analysis, geometric
-optics, and vector calculus / topology without turning any one imported wall into
-a theorem. The reduction-chain modules (`SATReduction*`, on `MatchingNPHard` /
+The newer `ShadowDecay`, `ShadowDecayGeneral`, `HaloGeometry`, `FaradayAB`, and
+`AuditCost` modules are method demonstrations, not extra P-vs-NP evidence. They
+show that the same public Lean discipline spans finite-field algebra, real
+analysis, geometric optics, vector calculus / topology, and a finite audit game
+without turning any one imported wall into a theorem. The reduction-chain modules (`SATReduction*`, on `MatchingNPHard` /
 `DecodingNPHard`) sit closer to this lane: they *anchor* the certificate's
 decoding-hardness import to 3SAT by a checked reduction. But they too leave the
 hardness imported (the NP class, poly-time-ness, and Cook-Levin), so they sharpen
@@ -167,13 +171,14 @@ the import rather than discharge it - still not P-vs-NP evidence.
 
 ## Status
 
-**PUBLIC, REPRODUCIBLE, SIX-EXAMPLE LEAN METHOD CORE.** The P-vs-NP
+**PUBLIC, REPRODUCIBLE, SEVEN-EXAMPLE LEAN METHOD CORE.** The P-vs-NP
 certificate soundness + lossiness are machine-checked; the shadow-decay (the
 concrete Gaussian decay and its general characteristic-function law), halo
 minimum-deviation, and Aharonov-Bohm gauge-invariance examples extend the method
-to three more mathematical shapes; and a machine-checked Karp reduction
+to three more mathematical shapes; a machine-checked Karp reduction
 `3SAT <= 3DM <= X3C <= decoding` anchors the certificate's decoding-hardness
-import to 3SAT — six worked examples across five kinds of math. Hardness, model
+import to 3SAT; and a finite audit game proves a cheap full-access audit blind to
+every decidable channel verifier — seven worked examples across six kinds of math. Hardness, model
 realization, physical optics, the physical gauge field, and the NP-class /
 poly-time / Cook-Levin complexity wrapping remain imported. Not a cryptographic
 one-wayness claim; not a claim about P versus NP; not a claim that Lean proves

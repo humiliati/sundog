@@ -86,6 +86,10 @@ code, experiments, prior theorem materials, and application bridges.
 - [Bayesian comparator ledger](SUNDOG_V_BAYES.md): cross-cutting Bayesian
   floor/comparator design — same-observation floor profiles, route-fidelity
   comparators, and the audit-chain integration across workbenches.
+- [Sundog Least Action ledger](SUNDOG_V_LEAST_ACTION.md): legibility and
+  meta-generality roadmap inspired by Euler/Lagrange, Snell/Fermat, and the
+  principle of least reader-action; stages the `B/Phi/T/A/I/F/R` coordinate
+  chart for making claims recoverable without hiding imports or falsifiers.
 - [Sundog Perception roadmap](SUNDOG_V_PERCEPTION.md): atlas-as-instrument
   program — smartphone-tier Phase 1, deep observation ladder, and the path
   from sensing-grade to evidence-grade calibration.
