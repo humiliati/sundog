@@ -90,6 +90,15 @@ code, experiments, prior theorem materials, and application bridges.
   meta-generality roadmap inspired by Euler/Lagrange, Snell/Fermat, and the
   principle of least reader-action; stages the `B/Phi/T/A/I/F/R` coordinate
   chart for making claims recoverable without hiding imports or falsifiers.
+- [Sundog Tauroctony ledger](SUNDOG_V_TAUROCTONY.md): the portfolio's
+  mythopoetic cosmogram — the tauroctony as one image holding the empirical
+  ledgers (Sol/field, the bull/maximand, the two torchbearers, the bestiary as
+  lanes). Braids a pantheon theory of agency, a hedged precession keystone, and
+  the figure-by-figure map; governed by the Ornament Rule (`[TYPED]`/`[ORNAMENT]`).
+  Supersedes the Least Action ledger in spirit (graceful-retire todo 3.5).
+- [Cautes and Cautopates essay](CAUTES_CAUTOPATES.md): companion narrative for
+  the two torchbearers — reward vs punishment training economies and the third
+  "field" path; the accessible on-ramp the Tauroctony ledger cites.
 - [Sundog Perception roadmap](SUNDOG_V_PERCEPTION.md): atlas-as-instrument
   program — smartphone-tier Phase 1, deep observation ladder, and the path
   from sensing-grade to evidence-grade calibration.
