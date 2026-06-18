@@ -185,8 +185,10 @@ the MESA controller-family architecture and capacity ladder.
 > governance — *we can bound the proxy; we have not shown the bounded council
 > out-governs a well-tuned monarch.* Last registered rung before the figure is
 > [ORNAMENT]-for-good at this tier: **H1.2d (RL-trained arbiter)**, the named
-> bottleneck. This is the Ornament Rule working as designed: the figure does not
-> keep its [TYPED] stamp on a failed falsifier.
+> bottleneck, now preregistered at
+> [`mesa/H1_2D_RL_ARBITER_SPEC.md`](mesa/H1_2D_RL_ARBITER_SPEC.md). This is the
+> Ornament Rule working as designed: the figure does not keep its [TYPED] stamp
+> on a failed falsifier.
 
 ---
 
