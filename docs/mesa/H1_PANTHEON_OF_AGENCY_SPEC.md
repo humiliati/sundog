@@ -1,6 +1,6 @@
 # H1 Pantheon of Agency - Pantheon vs Monolith Bake-Off
 
-Status: **DRAFT SPEC / ADMISSION PASS.** Opened 2026-06-18 from
+Status: **DRAFT SPEC / H1.2 OPEN.** Opened 2026-06-18 from
 [`SUNDOG_V_TAUROCTONY.md`](../SUNDOG_V_TAUROCTONY.md) Horizon H1. This is the
 first typed route by which the tauroctony's "assemble a pantheon, not a mind"
 thesis becomes an empirical mesa experiment.
@@ -331,10 +331,20 @@ the heads.
 
 ### H1.2 - Matched Small-Tier Bake-Off
 
+Status: **OPEN (2026-06-18).** Binding spec:
+[`H1_2_SMALL_BAKEOFF_SPEC.md`](H1_2_SMALL_BAKEOFF_SPEC.md).
+
+H1.1 showed that the heads and wrapper are not the bottleneck. The blind council
+underperforms because the placeholder arbiter cannot tell field-tracking from
+basin-pulling reward behavior, and the guard stub is inert. H1.2 is therefore a
+frozen-head, learned-coordinator bake-off: train the arbiter and label-trained
+guard, compare against an equal-budget monolithic adapter, and keep the
+role-weight / sovereignty schema unchanged.
+
 Deliverables:
 
-- train `P-Council Small`;
-- train `M-Scalar Small` with matched total parameters and budget;
+- train `P_Guard` and `P_Arbiter` over frozen Small heads;
+- train equal-incremental-budget `M-Adapter`;
 - evaluate both on the active Phase 3 probe slate and Phase 4 intervention
   battery;
 - run Phase 7-style classification over the new rows.
@@ -388,9 +398,7 @@ Exit criterion:
 
 ## 10. Staged Commands
 
-No H1 execution command is admitted yet. The next concrete task is H1.1 harness
-work. Once the wrapper exists, the first admissible command should be a capped
-smoke in this shape:
+H1.1 is complete. The original capped smoke command was:
 
 ```powershell
 node scripts/mesa-h1-pantheon-smoke.mjs `
@@ -404,7 +412,13 @@ node scripts/mesa-h1-pantheon-smoke.mjs `
 ```
 
 Expected wall-clock: under 10 minutes. Decision fed: whether H1.2 training code
-is worth writing, and whether the sovereignty metrics are stable.
+is worth writing, and whether the sovereignty metrics are stable. Readback:
+[`H1_1_SMOKE_RESULTS.md`](H1_1_SMOKE_RESULTS.md). Result: yes; H1.2 is open.
+
+Current next command frontier: H1.2a in
+[`H1_2_SMALL_BAKEOFF_SPEC.md`](H1_2_SMALL_BAKEOFF_SPEC.md). No H1.2b active
+Small slate is admitted until H1.2a measures dataset rows/sec and eval
+trials/sec and passes the leakage/schema checks.
 
 The first Medium-tier training command must not be run inline until H1.1 or
 H1.2 measures pantheon per-update cost. If estimated over 10 minutes, stage the
@@ -452,3 +466,8 @@ If H1 fails:
   Locks L-Mixed as prior/monolith baseline rather than pantheon, defines
   `P-Council`, monolith baselines, fairness rules, primary endpoint,
   sovereignty metric, branch table, and the next capped smoke shape.
+- `v0.2` (2026-06-18): H1.1 smoke marked met from
+  [`H1_1_SMOKE_RESULTS.md`](H1_1_SMOKE_RESULTS.md); H1.2 opened as
+  [`H1_2_SMALL_BAKEOFF_SPEC.md`](H1_2_SMALL_BAKEOFF_SPEC.md), scoped to
+  learned arbiter + label-trained guard over frozen heads with an equal-budget
+  monolithic adapter baseline.

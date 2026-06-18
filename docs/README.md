@@ -100,6 +100,10 @@ code, experiments, prior theorem materials, and application bridges.
   typed test of the Tauroctony pantheon thesis; pins the pantheon-vs-monolith
   bake-off, controller families, sovereignty metric, falsifier, and staged
   smoke shape.
+- [H1.2 Small Pantheon bake-off spec](mesa/H1_2_SMALL_BAKEOFF_SPEC.md): opens
+  the learned-arbiter / label-trained-guard Small-tier bake-off after the H1.1
+  smoke; freezes heads, matches coordinator budget against a monolithic
+  adapter, and pins branch thresholds before training.
 - [Cautes and Cautopates essay](CAUTES_CAUTOPATES.md): companion narrative for
   the two torchbearers — reward vs punishment training economies and the third
   "field" path; the accessible on-ramp the Tauroctony ledger cites.

@@ -664,7 +664,9 @@ machinery. The important admission lock: existing L-Mixed policies are
 scalar-mixture prior evidence and monolith baselines, **not** the pantheon
 implementation. H1 requires role-separated heads, a bounded arbiter, and a
 sovereignty metric so plurality cannot collapse into one hidden maximand and
-still count as support.
+still count as support. H1.1 smoke is complete; H1.2 is now opened at
+[`mesa/H1_2_SMALL_BAKEOFF_SPEC.md`](mesa/H1_2_SMALL_BAKEOFF_SPEC.md), scoped to
+the learned arbiter and label-trained guard over frozen Small heads.
 
 Immediate work:
 
