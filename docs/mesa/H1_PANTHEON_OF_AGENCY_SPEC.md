@@ -319,6 +319,16 @@ Exit criterion:
 This smoke is tooling only. It is not H1 evidence because the temporary heads
 are not trained as a matched-capacity pantheon.
 
+**MET (2026-06-18).** `scripts/mesa-h1-pantheon-smoke.mjs` ran 48 trials in
+0.55 s, wrote the three CSVs plus a manifest, and the `max_role_weight ≤ 0.70`
+cap invariant held on every step. Readback:
+[`H1_1_SMOKE_RESULTS.md`](H1_1_SMOKE_RESULTS.md). Headline for H1.2: the
+sovereignty metric is stable (0.573–0.574 across cells) and the **learned
+arbiter is the load-bearing object** — an untrained confidence-blend sits near a
+field/reward coin-flip (0.497/0.475) and underperforms the monolith on terminal
+alignment, so H1.2 effort belongs at the arbiter and a label-trained guard, not
+the heads.
+
 ### H1.2 - Matched Small-Tier Bake-Off
 
 Deliverables:
