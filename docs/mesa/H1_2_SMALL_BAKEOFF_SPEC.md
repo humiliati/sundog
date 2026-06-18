@@ -1,6 +1,8 @@
 # H1.2 Small-Tier Pantheon Bake-Off - Learned Arbiter and Guard
 
-Status: **OPEN SPEC.** Opened 2026-06-18 after the H1.1 harness smoke.
+Status: **CLOSED SPEC / H1.2b `NULL`.** Opened 2026-06-18 after the H1.1
+harness smoke; binding result recorded 2026-06-18. Registered follow-up:
+[`H1_2C_REWARD_ASYMMETRIC_CAP_SPEC.md`](H1_2C_REWARD_ASYMMETRIC_CAP_SPEC.md).
 Parent: [`H1_PANTHEON_OF_AGENCY_SPEC.md`](H1_PANTHEON_OF_AGENCY_SPEC.md).
 
 H1.1 answered the admission question: the wrapper, role-weight schema, and
@@ -401,22 +403,34 @@ guard-brake impose a **"pantheon tax"** — they forbid fully following the fiel
 even when it is the correct value, and the tax is not repaid by proxy-resistance
 here. Per the Tauroctony H1 falsifier, "assemble a pantheon" is demoted toward
 **[ORNAMENT] for the MESA lane** (scoped caveats in the readback: one supervised
-arbiter, symmetric blend cap, small-tier/frozen heads). Reopening needs a
-registered **H1.2c** (reward-asymmetric *blend* cap, or RL-trained arbiter) or a
-higher tier — not a re-score.
+arbiter, symmetric blend cap, small-tier/frozen heads). Reopening is now
+registered as **H1.2c**: reward-asymmetric *blend* cap first; RL-trained arbiter
+or a higher tier remains later — not a re-score.
 
 ---
 
-## 10. Admission Checklist
+### H1.2c - Registered Follow-Up
 
-Before H1.2b runs:
+H1.2c is now opened as
+[`H1_2C_REWARD_ASYMMETRIC_CAP_SPEC.md`](H1_2C_REWARD_ASYMMETRIC_CAP_SPEC.md).
+It is a new rung, not an amendment to this binding result. The chosen path is
+the surgical reward-asymmetric blend-cap test: keep the frozen heads, features,
+seeds, monolith baseline, and Small-tier slate, but bind only the reward/bull
+head (`w_reward <= 0.50`) while leaving the field/Sol head uncapped. RL arbiter
+training remains a later registered rung if H1.2c returns null.
 
-- [ ] feature schema proves no forbidden inference feature is present;
-- [ ] train/validation/evaluation seeds are disjoint;
-- [ ] `P_Guard + P_Arbiter` and `M-Adapter` parameter counts match within 5%;
-- [ ] H1.2a measured rate is recorded;
-- [ ] H1.2a writes all output files with stable columns;
-- [ ] branch thresholds in this spec are not edited after seeing H1.2b results.
+---
+
+## 10. Historical Admission Checklist
+
+H1.2b was admitted only after:
+
+- [x] feature schema proved no forbidden inference feature was present;
+- [x] train/validation/evaluation seeds were disjoint;
+- [x] `P_Guard + P_Arbiter` and `M-Adapter` parameter counts matched within 5%;
+- [x] H1.2a measured rate was recorded;
+- [x] H1.2a wrote all output files with stable columns;
+- [x] branch thresholds in this spec were not edited after seeing H1.2b results.
 
 ---
 
@@ -456,3 +470,7 @@ Avoid:
   primacy), re-derived from the tauroctony thesis rather than from the numbers.
   The 0.70 structural hard cap on all roles is unchanged. These definitions are
   now locked for H1.2b.
+- `v0.2` (2026-06-18): H1.2b binding result imported from
+  [`H1_2B_RESULTS.md`](H1_2B_RESULTS.md); spec status closed as `NULL`.
+  Registered H1.2c as a separate reward-asymmetric blend-cap follow-up, not a
+  re-score of H1.2b.

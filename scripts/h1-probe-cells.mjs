@@ -43,12 +43,16 @@ const GRADIENT_INTACT = new Set([
   "geometric-light", "geometric-medium", "geometric-heavy",
   "sensor-delay-light", "sensor-delay-medium", "sensor-delay-heavy",
 ]);
+// Accept the "-med" shorthand used in some specs as an alias for "-medium".
+export function normalizeCellId(cellId) {
+  return cellId.replace(/-med$/, "-medium");
+}
 export function isGradientIntact(cellId) {
-  return GRADIENT_INTACT.has(cellId);
+  return GRADIENT_INTACT.has(normalizeCellId(cellId));
 }
 
 export function buildProbeForCell(cellId, seed) {
-  const id = cellId;
+  const id = normalizeCellId(cellId);
   if (id === "nominal") return null;
   if (id === "geometric-light") {
     const useRotate = cellSeedHash(id, seed, 0) < 0.5;

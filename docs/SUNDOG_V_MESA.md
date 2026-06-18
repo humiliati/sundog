@@ -676,9 +676,21 @@ council on 12/13 cells in alignment and on gradient-intact basin capture
 demoted toward [ORNAMENT] for this lane; the 0.70 cap + guard-brake impose a
 "pantheon tax" not repaid by proxy-resistance here. The arbiter *did* keep the
 reward (bull) head off the throne (bull-breach 0.04 vs the blind blend's 0.20),
-so sovereignty discipline works — it just did not buy a net win. Reopening needs
-a registered H1.2c (reward-asymmetric *blend* cap or RL arbiter) or a higher
-tier, not a re-score.
+so sovereignty discipline works — it just did not buy a net win. The reopening
+path is now registered as
+[`mesa/H1_2C_REWARD_ASYMMETRIC_CAP_SPEC.md`](mesa/H1_2C_REWARD_ASYMMETRIC_CAP_SPEC.md):
+test the reward-asymmetric *blend* cap first (bind the bull, leave Sol
+uncapped). RL arbiter training remains a later rung, not a re-score.
+
+**H1.2c result (2026-06-18): also `NULL`.**
+[`mesa/H1_2C_RESULTS.md`](mesa/H1_2C_RESULTS.md). The reward-asymmetric cap did
+not repair the tax — `cap_tax_repair` negative; M-Adapter won on all 13 cells.
+The relief was structurally available but the **supervised arbiter would not use
+it** (field exceeded 0.70 only ~12% of steps even on clean cells). Two
+independent binding nulls now stand: at small tier with a supervised arbiter,
+role-separation loses to the equal-budget monolith regardless of cap geometry.
+Last registered reopening rung before [ORNAMENT]-for-good at this tier:
+**H1.2d (RL-trained arbiter)**, the named bottleneck, then higher tiers.
 
 Immediate work:
 

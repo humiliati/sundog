@@ -1,6 +1,6 @@
 # H1 Pantheon of Agency - Pantheon vs Monolith Bake-Off
 
-Status: **DRAFT SPEC / H1.2 OPEN.** Opened 2026-06-18 from
+Status: **DRAFT SPEC / H1.2c OPEN.** Opened 2026-06-18 from
 [`SUNDOG_V_TAUROCTONY.md`](../SUNDOG_V_TAUROCTONY.md) Horizon H1. This is the
 first typed route by which the tauroctony's "assemble a pantheon, not a mind"
 thesis becomes an empirical mesa experiment.
@@ -331,27 +331,52 @@ the heads.
 
 ### H1.2 - Matched Small-Tier Bake-Off
 
-Status: **OPEN (2026-06-18).** Binding spec:
-[`H1_2_SMALL_BAKEOFF_SPEC.md`](H1_2_SMALL_BAKEOFF_SPEC.md).
+Status: **CLOSED (2026-06-18): binding `NULL`.** Binding spec:
+[`H1_2_SMALL_BAKEOFF_SPEC.md`](H1_2_SMALL_BAKEOFF_SPEC.md). Result:
+[`H1_2B_RESULTS.md`](H1_2B_RESULTS.md).
 
-H1.1 showed that the heads and wrapper are not the bottleneck. The blind council
-underperforms because the placeholder arbiter cannot tell field-tracking from
-basin-pulling reward behavior, and the guard stub is inert. H1.2 is therefore a
-frozen-head, learned-coordinator bake-off: train the arbiter and label-trained
-guard, compare against an equal-budget monolithic adapter, and keep the
-role-weight / sovereignty schema unchanged.
+H1.1 showed that the heads and wrapper were not the bottleneck. H1.2 therefore
+tested a frozen-head, learned-coordinator council: train the arbiter and
+label-trained guard, compare against an equal-budget monolithic adapter, and
+keep the role-weight / sovereignty schema explicit.
 
-Deliverables:
-
-- train `P_Guard` and `P_Arbiter` over frozen Small heads;
-- train equal-incremental-budget `M-Adapter`;
-- evaluate both on the active Phase 3 probe slate and Phase 4 intervention
-  battery;
-- run Phase 7-style classification over the new rows.
+The H1.2a capped probe gave indicative support, but H1.2b did not replicate it
+on the binding 13-cell slate. `M-Adapter` beat the learned council on 12/13
+cells in alignment and on gradient-intact basin capture. The substantive H1
+falsifier fired for the symmetric-cap Small-tier council: matched monolith met
+or beat the pantheon on competence and proxy-capture. The durable positive was
+sovereignty discipline: the learned arbiter kept the reward/bull head off the
+throne far better than the blind blend.
 
 Exit criterion:
 
-- one of the H1 branch outcomes below is selected.
+- H1.2b selected `H1_2_ARBITER_NULL` mechanically, with the stronger substantive
+  reading `H1_NULL` / small-tier falsifier for the symmetric-cap council.
+
+### H1.2c - Reward-Asymmetric Blend-Cap Reopening
+
+Status: **OPEN (2026-06-18).** Binding spec:
+[`H1_2C_REWARD_ASYMMETRIC_CAP_SPEC.md`](H1_2C_REWARD_ASYMMETRIC_CAP_SPEC.md).
+
+H1.2c does not erase or re-score H1.2b. It tests the narrow mechanism H1.2b
+identified: the action-blend cap was symmetric, so it bounded the field/Sol head
+even when the field was the correct value. H1.2c keeps the same frozen heads,
+features, seeds, monolith, and Small-tier slate, but changes the blend geometry
+to reward-asymmetric caps: field `1.00`, reward `0.50`, guard `0.70`.
+
+Deliverables:
+
+- amend the H1.2 dataset/trainer/eval harness to accept role-specific caps and
+  record cap geometry in every manifest;
+- rebuild coordinator targets under the reward-asymmetric cap;
+- train `P_Guard + P_Arbiter` and equal-budget `M-Adapter`;
+- evaluate the binding 13-cell slate and select one H1.2c branch.
+
+Exit criterion:
+
+- H1.2c either repairs the cap tax and earns Small-tier support against the
+  same-run monolith, or the MESA-lane pantheon thesis remains [ORNAMENT] pending
+  an RL-arbiter or higher-tier registered rung.
 
 ### H1.3 - Medium Cliff Test
 
@@ -413,12 +438,14 @@ node scripts/mesa-h1-pantheon-smoke.mjs `
 
 Expected wall-clock: under 10 minutes. Decision fed: whether H1.2 training code
 is worth writing, and whether the sovereignty metrics are stable. Readback:
-[`H1_1_SMOKE_RESULTS.md`](H1_1_SMOKE_RESULTS.md). Result: yes; H1.2 is open.
+[`H1_1_SMOKE_RESULTS.md`](H1_1_SMOKE_RESULTS.md). Result: yes; H1.2 ran and
+closed `NULL`; H1.2c is the current reopening frontier.
 
-Current next command frontier: H1.2a in
-[`H1_2_SMALL_BAKEOFF_SPEC.md`](H1_2_SMALL_BAKEOFF_SPEC.md). No H1.2b active
-Small slate is admitted until H1.2a measures dataset rows/sec and eval
-trials/sec and passes the leakage/schema checks.
+Current next command frontier: H1.2c in
+[`H1_2C_REWARD_ASYMMETRIC_CAP_SPEC.md`](H1_2C_REWARD_ASYMMETRIC_CAP_SPEC.md).
+No H1.2c binding slate is admitted until the harness records role-specific cap
+geometry, proves `w_reward <= 0.50` on every council step, matches parameters
+within 5%, and passes leakage/schema checks on the capped probe.
 
 The first Medium-tier training command must not be run inline until H1.1 or
 H1.2 measures pantheon per-update cost. If estimated over 10 minutes, stage the
@@ -471,3 +498,9 @@ If H1 fails:
   [`H1_2_SMALL_BAKEOFF_SPEC.md`](H1_2_SMALL_BAKEOFF_SPEC.md), scoped to
   learned arbiter + label-trained guard over frozen heads with an equal-budget
   monolithic adapter baseline.
+- `v0.3` (2026-06-18): H1.2b binding `NULL` imported from
+  [`H1_2B_RESULTS.md`](H1_2B_RESULTS.md); H1.2 closed as a symmetric-cap
+  small-tier negative. H1.2c opened as
+  [`H1_2C_REWARD_ASYMMETRIC_CAP_SPEC.md`](H1_2C_REWARD_ASYMMETRIC_CAP_SPEC.md),
+  the registered test of whether the H1.2b pantheon tax was caused by capping
+  the field/Sol head along with the reward/bull head.

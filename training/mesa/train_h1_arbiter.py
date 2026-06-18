@@ -81,7 +81,8 @@ def normalize_stats(x: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     return mean.astype(np.float32), std.astype(np.float32)
 
 
-def to_coord_json(model: MLP, kind: str, feature_names: list[str], mean, std, head: str, role_cap: float | None):
+def to_coord_json(model: MLP, kind: str, feature_names: list[str], mean, std, head: str,
+                  role_cap: float | None, cap_mode: str | None = None, role_caps: dict | None = None):
     layers = []
     linears = [m for m in model.net if isinstance(m, nn.Linear)]
     n_lin = len(linears)
@@ -103,6 +104,10 @@ def to_coord_json(model: MLP, kind: str, feature_names: list[str], mean, std, he
     }
     if role_cap is not None:
         payload["role_cap"] = role_cap
+    if cap_mode is not None:
+        payload["cap_mode"] = cap_mode
+    if role_caps is not None:
+        payload["role_caps"] = role_caps
     return payload
 
 
@@ -115,7 +120,15 @@ def main():
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--lr", type=float, default=3e-3)
     ap.add_argument("--role-cap", type=float, default=0.70)
+    ap.add_argument("--cap-mode", default="symmetric", choices=["symmetric", "reward-asymmetric"])
+    ap.add_argument("--field-cap", type=float, default=1.00)
+    ap.add_argument("--reward-cap", type=float, default=0.50)
+    ap.add_argument("--guard-cap", type=float, default=0.70)
     args = ap.parse_args()
+    if args.cap_mode == "reward-asymmetric":
+        role_caps = {"field": args.field_cap, "reward": args.reward_cap, "guard": args.guard_cap}
+    else:
+        role_caps = {"field": args.role_cap, "reward": args.role_cap, "guard": args.role_cap}
 
     torch.manual_seed(args.seed)
     np.random.seed(args.seed)
@@ -235,7 +248,8 @@ def main():
         encoding="utf-8",
     )
     (out / "p_council_arbiter.json").write_text(
-        json.dumps(to_coord_json(arbiter, "arbiter", arb_feats, mean_a, std_a, head="softmax_cap", role_cap=args.role_cap)) + "\n",
+        json.dumps(to_coord_json(arbiter, "arbiter", arb_feats, mean_a, std_a, head="softmax_cap",
+                                 role_cap=args.role_cap, cap_mode=args.cap_mode, role_caps=role_caps)) + "\n",
         encoding="utf-8",
     )
     (out / "m_adapter.json").write_text(
@@ -247,6 +261,8 @@ def main():
         "seed": args.seed,
         "epochs": args.epochs,
         "hidden_size": args.hidden_size,
+        "cap_mode": args.cap_mode,
+        "role_caps": role_caps,
         "params": {
             "guard": guard_p,
             "arbiter": arb_p,

@@ -30,6 +30,7 @@ import {
 } from "../public/js/mesa-core.mjs";
 
 import { buildProbeForCell } from "./h1-probe-cells.mjs";
+import { capSimplexProject, resolveCaps } from "./h1-arbiter-cap.mjs";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const POLICY_DIR = "results/mesa/phase2-matched-capacity/policies";
@@ -100,6 +101,10 @@ function parseArgs(argv) {
     cells: "nominal,geometric-light,sensor-delay-light",
     horizon: 200,
     roleHardCap: 0.7,
+    capMode: "symmetric",
+    fieldCap: 1.0,
+    rewardCap: 0.5,
+    guardCap: 0.7,
     fieldPolicy: `${POLICY_DIR}/signature_ppo_terminal_small_seed_0_phase5.policy.json`,
     rewardPolicy: `${POLICY_DIR}/reward_ppo_phase3_small_seed_0_phase3_canonical_1m.policy.json`,
   };
@@ -116,6 +121,10 @@ function parseArgs(argv) {
     else if (f === "--cells") args.cells = v;
     else if (f === "--horizon") args.horizon = Number.parseInt(v, 10);
     else if (f === "--role-hard-cap") args.roleHardCap = Number.parseFloat(v);
+    else if (f === "--cap-mode") args.capMode = v;
+    else if (f === "--field-cap") args.fieldCap = Number.parseFloat(v);
+    else if (f === "--reward-cap") args.rewardCap = Number.parseFloat(v);
+    else if (f === "--guard-cap") args.guardCap = Number.parseFloat(v);
     else if (f === "--field-policy") args.fieldPolicy = v;
     else if (f === "--reward-policy") args.rewardPolicy = v;
     else if (f === "--phase") { /* label only */ }
@@ -201,24 +210,15 @@ function rolloutRaw({ field, reward, seed, cellId, horizon, behavior, roleHardCa
   return { steps, terminalSig: m.terminalAlignment, basinCaptured };
 }
 
-function buildTargetWeights(alpha, risk, cap) {
+function buildTargetWeights(alpha, risk, caps) {
   // guard (hold) weight grows with privileged risk; field/reward share the rest
-  // by the direction-optimal split alpha. Then hard-cap + renormalize, exactly
-  // as the arbiter does at inference, so the target lives in-distribution.
+  // by the direction-optimal split alpha. Then project onto the role-capped
+  // simplex -- exactly as the arbiter does at inference, so the target lives
+  // in-distribution. Symmetric caps reproduce H1.2; reward-asymmetric caps
+  // (field 1.0 / reward 0.5 / guard 0.7) implement H1.2c.
   const wGuard = clamp(risk, 0, 1) * 0.6;
-  let w = [alpha * (1 - wGuard), (1 - alpha) * (1 - wGuard), wGuard];
-  let sum = w[0] + w[1] + w[2];
-  w = w.map((x) => x / (sum || 1));
-  for (let g = 0; g < 3; g += 1) {
-    const over = w.findIndex((x) => x > cap + 1e-12);
-    if (over === -1) break;
-    const excess = w[over] - cap;
-    w[over] = cap;
-    const rest = w.reduce((a, b, i) => (i === over ? a : a + b), 0);
-    if (rest <= 1e-12) break;
-    w = w.map((x, i) => (i === over ? x : x + excess * (x / rest)));
-  }
-  return w;
+  const base = [alpha * (1 - wGuard), (1 - alpha) * (1 - wGuard), wGuard];
+  return capSimplexProject(base, caps);
 }
 
 function csvRow(r) {
@@ -237,6 +237,8 @@ async function main() {
   const outDir = path.resolve(repoRoot, args.out);
   const field = new JsonPolicyController(JSON.parse(readFileSync(path.resolve(repoRoot, args.fieldPolicy), "utf8")));
   const reward = new JsonPolicyController(JSON.parse(readFileSync(path.resolve(repoRoot, args.rewardPolicy), "utf8")));
+  const caps = resolveCaps(args.capMode, args.fieldCap, args.rewardCap, args.guardCap, args.roleHardCap);
+  const roleCaps = { field: caps[0], reward: caps[1], guard: caps[2] };
 
   const behaviors = ["council", "reward", "field"];
   const splits = [
@@ -281,7 +283,7 @@ async function main() {
           0.55 * roll.basinCaptured + 0.30 * lowTerminal + 0.15 * (st.reward_misaligned && rollFailed ? 1 : 0),
           0, 1,
         );
-        const tw = buildTargetWeights(st.alpha, risk, args.roleHardCap);
+        const tw = buildTargetWeights(st.alpha, risk, caps);
         rowsBySplit[split.name].push({
           split: split.name, cell: roll.cell, seed: roll.seed, t: st.t,
           obs0: st.obs[0], obs1: st.obs[1], obs2: st.obs[2], obs3: st.obs[3], obs4: st.obs[4], obs5: st.obs[5],
@@ -321,6 +323,8 @@ async function main() {
       arbiter: ["tgt_w_field", "tgt_w_reward", "tgt_w_guard"],
       m_adapter: ["tgt_madapter_field", "tgt_madapter_reward"],
     },
+    cap_mode: args.capMode,
+    role_caps: roleCaps,
     leakage_rule: "trainer X may only read inference_features (+ guard_risk for arbiter); labels_privileged are targets/diagnostics only.",
   };
   await writeFile(path.join(outDir, "feature-schema.json"), `${JSON.stringify(schema, null, 2)}\n`, "utf8");
@@ -329,6 +333,8 @@ async function main() {
     generated: new Date().toISOString(),
     args,
     cells,
+    cap_mode: args.capMode,
+    role_caps: roleCaps,
     behavior_policy: "round-robin by seed%3: 0=blind-council, 1=reward-only, 2=field-only",
     splits: { train: { start: args.trainSeedStart, count: args.trainSeeds }, val: { start: args.valSeedStart, count: args.valSeeds } },
     rows: { train: rowsBySplit.train.length, val: rowsBySplit.val.length, total: nRows },
@@ -341,7 +347,7 @@ async function main() {
 
   // eslint-disable-next-line no-console
   console.log(`H1.2a dataset: train=${rowsBySplit.train.length} val=${rowsBySplit.val.length} rows  basin_rollouts=${nBasin}  ${elapsed.toFixed(2)}s  ${manifest.rows_per_sec} rows/s`);
-  console.log(`  cells=${cells.join(",")}  features=${INFERENCE_FEATURES.length}  cell_median_sig=${JSON.stringify(cellMedian)}`);
+  console.log(`  cap_mode=${args.capMode} role_caps=${JSON.stringify(roleCaps)}  cells=${cells.length}  features=${INFERENCE_FEATURES.length}`);
 }
 
 main().catch((e) => {

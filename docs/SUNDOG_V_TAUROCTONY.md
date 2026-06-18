@@ -167,10 +167,26 @@ the MESA controller-family architecture and capacity ladder.
 > *correct* value (the field/Sol) when it is right, and in this task that cost
 > was not repaid by proxy-resistance. Scoped caveats (one supervised arbiter
 > design, a symmetric action-blend cap, small-tier with frozen heads) keep this
-> short of a blanket kill; reopening requires a registered H1.2c (reward-
-> asymmetric *blend* cap, or an RL-trained arbiter) or a higher tier, not a
-> re-score. This is the Ornament Rule working as designed: the figure does not
-> get to keep its [TYPED] stamp on a failed falsifier.
+> short of a blanket kill. The reopening path was registered as
+> [`mesa/H1_2C_REWARD_ASYMMETRIC_CAP_SPEC.md`](mesa/H1_2C_REWARD_ASYMMETRIC_CAP_SPEC.md):
+> bind the reward/bull head in the action blend while leaving the field/Sol head
+> uncapped.
+>
+> **H1.2c FIRED TOO (`NULL`, 2026-06-18; [`mesa/H1_2C_RESULTS.md`](mesa/H1_2C_RESULTS.md)).**
+> Uncapping Sol did *not* repair the tax — `cap_tax_repair` was *negative* and
+> `M-Adapter` still won on all 13 cells. The diagnosis sharpened: the relief was
+> structurally there (field cap 1.00) but the **supervised arbiter would not use
+> it** — even on clean cells it let the field exceed 0.70 only ~12% of the time,
+> hedging to a cautious central blend because local features could not tell it
+> when Sol was trustworthy. So the tax was not a cap-geometry artifact. **Two
+> independent binding nulls now stand**; the thesis stays [ORNAMENT] for the MESA
+> lane. What survived both: the discipline keeps the **bull off the throne**
+> (reward authority structurally ≤ 0.50, zero breaches). The unproven half is
+> governance — *we can bound the proxy; we have not shown the bounded council
+> out-governs a well-tuned monarch.* Last registered rung before the figure is
+> [ORNAMENT]-for-good at this tier: **H1.2d (RL-trained arbiter)**, the named
+> bottleneck. This is the Ornament Rule working as designed: the figure does not
+> keep its [TYPED] stamp on a failed falsifier.
 
 ---
 
@@ -374,15 +390,21 @@ convert myth into typed result.
   of the thesis. (**H1b**: pantheon vs its own best single-objective reduction.)
   Home: `SUNDOG_V_MESA.md` Phases 3, 7. Spec:
   [`mesa/H1_PANTHEON_OF_AGENCY_SPEC.md`](mesa/H1_PANTHEON_OF_AGENCY_SPEC.md).
-  **Status: H1.1 smoke ✓ → H1.2a indicative SUPPORT → H1.2b binding `NULL`
-  (2026-06-18).** The binding small-tier bake-off
-  ([`mesa/H1_2B_RESULTS.md`](mesa/H1_2B_RESULTS.md)) did not support the thesis —
-  the equal-budget monolith won on competence and proxy-capture across the
-  envelope. The falsifier fired at small-tier; the thesis is [ORNAMENT] for the
-  MESA lane pending a registered **H1.2c** (reward-asymmetric blend cap or RL
-  arbiter) or a higher-tier test. The one durable positive: the learned arbiter
-  did keep the **bull (reward) head** off the throne far better than a blind
-  blend — sovereignty discipline works; it just didn't buy a net win here.
+  **Status: H1.1 smoke ✓ → H1.2a indicative SUPPORT → H1.2b binding `NULL` →
+  H1.2c (reward-asymmetric cap) binding `NULL` (2026-06-18).** Two independent
+  binding small-tier nulls: the equal-budget monolith won on competence and
+  proxy-capture across the envelope under both the symmetric cap
+  ([`mesa/H1_2B_RESULTS.md`](mesa/H1_2B_RESULTS.md)) and the bull-bound,
+  field-uncapped cap ([`mesa/H1_2C_RESULTS.md`](mesa/H1_2C_RESULTS.md)). H1.2c
+  sharpened the diagnosis: uncapping Sol did not repair the tax because the
+  **supervised arbiter would not use the relief** (field exceeded 0.70 only ~12%
+  of steps even on clean cells). The thesis is [ORNAMENT] for the MESA lane; the
+  last registered rung before it is [ORNAMENT]-for-good at this tier is **H1.2d
+  (RL-trained arbiter)** — the named bottleneck — with higher-tier work after.
+  The one durable positive across both runs: the discipline keeps the **bull
+  (reward) head** off the throne (reward authority structurally ≤ 0.50, zero
+  breaches) — we can bound the proxy; we have not shown the bounded council
+  out-governs a well-tuned monarch.
 - **H2 — The Averted Face.** Operationalize "oriented to the invariant, not the
   kill": a controller regularized toward the geometry-derived field vs one
   optimizing the proxy directly; measure the Goodhart gap. Home:
