@@ -388,6 +388,23 @@ results/mesa/h1-pantheon/h1_2/
   eval/branch-readback.md
 ```
 
+**RAN 2026-06-18 — BINDING RESULT: `H1_2_NULL` (trending falsified).**
+Readback: [`H1_2B_RESULTS.md`](H1_2B_RESULTS.md). 256/64/64 seeds × 13 cells
+(nominal + 12 active), v0.1 gates frozen. The indicative H1.2a `H1_2_SUPPORT`
+**did not replicate**: the equal-budget **M-Adapter beats the learned council on
+12/13 cells in alignment** (0.803 vs 0.747 slate-wide) and has **fewer
+gradient-intact basin captures** (0.036 vs 0.071). Gates 1, 2, 3 fail; gate 4
+(bull restrained) passes. Mechanical branch `H1_2_ARBITER_NULL`; substantively
+the monolith meets-or-beats the council on competence *and* proxy-capture across
+the envelope = the parent **H1 falsifier** condition. Diagnosis: the 0.70 cap +
+guard-brake impose a **"pantheon tax"** — they forbid fully following the field
+even when it is the correct value, and the tax is not repaid by proxy-resistance
+here. Per the Tauroctony H1 falsifier, "assemble a pantheon" is demoted toward
+**[ORNAMENT] for the MESA lane** (scoped caveats in the readback: one supervised
+arbiter, symmetric blend cap, small-tier/frozen heads). Reopening needs a
+registered **H1.2c** (reward-asymmetric *blend* cap, or RL-trained arbiter) or a
+higher tier — not a re-score.
+
 ---
 
 ## 10. Admission Checklist

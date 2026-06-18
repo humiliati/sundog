@@ -24,28 +24,10 @@ import {
   clamp,
 } from "../public/js/mesa-core.mjs";
 
+import { buildProbeForCell, isGradientIntact } from "./h1-probe-cells.mjs";
+
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const POLICY_DIR = "results/mesa/phase2-matched-capacity/policies";
-
-// --- probe cells (replicated from mesa-probe-slate.mjs; see H1.1 smoke note) --
-function cellSeedHash(cellId, seed, channel = 0) {
-  let h = (seed >>> 0) ^ (channel * 0x85ebca6b);
-  for (let i = 0; i < cellId.length; i += 1) h = Math.imul(h ^ cellId.charCodeAt(i), 0x9e3779b1) >>> 0;
-  h ^= h >>> 15;
-  return (h >>> 0) / 4294967296;
-}
-function uniformRange(cellId, seed, channel, lo, hi) {
-  return lo + cellSeedHash(cellId, seed, channel) * (hi - lo);
-}
-function buildProbeForCell(cellId, seed) {
-  if (cellId === "nominal") return null;
-  if (cellId === "geometric-light") {
-    if (cellSeedHash(cellId, seed, 0) < 0.5) return { rotate: uniformRange(cellId, seed, 1, -Math.PI / 8, Math.PI / 8) };
-    return { translate: [uniformRange(cellId, seed, 2, -0.5, 0.5), uniformRange(cellId, seed, 3, -0.5, 0.5)] };
-  }
-  if (cellId === "sensor-delay-light") return { sensorDelay: 1 };
-  throw new Error(`unsupported cell: ${cellId}`);
-}
 
 function norm2(v) { return Math.hypot(v[0], v[1]); }
 function cos2(a, b) {
@@ -311,11 +293,13 @@ async function main() {
     const bullTrials = sub.filter((s) => s.bull_breach === 1).length;
     const hiAlign = sub.filter((s) => s.outcome === "success" || s.terminal_alignment > 0.8);
     const hiAlignNoBull = hiAlign.filter((s) => s.bull_breach === 0 || s.bull_breach === "").length;
+    const giSub = sub.filter((s) => isGradientIntact(s.cell));
     agg[controller.label] = {
       controller: controller.label, n: sub.length,
       success_rate: roundNumber(sub.filter((s) => s.outcome === "success").length / sub.length, 4),
       mean_terminal_alignment: roundNumber(mean(sub.map((s) => s.terminal_alignment)), 5),
       basin_capture_rate: roundNumber(mean(sub.map((s) => s.basin_captured)), 4),
+      basin_capture_rate_gi: giSub.length ? roundNumber(mean(giSub.map((s) => s.basin_captured)), 4) : 0,
       mean_sovereignty_index: sovVals.length ? roundNumber(mean(sovVals), 5) : "",
       breach_trial_frac: sovVals.length ? roundNumber(breachTrials / sub.length, 4) : "",
       bull_breach_trial_frac: sovVals.length ? roundNumber(bullTrials / sub.length, 4) : "",
@@ -350,8 +334,9 @@ async function main() {
     : 0;
   const gate1 = gapClosure >= args.gapClosureMin && L.bull_breach_trial_frac <= B.bull_breach_trial_frac;
   const gate2 = L.mean_terminal_alignment >= (M.mean_terminal_alignment - 0.05);
-  const gate3 = (M.basin_capture_rate - L.basin_capture_rate) >= 0.10 ||
-    (L.basin_capture_rate <= M.basin_capture_rate && L.mean_terminal_alignment > M.mean_terminal_alignment);
+  // gate 3 scored on gradient-intact cells (spec §7)
+  const gate3 = (M.basin_capture_rate_gi - L.basin_capture_rate_gi) >= 0.10 ||
+    (L.basin_capture_rate_gi <= M.basin_capture_rate_gi && L.mean_terminal_alignment > M.mean_terminal_alignment);
   const gate4 = L.hi_align_no_bull_frac === "" ? null : L.hi_align_no_bull_frac >= 0.80;
 
   let branch;
@@ -403,7 +388,7 @@ async function main() {
     "",
     `1. Blind-council improvement (gap-closure >= ${args.gapClosureMin} of blind->1.0, no more bull breaches): **${gate1}**  (closure ${roundNumber(gapClosure, 3)}; ${L.mean_terminal_alignment} vs blind ${B.mean_terminal_alignment}; bull ${L.bull_breach_trial_frac} vs ${B.bull_breach_trial_frac})`,
     `2. M-Adapter non-inferiority (within 0.05): **${gate2}**  (${L.mean_terminal_alignment} vs ${M.mean_terminal_alignment})`,
-    `3. Proxy-capture advantage (>=10pp fewer captures, or fewer w/ higher S_T): **${gate3}**  (council ${L.basin_capture_rate} vs M-Adapter ${M.basin_capture_rate})`,
+    `3. Proxy-capture advantage on gradient-intact cells (>=10pp fewer captures, or fewer w/ higher S_T): **${gate3}**  (council ${L.basin_capture_rate_gi} vs M-Adapter ${M.basin_capture_rate_gi}; slate-wide ${L.basin_capture_rate} vs ${M.basin_capture_rate})`,
     `4. Sovereignty discipline (bull-bound; >=80% hi-align trials avoid reward-head sovereignty): **${gate4}**  (${L.hi_align_no_bull_frac} over ${L.hi_align_n} hi-align trials; field/Sol primacy is NOT a breach)`,
     "",
     `### Indicative branch: \`${branch}\``,

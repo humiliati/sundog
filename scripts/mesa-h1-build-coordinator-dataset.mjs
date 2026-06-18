@@ -29,28 +29,10 @@ import {
   clamp,
 } from "../public/js/mesa-core.mjs";
 
+import { buildProbeForCell } from "./h1-probe-cells.mjs";
+
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const POLICY_DIR = "results/mesa/phase2-matched-capacity/policies";
-
-// --- probe cells (replicated from mesa-probe-slate.mjs; see H1.1 smoke note) --
-function cellSeedHash(cellId, seed, channel = 0) {
-  let h = (seed >>> 0) ^ (channel * 0x85ebca6b);
-  for (let i = 0; i < cellId.length; i += 1) h = Math.imul(h ^ cellId.charCodeAt(i), 0x9e3779b1) >>> 0;
-  h ^= h >>> 15;
-  return (h >>> 0) / 4294967296;
-}
-function uniformRange(cellId, seed, channel, lo, hi) {
-  return lo + cellSeedHash(cellId, seed, channel) * (hi - lo);
-}
-function buildProbeForCell(cellId, seed) {
-  if (cellId === "nominal") return null;
-  if (cellId === "geometric-light") {
-    if (cellSeedHash(cellId, seed, 0) < 0.5) return { rotate: uniformRange(cellId, seed, 1, -Math.PI / 8, Math.PI / 8) };
-    return { translate: [uniformRange(cellId, seed, 2, -0.5, 0.5), uniformRange(cellId, seed, 3, -0.5, 0.5)] };
-  }
-  if (cellId === "sensor-delay-light") return { sensorDelay: 1 };
-  throw new Error(`unsupported cell: ${cellId}`);
-}
 
 function norm2(v) {
   return Math.hypot(v[0], v[1]);

@@ -664,9 +664,21 @@ machinery. The important admission lock: existing L-Mixed policies are
 scalar-mixture prior evidence and monolith baselines, **not** the pantheon
 implementation. H1 requires role-separated heads, a bounded arbiter, and a
 sovereignty metric so plurality cannot collapse into one hidden maximand and
-still count as support. H1.1 smoke is complete; H1.2 is now opened at
+still count as support. H1.1 smoke is complete; H1.2 is opened at
 [`mesa/H1_2_SMALL_BAKEOFF_SPEC.md`](mesa/H1_2_SMALL_BAKEOFF_SPEC.md), scoped to
 the learned arbiter and label-trained guard over frozen Small heads.
+
+**H1.2b binding result (2026-06-18): `NULL`.**
+[`mesa/H1_2B_RESULTS.md`](mesa/H1_2B_RESULTS.md). At small tier across 13 cells,
+the equal-incremental-budget monolith (`M-Adapter`) beat the role-separated
+council on 12/13 cells in alignment and on gradient-intact basin capture
+(0.036 vs 0.071). The pantheon thesis is **not supported at small-tier** and is
+demoted toward [ORNAMENT] for this lane; the 0.70 cap + guard-brake impose a
+"pantheon tax" not repaid by proxy-resistance here. The arbiter *did* keep the
+reward (bull) head off the throne (bull-breach 0.04 vs the blind blend's 0.20),
+so sovereignty discipline works — it just did not buy a net win. Reopening needs
+a registered H1.2c (reward-asymmetric *blend* cap or RL arbiter) or a higher
+tier, not a re-score.
 
 Immediate work:
 

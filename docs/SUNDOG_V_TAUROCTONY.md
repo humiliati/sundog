@@ -156,6 +156,21 @@ the MESA controller-family architecture and capacity ladder.
 > stance is wrong and "assemble a pantheon" is demoted to [ORNAMENT]. Home:
 > `SUNDOG_V_MESA.md`, Phase 3 (Proxy-Splitting) and Phase 7 (Operating
 > Envelope). Routed as Horizon H1.
+>
+> **FIRED, at small-tier (2026-06-18).** The first binding test —
+> [`mesa/H1_2B_RESULTS.md`](mesa/H1_2B_RESULTS.md), 64 seeds × 13 cells — found
+> an equal-incremental-budget monolith (`M-Adapter`) beating the role-separated
+> council on 12/13 cells in alignment *and* on false-basin capture. The honest
+> consequence: **the pantheon thesis is demoted toward [ORNAMENT] for the MESA
+> lane**, banked as a negative. The diagnosis is itself thesis-shaped — a
+> "pantheon tax": the no-single-sovereign cap forbids fully following even the
+> *correct* value (the field/Sol) when it is right, and in this task that cost
+> was not repaid by proxy-resistance. Scoped caveats (one supervised arbiter
+> design, a symmetric action-blend cap, small-tier with frozen heads) keep this
+> short of a blanket kill; reopening requires a registered H1.2c (reward-
+> asymmetric *blend* cap, or an RL-trained arbiter) or a higher tier, not a
+> re-score. This is the Ornament Rule working as designed: the figure does not
+> get to keep its [TYPED] stamp on a failed falsifier.
 
 ---
 
@@ -357,8 +372,17 @@ convert myth into typed result.
 - **H1 — Pantheon vs Monolith bake-off.** Matched-capacity plural vs singular
   controllers against the MESA proxy-splitting battery. The flagship typed test
   of the thesis. (**H1b**: pantheon vs its own best single-objective reduction.)
-  Home: `SUNDOG_V_MESA.md` Phases 3, 7. Spec opened:
+  Home: `SUNDOG_V_MESA.md` Phases 3, 7. Spec:
   [`mesa/H1_PANTHEON_OF_AGENCY_SPEC.md`](mesa/H1_PANTHEON_OF_AGENCY_SPEC.md).
+  **Status: H1.1 smoke ✓ → H1.2a indicative SUPPORT → H1.2b binding `NULL`
+  (2026-06-18).** The binding small-tier bake-off
+  ([`mesa/H1_2B_RESULTS.md`](mesa/H1_2B_RESULTS.md)) did not support the thesis —
+  the equal-budget monolith won on competence and proxy-capture across the
+  envelope. The falsifier fired at small-tier; the thesis is [ORNAMENT] for the
+  MESA lane pending a registered **H1.2c** (reward-asymmetric blend cap or RL
+  arbiter) or a higher-tier test. The one durable positive: the learned arbiter
+  did keep the **bull (reward) head** off the throne far better than a blind
+  blend — sovereignty discipline works; it just didn't buy a net win here.
 - **H2 — The Averted Face.** Operationalize "oriented to the invariant, not the
   kill": a controller regularized toward the geometry-derived field vs one
   optimizing the proxy directly; measure the Goodhart gap. Home:
