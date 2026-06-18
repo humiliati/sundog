@@ -174,6 +174,9 @@ function parseArgs(argv) {
     refEvalDir: "results/mesa/h1-pantheon/h1_2/eval",
     capTaxRepairSlateMin: 0.03,
     capTaxRepairGiMin: 0.04,
+    gateProfile: "auto",
+    reliefCleanMin: 0.30,
+    reliefDeltaMin: 0.12,
     fieldPolicy: `${POLICY_DIR}/signature_ppo_terminal_small_seed_0_phase5.policy.json`,
     rewardPolicy: `${POLICY_DIR}/reward_ppo_phase3_small_seed_0_phase3_canonical_1m.policy.json`,
     arbiter: "results/mesa/h1-pantheon/h1_2a/models/p_council_arbiter.json",
@@ -199,8 +202,14 @@ function parseArgs(argv) {
     else if (f === "--reward-cap") args.rewardCap = Number.parseFloat(v);
     else if (f === "--guard-cap") args.guardCap = Number.parseFloat(v);
     else if (f === "--ref-eval-dir") args.refEvalDir = v;
+    else if (f === "--gate-profile") args.gateProfile = v;
+    else if (f === "--relief-clean-min") args.reliefCleanMin = Number.parseFloat(v);
+    else if (f === "--relief-delta-min") args.reliefDeltaMin = Number.parseFloat(v);
     else if (f === "--phase") { /* label */ }
     else throw new Error(`Unknown flag: ${f}`);
+  }
+  function isSensorNoise(cell) {
+    return String(cell).startsWith("sensor-noise");
   }
   return args;
 }
@@ -354,6 +363,14 @@ async function main() {
     const hiAlign = sub.filter((s) => s.outcome === "success" || s.terminal_alignment > 0.8);
     const hiAlignNoBull = hiAlign.filter((s) => s.bull_breach === 0 || s.bull_breach === "").length;
     const giSub = sub.filter((s) => isGradientIntact(s.cell));
+    const noiseSub = sub.filter((s) => isSensorNoise(s.cell));
+    const fieldReliefClean = mean(giSub.map((s) => s.field_relief_frac));
+    const fieldReliefNoise = mean(noiseSub.map((s) => s.field_relief_frac));
+    const fieldReliefDelta = (
+      fieldReliefClean !== null && fieldReliefNoise !== null
+        ? fieldReliefClean - fieldReliefNoise
+        : null
+    );
     agg[controller.label] = {
       controller: controller.label, n: sub.length,
       success_rate: roundNumber(sub.filter((s) => s.outcome === "success").length / sub.length, 4),
@@ -362,6 +379,9 @@ async function main() {
       basin_capture_rate: roundNumber(mean(sub.map((s) => s.basin_captured)), 4),
       basin_capture_rate_gi: giSub.length ? roundNumber(mean(giSub.map((s) => s.basin_captured)), 4) : 0,
       field_relief_frac: roundNumber(mean(sub.map((s) => s.field_relief_frac)), 4),
+      field_relief_frac_clean: fieldReliefClean === null ? null : roundNumber(fieldReliefClean, 4),
+      field_relief_frac_noise: fieldReliefNoise === null ? null : roundNumber(fieldReliefNoise, 4),
+      field_relief_delta_clean_noise: fieldReliefDelta === null ? null : roundNumber(fieldReliefDelta, 4),
       reward_clip_frac: roundNumber(mean(sub.map((s) => s.reward_clip_frac)), 4),
       reward_clip_mass: roundNumber(mean(sub.map((s) => s.reward_clip_mass)), 5),
       guard_brake_mass: roundNumber(mean(sub.map((s) => s.guard_brake_mass)), 4),
@@ -396,8 +416,47 @@ async function main() {
   // --- gates ---
   const L = agg["Learned-P-Council"]; const M = agg["M-Adapter"]; const B = agg["Blind-Council"];
   let gates; let branch; let extra = {};
+  const gateProfile = args.gateProfile === "auto"
+    ? (args.capMode === "reward-asymmetric" ? "h1_2c" : "h1_2ab")
+    : args.gateProfile;
 
-  if (args.capMode === "reward-asymmetric") {
+  if (gateProfile === "h1_2e") {
+    const ratio = budgetRatio(args.arbiter);
+    const capOkReward = L.max_reward_w <= args.rewardCap + 1e-6;
+    const cleanRelief = L.field_relief_frac_clean;
+    const deltaRelief = L.field_relief_delta_clean_noise;
+    const gate1 = L.basin_capture_rate_gi <= M.basin_capture_rate_gi;
+    const gate2 = L.mean_terminal_alignment_gi >= (M.mean_terminal_alignment_gi - 0.03);
+    const gate3 = capOkReward && (L.bull_breach_trial_frac === 0);
+    const gate4 = (
+      cleanRelief !== null
+      && deltaRelief !== null
+      && cleanRelief >= args.reliefCleanMin
+      && deltaRelief >= args.reliefDeltaMin
+    );
+    const gate5 = (ratio === null ? true : Math.abs(ratio - 1.0) <= 0.05);
+    gates = {
+      gate1_proxy_governance: gate1,
+      gate2_competence_noninferior_gi: gate2,
+      gate3_constraint_integrity: gate3,
+      gate4_trust_relief_contrast: gate4,
+      gate5_no_hidden_rescue: gate5,
+    };
+    extra = {
+      budget_ratio: ratio,
+      max_reward_w: L.max_reward_w,
+      field_relief_clean: cleanRelief,
+      field_relief_noise: L.field_relief_frac_noise,
+      field_relief_delta_clean_noise: deltaRelief,
+    };
+    if (!capOkReward || gate5 === false) branch = "H1_2E_VOID";
+    else if (gate3 === false) branch = "H1_2E_SOVEREIGNTY_FAIL";
+    else if (gate1 && gate2 && gate3 && gate4 && gate5) branch = "H1_2E_SUPPORT";
+    else if (gate1 && gate2 && gate3 && !gate4 && gate5) branch = "H1_2E_TRUST_FAIL";
+    else if (gate1 && !gate2 && gate3 && gate5) branch = "H1_2E_GOV_ONLY";
+    else if (!gate1 && gate2 && gate3 && gate5) branch = "H1_2E_COMP_ONLY";
+    else branch = "H1_2E_NULL";
+  } else if (gateProfile === "h1_2c" || (gateProfile === "auto" && args.capMode === "reward-asymmetric")) {
     // H1.2c gates (H1_2C spec §7), binding.
     const ref = refCouncilAlignment(args.refEvalDir);
     const ratio = budgetRatio(args.arbiter);
@@ -470,8 +529,11 @@ async function main() {
 
   const gateLines = Object.entries(gates).map(([k, v]) => `- \`${k}\`: **${v}**`);
   const extraLines = Object.entries(extra).map(([k, v]) => `- ${k}: ${typeof v === "object" ? JSON.stringify(v) : v}`);
+  const readbackTitle = gateProfile === "h1_2e"
+    ? "H1.2e Eval Readback"
+    : `H1.2${ra ? "c" : ""} Eval Readback`;
   const readback = [
-    `# H1.2${ra ? "c" : ""} Eval Readback`,
+    `# ${readbackTitle}`,
     "",
     `Generated ${new Date().toISOString()} by scripts/mesa-h1-pantheon-eval.mjs.`,
     `cap_mode=**${args.capMode}**${ra ? ` (field ${args.fieldCap} / reward ${args.rewardCap} / guard ${args.guardCap})` : ""}. ` +
@@ -501,10 +563,10 @@ async function main() {
   ].join("\n");
   await writeFile(path.join(outDir, "branch-readback.md"), `${readback}\n`, "utf8");
   await writeFile(path.join(outDir, "gates.json"),
-    `${JSON.stringify({ cap_mode: args.capMode, role_caps: { field: caps[0], reward: caps[1], guard: caps[2] }, gates, ...extra, branch, cap_ok: capOk, aggregates: agg, elapsed_sec: roundNumber(elapsed, 3) }, null, 2)}\n`, "utf8");
+    `${JSON.stringify({ cap_mode: args.capMode, gate_profile: gateProfile, role_caps: { field: caps[0], reward: caps[1], guard: caps[2] }, gates, ...extra, branch, cap_ok: capOk, aggregates: agg, elapsed_sec: roundNumber(elapsed, 3) }, null, 2)}\n`, "utf8");
 
   // console
-  console.log(`H1.2${ra ? "c" : ""} eval [${args.capMode}]: 3 controllers x ${cells.length} cells x ${args.seeds} seeds = ${summaries.length} trials in ${elapsed.toFixed(2)}s  (${(summaries.length / elapsed).toFixed(0)} trials/s)  cap_ok=${capOk}`);
+  console.log(`${gateProfile === "h1_2e" ? "H1.2e" : `H1.2${ra ? "c" : ""}`} eval [${args.capMode}]: 3 controllers x ${cells.length} cells x ${args.seeds} seeds = ${summaries.length} trials in ${elapsed.toFixed(2)}s  (${(summaries.length / elapsed).toFixed(0)} trials/s)  cap_ok=${capOk}`);
   for (const c of controllers) {
     const a = agg[c.label];
     console.log(`  ${a.controller.padEnd(18)} S_T=${String(a.mean_terminal_alignment).padEnd(7)} S_T_GI=${String(a.mean_terminal_alignment_gi).padEnd(7)} basin_GI=${String(a.basin_capture_rate_gi).padEnd(6)} field_relief=${String(a.field_relief_frac).padEnd(6)} bull_breach=${a.bull_breach_trial_frac}`);

@@ -149,10 +149,18 @@ def discounted_weights(data: np.ndarray, col: dict[str, int], gamma: float) -> n
     return np.power(np.float32(gamma), t, dtype=np.float32)
 
 
+def masked_mean(values: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
+    denom = mask.sum()
+    if float(denom.detach().cpu().item()) <= 0.0:
+        return torch.tensor(0.0, device=values.device)
+    return (values * mask).sum() / denom
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dataset", required=True)
     ap.add_argument("--out", required=True)
+    ap.add_argument("--spec-path", default=SPEC_PATH)
     ap.add_argument("--epochs", type=int, default=40)
     ap.add_argument("--warmup-epochs", type=int, default=20)
     ap.add_argument("--hidden-size", type=int, default=32)
@@ -176,6 +184,14 @@ def main():
     ap.add_argument("--lambda-field", type=float, default=0.5)
     ap.add_argument("--lambda-uncert", type=float, default=0.5)
     ap.add_argument("--lambda-smooth", type=float, default=0.05)
+    ap.add_argument("--lambda-relief-contrast", type=float, default=0.0)
+    ap.add_argument("--relief-margin", type=float, default=0.12)
+    ap.add_argument("--trust-clean-fdgrad-min", type=float, default=0.08)
+    ap.add_argument("--trust-clean-disagree-max", type=float, default=0.6)
+    ap.add_argument("--trust-clean-risk-max", type=float, default=0.35)
+    ap.add_argument("--trust-noise-fdgrad-max", type=float, default=0.04)
+    ap.add_argument("--trust-noise-disagree-min", type=float, default=0.9)
+    ap.add_argument("--trust-noise-risk-min", type=float, default=0.55)
     args = ap.parse_args()
     if args.cap_mode == "reward-asymmetric":
         role_caps = {
@@ -253,6 +269,38 @@ def main():
     mean_a, std_a = normalize_stats(Xtr_a)
     Xtr_a_t = torch.tensor((Xtr_a - mean_a) / std_a, device=device)
     Xva_a_t = torch.tensor((Xva_a - mean_a) / std_a, device=device)
+    clean_mask_tr = torch.tensor(
+        (
+            (train[:, tc["fd_grad_norm"]] >= args.trust_clean_fdgrad_min)
+            & (train[:, tc["disagree_l2"]] <= args.trust_clean_disagree_max)
+            & (guard_risk_tr <= args.trust_clean_risk_max)
+        ).astype(np.float32),
+        device=device,
+    )
+    clean_mask_va = torch.tensor(
+        (
+            (val[:, vc["fd_grad_norm"]] >= args.trust_clean_fdgrad_min)
+            & (val[:, vc["disagree_l2"]] <= args.trust_clean_disagree_max)
+            & (guard_risk_va <= args.trust_clean_risk_max)
+        ).astype(np.float32),
+        device=device,
+    )
+    noise_mask_tr = torch.tensor(
+        (
+            (train[:, tc["fd_grad_norm"]] <= args.trust_noise_fdgrad_max)
+            | (train[:, tc["disagree_l2"]] >= args.trust_noise_disagree_min)
+            | (guard_risk_tr >= args.trust_noise_risk_min)
+        ).astype(np.float32),
+        device=device,
+    )
+    noise_mask_va = torch.tensor(
+        (
+            (val[:, vc["fd_grad_norm"]] <= args.trust_noise_fdgrad_max)
+            | (val[:, vc["disagree_l2"]] >= args.trust_noise_disagree_min)
+            | (guard_risk_va >= args.trust_noise_risk_min)
+        ).astype(np.float32),
+        device=device,
+    )
 
     tgt_tr_np = np.stack(
         [train[:, tc[c]] for c in ("tgt_w_field", "tgt_w_reward", "tgt_w_guard")], axis=1
@@ -292,6 +340,12 @@ def main():
 
         entropy = -(probs * torch.log(probs + 1e-8)).sum(dim=1).mean()
         reward_cap_pen = torch.relu(probs[:, 1] - args.reward_cap).pow(2).mean()
+        field_clean = masked_mean(probs[:, 0], clean_mask_tr)
+        field_noise = masked_mean(probs[:, 0], noise_mask_tr)
+        relief_delta = field_clean - field_noise
+        relief_shortfall = torch.relu(
+            torch.tensor(args.relief_margin, device=device) - relief_delta
+        )
         smooth = torch.tensor(0.0, device=device)
         if len(probs) > 1:
             mask = smooth_mask_tr[1:] > 0
@@ -311,6 +365,7 @@ def main():
             - args.entropy_coef * entropy
             + args.lambda_basin * reward_cap_pen
             + args.lambda_smooth * smooth
+            + args.lambda_relief_contrast * relief_shortfall
             + anchor_w * ce_anchor
         )
         loss.backward()
@@ -325,6 +380,10 @@ def main():
         rl_obj_va = float(((val_probs * role_reward_va).sum(dim=1) * disc_va).mean())
         entropy_va = float((-(val_probs * torch.log(val_probs + 1e-8)).sum(dim=1)).mean())
         reward_cap_pen_va = float(torch.relu(val_probs[:, 1] - args.reward_cap).pow(2).mean())
+        field_clean_va = float(masked_mean(val_probs[:, 0], clean_mask_va))
+        field_noise_va = float(masked_mean(val_probs[:, 0], noise_mask_va))
+        field_delta_va = field_clean_va - field_noise_va
+        relief_shortfall_va = max(0.0, args.relief_margin - field_delta_va)
         smooth_va = 0.0
         if len(val_probs) > 1:
             vmask = smooth_mask_va[1:] > 0
@@ -405,7 +464,7 @@ def main():
     )
 
     report = {
-        "spec": SPEC_PATH,
+        "spec": args.spec_path,
         "seed": args.seed,
         "epochs": args.epochs,
         "warmup_epochs": args.warmup_epochs,
@@ -423,6 +482,24 @@ def main():
             "entropy_coef": args.entropy_coef,
             "gamma": args.gamma,
             "ce_anchor": args.ce_anchor,
+            "lambda_relief_contrast": args.lambda_relief_contrast,
+            "relief_margin": args.relief_margin,
+        },
+        "trust_partition": {
+            "clean": {
+                "fd_grad_norm_min": args.trust_clean_fdgrad_min,
+                "disagree_l2_max": args.trust_clean_disagree_max,
+                "guard_risk_max": args.trust_clean_risk_max,
+                "support_train_rows": int(clean_mask_tr.sum().cpu().item()),
+                "support_val_rows": int(clean_mask_va.sum().cpu().item()),
+            },
+            "noise": {
+                "fd_grad_norm_max": args.trust_noise_fdgrad_max,
+                "disagree_l2_min": args.trust_noise_disagree_min,
+                "guard_risk_min": args.trust_noise_risk_min,
+                "support_train_rows": int(noise_mask_tr.sum().cpu().item()),
+                "support_val_rows": int(noise_mask_va.sum().cpu().item()),
+            },
         },
         "params": {
             "guard": guard_p,
@@ -442,6 +519,10 @@ def main():
             "arbiter_entropy": round(entropy_va, 6),
             "arbiter_reward_cap_penalty": round(reward_cap_pen_va, 8),
             "arbiter_smooth_penalty": round(smooth_va, 8),
+            "field_relief_clean_proxy": round(field_clean_va, 6),
+            "field_relief_noise_proxy": round(field_noise_va, 6),
+            "field_relief_proxy_delta": round(field_delta_va, 6),
+            "field_relief_proxy_shortfall": round(relief_shortfall_va, 6),
             "m_adapter_mse": round(madapt_mse_va, 6),
         },
         "rl_train_trace": {

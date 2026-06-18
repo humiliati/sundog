@@ -187,6 +187,9 @@ the MESA controller-family architecture and capacity ladder.
 > [ORNAMENT]-for-good at this tier: **H1.2d (RL-trained arbiter)**, the named
 > bottleneck, now preregistered at
 > [`mesa/H1_2D_RL_ARBITER_SPEC.md`](mesa/H1_2D_RL_ARBITER_SPEC.md). This is the
+> H1.2d binding rung. Contingent next rung (if H1.2d does not admit support):
+> [`mesa/H1_2E_TRUST_HISTORY_RL_SPEC.md`](mesa/H1_2E_TRUST_HISTORY_RL_SPEC.md),
+> which locks a trust/history-aware relief-contrast RL objective.
 > Ornament Rule working as designed: the figure does not keep its [TYPED] stamp
 > on a failed falsifier.
 
