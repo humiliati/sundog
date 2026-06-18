@@ -208,10 +208,10 @@ function parseArgs(argv) {
     else if (f === "--phase") { /* label */ }
     else throw new Error(`Unknown flag: ${f}`);
   }
-  function isSensorNoise(cell) {
-    return String(cell).startsWith("sensor-noise");
-  }
   return args;
+}
+function isSensorNoise(cell) {
+  return String(cell).startsWith("sensor-noise");
 }
 
 function runTrial(controller, seed, cellId, horizon, sovThreshold, breachFrac, bullThreshold, rewardCap) {
