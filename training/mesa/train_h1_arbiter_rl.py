@@ -1,8 +1,9 @@
-"""H1.2d trainer: supervised guard + M-Adapter, RL-trained arbiter.
+"""H1.2d/H1.2e trainer: supervised guard + M-Adapter, RL-trained arbiter.
 
 Builds on the H1.2 coordinator contract and keeps the same JSON output schema as
 train_h1_arbiter.py, but replaces arbiter final training with an RL-style
-objective over offline rollouts.
+objective over offline rollouts. H1.2e mode is enabled by non-zero
+--lambda-relief-contrast.
 """
 
 from __future__ import annotations
@@ -23,7 +24,8 @@ except ModuleNotFoundError:  # pragma: no cover
     roc_auc_score = None
 
 COORD_FORMAT = "mesa-coordinator-json-v1"
-SPEC_PATH = "docs/mesa/H1_2D_RL_ARBITER_SPEC.md"
+SPEC_PATH_H1_2D = "docs/mesa/H1_2D_RL_ARBITER_SPEC.md"
+SPEC_PATH_H1_2E = "docs/mesa/H1_2E_TRUST_HISTORY_RL_SPEC.md"
 GUARD_CALIBRATION_PENALTY = 1.0
 MIN_ANCHOR_WEIGHT = 0.02
 
@@ -160,7 +162,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dataset", required=True)
     ap.add_argument("--out", required=True)
-    ap.add_argument("--spec-path", default=SPEC_PATH)
+    ap.add_argument("--spec-path", default=SPEC_PATH_H1_2D)
     ap.add_argument("--epochs", type=int, default=40)
     ap.add_argument("--warmup-epochs", type=int, default=20)
     ap.add_argument("--hidden-size", type=int, default=32)
@@ -193,6 +195,10 @@ def main():
     ap.add_argument("--trust-noise-disagree-min", type=float, default=0.9)
     ap.add_argument("--trust-noise-risk-min", type=float, default=0.55)
     args = ap.parse_args()
+    spec_path = args.spec_path
+    if args.lambda_relief_contrast > 0.0 and args.spec_path == SPEC_PATH_H1_2D:
+        spec_path = SPEC_PATH_H1_2E
+    rung_label = "H1.2e" if args.lambda_relief_contrast > 0.0 else "H1.2d"
     if args.cap_mode == "reward-asymmetric":
         role_caps = {
             "field": args.field_cap,
@@ -464,7 +470,7 @@ def main():
     )
 
     report = {
-        "spec": args.spec_path,
+        "spec": spec_path,
         "seed": args.seed,
         "epochs": args.epochs,
         "warmup_epochs": args.warmup_epochs,
@@ -540,7 +546,7 @@ def main():
         },
     }
     (out / "train-report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
-    print("H1.2d RL trainer done.")
+    print(f"{rung_label} RL trainer done.")
     print(
         f"  params guard={guard_p} arbiter={arb_p} council={council_p} | "
         f"m_adapter={madapt_p} (h={h}) ratio={budget_ratio:.3f} within5%={report['params']['budget_within_5pct']}"

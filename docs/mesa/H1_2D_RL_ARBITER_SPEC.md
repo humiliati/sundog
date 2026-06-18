@@ -295,7 +295,7 @@ results/mesa/h1-pantheon/h1_2d_rl/
   models/p_guard.json
   models/p_council_arbiter_rl.json
   models/m_adapter.json
-  models/training-report.json
+  models/train-report.json
   eval/h1-cell-map.csv
   eval/role_weights.csv
   eval/sovereignty-summary.csv

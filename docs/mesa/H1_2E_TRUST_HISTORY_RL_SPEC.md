@@ -1,4 +1,4 @@
-# H1.2e Trust/History-Aware RL Arbiter — Binding Spec (Draft)
+# H1.2e Trust/History-Aware RL Arbiter — Binding Spec
 
 Status: **OPEN SPEC / preregistered (2026-06-18)** as the next named bottleneck rung after H1.2d if support is not admitted.
 Parent specs/results: [`H1_2D_RL_ARBITER_SPEC.md`](H1_2D_RL_ARBITER_SPEC.md), [`H1_2C_RESULTS.md`](H1_2C_RESULTS.md), [`H1_2B_RESULTS.md`](H1_2B_RESULTS.md).
