@@ -241,6 +241,9 @@ this tier and require named new bottleneck before any H1.2e.
 - Eval seeds: `10000-10063`;
 - optional robustness reruns with seeds `11000-11063` (must be marked auxiliary).
 
+Ranges are intentionally non-overlapping and offset by block to make split
+audits and accidental overlap detection mechanically easy in manifests.
+
 ### 10.2 Budget and sweep matrix
 
 Budget lock:

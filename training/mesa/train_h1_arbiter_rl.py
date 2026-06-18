@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import math
 from pathlib import Path
 
 import numpy as np
@@ -22,6 +23,9 @@ except ModuleNotFoundError:  # pragma: no cover
     roc_auc_score = None
 
 COORD_FORMAT = "mesa-coordinator-json-v1"
+SPEC_PATH = "docs/mesa/H1_2D_RL_ARBITER_SPEC.md"
+GUARD_CALIBRATION_PENALTY = 1.0
+MIN_ANCHOR_WEIGHT = 0.02
 
 
 def load_csv(path: Path) -> tuple[list[str], np.ndarray, dict[str, int]]:
@@ -111,16 +115,16 @@ def to_coord_json(
     return payload
 
 
-def _clip01(x: np.ndarray) -> np.ndarray:
+def _clip_to_unit_interval(x: np.ndarray) -> np.ndarray:
     return np.minimum(np.maximum(x, 0.0), 1.0)
 
 
 def build_role_rewards(data: np.ndarray, col: dict[str, int], args) -> np.ndarray:
-    alpha = _clip01(data[:, col["alpha_star"]])
-    risk = _clip01(data[:, col["risk"]])
-    basin = _clip01(data[:, col["roll_basin_captured"]])
-    trust = _clip01((alpha - 0.5) * 2.0)
-    corruption = _clip01((0.5 - alpha) * 2.0)
+    alpha = _clip_to_unit_interval(data[:, col["alpha_star"]])
+    risk = _clip_to_unit_interval(data[:, col["risk"]])
+    basin = _clip_to_unit_interval(data[:, col["roll_basin_captured"]])
+    trust = _clip_to_unit_interval((alpha - 0.5) * 2.0)
+    corruption = _clip_to_unit_interval((0.5 - alpha) * 2.0)
 
     r_field = (
         args.lambda_align * alpha
@@ -229,7 +233,7 @@ def main():
         logit = guard(Xtr_t)
         loss = bce(logit, ytr)
         prob = torch.sigmoid(logit)
-        loss = loss + 1.0 * (prob.mean() - ytr.mean()) ** 2
+        loss = loss + GUARD_CALIBRATION_PENALTY * (prob.mean() - ytr.mean()) ** 2
         loss.backward()
         opt.step()
     with torch.no_grad():
@@ -290,14 +294,17 @@ def main():
         reward_cap_pen = torch.relu(probs[:, 1] - args.reward_cap).pow(2).mean()
         smooth = torch.tensor(0.0, device=device)
         if len(probs) > 1:
-            delta = (probs[1:] - probs[:-1]).pow(2).sum(dim=1)
-            denom = torch.clamp(smooth_mask_tr[1:].sum(), min=1.0)
-            smooth = (delta * smooth_mask_tr[1:]).sum() / denom
+            mask = smooth_mask_tr[1:] > 0
+            if bool(mask.any()):
+                diffs = probs[1:][mask] - probs[:-1][mask]
+                smooth = diffs.pow(2).sum(dim=1).mean()
 
         # anchor to supervised targets to avoid early collapse
         logsm = torch.log_softmax(logits, dim=1)
         ce_anchor = -(tgt_tr * logsm).sum(dim=1).mean()
-        anchor_w = max(0.02, args.ce_anchor * (1.0 - epoch / max(args.epochs, 1)))
+        anchor_w = max(
+            MIN_ANCHOR_WEIGHT, args.ce_anchor * (1.0 - epoch / max(args.epochs, 1))
+        )
 
         loss = (
             -discounted_obj
@@ -320,9 +327,10 @@ def main():
         reward_cap_pen_va = float(torch.relu(val_probs[:, 1] - args.reward_cap).pow(2).mean())
         smooth_va = 0.0
         if len(val_probs) > 1:
-            vdelta = (val_probs[1:] - val_probs[:-1]).pow(2).sum(dim=1)
-            vdenom = torch.clamp(smooth_mask_va[1:].sum(), min=1.0)
-            smooth_va = float((vdelta * smooth_mask_va[1:]).sum() / vdenom)
+            vmask = smooth_mask_va[1:] > 0
+            if bool(vmask.any()):
+                vdiffs = val_probs[1:][vmask] - val_probs[:-1][vmask]
+                smooth_va = float(vdiffs.pow(2).sum(dim=1).mean())
 
     # ---- M-Adapter -----------------------------------------------------------
     madapt_tgt_tr = torch.tensor(
@@ -370,27 +378,22 @@ def main():
         + "\n",
         encoding="utf-8",
     )
-    (out / "p_council_arbiter_rl.json").write_text(
-        json.dumps(
-            to_coord_json(
-                arbiter,
-                "arbiter",
-                arb_feats,
-                mean_a,
-                std_a,
-                head="softmax_cap",
-                role_cap=args.role_cap,
-                cap_mode=args.cap_mode,
-                role_caps=role_caps,
-            )
+    arbiter_json = json.dumps(
+        to_coord_json(
+            arbiter,
+            "arbiter",
+            arb_feats,
+            mean_a,
+            std_a,
+            head="softmax_cap",
+            role_cap=args.role_cap,
+            cap_mode=args.cap_mode,
+            role_caps=role_caps,
         )
-        + "\n",
-        encoding="utf-8",
-    )
+    ) + "\n"
+    (out / "p_council_arbiter_rl.json").write_text(arbiter_json, encoding="utf-8")
     # compatibility path for existing harness defaults
-    (out / "p_council_arbiter.json").write_text(
-        (out / "p_council_arbiter_rl.json").read_text(encoding="utf-8"), encoding="utf-8"
-    )
+    (out / "p_council_arbiter.json").write_text(arbiter_json, encoding="utf-8")
     (out / "m_adapter.json").write_text(
         json.dumps(
             to_coord_json(
@@ -402,7 +405,7 @@ def main():
     )
 
     report = {
-        "spec": "docs/mesa/H1_2D_RL_ARBITER_SPEC.md",
+        "spec": SPEC_PATH,
         "seed": args.seed,
         "epochs": args.epochs,
         "warmup_epochs": args.warmup_epochs,
@@ -431,7 +434,7 @@ def main():
             "budget_within_5pct": bool(abs(budget_ratio - 1.0) <= 0.05),
         },
         "val": {
-            "guard_auc": round(guard_auc, 4) if guard_auc == guard_auc else None,
+            "guard_auc": round(guard_auc, 4) if not math.isnan(guard_auc) else None,
             "guard_calibration_err": round(guard_cal, 4),
             "guard_pos_frac": round(float(y_guard_va.mean()), 4),
             "arbiter_ce_to_target": round(arb_ce_va, 4),
