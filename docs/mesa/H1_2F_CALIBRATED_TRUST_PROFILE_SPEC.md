@@ -68,7 +68,7 @@ H1.2f is **SUPPORTIVE** only if:
 
 ## 6. Runbook (command skeleton)
 
-Use the H1.2e command path twice with distinct threshold bundles and output roots:
+Use the H1.2e command path twice with distinct threshold bundles and output roots, then merge profile gates:
 
 ```powershell
 # profile A
@@ -88,6 +88,12 @@ python -m training.mesa.train_h1_arbiter_rl ... `
   --trust-noise-fdgrad-max 0.05 --trust-noise-disagree-min 0.85 --trust-noise-risk-min 0.50
 
 node scripts/mesa-h1-pantheon-eval.mjs ... --gate-profile h1_2e ...
+
+# merged H1.2f decision
+node scripts/mesa-h1-2f-merge-gates.mjs `
+  --profile-a results/mesa/h1-pantheon/h1_2f_calibrated_trust/profile_a/eval/gates.json `
+  --profile-b results/mesa/h1-pantheon/h1_2f_calibrated_trust/profile_b/eval/gates.json `
+  --out results/mesa/h1-pantheon/h1_2f_calibrated_trust
 ```
 
 ## 7. Artifact schema

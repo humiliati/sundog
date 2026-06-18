@@ -26,6 +26,7 @@ except ModuleNotFoundError:  # pragma: no cover
 COORD_FORMAT = "mesa-coordinator-json-v1"
 SPEC_PATH_H1_2D = "docs/mesa/H1_2D_RL_ARBITER_SPEC.md"
 SPEC_PATH_H1_2E = "docs/mesa/H1_2E_TRUST_HISTORY_RL_SPEC.md"
+SPEC_PATH_H1_2F = "docs/mesa/H1_2F_CALIBRATED_TRUST_PROFILE_SPEC.md"
 GUARD_CALIBRATION_PENALTY = 1.0
 MIN_ANCHOR_WEIGHT = 0.02
 
@@ -198,7 +199,12 @@ def main():
     spec_path = args.spec_path
     if args.lambda_relief_contrast > 0.0 and args.spec_path == SPEC_PATH_H1_2D:
         spec_path = SPEC_PATH_H1_2E
-    rung_label = "H1.2e" if args.lambda_relief_contrast > 0.0 else "H1.2d"
+    if spec_path == SPEC_PATH_H1_2F:
+        rung_label = "H1.2f"
+    elif spec_path == SPEC_PATH_H1_2E or args.lambda_relief_contrast > 0.0:
+        rung_label = "H1.2e"
+    else:
+        rung_label = "H1.2d"
     if args.cap_mode == "reward-asymmetric":
         role_caps = {
             "field": args.field_cap,
