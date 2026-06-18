@@ -3,6 +3,8 @@
 Status: **OPEN SPEC / preregistered (2026-06-18)** as the next named bottleneck rung after H1.2d if support is not admitted.
 Parent specs/results: [`H1_2D_RL_ARBITER_SPEC.md`](H1_2D_RL_ARBITER_SPEC.md), [`H1_2C_RESULTS.md`](H1_2C_RESULTS.md), [`H1_2B_RESULTS.md`](H1_2B_RESULTS.md).
 
+Contingent next rung (if H1.2e does not admit support): [`H1_2F_CALIBRATED_TRUST_PROFILE_SPEC.md`](H1_2F_CALIBRATED_TRUST_PROFILE_SPEC.md).
+
 ## 1. Decision lock
 
 H1.2e changes exactly one load-bearing element from H1.2d:
