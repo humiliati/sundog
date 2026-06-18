@@ -655,6 +655,17 @@ not `undertrained`. Four amendments required to PHASE7_V2_RESULTS.md
 Goal: turn the result into a defensible Sundog hook, update the boundary
 language across the program, and ship a public artifact.
 
+### Horizon H1 - Pantheon of Agency
+
+The Tauroctony ledger's first typed horizon is now opened as
+[`mesa/H1_PANTHEON_OF_AGENCY_SPEC.md`](mesa/H1_PANTHEON_OF_AGENCY_SPEC.md).
+H1 is a pantheon-vs-monolith bake-off over the existing Phase 3/4/7 MESA
+machinery. The important admission lock: existing L-Mixed policies are
+scalar-mixture prior evidence and monolith baselines, **not** the pantheon
+implementation. H1 requires role-separated heads, a bounded arbiter, and a
+sovereignty metric so plurality cannot collapse into one hidden maximand and
+still count as support.
+
 Immediate work:
 
 - Update `docs/promo/PROMO_HIGHLIGHTS.md` §The Gravity Claim with the earned mesa

@@ -96,6 +96,10 @@ code, experiments, prior theorem materials, and application bridges.
   lanes). Braids a pantheon theory of agency, a hedged precession keystone, and
   the figure-by-figure map; governed by the Ornament Rule (`[TYPED]`/`[ORNAMENT]`).
   Supersedes the Least Action ledger in spirit (graceful-retire todo 3.5).
+- [H1 Pantheon of Agency spec](mesa/H1_PANTHEON_OF_AGENCY_SPEC.md): first
+  typed test of the Tauroctony pantheon thesis; pins the pantheon-vs-monolith
+  bake-off, controller families, sovereignty metric, falsifier, and staged
+  smoke shape.
 - [Cautes and Cautopates essay](CAUTES_CAUTOPATES.md): companion narrative for
   the two torchbearers — reward vs punishment training economies and the third
   "field" path; the accessible on-ramp the Tauroctony ledger cites.

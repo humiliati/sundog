@@ -357,7 +357,8 @@ convert myth into typed result.
 - **H1 — Pantheon vs Monolith bake-off.** Matched-capacity plural vs singular
   controllers against the MESA proxy-splitting battery. The flagship typed test
   of the thesis. (**H1b**: pantheon vs its own best single-objective reduction.)
-  Home: `SUNDOG_V_MESA.md` Phases 3, 7.
+  Home: `SUNDOG_V_MESA.md` Phases 3, 7. Spec opened:
+  [`mesa/H1_PANTHEON_OF_AGENCY_SPEC.md`](mesa/H1_PANTHEON_OF_AGENCY_SPEC.md).
 - **H2 — The Averted Face.** Operationalize "oriented to the invariant, not the
   kill": a controller regularized toward the geometry-derived field vs one
   optimizing the proxy directly; measure the Goodhart gap. Home:
