@@ -7,7 +7,7 @@ Parent specs/results: [`H1_2E_TRUST_HISTORY_RL_SPEC.md`](H1_2E_TRUST_HISTORY_RL_
 
 H1.2f changes exactly one load-bearing element from H1.2e:
 
-> Keep the same RL arbiter objective and sovereignty geometry, but replace the single fixed trust partition with a preregistered **calibrated trust-profile pair** (primary + robustness profile) and require support to be profile-robust.
+> Keep the same RL arbiter objective and sovereignty geometry, but replace the single fixed trust partition with a preregistered **calibrated trust-profile pair** (primary + robustness profile) and require support to be profile-robust so the claim cannot rest on one hand-picked threshold set.
 
 Inherited and frozen from H1.2e:
 
