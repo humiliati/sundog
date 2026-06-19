@@ -192,7 +192,11 @@ the MESA controller-family architecture and capacity ladder.
 > which locks a trust/history-aware relief-contrast RL objective. If H1.2e
 > also does not admit support, the preregistered follow-on is
 > [`mesa/H1_2F_CALIBRATED_TRUST_PROFILE_SPEC.md`](mesa/H1_2F_CALIBRATED_TRUST_PROFILE_SPEC.md),
-> which tests profile-robust trust gating under the same sovereignty lock.
+> which tests profile-robust trust gating under the same sovereignty lock. If
+> H1.2f also does not admit support, the preregistered follow-on is
+> [`mesa/H1_2G_TRUST_CONSISTENCY_RL_SPEC.md`](mesa/H1_2G_TRUST_CONSISTENCY_RL_SPEC.md),
+> which tests per-cell cross-profile trust-consistency under the same
+> sovereignty lock.
 > Ornament Rule working as designed: the figure does not keep its [TYPED] stamp
 > on a failed falsifier.
 

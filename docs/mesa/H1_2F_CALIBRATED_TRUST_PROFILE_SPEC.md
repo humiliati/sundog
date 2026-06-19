@@ -2,6 +2,7 @@
 
 Status: **OPEN SPEC / preregistered (2026-06-18)** as the contingent rung after H1.2e if support is not admitted.
 Parent specs/results: [`H1_2E_TRUST_HISTORY_RL_SPEC.md`](H1_2E_TRUST_HISTORY_RL_SPEC.md), [`H1_2D_RL_ARBITER_SPEC.md`](H1_2D_RL_ARBITER_SPEC.md), [`H1_2C_RESULTS.md`](H1_2C_RESULTS.md), [`H1_2B_RESULTS.md`](H1_2B_RESULTS.md).
+Contingent next rung (if H1.2f does not admit support): [`H1_2G_TRUST_CONSISTENCY_RL_SPEC.md`](H1_2G_TRUST_CONSISTENCY_RL_SPEC.md).
 
 ## 1. Decision lock
 
