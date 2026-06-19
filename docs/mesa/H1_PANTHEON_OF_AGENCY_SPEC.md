@@ -1,6 +1,6 @@
 # H1 Pantheon of Agency - Pantheon vs Monolith Bake-Off
 
-Status: **DRAFT SPEC / H1.2c OPEN.** Opened 2026-06-18 from
+Status: **DRAFT SPEC / H1.2d OPEN.** Opened 2026-06-18 from
 [`SUNDOG_V_TAUROCTONY.md`](../SUNDOG_V_TAUROCTONY.md) Horizon H1. This is the
 first typed route by which the tauroctony's "assemble a pantheon, not a mind"
 thesis becomes an empirical mesa experiment.
@@ -355,28 +355,52 @@ Exit criterion:
 
 ### H1.2c - Reward-Asymmetric Blend-Cap Reopening
 
-Status: **OPEN (2026-06-18).** Binding spec:
+Status: **CLOSED (2026-06-18): binding `H1_2C_NULL`.** Binding spec:
 [`H1_2C_REWARD_ASYMMETRIC_CAP_SPEC.md`](H1_2C_REWARD_ASYMMETRIC_CAP_SPEC.md).
+Result: [`H1_2C_RESULTS.md`](H1_2C_RESULTS.md).
 
-H1.2c does not erase or re-score H1.2b. It tests the narrow mechanism H1.2b
+H1.2c did not erase or re-score H1.2b. It tested the narrow mechanism H1.2b
 identified: the action-blend cap was symmetric, so it bounded the field/Sol head
-even when the field was the correct value. H1.2c keeps the same frozen heads,
-features, seeds, monolith, and Small-tier slate, but changes the blend geometry
+even when the field was the correct value. H1.2c kept the same frozen heads,
+features, seeds, monolith, and Small-tier slate, but changed the blend geometry
 to reward-asymmetric caps: field `1.00`, reward `0.50`, guard `0.70`.
 
-Deliverables:
-
-- amend the H1.2 dataset/trainer/eval harness to accept role-specific caps and
-  record cap geometry in every manifest;
-- rebuild coordinator targets under the reward-asymmetric cap;
-- train `P_Guard + P_Arbiter` and equal-budget `M-Adapter`;
-- evaluate the binding 13-cell slate and select one H1.2c branch.
+The cap relief was structurally available, but the supervised arbiter did not
+use it. `P-Council-RA50` returned negative cap-tax repair (slate `-0.022`, GI
+`-0.024`), while `M-Adapter` beat it on all 13 cells and on gradient-intact
+basin capture. Bull discipline held perfectly: reward authority was structurally
+bounded at `<= 0.50`, with zero bull breaches.
 
 Exit criterion:
 
-- H1.2c either repairs the cap tax and earns Small-tier support against the
-  same-run monolith, or the MESA-lane pantheon thesis remains [ORNAMENT] pending
-  an RL-arbiter or higher-tier registered rung.
+- H1.2c selected `H1_2C_NULL`: the pantheon tax was not a cap-geometry artifact;
+  the named bottleneck is supervised arbiter discrimination.
+
+### H1.2d - RL-Trained Arbiter
+
+Status: **OPEN (2026-06-18); H1.2d-a probe support.** Binding spec:
+[`H1_2D_RL_ARBITER_SPEC.md`](H1_2D_RL_ARBITER_SPEC.md).
+Smoke readback: [`H1_2D_SMOKE_RESULTS.md`](H1_2D_SMOKE_RESULTS.md).
+Probe readback: [`H1_2D_A_RESULTS.md`](H1_2D_A_RESULTS.md).
+
+H1.2d tests the named H1.2c bottleneck. The council keeps the H1.2c
+reward-asymmetric caps and frozen heads, but trains `P_Arbiter` by direct
+rollout return instead of supervised regression to a privileged best-mix target.
+The primary comparator is not the old supervised monolith: H1.2d requires a
+same-run equal-budget `M-Adapter-RL` with the same PPO rollout budget.
+
+Deliverables:
+
+- complete H1.2d-b binding under the same rollout/update budget;
+- evaluate the binding 13-cell slate with the existing H1 metric schema plus PPO
+  diagnostics;
+- select one H1.2d branch.
+
+Exit criterion:
+
+- H1.2d either repairs the supervised arbiter hedge and beats/matches the
+  same-run RL monolith under proxy pressure, or the frozen-head Small-tier H1.2
+  line closes as [ORNAMENT] before moving to higher tiers or richer features.
 
 ### H1.3 - Medium Cliff Test
 
@@ -439,13 +463,14 @@ node scripts/mesa-h1-pantheon-smoke.mjs `
 Expected wall-clock: under 10 minutes. Decision fed: whether H1.2 training code
 is worth writing, and whether the sovereignty metrics are stable. Readback:
 [`H1_1_SMOKE_RESULTS.md`](H1_1_SMOKE_RESULTS.md). Result: yes; H1.2 ran and
-closed `NULL`; H1.2c is the current reopening frontier.
+closed `NULL`; H1.2c also closed `NULL`; H1.2d is the current reopening
+frontier.
 
-Current next command frontier: H1.2c in
-[`H1_2C_REWARD_ASYMMETRIC_CAP_SPEC.md`](H1_2C_REWARD_ASYMMETRIC_CAP_SPEC.md).
-No H1.2c binding slate is admitted until the harness records role-specific cap
-geometry, proves `w_reward <= 0.50` on every council step, matches parameters
-within 5%, and passes leakage/schema checks on the capped probe.
+Current next command frontier: operator-staged H1.2d-b binding in
+[`H1_2D_RL_ARBITER_SPEC.md`](H1_2D_RL_ARBITER_SPEC.md). H1.2d-a selected
+`H1_2D_SUPPORT` on the three-cell probe in
+[`H1_2D_A_RESULTS.md`](H1_2D_A_RESULTS.md); no Small-tier pantheon support is
+admitted until the 13-cell binding slate also clears.
 
 The first Medium-tier training command must not be run inline until H1.1 or
 H1.2 measures pantheon per-update cost. If estimated over 10 minutes, stage the
@@ -504,3 +529,8 @@ If H1 fails:
   [`H1_2C_REWARD_ASYMMETRIC_CAP_SPEC.md`](H1_2C_REWARD_ASYMMETRIC_CAP_SPEC.md),
   the registered test of whether the H1.2b pantheon tax was caused by capping
   the field/Sol head along with the reward/bull head.
+- `v0.4` (2026-06-18): H1.2c binding `H1_2C_NULL` imported from
+  [`H1_2C_RESULTS.md`](H1_2C_RESULTS.md); H1.2c closed as a reward-asymmetric
+  cap negative. H1.2d opened as
+  [`H1_2D_RL_ARBITER_SPEC.md`](H1_2D_RL_ARBITER_SPEC.md), scoped to direct-return
+  PPO training for the arbiter and a same-run equal-budget RL monolith.

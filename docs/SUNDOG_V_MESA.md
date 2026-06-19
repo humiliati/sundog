@@ -680,7 +680,9 @@ so sovereignty discipline works — it just did not buy a net win. The reopening
 path is now registered as
 [`mesa/H1_2C_REWARD_ASYMMETRIC_CAP_SPEC.md`](mesa/H1_2C_REWARD_ASYMMETRIC_CAP_SPEC.md):
 test the reward-asymmetric *blend* cap first (bind the bull, leave Sol
-uncapped). RL arbiter training remains a later rung, not a re-score.
+uncapped). That rung has now also returned null; the next registered rung is
+[`mesa/H1_2D_RL_ARBITER_SPEC.md`](mesa/H1_2D_RL_ARBITER_SPEC.md), not a
+re-score.
 
 **H1.2c result (2026-06-18): also `NULL`.**
 [`mesa/H1_2C_RESULTS.md`](mesa/H1_2C_RESULTS.md). The reward-asymmetric cap did
@@ -689,8 +691,25 @@ The relief was structurally available but the **supervised arbiter would not use
 it** (field exceeded 0.70 only ~12% of steps even on clean cells). Two
 independent binding nulls now stand: at small tier with a supervised arbiter,
 role-separation loses to the equal-budget monolith regardless of cap geometry.
-Last registered reopening rung before [ORNAMENT]-for-good at this tier:
-**H1.2d (RL-trained arbiter)**, the named bottleneck, then higher tiers.
+The last registered reopening rung before [ORNAMENT]-for-good at this tier is
+[`H1.2d`](mesa/H1_2D_RL_ARBITER_SPEC.md): RL-trained arbiter against a same-run
+equal-budget RL monolith, then higher tiers.
+
+**H1.2d binding (2026-06-19): `PROXY_NULL`.**
+[`mesa/H1_2D_RESULTS.md`](mesa/H1_2D_RESULTS.md). Direct-return PPO **repaired the
+H1.2c bottleneck** — the RL council reached competence parity with the same-run
+RL monolith (GI alignment 0.936 vs 0.969, slate 0.803 vs 0.835 within the 0.05
+band; field-relief 0.476, high on clean cells and backed off on corrupted ones)
+and held the bull ≤ 0.50 with zero breaches (gates 1, 2, 4, 5 pass). But it does
+**not out-resist proxy capture** (gate 3 fails: monolith GI basin 0.0045 <
+council 0.0223). Structural cause: a pantheon must always seat a bounded bull
+vote, while the monolith can become a pure field-follower and ignore the proxy
+entirely. **Three registered Small-tier nulls (H1.2b/c/d); the frozen-head
+Small-tier H1.2 line is CLOSED.** Net for the lane: the bull can be bounded and a
+bounded council governs as ably as the monarch, but plurality did not buy
+*superior* proxy resistance at this tier. Pantheon thesis stays [ORNAMENT] for
+the MESA lane; reopening = registered change of tier, features, or guard (a guard
+that cancels a basinward bull vote rather than merely holding).
 
 Immediate work:
 

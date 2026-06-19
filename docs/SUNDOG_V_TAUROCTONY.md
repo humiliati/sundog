@@ -184,9 +184,33 @@ the MESA controller-family architecture and capacity ladder.
 > (reward authority structurally ≤ 0.50, zero breaches). The unproven half is
 > governance — *we can bound the proxy; we have not shown the bounded council
 > out-governs a well-tuned monarch.* Last registered rung before the figure is
-> [ORNAMENT]-for-good at this tier: **H1.2d (RL-trained arbiter)**, the named
-> bottleneck. This is the Ornament Rule working as designed: the figure does not
-> keep its [TYPED] stamp on a failed falsifier.
+> [ORNAMENT]-for-good at this tier:
+> [`H1.2d`](mesa/H1_2D_RL_ARBITER_SPEC.md), an RL-trained arbiter tested against a
+> same-run equal-budget RL monolith.
+>
+> **H1.2d RESOLVED the arc (`PROXY_NULL`, 2026-06-19;
+> [`mesa/H1_2D_RESULTS.md`](mesa/H1_2D_RESULTS.md)).** Direct-return RL **fixed
+> the bottleneck**: the council reached competence parity with the matched RL
+> monarch (GI alignment 0.936; field-relief 0.476, used high on clean cells and
+> backed off on corrupted ones) and kept the bull bounded (zero breaches). So the
+> governance half is now answered — *a bull-bounded council can govern as well as
+> the monarch.* But the thesis needs **more** than parity, and the binding test
+> denied it: the monolith still resists the false basin slightly better
+> (GI capture 0.0045 vs 0.0223), never worse. The reason is the deepest finding
+> of the arc and is itself thesis-shaped — **the council loses the proxy-capture
+> crown *because* it is a pantheon.** Role separation forces a bounded-but-nonzero
+> bull vote into every action; a monarch can become a *pure* field-follower and
+> ignore the proxy entirely, so it never drifts basinward. Plurality buys
+> bull-discipline and pays for it in a small, irreducible proxy liability the
+> monarch does not carry. **Three registered Small-tier nulls now stand
+> (H1.2b/c/d); the frozen-head Small-tier line is closed.** The thesis is
+> [ORNAMENT] for the MESA lane at this tier; reopening requires a registered
+> change of tier, features, or the guard (a guard that can *cancel* a basinward
+> bull vote, not merely hold). This is the Ornament Rule working as designed: the
+> figure does not keep its [TYPED] stamp on a failed falsifier — and the honest
+> epitaph is precise. **We proved we can keep the bull off the throne, and that
+> the bounded court governs as ably as the crown; we did not prove the court
+> resists corruption better than a king who can simply look away from the bull.**
 
 ---
 
@@ -390,21 +414,26 @@ convert myth into typed result.
   of the thesis. (**H1b**: pantheon vs its own best single-objective reduction.)
   Home: `SUNDOG_V_MESA.md` Phases 3, 7. Spec:
   [`mesa/H1_PANTHEON_OF_AGENCY_SPEC.md`](mesa/H1_PANTHEON_OF_AGENCY_SPEC.md).
-  **Status: H1.1 smoke ✓ → H1.2a indicative SUPPORT → H1.2b binding `NULL` →
-  H1.2c (reward-asymmetric cap) binding `NULL` (2026-06-18).** Two independent
-  binding small-tier nulls: the equal-budget monolith won on competence and
-  proxy-capture across the envelope under both the symmetric cap
-  ([`mesa/H1_2B_RESULTS.md`](mesa/H1_2B_RESULTS.md)) and the bull-bound,
-  field-uncapped cap ([`mesa/H1_2C_RESULTS.md`](mesa/H1_2C_RESULTS.md)). H1.2c
-  sharpened the diagnosis: uncapping Sol did not repair the tax because the
-  **supervised arbiter would not use the relief** (field exceeded 0.70 only ~12%
-  of steps even on clean cells). The thesis is [ORNAMENT] for the MESA lane; the
-  last registered rung before it is [ORNAMENT]-for-good at this tier is **H1.2d
-  (RL-trained arbiter)** — the named bottleneck — with higher-tier work after.
-  The one durable positive across both runs: the discipline keeps the **bull
-  (reward) head** off the throne (reward authority structurally ≤ 0.50, zero
-  breaches) — we can bound the proxy; we have not shown the bounded council
-  out-governs a well-tuned monarch.
+  **Status: H1.1 ✓ → H1.2a indicative SUPPORT → H1.2b `NULL` → H1.2c
+  (reward-asymmetric cap) `NULL` → H1.2d (RL arbiter) `PROXY_NULL`
+  (2026-06-18→19). Frozen-head Small-tier line CLOSED; three registered nulls.**
+  H1.2b/c: the equal-budget monolith won on competence and proxy-capture under
+  both the symmetric ([`mesa/H1_2B_RESULTS.md`](mesa/H1_2B_RESULTS.md)) and
+  bull-bound ([`mesa/H1_2C_RESULTS.md`](mesa/H1_2C_RESULTS.md)) supervised caps;
+  the diagnosis was the supervised arbiter would not use the field relief.
+  **H1.2d resolved it** ([`mesa/H1_2D_RESULTS.md`](mesa/H1_2D_RESULTS.md)):
+  direct-return RL fixed the bottleneck — the council reached competence parity
+  with the matched RL monarch (GI 0.936; relief 0.476, used high on clean cells,
+  backed off on corrupted) and kept the bull bounded (zero breaches) — but the
+  monolith still resisted the false basin slightly better (GI capture 0.0045 vs
+  0.0223). The structural reason: a pantheon must always seat a bounded bull
+  vote, while a monarch can become a pure field-follower and ignore the proxy
+  entirely. The durable positives across all three: **the bull can be bounded
+  (reward ≤ 0.50, zero breaches) and the bounded court governs as ably as the
+  crown.** What stayed unproven: plurality itself buying *superior* proxy
+  resistance. Thesis is [ORNAMENT] for the MESA lane at this tier; reopening is a
+  registered change of tier, features, or the guard (a guard that *cancels* a
+  basinward bull vote, not merely holds).
 - **H2 — The Averted Face.** Operationalize "oriented to the invariant, not the
   kill": a controller regularized toward the geometry-derived field vs one
   optimizing the proxy directly; measure the Goodhart gap. Home:

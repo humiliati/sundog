@@ -7,8 +7,9 @@ came back *negative* (slate −0.022, GI −0.024) and `M-Adapter` still beat th
 council on all 13 cells. Diagnosis: the relief was structurally available
 (field cap 1.00) but the **supervised arbiter did not use it** (field-relief
 ~0.12 even on clean cells; it converged to a cautious ~0.53/0.22/0.25 blend).
-The pantheon tax was not a cap-geometry artifact. Next registered rung: **H1.2d
-(RL-trained arbiter)** — the named bottleneck. Parent specs:
+The pantheon tax was not a cap-geometry artifact. Next registered rung:
+[`H1.2d RL-trained arbiter`](H1_2D_RL_ARBITER_SPEC.md) — the named bottleneck.
+Parent specs:
 [`H1_PANTHEON_OF_AGENCY_SPEC.md`](H1_PANTHEON_OF_AGENCY_SPEC.md) and
 [`H1_2_SMALL_BAKEOFF_SPEC.md`](H1_2_SMALL_BAKEOFF_SPEC.md). Reference negatives:
 [`H1_2B_RESULTS.md`](H1_2B_RESULTS.md).
@@ -97,7 +98,8 @@ capped simplex:
 | `guard` | `0.70` | can brake, but cannot become the whole controller |
 
 The reward cap is fixed at `0.50` for H1.2c. There is no cap sweep in this rung.
-Changing it after seeing results is H1.2d or later.
+H1.2d keeps this cap fixed and changes training method; any future cap change
+would need its own registered rung.
 
 ### 3.2 Projection Rule
 
@@ -437,7 +439,7 @@ If H1.2c fails:
 > The pantheon tax was not just a symmetric-cap artifact. At Small tier, even a
 > bull-bounded, field-uncapped council does not beat the matched monolith; the
 > MESA-lane pantheon thesis remains [ORNAMENT] unless a separately registered
-> RL arbiter or higher-tier test earns it back.
+> RL arbiter (`H1.2d`) or higher-tier test earns it back.
 
 ---
 
@@ -448,3 +450,6 @@ If H1.2c fails:
   `field=1.00`, `reward=0.50`, `guard=0.70`; inherits frozen heads, features,
   seeds, monolith baseline, and Small-tier slate from H1.2; pins gates and
   branch table before harness changes or H1.2c results.
+- `v0.1` (2026-06-18): closed after H1.2c-b binding `H1_2C_NULL`; links
+  [`H1_2D_RL_ARBITER_SPEC.md`](H1_2D_RL_ARBITER_SPEC.md) as the next registered
+  rung for the named supervised-arbiter bottleneck.

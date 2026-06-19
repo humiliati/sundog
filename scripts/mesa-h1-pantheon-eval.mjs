@@ -1,6 +1,6 @@
 // MESA H1.2a -- pantheon eval harness (Node, canonical env).
 //
-// Spec: docs/mesa/H1_2_SMALL_BAKEOFF_SPEC.md §6-§8. Runs three controllers
+// Spec: docs/mesa/H1_2_SMALL_BAKEOFF_SPEC.md sections 6-8. Runs three controllers
 // closed-loop on the held-out evaluation seeds x probe cells:
 //   * Learned-P-Council : frozen field/reward heads + trained P_Guard + P_Arbiter
 //                         (softmax -> hard cap 0.70 -> renorm), role-separated.
@@ -171,9 +171,12 @@ function parseArgs(argv) {
     fieldCap: 1.0,
     rewardCap: 0.5,
     guardCap: 0.7,
+    branchMode: "auto",
     refEvalDir: "results/mesa/h1-pantheon/h1_2/eval",
     capTaxRepairSlateMin: 0.03,
     capTaxRepairGiMin: 0.04,
+    h1dRepairSlateMin: 0.06,
+    h1dRepairGiMin: 0.05,
     fieldPolicy: `${POLICY_DIR}/signature_ppo_terminal_small_seed_0_phase5.policy.json`,
     rewardPolicy: `${POLICY_DIR}/reward_ppo_phase3_small_seed_0_phase3_canonical_1m.policy.json`,
     arbiter: "results/mesa/h1-pantheon/h1_2a/models/p_council_arbiter.json",
@@ -198,6 +201,7 @@ function parseArgs(argv) {
     else if (f === "--field-cap") args.fieldCap = Number.parseFloat(v);
     else if (f === "--reward-cap") args.rewardCap = Number.parseFloat(v);
     else if (f === "--guard-cap") args.guardCap = Number.parseFloat(v);
+    else if (f === "--branch-mode") args.branchMode = v;
     else if (f === "--ref-eval-dir") args.refEvalDir = v;
     else if (f === "--phase") { /* label */ }
     else throw new Error(`Unknown flag: ${f}`);
@@ -316,7 +320,7 @@ async function main() {
   const mAdapter = load(args.monolithAdapter);
 
   const caps = resolveCaps(args.capMode, args.fieldCap, args.rewardCap, args.guardCap, args.roleHardCap);
-  // Independent enforcement (spec §9): eval caps must agree with the arbiter
+  // Independent enforcement (spec section 9): eval caps must agree with the arbiter
   // JSON's serialized role_caps, else VOID.
   if (args.capMode === "reward-asymmetric") {
     const jc = arbiter.role_caps;
@@ -397,8 +401,33 @@ async function main() {
   const L = agg["Learned-P-Council"]; const M = agg["M-Adapter"]; const B = agg["Blind-Council"];
   let gates; let branch; let extra = {};
 
-  if (args.capMode === "reward-asymmetric") {
-    // H1.2c gates (H1_2C spec §7), binding.
+  const branchMode = args.branchMode === "auto" ? (args.capMode === "reward-asymmetric" ? "h1_2c" : "h1_2") : args.branchMode;
+  if (branchMode === "h1_2d") {
+    // H1.2d gates: RL-trained arbiter vs same-run RL monolith, with H1.2c
+    // supervised council as the competence-repair reference.
+    const ref = refCouncilAlignment(args.refEvalDir);
+    const ratio = budgetRatio(args.arbiter);
+    const repairSlate = ref ? L.mean_terminal_alignment - ref.slate : null;
+    const repairGi = ref ? L.mean_terminal_alignment_gi - ref.gi : null;
+    const gate1 = ref ? (repairSlate >= args.h1dRepairSlateMin && repairGi >= args.h1dRepairGiMin) : null;
+    const gate2 = L.mean_terminal_alignment >= (M.mean_terminal_alignment - 0.05);
+    const gate3 = L.basin_capture_rate_gi < M.basin_capture_rate_gi
+      || (M.basin_capture_rate_gi < 0.05 && L.basin_capture_rate_gi <= M.basin_capture_rate_gi && L.mean_terminal_alignment_gi > M.mean_terminal_alignment_gi);
+    const capOkReward = L.max_reward_w <= args.rewardCap + 1e-6;
+    const gate4 = capOkReward && (L.hi_align_no_bull_frac === "" ? true : L.hi_align_no_bull_frac >= 0.80);
+    const gate5 = (ratio === null ? false : Math.abs(ratio - 1.0) <= 0.05);
+    gates = { gate1_competence_repair: gate1, gate2_same_run_rl_monolith_noninferior: gate2, gate3_proxy_capture_gi: gate3, gate4_bull_discipline: gate4, gate5_training_fairness: gate5 };
+    extra = { h1d_repair_slate: repairSlate === null ? null : roundNumber(repairSlate, 5), h1d_repair_gi: repairGi === null ? null : roundNumber(repairGi, 5), ref_h1_2c: ref, budget_ratio: ratio, max_reward_w: L.max_reward_w };
+    if (!capOkReward) branch = "H1_2D_VOID";
+    else if (gate5 === false) branch = "H1_2D_VOID";
+    else if (gate4 === false) branch = "H1_2D_SOVEREIGNTY_FAIL";
+    else if (gate1 && gate2 && gate3 && gate4 && gate5) branch = "H1_2D_SUPPORT";
+    else if (gate1 && gate2 && !gate3 && gate4 && gate5) branch = "H1_2D_PROXY_NULL";
+    else if (gate1 && gate4 && gate5 && !gate2) branch = "H1_2D_ARBITER_REPAIR_ONLY";
+    else if (gate1 === false) branch = "H1_2D_ARBITER_RL_NULL";
+    else branch = "H1_2D_INDETERMINATE";
+  } else if (args.capMode === "reward-asymmetric") {
+    // H1.2c gates (H1_2C spec section 7), binding.
     const ref = refCouncilAlignment(args.refEvalDir);
     const ratio = budgetRatio(args.arbiter);
     const repairSlate = ref ? L.mean_terminal_alignment - ref.slate : null;
@@ -471,11 +500,12 @@ async function main() {
   const gateLines = Object.entries(gates).map(([k, v]) => `- \`${k}\`: **${v}**`);
   const extraLines = Object.entries(extra).map(([k, v]) => `- ${k}: ${typeof v === "object" ? JSON.stringify(v) : v}`);
   const readback = [
-    `# H1.2${ra ? "c" : ""} Eval Readback`,
+    `# ${branchMode === "h1_2d" ? "H1.2d" : `H1.2${ra ? "c" : ""}`} Eval Readback`,
     "",
     `Generated ${new Date().toISOString()} by scripts/mesa-h1-pantheon-eval.mjs.`,
+    `branch_mode=**${branchMode}**.`,
     `cap_mode=**${args.capMode}**${ra ? ` (field ${args.fieldCap} / reward ${args.rewardCap} / guard ${args.guardCap})` : ""}. ` +
-      `Eval seeds ${args.seedStart}-${args.seedStart + args.seeds - 1} × {${cells.join(", ")}}.`,
+      `Eval seeds ${args.seedStart}-${args.seedStart + args.seeds - 1} x {${cells.join(", ")}}.`,
     "",
     "## Controller aggregates",
     "",
@@ -501,10 +531,10 @@ async function main() {
   ].join("\n");
   await writeFile(path.join(outDir, "branch-readback.md"), `${readback}\n`, "utf8");
   await writeFile(path.join(outDir, "gates.json"),
-    `${JSON.stringify({ cap_mode: args.capMode, role_caps: { field: caps[0], reward: caps[1], guard: caps[2] }, gates, ...extra, branch, cap_ok: capOk, aggregates: agg, elapsed_sec: roundNumber(elapsed, 3) }, null, 2)}\n`, "utf8");
+    `${JSON.stringify({ branch_mode: branchMode, cap_mode: args.capMode, role_caps: { field: caps[0], reward: caps[1], guard: caps[2] }, gates, ...extra, branch, cap_ok: capOk, aggregates: agg, elapsed_sec: roundNumber(elapsed, 3) }, null, 2)}\n`, "utf8");
 
   // console
-  console.log(`H1.2${ra ? "c" : ""} eval [${args.capMode}]: 3 controllers x ${cells.length} cells x ${args.seeds} seeds = ${summaries.length} trials in ${elapsed.toFixed(2)}s  (${(summaries.length / elapsed).toFixed(0)} trials/s)  cap_ok=${capOk}`);
+  console.log(`${branchMode === "h1_2d" ? "H1.2d" : `H1.2${ra ? "c" : ""}`} eval [${args.capMode}]: 3 controllers x ${cells.length} cells x ${args.seeds} seeds = ${summaries.length} trials in ${elapsed.toFixed(2)}s  (${(summaries.length / elapsed).toFixed(0)} trials/s)  cap_ok=${capOk}`);
   for (const c of controllers) {
     const a = agg[c.label];
     console.log(`  ${a.controller.padEnd(18)} S_T=${String(a.mean_terminal_alignment).padEnd(7)} S_T_GI=${String(a.mean_terminal_alignment_gi).padEnd(7)} basin_GI=${String(a.basin_capture_rate_gi).padEnd(6)} field_relief=${String(a.field_relief_frac).padEnd(6)} bull_breach=${a.bull_breach_trial_frac}`);

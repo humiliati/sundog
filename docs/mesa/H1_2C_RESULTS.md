@@ -87,11 +87,11 @@ bounded council out-governs a well-tuned monarch.*
 Registered reopening rungs (each must be pre-registered before running; none is
 a re-score):
 
-- **H1.2d — RL-trained arbiter.** The supervised arbiter's inability to use the
-  field relief is the named bottleneck. A reward-shaped (RL) arbiter that is
-  optimized for terminal alignment directly — rather than regressed to a
-  privileged target — is the spec-reserved amendment most likely to convert the
-  relief into competence.
+- **[`H1.2d`](H1_2D_RL_ARBITER_SPEC.md) — RL-trained arbiter.** The supervised
+  arbiter's inability to use the field relief is the named bottleneck. A
+  reward-shaped (RL) arbiter that is optimized for terminal alignment directly
+  — rather than regressed to a privileged target — is the spec-reserved
+  amendment most likely to convert the relief into competence.
 - **Richer trust features / history** so the arbiter can identify a clean local
   field (the current 17 local features + short history were not enough).
 - **Higher tier** (Medium/large), where the capacity gap to the monolith may

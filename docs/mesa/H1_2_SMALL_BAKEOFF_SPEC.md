@@ -403,9 +403,10 @@ guard-brake impose a **"pantheon tax"** — they forbid fully following the fiel
 even when it is the correct value, and the tax is not repaid by proxy-resistance
 here. Per the Tauroctony H1 falsifier, "assemble a pantheon" is demoted toward
 **[ORNAMENT] for the MESA lane** (scoped caveats in the readback: one supervised
-arbiter, symmetric blend cap, small-tier/frozen heads). Reopening is now
-registered as **H1.2c**: reward-asymmetric *blend* cap first; RL-trained arbiter
-or a higher tier remains later — not a re-score.
+arbiter, symmetric blend cap, small-tier/frozen heads). Reopening first
+registered as **H1.2c**: reward-asymmetric *blend* cap. H1.2c also returned
+`NULL`; the next registered rung is
+[`H1.2d`](H1_2D_RL_ARBITER_SPEC.md), the RL-trained arbiter.
 
 ---
 
@@ -416,8 +417,9 @@ H1.2c is now opened as
 It is a new rung, not an amendment to this binding result. The chosen path is
 the surgical reward-asymmetric blend-cap test: keep the frozen heads, features,
 seeds, monolith baseline, and Small-tier slate, but bind only the reward/bull
-head (`w_reward <= 0.50`) while leaving the field/Sol head uncapped. RL arbiter
-training remains a later registered rung if H1.2c returns null.
+head (`w_reward <= 0.50`) while leaving the field/Sol head uncapped. H1.2c
+returned `NULL`; RL arbiter training is now registered as
+[`H1.2d`](H1_2D_RL_ARBITER_SPEC.md).
 
 ---
 

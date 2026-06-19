@@ -105,9 +105,17 @@ code, experiments, prior theorem materials, and application bridges.
   smoke; freezes heads, matches coordinator budget against a monolithic
   adapter, and closes with the H1.2b binding `NULL`.
 - [H1.2c reward-asymmetric cap spec](mesa/H1_2C_REWARD_ASYMMETRIC_CAP_SPEC.md):
-  registered follow-up to the H1.2b negative; tests whether bounding the
-  reward/bull head while leaving the field/Sol head uncapped repairs the
-  diagnosed pantheon tax.
+  registered follow-up to the H1.2b negative; closes `H1_2C_NULL`, showing that
+  bounding the reward/bull head while leaving the field/Sol head uncapped did
+  not repair the diagnosed pantheon tax.
+- [H1.2d RL arbiter spec](mesa/H1_2D_RL_ARBITER_SPEC.md): registered test of
+  the named H1.2c bottleneck; trains the arbiter by direct rollout return and
+  compares against a same-run equal-budget RL monolithic adapter.
+- [H1.2d build smoke](mesa/H1_2D_SMOKE_RESULTS.md): confirms the PPO trainer
+  and H1.2d eval branch run end-to-end; estimates the full H1.2d-a probe above
+  the inline-run threshold.
+- [H1.2d-a PPO probe results](mesa/H1_2D_A_RESULTS.md): records the three-cell
+  PPO probe `H1_2D_SUPPORT`; binding remains open for the 13-cell slate.
 - [Cautes and Cautopates essay](CAUTES_CAUTOPATES.md): companion narrative for
   the two torchbearers — reward vs punishment training economies and the third
   "field" path; the accessible on-ramp the Tauroctony ledger cites.
