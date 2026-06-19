@@ -22,6 +22,9 @@ Parent specs:
 [`H1_2_SMALL_BAKEOFF_SPEC.md`](H1_2_SMALL_BAKEOFF_SPEC.md), and
 [`H1_2C_REWARD_ASYMMETRIC_CAP_SPEC.md`](H1_2C_REWARD_ASYMMETRIC_CAP_SPEC.md).
 
+Registered guard-change reopening:
+[`H1_2E_CANCELLING_GUARD_SPEC.md`](H1_2E_CANCELLING_GUARD_SPEC.md).
+
 H1.2b proved the supervised, symmetric-cap council loses to the equal-budget
 monolith. H1.2c proved that freeing the field/Sol head while binding the
 reward/bull head does not repair the loss. The cap relief was structurally

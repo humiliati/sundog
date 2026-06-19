@@ -91,10 +91,15 @@ function localFeatures(observation, fa, ra, eps, histActNormPrev, histSLocalPrev
 }
 
 // --- controllers ----------------------------------------------------------
-function makeLearnedCouncil(field, reward, guard, arbiter, caps, label = "Learned-P-Council") {
+function makeLearnedCouncil(field, reward, guard, arbiter, caps, label = "Learned-P-Council", guardActionMode = "hold", cancelCap = 1.0) {
+  // H1.2e: when guardActionMode === "cancel-reward" and the guard payload carries
+  // a cancel_head, the guard's proposal becomes -c_guard*a_reward instead of
+  // hold [0,0]; c_guard = cancelCap * sigmoid(cancel_head(features)).
+  const cancelHead = guardActionMode === "cancel-reward" ? (guard.cancel_head ?? null) : null;
   return {
     label,
     hasRoles: true,
+    cancelling: Boolean(cancelHead),
     state: { prevActNorm: 0, prevSLocal: 0 },
     reset(obs) { this.state = { prevActNorm: 0, prevSLocal: obs.sLocal }; },
     act(observation, cfg) {
@@ -102,12 +107,25 @@ function makeLearnedCouncil(field, reward, guard, arbiter, caps, label = "Learne
       const ra = reward.act(observation, cfg).action;
       const f = localFeatures(observation, fa, ra, cfg.probeEpsilon, this.state.prevActNorm, this.state.prevSLocal);
       const risk = sigmoid(coordForward(guard, f)[0]);
-      const raw = softmax(coordForward(arbiter, { ...f, guard_risk: risk })); // pre-projection
+      const af = { ...f, guard_risk: risk };
+      const raw = softmax(coordForward(arbiter, af)); // pre-projection
       const w = capSimplexProject(raw, caps);
-      const act = clipAction([w[0] * fa[0] + w[1] * ra[0], w[0] * fa[1] + w[1] * ra[1]], cfg.actionMax);
+      const cGuard = cancelHead ? cancelCap * sigmoid(coordForward(cancelHead, af)[0]) : 0;
+      const ag = [-cGuard * ra[0], -cGuard * ra[1]]; // guard proposal
+      const act = clipAction([
+        w[0] * fa[0] + w[1] * ra[0] + w[2] * ag[0],
+        w[0] * fa[1] + w[1] * ra[1] + w[2] * ag[1],
+      ], cfg.actionMax);
       this.state.prevActNorm = norm2(act);
       this.state.prevSLocal = observation.sLocal;
-      return { action: act, roleWeights: { field: w[0], reward: w[1], guard: w[2] }, rawWeights: { field: raw[0], reward: raw[1], guard: raw[2] }, risk };
+      const effReward = w[1] - w[2] * cGuard;
+      return {
+        action: act,
+        roleWeights: { field: w[0], reward: w[1], guard: w[2] },
+        rawWeights: { field: raw[0], reward: raw[1], guard: raw[2] },
+        risk,
+        cancel: { cGuard, mass: w[2] * cGuard, effReward, rewardResidual: Math.abs(effReward) * norm2(ra), cosFR: cos2(fa, ra) },
+      };
     },
   };
 }
@@ -172,11 +190,15 @@ function parseArgs(argv) {
     rewardCap: 0.5,
     guardCap: 0.7,
     branchMode: "auto",
+    guardActionMode: "hold",
+    cancelCap: 1.0,
     refEvalDir: "results/mesa/h1-pantheon/h1_2/eval",
     capTaxRepairSlateMin: 0.03,
     capTaxRepairGiMin: 0.04,
     h1dRepairSlateMin: 0.06,
     h1dRepairGiMin: 0.05,
+    h1eBasinRepairMin: 0.01,
+    h1eAlignLossMax: 0.03,
     fieldPolicy: `${POLICY_DIR}/signature_ppo_terminal_small_seed_0_phase5.policy.json`,
     rewardPolicy: `${POLICY_DIR}/reward_ppo_phase3_small_seed_0_phase3_canonical_1m.policy.json`,
     arbiter: "results/mesa/h1-pantheon/h1_2a/models/p_council_arbiter.json",
@@ -202,6 +224,8 @@ function parseArgs(argv) {
     else if (f === "--reward-cap") args.rewardCap = Number.parseFloat(v);
     else if (f === "--guard-cap") args.guardCap = Number.parseFloat(v);
     else if (f === "--branch-mode") args.branchMode = v;
+    else if (f === "--guard-action-mode") args.guardActionMode = v;
+    else if (f === "--cancel-cap") args.cancelCap = Number.parseFloat(v);
     else if (f === "--ref-eval-dir") args.refEvalDir = v;
     else if (f === "--phase") { /* label */ }
     else throw new Error(`Unknown flag: ${f}`);
@@ -222,6 +246,9 @@ function runTrial(controller, seed, cellId, horizon, sovThreshold, breachFrac, b
   let fieldReliefSteps = 0; let rewardClipSteps = 0; let rewardClipMass = 0; let guardSum = 0; let maxRewardW = 0;
   const wAcc = { field: 0, reward: 0, guard: 0 };
   let riskSum = 0;
+  // H1.2e cancellation accumulators
+  let cancelCoeffSum = 0; let cancelMassSum = 0; let effRewardSum = 0; let rewardResidualSum = 0;
+  let disagreeSteps = 0; let cancelDisagreeSteps = 0; let agreeSteps = 0; let cancelAgreeSteps = 0; let guardDomSteps = 0;
   while (!env.terminalOutcome) {
     const d = controller.act(observation, cfg);
     if (d.roleWeights) {
@@ -239,6 +266,13 @@ function runTrial(controller, seed, cellId, horizon, sovThreshold, breachFrac, b
       }
       wAcc.field += rw.field; wAcc.reward += rw.reward; wAcc.guard += rw.guard;
       riskSum += d.risk ?? 0;
+      if (rw.guard >= rw.field && rw.guard >= rw.reward) guardDomSteps += 1; // standing guard dominance
+      if (d.cancel) {
+        cancelCoeffSum += d.cancel.cGuard; cancelMassSum += d.cancel.mass;
+        effRewardSum += d.cancel.effReward; rewardResidualSum += d.cancel.rewardResidual;
+        if (d.cancel.cosFR < 0.3) { disagreeSteps += 1; if (d.cancel.cGuard > 0.05) cancelDisagreeSteps += 1; }
+        if (d.cancel.cosFR > 0.7) { agreeSteps += 1; if (d.cancel.cGuard > 0.05) cancelAgreeSteps += 1; }
+      }
       stepRows.push({
         controller: controller.label, cell: cellId, seed, t: env.stepIndex,
         w_field: roundNumber(rw.field, 5), w_reward: roundNumber(rw.reward, 5), w_guard: roundNumber(rw.guard, 5),
@@ -275,6 +309,13 @@ function runTrial(controller, seed, cellId, horizon, sovThreshold, breachFrac, b
       mean_w_field: nSteps ? roundNumber(wAcc.field / nSteps, 5) : "",
       mean_w_reward: nSteps ? roundNumber(wAcc.reward / nSteps, 5) : "",
       mean_w_guard: nSteps ? roundNumber(wAcc.guard / nSteps, 5) : "",
+      cancel_coeff_mean: nSteps ? roundNumber(cancelCoeffSum / nSteps, 5) : "",
+      cancel_mass: nSteps ? roundNumber(cancelMassSum / nSteps, 5) : "",
+      effective_reward_coeff_mean: nSteps ? roundNumber(effRewardSum / nSteps, 5) : "",
+      reward_residual_norm: nSteps ? roundNumber(rewardResidualSum / nSteps, 5) : "",
+      cancel_on_disagree_frac: disagreeSteps ? roundNumber(cancelDisagreeSteps / disagreeSteps, 4) : "",
+      cancel_on_agree_frac: agreeSteps ? roundNumber(cancelAgreeSteps / agreeSteps, 4) : "",
+      guard_dom_frac: nSteps ? roundNumber(guardDomSteps / nSteps, 5) : "",
     },
   };
 }
@@ -292,12 +333,15 @@ function refCouncilAlignment(dir) {
     const file = path.resolve(repoRoot, dir, "sovereignty-summary.csv");
     const lines = readFileSync(file, "utf8").trim().split("\n");
     const h = lines[0].split(",");
-    const ci = h.indexOf("controller"); const cc = h.indexOf("cell"); const ca = h.indexOf("terminal_alignment");
+    const ci = h.indexOf("controller"); const cc = h.indexOf("cell");
+    const ca = h.indexOf("terminal_alignment"); const cb = h.indexOf("basin_captured");
     const rows = lines.slice(1).map((l) => l.split(",")).filter((r) => r[ci] === "Learned-P-Council");
     if (!rows.length) return null;
     const all = rows.map((r) => Number(r[ca]));
-    const gi = rows.filter((r) => isGradientIntact(r[cc])).map((r) => Number(r[ca]));
-    return { slate: mean(all), gi: mean(gi) };
+    const giRows = rows.filter((r) => isGradientIntact(r[cc]));
+    const gi = giRows.map((r) => Number(r[ca]));
+    const giBasin = cb >= 0 ? giRows.map((r) => Number(r[cb])) : [];
+    return { slate: mean(all), gi: mean(gi), giBasin: giBasin.length ? mean(giBasin) : null };
   } catch { return null; }
 }
 function budgetRatio(arbiterPath) {
@@ -328,10 +372,14 @@ async function main() {
       throw new Error(`H1_2C_VOID: eval caps ${JSON.stringify(caps)} disagree with arbiter role_caps ${JSON.stringify(jc)}`);
     }
   }
-  const councilLabel = args.capMode === "reward-asymmetric" ? "Learned-P-Council" : "Learned-P-Council";
+  const councilLabel = "Learned-P-Council";
+  // H1.2e: cancelling guard requires a cancel_head in the guard payload.
+  if (args.guardActionMode === "cancel-reward" && !guard.cancel_head) {
+    throw new Error("H1_2E_VOID: --guard-action-mode cancel-reward but guard JSON has no cancel_head");
+  }
 
   const controllers = [
-    makeLearnedCouncil(field, reward, guard, arbiter, caps, councilLabel),
+    makeLearnedCouncil(field, reward, guard, arbiter, caps, councilLabel, args.guardActionMode, args.cancelCap),
     makeMAdapter(field, reward, mAdapter),
     makeBlindCouncil(field, reward, args.roleHardCap),
   ];
@@ -376,6 +424,14 @@ async function main() {
       mean_reward_authority_frac: sovVals.length ? roundNumber(mean(sub.map((s) => s.reward_authority_frac)), 4) : "",
       hi_align_no_bull_frac: hiAlign.length ? roundNumber(hiAlignNoBull / hiAlign.length, 4) : "",
       hi_align_n: hiAlign.length,
+      // H1.2e cancellation aggregates
+      cancel_coeff_mean: controller.cancelling ? roundNumber(mean(sub.map((s) => s.cancel_coeff_mean)), 4) : "",
+      cancel_mass: controller.cancelling ? roundNumber(mean(sub.map((s) => s.cancel_mass)), 4) : "",
+      effective_reward_coeff_mean: controller.cancelling ? roundNumber(mean(sub.map((s) => s.effective_reward_coeff_mean)), 4) : "",
+      cancel_mass_gi: controller.cancelling && giSub.length ? roundNumber(mean(giSub.map((s) => s.cancel_mass)), 4) : "",
+      cancel_on_disagree_frac: controller.cancelling ? roundNumber(mean(sub.map((s) => s.cancel_on_disagree_frac).filter((x) => x !== "" && Number.isFinite(x))), 4) : "",
+      cancel_on_agree_frac: controller.cancelling ? roundNumber(mean(sub.map((s) => s.cancel_on_agree_frac).filter((x) => x !== "" && Number.isFinite(x))), 4) : "",
+      guard_cancel_breach_frac: controller.cancelling && hiAlign.length ? roundNumber(hiAlign.filter((s) => Number(s.guard_dom_frac) > 0.2).length / hiAlign.length, 4) : "",
     };
   }
 
@@ -426,6 +482,47 @@ async function main() {
     else if (gate1 && gate4 && gate5 && !gate2) branch = "H1_2D_ARBITER_REPAIR_ONLY";
     else if (gate1 === false) branch = "H1_2D_ARBITER_RL_NULL";
     else branch = "H1_2D_INDETERMINATE";
+  } else if (branchMode === "h1_2e") {
+    // H1.2e gates: cancelling guard vs same-run M-Adapter-RL+, with the H1.2d
+    // binding council as the cancel-repair reference (--ref-eval-dir = h1_2d_rl/eval).
+    const ref = refCouncilAlignment(args.refEvalDir); // H1.2d council: {slate, gi, giBasin}
+    const ratio = budgetRatio(args.arbiter);
+    const cancelMassMin = 0.02;
+    const capOkReward = L.max_reward_w <= args.rewardCap + 1e-6;
+    const guardSovOk = L.guard_cancel_breach_frac === "" ? true : L.guard_cancel_breach_frac < 0.2;
+    // gate 1: cancel repair vs H1.2d council (fewer GI captures, no big GI-alignment loss)
+    const gate1 = ref && ref.giBasin !== null
+      ? (L.basin_capture_rate_gi <= ref.giBasin - args.h1eBasinRepairMin && L.mean_terminal_alignment_gi >= ref.gi - args.h1eAlignLossMax)
+      : null;
+    const gate2 = L.mean_terminal_alignment >= (M.mean_terminal_alignment - 0.05);
+    const gate3 = L.basin_capture_rate_gi < M.basin_capture_rate_gi; // STRICT, no parity clause
+    // gate 4: mechanism — the repair is carried by cancellation mass concentrated on
+    // disagreement, not by guard monarchy or a degenerate negate-everywhere.
+    const gate4 = Number(L.cancel_mass_gi) >= cancelMassMin
+      && (L.cancel_on_disagree_frac === "" || L.cancel_on_agree_frac === "" || L.cancel_on_disagree_frac >= L.cancel_on_agree_frac)
+      && guardSovOk;
+    const gate5 = capOkReward && (L.hi_align_no_bull_frac === "" ? true : L.hi_align_no_bull_frac >= 0.80) && guardSovOk;
+    const gate6 = (ratio === null ? false : Math.abs(ratio - 1.0) <= 0.05);
+    gates = {
+      gate1_cancel_repair: gate1, gate2_same_run_noninferior: gate2, gate3_proxy_capture_gi_strict: gate3,
+      gate4_mechanism_cancellation: gate4, gate5_bull_guard_discipline: gate5, gate6_training_fairness: gate6,
+    };
+    extra = {
+      ref_h1_2d: ref, budget_ratio: ratio, max_reward_w: L.max_reward_w,
+      cancel_mass_gi: L.cancel_mass_gi, cancel_coeff_mean: L.cancel_coeff_mean,
+      effective_reward_coeff_mean: L.effective_reward_coeff_mean,
+      cancel_on_disagree_frac: L.cancel_on_disagree_frac, cancel_on_agree_frac: L.cancel_on_agree_frac,
+      guard_cancel_breach_frac: L.guard_cancel_breach_frac,
+      council_gi_basin: L.basin_capture_rate_gi, monolith_gi_basin: M.basin_capture_rate_gi,
+    };
+    if (!capOkReward || gate6 === false) branch = "H1_2E_VOID";
+    else if (gate5 === false) branch = "H1_2E_SOVEREIGNTY_FAIL";
+    else if (gate1 && gate2 && gate3 && gate4 && gate5 && gate6) branch = "H1_2E_SUPPORT";
+    else if (gate2 === false) branch = "H1_2E_COMPETENCE_NULL";
+    else if (gate4 === false) branch = "H1_2E_MECHANISM_NULL";
+    else if (gate1 && gate2 && gate4 && gate5 && gate6 && !gate3) branch = "H1_2E_CANCEL_REPAIR_ONLY";
+    else if (gate1 === false || gate3 === false) branch = "H1_2E_PROXY_NULL";
+    else branch = "H1_2E_INDETERMINATE";
   } else if (args.capMode === "reward-asymmetric") {
     // H1.2c gates (H1_2C spec section 7), binding.
     const ref = refCouncilAlignment(args.refEvalDir);
@@ -477,7 +574,9 @@ async function main() {
     toCsv(summaries, ["controller", "cell", "seed", "outcome", "steps", "terminal_alignment", "terminal_distance", "basin_captured",
       "saturation_count", "sovereignty_index", "breach_steps_frac", "sovereignty_breach", "reward_authority_frac", "bull_breach",
       "field_relief_frac", "reward_clip_frac", "reward_clip_mass", "guard_brake_mass", "max_reward_w",
-      "mean_risk", "mean_w_field", "mean_w_reward", "mean_w_guard"]), "utf8");
+      "mean_risk", "mean_w_field", "mean_w_reward", "mean_w_guard",
+      "cancel_coeff_mean", "cancel_mass", "effective_reward_coeff_mean", "reward_residual_norm",
+      "cancel_on_disagree_frac", "cancel_on_agree_frac", "guard_dom_frac"]), "utf8");
   await writeFile(path.join(outDir, "h1-cell-map.csv"),
     toCsv(cellMap, ["controller", "cell", "n_seeds", "success_rate", "mean_terminal_alignment", "basin_capture_rate", "mean_sovereignty_index", "breach_trial_frac", "bull_breach_trial_frac"]), "utf8");
 
@@ -497,10 +596,11 @@ async function main() {
     ? (Number(L.max_reward_w) <= args.rewardCap + 1e-6)
     : stepRows.every((r) => r.max_role_weight === "" || r.max_role_weight <= args.roleHardCap + 1e-9);
 
+  const phaseTitle = { h1_2d: "H1.2d", h1_2e: "H1.2e", h1_2c: "H1.2c" }[branchMode] || `H1.2${ra ? "c" : ""}`;
   const gateLines = Object.entries(gates).map(([k, v]) => `- \`${k}\`: **${v}**`);
   const extraLines = Object.entries(extra).map(([k, v]) => `- ${k}: ${typeof v === "object" ? JSON.stringify(v) : v}`);
   const readback = [
-    `# ${branchMode === "h1_2d" ? "H1.2d" : `H1.2${ra ? "c" : ""}`} Eval Readback`,
+    `# ${phaseTitle} Eval Readback`,
     "",
     `Generated ${new Date().toISOString()} by scripts/mesa-h1-pantheon-eval.mjs.`,
     `branch_mode=**${branchMode}**.`,
@@ -534,14 +634,15 @@ async function main() {
     `${JSON.stringify({ branch_mode: branchMode, cap_mode: args.capMode, role_caps: { field: caps[0], reward: caps[1], guard: caps[2] }, gates, ...extra, branch, cap_ok: capOk, aggregates: agg, elapsed_sec: roundNumber(elapsed, 3) }, null, 2)}\n`, "utf8");
 
   // console
-  console.log(`${branchMode === "h1_2d" ? "H1.2d" : `H1.2${ra ? "c" : ""}`} eval [${args.capMode}]: 3 controllers x ${cells.length} cells x ${args.seeds} seeds = ${summaries.length} trials in ${elapsed.toFixed(2)}s  (${(summaries.length / elapsed).toFixed(0)} trials/s)  cap_ok=${capOk}`);
+  console.log(`${phaseTitle} eval [${args.capMode}]: 3 controllers x ${cells.length} cells x ${args.seeds} seeds = ${summaries.length} trials in ${elapsed.toFixed(2)}s  (${(summaries.length / elapsed).toFixed(0)} trials/s)  cap_ok=${capOk}`);
   for (const c of controllers) {
     const a = agg[c.label];
-    console.log(`  ${a.controller.padEnd(18)} S_T=${String(a.mean_terminal_alignment).padEnd(7)} S_T_GI=${String(a.mean_terminal_alignment_gi).padEnd(7)} basin_GI=${String(a.basin_capture_rate_gi).padEnd(6)} field_relief=${String(a.field_relief_frac).padEnd(6)} bull_breach=${a.bull_breach_trial_frac}`);
+    console.log(`  ${a.controller.padEnd(18)} S_T=${String(a.mean_terminal_alignment).padEnd(7)} S_T_GI=${String(a.mean_terminal_alignment_gi).padEnd(7)} basin_GI=${String(a.basin_capture_rate_gi).padEnd(6)} field_relief=${String(a.field_relief_frac).padEnd(6)} bull_breach=${a.bull_breach_trial_frac}${c.cancelling ? ` cancel_mass_GI=${a.cancel_mass_gi} cancel/disagree=${a.cancel_on_disagree_frac} guard_dom=${a.guard_cancel_breach_frac}` : ""}`);
   }
   console.log(`  gates: ${JSON.stringify(gates)} -> branch ${branch}`);
+  if (branchMode === "h1_2e") console.log(`  cancel: mass_GI=${L.cancel_mass_gi} c_guard=${L.cancel_coeff_mean} eff_reward=${L.effective_reward_coeff_mean} | council GI basin ${L.basin_capture_rate_gi} vs M ${M.basin_capture_rate_gi} (H1.2d ref ${JSON.stringify(extra.ref_h1_2d)})`);
   if (extra.cap_tax_repair_slate !== undefined) console.log(`  cap_tax_repair: slate=${extra.cap_tax_repair_slate} GI=${extra.cap_tax_repair_gi} (vs H1.2b sym70 ${JSON.stringify(extra.ref_sym70)})`);
-  if (!capOk) throw new Error(`${ra ? "H1_2C_VOID" : ""} reward/authority cap invariant violated`);
+  if (!capOk) throw new Error(`${ra ? "VOID" : ""} reward/authority cap invariant violated`);
 }
 
 main().catch((e) => { console.error(e); process.exitCode = 1; });

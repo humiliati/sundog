@@ -1,6 +1,8 @@
 # H1.2d-a PPO Probe Results
 
-Status: **PROBE SUPPORT; binding still open.**
+Status: **PROBE SUPPORT; superseded by H1.2d-b binding `H1_2D_PROXY_NULL`.**
+
+Binding result: [`H1_2D_RESULTS.md`](H1_2D_RESULTS.md).
 
 Run date: 2026-06-18 PDT / 2026-06-19 UTC.
 
@@ -85,12 +87,12 @@ uses field relief and clears the same-run monolith gate on the registered probe
 cells. It directly supports the H1.2c diagnosis that the supervised arbiter was
 the named bottleneck.
 
-It is not yet pantheon support for the Small-tier slate. The binding decision
-still requires H1.2d-b on all 13 cells and 64 eval seeds.
+It was not pantheon support for the Small-tier slate. The later H1.2d-b binding
+run selected `H1_2D_PROXY_NULL`; see [`H1_2D_RESULTS.md`](H1_2D_RESULTS.md).
 
 ## Next Step
 
-H1.2d-b remains operator-gated long-run work.
+H1.2d-b has since run; this estimate is retained as the pre-binding handoff.
 
 Updated estimate from the actual probe rate:
 
@@ -103,4 +105,3 @@ Updated estimate from the actual probe rate:
 The actual H1.2d-a run terminated many episodes before horizon and used
 650155 env steps instead of the 819200 max-step estimate, so H1.2d-b may also
 finish below the max-step bound. It remains well above the inline-run threshold.
-

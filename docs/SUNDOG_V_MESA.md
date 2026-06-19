@@ -710,6 +710,8 @@ bounded council governs as ably as the monarch, but plurality did not buy
 *superior* proxy resistance at this tier. Pantheon thesis stays [ORNAMENT] for
 the MESA lane; reopening = registered change of tier, features, or guard (a guard
 that cancels a basinward bull vote rather than merely holding).
+That guard-change reopening is now registered as
+[`H1.2e`](mesa/H1_2E_CANCELLING_GUARD_SPEC.md).
 
 Immediate work:
 

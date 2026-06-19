@@ -206,7 +206,9 @@ the MESA controller-family architecture and capacity ladder.
 > (H1.2b/c/d); the frozen-head Small-tier line is closed.** The thesis is
 > [ORNAMENT] for the MESA lane at this tier; reopening requires a registered
 > change of tier, features, or the guard (a guard that can *cancel* a basinward
-> bull vote, not merely hold). This is the Ornament Rule working as designed: the
+> bull vote, not merely hold). The guard-change reopening is now registered as
+> [`H1.2e`](mesa/H1_2E_CANCELLING_GUARD_SPEC.md). This is the Ornament Rule
+> working as designed: the
 > figure does not keep its [TYPED] stamp on a failed falsifier — and the honest
 > epitaph is precise. **We proved we can keep the bull off the throne, and that
 > the bounded court governs as ably as the crown; we did not prove the court
@@ -433,7 +435,8 @@ convert myth into typed result.
   crown.** What stayed unproven: plurality itself buying *superior* proxy
   resistance. Thesis is [ORNAMENT] for the MESA lane at this tier; reopening is a
   registered change of tier, features, or the guard (a guard that *cancels* a
-  basinward bull vote, not merely holds).
+  basinward bull vote, not merely holds). The guard-change reopening is
+  registered as [`H1.2e`](mesa/H1_2E_CANCELLING_GUARD_SPEC.md).
 - **H2 — The Averted Face.** Operationalize "oriented to the invariant, not the
   kill": a controller regularized toward the geometry-derived field vs one
   optimizing the proxy directly; measure the Goodhart gap. Home:

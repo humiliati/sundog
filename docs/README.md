@@ -115,7 +115,13 @@ code, experiments, prior theorem materials, and application bridges.
   and H1.2d eval branch run end-to-end; estimates the full H1.2d-a probe above
   the inline-run threshold.
 - [H1.2d-a PPO probe results](mesa/H1_2D_A_RESULTS.md): records the three-cell
-  PPO probe `H1_2D_SUPPORT`; binding remains open for the 13-cell slate.
+  PPO probe `H1_2D_SUPPORT`; superseded by the binding result below.
+- [H1.2d-b RL arbiter binding results](mesa/H1_2D_RESULTS.md): closes the
+  frozen-head Small-tier line as `H1_2D_PROXY_NULL`; RL fixes the arbiter and
+  competence tax, but the monolith still wins proxy capture.
+- [H1.2e cancelling-guard spec](mesa/H1_2E_CANCELLING_GUARD_SPEC.md):
+  registered reopening that changes the guard from passive hold to an
+  anti-reward countervote, without changing tier, heads, caps, or features.
 - [Cautes and Cautopates essay](CAUTES_CAUTOPATES.md): companion narrative for
   the two torchbearers — reward vs punishment training economies and the third
   "field" path; the accessible on-ramp the Tauroctony ledger cites.

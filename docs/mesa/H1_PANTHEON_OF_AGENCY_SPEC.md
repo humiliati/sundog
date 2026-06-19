@@ -1,6 +1,6 @@
 # H1 Pantheon of Agency - Pantheon vs Monolith Bake-Off
 
-Status: **DRAFT SPEC / H1.2d OPEN.** Opened 2026-06-18 from
+Status: **DRAFT SPEC / H1.2e OPEN.** Opened 2026-06-18 from
 [`SUNDOG_V_TAUROCTONY.md`](../SUNDOG_V_TAUROCTONY.md) Horizon H1. This is the
 first typed route by which the tauroctony's "assemble a pantheon, not a mind"
 thesis becomes an empirical mesa experiment.
@@ -378,29 +378,62 @@ Exit criterion:
 
 ### H1.2d - RL-Trained Arbiter
 
-Status: **OPEN (2026-06-18); H1.2d-a probe support.** Binding spec:
+Status: **CLOSED (2026-06-19): binding `H1_2D_PROXY_NULL`.** Binding spec:
 [`H1_2D_RL_ARBITER_SPEC.md`](H1_2D_RL_ARBITER_SPEC.md).
 Smoke readback: [`H1_2D_SMOKE_RESULTS.md`](H1_2D_SMOKE_RESULTS.md).
 Probe readback: [`H1_2D_A_RESULTS.md`](H1_2D_A_RESULTS.md).
+Binding result: [`H1_2D_RESULTS.md`](H1_2D_RESULTS.md).
 
-H1.2d tests the named H1.2c bottleneck. The council keeps the H1.2c
-reward-asymmetric caps and frozen heads, but trains `P_Arbiter` by direct
+H1.2d tested the named H1.2c bottleneck. The council kept the H1.2c
+reward-asymmetric caps and frozen heads, but trained `P_Arbiter` by direct
 rollout return instead of supervised regression to a privileged best-mix target.
-The primary comparator is not the old supervised monolith: H1.2d requires a
+The primary comparator was not the old supervised monolith: H1.2d required a
 same-run equal-budget `M-Adapter-RL` with the same PPO rollout budget.
 
-Deliverables:
+Result:
 
-- complete H1.2d-b binding under the same rollout/update budget;
-- evaluate the binding 13-cell slate with the existing H1 metric schema plus PPO
-  diagnostics;
-- select one H1.2d branch.
+- H1.2d repaired the supervised arbiter hedge and removed the competence tax:
+  the RL council reached GI alignment `0.936` with field relief `0.476`, and
+  stayed within the same-run monolith competence band.
+- H1.2d did not win the proxy-capture gate: monolith GI basin capture was
+  `0.0045`, council GI basin capture was `0.0223`.
+- Branch: `H1_2D_PROXY_NULL`.
 
 Exit criterion:
 
-- H1.2d either repairs the supervised arbiter hedge and beats/matches the
-  same-run RL monolith under proxy pressure, or the frozen-head Small-tier H1.2
-  line closes as [ORNAMENT] before moving to higher tiers or richer features.
+- The frozen-head Small-tier H1.2 line is closed. Reopening requires a
+  registered change of tier, features, or guard.
+
+### H1.2e - Cancelling Guard
+
+Status: **OPEN (2026-06-19).** Binding spec:
+[`H1_2E_CANCELLING_GUARD_SPEC.md`](H1_2E_CANCELLING_GUARD_SPEC.md).
+
+H1.2e tests the narrowest H1.2d reopening path. The H1.2d council lost gate 3
+because a bounded-but-nonzero reward/bull proposal remained in the action while
+the monolith could ignore the proxy entirely. H1.2e changes the guard from a
+passive hold vote `[0, 0]` to an explicitly capped anti-reward countervote:
+
+```text
+a_guard = -c_guard * a_reward
+```
+
+It keeps the Small tier, frozen field/reward heads, reward-asymmetric caps,
+allowed feature set, same-run matched RL monolith, and seed discipline fixed.
+
+Deliverables:
+
+- implement a cancelling-guard trainer and H1.2e eval branch;
+- prove cancellation metrics, cap invariants, and matched-budget readback in a
+  three-cell H1.2e-a probe;
+- run H1.2e-b on the 13-cell binding slate;
+- select one H1.2e branch.
+
+Exit criterion:
+
+- H1.2e either shows that an audited guard countervote closes the H1.2d
+  proxy-capture gap against the same-run monolith, or the Small-tier frozen-head
+  line remains closed until Medium/Large tier or richer trust features.
 
 ### H1.3 - Medium Cliff Test
 
@@ -463,14 +496,13 @@ node scripts/mesa-h1-pantheon-smoke.mjs `
 Expected wall-clock: under 10 minutes. Decision fed: whether H1.2 training code
 is worth writing, and whether the sovereignty metrics are stable. Readback:
 [`H1_1_SMOKE_RESULTS.md`](H1_1_SMOKE_RESULTS.md). Result: yes; H1.2 ran and
-closed `NULL`; H1.2c also closed `NULL`; H1.2d is the current reopening
-frontier.
+closed `NULL`; H1.2c also closed `NULL`; H1.2d closed `PROXY_NULL`. H1.2e is
+the current reopening frontier.
 
-Current next command frontier: operator-staged H1.2d-b binding in
-[`H1_2D_RL_ARBITER_SPEC.md`](H1_2D_RL_ARBITER_SPEC.md). H1.2d-a selected
-`H1_2D_SUPPORT` on the three-cell probe in
-[`H1_2D_A_RESULTS.md`](H1_2D_A_RESULTS.md); no Small-tier pantheon support is
-admitted until the 13-cell binding slate also clears.
+Current next command frontier: H1.2e cancelling-guard tooling in
+[`H1_2E_CANCELLING_GUARD_SPEC.md`](H1_2E_CANCELLING_GUARD_SPEC.md). No H1.2e
+claim is admitted until the guard-cancellation trainer, eval branch, cancellation
+metrics, cap invariants, and same-run matched monolith readback exist.
 
 The first Medium-tier training command must not be run inline until H1.1 or
 H1.2 measures pantheon per-update cost. If estimated over 10 minutes, stage the

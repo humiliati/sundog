@@ -101,3 +101,6 @@ heads** (per spec) — not a re-score. Candidate next rungs, all owner-gated:
   unseating the bull. (This changes the guard, so it is a new registered rung.)
 - **Richer trust features** so the arbiter can zero the reward weight on clean
   cells (currently the cap floors it in, structurally).
+
+The guard-change reopening is now registered as
+[`H1.2e`](H1_2E_CANCELLING_GUARD_SPEC.md).

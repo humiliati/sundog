@@ -4,7 +4,8 @@ Status: **PASS as plumbing smoke; not a result rung.**
 
 Later probe result: [`H1_2D_A_RESULTS.md`](H1_2D_A_RESULTS.md) records the
 completed H1.2d-a run, which selected `H1_2D_SUPPORT` on the three-cell probe.
-Binding remains open.
+Binding later selected `H1_2D_PROXY_NULL`; see
+[`H1_2D_RESULTS.md`](H1_2D_RESULTS.md).
 
 Run date: 2026-06-18 local.
 
