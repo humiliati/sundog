@@ -7,8 +7,9 @@ came back *negative* (slate −0.022, GI −0.024) and `M-Adapter` still beat th
 council on all 13 cells. Diagnosis: the relief was structurally available
 (field cap 1.00) but the **supervised arbiter did not use it** (field-relief
 ~0.12 even on clean cells; it converged to a cautious ~0.53/0.22/0.25 blend).
-The pantheon tax was not a cap-geometry artifact. Next registered rung: **H1.2d
-(RL-trained arbiter)** — the named bottleneck. Parent specs:
+The pantheon tax was not a cap-geometry artifact. Next registered rung:
+[`H1_2D_RL_ARBITER_SPEC.md`](H1_2D_RL_ARBITER_SPEC.md) (**H1.2d, RL-trained
+arbiter**) — the named bottleneck. Parent specs:
 [`H1_PANTHEON_OF_AGENCY_SPEC.md`](H1_PANTHEON_OF_AGENCY_SPEC.md) and
 [`H1_2_SMALL_BAKEOFF_SPEC.md`](H1_2_SMALL_BAKEOFF_SPEC.md). Reference negatives:
 [`H1_2B_RESULTS.md`](H1_2B_RESULTS.md).

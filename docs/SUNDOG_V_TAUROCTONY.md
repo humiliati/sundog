@@ -185,8 +185,20 @@ the MESA controller-family architecture and capacity ladder.
 > governance — *we can bound the proxy; we have not shown the bounded council
 > out-governs a well-tuned monarch.* Last registered rung before the figure is
 > [ORNAMENT]-for-good at this tier: **H1.2d (RL-trained arbiter)**, the named
-> bottleneck. This is the Ornament Rule working as designed: the figure does not
-> keep its [TYPED] stamp on a failed falsifier.
+> bottleneck, now preregistered at
+> [`mesa/H1_2D_RL_ARBITER_SPEC.md`](mesa/H1_2D_RL_ARBITER_SPEC.md). This is the
+> H1.2d binding rung. Contingent next rung (if H1.2d does not admit support):
+> [`mesa/H1_2E_TRUST_HISTORY_RL_SPEC.md`](mesa/H1_2E_TRUST_HISTORY_RL_SPEC.md),
+> which locks a trust/history-aware relief-contrast RL objective. If H1.2e
+> also does not admit support, the preregistered follow-on is
+> [`mesa/H1_2F_CALIBRATED_TRUST_PROFILE_SPEC.md`](mesa/H1_2F_CALIBRATED_TRUST_PROFILE_SPEC.md),
+> which tests profile-robust trust gating under the same sovereignty lock. If
+> H1.2f also does not admit support, the preregistered follow-on is
+> [`mesa/H1_2G_TRUST_CONSISTENCY_RL_SPEC.md`](mesa/H1_2G_TRUST_CONSISTENCY_RL_SPEC.md),
+> which tests per-cell cross-profile trust-consistency under the same
+> sovereignty lock.
+> Ornament Rule working as designed: the figure does not keep its [TYPED] stamp
+> on a failed falsifier.
 
 ---
 

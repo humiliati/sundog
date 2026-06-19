@@ -91,7 +91,7 @@ a re-score):
   field relief is the named bottleneck. A reward-shaped (RL) arbiter that is
   optimized for terminal alignment directly — rather than regressed to a
   privileged target — is the spec-reserved amendment most likely to convert the
-  relief into competence.
+  relief into competence. Spec: [`H1_2D_RL_ARBITER_SPEC.md`](H1_2D_RL_ARBITER_SPEC.md).
 - **Richer trust features / history** so the arbiter can identify a clean local
   field (the current 17 local features + short history were not enough).
 - **Higher tier** (Medium/large), where the capacity gap to the monolith may
