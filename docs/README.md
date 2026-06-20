@@ -201,6 +201,15 @@ underlying public problems.
   receipts, quarantines, and result conventions.
 - [P-vs-NP receipt index](pvnp/receipts/README.md): v0-v5 receipt trail,
   including the current v5 provisional cost-adjudication hold.
+- [BoxSEL false-closure ledger](SUNDOG_V_BOXSEL.md): bounded false-closure
+  detection over Statistical EL box embeddings (BoxSEL, arXiv:2407.11821) —
+  separates logical concentration from search/representation/loss-induced
+  narrowing against an exact small-fragment oracle, then tests whether embedding
+  traces can drive an accept/widen/abstain rule. Scaffold; lit-pass filled, no
+  oracle/sampler/run yet.
+- [BoxSEL lit-pass memo](boxsel/BOXSEL_LITPASS_MEMO.md): prior-art spine, claim
+  ledger, the Phase-1 PMP replication gate (Proposition 2 vs Appendix Algorithm 2
+  discrepancy), and the false-closure falsifier set.
 - [Capset ledger](SUNDOG_V_CAPSET.md): hard-math coupling precedent around the
   OpenAI unit-distance / cap-set disproof context; evaluator front plus
   substrate-analogue horizon.

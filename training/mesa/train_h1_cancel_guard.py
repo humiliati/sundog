@@ -74,6 +74,8 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--cancel-init", default="zero", choices=["zero"])
     ap.add_argument("--cancel-cap", type=float, default=1.0)
     ap.add_argument("--cancel-bias-init", type=float, default=-5.0)
+    ap.add_argument("--checkpoint-every", type=int, default=64,
+                    help="export current models + checkpoint.json every N updates (interruption insurance)")
     ap.add_argument("--cap-mode", default="reward-asymmetric", choices=["reward-asymmetric"])
     ap.add_argument("--field-cap", type=float, default=1.0)
     ap.add_argument("--reward-cap", type=float, default=0.5)
@@ -614,6 +616,21 @@ def cancel_head_to_json(council: CancellingActorCritic, input_features: list[str
     }
 
 
+def write_outputs(out: Path, guard_payload: dict[str, Any], council: "CancellingActorCritic",
+                  monolith: "ActorCritic", cap_mode: str, role_caps: dict[str, float]) -> None:
+    """Export the three deployable model JSONs. Used for periodic checkpoints AND
+    the final write, so an interrupted run always leaves an eval-able artifact."""
+    guard_out = dict(guard_payload)
+    guard_out["guard_action_mode"] = "cancel-reward"
+    guard_out["cancel_head"] = cancel_head_to_json(council, council.actor.input_features)
+    (out / "p_guard_cancel.json").write_text(json.dumps(guard_out) + "\n", encoding="utf-8")
+    (out / "p_council_arbiter_cancel.json").write_text(
+        json.dumps(actor_to_coord_json(council.actor, kind="arbiter", head="softmax_cap", role_cap=0.70,
+                                       cap_mode=cap_mode, role_caps=role_caps)) + "\n", encoding="utf-8")
+    (out / "m_adapter_rl_plus.json").write_text(
+        json.dumps(actor_to_coord_json(monolith.actor, kind="m_adapter", head="linear_blend")) + "\n", encoding="utf-8")
+
+
 def write_rows(path: Path, rows: list[dict[str, Any]], fieldnames: list[str]) -> None:
     with path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
@@ -706,6 +723,19 @@ def main() -> int:
                 f"steps={history[-1]['council_steps'] + history[-1]['monolith_steps']}",
                 flush=True,
             )
+            # interruption insurance: periodically export models + progress so a
+            # power/sleep event never loses more than --checkpoint-every updates.
+            if update % args.checkpoint_every == 0 or update == args.updates:
+                write_outputs(out, guard_payload, council, monolith, args.cap_mode, role_caps)
+                write_rows(out / "ppo-history.csv", history, list(history[0].keys()))
+                (out / "checkpoint.json").write_text(
+                    json.dumps({
+                        "last_update": update, "updates_total": args.updates,
+                        "env_steps": env_steps["council"] + env_steps["monolith"],
+                        "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+                    }) + "\n",
+                    encoding="utf-8",
+                )
 
     elapsed = time.time() - start_time
     guard_p = param_count(guard, trainable_only=False)
@@ -715,16 +745,8 @@ def main() -> int:
     council_total = guard_p + arb_p + cancel_p
     budget_ratio = mon_p / max(council_total, 1)
 
-    # exports
-    guard_out = dict(guard_payload)
-    guard_out["guard_action_mode"] = "cancel-reward"
-    guard_out["cancel_head"] = cancel_head_to_json(council, council.actor.input_features)
-    (out / "p_guard_cancel.json").write_text(json.dumps(guard_out) + "\n", encoding="utf-8")
-    (out / "p_council_arbiter_cancel.json").write_text(
-        json.dumps(actor_to_coord_json(council.actor, kind="arbiter", head="softmax_cap", role_cap=0.70,
-                                       cap_mode=args.cap_mode, role_caps=role_caps)) + "\n", encoding="utf-8")
-    (out / "m_adapter_rl_plus.json").write_text(
-        json.dumps(actor_to_coord_json(monolith.actor, kind="m_adapter", head="linear_blend")) + "\n", encoding="utf-8")
+    # final export (also written periodically as checkpoints during the loop)
+    write_outputs(out, guard_payload, council, monolith, args.cap_mode, role_caps)
     write_rows(out / "ppo-history.csv", history, list(history[0].keys()) if history else ["update"])
 
     report = {
