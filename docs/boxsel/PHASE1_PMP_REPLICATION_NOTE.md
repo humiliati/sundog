@@ -4,7 +4,7 @@
 **Gates:** §7 Phase 1 of [`../SUNDOG_V_BOXSEL.md`](../SUNDOG_V_BOXSEL.md). Closes the replication gate
 that must clear before any published BoxSEL interval is treated as ground truth.  
 **Artifacts:** `scripts/boxsel_pmp.py` (calculator) + `scripts/test_boxsel_pmp.py` (frozen test,
-**21/21 PASS**, `python scripts/test_boxsel_pmp.py` → exit 0). Prior-art + confirmations in
+**22/22 PASS**, `python scripts/test_boxsel_pmp.py` → exit 0). Prior-art + confirmations in
 [`BOXSEL_LITPASS_MEMO.md`](BOXSEL_LITPASS_MEMO.md) Track C.
 
 > **Not an attack on the paper** (falsifier `BOXSEL-PMP-TYPO-AS-ATTACK`). This note locks the body
@@ -84,7 +84,7 @@ They coincide for point premises, so the Phase-1 gate is unaffected; an interval
 ## Verdict
 
 ```
-PMP_BODY_CONFIRMED              ← body Prop 2 form locked + tested (21/21); reproduces the toy exact interval.
+PMP_BODY_CONFIRMED              ← body Prop 2 form locked + tested (22/22); reproduces the toy exact interval.
 PMP_PREMISE_SHAPE_UNRESOLVED    ← drift is REAL and load-bearing (counterexample banked); harmlessness
                                    depends on the authors' construction (A subset Q1?) — needs their code.
 (blast radius)                  ← HELD. Neither PMP_ALG2_TYPO_NO_METRIC_BLAST_RADIUS nor

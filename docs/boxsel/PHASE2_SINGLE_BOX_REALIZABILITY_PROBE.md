@@ -51,7 +51,7 @@ positive triples; `0` violations each), plus an explicit 2-D triple and an exact
 
 - `scripts/boxsel_single_box.py` — exact box geometry (`box_meet`, `type_volumes` by axis
   partitioning), the Helly-2 witness, and the two random batteries.
-- `scripts/test_boxsel_single_box.py` — **13/13 pass**, `python scripts/test_boxsel_single_box.py` → exit 0.
+- `scripts/test_boxsel_single_box.py` — **11/11 pass**, `python scripts/test_boxsel_single_box.py` → exit 0.
 
 ## Boundary & next work
 
@@ -60,6 +60,9 @@ positive triples; `0` violations each), plus an explicit 2-D triple and an exact
   exact `I*`. That **query-interval manifestation is the Phase-4 target** (extremal query
   optimization), which this probe seeds: build an ontology that forces the pairwise co-occurrences,
   then read off a query sensitive to the triple cell.
+- **Update 2026-06-20:** the first one-dimensional query-interval seed is now landed in
+  [`PHASE4_HELLY_INTERVAL_GAP_SEED.md`](PHASE4_HELLY_INTERVAL_GAP_SEED.md): `I*=[0,1]` vs
+  `I_box^1=[1/2,1]`. Higher-dimensional `I_box^n` remains future work.
 - The probe uses axis-parallel boxes with no learned roles; BoxSEL's affine role maps are out of
   scope here (role-free fragment, consistent with the Phase-2 oracle).
 

@@ -30,7 +30,7 @@ lit-pass findings now bind this ledger: **(1) the PMP discrepancy is confirmed i
 v1/v2 TeX source** — two checks, not one (§7 Phase 1); **(2) the coherence gap is demoted to a
 watch item** because the anchor paper's Theorem 3 is zero-loss *inference* soundness, which
 points the other way (§4). **Phase 1 (PMP replication gate) cleared 2026-06-20** —
-`scripts/boxsel_pmp.py` (+ `test_boxsel_pmp.py`, 21/21); verdict `PMP_BODY_CONFIRMED` +
+`scripts/boxsel_pmp.py` (+ `test_boxsel_pmp.py`, 22/22); verdict `PMP_BODY_CONFIRMED` +
 `PMP_PREMISE_SHAPE_UNRESOLVED`, blast radius held pending the authors' eval code
 ([`boxsel/PHASE1_PMP_REPLICATION_NOTE.md`](boxsel/PHASE1_PMP_REPLICATION_NOTE.md)).
 
@@ -203,7 +203,7 @@ phase, never appended after.
     (exact) example; **do not frame the typo as an attack** before the blast radius is known
     (falsifier `BOXSEL-PMP-TYPO-AS-ATTACK`).
   - **DONE 2026-06-20 — gate cleared.** `scripts/boxsel_pmp.py` + `scripts/test_boxsel_pmp.py`
-    (21/21). Verdict `PMP_BODY_CONFIRMED` (body form + toy `[0.16,0.96]` locked) +
+    (22/22). Verdict `PMP_BODY_CONFIRMED` (body form + toy `[0.16,0.96]` locked) +
     `PMP_PREMISE_SHAPE_UNRESOLVED` (a finite-model counterexample shows the `(Q2|A)` drift breaks
     soundness when `A ⊄ Q1`: computed upper `0.52` < true `0.80`; harmlessness needs the authors'
     construction). Blast-radius codes held — no public eval repo surfaced. Full note:
@@ -221,7 +221,7 @@ phase, never appended after.
     `interval_exact()` returns `Fraction`s), a deterministic tiny corpus with source-containment
     checks, and a count↔volume scale-invariance alignment smoke. Banked: the as-printed Algorithm 2
     is **unsound on a finite model** (§7 Phase 1 update). A separated **single-box realizability
-    probe** (`scripts/boxsel_single_box.py` +test 13/13) seeds the representation gap: axis-parallel
+    probe** (`scripts/boxsel_single_box.py` +test 11/11) seeds the representation gap: axis-parallel
     **Helly-2** ⟹ the `{A,B}/{B,C}/{A,C}`-positive, `{A,B,C}`-zero Venn is an oracle-valid model no
     single box can realize. Notes: [`boxsel/PHASE2_EXACT_MICRO_SEL_ORACLE_START.md`](boxsel/PHASE2_EXACT_MICRO_SEL_ORACLE_START.md),
     [`boxsel/PHASE2_SINGLE_BOX_REALIZABILITY_PROBE.md`](boxsel/PHASE2_SINGLE_BOX_REALIZABILITY_PROBE.md).
@@ -244,7 +244,15 @@ phase, never appended after.
 - **Phase 4 — Extremal query optimization (`I_box`).** Replace passive restarts with
   query-conditioned training: `min/max q_w(D|C) s.t. L_T(w) ≤ ε`. Approximates
   `I_box = [inf_w q, sup_w q]`. **Gate:** distinguish ordinary sampling failure (search gap)
-  from box-representation failure (representation gap).
+  from box-representation failure (representation gap). **SEED STARTED 2026-06-20:**
+  `scripts/boxsel_phase4_interval_gap.py` converts the Helly realizability obstruction into a
+  measured one-dimensional query gap: for a tiny ontology with atom sizes `1/2` and pairwise
+  co-occurrences `≥1/4`, the exact oracle gives `I*=[0,1]` for `P(C|A∧B)`, while
+  one-dimensional single boxes give `I_box^1=[1/2,1]`. The same seed now has a certified 2-D
+  rational witness with `q=513/1250 < 1/2`, inherited by every `n≥2` via full-axis extension;
+  this proves the 1-D gap shrinks in higher dimensions but does **not** settle the exact
+  higher-dimensional infimum. This is not yet the full extremal optimizer. Seed note:
+  [`boxsel/PHASE4_HELLY_INTERVAL_GAP_SEED.md`](boxsel/PHASE4_HELLY_INTERVAL_GAP_SEED.md).
 
 - **Phase 5 — Shadow-gap taxonomy.** Classify every case into search / representation / loss
   (+ a **coherence** watch-item bucket, populated only by an audit receipt per §4); gap-size
