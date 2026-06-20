@@ -22,11 +22,15 @@ Short version:
 **Status:** Scaffold opened 2026-06-19; lit-pass Phase 0.5 **filled 2026-06-20**
 ([`docs/boxsel/BOXSEL_LITPASS_MEMO.md`](boxsel/BOXSEL_LITPASS_MEMO.md); anchor = Zhu, Potyka,
 Xiong, Tran, Nayyeri, Kharlamov, Staab, accepted UAI 2026). No oracle, sampler, extremal
-optimizer, prereg, run, public page, `site-pages.json` entry, or external packet exists. Two
+optimizer, prereg, public page, `site-pages.json` entry, or external packet exists (Phase 1
+produced a PMP calculator + test only). Two
 lit-pass findings now bind this ledger: **(1) the PMP discrepancy is confirmed in the arXiv
 v1/v2 TeX source** — two checks, not one (§7 Phase 1); **(2) the coherence gap is demoted to a
 watch item** because the anchor paper's Theorem 3 is zero-loss *inference* soundness, which
-points the other way (§4).
+points the other way (§4). **Phase 1 (PMP replication gate) cleared 2026-06-20** —
+`scripts/boxsel_pmp.py` (+ `test_boxsel_pmp.py`, 21/21); verdict `PMP_BODY_CONFIRMED` +
+`PMP_PREMISE_SHAPE_UNRESOLVED`, blast radius held pending the authors' eval code
+([`boxsel/PHASE1_PMP_REPLICATION_NOTE.md`](boxsel/PHASE1_PMP_REPLICATION_NOTE.md)).
 
 Attribution: Statistical EL (SEL) and the entailment-interval framing, box embeddings
 (BoxSEL), and probabilistic EL / probabilistic modus-ponens bounds are the literature's
@@ -196,6 +200,12 @@ phase, never appended after.
   - **Gate:** reproduce the paper's illustrative `[0.43, 0.83]` (sampled) vs `[0.16, 0.96]`
     (exact) example; **do not frame the typo as an attack** before the blast radius is known
     (falsifier `BOXSEL-PMP-TYPO-AS-ATTACK`).
+  - **DONE 2026-06-20 — gate cleared.** `scripts/boxsel_pmp.py` + `scripts/test_boxsel_pmp.py`
+    (21/21). Verdict `PMP_BODY_CONFIRMED` (body form + toy `[0.16,0.96]` locked) +
+    `PMP_PREMISE_SHAPE_UNRESOLVED` (a finite-model counterexample shows the `(Q2|A)` drift breaks
+    soundness when `A ⊄ Q1`: computed upper `0.52` < true `0.80`; harmlessness needs the authors'
+    construction). Blast-radius codes held — no public eval repo surfaced. Full note:
+    [`boxsel/PHASE1_PMP_REPLICATION_NOTE.md`](boxsel/PHASE1_PMP_REPLICATION_NOTE.md).
 
 - **Phase 2 — Exact micro-SEL oracle (`I*`).** Tiny role-free SEL fragments; exact bounds by
   type enumeration + LP — a *local testbed*, not a new reasoning method (Lutz/Schröder lineage;
