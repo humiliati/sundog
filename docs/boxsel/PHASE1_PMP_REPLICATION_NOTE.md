@@ -67,6 +67,13 @@ soundness risk *in isolation* (correct slack), but proving the *shipped* Algorit
 some instance needs a search where **both** bugs survive together — a concrete Phase-2 task, not a
 settled claim. This is exactly why the blast-radius codes stay held.
 
+**UPDATE 2026-06-20 (Phase 2):** that search succeeded. `find_alg2_shipped_counterexample`
+(`scripts/boxsel_exact_oracle.py`) exhibits `U={1,2,3}, Q1={1,2}, A={1,3}, Q2={1,2}`, where the
+as-printed Algorithm 2 returns upper `q1·q2 + 1 − q2 = 3/4` while the true `P(Q2|Q1) = 1` — so the
+shipped formula **is unsound on a finite model** (both bugs survive together, do not compensate).
+This settles the *formula* question; the effect on the paper's **reported metrics** is still gated
+on their evaluation code. See [`PHASE2_EXACT_MICRO_SEL_ORACLE_START.md`](PHASE2_EXACT_MICRO_SEL_ORACLE_START.md).
+
 ### 4. Sharpness footnote (no error)
 
 The paper's general upper `min(1, u1*u2 + 1 - l1)` is **sound but not tight**; the sharp max over

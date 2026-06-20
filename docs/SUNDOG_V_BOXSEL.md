@@ -21,9 +21,11 @@ Short version:
 
 **Status:** Scaffold opened 2026-06-19; lit-pass Phase 0.5 **filled 2026-06-20**
 ([`docs/boxsel/BOXSEL_LITPASS_MEMO.md`](boxsel/BOXSEL_LITPASS_MEMO.md); anchor = Zhu, Potyka,
-Xiong, Tran, Nayyeri, Kharlamov, Staab, accepted UAI 2026). No oracle, sampler, extremal
-optimizer, prereg, public page, `site-pages.json` entry, or external packet exists (Phase 1
-produced a PMP calculator + test only). Two
+Xiong, Tran, Nayyeri, Kharlamov, Staab, accepted UAI 2026). Phase 1 produced a PMP
+calculator + frozen test; Phase 2 has started with a role-free exact-oracle smoke slice
+(`scripts/boxsel_exact_oracle.py` + `scripts/test_boxsel_exact_oracle.py`) but is **not
+cleared**. No sampler, extremal optimizer, prereg, public page, `site-pages.json` entry, or
+external packet exists. Two
 lit-pass findings now bind this ledger: **(1) the PMP discrepancy is confirmed in the arXiv
 v1/v2 TeX source** — two checks, not one (§7 Phase 1); **(2) the coherence gap is demoted to a
 watch item** because the anchor paper's Theorem 3 is zero-loss *inference* soundness, which
@@ -214,6 +216,23 @@ phase, never appended after.
   cases and the anchor toy example. **Semantic-alignment check (load-bearing; replaces the old
   "coherence check"):** confirm the finite-counting oracle's `I*` coincides with the
   geometric-volume semantics Theorem 3 is stated over, before relying on `I_box ⊆ I*` (§4).
+  - **STARTED 2026-06-20 (not cleared).** `scripts/boxsel_exact_oracle.py` (+test, 41/41) — an
+    **exact rational** type-enumeration oracle (in-house two-phase simplex; numpy/scipy removed;
+    `interval_exact()` returns `Fraction`s), a deterministic tiny corpus with source-containment
+    checks, and a count↔volume scale-invariance alignment smoke. Banked: the as-printed Algorithm 2
+    is **unsound on a finite model** (§7 Phase 1 update). A separated **single-box realizability
+    probe** (`scripts/boxsel_single_box.py` +test 13/13) seeds the representation gap: axis-parallel
+    **Helly-2** ⟹ the `{A,B}/{B,C}/{A,C}`-positive, `{A,B,C}`-zero Venn is an oracle-valid model no
+    single box can realize. Notes: [`boxsel/PHASE2_EXACT_MICRO_SEL_ORACLE_START.md`](boxsel/PHASE2_EXACT_MICRO_SEL_ORACLE_START.md),
+    [`boxsel/PHASE2_SINGLE_BOX_REALIZABILITY_PROBE.md`](boxsel/PHASE2_SINGLE_BOX_REALIZABILITY_PROBE.md).
+
+  **STARTED 2026-06-20:** `scripts/boxsel_exact_oracle.py` implements the first role-free
+  type-enumeration + LP oracle; `scripts/test_boxsel_exact_oracle.py` passes the Phase-1 PMP
+  hand cases, the toy `[0.16, 0.96]`, the sharp interval-premise check, and an as-printed
+  Algorithm-2 shipped counterexample. The same smoke now includes deterministic tiny-corpus
+  generation plus finite-counting/type-volume semantic alignment over disjoint Boolean type
+  cells; this is **not** yet a single-box realizability claim. Start note:
+  [`boxsel/PHASE2_EXACT_MICRO_SEL_ORACLE_START.md`](boxsel/PHASE2_EXACT_MICRO_SEL_ORACLE_START.md).
 
 - **Phase 3 — BoxSEL baseline sampler (`I_sample`).** Wrap box embeddings + random-restart
   training (dimension `n`, restarts `N`, loss tolerance `ε`); estimator
