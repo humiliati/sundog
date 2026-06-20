@@ -31,6 +31,14 @@ import {
 
 import { buildProbeForCell } from "./h1-probe-cells.mjs";
 import { capSimplexProject, resolveCaps } from "./h1-arbiter-cap.mjs";
+import {
+  buildH1LocalFeatures,
+  h1FeaturesForMode,
+  makeH1FeatureState,
+  noteH1Action,
+  resetH1FeatureState,
+  trustFeatureAudit,
+} from "./h1-trust-features.mjs";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const POLICY_DIR = "results/mesa/phase2-matched-capacity/policies";
@@ -105,6 +113,7 @@ function parseArgs(argv) {
     fieldCap: 1.0,
     rewardCap: 0.5,
     guardCap: 0.7,
+    featureMode: "base",
     fieldPolicy: `${POLICY_DIR}/signature_ppo_terminal_small_seed_0_phase5.policy.json`,
     rewardPolicy: `${POLICY_DIR}/reward_ppo_phase3_small_seed_0_phase3_canonical_1m.policy.json`,
   };
@@ -125,6 +134,7 @@ function parseArgs(argv) {
     else if (f === "--field-cap") args.fieldCap = Number.parseFloat(v);
     else if (f === "--reward-cap") args.rewardCap = Number.parseFloat(v);
     else if (f === "--guard-cap") args.guardCap = Number.parseFloat(v);
+    else if (f === "--feature-mode") args.featureMode = v;
     else if (f === "--field-policy") args.fieldPolicy = v;
     else if (f === "--reward-policy") args.rewardPolicy = v;
     else if (f === "--phase") { /* label only */ }
@@ -133,11 +143,6 @@ function parseArgs(argv) {
   return args;
 }
 
-const INFERENCE_FEATURES = [
-  "obs0", "obs1", "obs2", "obs3", "obs4", "obs5",
-  "fa_x", "fa_y", "ra_x", "ra_y", "fa_norm", "ra_norm",
-  "disagree_l2", "cos_agree", "fd_grad_norm", "hist_act_norm_prev", "hist_sLocal_prev",
-];
 const LABELS_PRIVILEGED = [
   "g_x", "g_y", "true_sig", "fb_val", "fb_dist",
   "alpha_star", "tgt_w_field", "tgt_w_reward", "tgt_w_guard",
@@ -145,9 +150,11 @@ const LABELS_PRIVILEGED = [
   "roll_basin_captured", "roll_terminal_sig", "behavior",
 ];
 const META_COLUMNS = ["split", "cell", "seed", "t"];
-const ALL_COLUMNS = [...META_COLUMNS, ...INFERENCE_FEATURES, ...LABELS_PRIVILEGED];
+function allColumns(inferenceFeatures) {
+  return [...META_COLUMNS, ...inferenceFeatures, ...LABELS_PRIVILEGED];
+}
 
-function rolloutRaw({ field, reward, seed, cellId, horizon, behavior, roleHardCap }) {
+function rolloutRaw({ field, reward, seed, cellId, horizon, behavior, roleHardCap, featureMode }) {
   const cfg = makeTrialConfig({ seed, sensorTier: SENSOR_TIERS.LOCAL_PROBE_FIELD, config: { horizon } });
   const env = new ShadowFieldEnv(cfg);
   const probe = buildProbeForCell(cellId, seed);
@@ -157,17 +164,15 @@ function rolloutRaw({ field, reward, seed, cellId, horizon, behavior, roleHardCa
 
   const steps = [];
   const satHist = [];
-  let prevActNorm = 0;
-  let prevSLocal = env.lastObservation.sLocal;
   let observation = env.lastObservation;
+  const featureState = makeH1FeatureState();
+  resetH1FeatureState(featureState, observation);
 
   while (!env.terminalOutcome) {
     const fa = field.act(observation, cfg).action;
     const ra = reward.act(observation, cfg).action;
-    const obs = observation.observation; // 6-dim [x,y,s0,s1,s2,s3]
-    const s = observation.samples;
-    const fdGrad = [(s[0] - s[1]) / (2 * eps), (s[2] - s[3]) / (2 * eps)];
-    const fdGradNorm = norm2(fdGrad);
+    const features = buildH1LocalFeatures({ observation, fa, ra, eps, state: featureState, featureMode });
+    const fdGradNorm = features.fd_grad_norm;
 
     // labels (privileged): true gradient & basin geometry at THIS state
     const g = signatureGradient(env.x, env.xGoal, env.config);
@@ -183,12 +188,8 @@ function rolloutRaw({ field, reward, seed, cellId, horizon, behavior, roleHardCa
 
     steps.push({
       t: env.stepIndex,
-      obs: obs.slice(),
       fa, ra, fdGradNorm,
-      disagree_l2: Math.hypot(fa[0] - ra[0], fa[1] - ra[1]),
-      cos_agree: cos2(fa, ra),
-      hist_act_norm_prev: prevActNorm,
-      hist_sLocal_prev: prevSLocal,
+      features,
       g, fbVal, fbDist, alpha,
       trueSig: env.trueSignature(),
       reward_misaligned: cos2(ra, g) < 0 ? 1 : 0,
@@ -196,8 +197,7 @@ function rolloutRaw({ field, reward, seed, cellId, horizon, behavior, roleHardCa
 
     satHist.push(norm2(act) >= 0.99 * actionMax ? 1 : 0);
     while (satHist.length > 10) satHist.shift();
-    prevActNorm = norm2(act);
-    prevSLocal = observation.sLocal;
+    noteH1Action(featureState, act, observation);
 
     const res = env.step(act);
     observation = res.observation;
@@ -222,7 +222,7 @@ function buildTargetWeights(alpha, risk, caps) {
 }
 
 function csvRow(r) {
-  return ALL_COLUMNS.map((c) => {
+  return r._columns.map((c) => {
     const v = r[c];
     if (v === null || v === undefined) return "";
     if (typeof v === "number") return Number.isFinite(v) ? String(roundNumber(v, 6)) : "";
@@ -234,6 +234,9 @@ function csvRow(r) {
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const cells = args.cells.split(",").map((c) => c.trim()).filter(Boolean);
+  if (!["base", "trust"].includes(args.featureMode)) throw new Error(`unknown --feature-mode ${args.featureMode}`);
+  const inferenceFeatures = h1FeaturesForMode(args.featureMode);
+  const allCols = allColumns(inferenceFeatures);
   const outDir = path.resolve(repoRoot, args.out);
   const field = new JsonPolicyController(JSON.parse(readFileSync(path.resolve(repoRoot, args.fieldPolicy), "utf8")));
   const reward = new JsonPolicyController(JSON.parse(readFileSync(path.resolve(repoRoot, args.rewardPolicy), "utf8")));
@@ -254,7 +257,7 @@ async function main() {
       for (let i = 0; i < split.count; i += 1) {
         const seed = split.start + i;
         const behavior = behaviors[seed % behaviors.length];
-        const roll = rolloutRaw({ field, reward, seed, cellId, horizon: args.horizon, behavior, roleHardCap: args.roleHardCap });
+        const roll = rolloutRaw({ field, reward, seed, cellId, horizon: args.horizon, behavior, roleHardCap: args.roleHardCap, featureMode: args.featureMode });
         rawBySplit[split.name].push({ split: split.name, cell: cellId, seed, behavior, ...roll });
       }
     }
@@ -285,12 +288,9 @@ async function main() {
         );
         const tw = buildTargetWeights(st.alpha, risk, caps);
         rowsBySplit[split.name].push({
+          _columns: allCols,
           split: split.name, cell: roll.cell, seed: roll.seed, t: st.t,
-          obs0: st.obs[0], obs1: st.obs[1], obs2: st.obs[2], obs3: st.obs[3], obs4: st.obs[4], obs5: st.obs[5],
-          fa_x: st.fa[0], fa_y: st.fa[1], ra_x: st.ra[0], ra_y: st.ra[1],
-          fa_norm: norm2(st.fa), ra_norm: norm2(st.ra),
-          disagree_l2: st.disagree_l2, cos_agree: st.cos_agree, fd_grad_norm: st.fdGradNorm,
-          hist_act_norm_prev: st.hist_act_norm_prev, hist_sLocal_prev: st.hist_sLocal_prev,
+          ...st.features,
           g_x: st.g[0], g_y: st.g[1], true_sig: st.trueSig,
           fb_val: st.fbVal, fb_dist: st.fbDist,
           alpha_star: st.alpha, tgt_w_field: tw[0], tgt_w_reward: tw[1], tgt_w_guard: tw[2],
@@ -307,7 +307,7 @@ async function main() {
   for (const split of splits) {
     await writeFile(
       path.join(outDir, `${split.name}.csv`),
-      `${ALL_COLUMNS.join(",")}\n${rowsBySplit[split.name].map(csvRow).join("\n")}\n`,
+      `${allCols.join(",")}\n${rowsBySplit[split.name].map(csvRow).join("\n")}\n`,
       "utf8",
     );
   }
@@ -315,7 +315,9 @@ async function main() {
   const schema = {
     format: "mesa-h1-coordinator-dataset-v1",
     meta_columns: META_COLUMNS,
-    inference_features: INFERENCE_FEATURES,
+    inference_features: inferenceFeatures,
+    feature_mode: args.featureMode,
+    trust_feature_audit: trustFeatureAudit(args.featureMode, inferenceFeatures),
     arbiter_extra_input: ["guard_risk"],
     labels_privileged: LABELS_PRIVILEGED,
     targets: {
@@ -333,6 +335,8 @@ async function main() {
     generated: new Date().toISOString(),
     args,
     cells,
+    feature_mode: args.featureMode,
+    trust_feature_audit: trustFeatureAudit(args.featureMode, inferenceFeatures),
     cap_mode: args.capMode,
     role_caps: roleCaps,
     behavior_policy: "round-robin by seed%3: 0=blind-council, 1=reward-only, 2=field-only",
@@ -347,7 +351,7 @@ async function main() {
 
   // eslint-disable-next-line no-console
   console.log(`H1.2a dataset: train=${rowsBySplit.train.length} val=${rowsBySplit.val.length} rows  basin_rollouts=${nBasin}  ${elapsed.toFixed(2)}s  ${manifest.rows_per_sec} rows/s`);
-  console.log(`  cap_mode=${args.capMode} role_caps=${JSON.stringify(roleCaps)}  cells=${cells.length}  features=${INFERENCE_FEATURES.length}`);
+  console.log(`  cap_mode=${args.capMode} role_caps=${JSON.stringify(roleCaps)}  cells=${cells.length}  feature_mode=${args.featureMode}  features=${inferenceFeatures.length}`);
 }
 
 main().catch((e) => {

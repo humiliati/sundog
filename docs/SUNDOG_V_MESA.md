@@ -713,6 +713,24 @@ that cancels a basinward bull vote rather than merely holding).
 That guard-change reopening is now registered as
 [`H1.2e`](mesa/H1_2E_CANCELLING_GUARD_SPEC.md).
 
+**H1.2e binding (2026-06-20): `MECHANISM_NULL`.**
+[`mesa/H1_2E_RESULTS.md`](mesa/H1_2E_RESULTS.md). The cancelling guard
+(`a_guard = −c_guard·a_reward`) council out-resisted the same-run `M-Adapter-RL+`
+on GI basin (0.0067 < 0.0223 → gates 1,2,3,5,6 pass), **but the pre-registered
+mechanism gate (4) failed: cancellation never engaged** (`c_guard` 0.007→0.015
+over 512 updates, cancel_mass ~0.001–0.003). The basin gain came from extra
+arbiter training + a weaker same-run monolith, not the countervote — so it's not
+creditable. Finding: **the cancelling guard is redundant** (the arbiter can
+already drive `w_reward→0`, a simpler lever; PPO leaves the cancel head at ~init),
+which *softens* the H1.2d "must seat the bull with force" reading — the bull can
+just be ignored. **Four registered Small-tier nulls (H1.2b/c/d/e); the
+frozen-head Small-tier line is thoroughly closed.** No tested mechanism — cap
+geometry, RL arbitration, cancelling guard — made plurality *creditably*
+out-resist proxy capture at this tier. Reopening = genuinely different regime
+(Medium/Large tier or richer trust features), separately registered. The
+mechanism gate is the durable methodological win (it blocked a false-positive
+SUPPORT).
+
 Immediate work:
 
 - Update `docs/promo/PROMO_HIGHLIGHTS.md` §The Gravity Claim with the earned mesa

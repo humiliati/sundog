@@ -213,6 +213,26 @@ the MESA controller-family architecture and capacity ladder.
 > epitaph is precise. **We proved we can keep the bull off the throne, and that
 > the bounded court governs as ably as the crown; we did not prove the court
 > resists corruption better than a king who can simply look away from the bull.**
+>
+> **H1.2e tried the cancelling guard (`MECHANISM_NULL`, 2026-06-20;
+> [`mesa/H1_2E_RESULTS.md`](mesa/H1_2E_RESULTS.md)).** Give the guard an
+> *anti-reward* vote — let it cancel the bull's residual rather than merely
+> abstain. The council *did* numerically out-resist the matched monarch on
+> gradient-intact basin capture (0.0067 < 0.0223) — but a **pre-registered
+> mechanism gate** caught that the cancellation **never engaged** (`c_guard` crept
+> 0.007→0.015 over 512 updates; effectively zero). The basin gain came from extra
+> arbiter training, not the countervote, so it is not creditable to the
+> hypothesis. The reason the guard stayed silent is itself the finding: **the
+> cancelling guard is redundant** — the arbiter can already drive the bull's
+> weight toward zero, a simpler lever than fighting a seated bull, so the engine
+> never reaches for the knife. This *softens* the H1.2d epitaph: the bull need not
+> be seated *with force*; it can simply be ignored. **Four registered Small-tier
+> nulls now stand (H1.2b/c/d/e); the frozen-head Small-tier line is thoroughly
+> closed.** No tested mechanism — cap geometry, RL arbitration, or an explicit
+> cancelling guard — made plurality *creditably* out-resist proxy capture at this
+> tier. Reopening means a genuinely different regime (higher tier or richer trust
+> features), separately registered. The durable win is the method: a mechanism
+> gate turned a would-be false-positive crown into an honest null.
 
 ---
 
@@ -416,9 +436,10 @@ convert myth into typed result.
   of the thesis. (**H1b**: pantheon vs its own best single-objective reduction.)
   Home: `SUNDOG_V_MESA.md` Phases 3, 7. Spec:
   [`mesa/H1_PANTHEON_OF_AGENCY_SPEC.md`](mesa/H1_PANTHEON_OF_AGENCY_SPEC.md).
-  **Status: H1.1 ✓ → H1.2a indicative SUPPORT → H1.2b `NULL` → H1.2c
-  (reward-asymmetric cap) `NULL` → H1.2d (RL arbiter) `PROXY_NULL`
-  (2026-06-18→19). Frozen-head Small-tier line CLOSED; three registered nulls.**
+  **Status: H1.1 ✓ → H1.2a indic. SUPPORT → H1.2b `NULL` → H1.2c `NULL` → H1.2d
+  (RL arbiter) `PROXY_NULL` → H1.2e (cancelling guard) `MECHANISM_NULL`
+  (2026-06-18→20). Frozen-head Small-tier line THOROUGHLY CLOSED; four registered
+  nulls.**
   H1.2b/c: the equal-budget monolith won on competence and proxy-capture under
   both the symmetric ([`mesa/H1_2B_RESULTS.md`](mesa/H1_2B_RESULTS.md)) and
   bull-bound ([`mesa/H1_2C_RESULTS.md`](mesa/H1_2C_RESULTS.md)) supervised caps;
@@ -433,10 +454,21 @@ convert myth into typed result.
   entirely. The durable positives across all three: **the bull can be bounded
   (reward ≤ 0.50, zero breaches) and the bounded court governs as ably as the
   crown.** What stayed unproven: plurality itself buying *superior* proxy
-  resistance. Thesis is [ORNAMENT] for the MESA lane at this tier; reopening is a
-  registered change of tier, features, or the guard (a guard that *cancels* a
-  basinward bull vote, not merely holds). The guard-change reopening is
-  registered as [`H1.2e`](mesa/H1_2E_CANCELLING_GUARD_SPEC.md).
+  resistance. **H1.2e then tried exactly that guard
+  ([`mesa/H1_2E_RESULTS.md`](mesa/H1_2E_RESULTS.md)): give it an anti-reward
+  countervote. The council out-resisted the same-run monarch on GI basin
+  (0.0067 < 0.0223), but the pre-registered mechanism gate caught that the
+  cancellation never engaged (c_guard ~0.015; the gain was extra arbiter
+  training, not the countervote) → `MECHANISM_NULL`.** The cancelling guard is
+  redundant: the arbiter can already zero the bull's weight, so PPO never grows
+  the countervote. Thesis stays [ORNAMENT] for the MESA lane; with four nulls the
+  frozen-head Small-tier line is thoroughly closed, and reopening now means a
+  genuinely different regime — Medium/Large tier or richer trust features,
+  separately registered. Durable win: the mechanism gate turned a would-be
+  false-positive crown into an honest null. **The richer-features reopening is
+  registered as [`H1.2f`](mesa/H1_2F_TRUST_FEATURES_SPEC.md)** (attacks the
+  named feature-discrimination bottleneck; gives the trust features equally to
+  the monolith; attribution-gated so any win must be *carried by* the features).
 - **H2 — The Averted Face.** Operationalize "oriented to the invariant, not the
   kill": a controller regularized toward the geometry-derived field vs one
   optimizing the proxy directly; measure the Goodhart gap. Home:

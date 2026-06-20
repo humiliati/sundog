@@ -253,6 +253,14 @@ phase, never appended after.
   this proves the 1-D gap shrinks in higher dimensions but does **not** settle the exact
   higher-dimensional infimum. This is not yet the full extremal optimizer. Seed note:
   [`boxsel/PHASE4_HELLY_INTERVAL_GAP_SEED.md`](boxsel/PHASE4_HELLY_INTERVAL_GAP_SEED.md).
+  - **TREND RESOLVED 2026-06-20** (`scripts/boxsel_inf_trend.py` +test 17/17): the box query
+    **factorizes over axes**, `q = ∏_k q_k` (each `q_k = P(C_k|A_k∩B_k) ∈ (0,1]`), and a proven,
+    exhaustively-grid-verified per-axis lemma `q_k ≥ P(C|A_k)P(C|B_k)` multiplies up (via the exact
+    `∏_k P(C|A_k) = |A∩C|/|A| ≥ 1/2`) to **`q ≥ 1/4` for every `n`**. With the `513/1250` witness:
+    **`1/4 ≤ inf I_box^n ≤ 513/1250` for `n ≥ 2`** — the representation gap **persists (≥ 1/4), it
+    does NOT vanish** with dimension. (A naive random search over-estimates the infimum in higher
+    dims — a live search-gap demo.) The *exact* infimum in `[1/4, 513/1250]` stays open. Note:
+    [`boxsel/PHASE4B_INF_TREND_RESOLVED.md`](boxsel/PHASE4B_INF_TREND_RESOLVED.md).
 
 - **Phase 5 — Shadow-gap taxonomy.** Classify every case into search / representation / loss
   (+ a **coherence** watch-item bucket, populated only by an audit receipt per §4); gap-size

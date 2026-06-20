@@ -28,6 +28,7 @@ import numpy as np
 import torch
 from torch import nn
 
+from training.mesa.h1_trust_features import H1FeatureState, build_h1_local_features, trust_feature_audit
 from training.mesa.js_bridge_env import BridgeClient, REPO_ROOT
 
 
@@ -59,6 +60,10 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--value-coef", type=float, default=0.5)
     ap.add_argument("--max-grad-norm", type=float, default=0.5)
     ap.add_argument("--log-std-init", type=float, default=-1.25)
+    ap.add_argument("--checkpoint-every", type=int, default=32,
+                    help="export models + save full torch resume state every N updates")
+    ap.add_argument("--no-resume", action="store_true",
+                    help="ignore any existing train_state.pt and start fresh")
     ap.add_argument("--init-guard", required=True)
     ap.add_argument("--init-arbiter", required=True)
     ap.add_argument("--init-monolith-adapter", required=True)
@@ -66,6 +71,7 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--field-cap", type=float, default=1.0)
     ap.add_argument("--reward-cap", type=float, default=0.5)
     ap.add_argument("--guard-cap", type=float, default=0.7)
+    ap.add_argument("--feature-mode", default="base", choices=["base", "trust"])
     ap.add_argument("--field-policy", required=True)
     ap.add_argument("--reward-policy", required=True)
     return ap.parse_args()
@@ -301,38 +307,6 @@ def sigmoid(x: float) -> float:
     return 1.0 / (1.0 + math.exp(-x))
 
 
-def cos2(a: np.ndarray, b: np.ndarray) -> float:
-    na = norm2(a)
-    nb = norm2(b)
-    if na < 1e-9 or nb < 1e-9:
-        return 0.0
-    return float(np.dot(a, b) / (na * nb))
-
-
-def local_features(obs: list[float], fa: np.ndarray, ra: np.ndarray, prev_act_norm: float, prev_s_local: float) -> dict[str, float]:
-    s0, s1, s2, s3 = obs[2], obs[3], obs[4], obs[5]
-    fd = np.asarray([(s0 - s1) / (2 * PROBE_EPSILON), (s2 - s3) / (2 * PROBE_EPSILON)], dtype=np.float32)
-    return {
-        "obs0": float(obs[0]),
-        "obs1": float(obs[1]),
-        "obs2": float(obs[2]),
-        "obs3": float(obs[3]),
-        "obs4": float(obs[4]),
-        "obs5": float(obs[5]),
-        "fa_x": float(fa[0]),
-        "fa_y": float(fa[1]),
-        "ra_x": float(ra[0]),
-        "ra_y": float(ra[1]),
-        "fa_norm": norm2(fa),
-        "ra_norm": norm2(ra),
-        "disagree_l2": norm2(fa - ra),
-        "cos_agree": cos2(fa, ra),
-        "fd_grad_norm": norm2(fd),
-        "hist_act_norm_prev": prev_act_norm,
-        "hist_sLocal_prev": prev_s_local,
-    }
-
-
 @dataclass
 class Episode:
     features: list[torch.Tensor]
@@ -368,6 +342,7 @@ def run_episode(
     seed: int,
     horizon: int,
     caps: np.ndarray,
+    feature_mode: str,
     env_seq: int,
 ) -> Episode:
     env_id = f"h1_2d_{controller}_{cell}_{seed}_{env_seq}"
@@ -383,8 +358,8 @@ def run_episode(
     )
     obs = response["obs"]
     info = response["info"]
-    prev_s_local = float(info.get("s_local", sum(obs[2:6]) / 4))
-    prev_act_norm = 0.0
+    feature_state = H1FeatureState()
+    feature_state.reset(obs, info)
 
     features: list[torch.Tensor] = []
     actions: list[torch.Tensor] = []
@@ -398,7 +373,7 @@ def run_episode(
     while not done:
         fa = field_policy.act(obs)
         ra = reward_policy.act(obs)
-        fmap = local_features(obs, fa, ra, prev_act_norm, prev_s_local)
+        fmap = build_h1_local_features(obs, fa, ra, eps=PROBE_EPSILON, state=feature_state, feature_mode=feature_mode)
         risk = sigmoid(float(coord_forward_np(guard, fmap)[0]))
         fmap["guard_risk"] = risk
         feat = model_features(agent.actor, fmap)
@@ -412,6 +387,7 @@ def run_episode(
         else:
             raise ValueError(f"unknown controller: {controller}")
         action = clip_action(action)
+        feature_state.note_action(action, info=info, obs=obs)
 
         step_response = client.request({"cmd": "step", "env_id": env_id, "action": action.tolist()})
         features.append(feat.squeeze(0))
@@ -424,8 +400,6 @@ def run_episode(
         info = step_response["info"]
         done = bool(step_response["done"])
         terminal_info = info
-        prev_act_norm = norm2(action)
-        prev_s_local = float(info.get("s_local", sum(obs[2:6]) / 4))
         steps += 1
 
     ep_return, basin = terminal_reward(terminal_info)
@@ -548,6 +522,35 @@ def actor_to_coord_json(
     return payload
 
 
+def write_outputs(
+    out: Path,
+    init_guard_path: str | Path,
+    council: ActorCritic,
+    monolith: ActorCritic,
+    cap_mode: str,
+    role_caps: dict[str, float],
+) -> None:
+    shutil.copyfile(repo_path(init_guard_path), out / "p_guard.json")
+    (out / "p_council_arbiter_rl.json").write_text(
+        json.dumps(
+            actor_to_coord_json(
+                council.actor,
+                kind="arbiter",
+                head="softmax_cap",
+                role_cap=0.70,
+                cap_mode=cap_mode,
+                role_caps=role_caps,
+            )
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    (out / "m_adapter_rl.json").write_text(
+        json.dumps(actor_to_coord_json(monolith.actor, kind="m_adapter", head="linear_blend")) + "\n",
+        encoding="utf-8",
+    )
+
+
 def write_rows(path: Path, rows: list[dict[str, Any]], fieldnames: list[str]) -> None:
     with path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
@@ -589,9 +592,72 @@ def main() -> int:
     env_steps = {"council": 0, "monolith": 0}
     episodes_seen = {"council": 0, "monolith": 0}
     env_seq = 0
+    start_update = 0
+    history_fields = [
+        "update",
+        "council_return_mean",
+        "monolith_return_mean",
+        "council_alignment_mean",
+        "monolith_alignment_mean",
+        "council_basin_rate",
+        "monolith_basin_rate",
+        "council_steps",
+        "monolith_steps",
+        "council_policy_loss",
+        "monolith_policy_loss",
+        "council_value_loss",
+        "monolith_value_loss",
+        "council_entropy",
+        "monolith_entropy",
+        "council_approx_kl",
+        "monolith_approx_kl",
+        "council_clip_frac",
+        "monolith_clip_frac",
+    ]
+
+    state_path = out / "train_state.pt"
+    if state_path.exists() and not args.no_resume:
+        st = torch.load(state_path, map_location="cpu", weights_only=False)
+        council.load_state_dict(st["council"])
+        monolith.load_state_dict(st["monolith"])
+        opt_council.load_state_dict(st["opt_council"])
+        opt_monolith.load_state_dict(st["opt_monolith"])
+        env_steps = st["env_steps"]
+        episodes_seen = st["episodes_seen"]
+        env_seq = st["env_seq"]
+        history = st["history"]
+        start_update = int(st["update"])
+        try:
+            torch.set_rng_state(st["torch_rng"])
+            np.random.set_state(st["np_rng"])
+        except Exception:
+            pass
+        print(
+            f"{args.phase} RESUME from update {start_update}/{args.updates} "
+            f"(env_steps so far {env_steps['council'] + env_steps['monolith']})",
+            flush=True,
+        )
+
+    def save_train_state(update: int) -> None:
+        torch.save(
+            {
+                "update": update,
+                "council": council.state_dict(),
+                "monolith": monolith.state_dict(),
+                "opt_council": opt_council.state_dict(),
+                "opt_monolith": opt_monolith.state_dict(),
+                "env_steps": env_steps,
+                "episodes_seen": episodes_seen,
+                "env_seq": env_seq,
+                "history": history,
+                "torch_rng": torch.get_rng_state(),
+                "np_rng": np.random.get_state(),
+            },
+            state_path,
+        )
 
     with BridgeClient() as client:
-        for update in range(1, args.updates + 1):
+        for update in range(start_update + 1, args.updates + 1):
             cases = []
             for j in range(args.rollouts_per_update):
                 seed = args.train_seed_start + ((update - 1) * args.rollouts_per_update + j) % max(args.train_seeds, 1)
@@ -614,6 +680,7 @@ def main() -> int:
                         seed=seed,
                         horizon=args.horizon,
                         caps=caps,
+                        feature_mode=args.feature_mode,
                         env_seq=env_seq,
                     )
                 )
@@ -630,6 +697,7 @@ def main() -> int:
                         seed=seed,
                         horizon=args.horizon,
                         caps=caps,
+                        feature_mode=args.feature_mode,
                         env_seq=env_seq,
                     )
                 )
@@ -666,13 +734,29 @@ def main() -> int:
                 }
             )
             print(
-                "h1.2d ppo "
+                f"{args.phase} ppo "
                 f"update={update}/{args.updates} "
                 f"c_return={history[-1]['council_return_mean']:.3f} "
                 f"m_return={history[-1]['monolith_return_mean']:.3f} "
                 f"steps={history[-1]['council_steps'] + history[-1]['monolith_steps']}",
                 flush=True,
             )
+            if update % args.checkpoint_every == 0 or update == args.updates:
+                write_outputs(out, args.init_guard, council, monolith, args.cap_mode, role_caps)
+                save_train_state(update)
+                write_rows(out / "ppo-history.csv", history, history_fields)
+                (out / "checkpoint.json").write_text(
+                    json.dumps(
+                        {
+                            "last_update": update,
+                            "updates_total": args.updates,
+                            "env_steps": env_steps["council"] + env_steps["monolith"],
+                            "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+                        }
+                    )
+                    + "\n",
+                    encoding="utf-8",
+                )
 
     elapsed = time.time() - start_time
     guard_p = param_count(guard, trainable_only=False)
@@ -684,56 +768,43 @@ def main() -> int:
     arb_trainable_p = param_count(council.actor)
     mon_trainable_p = param_count(monolith.actor)
 
-    shutil.copyfile(repo_path(args.init_guard), out / "p_guard.json")
-    (out / "p_council_arbiter_rl.json").write_text(
-        json.dumps(
-            actor_to_coord_json(
-                council.actor,
-                kind="arbiter",
-                head="softmax_cap",
-                role_cap=0.70,
-                cap_mode=args.cap_mode,
-                role_caps=role_caps,
-            )
-        )
-        + "\n",
-        encoding="utf-8",
-    )
-    (out / "m_adapter_rl.json").write_text(
-        json.dumps(actor_to_coord_json(monolith.actor, kind="m_adapter", head="linear_blend")) + "\n",
-        encoding="utf-8",
-    )
+    write_outputs(out, args.init_guard, council, monolith, args.cap_mode, role_caps)
     write_rows(
         out / "ppo-history.csv",
         history,
-        [
-            "update",
-            "council_return_mean",
-            "monolith_return_mean",
-            "council_alignment_mean",
-            "monolith_alignment_mean",
-            "council_basin_rate",
-            "monolith_basin_rate",
-            "council_steps",
-            "monolith_steps",
-            "council_policy_loss",
-            "monolith_policy_loss",
-            "council_value_loss",
-            "monolith_value_loss",
-            "council_entropy",
-            "monolith_entropy",
-            "council_approx_kl",
-            "monolith_approx_kl",
-            "council_clip_frac",
-            "monolith_clip_frac",
-        ],
+        history_fields,
     )
+    spec_doc = (
+        "docs/mesa/H1_2F_TRUST_FEATURES_SPEC.md"
+        if args.feature_mode == "trust" or "h1_2f" in args.phase.lower()
+        else "docs/mesa/H1_2D_RL_ARBITER_SPEC.md"
+    )
+    guard_features = list(guard.actor.input_features if hasattr(guard, "actor") else guard.input_features)
+    council_features = [name for name in council.actor.input_features if name != "guard_risk"]
+    monolith_features = list(monolith.actor.input_features)
+    feature_audit = {
+        "feature_mode": args.feature_mode,
+        "guard": trust_feature_audit(args.feature_mode, guard_features),
+        "arbiter_base": trust_feature_audit(args.feature_mode, council_features),
+        "m_adapter": trust_feature_audit(args.feature_mode, monolith_features),
+        "same_controller_features": guard_features == council_features == monolith_features,
+        "arbiter_guard_risk_extra": (
+            len(council.actor.input_features) == len(guard_features) + 1
+            and council.actor.input_features[-1] == "guard_risk"
+        ),
+    }
     report = {
-        "spec": "docs/mesa/H1_2D_RL_ARBITER_SPEC.md",
+        "spec": spec_doc,
         "phase": args.phase,
-        "opened_after": ["docs/mesa/H1_2B_RESULTS.md", "docs/mesa/H1_2C_RESULTS.md"],
+        "opened_after": (
+            ["docs/mesa/H1_2B_RESULTS.md", "docs/mesa/H1_2C_RESULTS.md", "docs/mesa/H1_2D_RESULTS.md", "docs/mesa/H1_2E_RESULTS.md"]
+            if args.feature_mode == "trust" or "h1_2f" in args.phase.lower()
+            else ["docs/mesa/H1_2B_RESULTS.md", "docs/mesa/H1_2C_RESULTS.md"]
+        ),
         "algorithm": "ppo",
         "seed": args.ppo_seed,
+        "feature_mode": args.feature_mode,
+        "trust_feature_audit": feature_audit,
         "cells": cells,
         "train_seed_start": args.train_seed_start,
         "train_seeds": args.train_seeds,
@@ -758,6 +829,7 @@ def main() -> int:
             "arbiter": str((out / "p_council_arbiter_rl.json").relative_to(REPO_ROOT)).replace("\\", "/"),
             "monolith_adapter": str((out / "m_adapter_rl.json").relative_to(REPO_ROOT)).replace("\\", "/"),
             "history": str((out / "ppo-history.csv").relative_to(REPO_ROOT)).replace("\\", "/"),
+            "resume_state": str(state_path.relative_to(REPO_ROOT)).replace("\\", "/"),
         },
         "params": {
             "budget_basis": "exported_controller_actor_params; guard is frozen for PPO but counted per H1.2 family budget",
@@ -780,6 +852,8 @@ def main() -> int:
             "council_env_steps": env_steps["council"],
             "monolith_env_steps": env_steps["monolith"],
             "same_episode_budget": episodes_seen["council"] == episodes_seen["monolith"],
+            "resumed_from_update": start_update,
+            "checkpoint_every": args.checkpoint_every,
         },
         "timing": {
             "elapsed_sec": round(elapsed, 3),
@@ -793,7 +867,7 @@ def main() -> int:
     }
     (out / "train-report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     print(
-        "H1.2d RL trainer done. "
+        f"{args.phase} RL trainer done. "
         f"updates={args.updates} env_steps={env_steps['council'] + env_steps['monolith']} "
         f"elapsed={elapsed:.2f}s steps/s={report['timing']['env_steps_per_sec']} "
         f"budget_ratio={budget_ratio:.3f}",

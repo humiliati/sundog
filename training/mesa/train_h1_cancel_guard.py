@@ -75,7 +75,9 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--cancel-cap", type=float, default=1.0)
     ap.add_argument("--cancel-bias-init", type=float, default=-5.0)
     ap.add_argument("--checkpoint-every", type=int, default=64,
-                    help="export current models + checkpoint.json every N updates (interruption insurance)")
+                    help="export models + save full torch resume state every N updates")
+    ap.add_argument("--no-resume", action="store_true",
+                    help="ignore any existing train_state.pt and start fresh")
     ap.add_argument("--cap-mode", default="reward-asymmetric", choices=["reward-asymmetric"])
     ap.add_argument("--field-cap", type=float, default=1.0)
     ap.add_argument("--reward-cap", type=float, default=0.5)
@@ -672,9 +674,40 @@ def main() -> int:
     env_steps = {"council": 0, "monolith": 0}
     episodes_seen = {"council": 0, "monolith": 0}
     env_seq = 0
+    start_update = 0
+
+    # Auto-resume: if a torch resume state exists, continue the SAME run (same
+    # 512-update PPO trajectory) instead of restarting -- survives sleep/power kills.
+    state_path = out / "train_state.pt"
+    if state_path.exists() and not args.no_resume:
+        st = torch.load(state_path, map_location="cpu", weights_only=False)
+        council.load_state_dict(st["council"])
+        monolith.load_state_dict(st["monolith"])
+        opt_council.load_state_dict(st["opt_council"])
+        opt_monolith.load_state_dict(st["opt_monolith"])
+        env_steps = st["env_steps"]
+        episodes_seen = st["episodes_seen"]
+        env_seq = st["env_seq"]
+        history = st["history"]
+        start_update = int(st["update"])
+        try:
+            torch.set_rng_state(st["torch_rng"])
+            np.random.set_state(st["np_rng"])
+        except Exception:
+            pass
+        print(f"h1.2e RESUME from update {start_update}/{args.updates} (env_steps so far {env_steps['council']+env_steps['monolith']})", flush=True)
+
+    def save_train_state(update: int) -> None:
+        torch.save({
+            "update": update,
+            "council": council.state_dict(), "monolith": monolith.state_dict(),
+            "opt_council": opt_council.state_dict(), "opt_monolith": opt_monolith.state_dict(),
+            "env_steps": env_steps, "episodes_seen": episodes_seen, "env_seq": env_seq,
+            "history": history, "torch_rng": torch.get_rng_state(), "np_rng": np.random.get_state(),
+        }, state_path)
 
     with BridgeClient() as client:
-        for update in range(1, args.updates + 1):
+        for update in range(start_update + 1, args.updates + 1):
             cases = []
             for j in range(args.rollouts_per_update):
                 seed = args.train_seed_start + ((update - 1) * args.rollouts_per_update + j) % max(args.train_seeds, 1)
@@ -727,6 +760,7 @@ def main() -> int:
             # power/sleep event never loses more than --checkpoint-every updates.
             if update % args.checkpoint_every == 0 or update == args.updates:
                 write_outputs(out, guard_payload, council, monolith, args.cap_mode, role_caps)
+                save_train_state(update)
                 write_rows(out / "ppo-history.csv", history, list(history[0].keys()))
                 (out / "checkpoint.json").write_text(
                     json.dumps({

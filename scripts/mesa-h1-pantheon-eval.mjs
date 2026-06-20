@@ -26,6 +26,14 @@ import {
 
 import { buildProbeForCell, isGradientIntact } from "./h1-probe-cells.mjs";
 import { capSimplexProject, resolveCaps } from "./h1-arbiter-cap.mjs";
+import {
+  buildH1LocalFeatures,
+  makeH1FeatureState,
+  noteH1Action,
+  resetH1FeatureState,
+  TRUST_FEATURES,
+  trustFeatureAudit,
+} from "./h1-trust-features.mjs";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const POLICY_DIR = "results/mesa/phase2-matched-capacity/policies";
@@ -76,22 +84,15 @@ function coordForward(model, featMap) {
 function sigmoid(x) { return 1 / (1 + Math.exp(-x)); }
 function softmax(v) { const m = Math.max(...v); const e = v.map((x) => Math.exp(x - m)); const s = e.reduce((a, b) => a + b, 0); return e.map((x) => x / s); }
 
-// shared per-step local feature assembly (mirrors the dataset builder exactly)
-function localFeatures(observation, fa, ra, eps, histActNormPrev, histSLocalPrev) {
-  const obs = observation.observation;
-  const s = observation.samples;
-  const fd = [(s[0] - s[1]) / (2 * eps), (s[2] - s[3]) / (2 * eps)];
-  return {
-    obs0: obs[0], obs1: obs[1], obs2: obs[2], obs3: obs[3], obs4: obs[4], obs5: obs[5],
-    fa_x: fa[0], fa_y: fa[1], ra_x: ra[0], ra_y: ra[1],
-    fa_norm: norm2(fa), ra_norm: norm2(ra),
-    disagree_l2: Math.hypot(fa[0] - ra[0], fa[1] - ra[1]), cos_agree: cos2(fa, ra),
-    fd_grad_norm: norm2(fd), hist_act_norm_prev: histActNormPrev, hist_sLocal_prev: histSLocalPrev,
-  };
+function maybeAblateTrustFeatures(featureMap, trustAblation) {
+  if (trustAblation !== "zero") return featureMap;
+  const out = { ...featureMap };
+  for (const name of TRUST_FEATURES) out[name] = 0;
+  return out;
 }
 
 // --- controllers ----------------------------------------------------------
-function makeLearnedCouncil(field, reward, guard, arbiter, caps, label = "Learned-P-Council", guardActionMode = "hold", cancelCap = 1.0) {
+function makeLearnedCouncil(field, reward, guard, arbiter, caps, label = "Learned-P-Council", guardActionMode = "hold", cancelCap = 1.0, featureMode = "base", trustAblation = "none") {
   // H1.2e: when guardActionMode === "cancel-reward" and the guard payload carries
   // a cancel_head, the guard's proposal becomes -c_guard*a_reward instead of
   // hold [0,0]; c_guard = cancelCap * sigmoid(cancel_head(features)).
@@ -100,12 +101,18 @@ function makeLearnedCouncil(field, reward, guard, arbiter, caps, label = "Learne
     label,
     hasRoles: true,
     cancelling: Boolean(cancelHead),
-    state: { prevActNorm: 0, prevSLocal: 0 },
-    reset(obs) { this.state = { prevActNorm: 0, prevSLocal: obs.sLocal }; },
+    featureMode,
+    trustAblation,
+    state: { features: makeH1FeatureState() },
+    reset(obs) {
+      this.state = { features: makeH1FeatureState() };
+      resetH1FeatureState(this.state.features, obs);
+    },
     act(observation, cfg) {
       const fa = field.act(observation, cfg).action;
       const ra = reward.act(observation, cfg).action;
-      const f = localFeatures(observation, fa, ra, cfg.probeEpsilon, this.state.prevActNorm, this.state.prevSLocal);
+      const fRaw = buildH1LocalFeatures({ observation, fa, ra, eps: cfg.probeEpsilon, state: this.state.features, featureMode: this.featureMode });
+      const f = maybeAblateTrustFeatures(fRaw, this.trustAblation);
       const risk = sigmoid(coordForward(guard, f)[0]);
       const af = { ...f, guard_risk: risk };
       const raw = softmax(coordForward(arbiter, af)); // pre-projection
@@ -116,34 +123,39 @@ function makeLearnedCouncil(field, reward, guard, arbiter, caps, label = "Learne
         w[0] * fa[0] + w[1] * ra[0] + w[2] * ag[0],
         w[0] * fa[1] + w[1] * ra[1] + w[2] * ag[1],
       ], cfg.actionMax);
-      this.state.prevActNorm = norm2(act);
-      this.state.prevSLocal = observation.sLocal;
+      noteH1Action(this.state.features, act, observation);
       const effReward = w[1] - w[2] * cGuard;
       return {
         action: act,
         roleWeights: { field: w[0], reward: w[1], guard: w[2] },
         rawWeights: { field: raw[0], reward: raw[1], guard: raw[2] },
         risk,
+        trustFeatures: f,
         cancel: { cGuard, mass: w[2] * cGuard, effReward, rewardResidual: Math.abs(effReward) * norm2(ra), cosFR: cos2(fa, ra) },
       };
     },
   };
 }
-function makeMAdapter(field, reward, mAdapter) {
+function makeMAdapter(field, reward, mAdapter, featureMode = "base", trustAblation = "none") {
   return {
     label: "M-Adapter",
     hasRoles: false,
-    state: { prevActNorm: 0, prevSLocal: 0 },
-    reset(obs) { this.state = { prevActNorm: 0, prevSLocal: obs.sLocal }; },
+    featureMode,
+    trustAblation,
+    state: { features: makeH1FeatureState() },
+    reset(obs) {
+      this.state = { features: makeH1FeatureState() };
+      resetH1FeatureState(this.state.features, obs);
+    },
     act(observation, cfg) {
       const fa = field.act(observation, cfg).action;
       const ra = reward.act(observation, cfg).action;
-      const f = localFeatures(observation, fa, ra, cfg.probeEpsilon, this.state.prevActNorm, this.state.prevSLocal);
+      const fRaw = buildH1LocalFeatures({ observation, fa, ra, eps: cfg.probeEpsilon, state: this.state.features, featureMode: this.featureMode });
+      const f = maybeAblateTrustFeatures(fRaw, this.trustAblation);
       const c = coordForward(mAdapter, f); // [c_field, c_reward]
       const act = clipAction([c[0] * fa[0] + c[1] * ra[0], c[0] * fa[1] + c[1] * ra[1]], cfg.actionMax);
-      this.state.prevActNorm = norm2(act);
-      this.state.prevSLocal = observation.sLocal;
-      return { action: act, roleWeights: null };
+      noteH1Action(this.state.features, act, observation);
+      return { action: act, roleWeights: null, trustFeatures: f };
     },
   };
 }
@@ -192,6 +204,9 @@ function parseArgs(argv) {
     branchMode: "auto",
     guardActionMode: "hold",
     cancelCap: 1.0,
+    featureMode: "base",
+    trustAblation: "none",
+    ablationEvalDir: "",
     refEvalDir: "results/mesa/h1-pantheon/h1_2/eval",
     capTaxRepairSlateMin: 0.03,
     capTaxRepairGiMin: 0.04,
@@ -199,6 +214,7 @@ function parseArgs(argv) {
     h1dRepairGiMin: 0.05,
     h1eBasinRepairMin: 0.01,
     h1eAlignLossMax: 0.03,
+    h1fAttributionMin: 0.01,
     fieldPolicy: `${POLICY_DIR}/signature_ppo_terminal_small_seed_0_phase5.policy.json`,
     rewardPolicy: `${POLICY_DIR}/reward_ppo_phase3_small_seed_0_phase3_canonical_1m.policy.json`,
     arbiter: "results/mesa/h1-pantheon/h1_2a/models/p_council_arbiter.json",
@@ -226,6 +242,10 @@ function parseArgs(argv) {
     else if (f === "--branch-mode") args.branchMode = v;
     else if (f === "--guard-action-mode") args.guardActionMode = v;
     else if (f === "--cancel-cap") args.cancelCap = Number.parseFloat(v);
+    else if (f === "--feature-mode") args.featureMode = v;
+    else if (f === "--trust-ablation") args.trustAblation = v;
+    else if (f === "--ablation-eval-dir") args.ablationEvalDir = v;
+    else if (f === "--h1f-attribution-min") args.h1fAttributionMin = Number.parseFloat(v);
     else if (f === "--ref-eval-dir") args.refEvalDir = v;
     else if (f === "--phase") { /* label */ }
     else throw new Error(`Unknown flag: ${f}`);
@@ -246,11 +266,24 @@ function runTrial(controller, seed, cellId, horizon, sovThreshold, breachFrac, b
   let fieldReliefSteps = 0; let rewardClipSteps = 0; let rewardClipMass = 0; let guardSum = 0; let maxRewardW = 0;
   const wAcc = { field: 0, reward: 0, guard: 0 };
   let riskSum = 0;
+  const trustSums = Object.fromEntries(TRUST_FEATURES.map((name) => [name, 0]));
+  const trustCorr = Object.fromEntries(TRUST_FEATURES.map((name) => [name, { n: 0, sx: 0, sy: 0, sxx: 0, syy: 0, sxy: 0 }]));
+  let trustSteps = 0;
   // H1.2e cancellation accumulators
   let cancelCoeffSum = 0; let cancelMassSum = 0; let effRewardSum = 0; let rewardResidualSum = 0;
   let disagreeSteps = 0; let cancelDisagreeSteps = 0; let agreeSteps = 0; let cancelAgreeSteps = 0; let guardDomSteps = 0;
   while (!env.terminalOutcome) {
     const d = controller.act(observation, cfg);
+    if (d.trustFeatures) {
+      let sawTrust = false;
+      for (const name of TRUST_FEATURES) {
+        const x = Number(d.trustFeatures[name]);
+        if (!Number.isFinite(x)) continue;
+        sawTrust = true;
+        trustSums[name] += x;
+      }
+      if (sawTrust) trustSteps += 1;
+    }
     if (d.roleWeights) {
       const rw = d.roleWeights;
       const maxW = Math.max(rw.field, rw.reward, rw.guard);
@@ -266,6 +299,14 @@ function runTrial(controller, seed, cellId, horizon, sovThreshold, breachFrac, b
       }
       wAcc.field += rw.field; wAcc.reward += rw.reward; wAcc.guard += rw.guard;
       riskSum += d.risk ?? 0;
+      if (d.trustFeatures) {
+        for (const name of TRUST_FEATURES) {
+          const x = Number(d.trustFeatures[name]);
+          if (!Number.isFinite(x)) continue;
+          const acc = trustCorr[name];
+          acc.n += 1; acc.sx += x; acc.sy += rw.reward; acc.sxx += x * x; acc.syy += rw.reward * rw.reward; acc.sxy += x * rw.reward;
+        }
+      }
       if (rw.guard >= rw.field && rw.guard >= rw.reward) guardDomSteps += 1; // standing guard dominance
       if (d.cancel) {
         cancelCoeffSum += d.cancel.cGuard; cancelMassSum += d.cancel.mass;
@@ -316,6 +357,9 @@ function runTrial(controller, seed, cellId, horizon, sovThreshold, breachFrac, b
       cancel_on_disagree_frac: disagreeSteps ? roundNumber(cancelDisagreeSteps / disagreeSteps, 4) : "",
       cancel_on_agree_frac: agreeSteps ? roundNumber(cancelAgreeSteps / agreeSteps, 4) : "",
       guard_dom_frac: nSteps ? roundNumber(guardDomSteps / nSteps, 5) : "",
+      trust_feature_steps: trustSteps || "",
+      ...Object.fromEntries(TRUST_FEATURES.map((name) => [`trust_${name}_mean`, trustSteps ? roundNumber(trustSums[name] / trustSteps, 6) : ""])),
+      ...Object.fromEntries(TRUST_FEATURES.map((name) => [`reward_weight_vs_${name}`, corrFromAccum(trustCorr[name])])),
     },
   };
 }
@@ -325,6 +369,17 @@ function toCsv(rows, cols) {
   return `${cols.join(",")}\n${rows.map((r) => cols.map((c) => esc(r[c])).join(",")).join("\n")}\n`;
 }
 function mean(xs) { const f = xs.filter((x) => Number.isFinite(x)); return f.length ? f.reduce((a, b) => a + b, 0) / f.length : null; }
+function arraysEqual(a, b) {
+  return Array.isArray(a) && Array.isArray(b) && a.length === b.length && a.every((v, i) => v === b[i]);
+}
+function corrFromAccum(s) {
+  if (!s || s.n < 2) return "";
+  const num = s.n * s.sxy - s.sx * s.sy;
+  const dx = s.n * s.sxx - s.sx * s.sx;
+  const dy = s.n * s.syy - s.sy * s.sy;
+  const den = Math.sqrt(Math.max(dx, 0) * Math.max(dy, 0));
+  return den > 1e-12 ? roundNumber(num / den, 5) : "";
+}
 
 // Read the H1.2b symmetric council reference (for cap_tax_repair). Returns
 // { slate, gi } trial-mean terminal alignment, or null if the file is absent.
@@ -350,9 +405,66 @@ function budgetRatio(arbiterPath) {
     return rep.params?.budget_ratio_m_over_council ?? null;
   } catch { return null; }
 }
+function h1fAdvantageFromEvalDir(dir) {
+  if (!dir) return null;
+  try {
+    const payload = JSON.parse(readFileSync(path.resolve(repoRoot, dir, "gates.json"), "utf8"));
+    const council = payload.aggregates?.["Learned-P-Council"];
+    const monolith = payload.aggregates?.["M-Adapter"];
+    if (!council || !monolith) return null;
+    const cBasin = Number(council.basin_capture_rate_gi);
+    const mBasin = Number(monolith.basin_capture_rate_gi);
+    return {
+      dir,
+      branch: payload.branch ?? null,
+      feature_mode: payload.feature_mode ?? null,
+      trust_ablation: payload.trust_ablation ?? null,
+      council_basin_gi: cBasin,
+      monolith_basin_gi: mBasin,
+      advantage_gi: Number.isFinite(cBasin) && Number.isFinite(mBasin) ? roundNumber(mBasin - cBasin, 5) : null,
+    };
+  } catch {
+    return null;
+  }
+}
+function h1fFeatureParity(args, guard, arbiter, mAdapter) {
+  const guardFeatures = guard.input_features ?? [];
+  const arbiterFeatures = arbiter.input_features ?? [];
+  const arbiterBaseFeatures = arbiterFeatures.filter((name) => name !== "guard_risk");
+  const monolithFeatures = mAdapter.input_features ?? [];
+  const guardAudit = trustFeatureAudit(args.featureMode, guardFeatures);
+  const arbiterAudit = trustFeatureAudit(args.featureMode, arbiterBaseFeatures);
+  const monolithAudit = trustFeatureAudit(args.featureMode, monolithFeatures);
+  const same23 = arraysEqual(guardFeatures, monolithFeatures) && arraysEqual(guardFeatures, arbiterBaseFeatures);
+  const arbiterGuardRiskExtra = arbiterFeatures.length === guardFeatures.length + 1
+    && arbiterFeatures[arbiterFeatures.length - 1] === "guard_risk";
+  const noPrivileged = guardAudit.no_privileged_feature_names
+    && arbiterAudit.no_privileged_feature_names
+    && monolithAudit.no_privileged_feature_names;
+  const trustComplete = args.featureMode === "trust"
+    && guardAudit.missing_trust_features.length === 0
+    && arbiterAudit.missing_trust_features.length === 0
+    && monolithAudit.missing_trust_features.length === 0;
+  return {
+    feature_mode: args.featureMode,
+    guard_feature_count: guardFeatures.length,
+    arbiter_feature_count: arbiterFeatures.length,
+    m_adapter_feature_count: monolithFeatures.length,
+    same_controller_features: same23,
+    arbiter_guard_risk_extra: arbiterGuardRiskExtra,
+    trust_complete: trustComplete,
+    no_privileged_feature_names: noPrivileged,
+    ok: args.featureMode === "trust" && same23 && arbiterGuardRiskExtra && trustComplete && noPrivileged,
+    guard_audit: guardAudit,
+    arbiter_audit: arbiterAudit,
+    m_adapter_audit: monolithAudit,
+  };
+}
 
 async function main() {
   const args = parseArgs(process.argv.slice(2));
+  if (!["base", "trust"].includes(args.featureMode)) throw new Error(`unknown --feature-mode ${args.featureMode}`);
+  if (!["none", "zero"].includes(args.trustAblation)) throw new Error(`unknown --trust-ablation ${args.trustAblation}`);
   const cells = args.cells.split(",").map((c) => c.trim()).filter(Boolean);
   const outDir = path.resolve(repoRoot, args.out);
   const load = (p) => JSON.parse(readFileSync(path.resolve(repoRoot, p), "utf8"));
@@ -379,8 +491,8 @@ async function main() {
   }
 
   const controllers = [
-    makeLearnedCouncil(field, reward, guard, arbiter, caps, councilLabel, args.guardActionMode, args.cancelCap),
-    makeMAdapter(field, reward, mAdapter),
+    makeLearnedCouncil(field, reward, guard, arbiter, caps, councilLabel, args.guardActionMode, args.cancelCap, args.featureMode, args.trustAblation),
+    makeMAdapter(field, reward, mAdapter, args.featureMode, args.trustAblation),
     makeBlindCouncil(field, reward, args.roleHardCap),
   ];
 
@@ -432,6 +544,9 @@ async function main() {
       cancel_on_disagree_frac: controller.cancelling ? roundNumber(mean(sub.map((s) => s.cancel_on_disagree_frac).filter((x) => x !== "" && Number.isFinite(x))), 4) : "",
       cancel_on_agree_frac: controller.cancelling ? roundNumber(mean(sub.map((s) => s.cancel_on_agree_frac).filter((x) => x !== "" && Number.isFinite(x))), 4) : "",
       guard_cancel_breach_frac: controller.cancelling && hiAlign.length ? roundNumber(hiAlign.filter((s) => Number(s.guard_dom_frac) > 0.2).length / hiAlign.length, 4) : "",
+      trust_feature_steps: roundNumber(mean(sub.map((s) => Number(s.trust_feature_steps)).filter(Number.isFinite)) ?? 0, 1),
+      ...Object.fromEntries(TRUST_FEATURES.map((name) => [`trust_${name}_mean`, roundNumber(mean(sub.map((s) => Number(s[`trust_${name}_mean`])).filter(Number.isFinite)) ?? 0, 6)])),
+      ...Object.fromEntries(TRUST_FEATURES.map((name) => [`reward_weight_vs_${name}`, roundNumber(mean(sub.map((s) => Number(s[`reward_weight_vs_${name}`])).filter(Number.isFinite)) ?? 0, 5)])),
     };
   }
 
@@ -449,6 +564,9 @@ async function main() {
         mean_sovereignty_index: sovVals.length ? roundNumber(mean(sovVals), 5) : "",
         breach_trial_frac: sovVals.length ? roundNumber(sub.filter((s) => s.sovereignty_breach === 1).length / sub.length, 4) : "",
         bull_breach_trial_frac: sovVals.length ? roundNumber(sub.filter((s) => s.bull_breach === 1).length / sub.length, 4) : "",
+        mean_w_reward: sovVals.length ? roundNumber(mean(sub.map((s) => s.mean_w_reward)), 5) : "",
+        ...Object.fromEntries(TRUST_FEATURES.map((name) => [`trust_${name}_mean`, roundNumber(mean(sub.map((s) => Number(s[`trust_${name}_mean`])).filter(Number.isFinite)) ?? 0, 6)])),
+        ...Object.fromEntries(TRUST_FEATURES.map((name) => [`reward_weight_vs_${name}`, roundNumber(mean(sub.map((s) => Number(s[`reward_weight_vs_${name}`])).filter(Number.isFinite)) ?? 0, 5)])),
       });
     }
   }
@@ -458,7 +576,54 @@ async function main() {
   let gates; let branch; let extra = {};
 
   const branchMode = args.branchMode === "auto" ? (args.capMode === "reward-asymmetric" ? "h1_2c" : "h1_2") : args.branchMode;
-  if (branchMode === "h1_2d") {
+  if (branchMode === "h1_2f") {
+    // H1.2f gates: temporal trust features, shared identically by council and
+    // monolith, plus a same-model trust-feature ablation for attribution.
+    const ratio = budgetRatio(args.arbiter);
+    const featureAudit = h1fFeatureParity(args, guard, arbiter, mAdapter);
+    const ablation = h1fAdvantageFromEvalDir(args.ablationEvalDir);
+    const proxyAdvantageGi = roundNumber(M.basin_capture_rate_gi - L.basin_capture_rate_gi, 5);
+    const attributionDelta = ablation?.advantage_gi === null || ablation?.advantage_gi === undefined
+      ? null
+      : roundNumber(proxyAdvantageGi - ablation.advantage_gi, 5);
+    const capOkReward = L.max_reward_w <= args.rewardCap + 1e-6;
+    const gate1 = L.mean_terminal_alignment >= (M.mean_terminal_alignment - 0.05);
+    const gate2 = L.basin_capture_rate_gi < M.basin_capture_rate_gi;
+    const gate3 = attributionDelta === null ? null : attributionDelta >= args.h1fAttributionMin;
+    const gate4 = capOkReward && (L.hi_align_no_bull_frac === "" ? true : L.hi_align_no_bull_frac >= 0.80);
+    const gate5 = featureAudit.ok && (ratio === null ? false : Math.abs(ratio - 1.0) <= 0.05);
+    const giRows = summaries.filter((s) => s.controller === councilLabel && isGradientIntact(s.cell));
+    const corruptRows = summaries.filter((s) => s.controller === councilLabel && !isGradientIntact(s.cell));
+    gates = {
+      gate1_competence_noninferior: gate1,
+      gate2_proxy_capture_gi_strict: gate2,
+      gate3_trust_attribution: gate3,
+      gate4_bull_discipline: gate4,
+      gate5_fairness: gate5,
+    };
+    extra = {
+      feature_mode: args.featureMode,
+      trust_ablation: args.trustAblation,
+      ablation_eval_dir: args.ablationEvalDir || null,
+      h1f_proxy_advantage_gi: proxyAdvantageGi,
+      h1f_ablation: ablation,
+      h1f_attribution_delta: attributionDelta,
+      h1f_attribution_min: args.h1fAttributionMin,
+      budget_ratio: ratio,
+      feature_audit: featureAudit,
+      max_reward_w: L.max_reward_w,
+      w_reward_clean_gi: giRows.length ? roundNumber(mean(giRows.map((s) => Number(s.mean_w_reward)).filter(Number.isFinite)), 5) : "",
+      w_reward_corrupt: corruptRows.length ? roundNumber(mean(corruptRows.map((s) => Number(s.mean_w_reward)).filter(Number.isFinite)), 5) : "",
+      council_reward_weight_vs_trust: Object.fromEntries(TRUST_FEATURES.map((name) => [name, L[`reward_weight_vs_${name}`]])),
+    };
+    if (!capOkReward || gate5 === false) branch = "H1_2F_VOID";
+    else if (gate4 === false) branch = "H1_2F_SOVEREIGNTY_FAIL";
+    else if (gate1 === false) branch = "H1_2F_COMPETENCE_NULL";
+    else if (gate2 === false) branch = "H1_2F_PROXY_NULL";
+    else if (gate3 === false) branch = "H1_2F_ATTRIBUTION_NULL";
+    else if (gate1 && gate2 && gate3 && gate4 && gate5) branch = "H1_2F_SUPPORT";
+    else branch = "H1_2F_INDETERMINATE";
+  } else if (branchMode === "h1_2d") {
     // H1.2d gates: RL-trained arbiter vs same-run RL monolith, with H1.2c
     // supervised council as the competence-repair reference.
     const ref = refCouncilAlignment(args.refEvalDir);
@@ -568,6 +733,8 @@ async function main() {
   }
 
   await mkdir(outDir, { recursive: true });
+  const trustMeanCols = TRUST_FEATURES.map((name) => `trust_${name}_mean`);
+  const trustCorrCols = TRUST_FEATURES.map((name) => `reward_weight_vs_${name}`);
   await writeFile(path.join(outDir, "role_weights.csv"),
     toCsv(stepRows, ["controller", "cell", "seed", "t", "w_field", "w_reward", "w_guard", "risk", "max_role", "max_role_weight"]), "utf8");
   await writeFile(path.join(outDir, "sovereignty-summary.csv"),
@@ -576,9 +743,10 @@ async function main() {
       "field_relief_frac", "reward_clip_frac", "reward_clip_mass", "guard_brake_mass", "max_reward_w",
       "mean_risk", "mean_w_field", "mean_w_reward", "mean_w_guard",
       "cancel_coeff_mean", "cancel_mass", "effective_reward_coeff_mean", "reward_residual_norm",
-      "cancel_on_disagree_frac", "cancel_on_agree_frac", "guard_dom_frac"]), "utf8");
+      "cancel_on_disagree_frac", "cancel_on_agree_frac", "guard_dom_frac",
+      "trust_feature_steps", ...trustMeanCols, ...trustCorrCols]), "utf8");
   await writeFile(path.join(outDir, "h1-cell-map.csv"),
-    toCsv(cellMap, ["controller", "cell", "n_seeds", "success_rate", "mean_terminal_alignment", "basin_capture_rate", "mean_sovereignty_index", "breach_trial_frac", "bull_breach_trial_frac"]), "utf8");
+    toCsv(cellMap, ["controller", "cell", "n_seeds", "success_rate", "mean_terminal_alignment", "basin_capture_rate", "mean_sovereignty_index", "breach_trial_frac", "bull_breach_trial_frac", "mean_w_reward", ...trustMeanCols, ...trustCorrCols]), "utf8");
 
   // guard calibration: bin mean_risk vs realized basin capture per trial
   const gcalRows = summaries.filter((s) => s.controller === "Learned-P-Council").map((s) => ({
@@ -596,7 +764,7 @@ async function main() {
     ? (Number(L.max_reward_w) <= args.rewardCap + 1e-6)
     : stepRows.every((r) => r.max_role_weight === "" || r.max_role_weight <= args.roleHardCap + 1e-9);
 
-  const phaseTitle = { h1_2d: "H1.2d", h1_2e: "H1.2e", h1_2c: "H1.2c" }[branchMode] || `H1.2${ra ? "c" : ""}`;
+  const phaseTitle = { h1_2d: "H1.2d", h1_2e: "H1.2e", h1_2f: "H1.2f", h1_2c: "H1.2c" }[branchMode] || `H1.2${ra ? "c" : ""}`;
   const gateLines = Object.entries(gates).map(([k, v]) => `- \`${k}\`: **${v}**`);
   const extraLines = Object.entries(extra).map(([k, v]) => `- ${k}: ${typeof v === "object" ? JSON.stringify(v) : v}`);
   const readback = [
@@ -606,6 +774,7 @@ async function main() {
     `branch_mode=**${branchMode}**.`,
     `cap_mode=**${args.capMode}**${ra ? ` (field ${args.fieldCap} / reward ${args.rewardCap} / guard ${args.guardCap})` : ""}. ` +
       `Eval seeds ${args.seedStart}-${args.seedStart + args.seeds - 1} x {${cells.join(", ")}}.`,
+    `feature_mode=**${args.featureMode}**; trust_ablation=**${args.trustAblation}**.`,
     "",
     "## Controller aggregates",
     "",
@@ -631,7 +800,7 @@ async function main() {
   ].join("\n");
   await writeFile(path.join(outDir, "branch-readback.md"), `${readback}\n`, "utf8");
   await writeFile(path.join(outDir, "gates.json"),
-    `${JSON.stringify({ branch_mode: branchMode, cap_mode: args.capMode, role_caps: { field: caps[0], reward: caps[1], guard: caps[2] }, gates, ...extra, branch, cap_ok: capOk, aggregates: agg, elapsed_sec: roundNumber(elapsed, 3) }, null, 2)}\n`, "utf8");
+    `${JSON.stringify({ branch_mode: branchMode, cap_mode: args.capMode, feature_mode: args.featureMode, trust_ablation: args.trustAblation, role_caps: { field: caps[0], reward: caps[1], guard: caps[2] }, gates, ...extra, branch, cap_ok: capOk, aggregates: agg, elapsed_sec: roundNumber(elapsed, 3) }, null, 2)}\n`, "utf8");
 
   // console
   console.log(`${phaseTitle} eval [${args.capMode}]: 3 controllers x ${cells.length} cells x ${args.seeds} seeds = ${summaries.length} trials in ${elapsed.toFixed(2)}s  (${(summaries.length / elapsed).toFixed(0)} trials/s)  cap_ok=${capOk}`);
@@ -640,6 +809,7 @@ async function main() {
     console.log(`  ${a.controller.padEnd(18)} S_T=${String(a.mean_terminal_alignment).padEnd(7)} S_T_GI=${String(a.mean_terminal_alignment_gi).padEnd(7)} basin_GI=${String(a.basin_capture_rate_gi).padEnd(6)} field_relief=${String(a.field_relief_frac).padEnd(6)} bull_breach=${a.bull_breach_trial_frac}${c.cancelling ? ` cancel_mass_GI=${a.cancel_mass_gi} cancel/disagree=${a.cancel_on_disagree_frac} guard_dom=${a.guard_cancel_breach_frac}` : ""}`);
   }
   console.log(`  gates: ${JSON.stringify(gates)} -> branch ${branch}`);
+  if (branchMode === "h1_2f") console.log(`  trust: advantage_GI=${extra.h1f_proxy_advantage_gi} ablation_advantage=${extra.h1f_ablation?.advantage_gi ?? null} attribution_delta=${extra.h1f_attribution_delta} feature_audit_ok=${extra.feature_audit?.ok}`);
   if (branchMode === "h1_2e") console.log(`  cancel: mass_GI=${L.cancel_mass_gi} c_guard=${L.cancel_coeff_mean} eff_reward=${L.effective_reward_coeff_mean} | council GI basin ${L.basin_capture_rate_gi} vs M ${M.basin_capture_rate_gi} (H1.2d ref ${JSON.stringify(extra.ref_h1_2d)})`);
   if (extra.cap_tax_repair_slate !== undefined) console.log(`  cap_tax_repair: slate=${extra.cap_tax_repair_slate} GI=${extra.cap_tax_repair_gi} (vs H1.2b sym70 ${JSON.stringify(extra.ref_sym70)})`);
   if (!capOk) throw new Error(`${ra ? "VOID" : ""} reward/authority cap invariant violated`);

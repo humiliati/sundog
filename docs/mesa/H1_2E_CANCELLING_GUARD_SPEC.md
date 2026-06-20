@@ -1,18 +1,25 @@
 # H1.2e Cancelling-Guard Rung
 
-Status: **OPEN SPEC / H1.2e-b BINDING RUNNING.** Opened 2026-06-19 after H1.2d-b
-selected `H1_2D_PROXY_NULL`. Tooling built 2026-06-19
-(`training/mesa/train_h1_cancel_guard.py` + eval `--guard-action-mode
-cancel-reward` / `--branch-mode h1_2e` + cancellation metrics + mechanism gate);
-build smoke PASSED (cancel≈0.007 at init via the zero-init head; budget 0.9956
-within 5%; cap held; gates compute). **H1.2e-a 3-cell probe RAN** (667 env
-steps/s, ~14 min): indicative `H1_2E_MECHANISM_NULL` — but this is expected and
-uninformative, because the 3 gradient-intact probe cells have basin capture ≈ 0,
-so there is **no basinward residual to cancel** and PPO never grows `c_guard`
-(stayed at the 0.007 init). The mechanism can only be exercised on the corrupted
-(decoy / sensor-noise) cells, so the binding is the real test. **H1.2e-b binding
-LAUNCHED 2026-06-19 08:37 (~4.5 h, 512 updates × 13 cells, warm-start from
-H1.2d-b).** Result will be written to [`H1_2E_RESULTS.md`](H1_2E_RESULTS.md).
+Status: **CLOSED SPEC / H1.2e-b `MECHANISM_NULL`** (binding ran 2026-06-19→20;
+gates frozen before the run). Result: [`H1_2E_RESULTS.md`](H1_2E_RESULTS.md).
+The council numerically out-resisted the same-run monolith on gradient-intact
+basin capture (GI basin 0.0067 < 0.0223 → gates 1,2,3,5,6 pass), but **gate 4
+(mechanism) FAILED: the cancellation never engaged** — `c_guard` crept only
+0.007→0.015 over 512 updates (cap 1.0; cancel_mass ~0.001–0.003), so the basin
+improvement is NOT attributable to cancellation. It came from 512 more updates of
+arbiter training (continued convergence) + a weaker same-run monolith. **Finding:
+the explicit cancelling guard is REDUNDANT** — the arbiter can already drive
+`w_reward→0`, a simpler lever than fighting a seated reward, so PPO leaves the
+cancel head at ~init. The mechanism gate did exactly its job: it converted a
+would-be false-positive SUPPORT into an honest `MECHANISM_NULL`. **Fourth
+registered Small-tier null (H1.2b/c/d/e); the frozen-head Small-tier line is
+thoroughly closed; pantheon thesis stays [ORNAMENT] for the MESA lane.** Reopening
+needs a genuinely different regime (Medium/Large tier or richer trust features),
+separately registered. Tooling built 2026-06-19
+(`training/mesa/train_h1_cancel_guard.py` with zero-init cancel head + full
+torch-resume; eval `--guard-action-mode cancel-reward` / `--branch-mode h1_2e` +
+8 cancel metrics + mechanism gate); build smoke + H1.2e-a probe passed; binding
+survived two power/sleep deaths via the added resume capability.
 
 Parent result:
 [`H1_2D_RESULTS.md`](H1_2D_RESULTS.md).

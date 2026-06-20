@@ -261,6 +261,8 @@ def main():
         "seed": args.seed,
         "epochs": args.epochs,
         "hidden_size": args.hidden_size,
+        "feature_mode": schema.get("feature_mode", "base"),
+        "trust_feature_audit": schema.get("trust_feature_audit"),
         "cap_mode": args.cap_mode,
         "role_caps": role_caps,
         "params": {
