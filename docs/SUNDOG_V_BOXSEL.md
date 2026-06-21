@@ -415,6 +415,14 @@ phase, never appended after.
     [`boxsel/PHASE7B_FALSE_CLOSURE_PREREG_START.md`](boxsel/PHASE7B_FALSE_CLOSURE_PREREG_START.md),
     [`boxsel/PHASE7B_CORPUS_EVALUATOR_START.md`](boxsel/PHASE7B_CORPUS_EVALUATOR_START.md),
     [`boxsel/PHASE7B_V2_FREEZE_LOCK.md`](boxsel/PHASE7B_V2_FREEZE_LOCK.md).
+  - **PHASE-7B RUN PASSED 2026-06-21** (`scripts/boxsel_phase7b_run.py` +test 24/24):
+    frozen v2 passed the locked false-closure gate. Detector accepted false closures:
+    `0/16 = 0.00`; restart-variance baseline accepted `16/16 = 1.00`; baseline improvement `1.00`;
+    true-narrow accept rate `9/9 = 1.00`; loss-escape accepts `0/3`; stable-PMP pressure warning
+    rate `8/8 = 1.00` vs baseline `0/8 = 0.00`. No kill criteria triggered and all five
+    preregistered predictions were supported. This unblocks Phase 8 as a toy micro-SEL workbench
+    and detector-demonstration lane, **not** a real-KG/product claim. Result note:
+    [`boxsel/PHASE7B_FALSE_CLOSURE_RUN.md`](boxsel/PHASE7B_FALSE_CLOSURE_RUN.md).
 
 - **Phase 8 — Workbench (gated on a Phase-7 pass).** Three nested interval bars (sampled ⊆
   box-attainable ⊆ exact); controls for dimension, restarts, loss tolerance, query pressure,

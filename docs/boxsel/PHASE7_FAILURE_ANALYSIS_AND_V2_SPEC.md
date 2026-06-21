@@ -1,12 +1,13 @@
 # BoxSEL Phase 7 Failure Analysis And V2 Spec
 
 **Date:** 2026-06-21  
-**Status:** Phase-7 bounded null analyzed; Phase-6b trace schema/adapters started; Phase-7b v2 detector frozen; Phase-7b locked, not run.
+**Status:** Phase-7 bounded null analyzed; Phase-6b trace schema/adapters started; Phase-7b v2 detector frozen; Phase-7b run passed on the toy micro-corpus.
 
 ## Boundary
 
-This note starts the redesign after the failed Phase-7 run. It does not change the failed detector,
-does not rerun held-out cases, and does not open Phase 8.
+This note records the redesign after the failed Phase-7 run and the subsequent Phase-7b pass. It
+does not change the failed Phase-7 detector or convert the toy micro-corpus result into a real-KG,
+calibration, or product claim.
 
 The Phase-7 result remains:
 
@@ -241,8 +242,23 @@ PHASE7B_PREREG_STATUS = LOCKED_NOT_RUN
 HELDOUT_RUN_STATUS = READY_NOT_RUN
 ```
 
-Phase 7b must still produce a result note after the held-out run before any held-out claim. Until
-then, no Phase-8 workbench claim is allowed.
+Phase 7b has a result note:
+
+```text
+docs/boxsel/PHASE7B_FALSE_CLOSURE_RUN.md
+```
+
+The result is:
+
+```text
+PASS_PREREG_GATE
+accepted false closures : 0 / 16 = 0.00
+baseline accepted       : 16 / 16 = 1.00
+baseline improvement    : 1.00
+```
+
+This unblocks Phase 8 only inside the toy micro-SEL workbench boundary. It is not a real-KG,
+calibration, or Ask Sundog product claim.
 
 ## Claim Language
 
@@ -252,11 +268,16 @@ Allowed now:
 > false-closure traps. The next design target is a general trace schema plus pressure-response
 > signals that remain oracle-free.
 
+Allowed after Phase 7b:
+
+> On the locked tiny Phase-7b micro-corpus, the frozen v2 trace detector accepted 0/16
+> false-closure traps while the restart-variance baseline accepted 16/16.
+
 Forbidden:
 
 - "Phase 7 almost passed."
-- "The detector works on held-out cases."
-- "Phase 8 is unblocked."
+- "The detector works on real KGs."
+- "Phase 8 product/public claims are unblocked."
 - "Pressure response is exact inference."
 
 ## Artifacts
@@ -268,6 +289,8 @@ Forbidden:
 - `scripts/boxsel_phase7b_corpus.py`
 - `scripts/boxsel_phase7b_evaluator.py`
 - `scripts/test_boxsel_phase7b_corpus_evaluator.py`
+- `scripts/boxsel_phase7b_run.py`
+- `scripts/test_boxsel_phase7b_run.py`
 
 Verification:
 
@@ -275,6 +298,7 @@ Verification:
 python scripts/test_boxsel_phase6b_trace_schema.py
 python scripts/test_boxsel_phase7b_v2_detector.py
 python scripts/test_boxsel_phase7b_corpus_evaluator.py
+python scripts/test_boxsel_phase7b_run.py
 ```
 
 Result:
@@ -282,6 +306,7 @@ Result:
 ```text
 39/39 checks pass, exit 0.
 16/16 checks pass, exit 0.
+24/24 checks pass, exit 0.
 24/24 checks pass, exit 0.
 ```
 
