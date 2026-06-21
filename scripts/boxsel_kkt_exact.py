@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-r"""BoxSEL Phase 4d - the exact algebraic optimum (KKT solve) for inf I_box^n.
+r"""BoxSEL Phase 4d - exact algebraic KKT candidate for inf I_box^n.
 
-The Phase-4c numerics located the infimum at n=2, ~=0.41010, with both |A&C| and |B&C| active.
-Solving that KKT exactly gives a CLOSED FORM:
+The Phase-4c numerics located the best candidate at n=2, ~=0.41010, with both |A&C| and |B&C| active.
+Solving that structured KKT system exactly gives a CLOSED FORM:
 
-    inf I_box^n  =  (9 + sqrt(17)) / 32  ~=  0.4100970          (attained at n = 2)
+    q_KKT  =  (9 + sqrt(17)) / 32  ~=  0.4100970          (attained by an n = 2 box)
 
 DERIVATION (structured family generalizing the Phase-4 witness; B_1 full, both C-overlaps active,
 A&B slack). Let x = |A_1| be A's axis-1 length, with
@@ -16,16 +16,17 @@ constraints |A&C| = |B&C| = 1/4 forces z = 2(1-x) AND z = x/(2(1-x)), hence
 
     4(1-x)^2 = x   =>   4x^2 - 9x + 4 = 0   =>   x = (9 - sqrt 17)/8 ~= 0.60961.
 
-Then |A&B&C| = 1/8 and |A&B| = x/2, so q* = (1/8)/(x/2) = 1/(4x) = (9 + sqrt 17)/32.
+Then |A&B&C| = 1/8 and |A&B| = x/2, so q_KKT = (1/8)/(x/2) = 1/(4x) =
+(9 + sqrt 17)/32.
 
-STATUS. The optimum is CERTIFIED ACHIEVABLE: this module constructs the config in exact Q(sqrt 17)
-arithmetic and verifies every constraint and the value q* exactly. It is numerically the GLOBAL
-n=2 minimum (Phase-4c's broad search finds nothing below it; Nelder-Mead converged to ~0.4100984,
-i.e. just ABOVE this exact value). So inf I_box^n <= (9+sqrt 17)/32 is certified, and it equals the
-infimum up to the still-open matching LOWER bound (the proven lower bound stays 1/4; closing it is
-the last open thread). The certified sandwich therefore tightens to
+STATUS. The KKT candidate is CERTIFIED ACHIEVABLE: this module constructs the config in exact Q(sqrt 17)
+arithmetic and verifies every constraint and the value q* exactly. It is numerically the best
+n=2 candidate seen (Phase-4c's broad search finds nothing below it; Nelder-Mead converged to ~0.4100984,
+i.e. just ABOVE this exact value). So inf I_box^n <= (9+sqrt 17)/32 is certified. The matching
+LOWER bound is still open globally (the proven lower bound stays 1/4; closing it is the last
+thread). The certified sandwich therefore tightens to
 
-    1/4  <=  inf I_box^n  =  (9 + sqrt 17)/32  ~= 0.4100970   <   513/1250 = 0.41040  (old witness).
+    1/4  <=  inf I_box^n  <=  (9 + sqrt 17)/32  ~= 0.4100970  <  513/1250 = 0.41040.
 
 Exact and dependency-free (a tiny Q(sqrt 17) field; no numpy/scipy/sympy).
 """
@@ -152,7 +153,7 @@ def meet_volume(boxes):
 
 
 X_OPT = Surd(Fraction(9, 8), Fraction(-1, 8))          # x = (9 - sqrt 17)/8, the root of 4x^2-9x+4=0 in (0,1)
-Q_STAR = Surd(Fraction(9, 32), Fraction(1, 32))        # q* = (9 + sqrt 17)/32, the exact infimum
+Q_STAR = Surd(Fraction(9, 32), Fraction(1, 32))        # q_KKT = (9 + sqrt 17)/32, certified achievable
 CERTIFIED_LOWER = Surd(Fraction(1, 4))                 # 1/4 (Phase 4b, proven)
 
 
@@ -171,13 +172,13 @@ def optimal_config():
 
 
 def optimal_query_value():
-    """q = |A&B&C| / |A&B| at the optimum (returns the exact Surd; equals Q_STAR)."""
+    """q = |A&B&C| / |A&B| at the KKT candidate (returns the exact Surd; equals Q_STAR)."""
     e = optimal_config()
     return meet_volume([e["A"], e["B"], e["C"]]) / meet_volume([e["A"], e["B"]])
 
 
 def certified_sandwich():
-    """(lower, exact_inf): 1/4 <= inf I_box^n = (9 + sqrt 17)/32."""
+    """(lower, candidate_upper): 1/4 <= inf I_box^n <= (9 + sqrt 17)/32."""
     return CERTIFIED_LOWER, Q_STAR
 
 
@@ -193,4 +194,4 @@ if __name__ == "__main__":
     print("|A&B|, |A&C|, |B&C| =", [float(meet_volume([e[i], e[j]])) for i, j in (("A", "B"), ("A", "C"), ("B", "C"))])
     print("|A&B&C| =", float(meet_volume([e["A"], e["B"], e["C"]])))
     print("q* =", repr(optimal_query_value()), "~=", float(Q_STAR))
-    print("exact inf I_box^n = (9 + sqrt 17)/32 ~=", float(Q_STAR), " (< 513/1250 =", 513 / 1250, ")")
+    print("candidate upper bound (9 + sqrt 17)/32 ~=", float(Q_STAR), " (< 513/1250 =", 513 / 1250, ")")

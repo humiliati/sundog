@@ -1,9 +1,9 @@
 #!/usr/bin/env python
-"""Frozen test for the BoxSEL Phase-4d exact KKT optimum (scripts/boxsel_kkt_exact.py).
+"""Frozen test for the BoxSEL Phase-4d exact KKT candidate (scripts/boxsel_kkt_exact.py).
 
 Verifies, in exact Q(sqrt 17) arithmetic, that the constructed n=2 config is feasible and achieves
-q* = (9 + sqrt 17)/32, the exact infimum -- strictly below the old rational witness 513/1250 and the
-Nelder-Mead value, and inside the certified bracket [1/4, (9+sqrt17)/32].
+q* = (9 + sqrt 17)/32 -- strictly below the old rational witness 513/1250 and the Nelder-Mead
+value, and inside the certified bracket [1/4, (9+sqrt17)/32].
 Run: python scripts/test_boxsel_kkt_exact.py
 """
 import sys
@@ -47,22 +47,22 @@ check("|A&B| = (9 - sqrt 17)/16 and is SLACK (> 1/4)",
       f"|A&B| ~= {float(kkt.meet_volume([A,B])):.6f}")
 check("|A&B&C| = 1/8 exactly", kkt.meet_volume([A, B, C]) == eighth)
 
-print("(3) the exact optimum value:")
+print("(3) the exact KKT-candidate value:")
 q = kkt.optimal_query_value()
 check("q = |A&B&C|/|A&B| = (9 + sqrt 17)/32 exactly",
       q == kkt.Q_STAR and q == S(F(9, 32), F(1, 32)), f"q ~= {float(q):.7f}")
 check("q*  >  1/4 (the proven lower bound is not met -- strict)", q > quarter)
 check("q*  <  513/1250 (strictly better than the Phase-4 rational witness)", q < S(F(513, 1250)),
       f"{float(q):.7f} < {513/1250:.7f}")
-check("q*  <  the Nelder-Mead numerical value 0.4100984 (search under-converged above the exact opt)",
+check("q*  <  the Nelder-Mead numerical value 0.4100984 (search under-converged above the candidate)",
       float(q) < 0.4100980)
 
 print("(4) the certified sandwich tightens:")
-lo, inf = kkt.certified_sandwich()
-check("1/4 <= inf I_box^n = (9 + sqrt 17)/32, with lower < inf (gap persists, > 0)",
-      lo == quarter and inf == kkt.Q_STAR and lo < inf and lo.sign() > 0)
-check("float value ~= 0.4100970 (matches the Phase-4c numerical infimum)",
-      abs(float(inf) - 0.4100970) < 1e-6, f"{float(inf):.7f}")
+lo, upper = kkt.certified_sandwich()
+check("1/4 <= inf I_box^n <= (9 + sqrt 17)/32, with lower < candidate upper (gap persists, > 0)",
+      lo == quarter and upper == kkt.Q_STAR and lo < upper and lo.sign() > 0)
+check("candidate float value ~= 0.4100970 (matches the Phase-4c numerical infimum)",
+      abs(float(upper) - 0.4100970) < 1e-6, f"{float(upper):.7f}")
 
-print(f"\n{'ALL PASS -- exact KKT optimum: inf I_box^n = (9 + sqrt 17)/32 ~= 0.4100970, certified achievable in Q(sqrt 17); both C-overlaps active; < 513/1250' if fail == 0 else str(fail) + ' FAILED'}")
+print(f"\n{'ALL PASS -- exact KKT candidate: q = (9 + sqrt 17)/32 ~= 0.4100970 is certified achievable in Q(sqrt 17); both C-overlaps active; < 513/1250' if fail == 0 else str(fail) + ' FAILED'}")
 sys.exit(1 if fail else 0)

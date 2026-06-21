@@ -270,13 +270,22 @@ phase, never appended after.
     `≈0.41010`. The exact algebraic value + a proof `n≥3 ⊁ n=2` stay open. Note:
     [`boxsel/PHASE4C_EXACT_INF_OPTIMIZER.md`](boxsel/PHASE4C_EXACT_INF_OPTIMIZER.md).
   - **EXACT VALUE — KKT solve 2026-06-20** (`scripts/boxsel_kkt_exact.py` +test 12/12): the n=2
-    optimum has a **closed form**, `inf I_box^n = (9+√17)/32 ≈ 0.4100971`. KKT with both
+    KKT candidate has a **closed form**, `q_KKT = (9+√17)/32 ≈ 0.4100971`. KKT with both
     `|A∩C|=|B∩C|=1/4` active forces `4x²−9x+4=0`, `x=(9−√17)/8`; then `|A∩B∩C|=1/8`, `|A∩B|=x/2`,
     so `q*=1/(4x)=(9+√17)/32` — **verified exactly in `ℚ(√17)`** (a tiny exact `Surd` field).
     Strictly below the old rational witness `513/1250`; certified achievable + numerically the
-    global min. Tightened sandwich: **`1/4 ≤ inf I_box^n = (9+√17)/32`**; the matching *lower*
-    bound is the one open thread. Note:
+    best global candidate seen. Tightened sandwich: **`1/4 ≤ inf I_box^n ≤ (9+√17)/32`**; the matching
+    *lower* bound is the one open thread. Note:
     [`boxsel/PHASE4D_KKT_EXACT_OPTIMUM.md`](boxsel/PHASE4D_KKT_EXACT_OPTIMUM.md).
+  - **LOWER-BOUND CLOSURE START 2026-06-20** (`scripts/boxsel_phase4e_lower_bound.py` +test 17/17):
+    the KKT value is now proved to be the exact minimum **inside the structured 2-D normal form**
+    used by Phase 4D. The proof reduces feasibility to
+    `2(1-x) ≤ z ≤ x/(2(1-x))`, giving the lower root `x*=(9−√17)/8`; for fixed `x`, `q(x,z)` is
+    concave in `z`, so the minimum is at an active-constraint endpoint, where
+    `q0(x)=(-2x²+5x−2)/(2x²)` and `q0(x*)=(9+√17)/32`. This closes the local perturbation loophole
+    but **does not** close the global theorem; remaining obligations are a 2-D endpoint-order atlas
+    and an `n≥3` compression/no-improvement proof. Note:
+    [`boxsel/PHASE4E_LOWER_BOUND_CLOSURE_START.md`](boxsel/PHASE4E_LOWER_BOUND_CLOSURE_START.md).
 
 - **Phase 5 — Shadow-gap taxonomy.** Classify every case into search / representation / loss
   (+ a **coherence** watch-item bucket, populated only by an audit receipt per §4); gap-size

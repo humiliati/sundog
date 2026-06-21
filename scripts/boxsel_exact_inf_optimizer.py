@@ -1,25 +1,26 @@
 #!/usr/bin/env python
-r"""BoxSEL Phase 4c - the exact-infimum optimizer for inf I_box^n (Helly-seed ontology).
+r"""BoxSEL Phase 4c - optimizer evidence for inf I_box^n (Helly-seed ontology).
 
-GOAL: pin the exact value of inf I_box^n inside the Phase-4b bracket [1/4, 513/1250] for the
+GOAL: probe the exact value of inf I_box^n inside the Phase-4b bracket [1/4, 513/1250] for the
 seed ontology (atoms 1/2, pairwise >= 1/4) and query q = P(C | A and B).
 
 WHAT WE FOUND:
 
-* The infimum is ATTAINED AT n = 2 (a finite-dimensional minimum) -- it does NOT keep decreasing,
-  and it does NOT vanish. n=1 gives exactly 1/2; n>=3 do not improve on n=2 (every optimizer and
-  the small-deficit argument agree the value plateaus/rises back toward 1/2 for large n, because
-  prod_k |A_k| = 1/2 forces near-full intervals which push each factor q_k -> 1).
-* The n=2 optimum is ~= 0.41010 with BOTH |A&C| = |B&C| = 1/4 active (the Phase-4 witness had only
-  |A&C| active, hence its slightly-higher 513/1250 = 0.41040). The exact optimum is an algebraic
-  number (KKT with two active overlap constraints); 513/1250 is a near-optimal certified RATIONAL
-  upper bound, ~0.0003 above the true value.
+* Numerically, the best candidate is attained at n = 2 (a finite-dimensional minimum candidate) --
+  it does NOT keep decreasing in any optimizer run, and it does NOT vanish. n=1 gives exactly 1/2;
+  n>=3 do not improve on n=2 in the recorded optimizers (consistent with the small-deficit
+  heuristic: prod_k |A_k| = 1/2 forces near-full intervals which push each factor q_k -> 1).
+* The n=2 candidate is ~= 0.41010 with BOTH |A&C| = |B&C| = 1/4 active (the Phase-4 witness had only
+  |A&C| active, hence its slightly-higher 513/1250 = 0.41040). The KKT value is an algebraic
+  number (two active overlap constraints; Phase 4d); 513/1250 is a near-optimal certified RATIONAL
+  upper bound, ~0.0003 above the KKT candidate.
 
-CERTIFIED: 1/4 <= inf I_box^n <= 513/1250 (Phase 4b). NUMERICAL: inf attained at n=2, ~= 0.41010.
-OPEN: the exact algebraic value, and a proof that no n >= 3 beats n = 2.
+CERTIFIED: 1/4 <= inf I_box^n <= 513/1250 (Phase 4b). NUMERICAL: best candidate at n=2,
+~= 0.41010. OPEN: the exact algebraic value and matching lower-bound proof are separate
+Phase-4d/4e tasks.
 
 THE SEARCH GAP IS THE HEADLINE. Every from-scratch optimizer FAILS to reach even the rational
-witness -- only local search *seeded from the analytic witness* finds the optimum:
+witness -- only local search *seeded from the analytic witness* finds the candidate:
 
     random search (numpy, ~3.2M feasible samples)   n=2 -> 0.437          (misses)
     SLSQP (60 multistarts)                          n=2 -> 0.500, n>=3 -> 1.000 (fails)
@@ -28,7 +29,8 @@ witness -- only local search *seeded from the analytic witness* finds the optimu
     Nelder-Mead SEEDED from the analytic witness    n=2 -> 0.41010 (reaches), n>=3 -> 0.41040
 
 So on this fragment the SEARCH GAP (I_box \ I_sample) is severe: without the analytic handle, a
-search returns a badly-wrong infimum. That is the lane's own thesis, biting the meta-optimization.
+search returns a badly-wrong endpoint candidate. That is the lane's own thesis, biting the
+meta-optimization.
 
 This module is exact/pure (no numpy/scipy). The grid-search demonstration is deterministic exact
 rationals; the four float-optimizer numbers above are recorded as provenance constants
@@ -44,11 +46,11 @@ F = Fraction
 CERTIFIED_LOWER = trend.CERTIFIED_LOWER             # 1/4   (Phase 4b, proven)
 CERTIFIED_UPPER = trend.CERTIFIED_UPPER_N_GE_2      # 513/1250 (certified witness)
 
-INF_ATTAINED_DIM = 2                                # numerical: the minimum is at n = 2
-INF_NUMERICAL = 0.41010                             # numerical: the n=2 optimum (both |A&C|,|B&C| active)
+INF_ATTAINED_DIM = 2                                # numerical/provenance: the best candidate is at n = 2
+INF_NUMERICAL = 0.41010                             # numerical: the n=2 candidate (both |A&C|,|B&C| active)
 WITNESS_IS_EXACT_OPTIMUM = False                    # 513/1250 is near-optimal, NOT the exact min
 
-# Provenance: best feasible q each from-scratch optimizer reached (all MISS the analytic optimum).
+# Provenance: best feasible q each from-scratch optimizer reached (all MISS the analytic candidate).
 OPTIMIZER_RESULTS = {
     "random_search_numpy": {2: 0.437},
     "slsqp_multistart": {2: 0.500, 3: 1.000, 4: 1.000},
@@ -78,7 +80,7 @@ def exact_grid_min(g: int) -> Fraction:
 
     Marginals are kept exactly 1/2 (only axis-length pairs with product 1/2 are used). Returns the
     smallest feasible q on the grid -- a deterministic search-gap probe: coarse/fine grids alike
-    stall well above the analytic optimum (>= 4/9 for g<=24), because the optimum needs endpoint
+    stall well above the analytic candidate (>= 4/9 for g<=24), because the candidate needs endpoint
     denominators (41, 1600, ...) no practical grid contains.
     """
     pts = [F(i, g) for i in range(g + 1)]
@@ -130,6 +132,6 @@ if __name__ == "__main__":
     print("inf attained at dim:", INF_ATTAINED_DIM, "  numerical value ~=", INF_NUMERICAL)
     for g in (4, 8, 12, 16, 24):
         m = exact_grid_min(g)
-        print(f"  exact grid g={g}: min q = {m} = {float(m):.5f}  (misses the ~0.41 optimum)")
+        print(f"  exact grid g={g}: min q = {m} = {float(m):.5f}  (misses the ~0.41 candidate)")
     print("search-gap floor over grids:", search_gap_min(), "=", float(search_gap_min()))
     print("=> every from-scratch optimizer misses; only witness-seeded local search reaches ~0.41010")

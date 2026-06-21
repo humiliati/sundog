@@ -1,21 +1,23 @@
-# BoxSEL Phase 4d — The Exact Algebraic Optimum (KKT solve)
+# BoxSEL Phase 4d — Exact Algebraic KKT Candidate
 
 **Date:** 2026-06-20  
-**Status:** Closed form found and verified exactly. The infimum has a clean algebraic value.
+**Status:** Closed form found and verified exactly as an achievable box value. The matching global
+lower bound is still open.
 
 ## Result
 
 ```text
-inf I_box^n  =  (9 + sqrt 17) / 32  ~=  0.41009705        (attained at n = 2)
+inf I_box^n  <=  (9 + sqrt 17) / 32  ~=  0.41009705        (attained by an n = 2 box)
 ```
 
 Strictly below the Phase-4 rational witness `513/1250 = 0.41040`, and below the Phase-4c numerical
-value `0.4100984` (Nelder–Mead under-converged just *above* the true optimum). Certified achievable
-in exact `Q(sqrt 17)` arithmetic.
+value `0.4100984` (Nelder-Mead under-converged just *above* this exact candidate). Certified
+achievable in exact `Q(sqrt 17)` arithmetic.
 
 ## The KKT solve
 
-Phase 4c located the optimum at `n = 2` with both `|A∩C|` and `|B∩C|` active (and `|A∩B|` slack).
+Phase 4c located the best numerical candidate at `n = 2` with both `|A∩C|` and `|B∩C|` active
+(and `|A∩B|` slack).
 Take the structured family that generalizes the Phase-4 witness — `B_1` full, `A` right/top-aligned,
 `C` left-aligned and sharing `A`'s axis-2 bottom — parameterized by `x = |A_1|`:
 
@@ -66,25 +68,31 @@ rational `a + b·sqrt 17`, exact `+ - * /` and sign/compare) and checks, with **
 
 - **Certified (exact):** the config is feasible and achieves `q* = (9 + sqrt 17)/32`, so
   `inf I_box^n <= (9 + sqrt 17)/32`. This is a strictly better certified upper bound than the old
-  `513/1250`, now an exact algebraic value.
-- **Numerically the global minimum:** Phase-4c's broad search (Nelder–Mead, DE, exact grid) finds
-  nothing below it; the value matches the structural KKT optimum.
+  `513/1250`, now an exact algebraic candidate value.
+- **Numerically the best global candidate:** Phase-4c's broad search (Nelder-Mead, DE, exact grid)
+  finds nothing below it; the value matches the structural KKT candidate.
 - **Open (the last thread):** a fully rigorous matching **lower bound**. The proven lower bound is
   still `1/4` (loose); proving `inf I_box^n >= (9 + sqrt 17)/32` would need to rule out every other
   combinatorial cell at `n = 2` and every `n >= 3`. So the certified sandwich is
 
   ```text
-  1/4  <=  inf I_box^n  =  (9 + sqrt 17)/32  ~= 0.4100970   (upper certified + numerically exact).
+  1/4  <=  inf I_box^n  <=  (9 + sqrt 17)/32  ~= 0.4100970   (upper certified + numerically exact).
   ```
 
 ## The lane picture
 
-The representation gap `I*_lower = 0` vs `inf I_box^n = (9 + sqrt 17)/32` is now a clean algebraic
-number — a *persistent* gap of `~0.41`, with a closed form. Combined with Phase 4c's search-gap
-finding (every from-scratch optimizer missed even the rational witness), the moral is sharp: the
-exact answer here is reachable only by analysis, not by search.
+The representation gap is now bracketed by a clean algebraic candidate:
+
+```text
+0 = I*_lower  <  1/4 <= inf I_box^n <= (9 + sqrt 17)/32 ~= 0.4100970.
+```
+
+Combined with Phase 4c's search-gap finding (every from-scratch optimizer missed even the rational
+witness), the moral is sharp: the best candidate here is reachable only by analysis, not by naive
+search. Phase 4e is the lower-bound closure pass that must decide whether this candidate is truly
+global.
 
 ---
 
-*Sundog Research Lab — BoxSEL Phase-4d exact KKT optimum. Internal; closed form
+*Sundog Research Lab — BoxSEL Phase-4d exact KKT candidate. Internal; closed form
 `(9 + sqrt 17)/32` certified achievable in `Q(sqrt 17)`; matching lower bound still open.*
