@@ -240,7 +240,7 @@ phase, never appended after.
   variance. **Gate (prereg):** under low loss, sampled estimates lie inside `I*`; mark every
   escape as loss-induced, and route any *zero-loss* escape to the coherence watch-item audits
   (§4) rather than reporting it as a banked gap.
-  - **RESTART SAMPLER BUILT 2026-06-21** (`scripts/boxsel_phase3_restart_sampler.py` +test 20/20):
+  - **RESTART SAMPLER BUILT 2026-06-21** (`scripts/boxsel_phase3_restart_sampler.py` +test 19/19):
     ordinary **loss-only** zero-loss restarts for the Helly-seed ontology, deliberately without
     query pressure. For `dim=2`, `N=128`, `seed=314159`, the observed interval is
     `I_sample=[0.5336525204919725,1.0]`, nested inside the exact Phase-4 box interval
@@ -333,7 +333,7 @@ phase, never appended after.
     Phase 4k compresses `n≥3` to it. Note:
     [`boxsel/PHASE4I_TWO_HELP_MIXED_CORE.md`](boxsel/PHASE4I_TWO_HELP_MIXED_CORE.md).
   - **MIXED ENVELOPE CLOSURE 2026-06-20** (`scripts/boxsel_phase4j_mixed_envelope_closure.py`
-    +test 21/21): the Phase-4i envelope maximum is proved exactly. In shifted variables
+    +test 22/22): the Phase-4i envelope maximum is proved exactly. In shifted variables
     `a=r−1`, `b=t−1`, either the comparison is automatic (`M≤0`) or the legal squared residual
     factors as `D−L²=(a+1)²F/(8(b+1)²)`. On the `M>0` branch, `M` is decreasing in `b`, `F` is
     concave, `F(a,0)≥0` whenever `M(a,0)>0`, and `Res_b(F,M)` has fixed nonzero sign on the live
@@ -359,12 +359,39 @@ phase, never appended after.
   restarts, endpoint movement vs dimension, ordinary-vs-extremal disagreement, constraint-slack
   concentration, regularization sensitivity, loss/query-gradient conflict, low-loss-basin
   instability. **Deliverable:** a guarded rule — accept / widen / abstain.
+  - **TRACE DETECTOR START 2026-06-21** (`scripts/boxsel_phase6_trace_detector.py` +test 15/15):
+    first trace-only guard over the Phase-3 Helly sampler. Features are sampled endpoint movement,
+    zero-loss status, constraint slack, seed variance, and dimension sensitivity; the decision does
+    **not** read `I*` or the exact `I_box` endpoint. On the canonical `dim=2,N=128,seed=314159`
+    trace, the guard flags `endpoint_drift`, `active_constraint_slack`, `seed_variance`, and
+    `dimension_sensitivity`, then returns `abstain`. Oracle evaluation is separate and confirms the
+    case was false-closed relative to `I_box` (lower search gap `0.1235554696914206`) but not
+    accepted. Controls lock `accept` for a stable high-slack trace, `widen` for a one-flag active
+    slack trace, and `abstain` for loss escape. This is a seed-trap receipt, not a held-out
+    Phase-7 success claim. Note:
+    [`boxsel/PHASE6_TRACE_DETECTOR_START.md`](boxsel/PHASE6_TRACE_DETECTOR_START.md).
 
 - **Phase 7 — Preregistered falsifier (LOCK before running).** Held-out ontologies with low
   loss, stable endpoints, narrow restart disagreement, **but a substantially wider exact
   interval.** **Build-gate / kill-gate:** if the guard repeatedly *accepts* these false-closure
   traps, AND does not beat a restart-variance baseline by the pre-registered margin, the lane
   is shelved. This is the make-or-break, not a victory lap.
+  - **PREREG LOCKED 2026-06-21** (`scripts/boxsel_phase7_prereg.py` +test 18/18):
+    detector thresholds, trace-only feature list, held-out seeds, corpus families, baseline,
+    predictions, and kill criteria are frozen before held-out runs. Planned corpus: 16 held-out
+    cases, including 10 false-closure traps, 4 true-narrow controls, and 2 loss-escape controls.
+    Primary kill metric is accepted false-closure rate; guard must also beat
+    `restart_variance_only_v0` by 20 percentage points, accept at least 50% of true-narrow controls,
+    and accept zero loss escapes. Results status is explicitly `NOT_RUN`. Note:
+    [`boxsel/PHASE7_FALSE_CLOSURE_PREREG.md`](boxsel/PHASE7_FALSE_CLOSURE_PREREG.md).
+  - **RUN FAILED 2026-06-21** (`scripts/boxsel_phase7_run.py` +test 24/24):
+    the first preregistered detector run trips `KILL7-1` and `KILL7-2`. The guard catches the
+    six Helly seed-variant false closures (`abstain`), accepts all four stable PMP-shaped false
+    closures, accepts all four true-narrow controls, and abstains on both loss-escape controls.
+    Metrics: accepted false-closure rate `4/10 = 0.40`; restart-variance baseline also `4/10`;
+    baseline improvement `0.00`; true-narrow accept rate `1.00`; loss-escape accepts `0`.
+    This is a bounded null for the Phase-6 start rule, not a Phase-7 pass. Phase 8 remains gated.
+    Note: [`boxsel/PHASE7_FALSE_CLOSURE_RUN.md`](boxsel/PHASE7_FALSE_CLOSURE_RUN.md).
 
 - **Phase 8 — Workbench (gated on a Phase-7 pass).** Three nested interval bars (sampled ⊆
   box-attainable ⊆ exact); controls for dimension, restarts, loss tolerance, query pressure,

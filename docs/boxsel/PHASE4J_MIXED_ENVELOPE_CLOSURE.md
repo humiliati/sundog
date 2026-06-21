@@ -137,7 +137,7 @@ python scripts/test_boxsel_phase4j_mixed_envelope_closure.py
 Result:
 
 ```text
-21/21 checks pass, exit 0.
+22/22 checks pass, exit 0.
 ```
 
 ---

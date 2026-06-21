@@ -95,7 +95,7 @@ python scripts/test_boxsel_phase3_restart_sampler.py
 Result:
 
 ```text
-20/20 checks pass, exit 0.
+19/19 checks pass, exit 0.
 ```
 
 ---
