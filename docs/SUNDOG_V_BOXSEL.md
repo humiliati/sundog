@@ -370,6 +370,16 @@ phase, never appended after.
     slack trace, and `abstain` for loss escape. This is a seed-trap receipt, not a held-out
     Phase-7 success claim. Note:
     [`boxsel/PHASE6_TRACE_DETECTOR_START.md`](boxsel/PHASE6_TRACE_DETECTOR_START.md).
+  - **PHASE-6B SCHEMA/ADAPTER START 2026-06-21** (`scripts/boxsel_phase6b_trace_schema.py` +test 39/39):
+    post-Phase-7 redesign scaffold. The failure class is now named
+    `stable_low_loss_false_closure`: the v1 guard caught turbulent Helly-style false closure but
+    accepted stable PMP-shaped false closure. The new schema separates endpoint observations,
+    per-constraint observations, support masses, seed/dimension/optimizer comparisons, and
+    query-pressure observations; adapters convert real Phase-3 Helly reports and seen Phase-7
+    result rows into `GeneralTrace`, and a PMP query-pressure producer exposes ordinary-vs-pressure
+    lower-endpoint movement for the stable failure class. Feature names remain oracle-free and no
+    v2 detector or Phase-7b held-out protocol is claimed. Phase-7 rows are now seen diagnostics only. Note:
+    [`boxsel/PHASE7_FAILURE_ANALYSIS_AND_V2_SPEC.md`](boxsel/PHASE7_FAILURE_ANALYSIS_AND_V2_SPEC.md).
 
 - **Phase 7 — Preregistered falsifier (LOCK before running).** Held-out ontologies with low
   loss, stable endpoints, narrow restart disagreement, **but a substantially wider exact
