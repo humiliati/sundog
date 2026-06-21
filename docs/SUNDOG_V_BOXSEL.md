@@ -240,6 +240,16 @@ phase, never appended after.
   variance. **Gate (prereg):** under low loss, sampled estimates lie inside `I*`; mark every
   escape as loss-induced, and route any *zero-loss* escape to the coherence watch-item audits
   (§4) rather than reporting it as a banked gap.
+  - **RESTART SAMPLER BUILT 2026-06-21** (`scripts/boxsel_phase3_restart_sampler.py` +test 20/20):
+    ordinary **loss-only** zero-loss restarts for the Helly-seed ontology, deliberately without
+    query pressure. For `dim=2`, `N=128`, `seed=314159`, the observed interval is
+    `I_sample=[0.5336525204919725,1.0]`, nested inside the exact Phase-4 box interval
+    `I_box=[(9+√17)/32,1.0]≈[0.4100970508005519,1.0]` and the oracle interval `I*=[0,1]`.
+    Lower search gap: `0.1235554696914206`. Logs include loss, query, atom volumes, pairwise
+    overlaps, constraint slack, cumulative endpoint movement, and seed variance. This is a
+    baseline sampler, not a general BoxSEL optimizer; its value is quantifying the observed
+    `I_box \ I_sample` gap against the now-exact Phase-4 endpoint. Note:
+    [`boxsel/PHASE3_RESTART_SAMPLER.md`](boxsel/PHASE3_RESTART_SAMPLER.md).
 
 - **Phase 4 — Extremal query optimization (`I_box`).** Replace passive restarts with
   query-conditioned training: `min/max q_w(D|C) s.t. L_T(w) ≤ ε`. Approximates
