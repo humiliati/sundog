@@ -9,6 +9,10 @@ two-parameter envelope. See [`PHASE4I_TWO_HELP_MIXED_CORE.md`](PHASE4I_TWO_HELP_
 **Update after Phase 4j:** that envelope is now exact-closed, so all 123 n=2 endpoint-order orbits
 are closed. See [`PHASE4J_MIXED_ENVELOPE_CLOSURE.md`](PHASE4J_MIXED_ENVELOPE_CLOSURE.md).
 
+**Update after Phase 4k:** `n >= 3` compression is now closed, so Phase 4 has an exact
+arbitrary-dimension lower endpoint. See
+[`PHASE4K_DIMENSION_COMPRESSION.md`](PHASE4K_DIMENSION_COMPRESSION.md).
+
 ## Purpose
 
 After Phase 4g:
@@ -125,4 +129,4 @@ Result:
 ---
 
 *Sundog Research Lab - BoxSEL Phase-4h one-help closure. Internal; 113/123 n=2 orbits exact-closed,
-10 two-help mixed n=2 orbits remain open; global lower bound still open.*
+10 two-help mixed n=2 orbits remained open here; later phases close n=2 and arbitrary dimension.*

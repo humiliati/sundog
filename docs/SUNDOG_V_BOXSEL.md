@@ -320,7 +320,7 @@ phase, never appended after.
     `P(r,t)≤P(2,1)=(9−√17)/8`. Endpoint identity is exact:
     `1/(4P(2,1))=(9+√17)/32=q_KKT`; the `t=1` edge is monotone by a `16r^3>0` certificate, and a
     rational-grid guard finds no envelope violation. Phase 4j closes the full two-parameter envelope;
-    `n≥3` compression remains open. Note:
+    Phase 4k compresses `n≥3` to it. Note:
     [`boxsel/PHASE4I_TWO_HELP_MIXED_CORE.md`](boxsel/PHASE4I_TWO_HELP_MIXED_CORE.md).
   - **MIXED ENVELOPE CLOSURE 2026-06-20** (`scripts/boxsel_phase4j_mixed_envelope_closure.py`
     +test 21/21): the Phase-4i envelope maximum is proved exactly. In shifted variables
@@ -328,9 +328,17 @@ phase, never appended after.
     factors as `D−L²=(a+1)²F/(8(b+1)²)`. On the `M>0` branch, `M` is decreasing in `b`, `F` is
     concave, `F(a,0)≥0` whenever `M(a,0)>0`, and `Res_b(F,M)` has fixed nonzero sign on the live
     `M=0` endpoint. Therefore `P(r,t)≤P(2,1)` on `1≤t≤r≤2`, closing the final 10 mixed n=2
-    orbits. **n=2 exact result:** `inf I_box^2=(9+√17)/32`. **Global arbitrary-dimension sandwich
-    unchanged:** `1/4≤inf I_box^n≤(9+√17)/32` until `n≥3` compression is proved. Note:
+    orbits. **n=2 exact result:** `inf I_box^2=(9+√17)/32`. Phase 4k lifts this to all `n≥2`. Note:
     [`boxsel/PHASE4J_MIXED_ENVELOPE_CLOSURE.md`](boxsel/PHASE4J_MIXED_ENVELOPE_CLOSURE.md).
+  - **DIMENSION COMPRESSION 2026-06-21** (`scripts/boxsel_phase4k_dimension_compression.py`
+    +test 17/17): arbitrary `n≥3` embeddings compress to the Phase-4i/4j envelope. Partition axes
+    into `AC`-help, `BC`-help, and neutral `AB`-min groups. Same-side cases give
+    `q≥1/2>q_KKT`; mixed cases use the `A/B` symmetry to orient neutral slack with `rho≤1`, giving
+    the same domain `s≥1/2`, `1≤t≤r≤2` and neutral-adjusted bounds no larger than the pure mixed
+    envelope. Therefore `rP/t≤P_phase4i(r,t)≤(9−√17)/8`, so
+    `q≥(9+√17)/32`. Full-axis padding attains the value in every `n≥2`. **Global exact result:**
+    `inf I_box^n=(9+√17)/32` for every `n≥2` (with `n=1` still `1/2`). Note:
+    [`boxsel/PHASE4K_DIMENSION_COMPRESSION.md`](boxsel/PHASE4K_DIMENSION_COMPRESSION.md).
 
 - **Phase 5 — Shadow-gap taxonomy.** Classify every case into search / representation / loss
   (+ a **coherence** watch-item bucket, populated only by an audit receipt per §4); gap-size

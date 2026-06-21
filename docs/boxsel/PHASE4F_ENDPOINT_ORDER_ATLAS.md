@@ -15,6 +15,10 @@ certificate. The n=2 atlas is now **123/123 closed** with
 `inf I_box^2=(9+sqrt 17)/32`. See
 [`PHASE4J_MIXED_ENVELOPE_CLOSURE.md`](PHASE4J_MIXED_ENVELOPE_CLOSURE.md).
 
+**Update after Phase 4k:** `n >= 3` compression is now closed; the arbitrary-dimension lower
+endpoint is `inf I_box^n=(9+sqrt 17)/32` for every `n >= 2`. See
+[`PHASE4K_DIMENSION_COMPRESSION.md`](PHASE4K_DIMENSION_COMPRESSION.md).
+
 ## Goal
 
 Phase 4e proved `q_KKT = (9+√17)/32` minimal *inside the structured normal form*. The next
@@ -82,4 +86,5 @@ Phase 4g later exact-closes 47 of these 92 live orbits by the min-pair same-side
 ---
 
 *Sundog Research Lab — BoxSEL Phase-4f endpoint-order atlas. Internal; 123 cells enumerated, 31
-eliminated exactly, 92 live verified by a symmetry-seeded backstop; global lower bound still open.*
+eliminated exactly, 92 live verified by a symmetry-seeded backstop; later phases close n=2 and
+then arbitrary dimension.*

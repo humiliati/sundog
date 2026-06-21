@@ -10,6 +10,9 @@ frontier is **10 two-help mixed** orbits. See [`PHASE4H_ONE_HELP_CLOSURE.md`](PH
 now **123/123 closed**. See
 [`PHASE4J_MIXED_ENVELOPE_CLOSURE.md`](PHASE4J_MIXED_ENVELOPE_CLOSURE.md).
 
+**Update after Phase 4k:** `n >= 3` compression is now closed, so the arbitrary-dimension lower
+endpoint is exact. See [`PHASE4K_DIMENSION_COMPRESSION.md`](PHASE4K_DIMENSION_COMPRESSION.md).
+
 ## Purpose
 
 Phase 4f mapped the n=2 endpoint-order atlas:
@@ -121,4 +124,4 @@ Result:
 ---
 
 *Sundog Research Lab - BoxSEL Phase-4g min-pair reduction. Internal; 78/123 n=2 orbits exact-closed,
-45 mixed-side n=2 orbits remain open; global lower bound still open.*
+45 mixed-side n=2 orbits remained open here; later phases close n=2 and arbitrary dimension.*

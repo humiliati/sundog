@@ -4,8 +4,10 @@
 **Status:** Final 10 n=2 orbits reduced to one analytic envelope. Global lower bound still open.
 
 **Update after Phase 4j:** the two-parameter envelope maximum below is now exact-closed. The n=2
-atlas is fully closed with `inf I_box^2 = (9 + sqrt 17)/32`; the global arbitrary-dimension lower
-bound still awaits the separate `n >= 3` compression proof.
+atlas is fully closed with `inf I_box^2 = (9 + sqrt 17)/32`.
+
+**Update after Phase 4k:** the separate `n >= 3` compression proof is now banked, so
+`inf I_box^n = (9 + sqrt 17)/32` for every `n >= 2`.
 
 ## Purpose
 

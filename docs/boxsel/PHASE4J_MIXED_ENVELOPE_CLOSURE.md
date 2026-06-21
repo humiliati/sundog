@@ -3,6 +3,10 @@
 **Date:** 2026-06-20  
 **Status:** The final 10 n=2 two-help mixed orbits are exact-closed. The n=2 infimum is now proved.
 
+**Update after Phase 4k:** the separate `n >= 3` compression proof is now banked. The global
+arbitrary-dimension lower endpoint is exact:
+`inf I_box^n = (9 + sqrt 17)/32` for every `n >= 2`.
+
 ## Result
 
 Phase 4i reduced the remaining n=2 frontier to one envelope:
@@ -106,14 +110,14 @@ ten orbits.
 
 ## Claim Boundary
 
-This closes the n=2 endpoint-order atlas only. The arbitrary-dimensional lower bound still needs a
-separate compression/no-improvement proof:
+This phase closed the n=2 endpoint-order atlas only. Phase 4k later supplied the separate
+compression/no-improvement proof, so the historical Phase-4j sandwich:
 
 ```text
 1/4 <= inf I_box^n <= (9 + sqrt 17)/32.
 ```
 
-The exact n=2 statement is stronger:
+has since collapsed to the global equality. The exact n=2 statement from this phase was:
 
 ```text
 inf I_box^2 = (9 + sqrt 17)/32.
@@ -139,4 +143,4 @@ Result:
 ---
 
 *Sundog Research Lab - BoxSEL Phase-4j mixed-envelope closure. Internal; n=2 lower bound closed,
-arbitrary-dimension compression remains open.*
+with arbitrary-dimension compression later closed by Phase 4k.*
