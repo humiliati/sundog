@@ -286,6 +286,17 @@ phase, never appended after.
     but **does not** close the global theorem; remaining obligations are a 2-D endpoint-order atlas
     and an `n≥3` compression/no-improvement proof. Note:
     [`boxsel/PHASE4E_LOWER_BOUND_CLOSURE_START.md`](boxsel/PHASE4E_LOWER_BOUND_CLOSURE_START.md).
+  - **ENDPOINT-ORDER ATLAS START 2026-06-20** (`scripts/boxsel_phase4f_cell_atlas.py` +test 13/13):
+    the first of those two obligations, attacked. **Certified enumeration:** a per-axis cell is an
+    `(σ,τ)` left/right-endpoint ordering ⟹ `36` per-axis types → `12` orbits; `1296` n=2 pairs →
+    **`123` orbits** under {A↔B, reflection, axis-swap}. **Exact elimination:** C "helps" (`q_k<1`)
+    iff it sticks out of `A∩B` (largest-left or smallest-right); the **31** zero-help orbits force
+    `q=1 > q_KKT`. That leaves **92 live** orbits (56 one-help + 36 two-help; `q_KKT` sits on a
+    two-help boundary). A **symmetry-orbit-seeded** search over the live cells finds nothing below
+    `q_KKT` (numerical backstop — the blind searches all missed it, so seeding is what makes this
+    trustworthy). Global lower bound still the proven `1/4`; sandwich `1/4 ≤ inf I_box^n ≤ (9+√17)/32`
+    **unchanged**. OPEN: exact per-cell minima for the 92 live orbits + the `n≥3` compression. Note:
+    [`boxsel/PHASE4F_ENDPOINT_ORDER_ATLAS.md`](boxsel/PHASE4F_ENDPOINT_ORDER_ATLAS.md).
 
 - **Phase 5 — Shadow-gap taxonomy.** Classify every case into search / representation / loss
   (+ a **coherence** watch-item bucket, populated only by an audit receipt per §4); gap-size
