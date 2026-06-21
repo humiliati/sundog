@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-"""Frozen test for the BoxSEL Phase-7b preregistration start.
+"""Frozen test for the BoxSEL Phase-7b locked preregistration.
 
-This verifies that Phase 7b has a disciplined prereg start without pretending the v2 detector is
-locked or held-out results exist.
+This verifies that Phase 7b has a locked detector/threshold boundary without pretending held-out
+results exist.
 Run: python scripts/test_boxsel_phase7b_prereg.py
 """
 
@@ -11,6 +11,7 @@ import sys
 sys.path.insert(0, "scripts")
 import boxsel_phase6b_trace_schema as schema
 import boxsel_phase7b_prereg as prereg
+import boxsel_phase7b_v2_detector as v2
 
 try:
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -27,25 +28,27 @@ def check(name, cond, detail=""):
         fail += 1
 
 
-print("(1) prereg start is not a lock:")
-check("status is STARTED_NOT_LOCKED",
-      prereg.PHASE7B_PREREG_STATUS == "STARTED_NOT_LOCKED")
-check("locked flag is false",
-      prereg.PHASE7B_PREREG_LOCKED is False)
+print("(1) prereg is locked but not run:")
+check("status is LOCKED_NOT_RUN",
+      prereg.PHASE7B_PREREG_STATUS == "LOCKED_NOT_RUN")
+check("locked flag is true",
+      prereg.PHASE7B_PREREG_LOCKED is True)
 check("results status remains NOT_RUN with no rows",
       prereg.RESULTS_STATUS == "NOT_RUN" and prereg.RESULT_ROWS == ())
-check("held-out run is blocked until lock",
-      prereg.HELDOUT_RUN_STATUS == "BLOCKED_UNTIL_LOCK")
-check("prereg cannot lock while blockers remain",
-      not prereg.prereg_can_lock() and len(prereg.LOCK_BLOCKERS) == 2,
+check("held-out run is ready but not run",
+      prereg.HELDOUT_RUN_STATUS == "READY_NOT_RUN")
+check("lock blockers are cleared",
+      prereg.prereg_can_lock() and prereg.LOCK_BLOCKERS == (),
       f"blockers={prereg.LOCK_BLOCKERS}")
 
-print("(2) v2 detector and thresholds are explicitly unfrozen:")
-check("detector is not frozen",
-      prereg.DETECTOR_VERSION == "UNFROZEN")
-check("thresholds are not frozen",
-      prereg.THRESHOLD_STATUS == "UNFROZEN")
-check("corpus generator and evaluator are built but detector remains unfrozen",
+print("(2) v2 detector and thresholds are frozen:")
+check("detector version is frozen from the v2 module",
+      prereg.DETECTOR_VERSION == v2.DETECTOR_VERSION and prereg.DETECTOR_STATUS == "FROZEN")
+check("thresholds are frozen from the v2 module",
+      prereg.THRESHOLD_VERSION == v2.THRESHOLD_VERSION
+      and prereg.THRESHOLD_STATUS == "FROZEN"
+      and prereg.FROZEN_THRESHOLDS == v2.frozen_thresholds())
+check("corpus generator and evaluator are built",
       prereg.CORPUS_GENERATOR_STATUS == "BUILT" and prereg.EVALUATOR_STATUS == "BUILT")
 
 print("(3) schema and feature boundary are clean:")
@@ -101,12 +104,17 @@ check("kill list is populated and includes seen-case reuse",
 
 print("(7) summary exposes prereg metadata only:")
 summary = prereg.prereg_summary()
-check("summary reports not locked and NOT_RUN",
-      summary["locked"] is False and summary["results_status"] == "NOT_RUN")
-check("summary reports counts and blockers, not outcomes",
+check("summary reports locked and NOT_RUN",
+      summary["locked"] is True and summary["results_status"] == "NOT_RUN")
+check("summary reports frozen detector metadata",
+      summary["detector_version"] == v2.DETECTOR_VERSION
+      and summary["detector_status"] == "FROZEN"
+      and summary["threshold_version"] == v2.THRESHOLD_VERSION
+      and summary["threshold_status"] == "FROZEN")
+check("summary reports counts and cleared blockers, not outcomes",
       summary["heldout_cases"] == prereg.heldout_case_count()
       and summary["false_closure_traps"] == prereg.heldout_case_count("false_closure_trap")
       and summary["lock_blockers"] == prereg.LOCK_BLOCKERS)
 
-print(f"\n{'ALL PASS -- Phase-7b prereg start: boundaries/families/baselines frozen, lock blocked until v2 detector and thresholds are frozen' if fail == 0 else str(fail) + ' FAILED'}")
+print(f"\n{'ALL PASS -- Phase-7b prereg locked: v2 detector/thresholds frozen, results still NOT_RUN' if fail == 0 else str(fail) + ' FAILED'}")
 sys.exit(1 if fail else 0)

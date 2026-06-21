@@ -1,7 +1,7 @@
 # BoxSEL Phase 7 Failure Analysis And V2 Spec
 
 **Date:** 2026-06-21  
-**Status:** Phase-7 bounded null analyzed; Phase-6b trace schema/adapters started; Phase-7b preregistration start opened; Phase-7b corpus/evaluator built; not locked.
+**Status:** Phase-7 bounded null analyzed; Phase-6b trace schema/adapters started; Phase-7b v2 detector frozen; Phase-7b locked, not run.
 
 ## Boundary
 
@@ -203,7 +203,7 @@ were useful: an always-widen detector is not acceptable.
 
 ## Phase 7b Prereg Requirements
 
-Before any v2 held-out run:
+Frozen before any v2 held-out run:
 
 - freeze the v2 detector and thresholds;
 - keep the new held-out seed list disjoint from Phase 3, Phase 6, and Phase 7;
@@ -213,7 +213,7 @@ Before any v2 held-out run:
 - keep `restart_variance_only_v0` or name a stricter baseline;
 - preserve the same primary kill metric: accepted false-closure rate.
 
-Phase 7b now has a preregistration-start receipt:
+Phase 7b now has a locked preregistration receipt:
 
 ```text
 docs/boxsel/PHASE7B_FALSE_CLOSURE_PREREG_START.md
@@ -226,15 +226,23 @@ docs/boxsel/PHASE7B_CORPUS_EVALUATOR_START.md
 ```
 
 That clears the `PHASE7B_CORPUS_GENERATOR_NOT_BUILT` and `PHASE7B_EVALUATOR_NOT_BUILT` blockers.
-The remaining lock blockers are:
+
+The v2 freeze receipt is:
 
 ```text
-V2_DETECTOR_RULE_NOT_FROZEN
-V2_THRESHOLDS_NOT_FROZEN
+docs/boxsel/PHASE7B_V2_FREEZE_LOCK.md
 ```
 
-Phase 7b is explicitly not locked. It must still produce a locked prereg/result pair before any
-held-out claim. Until then, no Phase-8 workbench claim is allowed.
+It clears the v2 detector and threshold blockers:
+
+```text
+LOCK_BLOCKERS = ()
+PHASE7B_PREREG_STATUS = LOCKED_NOT_RUN
+HELDOUT_RUN_STATUS = READY_NOT_RUN
+```
+
+Phase 7b must still produce a result note after the held-out run before any held-out claim. Until
+then, no Phase-8 workbench claim is allowed.
 
 ## Claim Language
 
@@ -255,6 +263,8 @@ Forbidden:
 
 - `scripts/boxsel_phase6b_trace_schema.py`
 - `scripts/test_boxsel_phase6b_trace_schema.py`
+- `scripts/boxsel_phase7b_v2_detector.py`
+- `scripts/test_boxsel_phase7b_v2_detector.py`
 - `scripts/boxsel_phase7b_corpus.py`
 - `scripts/boxsel_phase7b_evaluator.py`
 - `scripts/test_boxsel_phase7b_corpus_evaluator.py`
@@ -263,6 +273,7 @@ Verification:
 
 ```text
 python scripts/test_boxsel_phase6b_trace_schema.py
+python scripts/test_boxsel_phase7b_v2_detector.py
 python scripts/test_boxsel_phase7b_corpus_evaluator.py
 ```
 
@@ -270,6 +281,7 @@ Result:
 
 ```text
 39/39 checks pass, exit 0.
+16/16 checks pass, exit 0.
 24/24 checks pass, exit 0.
 ```
 

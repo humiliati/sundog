@@ -362,7 +362,7 @@ framing." Do not claim a mathematical weakening without a dedicated diff.
 | Coherence gap at zero loss. | WATCH ITEM, not banked | Must be proven as finite-vs-volume or implementation mismatch before claiming. |
 | Trace-based false-closure detector. | FIRST PREREG FAILED | Phase-7 run accepted stable PMP-shaped false closures and did not beat restart variance. |
 | Phase-6b general trace schema/adapters. | STARTED | Converts Phase-3/Phase-7 diagnostics to `GeneralTrace`; adds PMP pressure producer; no v2 held-out claim. |
-| Phase-7b preregistration. | STARTED, NOT LOCKED | Boundaries/families/baselines seeded; corpus generator and evaluator built; v2 detector rule and thresholds still block locking. |
+| Phase-7b preregistration. | LOCKED, NOT RUN | Boundaries/families/baselines seeded; corpus generator and evaluator built; v2 detector rule and thresholds frozen; held-out results still `NOT_RUN`. |
 | Accept/widen/abstain rule. | SYNTHESIS over prior abstention | Cite Chow, Geifman/El-Yaniv, calibration, conformal KGE. |
 | PMP `+ 1 - q1` upper slack. | STANDARD / body formula | Proposition 2 and Wagner-style conditional PMP sanity. |
 | Algorithm 2 typo / drift. | BANKED ARTIFACT ISSUE | Verified in arXiv source; blast radius unresolved. |

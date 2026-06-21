@@ -1,10 +1,10 @@
-# BoxSEL Phase 7b - False-Closure Preregistration Start
+# BoxSEL Phase 7b - False-Closure Preregistration Lock
 
 **Date:** 2026-06-21  
-**Status:** `STARTED_NOT_LOCKED`
+**Status:** `LOCKED_NOT_RUN`
 
-This opens the Phase-7b preregistration lane after the Phase-7 bounded null. It is not a locked
-preregistration and it authorizes no held-out run.
+This locks the Phase-7b preregistration lane after the Phase-7 bounded null. It freezes the v2
+detector and thresholds, but no held-out detector run has been executed.
 
 ## Boundary
 
@@ -36,29 +36,40 @@ loss-00 ... loss-01
 ## Lock State
 
 ```text
-PHASE7B_PREREG_STATUS = STARTED_NOT_LOCKED
-PHASE7B_PREREG_LOCKED = False
+PHASE7B_PREREG_STATUS = LOCKED_NOT_RUN
+PHASE7B_PREREG_LOCKED = True
 RESULTS_STATUS        = NOT_RUN
-HELDOUT_RUN_STATUS    = BLOCKED_UNTIL_LOCK
+HELDOUT_RUN_STATUS    = READY_NOT_RUN
 ```
 
-Current blockers:
+Lock blockers:
 
 ```text
-V2_DETECTOR_RULE_NOT_FROZEN
-V2_THRESHOLDS_NOT_FROZEN
+none
 ```
 
-Until those clear, this file is a preregistration start, not a preregistration lock.
+Frozen detector:
 
-Infrastructure now built, still not a held-out run:
+```text
+DETECTOR_VERSION = phase7b_v2_trace_detector_v1
+DETECTOR_STATUS  = FROZEN
+```
+
+Frozen thresholds:
+
+```text
+THRESHOLD_VERSION = phase7b_v2_thresholds_v1
+THRESHOLD_STATUS  = FROZEN
+```
+
+Infrastructure:
 
 ```text
 CORPUS_GENERATOR_STATUS = BUILT
 EVALUATOR_STATUS        = BUILT
 ```
 
-## Frozen So Far
+## Frozen At Lock
 
 Schema:
 
@@ -95,6 +106,24 @@ support_floor
 max_constraint_violation
 min_constraint_slack
 ```
+
+Frozen v2 action rule:
+
+```text
+max_loss > 1e-9                         -> abstain
+max_constraint_violation > 1e-9         -> abstain
+pressure_low_shift >= 0.05              -> abstain
+optimizer_low_spread >= 0.05            -> abstain
+support_floor <= 0.08                   -> widen
+early_lower_drop >= 0.03                -> widen
+late_lower_drop >= 0.015                -> widen
+seed_low_range >= 0.02                  -> widen
+dimension_low_spread >= 0.02            -> widen
+otherwise                               -> accept
+```
+
+`min_constraint_slack` remains a frozen schema feature and audit trace, but it is not a standalone
+v2 action trigger. Exact-equality controls can have zero slack without indicating false closure.
 
 Baselines:
 
@@ -176,18 +205,17 @@ KILL7B-4: Phase-7 seen cases are reused as held-out validation rows.
 KILL7B-5: thresholds or feature definitions are changed after the locked prereg.
 ```
 
-## What Must Happen Before Lock
+## Lock Receipt
 
-1. Build and freeze the v2 detector rule.
-2. Freeze v2 thresholds.
-3. Confirm no Phase-7 case IDs or seeds are reused as held-out validation.
-4. Replace this prereg-start note with a locked prereg or add a locked addendum.
-
-Built before lock, but not yet sufficient to lock:
+Cleared before lock:
 
 ```text
-Phase-7b corpus generator
-Phase-7b evaluator
+v2 detector rule frozen
+v2 thresholds frozen
+Phase-7b corpus generator built
+Phase-7b evaluator built
+Phase-7 case IDs excluded
+reserved seed pool confirmed clean
 ```
 
 ## Results
@@ -196,31 +224,36 @@ Phase-7b evaluator
 NOT_RUN
 ```
 
-This prereg start contains no held-out outcomes.
+This locked prereg contains no held-out outcomes.
 
 ## Artifacts
 
 - `scripts/boxsel_phase7b_prereg.py`
+- `scripts/boxsel_phase7b_v2_detector.py`
 - `scripts/boxsel_phase7b_corpus.py`
 - `scripts/boxsel_phase7b_evaluator.py`
 - `scripts/test_boxsel_phase7b_prereg.py`
+- `scripts/test_boxsel_phase7b_v2_detector.py`
 - `scripts/test_boxsel_phase7b_corpus_evaluator.py`
 - `docs/boxsel/PHASE7B_CORPUS_EVALUATOR_START.md`
+- `docs/boxsel/PHASE7B_V2_FREEZE_LOCK.md`
 
 Verification:
 
 ```text
 python scripts/test_boxsel_phase7b_prereg.py
+python scripts/test_boxsel_phase7b_v2_detector.py
 python scripts/test_boxsel_phase7b_corpus_evaluator.py
 ```
 
 Result:
 
 ```text
-29/29 checks pass, exit 0.
+30/30 checks pass, exit 0.
+16/16 checks pass, exit 0.
 24/24 checks pass, exit 0.
 ```
 
 ---
 
-*Sundog Research Lab - BoxSEL Phase-7b preregistration start. Internal; not locked, no held-out run.*
+*Sundog Research Lab - BoxSEL Phase-7b preregistration lock. Internal; locked, not run.*

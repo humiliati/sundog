@@ -1,7 +1,7 @@
 # BoxSEL Phase 7b - Corpus Generator And Evaluator Start
 
 **Date:** 2026-06-21  
-**Status:** Corpus generator and evaluator built; v2 detector still not frozen.
+**Status:** Corpus generator and evaluator built; v2 detector subsequently frozen.
 
 This clears two Phase-7b prereg-start blockers:
 
@@ -10,14 +10,15 @@ PHASE7B_CORPUS_GENERATOR_NOT_BUILT  -> cleared
 PHASE7B_EVALUATOR_NOT_BUILT         -> cleared
 ```
 
-The remaining lock blockers are:
+At this infrastructure step, the detector rule and thresholds were not yet frozen.
 
 ```text
-V2_DETECTOR_RULE_NOT_FROZEN
-V2_THRESHOLDS_NOT_FROZEN
+detector rule pending
+thresholds pending
 ```
 
-No v2 detector has been run, no thresholds are frozen, and no held-out result claim is made.
+Those blockers were later cleared by `docs/boxsel/PHASE7B_V2_FREEZE_LOCK.md`. No held-out result
+claim is made in this infrastructure note.
 
 ## Corpus Generator
 
@@ -94,7 +95,7 @@ Results:
 
 ```text
 24/24 checks pass, exit 0.
-29/29 checks pass, exit 0.
+30/30 checks pass, exit 0.
 ```
 
 ---

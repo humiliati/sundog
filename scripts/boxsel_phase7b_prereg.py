@@ -12,19 +12,23 @@ from dataclasses import dataclass
 
 import boxsel_phase6b_trace_schema as schema
 import boxsel_phase7_prereg as phase7
+import boxsel_phase7b_v2_detector as v2
 
 
-PHASE7B_PREREG_STATUS = "STARTED_NOT_LOCKED"
-PHASE7B_PREREG_LOCKED = False
+PHASE7B_PREREG_STATUS = "LOCKED_NOT_RUN"
+PHASE7B_PREREG_LOCKED = True
 RESULTS_STATUS = "NOT_RUN"
 RESULT_ROWS: tuple = ()
 
 SCHEMA_VERSION = schema.SCHEMA_VERSION
-DETECTOR_VERSION = "UNFROZEN"
-THRESHOLD_STATUS = "UNFROZEN"
+DETECTOR_VERSION = v2.DETECTOR_VERSION
+DETECTOR_STATUS = v2.DETECTOR_STATUS
+THRESHOLD_VERSION = v2.THRESHOLD_VERSION
+THRESHOLD_STATUS = v2.THRESHOLD_STATUS
+FROZEN_THRESHOLDS = v2.frozen_thresholds()
 CORPUS_GENERATOR_STATUS = "BUILT"
 EVALUATOR_STATUS = "BUILT"
-HELDOUT_RUN_STATUS = "BLOCKED_UNTIL_LOCK"
+HELDOUT_RUN_STATUS = "READY_NOT_RUN"
 
 PRIMARY_BASELINE_VERSION = "restart_variance_only_v0"
 DIAGNOSTIC_BASELINE_VERSION = "phase6_trace_detector_start"
@@ -131,10 +135,7 @@ MIN_BASELINE_IMPROVEMENT = 0.20
 MIN_TRUE_NARROW_ACCEPT_RATE = 0.50
 MAX_LOSS_ESCAPE_ACCEPTS = 0
 
-LOCK_BLOCKERS = (
-    "V2_DETECTOR_RULE_NOT_FROZEN",
-    "V2_THRESHOLDS_NOT_FROZEN",
-)
+LOCK_BLOCKERS = ()
 
 PREDICTIONS = (
     "P7B-P1: once locked, v2 will widen or abstain on at least 90% of held-out false-closure traps.",
@@ -186,6 +187,8 @@ def prereg_summary() -> dict[str, object]:
         "results_status": RESULTS_STATUS,
         "schema_version": SCHEMA_VERSION,
         "detector_version": DETECTOR_VERSION,
+        "detector_status": DETECTOR_STATUS,
+        "threshold_version": THRESHOLD_VERSION,
         "threshold_status": THRESHOLD_STATUS,
         "heldout_cases": heldout_case_count(),
         "false_closure_traps": heldout_case_count("false_closure_trap"),
