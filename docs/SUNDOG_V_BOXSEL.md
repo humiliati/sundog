@@ -402,6 +402,17 @@ phase, never appended after.
     baseline improvement `0.00`; true-narrow accept rate `1.00`; loss-escape accepts `0`.
     This is a bounded null for the Phase-6 start rule, not a Phase-7 pass. Phase 8 remains gated.
     Note: [`boxsel/PHASE7_FALSE_CLOSURE_RUN.md`](boxsel/PHASE7_FALSE_CLOSURE_RUN.md).
+  - **PHASE-7B PREREG STARTED 2026-06-21** (`scripts/boxsel_phase7b_prereg.py` +test 29/29):
+    preregistration start only, explicitly `STARTED_NOT_LOCKED`. It freezes the Phase-6b schema
+    feature boundary, excludes all Phase-7 rows as seen diagnostics, reserves a fresh seed pool,
+    names the stable-PMP pressure family, keeps `restart_variance_only_v0` as primary baseline,
+    and records lock blockers. The corpus generator and evaluator are now built
+    (`scripts/boxsel_phase7b_corpus.py`, `scripts/boxsel_phase7b_evaluator.py`;
+    `test_boxsel_phase7b_corpus_evaluator.py`, 24/24), so the remaining blockers are the v2
+    detector rule and thresholds. Results remain `NOT_RUN`; held-out runs are
+    `BLOCKED_UNTIL_LOCK`. Notes:
+    [`boxsel/PHASE7B_FALSE_CLOSURE_PREREG_START.md`](boxsel/PHASE7B_FALSE_CLOSURE_PREREG_START.md),
+    [`boxsel/PHASE7B_CORPUS_EVALUATOR_START.md`](boxsel/PHASE7B_CORPUS_EVALUATOR_START.md).
 
 - **Phase 8 — Workbench (gated on a Phase-7 pass).** Three nested interval bars (sampled ⊆
   box-attainable ⊆ exact); controls for dimension, restarts, loss tolerance, query pressure,

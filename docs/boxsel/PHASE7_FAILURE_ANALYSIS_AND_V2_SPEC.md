@@ -1,7 +1,7 @@
 # BoxSEL Phase 7 Failure Analysis And V2 Spec
 
 **Date:** 2026-06-21  
-**Status:** Phase-7 bounded null analyzed; Phase-6b trace schema/adapters started; Phase-7b not registered.
+**Status:** Phase-7 bounded null analyzed; Phase-6b trace schema/adapters started; Phase-7b preregistration start opened; Phase-7b corpus/evaluator built; not locked.
 
 ## Boundary
 
@@ -206,14 +206,35 @@ were useful: an always-widen detector is not acceptable.
 Before any v2 held-out run:
 
 - freeze the v2 detector and thresholds;
-- freeze a new held-out seed list disjoint from Phase 3, Phase 6, and Phase 7;
+- keep the new held-out seed list disjoint from Phase 3, Phase 6, and Phase 7;
 - exclude all Phase-7 cases from validation;
 - include stable false-closure traps as a named family;
 - keep true-narrow and loss-escape controls;
 - keep `restart_variance_only_v0` or name a stricter baseline;
 - preserve the same primary kill metric: accepted false-closure rate.
 
-Phase 7b must produce a new prereg/result pair. Until then, no Phase-8 workbench claim is allowed.
+Phase 7b now has a preregistration-start receipt:
+
+```text
+docs/boxsel/PHASE7B_FALSE_CLOSURE_PREREG_START.md
+```
+
+The corpus generator and evaluator now have an infrastructure receipt:
+
+```text
+docs/boxsel/PHASE7B_CORPUS_EVALUATOR_START.md
+```
+
+That clears the `PHASE7B_CORPUS_GENERATOR_NOT_BUILT` and `PHASE7B_EVALUATOR_NOT_BUILT` blockers.
+The remaining lock blockers are:
+
+```text
+V2_DETECTOR_RULE_NOT_FROZEN
+V2_THRESHOLDS_NOT_FROZEN
+```
+
+Phase 7b is explicitly not locked. It must still produce a locked prereg/result pair before any
+held-out claim. Until then, no Phase-8 workbench claim is allowed.
 
 ## Claim Language
 
@@ -234,17 +255,22 @@ Forbidden:
 
 - `scripts/boxsel_phase6b_trace_schema.py`
 - `scripts/test_boxsel_phase6b_trace_schema.py`
+- `scripts/boxsel_phase7b_corpus.py`
+- `scripts/boxsel_phase7b_evaluator.py`
+- `scripts/test_boxsel_phase7b_corpus_evaluator.py`
 
 Verification:
 
 ```text
 python scripts/test_boxsel_phase6b_trace_schema.py
+python scripts/test_boxsel_phase7b_corpus_evaluator.py
 ```
 
 Result:
 
 ```text
 39/39 checks pass, exit 0.
+24/24 checks pass, exit 0.
 ```
 
 ---
