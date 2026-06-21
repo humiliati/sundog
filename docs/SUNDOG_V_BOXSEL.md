@@ -297,6 +297,21 @@ phase, never appended after.
     trustworthy). Global lower bound still the proven `1/4`; sandwich `1/4 ≤ inf I_box^n ≤ (9+√17)/32`
     **unchanged**. OPEN: exact per-cell minima for the 92 live orbits + the `n≥3` compression. Note:
     [`boxsel/PHASE4F_ENDPOINT_ORDER_ATLAS.md`](boxsel/PHASE4F_ENDPOINT_ORDER_ATLAS.md).
+  - **MIN-PAIR REDUCTION 2026-06-20** (`scripts/boxsel_phase4g_minpair_reduction.py` +test 13/13):
+    the 92-live frontier shrinks exactly. For three pairwise-overlapping intervals on one axis,
+    `|A∩B∩C| = min(|A∩B|, |A∩C|, |B∩C|)`. Thus if every helping axis can be assigned to the same
+    side `S∈{AC,BC}`, then `q = |S|/|A∩B| ≥ (1/4)/(1/2) = 1/2 > q_KKT`. This exact-closes **47**
+    formerly-live same-side orbits (21 one-help + 26 two-help). With the 31 zero-help closures from
+    4f: **78/123 n=2 orbits exact-closed**, **45 mixed-side n=2 orbits remain open** (35 one-help
+    mixed + 10 two-help AC-vs-BC mixed). Global sandwich unchanged; `n≥3` compression still open.
+    Note: [`boxsel/PHASE4G_MINPAIR_REDUCTION.md`](boxsel/PHASE4G_MINPAIR_REDUCTION.md).
+  - **ONE-HELP CLOSURE 2026-06-20** (`scripts/boxsel_phase4h_one_help_closure.py` +test 12/12):
+    the 35 one-help mixed-side orbits close exactly. If the only helping axis is `AC` and
+    `q=|A_1∩C_1|/|A_1∩B_1|<1/2`, then the global `|A∩C|≥1/4` constraint would force
+    `|A_2∩C_2|>1/(2|A_1∩B_1|)`, but `|A_2∩C_2|≤|A_2|=1/(2|A_1|)≤1/(2|A_1∩B_1|)`, contradiction
+    (and symmetrically for `BC`). So every one-help orbit has `q≥1/2>q_KKT`. Now
+    **113/123 n=2 orbits exact-closed**; only the **10 two-help AC-vs-BC mixed** n=2 orbits remain,
+    plus `n≥3` compression. Note: [`boxsel/PHASE4H_ONE_HELP_CLOSURE.md`](boxsel/PHASE4H_ONE_HELP_CLOSURE.md).
 
 - **Phase 5 — Shadow-gap taxonomy.** Classify every case into search / representation / loss
   (+ a **coherence** watch-item bucket, populated only by an audit receipt per §4); gap-size

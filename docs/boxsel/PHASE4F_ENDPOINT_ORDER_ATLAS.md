@@ -4,6 +4,12 @@
 **Status:** Atlas mapped and a structural chunk closed exactly; the rest of the n=2 lower bound is a
 verified-but-not-yet-formal backstop. A START, honestly scoped — the global sandwich is unchanged.
 
+**Update after Phase 4g:** the 92-live frontier below has been reduced exactly to **45 mixed-side**
+n=2 orbits. See [`PHASE4G_MINPAIR_REDUCTION.md`](PHASE4G_MINPAIR_REDUCTION.md).
+
+**Update after Phase 4h:** all one-help orbits are exact-closed; the n=2 frontier is now **10
+two-help mixed** orbits. See [`PHASE4H_ONE_HELP_CLOSURE.md`](PHASE4H_ONE_HELP_CLOSURE.md).
+
 ## Goal
 
 Phase 4e proved `q_KKT = (9+√17)/32` minimal *inside the structured normal form*. The next
@@ -54,6 +60,9 @@ per-cell minimum.
 - **Open (for full rigor):** an **exact per-cell minimum** for each of the 92 live orbits
   (56 one-help + 36 two-help), then the **n≥3 compression** proof. Until those land, the global
   lower bound stays the proven `1/4`.
+
+Phase 4g later exact-closes 47 of these 92 live orbits by the min-pair same-side rule, leaving
+45 mixed-side n=2 orbits.
 
 ```text
 1/4  <=  inf I_box^n  <=  (9 + √17)/32        (UNCHANGED — global lower bound still open)
