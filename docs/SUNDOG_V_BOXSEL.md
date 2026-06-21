@@ -269,6 +269,14 @@ phase, never appended after.
     `0.43`, exact grid `≥4/9` — only Nelder-Mead **seeded from the analytic witness** reaches
     `≈0.41010`. The exact algebraic value + a proof `n≥3 ⊁ n=2` stay open. Note:
     [`boxsel/PHASE4C_EXACT_INF_OPTIMIZER.md`](boxsel/PHASE4C_EXACT_INF_OPTIMIZER.md).
+  - **EXACT VALUE — KKT solve 2026-06-20** (`scripts/boxsel_kkt_exact.py` +test 12/12): the n=2
+    optimum has a **closed form**, `inf I_box^n = (9+√17)/32 ≈ 0.4100971`. KKT with both
+    `|A∩C|=|B∩C|=1/4` active forces `4x²−9x+4=0`, `x=(9−√17)/8`; then `|A∩B∩C|=1/8`, `|A∩B|=x/2`,
+    so `q*=1/(4x)=(9+√17)/32` — **verified exactly in `ℚ(√17)`** (a tiny exact `Surd` field).
+    Strictly below the old rational witness `513/1250`; certified achievable + numerically the
+    global min. Tightened sandwich: **`1/4 ≤ inf I_box^n = (9+√17)/32`**; the matching *lower*
+    bound is the one open thread. Note:
+    [`boxsel/PHASE4D_KKT_EXACT_OPTIMUM.md`](boxsel/PHASE4D_KKT_EXACT_OPTIMUM.md).
 
 - **Phase 5 — Shadow-gap taxonomy.** Classify every case into search / representation / loss
   (+ a **coherence** watch-item bucket, populated only by an audit receipt per §4); gap-size
