@@ -1,0 +1,1190 @@
+{
+  "boundary": "Toy role-free micro-SEL workbench. Not a real-KG result, not a calibration guarantee, and not an Ask Sundog product claim.",
+  "cases": [
+    {
+      "baselineAcceptedFalseClosure": true,
+      "baselineAction": "accept",
+      "box": null,
+      "caseId": "p7b-stable-pmp-00",
+      "decision": "abstain",
+      "detectorFlags": [
+        "pressure_low_shift",
+        "optimizer_low_spread"
+      ],
+      "dimensionProfile": null,
+      "exact": {
+        "lower": 0.222222,
+        "upper": 0.888889
+      },
+      "falseClosed": true,
+      "family": "stable_pmp_pressure_variants",
+      "gap": 0.154778,
+      "middleKind": "pressure_probe",
+      "note": "Stable PMP pressure trap; v2 should abstain from query-pressure/optimizer spread.",
+      "pressure": {
+        "lower": 0.222222,
+        "upper": 0.383
+      },
+      "role": "false_closure_trap",
+      "sample": {
+        "lower": 0.377,
+        "upper": 0.383
+      },
+      "seed": 9001,
+      "trace": {
+        "dimensionLowSpread": 0.0,
+        "earlyLowerDrop": 0.0,
+        "lateLowerDrop": 0.0,
+        "maxLoss": 0.0,
+        "optimizerLowSpread": 0.154778,
+        "pressureLowShift": 0.154778,
+        "seedLowRange": 0.0,
+        "supportFloor": 0.333333
+      }
+    },
+    {
+      "baselineAcceptedFalseClosure": true,
+      "baselineAction": "accept",
+      "box": null,
+      "caseId": "p7b-stable-pmp-01",
+      "decision": "abstain",
+      "detectorFlags": [
+        "pressure_low_shift",
+        "optimizer_low_spread"
+      ],
+      "dimensionProfile": null,
+      "exact": {
+        "lower": 0.24,
+        "upper": 0.84
+      },
+      "falseClosed": true,
+      "family": "stable_pmp_pressure_variants",
+      "gap": 0.147,
+      "middleKind": "pressure_probe",
+      "note": "Stable PMP pressure trap; v2 should abstain from query-pressure/optimizer spread.",
+      "pressure": {
+        "lower": 0.24,
+        "upper": 0.393
+      },
+      "role": "false_closure_trap",
+      "sample": {
+        "lower": 0.387,
+        "upper": 0.393
+      },
+      "seed": 9011,
+      "trace": {
+        "dimensionLowSpread": 0.0,
+        "earlyLowerDrop": 0.0,
+        "lateLowerDrop": 0.0,
+        "maxLoss": 0.0,
+        "optimizerLowSpread": 0.147,
+        "pressureLowShift": 0.147,
+        "seedLowRange": 0.0,
+        "supportFloor": 0.387
+      }
+    },
+    {
+      "baselineAcceptedFalseClosure": true,
+      "baselineAction": "accept",
+      "box": null,
+      "caseId": "p7b-stable-pmp-02",
+      "decision": "abstain",
+      "detectorFlags": [
+        "pressure_low_shift",
+        "optimizer_low_spread"
+      ],
+      "dimensionProfile": null,
+      "exact": {
+        "lower": 0.25,
+        "upper": 0.75
+      },
+      "falseClosed": true,
+      "family": "stable_pmp_pressure_variants",
+      "gap": 0.147,
+      "middleKind": "pressure_probe",
+      "note": "Stable PMP pressure trap; v2 should abstain from query-pressure/optimizer spread.",
+      "pressure": {
+        "lower": 0.25,
+        "upper": 0.403
+      },
+      "role": "false_closure_trap",
+      "sample": {
+        "lower": 0.397,
+        "upper": 0.403
+      },
+      "seed": 9029,
+      "trace": {
+        "dimensionLowSpread": 0.0,
+        "earlyLowerDrop": 0.0,
+        "lateLowerDrop": 0.0,
+        "maxLoss": 0.0,
+        "optimizerLowSpread": 0.147,
+        "pressureLowShift": 0.147,
+        "seedLowRange": 0.0,
+        "supportFloor": 0.397
+      }
+    },
+    {
+      "baselineAcceptedFalseClosure": true,
+      "baselineAction": "accept",
+      "box": null,
+      "caseId": "p7b-stable-pmp-03",
+      "decision": "abstain",
+      "detectorFlags": [
+        "pressure_low_shift",
+        "optimizer_low_spread"
+      ],
+      "dimensionProfile": null,
+      "exact": {
+        "lower": 0.24,
+        "upper": 0.64
+      },
+      "falseClosed": true,
+      "family": "stable_pmp_pressure_variants",
+      "gap": 0.137,
+      "middleKind": "pressure_probe",
+      "note": "Stable PMP pressure trap; v2 should abstain from query-pressure/optimizer spread.",
+      "pressure": {
+        "lower": 0.24,
+        "upper": 0.383
+      },
+      "role": "false_closure_trap",
+      "sample": {
+        "lower": 0.377,
+        "upper": 0.383
+      },
+      "seed": 9041,
+      "trace": {
+        "dimensionLowSpread": 0.0,
+        "earlyLowerDrop": 0.0,
+        "lateLowerDrop": 0.0,
+        "maxLoss": 0.0,
+        "optimizerLowSpread": 0.137,
+        "pressureLowShift": 0.137,
+        "seedLowRange": 0.0,
+        "supportFloor": 0.377
+      }
+    },
+    {
+      "baselineAcceptedFalseClosure": true,
+      "baselineAction": "accept",
+      "box": null,
+      "caseId": "p7b-stable-pmp-04",
+      "decision": "abstain",
+      "detectorFlags": [
+        "pressure_low_shift",
+        "optimizer_low_spread"
+      ],
+      "dimensionProfile": null,
+      "exact": {
+        "lower": 0.28125,
+        "upper": 0.90625
+      },
+      "falseClosed": true,
+      "family": "stable_pmp_pressure_variants",
+      "gap": 0.14575,
+      "middleKind": "pressure_probe",
+      "note": "Stable PMP pressure trap; v2 should abstain from query-pressure/optimizer spread.",
+      "pressure": {
+        "lower": 0.28125,
+        "upper": 0.433
+      },
+      "role": "false_closure_trap",
+      "sample": {
+        "lower": 0.427,
+        "upper": 0.433
+      },
+      "seed": 9059,
+      "trace": {
+        "dimensionLowSpread": 0.0,
+        "earlyLowerDrop": 0.0,
+        "lateLowerDrop": 0.0,
+        "maxLoss": 0.0,
+        "optimizerLowSpread": 0.14575,
+        "pressureLowShift": 0.14575,
+        "seedLowRange": 0.0,
+        "supportFloor": 0.375
+      }
+    },
+    {
+      "baselineAcceptedFalseClosure": true,
+      "baselineAction": "accept",
+      "box": null,
+      "caseId": "p7b-stable-pmp-05",
+      "decision": "abstain",
+      "detectorFlags": [
+        "pressure_low_shift",
+        "optimizer_low_spread"
+      ],
+      "dimensionProfile": null,
+      "exact": {
+        "lower": 0.285714,
+        "upper": 0.714286
+      },
+      "falseClosed": true,
+      "family": "stable_pmp_pressure_variants",
+      "gap": 0.151286,
+      "middleKind": "pressure_probe",
+      "note": "Stable PMP pressure trap; v2 should abstain from query-pressure/optimizer spread.",
+      "pressure": {
+        "lower": 0.285714,
+        "upper": 0.443
+      },
+      "role": "false_closure_trap",
+      "sample": {
+        "lower": 0.437,
+        "upper": 0.443
+      },
+      "seed": 9067,
+      "trace": {
+        "dimensionLowSpread": 0.0,
+        "earlyLowerDrop": 0.0,
+        "lateLowerDrop": 0.0,
+        "maxLoss": 0.0,
+        "optimizerLowSpread": 0.151286,
+        "pressureLowShift": 0.151286,
+        "seedLowRange": 0.0,
+        "supportFloor": 0.437
+      }
+    },
+    {
+      "baselineAcceptedFalseClosure": true,
+      "baselineAction": "accept",
+      "box": null,
+      "caseId": "p7b-stable-pmp-06",
+      "decision": "abstain",
+      "detectorFlags": [
+        "pressure_low_shift",
+        "optimizer_low_spread"
+      ],
+      "dimensionProfile": null,
+      "exact": {
+        "lower": 0.25,
+        "upper": 0.625
+      },
+      "falseClosed": true,
+      "family": "stable_pmp_pressure_variants",
+      "gap": 0.157,
+      "middleKind": "pressure_probe",
+      "note": "Stable PMP pressure trap; v2 should abstain from query-pressure/optimizer spread.",
+      "pressure": {
+        "lower": 0.25,
+        "upper": 0.413
+      },
+      "role": "false_closure_trap",
+      "sample": {
+        "lower": 0.407,
+        "upper": 0.413
+      },
+      "seed": 9091,
+      "trace": {
+        "dimensionLowSpread": 0.0,
+        "earlyLowerDrop": 0.0,
+        "lateLowerDrop": 0.0,
+        "maxLoss": 0.0,
+        "optimizerLowSpread": 0.157,
+        "pressureLowShift": 0.157,
+        "seedLowRange": 0.0,
+        "supportFloor": 0.407
+      }
+    },
+    {
+      "baselineAcceptedFalseClosure": true,
+      "baselineAction": "accept",
+      "box": null,
+      "caseId": "p7b-stable-pmp-07",
+      "decision": "abstain",
+      "detectorFlags": [
+        "pressure_low_shift",
+        "optimizer_low_spread"
+      ],
+      "dimensionProfile": null,
+      "exact": {
+        "lower": 0.222222,
+        "upper": 0.555556
+      },
+      "falseClosed": true,
+      "family": "stable_pmp_pressure_variants",
+      "gap": 0.144778,
+      "middleKind": "pressure_probe",
+      "note": "Stable PMP pressure trap; v2 should abstain from query-pressure/optimizer spread.",
+      "pressure": {
+        "lower": 0.222222,
+        "upper": 0.373
+      },
+      "role": "false_closure_trap",
+      "sample": {
+        "lower": 0.367,
+        "upper": 0.373
+      },
+      "seed": 9103,
+      "trace": {
+        "dimensionLowSpread": 0.0,
+        "earlyLowerDrop": 0.0,
+        "lateLowerDrop": 0.0,
+        "maxLoss": 0.0,
+        "optimizerLowSpread": 0.144778,
+        "pressureLowShift": 0.144778,
+        "seedLowRange": 0.0,
+        "supportFloor": 0.367
+      }
+    },
+    {
+      "baselineAcceptedFalseClosure": true,
+      "baselineAction": "accept",
+      "box": {
+        "lower": 0.410097,
+        "upper": 1.0
+      },
+      "caseId": "p7b-helly-00",
+      "decision": "widen",
+      "detectorFlags": [
+        "early_lower_drop"
+      ],
+      "dimensionProfile": {
+        "dim1": {
+          "lower": 0.5,
+          "upper": 1.0
+        },
+        "dim2Plus": {
+          "lower": 0.410097,
+          "upper": 1.0
+        },
+        "dimensionControlled": true,
+        "exact": {
+          "lower": 0.0,
+          "upper": 1.0
+        }
+      },
+      "exact": {
+        "lower": 0.0,
+        "upper": 1.0
+      },
+      "falseClosed": true,
+      "family": "helly_threshold_variants_v2",
+      "gap": 0.546299,
+      "middleKind": "box_attainable",
+      "note": "Fresh Helly threshold trap; v2 should widen from ordinary endpoint movement.",
+      "pressure": null,
+      "role": "false_closure_trap",
+      "sample": {
+        "lower": 0.546299,
+        "upper": 1.0
+      },
+      "seed": 9127,
+      "trace": {
+        "dimensionLowSpread": 0.0,
+        "earlyLowerDrop": 0.180347,
+        "lateLowerDrop": 0.011475,
+        "maxLoss": 6.162975822039155e-32,
+        "optimizerLowSpread": 0.0,
+        "pressureLowShift": 0.0,
+        "seedLowRange": 0.0,
+        "supportFloor": 0.206131
+      }
+    },
+    {
+      "baselineAcceptedFalseClosure": true,
+      "baselineAction": "accept",
+      "box": {
+        "lower": 0.410097,
+        "upper": 1.0
+      },
+      "caseId": "p7b-helly-01",
+      "decision": "widen",
+      "detectorFlags": [
+        "early_lower_drop"
+      ],
+      "dimensionProfile": {
+        "dim1": {
+          "lower": 0.5,
+          "upper": 1.0
+        },
+        "dim2Plus": {
+          "lower": 0.410097,
+          "upper": 1.0
+        },
+        "dimensionControlled": true,
+        "exact": {
+          "lower": 0.0,
+          "upper": 1.0
+        }
+      },
+      "exact": {
+        "lower": 0.0,
+        "upper": 1.0
+      },
+      "falseClosed": true,
+      "family": "helly_threshold_variants_v2",
+      "gap": 0.568699,
+      "middleKind": "box_attainable",
+      "note": "Fresh Helly threshold trap; v2 should widen from ordinary endpoint movement.",
+      "pressure": null,
+      "role": "false_closure_trap",
+      "sample": {
+        "lower": 0.568699,
+        "upper": 1.0
+      },
+      "seed": 9137,
+      "trace": {
+        "dimensionLowSpread": 0.0,
+        "earlyLowerDrop": 0.116867,
+        "lateLowerDrop": 0.0,
+        "maxLoss": 4.0059342843254506e-32,
+        "optimizerLowSpread": 0.0,
+        "pressureLowShift": 0.0,
+        "seedLowRange": 0.0,
+        "supportFloor": 0.200015
+      }
+    },
+    {
+      "baselineAcceptedFalseClosure": true,
+      "baselineAction": "accept",
+      "box": {
+        "lower": 0.410097,
+        "upper": 1.0
+      },
+      "caseId": "p7b-helly-02",
+      "decision": "widen",
+      "detectorFlags": [
+        "early_lower_drop",
+        "late_lower_drop"
+      ],
+      "dimensionProfile": {
+        "dim1": {
+          "lower": 0.5,
+          "upper": 1.0
+        },
+        "dim2Plus": {
+          "lower": 0.410097,
+          "upper": 1.0
+        },
+        "dimensionControlled": true,
+        "exact": {
+          "lower": 0.0,
+          "upper": 1.0
+        }
+      },
+      "exact": {
+        "lower": 0.0,
+        "upper": 1.0
+      },
+      "falseClosed": true,
+      "family": "helly_threshold_variants_v2",
+      "gap": 0.545777,
+      "middleKind": "box_attainable",
+      "note": "Fresh Helly threshold trap; v2 should widen from ordinary endpoint movement.",
+      "pressure": null,
+      "role": "false_closure_trap",
+      "sample": {
+        "lower": 0.545777,
+        "upper": 0.985743
+      },
+      "seed": 9151,
+      "trace": {
+        "dimensionLowSpread": 0.0,
+        "earlyLowerDrop": 0.070921,
+        "lateLowerDrop": 0.068297,
+        "maxLoss": 5.238529448733282e-32,
+        "optimizerLowSpread": 0.0,
+        "pressureLowShift": 0.0,
+        "seedLowRange": 0.0,
+        "supportFloor": 0.190914
+      }
+    },
+    {
+      "baselineAcceptedFalseClosure": true,
+      "baselineAction": "accept",
+      "box": {
+        "lower": 0.410097,
+        "upper": 1.0
+      },
+      "caseId": "p7b-helly-03",
+      "decision": "widen",
+      "detectorFlags": [
+        "late_lower_drop"
+      ],
+      "dimensionProfile": {
+        "dim1": {
+          "lower": 0.5,
+          "upper": 1.0
+        },
+        "dim2Plus": {
+          "lower": 0.410097,
+          "upper": 1.0
+        },
+        "dimensionControlled": true,
+        "exact": {
+          "lower": 0.0,
+          "upper": 1.0
+        }
+      },
+      "exact": {
+        "lower": 0.0,
+        "upper": 1.0
+      },
+      "falseClosed": true,
+      "family": "helly_threshold_variants_v2",
+      "gap": 0.530664,
+      "middleKind": "box_attainable",
+      "note": "Fresh Helly threshold trap; v2 should widen from ordinary endpoint movement.",
+      "pressure": null,
+      "role": "false_closure_trap",
+      "sample": {
+        "lower": 0.530664,
+        "upper": 1.0
+      },
+      "seed": 9173,
+      "trace": {
+        "dimensionLowSpread": 0.0,
+        "earlyLowerDrop": 0.021432,
+        "lateLowerDrop": 0.021432,
+        "maxLoss": 6.471124613141112e-32,
+        "optimizerLowSpread": 0.0,
+        "pressureLowShift": 0.0,
+        "seedLowRange": 0.0,
+        "supportFloor": 0.193719
+      }
+    },
+    {
+      "baselineAcceptedFalseClosure": true,
+      "baselineAction": "accept",
+      "box": null,
+      "caseId": "p7b-support-00",
+      "decision": "abstain",
+      "detectorFlags": [
+        "pressure_low_shift",
+        "optimizer_low_spread",
+        "support_floor"
+      ],
+      "dimensionProfile": null,
+      "exact": {
+        "lower": 0.0,
+        "upper": 1.0
+      },
+      "falseClosed": true,
+      "family": "support_floor_variants",
+      "gap": 0.437,
+      "middleKind": "pressure_probe",
+      "note": "Low-support pressure trap; v2 should abstain or widen from pressure/support warnings.",
+      "pressure": {
+        "lower": 0.259,
+        "upper": 0.443
+      },
+      "role": "false_closure_trap",
+      "sample": {
+        "lower": 0.437,
+        "upper": 0.443
+      },
+      "seed": 9187,
+      "trace": {
+        "dimensionLowSpread": 0.0,
+        "earlyLowerDrop": 0.0,
+        "lateLowerDrop": 0.0,
+        "maxLoss": 0.0,
+        "optimizerLowSpread": 0.178,
+        "pressureLowShift": 0.178,
+        "seedLowRange": 0.0,
+        "supportFloor": 0.0437
+      }
+    },
+    {
+      "baselineAcceptedFalseClosure": true,
+      "baselineAction": "accept",
+      "box": null,
+      "caseId": "p7b-support-01",
+      "decision": "abstain",
+      "detectorFlags": [
+        "pressure_low_shift",
+        "optimizer_low_spread",
+        "support_floor"
+      ],
+      "dimensionProfile": null,
+      "exact": {
+        "lower": 0.0,
+        "upper": 1.0
+      },
+      "falseClosed": true,
+      "family": "support_floor_variants",
+      "gap": 0.457,
+      "middleKind": "pressure_probe",
+      "note": "Low-support pressure trap; v2 should abstain or widen from pressure/support warnings.",
+      "pressure": {
+        "lower": 0.279,
+        "upper": 0.463
+      },
+      "role": "false_closure_trap",
+      "sample": {
+        "lower": 0.457,
+        "upper": 0.463
+      },
+      "seed": 9203,
+      "trace": {
+        "dimensionLowSpread": 0.0,
+        "earlyLowerDrop": 0.0,
+        "lateLowerDrop": 0.0,
+        "maxLoss": 0.0,
+        "optimizerLowSpread": 0.178,
+        "pressureLowShift": 0.178,
+        "seedLowRange": 0.0,
+        "supportFloor": 0.038083
+      }
+    },
+    {
+      "baselineAcceptedFalseClosure": true,
+      "baselineAction": "accept",
+      "box": null,
+      "caseId": "p7b-support-02",
+      "decision": "abstain",
+      "detectorFlags": [
+        "pressure_low_shift",
+        "optimizer_low_spread",
+        "support_floor"
+      ],
+      "dimensionProfile": null,
+      "exact": {
+        "lower": 0.0,
+        "upper": 1.0
+      },
+      "falseClosed": true,
+      "family": "support_floor_variants",
+      "gap": 0.477,
+      "middleKind": "pressure_probe",
+      "note": "Low-support pressure trap; v2 should abstain or widen from pressure/support warnings.",
+      "pressure": {
+        "lower": 0.299,
+        "upper": 0.483
+      },
+      "role": "false_closure_trap",
+      "sample": {
+        "lower": 0.477,
+        "upper": 0.483
+      },
+      "seed": 9221,
+      "trace": {
+        "dimensionLowSpread": 0.0,
+        "earlyLowerDrop": 0.0,
+        "lateLowerDrop": 0.0,
+        "maxLoss": 0.0,
+        "optimizerLowSpread": 0.178,
+        "pressureLowShift": 0.178,
+        "seedLowRange": 0.0,
+        "supportFloor": 0.059625
+      }
+    },
+    {
+      "baselineAcceptedFalseClosure": true,
+      "baselineAction": "accept",
+      "box": null,
+      "caseId": "p7b-support-03",
+      "decision": "abstain",
+      "detectorFlags": [
+        "pressure_low_shift",
+        "optimizer_low_spread",
+        "support_floor"
+      ],
+      "dimensionProfile": null,
+      "exact": {
+        "lower": 0.0,
+        "upper": 1.0
+      },
+      "falseClosed": true,
+      "family": "support_floor_variants",
+      "gap": 0.497,
+      "middleKind": "pressure_probe",
+      "note": "Low-support pressure trap; v2 should abstain or widen from pressure/support warnings.",
+      "pressure": {
+        "lower": 0.319,
+        "upper": 0.503
+      },
+      "role": "false_closure_trap",
+      "sample": {
+        "lower": 0.497,
+        "upper": 0.503
+      },
+      "seed": 9239,
+      "trace": {
+        "dimensionLowSpread": 0.0,
+        "earlyLowerDrop": 0.0,
+        "lateLowerDrop": 0.0,
+        "maxLoss": 0.0,
+        "optimizerLowSpread": 0.178,
+        "pressureLowShift": 0.178,
+        "seedLowRange": 0.0,
+        "supportFloor": 0.031062
+      }
+    },
+    {
+      "baselineAcceptedFalseClosure": false,
+      "baselineAction": "accept",
+      "box": null,
+      "caseId": "p7b-narrow-00",
+      "decision": "accept",
+      "detectorFlags": [],
+      "dimensionProfile": null,
+      "exact": {
+        "lower": 0.65,
+        "upper": 0.65
+      },
+      "falseClosed": false,
+      "family": "true_narrow_controls_v2",
+      "gap": -0.0005,
+      "middleKind": "none",
+      "note": "Acceptance control; v2 should accept when no frozen warning flags fire.",
+      "pressure": null,
+      "role": "acceptance_control",
+      "sample": {
+        "lower": 0.6495,
+        "upper": 0.6505
+      },
+      "seed": 9001,
+      "trace": {
+        "dimensionLowSpread": 0.0,
+        "earlyLowerDrop": 0.0,
+        "lateLowerDrop": 0.0,
+        "maxLoss": 0.0,
+        "optimizerLowSpread": 0.0,
+        "pressureLowShift": 0.0,
+        "seedLowRange": 0.0,
+        "supportFloor": 0.6495
+      }
+    },
+    {
+      "baselineAcceptedFalseClosure": false,
+      "baselineAction": "accept",
+      "box": null,
+      "caseId": "p7b-narrow-01",
+      "decision": "accept",
+      "detectorFlags": [],
+      "dimensionProfile": null,
+      "exact": {
+        "lower": 0.7,
+        "upper": 0.7
+      },
+      "falseClosed": false,
+      "family": "true_narrow_controls_v2",
+      "gap": -0.0005,
+      "middleKind": "none",
+      "note": "Acceptance control; v2 should accept when no frozen warning flags fire.",
+      "pressure": null,
+      "role": "acceptance_control",
+      "sample": {
+        "lower": 0.6995,
+        "upper": 0.7005
+      },
+      "seed": 9011,
+      "trace": {
+        "dimensionLowSpread": 0.0,
+        "earlyLowerDrop": 0.0,
+        "lateLowerDrop": 0.0,
+        "maxLoss": 0.0,
+        "optimizerLowSpread": 0.0,
+        "pressureLowShift": 0.0,
+        "seedLowRange": 0.0,
+        "supportFloor": 0.6995
+      }
+    },
+    {
+      "baselineAcceptedFalseClosure": false,
+      "baselineAction": "accept",
+      "box": null,
+      "caseId": "p7b-narrow-02",
+      "decision": "accept",
+      "detectorFlags": [],
+      "dimensionProfile": null,
+      "exact": {
+        "lower": 0.75,
+        "upper": 0.75
+      },
+      "falseClosed": false,
+      "family": "true_narrow_controls_v2",
+      "gap": -0.0005,
+      "middleKind": "none",
+      "note": "Acceptance control; v2 should accept when no frozen warning flags fire.",
+      "pressure": null,
+      "role": "acceptance_control",
+      "sample": {
+        "lower": 0.7495,
+        "upper": 0.7505
+      },
+      "seed": 9029,
+      "trace": {
+        "dimensionLowSpread": 0.0,
+        "earlyLowerDrop": 0.0,
+        "lateLowerDrop": 0.0,
+        "maxLoss": 0.0,
+        "optimizerLowSpread": 0.0,
+        "pressureLowShift": 0.0,
+        "seedLowRange": 0.0,
+        "supportFloor": 0.7495
+      }
+    },
+    {
+      "baselineAcceptedFalseClosure": false,
+      "baselineAction": "accept",
+      "box": null,
+      "caseId": "p7b-narrow-03",
+      "decision": "accept",
+      "detectorFlags": [],
+      "dimensionProfile": null,
+      "exact": {
+        "lower": 0.8,
+        "upper": 0.8
+      },
+      "falseClosed": false,
+      "family": "true_narrow_controls_v2",
+      "gap": -0.0005,
+      "middleKind": "none",
+      "note": "Acceptance control; v2 should accept when no frozen warning flags fire.",
+      "pressure": null,
+      "role": "acceptance_control",
+      "sample": {
+        "lower": 0.7995,
+        "upper": 0.8005
+      },
+      "seed": 9041,
+      "trace": {
+        "dimensionLowSpread": 0.0,
+        "earlyLowerDrop": 0.0,
+        "lateLowerDrop": 0.0,
+        "maxLoss": 0.0,
+        "optimizerLowSpread": 0.0,
+        "pressureLowShift": 0.0,
+        "seedLowRange": 0.0,
+        "supportFloor": 0.7995
+      }
+    },
+    {
+      "baselineAcceptedFalseClosure": false,
+      "baselineAction": "accept",
+      "box": null,
+      "caseId": "p7b-narrow-04",
+      "decision": "accept",
+      "detectorFlags": [],
+      "dimensionProfile": null,
+      "exact": {
+        "lower": 0.833333,
+        "upper": 0.833333
+      },
+      "falseClosed": false,
+      "family": "true_narrow_controls_v2",
+      "gap": -0.0005,
+      "middleKind": "none",
+      "note": "Acceptance control; v2 should accept when no frozen warning flags fire.",
+      "pressure": null,
+      "role": "acceptance_control",
+      "sample": {
+        "lower": 0.832833,
+        "upper": 0.833833
+      },
+      "seed": 9059,
+      "trace": {
+        "dimensionLowSpread": 0.0,
+        "earlyLowerDrop": 0.0,
+        "lateLowerDrop": 0.0,
+        "maxLoss": 0.0,
+        "optimizerLowSpread": 0.0,
+        "pressureLowShift": 0.0,
+        "seedLowRange": 0.0,
+        "supportFloor": 0.832833
+      }
+    },
+    {
+      "baselineAcceptedFalseClosure": false,
+      "baselineAction": "accept",
+      "box": null,
+      "caseId": "p7b-narrow-05",
+      "decision": "accept",
+      "detectorFlags": [],
+      "dimensionProfile": null,
+      "exact": {
+        "lower": 0.9,
+        "upper": 0.9
+      },
+      "falseClosed": false,
+      "family": "true_narrow_controls_v2",
+      "gap": -0.0005,
+      "middleKind": "none",
+      "note": "Acceptance control; v2 should accept when no frozen warning flags fire.",
+      "pressure": null,
+      "role": "acceptance_control",
+      "sample": {
+        "lower": 0.8995,
+        "upper": 0.9005
+      },
+      "seed": 9067,
+      "trace": {
+        "dimensionLowSpread": 0.0,
+        "earlyLowerDrop": 0.0,
+        "lateLowerDrop": 0.0,
+        "maxLoss": 0.0,
+        "optimizerLowSpread": 0.0,
+        "pressureLowShift": 0.0,
+        "seedLowRange": 0.0,
+        "supportFloor": 0.8995
+      }
+    },
+    {
+      "baselineAcceptedFalseClosure": false,
+      "baselineAction": "accept",
+      "box": null,
+      "caseId": "p7b-pressure-noop-00",
+      "decision": "accept",
+      "detectorFlags": [],
+      "dimensionProfile": null,
+      "exact": {
+        "lower": 0.6,
+        "upper": 0.6
+      },
+      "falseClosed": false,
+      "family": "pressure_noop_controls",
+      "gap": -0.0005,
+      "middleKind": "none",
+      "note": "Acceptance control; v2 should accept when no frozen warning flags fire.",
+      "pressure": null,
+      "role": "acceptance_control",
+      "sample": {
+        "lower": 0.5995,
+        "upper": 0.6005
+      },
+      "seed": 9091,
+      "trace": {
+        "dimensionLowSpread": 0.0,
+        "earlyLowerDrop": 0.0,
+        "lateLowerDrop": 0.0,
+        "maxLoss": 0.0,
+        "optimizerLowSpread": 0.0,
+        "pressureLowShift": 0.0,
+        "seedLowRange": 0.0,
+        "supportFloor": 0.5995
+      }
+    },
+    {
+      "baselineAcceptedFalseClosure": false,
+      "baselineAction": "accept",
+      "box": null,
+      "caseId": "p7b-pressure-noop-01",
+      "decision": "accept",
+      "detectorFlags": [],
+      "dimensionProfile": null,
+      "exact": {
+        "lower": 0.666667,
+        "upper": 0.666667
+      },
+      "falseClosed": false,
+      "family": "pressure_noop_controls",
+      "gap": -0.0005,
+      "middleKind": "none",
+      "note": "Acceptance control; v2 should accept when no frozen warning flags fire.",
+      "pressure": null,
+      "role": "acceptance_control",
+      "sample": {
+        "lower": 0.666167,
+        "upper": 0.667167
+      },
+      "seed": 9103,
+      "trace": {
+        "dimensionLowSpread": 0.0,
+        "earlyLowerDrop": 0.0,
+        "lateLowerDrop": 0.0,
+        "maxLoss": 0.0,
+        "optimizerLowSpread": 0.0,
+        "pressureLowShift": 0.0,
+        "seedLowRange": 0.0,
+        "supportFloor": 0.666167
+      }
+    },
+    {
+      "baselineAcceptedFalseClosure": false,
+      "baselineAction": "accept",
+      "box": null,
+      "caseId": "p7b-pressure-noop-02",
+      "decision": "accept",
+      "detectorFlags": [],
+      "dimensionProfile": null,
+      "exact": {
+        "lower": 0.7,
+        "upper": 0.7
+      },
+      "falseClosed": false,
+      "family": "pressure_noop_controls",
+      "gap": -0.0005,
+      "middleKind": "none",
+      "note": "Acceptance control; v2 should accept when no frozen warning flags fire.",
+      "pressure": null,
+      "role": "acceptance_control",
+      "sample": {
+        "lower": 0.6995,
+        "upper": 0.7005
+      },
+      "seed": 9127,
+      "trace": {
+        "dimensionLowSpread": 0.0,
+        "earlyLowerDrop": 0.0,
+        "lateLowerDrop": 0.0,
+        "maxLoss": 0.0,
+        "optimizerLowSpread": 0.0,
+        "pressureLowShift": 0.0,
+        "seedLowRange": 0.0,
+        "supportFloor": 0.6995
+      }
+    },
+    {
+      "baselineAcceptedFalseClosure": false,
+      "baselineAction": "accept",
+      "box": null,
+      "caseId": "p7b-loss-00",
+      "decision": "abstain",
+      "detectorFlags": [
+        "max_loss"
+      ],
+      "dimensionProfile": null,
+      "exact": {
+        "lower": 0.6,
+        "upper": 0.6
+      },
+      "falseClosed": false,
+      "family": "loss_escape_controls_v2",
+      "gap": -0.0005,
+      "middleKind": "none",
+      "note": "Nonzero-loss control; v2 must abstain.",
+      "pressure": null,
+      "role": "loss_control",
+      "sample": {
+        "lower": 0.5995,
+        "upper": 0.6005
+      },
+      "seed": 9137,
+      "trace": {
+        "dimensionLowSpread": 0.0,
+        "earlyLowerDrop": 0.0,
+        "lateLowerDrop": 0.0,
+        "maxLoss": 1e-06,
+        "optimizerLowSpread": 0.0,
+        "pressureLowShift": 0.0,
+        "seedLowRange": 0.0,
+        "supportFloor": 0.5995
+      }
+    },
+    {
+      "baselineAcceptedFalseClosure": false,
+      "baselineAction": "accept",
+      "box": null,
+      "caseId": "p7b-loss-01",
+      "decision": "abstain",
+      "detectorFlags": [
+        "max_loss"
+      ],
+      "dimensionProfile": null,
+      "exact": {
+        "lower": 0.666667,
+        "upper": 0.666667
+      },
+      "falseClosed": false,
+      "family": "loss_escape_controls_v2",
+      "gap": -0.0005,
+      "middleKind": "none",
+      "note": "Nonzero-loss control; v2 must abstain.",
+      "pressure": null,
+      "role": "loss_control",
+      "sample": {
+        "lower": 0.666167,
+        "upper": 0.667167
+      },
+      "seed": 9151,
+      "trace": {
+        "dimensionLowSpread": 0.0,
+        "earlyLowerDrop": 0.0,
+        "lateLowerDrop": 0.0,
+        "maxLoss": 1e-06,
+        "optimizerLowSpread": 0.0,
+        "pressureLowShift": 0.0,
+        "seedLowRange": 0.0,
+        "supportFloor": 0.666167
+      }
+    },
+    {
+      "baselineAcceptedFalseClosure": false,
+      "baselineAction": "accept",
+      "box": null,
+      "caseId": "p7b-loss-02",
+      "decision": "abstain",
+      "detectorFlags": [
+        "max_loss"
+      ],
+      "dimensionProfile": null,
+      "exact": {
+        "lower": 0.75,
+        "upper": 0.75
+      },
+      "falseClosed": false,
+      "family": "loss_escape_controls_v2",
+      "gap": -0.0005,
+      "middleKind": "none",
+      "note": "Nonzero-loss control; v2 must abstain.",
+      "pressure": null,
+      "role": "loss_control",
+      "sample": {
+        "lower": 0.7495,
+        "upper": 0.7505
+      },
+      "seed": 9173,
+      "trace": {
+        "dimensionLowSpread": 0.0,
+        "earlyLowerDrop": 0.0,
+        "lateLowerDrop": 0.0,
+        "maxLoss": 1e-06,
+        "optimizerLowSpread": 0.0,
+        "pressureLowShift": 0.0,
+        "seedLowRange": 0.0,
+        "supportFloor": 0.7495
+      }
+    }
+  ],
+  "intervalReference": {
+    "hellyBoxLowerDim1": 0.5,
+    "hellyBoxLowerDim2Plus": 0.410097,
+    "hellyExact": {
+      "lower": 0.0,
+      "upper": 1.0
+    }
+  },
+  "phase8Note": "docs/boxsel/PHASE8_WORKBENCH_START.md",
+  "schemaVersion": 1,
+  "sourceManifest": "results/boxsel/phase7b_false_closure_run/manifest.json",
+  "sourceResultNote": "docs/boxsel/PHASE7B_FALSE_CLOSURE_RUN.md",
+  "summary": {
+    "acceptedFalseClosureRate": 0.0,
+    "baselineAcceptedFalseClosureRate": 1.0,
+    "baselineAcceptedFalseClosures": 16,
+    "baselineImprovement": 1.0,
+    "baselinePressureWarningRateOnStablePmp": 0.0,
+    "caseCount": 28,
+    "detectorAcceptedFalseClosures": 0,
+    "falseClosureTraps": 16,
+    "killCriteriaTriggered": [],
+    "lossEscapeAcceptCount": 0,
+    "predictionsSupported": [
+      "P7B-P1",
+      "P7B-P2",
+      "P7B-P3",
+      "P7B-P4",
+      "P7B-P5"
+    ],
+    "pressureWarningRateOnStablePmp": 1.0,
+    "status": "PASS_PREREG_GATE",
+    "trueNarrowAcceptRate": 1.0
+  },
+  "thresholds": {
+    "dimension_low_spread": 0.02,
+    "early_lower_drop": 0.03,
+    "late_lower_drop": 0.015,
+    "max_constraint_violation": 1e-09,
+    "max_loss": 1e-09,
+    "optimizer_low_spread": 0.05,
+    "pressure_low_shift": 0.05,
+    "seed_low_range": 0.02,
+    "support_floor": 0.08
+  },
+  "workbenchDataVersion": "phase8_boxsel_workbench_v0"
+}

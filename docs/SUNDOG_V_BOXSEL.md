@@ -428,6 +428,14 @@ phase, never appended after.
   box-attainable ⊆ exact); controls for dimension, restarts, loss tolerance, query pressure,
   regularization. Purpose: make false closure a visible boundary event. No public surface
   until the promote-gate clears.
+  - **STARTED 2026-06-21** (`boxsel.html`, `scripts/boxsel_phase8_workbench_data.py`):
+    review-only, noindex workbench over the passed Phase-7b micro-corpus. Data is generated from
+    `results/boxsel/phase7b_false_closure_run/manifest.json` into
+    `public/data/boxsel-phase8-workbench.json`. The page shows exact/sample/box layers where the
+    Phase-4 Helly closed form is available, and labels PMP/support middle layers as
+    `Pressure trace` rather than `I_box`. Controls cover query pressure, Helly dimension, restart
+    reveal, and loss tolerance. Boundary remains toy micro-SEL only; no public inbound path. Note:
+    [`boxsel/PHASE8_WORKBENCH_START.md`](boxsel/PHASE8_WORKBENCH_START.md).
 
 ## 8. Promote-gate / tier
 

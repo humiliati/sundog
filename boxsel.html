@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Review-only BoxSEL false-closure workbench for tiny micro-SEL interval traces.">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#17242C">
+    <link rel="canonical" href="https://sundog.cc/boxsel">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <title>BoxSEL False-Closure Workbench</title>
+    <style>
+        :root {
+            --ink: #17242C;
+            --muted: #52616B;
+            --line: #D8E0E5;
+            --paper: #F7FAFC;
+            --panel: #FFFFFF;
+            --teal: #1C7C7D;
+            --amber: #C58A16;
+            --red: #B74B48;
+            --green: #34785A;
+            --blue: #406E9F;
+            --violet: #665C9E;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            color: var(--ink);
+            background: var(--paper);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            overflow-x: hidden;
+        }
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: rgba(255, 255, 255, 0.94);
+            border-bottom: 1px solid var(--line);
+            backdrop-filter: blur(14px);
+        }
+
+        .site-nav {
+            max-width: 1420px;
+            margin: 0 auto;
+            padding: 0.8rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .site-brand {
+            color: var(--ink);
+            font-size: 0.95rem;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .site-links {
+            display: flex;
+            gap: 0.85rem;
+            align-items: center;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .site-links a {
+            color: #344A58;
+            font-size: 0.86rem;
+            font-weight: 650;
+            text-decoration: none;
+        }
+
+        .app {
+            min-height: calc(100vh - 57px);
+            display: grid;
+            grid-template-columns: 300px minmax(0, 1fr) 340px;
+            gap: 0;
+        }
+
+        .rail,
+        .trace-panel {
+            background: #FFFFFF;
+            border-color: var(--line);
+            border-style: solid;
+        }
+
+        .rail {
+            border-width: 0 1px 0 0;
+            min-height: calc(100vh - 57px);
+            overflow-y: auto;
+        }
+
+        .trace-panel {
+            border-width: 0 0 0 1px;
+            min-height: calc(100vh - 57px);
+            overflow-y: auto;
+        }
+
+        .rail-head,
+        .panel-section,
+        .main-head {
+            padding: 1rem;
+        }
+
+        .eyebrow {
+            margin: 0 0 0.45rem;
+            color: var(--teal);
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        h1,
+        h2,
+        h3,
+        p {
+            margin-top: 0;
+        }
+
+        h1 {
+            margin-bottom: 0.3rem;
+            font-size: 1.55rem;
+            line-height: 1.12;
+            letter-spacing: 0;
+        }
+
+        h2 {
+            margin-bottom: 0.6rem;
+            font-size: 1rem;
+            line-height: 1.2;
+            letter-spacing: 0;
+        }
+
+        h3 {
+            margin-bottom: 0.55rem;
+            font-size: 0.88rem;
+            line-height: 1.2;
+            letter-spacing: 0;
+        }
+
+        .lede,
+        .boundary,
+        .small {
+            color: var(--muted);
+            font-size: 0.86rem;
+            line-height: 1.5;
+        }
+
+        .boundary {
+            margin: 0;
+            padding: 0.7rem 0.85rem;
+            border: 1px solid #E6D5A8;
+            border-radius: 8px;
+            background: #FFF9E8;
+            color: #5F4A12;
+        }
+
+        .case-list {
+            display: grid;
+            gap: 0.45rem;
+            padding: 0 0.75rem 1rem;
+        }
+
+        .case-button {
+            width: 100%;
+            min-height: 58px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 0.5rem;
+            align-items: center;
+            padding: 0.68rem 0.72rem;
+            color: var(--ink);
+            background: #F8FBFD;
+            border: 1px solid #E0E8ED;
+            border-radius: 8px;
+            font: inherit;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .case-button:hover,
+        .case-button:focus-visible {
+            border-color: #92B9BA;
+            outline: none;
+        }
+
+        .case-button.active {
+            background: #EEF8F8;
+            border-color: var(--teal);
+        }
+
+        .case-id {
+            overflow: hidden;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .case-family {
+            margin-top: 0.18rem;
+            overflow: hidden;
+            color: var(--muted);
+            font-size: 0.72rem;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .decision {
+            min-width: 62px;
+            padding: 0.28rem 0.38rem;
+            border-radius: 999px;
+            font-size: 0.68rem;
+            font-weight: 850;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .decision.accept {
+            color: #235B42;
+            background: #DDF0E7;
+        }
+
+        .decision.widen {
+            color: #76500E;
+            background: #F7E7BC;
+        }
+
+        .decision.abstain {
+            color: #8C3936;
+            background: #F7D9D8;
+        }
+
+        .main {
+            min-width: 0;
+            display: grid;
+            grid-template-rows: auto auto minmax(0, 1fr);
+        }
+
+        .main-head {
+            border-bottom: 1px solid var(--line);
+            background: #FBFDFE;
+        }
+
+        .summary-strip {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 1px;
+            border-bottom: 1px solid var(--line);
+            background: var(--line);
+        }
+
+        .summary-cell {
+            min-height: 74px;
+            padding: 0.75rem 1rem;
+            background: #FFFFFF;
+        }
+
+        .metric {
+            color: var(--ink);
+            font-size: 1.15rem;
+            font-weight: 850;
+            line-height: 1.1;
+        }
+
+        .metric-label {
+            margin-top: 0.25rem;
+            color: var(--muted);
+            font-size: 0.72rem;
+            line-height: 1.3;
+        }
+
+        .workspace {
+            display: grid;
+            grid-template-rows: auto minmax(0, 1fr);
+            gap: 1rem;
+            padding: 1rem;
+            overflow: auto;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 0.75rem;
+        }
+
+        .control {
+            padding: 0.85rem;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+        }
+
+        .control label {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.5rem;
+            color: #334A58;
+            font-size: 0.74rem;
+            font-weight: 760;
+        }
+
+        .control output {
+            color: var(--teal);
+            font-variant-numeric: tabular-nums;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            margin: 0.65rem 0 0;
+            accent-color: var(--teal);
+        }
+
+        .viz-wrap {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(240px, 0.34fr);
+            gap: 1rem;
+            align-items: stretch;
+        }
+
+        .interval-stage,
+        .case-readout {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+        }
+
+        .interval-stage {
+            min-height: 460px;
+            padding: 1rem;
+        }
+
+        .axis {
+            position: relative;
+            height: 34px;
+            margin: 0.6rem 0 1.3rem;
+        }
+
+        .axis-line {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 16px;
+            height: 2px;
+            background: #C9D4DA;
+        }
+
+        .tick {
+            position: absolute;
+            top: 5px;
+            width: 1px;
+            height: 20px;
+            background: #9EAEB8;
+        }
+
+        .tick span {
+            position: absolute;
+            top: 22px;
+            left: -12px;
+            color: var(--muted);
+            font-size: 0.7rem;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .bars {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .bar-row {
+            display: grid;
+            grid-template-columns: 128px minmax(0, 1fr) 112px;
+            gap: 0.75rem;
+            align-items: center;
+            min-height: 70px;
+        }
+
+        .bar-label {
+            color: #334A58;
+            font-size: 0.78rem;
+            font-weight: 820;
+        }
+
+        .bar-track {
+            position: relative;
+            height: 28px;
+            border-radius: 999px;
+            background: #EDF2F5;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            position: absolute;
+            top: 4px;
+            height: 20px;
+            min-width: 2px;
+            border-radius: 999px;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+        }
+
+        .bar-fill.exact {
+            background: var(--blue);
+        }
+
+        .bar-fill.box {
+            background: var(--violet);
+        }
+
+        .bar-fill.pressure {
+            background: var(--teal);
+        }
+
+        .bar-fill.sample {
+            background: var(--amber);
+        }
+
+        .bar-values {
+            color: var(--muted);
+            font-size: 0.76rem;
+            font-variant-numeric: tabular-nums;
+            text-align: right;
+        }
+
+        .case-readout {
+            padding: 1rem;
+        }
+
+        .case-title {
+            margin-bottom: 0.45rem;
+            font-size: 1.05rem;
+            font-weight: 850;
+            line-height: 1.2;
+            overflow-wrap: anywhere;
+        }
+
+        .status-line {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            margin: 0.75rem 0;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            min-height: 25px;
+            padding: 0.25rem 0.5rem;
+            border-radius: 999px;
+            background: #EEF2F5;
+            color: #344A58;
+            font-size: 0.72rem;
+            font-weight: 780;
+        }
+
+        .pill.false {
+            background: #F7D9D8;
+            color: #8C3936;
+        }
+
+        .pill.ok {
+            background: #DDF0E7;
+            color: #235B42;
+        }
+
+        .flag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: 0.6rem;
+        }
+
+        .flag {
+            padding: 0.25rem 0.42rem;
+            border: 1px solid #D8E0E5;
+            border-radius: 6px;
+            color: #344A58;
+            background: #F8FBFD;
+            font-size: 0.7rem;
+            font-weight: 760;
+        }
+
+        .trace-grid {
+            display: grid;
+            gap: 1px;
+            background: var(--line);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .trace-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 0.75rem;
+            padding: 0.7rem 0.8rem;
+            background: #FFFFFF;
+            font-size: 0.78rem;
+        }
+
+        .trace-row span:first-child {
+            color: var(--muted);
+        }
+
+        .trace-row span:last-child {
+            font-weight: 820;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .threshold-hit {
+            color: var(--red);
+        }
+
+        .threshold-clear {
+            color: var(--green);
+        }
+
+        .family-filter {
+            width: calc(100% - 1.5rem);
+            margin: 0 0.75rem 0.75rem;
+            padding: 0.55rem 0.65rem;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            color: var(--ink);
+            font: inherit;
+            font-size: 0.82rem;
+        }
+
+        .error {
+            margin: 1rem;
+            padding: 1rem;
+            border: 1px solid #E6B4B2;
+            border-radius: 8px;
+            color: #8C3936;
+            background: #FFF4F3;
+        }
+
+        footer {
+            padding: 0.8rem 1rem;
+            color: var(--muted);
+            border-top: 1px solid var(--line);
+            background: #FFFFFF;
+            font-size: 0.74rem;
+        }
+
+        @media (max-width: 1180px) {
+            .app {
+                grid-template-columns: 260px minmax(0, 1fr);
+            }
+
+            .trace-panel {
+                grid-column: 1 / -1;
+                min-height: 0;
+                border-width: 1px 0 0;
+            }
+
+            .trace-panel .panel-section {
+                display: grid;
+                grid-template-columns: minmax(0, 0.5fr) minmax(0, 0.5fr);
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 780px) {
+            .site-nav {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .app,
+            .viz-wrap,
+            .controls,
+            .summary-strip,
+            .trace-panel .panel-section {
+                grid-template-columns: 1fr;
+            }
+
+            .rail,
+            .trace-panel {
+                min-height: 0;
+                border-width: 0 0 1px;
+            }
+
+            .case-list {
+                max-height: 300px;
+                overflow-y: auto;
+            }
+
+            .bar-row {
+                grid-template-columns: 1fr;
+                gap: 0.35rem;
+            }
+
+            .bar-values {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="/" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="/applications-gallery">Applications</a>
+                <a href="/alignment">Alignment</a>
+                <a href="/generality">Generality</a>
+                <a href="/docs/SUNDOG_V_BOXSEL.md">BoxSEL Ledger</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="app">
+        <aside class="rail" aria-label="Phase 8 case rail">
+            <div class="rail-head">
+                <p class="eyebrow">BoxSEL Phase 8</p>
+                <h1>False-Closure Workbench</h1>
+                <p class="boundary">Toy micro-SEL boundary: exact-oracle fragments only. Not a real-KG, calibration, or product claim.</p>
+            </div>
+            <select id="family-filter" class="family-filter" aria-label="Filter cases by family"></select>
+            <div id="case-list" class="case-list"></div>
+        </aside>
+
+        <section class="main" aria-label="Interval and trace workbench">
+            <div class="main-head">
+                <p class="eyebrow">Locked Phase-7b Receipt</p>
+                <h2 id="result-title">Loading BoxSEL receipt</h2>
+                <p class="lede" id="result-boundary">Loading workbench data.</p>
+            </div>
+            <div class="summary-strip" aria-label="Run summary">
+                <div class="summary-cell">
+                    <div class="metric" id="metric-status">-</div>
+                    <div class="metric-label">gate status</div>
+                </div>
+                <div class="summary-cell">
+                    <div class="metric" id="metric-detector">-</div>
+                    <div class="metric-label">accepted false closures</div>
+                </div>
+                <div class="summary-cell">
+                    <div class="metric" id="metric-baseline">-</div>
+                    <div class="metric-label">baseline accepted</div>
+                </div>
+                <div class="summary-cell">
+                    <div class="metric" id="metric-controls">-</div>
+                    <div class="metric-label">acceptance controls</div>
+                </div>
+                <div class="summary-cell">
+                    <div class="metric" id="metric-pressure">-</div>
+                    <div class="metric-label">stable-PMP pressure warnings</div>
+                </div>
+            </div>
+            <div class="workspace">
+                <div class="controls" aria-label="Workbench controls">
+                    <div class="control">
+                        <label for="pressure-slider">Query pressure <output id="pressure-output">100%</output></label>
+                        <input id="pressure-slider" type="range" min="0" max="100" value="100">
+                    </div>
+                    <div class="control">
+                        <label for="dimension-slider">Box dimension <output id="dimension-output">2</output></label>
+                        <input id="dimension-slider" type="range" min="1" max="4" value="2">
+                    </div>
+                    <div class="control">
+                        <label for="restart-slider">Restart reveal <output id="restart-output">100%</output></label>
+                        <input id="restart-slider" type="range" min="10" max="100" value="100">
+                    </div>
+                    <div class="control">
+                        <label for="loss-slider">Loss tolerance <output id="loss-output">1e-9</output></label>
+                        <input id="loss-slider" type="range" min="-12" max="-3" value="-9">
+                    </div>
+                </div>
+
+                <div class="viz-wrap">
+                    <section class="interval-stage" aria-label="Nested interval visualization">
+                        <div class="axis" aria-hidden="true">
+                            <div class="axis-line"></div>
+                            <div class="tick" style="left: 0%"><span>0</span></div>
+                            <div class="tick" style="left: 25%"><span>.25</span></div>
+                            <div class="tick" style="left: 50%"><span>.50</span></div>
+                            <div class="tick" style="left: 75%"><span>.75</span></div>
+                            <div class="tick" style="left: 100%"><span>1</span></div>
+                        </div>
+                        <div id="bars" class="bars"></div>
+                    </section>
+
+                    <section class="case-readout" aria-label="Selected case readout">
+                        <div class="case-title" id="selected-case">-</div>
+                        <p class="small" id="selected-note">-</p>
+                        <div class="status-line" id="status-line"></div>
+                        <h3>Detector Flags</h3>
+                        <div class="flag-list" id="flag-list"></div>
+                    </section>
+                </div>
+            </div>
+        </section>
+
+        <aside class="trace-panel" aria-label="Trace quantities">
+            <div class="panel-section">
+                <div>
+                    <p class="eyebrow">Trace</p>
+                    <h2>Observed Signals</h2>
+                    <div id="trace-grid" class="trace-grid"></div>
+                </div>
+                <div>
+                    <p class="eyebrow">Receipts</p>
+                    <h2>Run Boundary</h2>
+                    <p class="small" id="receipt-copy">Phase 7b passed on the locked tiny corpus. Wider claims need a new gate.</p>
+                    <div class="status-line">
+                        <a class="pill" href="/docs/boxsel/PHASE7B_FALSE_CLOSURE_RUN.md">Result note</a>
+                        <a class="pill" href="/docs/boxsel/PHASE7B_V2_FREEZE_LOCK.md">V2 lock</a>
+                    </div>
+                </div>
+            </div>
+            <footer>&copy; 2026 Stellar Aqua LLC. Sundog Research Lab internal review surface.</footer>
+        </aside>
+    </main>
+
+    <script type="module">
+        const DATA_URL = "/data/boxsel-phase8-workbench.json";
+        const state = {
+            data: null,
+            family: "all",
+            selectedId: null,
+            pressure: 1,
+            dimension: 2,
+            restart: 1,
+            lossTolerance: 1e-9,
+        };
+
+        const els = {
+            caseList: document.querySelector("#case-list"),
+            familyFilter: document.querySelector("#family-filter"),
+            resultTitle: document.querySelector("#result-title"),
+            resultBoundary: document.querySelector("#result-boundary"),
+            metricStatus: document.querySelector("#metric-status"),
+            metricDetector: document.querySelector("#metric-detector"),
+            metricBaseline: document.querySelector("#metric-baseline"),
+            metricControls: document.querySelector("#metric-controls"),
+            metricPressure: document.querySelector("#metric-pressure"),
+            pressureSlider: document.querySelector("#pressure-slider"),
+            pressureOutput: document.querySelector("#pressure-output"),
+            dimensionSlider: document.querySelector("#dimension-slider"),
+            dimensionOutput: document.querySelector("#dimension-output"),
+            restartSlider: document.querySelector("#restart-slider"),
+            restartOutput: document.querySelector("#restart-output"),
+            lossSlider: document.querySelector("#loss-slider"),
+            lossOutput: document.querySelector("#loss-output"),
+            bars: document.querySelector("#bars"),
+            selectedCase: document.querySelector("#selected-case"),
+            selectedNote: document.querySelector("#selected-note"),
+            statusLine: document.querySelector("#status-line"),
+            flagList: document.querySelector("#flag-list"),
+            traceGrid: document.querySelector("#trace-grid"),
+        };
+
+        function fmt(value, digits = 3) {
+            if (!Number.isFinite(value)) return "-";
+            return value.toFixed(digits).replace(/0+$/, "").replace(/\.$/, "");
+        }
+
+        function pct(value) {
+            return `${Math.round(value * 100)}%`;
+        }
+
+        function clamp01(value) {
+            return Math.max(0, Math.min(1, value));
+        }
+
+        function widthOf(interval) {
+            return clamp01(interval.upper) - clamp01(interval.lower);
+        }
+
+        function activeCases() {
+            if (!state.data) return [];
+            if (state.family === "all") return state.data.cases;
+            return state.data.cases.filter((item) => item.family === state.family);
+        }
+
+        function selectedCase() {
+            const cases = activeCases();
+            return cases.find((item) => item.caseId === state.selectedId) ?? cases[0] ?? null;
+        }
+
+        function caseDecisionClass(decision) {
+            return ["accept", "widen", "abstain"].includes(decision) ? decision : "widen";
+        }
+
+        function controlledSample(item) {
+            const lift = Math.max(item.trace.earlyLowerDrop ?? 0, item.trace.lateLowerDrop ?? 0);
+            const lower = item.sample.lower + lift * (1 - state.restart);
+            return { lower: Math.min(lower, item.sample.upper), upper: item.sample.upper };
+        }
+
+        function controlledPressure(item) {
+            if (!item.pressure) return null;
+            const fullShift = item.sample.lower - item.pressure.lower;
+            return {
+                lower: item.sample.lower - fullShift * state.pressure,
+                upper: item.pressure.upper,
+            };
+        }
+
+        function controlledBox(item) {
+            if (!item.box) return null;
+            const profile = item.dimensionProfile;
+            if (!profile?.dimensionControlled) return item.box;
+            return Number(state.dimension) === 1 ? profile.dim1 : profile.dim2Plus;
+        }
+
+        function rowsFor(item) {
+            const sample = controlledSample(item);
+            const pressure = controlledPressure(item);
+            const box = controlledBox(item);
+            const rows = [
+                { label: "Exact I*", kind: "exact", interval: item.exact },
+            ];
+            if (box) rows.push({ label: state.dimension === 1 ? "Box I_box^1" : "Box I_box^n", kind: "box", interval: box });
+            if (pressure) rows.push({ label: "Pressure trace", kind: "pressure", interval: pressure });
+            rows.push({ label: "Sampled restarts", kind: "sample", interval: sample });
+            return rows;
+        }
+
+        function drawBars(item) {
+            const rows = rowsFor(item);
+            els.bars.innerHTML = "";
+            for (const row of rows) {
+                const left = clamp01(row.interval.lower) * 100;
+                const width = Math.max(widthOf(row.interval) * 100, 0.25);
+                const div = document.createElement("div");
+                div.className = "bar-row";
+                div.innerHTML = `
+                    <div class="bar-label">${row.label}</div>
+                    <div class="bar-track">
+                        <div class="bar-fill ${row.kind}" style="left:${left}%;width:${width}%"></div>
+                    </div>
+                    <div class="bar-values">[${fmt(row.interval.lower)}, ${fmt(row.interval.upper)}]</div>
+                `;
+                els.bars.appendChild(div);
+            }
+        }
+
+        function flagSet(item) {
+            const flags = new Set(item.detectorFlags);
+            const pressureShift = (item.trace.pressureLowShift ?? 0) * state.pressure;
+            const optSpread = (item.trace.optimizerLowSpread ?? 0) * state.pressure;
+            if (pressureShift >= state.data.thresholds.pressure_low_shift) flags.add("pressure_low_shift");
+            else flags.delete("pressure_low_shift");
+            if (optSpread >= state.data.thresholds.optimizer_low_spread) flags.add("optimizer_low_spread");
+            else flags.delete("optimizer_low_spread");
+            if ((item.trace.maxLoss ?? 0) > state.lossTolerance) flags.add("max_loss");
+            else if (item.trace.maxLoss <= state.data.thresholds.max_loss) flags.delete("max_loss");
+            return [...flags];
+        }
+
+        function actionFor(item, flags) {
+            if (flags.includes("max_loss") || flags.includes("max_constraint_violation") || flags.includes("pressure_low_shift") || flags.includes("optimizer_low_spread")) {
+                return "abstain";
+            }
+            if (flags.length > 0) return "widen";
+            return "accept";
+        }
+
+        function traceRows(item, flags) {
+            const t = item.trace;
+            return [
+                ["pressure_low_shift", t.pressureLowShift * state.pressure, state.data.thresholds.pressure_low_shift, "high"],
+                ["optimizer_low_spread", t.optimizerLowSpread * state.pressure, state.data.thresholds.optimizer_low_spread, "high"],
+                ["support_floor", t.supportFloor, state.data.thresholds.support_floor, "low"],
+                ["early_lower_drop", t.earlyLowerDrop * (1 - state.restart + 0.35), state.data.thresholds.early_lower_drop, "high"],
+                ["late_lower_drop", t.lateLowerDrop * (1 - state.restart + 0.35), state.data.thresholds.late_lower_drop, "high"],
+                ["seed_low_range", t.seedLowRange, state.data.thresholds.seed_low_range, "high"],
+                ["dimension_low_spread", t.dimensionLowSpread, state.data.thresholds.dimension_low_spread, "high"],
+                ["max_loss", t.maxLoss, state.lossTolerance, "high"],
+            ].map(([name, value, threshold, direction]) => {
+                const hit = direction === "low" ? value <= threshold : value >= threshold;
+                return { name, value, threshold, hit: hit || flags.includes(name) };
+            });
+        }
+
+        function renderCaseList() {
+            const cases = activeCases();
+            els.caseList.innerHTML = "";
+            for (const item of cases) {
+                const button = document.createElement("button");
+                button.className = `case-button${item.caseId === state.selectedId ? " active" : ""}`;
+                button.type = "button";
+                button.innerHTML = `
+                    <span>
+                        <span class="case-id">${item.caseId}</span>
+                        <span class="case-family">${item.family}</span>
+                    </span>
+                    <span class="decision ${caseDecisionClass(item.decision)}">${item.decision}</span>
+                `;
+                button.addEventListener("click", () => {
+                    state.selectedId = item.caseId;
+                    render();
+                });
+                els.caseList.appendChild(button);
+            }
+        }
+
+        function renderSummary() {
+            const s = state.data.summary;
+            els.resultTitle.textContent = `Phase 7b ${s.status.replaceAll("_", " ")}`;
+            els.resultBoundary.textContent = state.data.boundary;
+            els.metricStatus.textContent = s.status === "PASS_PREREG_GATE" ? "pass" : "check";
+            els.metricDetector.textContent = `${s.detectorAcceptedFalseClosures}/${s.falseClosureTraps}`;
+            els.metricBaseline.textContent = `${s.baselineAcceptedFalseClosures}/${s.falseClosureTraps}`;
+            els.metricControls.textContent = pct(s.trueNarrowAcceptRate);
+            els.metricPressure.textContent = pct(s.pressureWarningRateOnStablePmp);
+        }
+
+        function renderFilters() {
+            const families = ["all", ...new Set(state.data.cases.map((item) => item.family))];
+            els.familyFilter.innerHTML = "";
+            for (const family of families) {
+                const option = document.createElement("option");
+                option.value = family;
+                option.textContent = family === "all" ? "All families" : family;
+                els.familyFilter.appendChild(option);
+            }
+            els.familyFilter.value = state.family;
+        }
+
+        function renderSelected() {
+            const item = selectedCase();
+            if (!item) return;
+            state.selectedId = item.caseId;
+            const flags = flagSet(item);
+            const liveAction = actionFor(item, flags);
+            els.selectedCase.textContent = item.caseId;
+            els.selectedNote.textContent = item.note;
+            els.statusLine.innerHTML = `
+                <span class="decision ${caseDecisionClass(liveAction)}">${liveAction}</span>
+                <span class="pill ${item.falseClosed ? "false" : "ok"}">${item.falseClosed ? "false closure" : "control"}</span>
+                <span class="pill">gap ${fmt(item.gap, 4)}</span>
+                <span class="pill">baseline ${item.baselineAction}</span>
+            `;
+            els.flagList.innerHTML = "";
+            if (flags.length === 0) {
+                const empty = document.createElement("span");
+                empty.className = "flag";
+                empty.textContent = "no warning flags";
+                els.flagList.appendChild(empty);
+            } else {
+                for (const flag of flags) {
+                    const span = document.createElement("span");
+                    span.className = "flag";
+                    span.textContent = flag;
+                    els.flagList.appendChild(span);
+                }
+            }
+            els.traceGrid.innerHTML = "";
+            for (const row of traceRows(item, flags)) {
+                const div = document.createElement("div");
+                div.className = "trace-row";
+                div.innerHTML = `
+                    <span>${row.name}</span>
+                    <span class="${row.hit ? "threshold-hit" : "threshold-clear"}">${fmt(row.value, 4)} / ${fmt(row.threshold, 4)}</span>
+                `;
+                els.traceGrid.appendChild(div);
+            }
+            drawBars(item);
+        }
+
+        function renderControls() {
+            els.pressureOutput.textContent = `${Math.round(state.pressure * 100)}%`;
+            els.dimensionOutput.textContent = `${state.dimension}`;
+            els.restartOutput.textContent = `${Math.round(state.restart * 100)}%`;
+            els.lossOutput.textContent = state.lossTolerance.toExponential(0);
+        }
+
+        function render() {
+            renderSummary();
+            renderControls();
+            renderCaseList();
+            renderSelected();
+        }
+
+        function initEvents() {
+            els.familyFilter.addEventListener("change", () => {
+                state.family = els.familyFilter.value;
+                state.selectedId = activeCases()[0]?.caseId ?? null;
+                render();
+            });
+            els.pressureSlider.addEventListener("input", () => {
+                state.pressure = Number(els.pressureSlider.value) / 100;
+                render();
+            });
+            els.dimensionSlider.addEventListener("input", () => {
+                state.dimension = Number(els.dimensionSlider.value);
+                render();
+            });
+            els.restartSlider.addEventListener("input", () => {
+                state.restart = Number(els.restartSlider.value) / 100;
+                render();
+            });
+            els.lossSlider.addEventListener("input", () => {
+                state.lossTolerance = 10 ** Number(els.lossSlider.value);
+                render();
+            });
+        }
+
+        async function main() {
+            initEvents();
+            try {
+                const response = await fetch(DATA_URL);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                state.data = await response.json();
+                state.selectedId = state.data.cases[0]?.caseId ?? null;
+                renderFilters();
+                render();
+            } catch (error) {
+                document.querySelector(".workspace").innerHTML = `<div class="error">Could not load ${DATA_URL}: ${error.message}</div>`;
+            }
+        }
+
+        main();
+    </script>
+</body>
+</html>

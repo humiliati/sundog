@@ -363,6 +363,7 @@ framing." Do not claim a mathematical weakening without a dedicated diff.
 | Trace-based false-closure detector. | FIRST PREREG FAILED | Phase-7 run accepted stable PMP-shaped false closures and did not beat restart variance. |
 | Phase-6b general trace schema/adapters. | STARTED | Converts Phase-3/Phase-7 diagnostics to `GeneralTrace`; adds PMP pressure producer; no v2 held-out claim. |
 | Phase-7b preregistration. | PASS ON TOY MICRO-CORPUS | Boundaries/families/baselines locked; v2 detector rule and thresholds frozen; held-out micro-corpus run accepted `0/16` false closures vs restart-variance baseline `16/16`. |
+| Phase-8 workbench. | REVIEW-ONLY VISUALIZATION | `boxsel.html` renders the Phase-7b receipt as interval bars and trace flags; noindex, no public inbound path, toy micro-SEL boundary retained. |
 | Accept/widen/abstain rule. | SYNTHESIS over prior abstention | Cite Chow, Geifman/El-Yaniv, calibration, conformal KGE. |
 | PMP `+ 1 - q1` upper slack. | STANDARD / body formula | Proposition 2 and Wagner-style conditional PMP sanity. |
 | Algorithm 2 typo / drift. | BANKED ARTIFACT ISSUE | Verified in arXiv source; blast radius unresolved. |
