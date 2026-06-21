@@ -3,6 +3,8 @@
 Status: **OPEN SPEC; H1.2f-0 SMOKE PASSED.** Opened 2026-06-20 after H1.2e-b selected
 `H1_2E_MECHANISM_NULL` — the fourth registered Small-tier null.
 
+Smoke receipt: [`H1_2F_SMOKE_RESULTS.md`](H1_2F_SMOKE_RESULTS.md).
+
 Parent result: [`H1_2E_RESULTS.md`](H1_2E_RESULTS.md).
 Parent specs:
 [`H1_PANTHEON_OF_AGENCY_SPEC.md`](H1_PANTHEON_OF_AGENCY_SPEC.md),

@@ -261,6 +261,14 @@ phase, never appended after.
     does NOT vanish** with dimension. (A naive random search over-estimates the infimum in higher
     dims — a live search-gap demo.) The *exact* infimum in `[1/4, 513/1250]` stays open. Note:
     [`boxsel/PHASE4B_INF_TREND_RESOLVED.md`](boxsel/PHASE4B_INF_TREND_RESOLVED.md).
+  - **EXACT-INF OPTIMIZER 2026-06-20** (`scripts/boxsel_exact_inf_optimizer.py` +test 17/17): the
+    infimum is **attained at `n=2`** (`≈0.41010`, with `|A∩C|=|B∩C|=1/4` both active) — `n≥3` do
+    **not** improve, so it is a finite-dimensional minimum, not a vanishing limit; the `513/1250`
+    witness is near-optimal but **not** exact (only `|A∩C|` active). **Headline = a severe search
+    gap:** every from-scratch optimizer misses the optimum — random `0.437`, SLSQP `0.50`, DE
+    `0.43`, exact grid `≥4/9` — only Nelder-Mead **seeded from the analytic witness** reaches
+    `≈0.41010`. The exact algebraic value + a proof `n≥3 ⊁ n=2` stay open. Note:
+    [`boxsel/PHASE4C_EXACT_INF_OPTIMIZER.md`](boxsel/PHASE4C_EXACT_INF_OPTIMIZER.md).
 
 - **Phase 5 — Shadow-gap taxonomy.** Classify every case into search / representation / loss
   (+ a **coherence** watch-item bucket, populated only by an audit receipt per §4); gap-size
