@@ -3,6 +3,12 @@
 **Date:** 2026-06-20  
 **Status:** Exact n=2 closure for every one-help orbit. Global lower bound still open.
 
+**Update after Phase 4i:** the 10 two-help mixed n=2 orbits below have been reduced to one
+two-parameter envelope. See [`PHASE4I_TWO_HELP_MIXED_CORE.md`](PHASE4I_TWO_HELP_MIXED_CORE.md).
+
+**Update after Phase 4j:** that envelope is now exact-closed, so all 123 n=2 endpoint-order orbits
+are closed. See [`PHASE4J_MIXED_ENVELOPE_CLOSURE.md`](PHASE4J_MIXED_ENVELOPE_CLOSURE.md).
+
 ## Purpose
 
 After Phase 4g:

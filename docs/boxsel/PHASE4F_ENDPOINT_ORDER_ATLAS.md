@@ -10,6 +10,11 @@ n=2 orbits. See [`PHASE4G_MINPAIR_REDUCTION.md`](PHASE4G_MINPAIR_REDUCTION.md).
 **Update after Phase 4h:** all one-help orbits are exact-closed; the n=2 frontier is now **10
 two-help mixed** orbits. See [`PHASE4H_ONE_HELP_CLOSURE.md`](PHASE4H_ONE_HELP_CLOSURE.md).
 
+**Update after Phase 4j:** the final 10 two-help mixed orbits are exact-closed by the mixed-envelope
+certificate. The n=2 atlas is now **123/123 closed** with
+`inf I_box^2=(9+sqrt 17)/32`. See
+[`PHASE4J_MIXED_ENVELOPE_CLOSURE.md`](PHASE4J_MIXED_ENVELOPE_CLOSURE.md).
+
 ## Goal
 
 Phase 4e proved `q_KKT = (9+√17)/32` minimal *inside the structured normal form*. The next

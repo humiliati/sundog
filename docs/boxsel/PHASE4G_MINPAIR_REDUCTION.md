@@ -6,6 +6,10 @@
 **Update after Phase 4h:** the 35 one-help mixed-side orbits below are now exact-closed. The n=2
 frontier is **10 two-help mixed** orbits. See [`PHASE4H_ONE_HELP_CLOSURE.md`](PHASE4H_ONE_HELP_CLOSURE.md).
 
+**Update after Phase 4j:** the final 10 two-help mixed orbits are exact-closed. The n=2 atlas is
+now **123/123 closed**. See
+[`PHASE4J_MIXED_ENVELOPE_CLOSURE.md`](PHASE4J_MIXED_ENVELOPE_CLOSURE.md).
+
 ## Purpose
 
 Phase 4f mapped the n=2 endpoint-order atlas:

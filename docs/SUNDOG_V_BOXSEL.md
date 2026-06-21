@@ -312,6 +312,25 @@ phase, never appended after.
     (and symmetrically for `BC`). So every one-help orbit has `q≥1/2>q_KKT`. Now
     **113/123 n=2 orbits exact-closed**; only the **10 two-help AC-vs-BC mixed** n=2 orbits remain,
     plus `n≥3` compression. Note: [`boxsel/PHASE4H_ONE_HELP_CLOSURE.md`](boxsel/PHASE4H_ONE_HELP_CLOSURE.md).
+  - **TWO-HELP MIXED CORE 2026-06-20** (`scripts/boxsel_phase4i_two_help_mixed_core.py` +test 13/13):
+    the final 10 n=2 orbits reduce to one explicit envelope. WLOG axis 1 is `AC`-min and axis 2 is
+    `BC`-min. With `r=|BC_1|/|AC_1|` and `t=4|BC_1||BC_2|`, the mixed geometry gives
+    `1≤t≤r≤2` and a relaxation envelope
+    `P(r,t)=max_y r|AB_1||AB_2|/t`; closing n=2 now means proving
+    `P(r,t)≤P(2,1)=(9−√17)/8`. Endpoint identity is exact:
+    `1/(4P(2,1))=(9+√17)/32=q_KKT`; the `t=1` edge is monotone by a `16r^3>0` certificate, and a
+    rational-grid guard finds no envelope violation. Phase 4j closes the full two-parameter envelope;
+    `n≥3` compression remains open. Note:
+    [`boxsel/PHASE4I_TWO_HELP_MIXED_CORE.md`](boxsel/PHASE4I_TWO_HELP_MIXED_CORE.md).
+  - **MIXED ENVELOPE CLOSURE 2026-06-20** (`scripts/boxsel_phase4j_mixed_envelope_closure.py`
+    +test 21/21): the Phase-4i envelope maximum is proved exactly. In shifted variables
+    `a=r−1`, `b=t−1`, either the comparison is automatic (`M≤0`) or the legal squared residual
+    factors as `D−L²=(a+1)²F/(8(b+1)²)`. On the `M>0` branch, `M` is decreasing in `b`, `F` is
+    concave, `F(a,0)≥0` whenever `M(a,0)>0`, and `Res_b(F,M)` has fixed nonzero sign on the live
+    `M=0` endpoint. Therefore `P(r,t)≤P(2,1)` on `1≤t≤r≤2`, closing the final 10 mixed n=2
+    orbits. **n=2 exact result:** `inf I_box^2=(9+√17)/32`. **Global arbitrary-dimension sandwich
+    unchanged:** `1/4≤inf I_box^n≤(9+√17)/32` until `n≥3` compression is proved. Note:
+    [`boxsel/PHASE4J_MIXED_ENVELOPE_CLOSURE.md`](boxsel/PHASE4J_MIXED_ENVELOPE_CLOSURE.md).
 
 - **Phase 5 — Shadow-gap taxonomy.** Classify every case into search / representation / loss
   (+ a **coherence** watch-item bucket, populated only by an audit receipt per §4); gap-size
