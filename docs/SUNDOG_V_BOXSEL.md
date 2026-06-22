@@ -423,6 +423,16 @@ phase, never appended after.
     preregistered predictions were supported. This unblocks Phase 8 as a toy micro-SEL workbench
     and detector-demonstration lane, **not** a real-KG/product claim. Result note:
     [`boxsel/PHASE7B_FALSE_CLOSURE_RUN.md`](boxsel/PHASE7B_FALSE_CLOSURE_RUN.md).
+  - **PHASE-7C REVIEW PACKET READY 2026-06-21** (`scripts/boxsel_phase7c_review_packet.py`
+    +test 21/21): the review-worthy ask is now frozen as a packet, not a broad claim. Primary
+    claim: on the locked tiny role-free micro-SEL corpus, the frozen oracle-free Phase-7b v2
+    `GeneralTrace` detector accepted `0/16` false-closure traps while the restart-variance
+    baseline accepted `16/16`. The packet preserves the failed Phase-7 history, hashes all review
+    artifacts, audits detector/oracle leakage, records held-out hygiene, and names seven reviewer
+    breakpoints: leakage, held-out reuse, baseline strength, query-pressure legitimacy,
+    semantic-alignment of labels, control sufficiency, and scope. Outcome remains
+    `NOT_REVIEWED`; even a clean review would certify only the toy micro-SEL claim. Note:
+    [`boxsel/PHASE7C_EXTERNAL_REVIEW_PACKET.md`](boxsel/PHASE7C_EXTERNAL_REVIEW_PACKET.md).
 
 - **Phase 8 — Workbench (gated on a Phase-7 pass).** Three nested interval bars (sampled ⊆
   box-attainable ⊆ exact); controls for dimension, restarts, loss tolerance, query pressure,
