@@ -774,11 +774,24 @@ def main() -> int:
         history,
         history_fields,
     )
-    spec_doc = (
-        "docs/mesa/H1_2F_TRUST_FEATURES_SPEC.md"
-        if args.feature_mode == "trust" or "h1_2f" in args.phase.lower()
-        else "docs/mesa/H1_2D_RL_ARBITER_SPEC.md"
-    )
+    phase_lower = args.phase.lower()
+    if "h1_3" in phase_lower:
+        spec_doc = "docs/mesa/H1_3_MEDIUM_TRUST_SCALING_SPEC.md"
+        opened_after = [
+            "docs/mesa/H1_2F_RESULTS.md",
+            "docs/mesa/H1_2G_MULTI_SEED_REPLICATION_SPEC.md",
+        ]
+    elif args.feature_mode == "trust" or "h1_2f" in phase_lower:
+        spec_doc = "docs/mesa/H1_2F_TRUST_FEATURES_SPEC.md"
+        opened_after = [
+            "docs/mesa/H1_2B_RESULTS.md",
+            "docs/mesa/H1_2C_RESULTS.md",
+            "docs/mesa/H1_2D_RESULTS.md",
+            "docs/mesa/H1_2E_RESULTS.md",
+        ]
+    else:
+        spec_doc = "docs/mesa/H1_2D_RL_ARBITER_SPEC.md"
+        opened_after = ["docs/mesa/H1_2B_RESULTS.md", "docs/mesa/H1_2C_RESULTS.md"]
     guard_features = list(guard.actor.input_features if hasattr(guard, "actor") else guard.input_features)
     council_features = [name for name in council.actor.input_features if name != "guard_risk"]
     monolith_features = list(monolith.actor.input_features)
@@ -796,11 +809,7 @@ def main() -> int:
     report = {
         "spec": spec_doc,
         "phase": args.phase,
-        "opened_after": (
-            ["docs/mesa/H1_2B_RESULTS.md", "docs/mesa/H1_2C_RESULTS.md", "docs/mesa/H1_2D_RESULTS.md", "docs/mesa/H1_2E_RESULTS.md"]
-            if args.feature_mode == "trust" or "h1_2f" in args.phase.lower()
-            else ["docs/mesa/H1_2B_RESULTS.md", "docs/mesa/H1_2C_RESULTS.md"]
-        ),
+        "opened_after": opened_after,
         "algorithm": "ppo",
         "seed": args.ppo_seed,
         "feature_mode": args.feature_mode,

@@ -256,9 +256,17 @@ def main():
         json.dumps(to_coord_json(m_adapter, "m_adapter", feats, mean, std, head="linear_blend", role_cap=None)) + "\n",
         encoding="utf-8",
     )
+    dataset_hint = str(ds).lower()
+    if "h1_3" in dataset_hint:
+        spec_doc = "docs/mesa/H1_3_MEDIUM_TRUST_SCALING_SPEC.md"
+    elif schema.get("feature_mode") == "trust":
+        spec_doc = "docs/mesa/H1_2F_TRUST_FEATURES_SPEC.md"
+    else:
+        spec_doc = "docs/mesa/H1_2_SMALL_BAKEOFF_SPEC.md §5"
+
     report = {
-        "spec": "docs/mesa/H1_2_SMALL_BAKEOFF_SPEC.md §5",
         "seed": args.seed,
+        "spec": spec_doc,
         "epochs": args.epochs,
         "hidden_size": args.hidden_size,
         "feature_mode": schema.get("feature_mode", "base"),
@@ -289,7 +297,7 @@ def main():
         },
     }
     (out / "train-report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
-    print("H1.2a trainer done.")
+    print(f"{spec_doc} trainer done.")
     print(
         f"  params guard={guard_p} arbiter={arb_p} council={council_p} | "
         f"m_adapter={madapt_p} (h={h}) ratio={budget_ratio:.3f} within5%={report['params']['budget_within_5pct']}"

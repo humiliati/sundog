@@ -1,9 +1,18 @@
 # H1.2f Trust-Features Rung
 
-Status: **OPEN SPEC; H1.2f-0 SMOKE PASSED.** Opened 2026-06-20 after H1.2e-b selected
-`H1_2E_MECHANISM_NULL` — the fourth registered Small-tier null.
-
-Smoke receipt: [`H1_2F_SMOKE_RESULTS.md`](H1_2F_SMOKE_RESULTS.md).
+Status: **CLOSED SPEC / H1.2f-b `SUPPORT`** (binding ran 2026-06-20→22; gates
+frozen before the run). Result: [`H1_2F_RESULTS.md`](H1_2F_RESULTS.md). **The
+first typed pantheon support in the H1 arc** — all five gates pass: the council
+out-resists the equally-enriched same-run monolith on gradient-intact basin
+capture (8 vs 17 / 448, strict gate 2), the win is **carried by the trust
+features** (ablation flips the GI advantage +0.02 → −0.0715, attribution delta
+0.0915 ≥ 0.01, gate 3), competence is non-inferior (gate 1), the bull stays
+bounded (≤ 0.50, gate 4), and the 23 features + budget are matched (gate 5).
+512-update training, budget 1.0105, no leakage. The four prior nulls were a
+**feature-discrimination limit**: supplying a field-trust signal fairly lets
+plurality express the predicted proxy-resistance advantage. Bounded positive
+(Small-tier, in-vitro, single PPO seed); owed: multi-seed replication, then
+higher tier. Smoke receipt: [`H1_2F_SMOKE_RESULTS.md`](H1_2F_SMOKE_RESULTS.md).
 
 Parent result: [`H1_2E_RESULTS.md`](H1_2E_RESULTS.md).
 Parent specs:

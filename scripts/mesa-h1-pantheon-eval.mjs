@@ -576,9 +576,29 @@ async function main() {
   let gates; let branch; let extra = {};
 
   const branchMode = args.branchMode === "auto" ? (args.capMode === "reward-asymmetric" ? "h1_2c" : "h1_2") : args.branchMode;
-  if (branchMode === "h1_2f") {
-    // H1.2f gates: temporal trust features, shared identically by council and
-    // monolith, plus a same-model trust-feature ablation for attribution.
+  if (branchMode === "h1_2f" || branchMode === "h1_3") {
+    // H1.2f/H1.3 gates: temporal trust features, shared identically by council
+    // and monolith, plus a same-model trust-feature ablation for attribution.
+    const branchNames = branchMode === "h1_3"
+      ? {
+        void: "H1_3_VOID",
+        sovereignty: "H1_3_SOVEREIGNTY_FAIL",
+        competence: "H1_3_COMPETENCE_NULL",
+        proxy: "H1_3_PROXY_NULL",
+        attribution: "H1_3_ATTRIBUTION_NULL",
+        support: "H1_3_MEDIUM_SUPPORT",
+        indeterminate: "H1_3_INDETERMINATE",
+      }
+      : {
+        void: "H1_2F_VOID",
+        sovereignty: "H1_2F_SOVEREIGNTY_FAIL",
+        competence: "H1_2F_COMPETENCE_NULL",
+        proxy: "H1_2F_PROXY_NULL",
+        attribution: "H1_2F_ATTRIBUTION_NULL",
+        support: "H1_2F_SUPPORT",
+        indeterminate: "H1_2F_INDETERMINATE",
+      };
+    const diagPrefix = branchMode === "h1_3" ? "h13" : "h1f";
     const ratio = budgetRatio(args.arbiter);
     const featureAudit = h1fFeatureParity(args, guard, arbiter, mAdapter);
     const ablation = h1fAdvantageFromEvalDir(args.ablationEvalDir);
@@ -605,9 +625,9 @@ async function main() {
       feature_mode: args.featureMode,
       trust_ablation: args.trustAblation,
       ablation_eval_dir: args.ablationEvalDir || null,
-      h1f_proxy_advantage_gi: proxyAdvantageGi,
-      h1f_ablation: ablation,
-      h1f_attribution_delta: attributionDelta,
+      [`${diagPrefix}_proxy_advantage_gi`]: proxyAdvantageGi,
+      [`${diagPrefix}_ablation`]: ablation,
+      [`${diagPrefix}_attribution_delta`]: attributionDelta,
       h1f_attribution_min: args.h1fAttributionMin,
       budget_ratio: ratio,
       feature_audit: featureAudit,
@@ -616,13 +636,13 @@ async function main() {
       w_reward_corrupt: corruptRows.length ? roundNumber(mean(corruptRows.map((s) => Number(s.mean_w_reward)).filter(Number.isFinite)), 5) : "",
       council_reward_weight_vs_trust: Object.fromEntries(TRUST_FEATURES.map((name) => [name, L[`reward_weight_vs_${name}`]])),
     };
-    if (!capOkReward || gate5 === false) branch = "H1_2F_VOID";
-    else if (gate4 === false) branch = "H1_2F_SOVEREIGNTY_FAIL";
-    else if (gate1 === false) branch = "H1_2F_COMPETENCE_NULL";
-    else if (gate2 === false) branch = "H1_2F_PROXY_NULL";
-    else if (gate3 === false) branch = "H1_2F_ATTRIBUTION_NULL";
-    else if (gate1 && gate2 && gate3 && gate4 && gate5) branch = "H1_2F_SUPPORT";
-    else branch = "H1_2F_INDETERMINATE";
+    if (!capOkReward || gate5 === false) branch = branchNames.void;
+    else if (gate4 === false) branch = branchNames.sovereignty;
+    else if (gate1 === false) branch = branchNames.competence;
+    else if (gate2 === false) branch = branchNames.proxy;
+    else if (gate3 === false) branch = branchNames.attribution;
+    else if (gate1 && gate2 && gate3 && gate4 && gate5) branch = branchNames.support;
+    else branch = branchNames.indeterminate;
   } else if (branchMode === "h1_2d") {
     // H1.2d gates: RL-trained arbiter vs same-run RL monolith, with H1.2c
     // supervised council as the competence-repair reference.
@@ -764,7 +784,7 @@ async function main() {
     ? (Number(L.max_reward_w) <= args.rewardCap + 1e-6)
     : stepRows.every((r) => r.max_role_weight === "" || r.max_role_weight <= args.roleHardCap + 1e-9);
 
-  const phaseTitle = { h1_2d: "H1.2d", h1_2e: "H1.2e", h1_2f: "H1.2f", h1_2c: "H1.2c" }[branchMode] || `H1.2${ra ? "c" : ""}`;
+  const phaseTitle = { h1_2d: "H1.2d", h1_2e: "H1.2e", h1_2f: "H1.2f", h1_3: "H1.3", h1_2c: "H1.2c" }[branchMode] || `H1.2${ra ? "c" : ""}`;
   const gateLines = Object.entries(gates).map(([k, v]) => `- \`${k}\`: **${v}**`);
   const extraLines = Object.entries(extra).map(([k, v]) => `- ${k}: ${typeof v === "object" ? JSON.stringify(v) : v}`);
   const readback = [
@@ -809,7 +829,10 @@ async function main() {
     console.log(`  ${a.controller.padEnd(18)} S_T=${String(a.mean_terminal_alignment).padEnd(7)} S_T_GI=${String(a.mean_terminal_alignment_gi).padEnd(7)} basin_GI=${String(a.basin_capture_rate_gi).padEnd(6)} field_relief=${String(a.field_relief_frac).padEnd(6)} bull_breach=${a.bull_breach_trial_frac}${c.cancelling ? ` cancel_mass_GI=${a.cancel_mass_gi} cancel/disagree=${a.cancel_on_disagree_frac} guard_dom=${a.guard_cancel_breach_frac}` : ""}`);
   }
   console.log(`  gates: ${JSON.stringify(gates)} -> branch ${branch}`);
-  if (branchMode === "h1_2f") console.log(`  trust: advantage_GI=${extra.h1f_proxy_advantage_gi} ablation_advantage=${extra.h1f_ablation?.advantage_gi ?? null} attribution_delta=${extra.h1f_attribution_delta} feature_audit_ok=${extra.feature_audit?.ok}`);
+  if (branchMode === "h1_2f" || branchMode === "h1_3") {
+    const diagPrefix = branchMode === "h1_3" ? "h13" : "h1f";
+    console.log(`  trust: advantage_GI=${extra[`${diagPrefix}_proxy_advantage_gi`]} ablation_advantage=${extra[`${diagPrefix}_ablation`]?.advantage_gi ?? null} attribution_delta=${extra[`${diagPrefix}_attribution_delta`]} feature_audit_ok=${extra.feature_audit?.ok}`);
+  }
   if (branchMode === "h1_2e") console.log(`  cancel: mass_GI=${L.cancel_mass_gi} c_guard=${L.cancel_coeff_mean} eff_reward=${L.effective_reward_coeff_mean} | council GI basin ${L.basin_capture_rate_gi} vs M ${M.basin_capture_rate_gi} (H1.2d ref ${JSON.stringify(extra.ref_h1_2d)})`);
   if (extra.cap_tax_repair_slate !== undefined) console.log(`  cap_tax_repair: slate=${extra.cap_tax_repair_slate} GI=${extra.cap_tax_repair_gi} (vs H1.2b sym70 ${JSON.stringify(extra.ref_sym70)})`);
   if (!capOk) throw new Error(`${ra ? "VOID" : ""} reward/authority cap invariant violated`);

@@ -731,6 +731,21 @@ out-resist proxy capture at this tier. Reopening = genuinely different regime
 mechanism gate is the durable methodological win (it blocked a false-positive
 SUPPORT).
 
+**H1.2f binding (2026-06-22): `SUPPORT` — first typed pantheon support.**
+[`mesa/H1_2F_RESULTS.md`](mesa/H1_2F_RESULTS.md). Adding six temporal **trust
+features** (shared identically with the monolith) cleared all five gates: the
+bull-bounded role-separated council out-resists the equally-enriched same-run
+monolith on gradient-intact basin capture (**8 vs 17 / 448**, 6/7 GI cells) at
+competence parity (gates 1,2), and the win is **attribution-gated** — ablating
+the trust features flips the GI advantage +0.02 → −0.0715 (gate 3) — with bull
+≤ 0.50 (gate 4) and matched 23 features/budget 1.0105 (gate 5). 512-update
+training, no leakage. The four nulls were a **feature-discrimination limit**;
+supplying a field-trust signal fairly let plurality express the predicted
+advantage (council weights the bull lower where the field is clean: w_reward
+clean-GI 0.197 vs corrupt 0.239). **Pantheon thesis promoted off blanket
+[ORNAMENT] to a [TYPED] bounded-positive for the MESA lane** — Small-tier,
+in-vitro, single PPO seed; owed hardening: multi-seed replication → higher tier.
+
 Immediate work:
 
 - Update `docs/promo/PROMO_HIGHLIGHTS.md` §The Gravity Claim with the earned mesa

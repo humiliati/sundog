@@ -233,6 +233,30 @@ the MESA controller-family architecture and capacity ladder.
 > tier. Reopening means a genuinely different regime (higher tier or richer trust
 > features), separately registered. The durable win is the method: a mechanism
 > gate turned a would-be false-positive crown into an honest null.
+>
+> **H1.2f ANSWERED THE FALSIFIER — first typed support (`SUPPORT`, 2026-06-22;
+> [`mesa/H1_2F_RESULTS.md`](mesa/H1_2F_RESULTS.md)).** The four nulls had a common
+> diagnosis the lab kept naming: the arbiter could not tell, from instantaneous
+> local features, *when the field was trustworthy*. H1.2f gave it six temporal
+> **trust features** — handed identically to the monolith (fairness) — and
+> required any win to survive **ablating** those features (attribution gate). It
+> cleared all five gates: the bull-bounded, role-separated council out-resists the
+> equally-enriched monolith on gradient-intact false-basin capture (**8 vs 17 per
+> 448**, broad over 6/7 cells) at competence parity; ablating the trust features
+> flips the advantage **+0.02 → −0.0715**, so the win is genuinely *carried by*
+> the discrimination signal — unlike H1.2e, the mechanism is live. The reading is
+> the thesis itself: **a pantheon plus a field-trust signal out-resists a monarch
+> with the identical signal** — plurality buys something the matched monolith
+> cannot, *once the court can tell which value to trust.* So the thesis earns a
+> **[TYPED]** foothold for the MESA lane — promoted off blanket [ORNAMENT] to a
+> **bounded positive**: Small-tier, in-vitro, attribution-gated to the trust
+> features. The four nulls are reframed, not erased — they were a
+> feature-discrimination limit, and removing it (fairly) let plurality express the
+> predicted advantage. Honest bounds: in-vitro shadow-field, modest counts (8 vs
+> 17), single PPO seed; the owed hardening is a **multi-seed replication** then a
+> **higher tier**. The Ornament Rule cuts both ways — the figure that lost its
+> [TYPED] stamp on four failed falsifiers earns it back on a creditable, gated,
+> pre-registered win.
 
 ---
 
@@ -466,9 +490,19 @@ convert myth into typed result.
   genuinely different regime — Medium/Large tier or richer trust features,
   separately registered. Durable win: the mechanism gate turned a would-be
   false-positive crown into an honest null. **The richer-features reopening is
-  registered as [`H1.2f`](mesa/H1_2F_TRUST_FEATURES_SPEC.md)** (attacks the
-  named feature-discrimination bottleneck; gives the trust features equally to
-  the monolith; attribution-gated so any win must be *carried by* the features).
+  registered as [`H1.2f`](mesa/H1_2F_TRUST_FEATURES_SPEC.md). **H1.2f then
+  SUCCEEDED — first typed support (`SUPPORT`, 2026-06-22;
+  [`mesa/H1_2F_RESULTS.md`](mesa/H1_2F_RESULTS.md)).** Given six temporal trust
+  features (shared identically with the monolith), the council out-resists the
+  equally-enriched monarch on GI basin capture (**8 vs 17 / 448**, 6/7 cells) at
+  competence parity, and the win is **attribution-gated** — ablating the features
+  flips the advantage +0.02 → −0.0715. All five gates pass; 512-update training,
+  budget 1.0105, bull ≤ 0.50, no leakage. The four nulls were a
+  **feature-discrimination limit**; supplying the signal fairly let plurality
+  express the predicted advantage. **The thesis is promoted off blanket
+  [ORNAMENT] to a [TYPED] bounded-positive for the MESA lane** (Small-tier,
+  in-vitro, single PPO seed). Owed hardening: multi-seed replication → higher
+  tier.
 - **H2 — The Averted Face.** Operationalize "oriented to the invariant, not the
   kill": a controller regularized toward the geometry-derived field vs one
   optimizing the proxy directly; measure the Goodhart gap. Home:

@@ -116,6 +116,7 @@ function parseArgs(argv) {
     featureMode: "base",
     fieldPolicy: `${POLICY_DIR}/signature_ppo_terminal_small_seed_0_phase5.policy.json`,
     rewardPolicy: `${POLICY_DIR}/reward_ppo_phase3_small_seed_0_phase3_canonical_1m.policy.json`,
+    phase: "h1_2a",
   };
   for (let i = 0; i < argv.length; i += 1) {
     const f = argv[i];
@@ -137,10 +138,17 @@ function parseArgs(argv) {
     else if (f === "--feature-mode") args.featureMode = v;
     else if (f === "--field-policy") args.fieldPolicy = v;
     else if (f === "--reward-policy") args.rewardPolicy = v;
-    else if (f === "--phase") { /* label only */ }
+    else if (f === "--phase") args.phase = v;
     else throw new Error(`Unknown flag: ${f}`);
   }
   return args;
+}
+
+function specForPhase(phase) {
+  const p = String(phase || "").toLowerCase();
+  if (p.includes("h1_3")) return "docs/mesa/H1_3_MEDIUM_TRUST_SCALING_SPEC.md";
+  if (p.includes("h1_2f")) return "docs/mesa/H1_2F_TRUST_FEATURES_SPEC.md";
+  return "docs/mesa/H1_2_SMALL_BAKEOFF_SPEC.md §4 (H1.2a capped probe)";
 }
 
 const LABELS_PRIVILEGED = [
@@ -331,7 +339,7 @@ async function main() {
   };
   await writeFile(path.join(outDir, "feature-schema.json"), `${JSON.stringify(schema, null, 2)}\n`, "utf8");
   const manifest = {
-    spec: "docs/mesa/H1_2_SMALL_BAKEOFF_SPEC.md §4 (H1.2a capped probe)",
+    spec: specForPhase(args.phase),
     generated: new Date().toISOString(),
     args,
     cells,
@@ -350,7 +358,7 @@ async function main() {
   await writeFile(path.join(outDir, "manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
 
   // eslint-disable-next-line no-console
-  console.log(`H1.2a dataset: train=${rowsBySplit.train.length} val=${rowsBySplit.val.length} rows  basin_rollouts=${nBasin}  ${elapsed.toFixed(2)}s  ${manifest.rows_per_sec} rows/s`);
+  console.log(`${args.phase} dataset: train=${rowsBySplit.train.length} val=${rowsBySplit.val.length} rows  basin_rollouts=${nBasin}  ${elapsed.toFixed(2)}s  ${manifest.rows_per_sec} rows/s`);
   console.log(`  cap_mode=${args.capMode} role_caps=${JSON.stringify(roleCaps)}  cells=${cells.length}  feature_mode=${args.featureMode}  features=${inferenceFeatures.length}`);
 }
 
