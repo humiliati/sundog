@@ -19,6 +19,7 @@ import boxsel_phase7b_run as run
 import boxsel_phase7b_v2_detector as detector
 import boxsel_phase7d_stable_variance_mechanism as phase7d
 import boxsel_phase7e_oracle_free_recovery as phase7e
+import boxsel_phase7f_active_set_discovery as phase7f
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -62,6 +63,7 @@ REVIEW_ARTIFACTS = (
     "docs/boxsel/PHASE7C_EXTERNAL_REVIEW_PACKET.md",
     "docs/boxsel/PHASE7D_STABLE_VARIANCE_MECHANISM.md",
     "docs/boxsel/PHASE7E_ORACLE_FREE_RECOVERY.md",
+    "docs/boxsel/PHASE7F_ACTIVE_SET_DISCOVERY.md",
     "docs/boxsel/PHASE8_WORKBENCH_START.md",
     "scripts/boxsel_phase6b_trace_schema.py",
     "scripts/boxsel_phase7_run.py",
@@ -73,14 +75,17 @@ REVIEW_ARTIFACTS = (
     "scripts/boxsel_phase7c_review_packet.py",
     "scripts/boxsel_phase7d_stable_variance_mechanism.py",
     "scripts/boxsel_phase7e_oracle_free_recovery.py",
+    "scripts/boxsel_phase7f_active_set_discovery.py",
     "scripts/test_boxsel_phase7b_run.py",
     "scripts/test_boxsel_phase7c_review_packet.py",
     "scripts/test_boxsel_phase7d_stable_variance_mechanism.py",
     "scripts/test_boxsel_phase7e_oracle_free_recovery.py",
+    "scripts/test_boxsel_phase7f_active_set_discovery.py",
     "results/boxsel/phase7_false_closure_run/manifest.json",
     "results/boxsel/phase7b_false_closure_run/manifest.json",
     "results/boxsel/phase7d_stable_variance_mechanism/manifest.json",
     "results/boxsel/phase7e_oracle_free_recovery/manifest.json",
+    "results/boxsel/phase7f_active_set_discovery/manifest.json",
     "boxsel.html",
     "public/data/boxsel-phase8-workbench.json",
 )
@@ -299,6 +304,21 @@ def packet_payload() -> dict[str, object]:
                 "recoveryRule",
                 "recoveredEndpointPayload",
                 "closedFormPayload",
+            }
+        },
+        "phase7fDiscovery": {
+            key: value
+            for key, value in phase7f.discovery_summary().items()
+            if key
+            in {
+                "discoveryVersion",
+                "status",
+                "primaryDiscoveryClaim",
+                "boundary",
+                "rawTraceOracleFree",
+                "discoveryRule",
+                "discovered",
+                "negativeControl",
             }
         },
         "frozenDetector": detector.detector_summary(),

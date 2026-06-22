@@ -3,14 +3,14 @@
     {
       "exists": true,
       "path": "docs/SUNDOG_V_BOXSEL.md",
-      "sha256": "eba32c1d8f0de9da27ea36233d2e56f22dbc3a98c455239eac79892694a55fdf",
-      "sizeBytes": 38111
+      "sha256": "6d5e73613d3dcfed26c0ad02014f560378ab60d8795a9efce2209c3e2370bd53",
+      "sizeBytes": 38977
     },
     {
       "exists": true,
       "path": "docs/boxsel/BOXSEL_LITPASS_MEMO.md",
-      "sha256": "032c741600d46ae415c99e158b7b14e9d3829e2904a7eff9251b110983574b57",
-      "sizeBytes": 26133
+      "sha256": "b8bacad33a0afbd8df8e59c243fbac8596a782fe1c978a0fbac0b5d456af8a24",
+      "sizeBytes": 26653
     },
     {
       "exists": true,
@@ -57,8 +57,8 @@
     {
       "exists": true,
       "path": "docs/boxsel/PHASE7C_EXTERNAL_REVIEW_PACKET.md",
-      "sha256": "20dcaf27a5f99b5b400dd88fd2822b25776cccdcdc233f65ef041b7e9f239271",
-      "sizeBytes": 5956
+      "sha256": "6df522b67ccb7fe819efadb4cc2ec3617a0c9e4c448e20f35fbb30b78cd79b7c",
+      "sizeBytes": 6418
     },
     {
       "exists": true,
@@ -71,6 +71,12 @@
       "path": "docs/boxsel/PHASE7E_ORACLE_FREE_RECOVERY.md",
       "sha256": "f73bb66fabde1312bef942c260038fe9b12a2819bc91365e5183ac5caf72d677",
       "sizeBytes": 2812
+    },
+    {
+      "exists": true,
+      "path": "docs/boxsel/PHASE7F_ACTIVE_SET_DISCOVERY.md",
+      "sha256": "faaad56b7132c81ef67cbcb2b6c39bca48f4720591bf58250da0165ea48c5aa3",
+      "sizeBytes": 2610
     },
     {
       "exists": true,
@@ -123,8 +129,8 @@
     {
       "exists": true,
       "path": "scripts/boxsel_phase7c_review_packet.py",
-      "sha256": "f89c98f2eb59b6ebf935cb0c9731ced9ab3c62e18e1d6594739a693f739e146b",
-      "sizeBytes": 14582
+      "sha256": "5ec93ff3ada5e6ab2419663f02caabc3360d2b5579029d6eb47cee832d38bcfb",
+      "sizeBytes": 15312
     },
     {
       "exists": true,
@@ -140,6 +146,12 @@
     },
     {
       "exists": true,
+      "path": "scripts/boxsel_phase7f_active_set_discovery.py",
+      "sha256": "0b20def81b086f6e17a7acab36ed862ff2ae81e505db53cc65fad4d413e13b28",
+      "sizeBytes": 12524
+    },
+    {
+      "exists": true,
       "path": "scripts/test_boxsel_phase7b_run.py",
       "sha256": "e51661e8a1be9a7de087779bc9ef76d10d8521c14dc25f705d7bb08ff987e913",
       "sizeBytes": 5769
@@ -147,8 +159,8 @@
     {
       "exists": true,
       "path": "scripts/test_boxsel_phase7c_review_packet.py",
-      "sha256": "22a40a1b8039f84d3d571c99a6fdb4f27c2f663188a4e2c3e8b1334b78fc67e0",
-      "sizeBytes": 8746
+      "sha256": "2aed2d9d615ef981120513e027a4c2d030bc72908fbe09ecdc3359744631e149",
+      "sizeBytes": 10335
     },
     {
       "exists": true,
@@ -161,6 +173,12 @@
       "path": "scripts/test_boxsel_phase7e_oracle_free_recovery.py",
       "sha256": "7146e0b14a510e50ef00ea4f3518d8569e49f91578462241473698c39bc0f370",
       "sizeBytes": 5412
+    },
+    {
+      "exists": true,
+      "path": "scripts/test_boxsel_phase7f_active_set_discovery.py",
+      "sha256": "ad02ffedfc70b1d2112d21bd1fbd01afc7efb8561521976f9b66d993a088e8b9",
+      "sizeBytes": 5921
     },
     {
       "exists": true,
@@ -185,6 +203,12 @@
       "path": "results/boxsel/phase7e_oracle_free_recovery/manifest.json",
       "sha256": "19b75433ee1ba4e59ae31455c4957e8b0d25f6c626f204b1dd8787f0486cef25",
       "sizeBytes": 2699
+    },
+    {
+      "exists": true,
+      "path": "results/boxsel/phase7f_active_set_discovery/manifest.json",
+      "sha256": "30709e1b5075bab9afa0fee11b72fa2a20f46e43b04b17adb44efa1fd2d651f7",
+      "sizeBytes": 5244
     },
     {
       "exists": true,
@@ -357,6 +381,91 @@
     "recoveryVersion": "phase7e_oracle_free_recovery_v0",
     "status": "RECOVERY_RECEIPT",
     "traceInputOracleFree": true
+  },
+  "phase7fDiscovery": {
+    "boundary": "Toy micro-SEL Helly box fragment only. This discovers the active set for the recorded KKT trace; it is not a general active-set learner, not a global optimizer, not exact SEL inference, and not a real-KG or product claim.",
+    "discovered": {
+      "active_equation": [
+        4,
+        -9,
+        4
+      ],
+      "active_pairs": [
+        "AC",
+        "BC"
+      ],
+      "applicable": true,
+      "atom_volumes": {
+        "A": "(1/2 + 0*sqrt17)",
+        "B": "(1/2 + 0*sqrt17)",
+        "C": "(1/2 + 0*sqrt17)"
+      },
+      "discovered_x": "(9/8 + -1/8*sqrt17)",
+      "discovered_z": "(-1/4 + 1/4*sqrt17)",
+      "pair_residuals": {
+        "AB": "(5/16 + -1/16*sqrt17)",
+        "AC": "(0 + 0*sqrt17)",
+        "BC": "(0 + 0*sqrt17)"
+      },
+      "pair_volumes": {
+        "AB": "(9/16 + -1/16*sqrt17)",
+        "AC": "(1/4 + 0*sqrt17)",
+        "BC": "(1/4 + 0*sqrt17)"
+      },
+      "recovered_endpoint": "(9/32 + 1/32*sqrt17)",
+      "slack_pairs": [
+        "AB"
+      ],
+      "trace_id": "phase7f-helly-kkt-raw-box-trace",
+      "validation_matches_recovery": true,
+      "z_from_ac": "(-1/4 + 1/4*sqrt17)",
+      "z_from_bc": "(-1/4 + 1/4*sqrt17)"
+    },
+    "discoveryRule": {
+      "activeCriterion": "exact zero residual against pair target 1/4",
+      "input": "raw box intervals",
+      "slackCriterion": "positive residual against pair target 1/4",
+      "usesActiveLabelsAsInput": false,
+      "usesClosedFormForDiscovery": false,
+      "usesExactOracle": false
+    },
+    "discoveryVersion": "phase7f_active_set_discovery_v0",
+    "negativeControl": {
+      "active_equation": null,
+      "active_pairs": [
+        "AC"
+      ],
+      "applicable": false,
+      "atom_volumes": {
+        "A": "(1/2 + 0*sqrt17)",
+        "B": "(1/2 + 0*sqrt17)",
+        "C": "(1/2 + 0*sqrt17)"
+      },
+      "discovered_x": "(25/41 + 0*sqrt17)",
+      "discovered_z": "(32/41 + 0*sqrt17)",
+      "pair_residuals": {
+        "AB": "(9/164 + 0*sqrt17)",
+        "AC": "(0 + 0*sqrt17)",
+        "BC": "(1/4100 + 0*sqrt17)"
+      },
+      "pair_volumes": {
+        "AB": "(25/82 + 0*sqrt17)",
+        "AC": "(1/4 + 0*sqrt17)",
+        "BC": "(513/2050 + 0*sqrt17)"
+      },
+      "recovered_endpoint": null,
+      "slack_pairs": [
+        "AB",
+        "BC"
+      ],
+      "trace_id": "phase7f-rational-witness-negative-control",
+      "validation_matches_recovery": false,
+      "z_from_ac": "(32/41 + 0*sqrt17)",
+      "z_from_bc": "(25/32 + 0*sqrt17)"
+    },
+    "primaryDiscoveryClaim": "For the Helly-seed KKT box trace, active pairs and the recovery equation can be discovered from raw oracle-free box geometry: exact residuals identify AC and BC as active, AB as slack, and the structured active geometry yields 4x^2 - 9x + 4 = 0.",
+    "rawTraceOracleFree": true,
+    "status": "DISCOVERY_RECEIPT"
   },
   "primaryReviewClaim": "On the locked tiny role-free micro-SEL fragment, restart-variance-only detection is structurally blind to stable false closure because it observes only seed_low_range; the stable PMP traps and pressure-noop controls share seed_low_range=0 while pressure-response traces separate the labels.",
   "reviewOutcomeStatus": "NOT_REVIEWED",

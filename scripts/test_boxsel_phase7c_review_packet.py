@@ -116,7 +116,27 @@ check("recovered endpoint matches the closed-form payload",
       recovery["recoveredEndpointPayload"]["repr"] == recovery["closedFormPayload"]["repr"]
       and recovery["recoveredEndpointPayload"]["repr"] == "(9/32 + 1/32*sqrt17)")
 
-print("(6) review questions are concrete breakpoints:")
+print("(6) active-set discovery receipt is included in the review packet:")
+discovery = data["phase7fDiscovery"]
+check("Phase-7f discovery summary is present",
+      discovery["discoveryVersion"] == "phase7f_active_set_discovery_v0"
+      and discovery["status"] == "DISCOVERY_RECEIPT")
+check("discovery summary preserves raw oracle-free input and no active-label input",
+      discovery["rawTraceOracleFree"]
+      and discovery["discoveryRule"]["input"] == "raw box intervals"
+      and discovery["discoveryRule"]["usesActiveLabelsAsInput"] is False
+      and discovery["discoveryRule"]["usesClosedFormForDiscovery"] is False)
+check("discovered active set and equation feed the recovered endpoint",
+      set(discovery["discovered"]["active_pairs"]) == {"AC", "BC"}
+      and discovery["discovered"]["slack_pairs"] == ("AB",)
+      and discovery["discovered"]["active_equation"] == (4, -9, 4)
+      and discovery["discovered"]["recovered_endpoint"] == "(9/32 + 1/32*sqrt17)")
+check("negative control is not applicable to Phase-7e recovery",
+      discovery["negativeControl"]["active_pairs"] == ("AC",)
+      and discovery["negativeControl"]["active_equation"] is None
+      and discovery["negativeControl"]["applicable"] is False)
+
+print("(7) review questions are concrete breakpoints:")
 questions = data["reviewQuestions"]
 categories = {item["category"] for item in questions}
 check("seven named review questions are present",
@@ -133,21 +153,25 @@ check("review outcomes include pass, follow-up gate, and redesign paths",
       {item["name"] for item in outcomes}
       == {"toy_claim_review_pass", "followup_gate_required", "claim_withdrawn_or_redesigned"})
 
-print("(7) artifacts and note are packetized:")
+print("(8) artifacts and note are packetized:")
 hashes = data["artifactHashes"]
 by_path = {item["path"]: item for item in hashes}
 required_paths = {
     "docs/boxsel/PHASE7C_EXTERNAL_REVIEW_PACKET.md",
     "docs/boxsel/PHASE7D_STABLE_VARIANCE_MECHANISM.md",
     "docs/boxsel/PHASE7E_ORACLE_FREE_RECOVERY.md",
+    "docs/boxsel/PHASE7F_ACTIVE_SET_DISCOVERY.md",
     "scripts/boxsel_phase7c_review_packet.py",
     "scripts/boxsel_phase7d_stable_variance_mechanism.py",
     "scripts/boxsel_phase7e_oracle_free_recovery.py",
+    "scripts/boxsel_phase7f_active_set_discovery.py",
     "scripts/test_boxsel_phase7c_review_packet.py",
     "scripts/test_boxsel_phase7d_stable_variance_mechanism.py",
     "scripts/test_boxsel_phase7e_oracle_free_recovery.py",
+    "scripts/test_boxsel_phase7f_active_set_discovery.py",
     "results/boxsel/phase7d_stable_variance_mechanism/manifest.json",
     "results/boxsel/phase7e_oracle_free_recovery/manifest.json",
+    "results/boxsel/phase7f_active_set_discovery/manifest.json",
     "results/boxsel/phase7b_false_closure_run/manifest.json",
     "boxsel.html",
 }
@@ -162,7 +186,8 @@ check("manifest writes and round-trips",
       loaded["packetVersion"] == written["packetVersion"]
       and loaded["phase7bResult"]["detectorAcceptedFalseClosures"] == 0
       and loaded["phase7dMechanism"]["baselineObservableEquivalencePairs"] == 24
-      and loaded["phase7eRecovery"]["recoveredEndpointPayload"]["repr"] == "(9/32 + 1/32*sqrt17)")
+      and loaded["phase7eRecovery"]["recoveredEndpointPayload"]["repr"] == "(9/32 + 1/32*sqrt17)"
+      and loaded["phase7fDiscovery"]["discovered"]["active_equation"] == [4, -9, 4])
 note = (ROOT / "docs" / "boxsel" / "PHASE7C_EXTERNAL_REVIEW_PACKET.md").read_text(encoding="utf-8")
 check("review note carries status, questions, and exact metrics",
       "READY_FOR_EXTERNAL_REVIEW" in note
@@ -170,7 +195,8 @@ check("review note carries status, questions, and exact metrics",
       and "0 / 16" in note
       and "16 / 16" in note
       and "stable false closure" in note
-      and "Phase 7 failed" in note)
+      and "Phase 7 failed" in note
+      and "active-set discovery" in note)
 
 print(f"\n{'ALL PASS -- Phase-7c external-review packet is review-ready and bounded' if fail == 0 else str(fail) + ' FAILED'}")
 sys.exit(1 if fail else 0)

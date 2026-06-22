@@ -366,6 +366,7 @@ framing." Do not claim a mathematical weakening without a dedicated diff.
 | Phase-7c external-review packet. | READY FOR REVIEW, NOT REVIEWED | Mechanism-centered packet: restart-variance blind spot, Phase-7 failure, Phase-7b toy pass metrics, Phase-7d summary, artifact hashes, leakage audit, held-out hygiene, and seven reviewer breakpoints; no wider claim. |
 | Phase-7d stable/variance mechanism. | MECHANISM RECEIPT | Shows restart variance is structurally blind to stable false closure on the Phase-7b fragment: stable PMP traps and pressure-noop controls share `seed_low_range = 0`, while pressure response separates the labels. |
 | Phase-7e oracle-free recovery. | RECOVERY RECEIPT | On the Helly-seed `n>=2` box fragment, an active-set pressure trace recovers `q=(9+sqrt17)/32` from `4x^2-9x+4=0`; Phase-4 closed form is validation, not detector input. |
+| Phase-7f active-set discovery. | DISCOVERY RECEIPT | On the recorded Helly-seed KKT trace, raw box intervals determine the active pattern `AC,BC` active and `AB` slack by exact residuals, derive `4x^2-9x+4=0`, and feed the Phase-7e recovery; the rational witness negative control is rejected. |
 | Phase-8 workbench. | REVIEW-ONLY VISUALIZATION | `boxsel.html` renders the Phase-7b receipt as interval bars and trace flags; noindex, no public inbound path, toy micro-SEL boundary retained. |
 | Accept/widen/abstain rule. | SYNTHESIS over prior abstention | Cite Chow, Geifman/El-Yaniv, calibration, conformal KGE. |
 | PMP `+ 1 - q1` upper slack. | STANDARD / body formula | Proposition 2 and Wagner-style conditional PMP sanity. |
@@ -487,6 +488,11 @@ Required checks:
 > On the Helly-seed box fragment, an oracle-free active-set pressure trace recovers the exact
 > Phase-4 lower endpoint `(9+sqrt17)/32`; the closed-form theorem is used only to validate the
 > recovered value after the trace-level recovery.
+
+**Allowed after Phase 7f:**
+
+> On the recorded Helly-seed KKT trace, the active set needed by the recovery rule is discovered
+> from raw box intervals by exact residuals, with a rational-witness negative control rejected.
 
 **Forbidden:**
 

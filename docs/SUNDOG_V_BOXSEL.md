@@ -424,7 +424,7 @@ phase, never appended after.
     and detector-demonstration lane, **not** a real-KG/product claim. Result note:
     [`boxsel/PHASE7B_FALSE_CLOSURE_RUN.md`](boxsel/PHASE7B_FALSE_CLOSURE_RUN.md).
   - **PHASE-7C REVIEW PACKET READY 2026-06-21** (`scripts/boxsel_phase7c_review_packet.py`
-    +test 25/25): the review-worthy ask is now mechanism-centered, not a broad benchmark claim.
+    +test 32/32): the review-worthy ask is now mechanism-centered, not a broad benchmark claim.
     Primary claim: on the locked tiny role-free micro-SEL fragment, restart-variance-only
     detection is structurally blind to stable false closure because it observes only
     `seed_low_range`; the stable PMP traps and pressure-noop controls share `seed_low_range = 0`
@@ -456,6 +456,16 @@ phase, never appended after.
     witness both sit above the recovered value. This is still a Helly-fragment recovery receipt,
     not a general optimizer or real-KG claim. Note:
     [`boxsel/PHASE7E_ORACLE_FREE_RECOVERY.md`](boxsel/PHASE7E_ORACLE_FREE_RECOVERY.md).
+  - **PHASE-7F ACTIVE-SET DISCOVERY 2026-06-21**
+    (`scripts/boxsel_phase7f_active_set_discovery.py` +test 22/22): the recovery input is no
+    longer assumed for the recorded KKT trace. Starting from raw box intervals with no active-pair
+    labels, no KKT equation, and no oracle fields, exact residuals against the pair target `1/4`
+    discover `AC` and `BC` active and `AB` slack. The structured geometry then derives
+    `4x^2 - 9x + 4 = 0`, hands the discovered trace to Phase 7e, and recovers
+    `(9+sqrt17)/32`. The earlier rational witness is a negative control: only `AC` is active, so
+    no KKT equation is derived and no recovery trace is emitted. This remains a Helly-fragment
+    discovery receipt, not a general active-set learner or global optimizer. Note:
+    [`boxsel/PHASE7F_ACTIVE_SET_DISCOVERY.md`](boxsel/PHASE7F_ACTIVE_SET_DISCOVERY.md).
 
 - **Phase 8 — Workbench (gated on a Phase-7 pass).** Three nested interval bars (sampled ⊆
   box-attainable ⊆ exact); controls for dimension, restarts, loss tolerance, query pressure,

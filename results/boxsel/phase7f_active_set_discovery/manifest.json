@@ -1,0 +1,190 @@
+{
+  "boundary": "Toy micro-SEL Helly box fragment only. This discovers the active set for the recorded KKT trace; it is not a general active-set learner, not a global optimizer, not exact SEL inference, and not a real-KG or product claim.",
+  "discovered": {
+    "active_equation": [
+      4,
+      -9,
+      4
+    ],
+    "active_pairs": [
+      "AC",
+      "BC"
+    ],
+    "applicable": true,
+    "atom_volumes": {
+      "A": "(1/2 + 0*sqrt17)",
+      "B": "(1/2 + 0*sqrt17)",
+      "C": "(1/2 + 0*sqrt17)"
+    },
+    "discovered_x": "(9/8 + -1/8*sqrt17)",
+    "discovered_z": "(-1/4 + 1/4*sqrt17)",
+    "pair_residuals": {
+      "AB": "(5/16 + -1/16*sqrt17)",
+      "AC": "(0 + 0*sqrt17)",
+      "BC": "(0 + 0*sqrt17)"
+    },
+    "pair_volumes": {
+      "AB": "(9/16 + -1/16*sqrt17)",
+      "AC": "(1/4 + 0*sqrt17)",
+      "BC": "(1/4 + 0*sqrt17)"
+    },
+    "recovered_endpoint": "(9/32 + 1/32*sqrt17)",
+    "slack_pairs": [
+      "AB"
+    ],
+    "trace_id": "phase7f-helly-kkt-raw-box-trace",
+    "validation_matches_recovery": true,
+    "z_from_ac": "(-1/4 + 1/4*sqrt17)",
+    "z_from_bc": "(-1/4 + 1/4*sqrt17)"
+  },
+  "discoveryRule": {
+    "activeCriterion": "exact zero residual against pair target 1/4",
+    "input": "raw box intervals",
+    "slackCriterion": "positive residual against pair target 1/4",
+    "usesActiveLabelsAsInput": false,
+    "usesClosedFormForDiscovery": false,
+    "usesExactOracle": false
+  },
+  "discoveryVersion": "phase7f_active_set_discovery_v0",
+  "negativeControl": {
+    "active_equation": null,
+    "active_pairs": [
+      "AC"
+    ],
+    "applicable": false,
+    "atom_volumes": {
+      "A": "(1/2 + 0*sqrt17)",
+      "B": "(1/2 + 0*sqrt17)",
+      "C": "(1/2 + 0*sqrt17)"
+    },
+    "discovered_x": "(25/41 + 0*sqrt17)",
+    "discovered_z": "(32/41 + 0*sqrt17)",
+    "pair_residuals": {
+      "AB": "(9/164 + 0*sqrt17)",
+      "AC": "(0 + 0*sqrt17)",
+      "BC": "(1/4100 + 0*sqrt17)"
+    },
+    "pair_volumes": {
+      "AB": "(25/82 + 0*sqrt17)",
+      "AC": "(1/4 + 0*sqrt17)",
+      "BC": "(513/2050 + 0*sqrt17)"
+    },
+    "recovered_endpoint": null,
+    "slack_pairs": [
+      "AB",
+      "BC"
+    ],
+    "trace_id": "phase7f-rational-witness-negative-control",
+    "validation_matches_recovery": false,
+    "z_from_ac": "(32/41 + 0*sqrt17)",
+    "z_from_bc": "(25/32 + 0*sqrt17)"
+  },
+  "phase7eRecovered": {
+    "observedMatchesRecovered": true,
+    "recoveredEndpoint": "(9/32 + 1/32*sqrt17)",
+    "traceId": "phase7f-helly-kkt-raw-box-trace-discovered-active-set",
+    "validationMatchesClosedForm": true
+  },
+  "primaryDiscoveryClaim": "For the Helly-seed KKT box trace, active pairs and the recovery equation can be discovered from raw oracle-free box geometry: exact residuals identify AC and BC as active, AB as slack, and the structured active geometry yields 4x^2 - 9x + 4 = 0.",
+  "rawTrace": {
+    "boxes": {
+      "A": [
+        [
+          {
+            "a": "-1/8",
+            "b": "1/8",
+            "float": 0.3903882032022076,
+            "repr": "(-1/8 + 1/8*sqrt17)"
+          },
+          {
+            "a": "1",
+            "b": "0",
+            "float": 1.0,
+            "repr": "(1 + 0*sqrt17)"
+          }
+        ],
+        [
+          {
+            "a": "7/16",
+            "b": "-1/16",
+            "float": 0.1798058983988962,
+            "repr": "(7/16 + -1/16*sqrt17)"
+          },
+          {
+            "a": "1",
+            "b": "0",
+            "float": 1.0,
+            "repr": "(1 + 0*sqrt17)"
+          }
+        ]
+      ],
+      "B": [
+        [
+          {
+            "a": "0",
+            "b": "0",
+            "float": 0.0,
+            "repr": "(0 + 0*sqrt17)"
+          },
+          {
+            "a": "1",
+            "b": "0",
+            "float": 1.0,
+            "repr": "(1 + 0*sqrt17)"
+          }
+        ],
+        [
+          {
+            "a": "1/2",
+            "b": "0",
+            "float": 0.5,
+            "repr": "(1/2 + 0*sqrt17)"
+          },
+          {
+            "a": "1",
+            "b": "0",
+            "float": 1.0,
+            "repr": "(1 + 0*sqrt17)"
+          }
+        ]
+      ],
+      "C": [
+        [
+          {
+            "a": "0",
+            "b": "0",
+            "float": 0.0,
+            "repr": "(0 + 0*sqrt17)"
+          },
+          {
+            "a": "-1/4",
+            "b": "1/4",
+            "float": 0.7807764064044151,
+            "repr": "(-1/4 + 1/4*sqrt17)"
+          }
+        ],
+        [
+          {
+            "a": "7/16",
+            "b": "-1/16",
+            "float": 0.1798058983988962,
+            "repr": "(7/16 + -1/16*sqrt17)"
+          },
+          {
+            "a": "9/16",
+            "b": "1/16",
+            "float": 0.8201941016011038,
+            "repr": "(9/16 + 1/16*sqrt17)"
+          }
+        ]
+      ]
+    },
+    "dimension": 2,
+    "family": "helly_seed_box_active_set_discovery",
+    "optimizerMode": "query_pressure_extremal",
+    "oracleFieldsPresent": false,
+    "traceId": "phase7f-helly-kkt-raw-box-trace"
+  },
+  "rawTraceOracleFree": true,
+  "status": "DISCOVERY_RECEIPT"
+}

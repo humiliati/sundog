@@ -1,0 +1,611 @@
+# Sundog vs. Ghost
+
+Working hook:
+
+> Draw the circle. Find the ghost.
+
+Short version:
+
+> Sundog Ghost asks whether a finite inside can ever certify the order it
+> belongs to without importing an outside. Aperiodic tilings are the first hard
+> substrate: a tile patch is local, legal, and concrete, yet its full
+> explanation lives in a larger hierarchy the patch does not contain.
+
+Status: Brainstorm scaffold opened 2026-06-22 from the Inside/Outside Problem
+thread. Starter citation spine filed at
+[`GHOST_LITPASS_MEMO.md`](GHOST_LITPASS_MEMO.md). This is a reader-lane
+scaffold, not a theorem claim, public claim, or implementation commitment.
+
+The lane name is deliberately broader than `SUNDOG_V_APERIODICITY.md`.
+Aperiodicity is the mathematical pressure test. "Ghost" is the Sundog hook: the
+outside condition that must be present for an inside to make sense, but which
+the inside cannot fully derive from itself.
+
+## Reader-Lane Disposition
+
+Default posture:
+
+> Ghost is an exposition/exhibit reframing of existing aperiodic-order theory
+> and engineering boundary discipline. It has no new invariant by default.
+
+Theorem-shaped expectations exit here. The lane may become research only if a
+later phase identifies a precise object that is not already recognizability,
+local derivability, patch complexity, extension complexity, hull structure, or
+another named formalism, and that object survives specialist review.
+
+Until then, the deliverable is a reader/workbench:
+
+- explain local rules versus global order;
+- make periodic closure and aperiodic non-closure visible;
+- translate "outside debt" into existing technical vocabulary;
+- show engineering analogues where modules depend on runtimes, trust bases,
+  or human theories outside the code boundary.
+
+Public copy must remain true if every conjecture-shaped sentence is deleted.
+
+## Thesis
+
+Every time we draw a circle around a system, we create an inside and an outside.
+The inside may be rich, lawful, and predictive. But when the system tries to
+explain itself completely, some condition moves to the boundary:
+
+- an axiom;
+- a runtime;
+- a measurement convention;
+- a coordinate frame;
+- a hidden hierarchy;
+- a boundary condition;
+- an observer position;
+- a larger geometry.
+
+That boundary condition is the **ghost**.
+
+The ghost is not supernatural. It is the dependency that becomes visible when
+local closure fails.
+
+For periodic tilings, the ghost can often be domesticated. Find the repeat cell,
+name the lattice, and the outside collapses into a finite generator.
+
+For aperiodic tilings, the ghost does not disappear. Every finite patch can be
+legal, but no finite patch is the whole explanation. The pattern is ordered, yet
+not loop-compressible. The outside keeps reappearing as scale.
+
+Candidate one-line thesis:
+
+> Aperiodicity is geometry with an unerasable outside.
+
+## Claim Boundary
+
+This document does **not** claim:
+
+- a new aperiodic monotile;
+- a proof of a new tiling theorem;
+- a proof or paraphrase of Goedel's incompleteness theorem;
+- that all self-reference phenomena reduce to tiling;
+- that "ghost" is a formal invariant yet;
+- that a browser visualization is evidence for a mathematical claim;
+- that Sundog has discovered a new bridge between logic, cognition, and
+  tiling theory.
+
+This document may stage:
+
+- a bounded reader/workbench lane around local rules, global order, and
+  aperiodicity;
+- a vocabulary for "outside debt" in systems that cannot close themselves
+  locally;
+- a careful public essay or interactive exhibit contrasting periodic and
+  aperiodic closure;
+- a careful test of whether an existing finite-patch observable can carry the
+  "ghost boundary" explanation without inventing new theory;
+- a dev-facing analogy between tilings, runtimes, tests, model priors, and
+  hidden infrastructure.
+
+The hard stop: do not launder philosophical force into mathematical novelty.
+The philosophy is allowed to be generative. The math must be cited, bounded,
+and treated as already-existing terrain until a real theorem says otherwise.
+
+## Known Anchor
+
+The current aperiodic-monotile landscape gives the lane a real substrate rather
+than a loose metaphor.
+
+See [`GHOST_LITPASS_MEMO.md`](GHOST_LITPASS_MEMO.md) for the broader
+historical and current citation spine across tiling theory, aperiodic order,
+engineering trust boundaries, and philosophy of self-reference.
+
+- Smith, Myers, Kaplan, and Goodman-Strauss, ["An aperiodic monotile"](https://arxiv.org/abs/2303.10798),
+  introduced the Hat family: topological disk tiles that tile the plane but
+  force non-periodicity. Their proof route includes metatiles, substitution
+  structure, and hierarchy.
+- The same authors, ["A chiral aperiodic monotile"](https://arxiv.org/abs/2305.17743),
+  introduced the Spectre family, addressing the reflection/chirality issue and
+  giving a strictly chiral aperiodic monotile family based on hierarchical
+  substitution.
+- Bruneau and Whittaker, ["Planar aperiodic tile sets: from Wang tiles to the
+  Hat and Spectre monotiles"](https://arxiv.org/abs/2310.06759), provide a
+  compact historical bridge from Wang tiles and the Domino Problem through
+  Hat/Spectre.
+
+The Sundog point is not "the Hat proves the Inside/Outside Problem." The point
+is narrower and more useful:
+
+> Aperiodic monotiles make the local/global tension visible. A single local
+> shape can force lawful global order, but the explanation of that order lives
+> in a hierarchy no single bounded patch exhausts.
+
+That is a clean place to ask what the ghost is.
+
+## Vocabulary Lock
+
+**Circle**
+
+The bounded region we choose to inspect: a finite patch, module, proof fragment,
+model, dataset, organism, observer, or theory.
+
+**Inside**
+
+The information available within the circle: local adjacency, visible geometry,
+observed behavior, source code, empirical measurements, or derived facts.
+
+**Outside**
+
+The information required to explain why the inside is legal, meaningful, or
+predictive: boundary conditions, axioms, runtime, hidden variables, evaluation
+criteria, or larger-scale context.
+
+**Ghost**
+
+The outside dependency made visible by failed closure. A ghost is not merely an
+unknown. It is an unknown with a job: the thing the inside needs in order to be
+explained as part of a larger lawful structure.
+
+**Closure**
+
+A system is locally closed when the bounded inside contains enough information
+to determine the relevant explanation. In a periodic tiling, a fundamental
+domain plus lattice vectors gives a strong closure certificate.
+
+**Outside Debt**
+
+The amount or kind of context a finite inside needs before its role in the
+larger order can be certified.
+
+**Ghost Boundary**
+
+The boundary layer where local legality becomes global dependency. In a finite
+tiling patch, this is the edge where many possible continuations remain live and
+where hidden hierarchy may be underdetermined.
+
+## The Aperiodic Move
+
+The intuitive contrast:
+
+> Periodicity says: this inside explains the outside by repetition.
+
+> Aperiodicity says: this inside is lawful, but every attempted closure opens
+> into a larger law.
+
+That contrast is the center of the lane.
+
+A periodic pattern can often be compressed into:
+
+1. a finite motif;
+2. translation vectors;
+3. a repeat rule.
+
+The patch becomes a map of the plane.
+
+An aperiodic pattern can still be generated by rules, but not by translational
+periodicity. The patch may imply legal continuations, but no finite circle
+around it yields a repeat cell for the whole plane. The explanation passes
+through substitution, matching constraints, inflation, metatiles, or another
+global/hierarchical mechanism.
+
+The ghost is that mechanism as seen from the patch boundary.
+
+Sundog phrasing:
+
+> Some shapes do not tile the plane by repeating themselves. They tile it by
+> continually revealing that they were part of a larger shape all along.
+
+## Heuristic Questions, Not Conjectures
+
+These are reader/workbench questions. They are not public conjectures and
+should not be marketed as theorem-shaped claims.
+
+### Ghost Boundary Heuristic
+
+> Any local rule system that forces non-periodic global order must leave, on
+> every sufficiently large finite circle, a detectable dependency on context
+> outside that circle.
+
+What this wants to become:
+
+- a statement about finite patches in finite-local-complexity tiling spaces;
+- a distinction between bounded outside debt and unbounded outside debt;
+- a way to compare periodic, quasiperiodic, substitution, and aperiodic systems;
+- a visualization of the "live" continuation classes at the boundary.
+
+Immediate danger:
+
+This may be false as written, too vague, or already covered by existing tiling
+dynamics language. Treat it as a reader prompt, not a claim.
+
+Research upgrade gate:
+
+- identify the closest existing formalism first;
+- write the question in that formalism's vocabulary;
+- name at least one example and one counterexample class;
+- get specialist review before any public theorem-shaped phrasing.
+
+### Outside Debt Gradient
+
+> Systems differ by how much outside they require for a finite inside to be
+> certified as part of the whole.
+
+Possible coarse ladder:
+
+| class | inside | ghost / outside debt |
+| --- | --- | --- |
+| finite object | bounded description | low once boundary is named |
+| periodic tiling | motif plus lattice | bounded by repeat cell |
+| quasiperiodic tiling | local patch plus projection/cut data | external phase/window data |
+| substitution tiling | patch plus hierarchy | scale-recursive ancestry |
+| aperiodic monotile | local geometry plus forced hierarchy | unbounded non-periodic context |
+| computation / SFT edge cases | local rules | extension/halting-like uncertainty |
+
+This ladder is heuristic. Its job is to produce good questions, not to rank
+formal difficulty.
+
+### Local Closure Failure
+
+> Non-periodicity is not randomness. It is the failure of local closure under a
+> lawful global constraint.
+
+This is probably the safest public-facing line. It avoids pretending that
+aperiodicity means "unstructured" and keeps the focus on lawful order without
+repeat.
+
+### Ghost as Hidden Ancestry
+
+> In hierarchical aperiodic tilings, the ghost of a finite patch is the
+> underdetermined ancestry of the larger supertile structure that contains it.
+
+This is the most visual formulation. It can become a workbench: click a patch,
+see all compatible supertile ancestries, watch the uncertainty move to the
+boundary as the circle expands.
+
+## Why This Is Sundog
+
+Sundogs are not fake suns in the sense of mere illusion. They are real optical
+consequences of light, ice crystals, observer position, and atmosphere. The
+thing seen in the sky is a local appearance produced by a larger geometry.
+
+That maps well:
+
+- the visible sundog is the finite patch;
+- the atmosphere and observer geometry are the outside;
+- the halo is the ghost boundary made visible.
+
+The same pattern appears in the current Sundog corpus:
+
+- Geometry Workbench: the visible arc depends on the hidden parametric
+  apparatus of sun altitude, crystal orientation, and projection.
+- Perception: sub-visible continuations depend on instrumented integration
+  along predicted geometry.
+- Kakeya: direction-complete shadows hide body-resistance in a tiny set.
+- Mesa: behavior depends on a hidden field-like subspace, not just reward
+  labels.
+- P vs. NP / certificates: local verification depends on a global witness
+  structure.
+
+Ghost is the abstract lane that names the recurring boundary condition.
+
+## Dev Hook
+
+The developer version is immediate:
+
+> Every program runs inside a circle it did not draw.
+
+Software is full of ghosts:
+
+- source code depends on compiler/runtime behavior;
+- tests depend on oracles of expected output;
+- sandboxes depend on a host;
+- APIs depend on contracts outside the function body;
+- models depend on training data, reward signals, and evaluation frames;
+- proof assistants depend on kernels, axioms, libraries, and trusted
+  extraction boundaries;
+- distributed systems depend on timing, failure models, clocks, consensus
+  assumptions, and operators.
+
+The dev-facing Sundog move:
+
+> Draw the module boundary. Find the assumption it cannot prove from inside.
+
+This gives Ghost a lane that can support both math-art and engineering
+inspection. A tiling patch and a code module become two versions of the same
+question: what outside condition makes this inside meaningful?
+
+## Possible Artifact
+
+Build a small `ghost.html` internal workbench before any public page.
+
+Goal:
+
+> Let a viewer draw a circle around a pattern and see what the circle fails to
+> explain.
+
+Minimum viable substrate:
+
+- periodic square-grid pattern;
+- deterministic but non-periodic toy sequence or substitution stripe;
+- Penrose-style or Hat/Spectre-inspired patch viewer only if licensing and
+  source discipline are clean;
+- no claim of novel tiling generation.
+
+Core interactions:
+
+1. **Draw circle**: user selects a finite patch.
+2. **Local facts**: show what can be known from the patch alone.
+3. **Possible continuations**: show compatible outside contexts.
+4. **Closure test**: identify whether a finite repeat cell is visible/certified.
+5. **Ghost layer**: highlight the boundary where unresolved context lives.
+6. **Scale up**: enlarge the circle and show whether the ghost disappears,
+   stabilizes, or recedes.
+
+For periodic examples, the ghost should shrink once the repeat cell is captured.
+
+For aperiodic or substitution examples, the ghost should migrate upward: the
+inside grows, but the explanation keeps moving to a larger hierarchy.
+
+The exhibit is successful if a non-specialist comes away with:
+
+> Ordered does not mean repeating. Local does not mean closed.
+
+## Workbench Metric Sketches
+
+These are possible measurements to prototype. They are not settled math.
+
+**Continuation Count**
+
+Given a finite patch and a local rule set, estimate the number of distinct
+legal continuations to a larger bounding box. Compare growth across periodic
+and non-periodic systems.
+
+Risk: boundary growth may dominate and make the metric visually noisy.
+
+**Ancestry Ambiguity**
+
+For substitution tilings, count or visualize the possible supertile ancestry
+assignments compatible with the selected patch.
+
+Risk: requires careful substrate choice and known substitution rules.
+
+**Repeat-Cell Capture Radius**
+
+For periodic patterns, measure the smallest circle that captures enough
+information to infer the period lattice. Use this as the "ghost collapse"
+baseline.
+
+Risk: inference can be brittle unless the periodic family is deliberately
+simple.
+
+**Boundary Dependency Ratio**
+
+Track how much of the explanation depends on edge choices versus interior
+choices as the selected circle grows.
+
+Risk: needs a formal definition before it deserves a serious name.
+
+**Compression Delta**
+
+Compare direct description length of a patch to description length under an
+allowed generator class: periodic generator, substitution generator, local-rule
+solver, etc.
+
+Risk: Kolmogorov-complexity language gets slippery fast. Keep it operational:
+actual encoders, actual generator families, actual finite examples.
+
+## Lit-Pass Questions
+
+Before this becomes public:
+
+1. What existing tiling-dynamics terms already name this?
+2. Is "outside debt" just recognizability, repetitivity, local derivability,
+   mutual local derivability, cohomology, hull structure, or extension
+   complexity in disguise?
+3. Which examples best separate:
+   - periodic closure;
+   - quasiperiodic order;
+   - substitution hierarchy;
+   - matching-rule aperiodicity;
+   - computationally hard extension?
+4. Is there an existing finite-patch metric for extension complexity that can
+   be visualized honestly?
+5. Can the Hat/Spectre proof machinery be explained without recreating or
+   misrepresenting copyrighted figures?
+6. What is the safest toy substrate for a browser artifact?
+
+Candidate reading spine:
+
+- Wang's Domino Problem and Wang tiles;
+- Berger/Robinson aperiodic tile sets;
+- Penrose tilings and local matching rules;
+- substitution tilings, recognizability, and local derivability;
+- Hat and Spectre monotile papers;
+- finite local complexity tiling spaces and tiling dynamical systems;
+- symbolic dynamics / shifts of finite type for local-rule analogues.
+
+## Public Framing Candidates
+
+Title candidates:
+
+- Draw the Circle, Find the Ghost
+- The Ghost Boundary
+- Aperiodicity and the Hidden Outside of Order
+- Geometry With an Unerasable Outside
+- The Map Inside the Territory
+
+Hero lines:
+
+> A repeating pattern closes its circle. An aperiodic pattern keeps the circle
+> open.
+
+> Every finite patch is lawful. None is the whole law.
+
+> The ghost is the outside a system needs in order to make sense.
+
+> Some order cannot be explained by copying a smaller order.
+
+> Draw a boundary around the pattern. The unsolved part appears at the edge.
+
+Longer public paragraph:
+
+> A periodic tiling explains the plane by repeating a finite unit. Aperiodic
+> tilings are stranger: they are ordered, rule-governed, and locally concrete,
+> yet no finite unit repeats to give the whole plane. Sundog Ghost treats this
+> as a visible form of the inside/outside problem. The patch is the inside. The
+> hidden hierarchy is the outside. The boundary between them is where the ghost
+> appears.
+
+## Failure Modes
+
+**Mathematical overclaim**
+
+Saying "we found a principle behind aperiodicity" without a theorem is failure.
+The acceptable claim is "we are building a reader/workbench for existing
+aperiodic-order principles and testing whether any existing observable is a
+good public explanation surface."
+
+**Research-lane drag**
+
+Letting the reader lane imply a pending theorem is failure. The first public
+version must be valuable even if "outside debt" reduces entirely to
+recognizability, local derivability, patch complexity, extension complexity,
+or hull structure.
+
+**Goedel laundering**
+
+Loose Goedel references sound profound and become inaccurate quickly. If Goedel
+appears in public copy, it must be framed as philosophical ancestry, not as a
+technical warrant for tiling claims.
+
+**Aperiodic equals random**
+
+Aperiodic tilings are ordered. The exhibit must make this unmistakable.
+
+**Ghost equals mysticism**
+
+The ghost is a boundary dependency, not a spooky entity. Keep the language
+poetic in the hook and operational in the method.
+
+**Visualization-as-proof**
+
+A beautiful patch viewer is not evidence. It is an intuition surface. Any
+formal claim needs cited math or a separate proof artifact.
+
+**Boundary-only triviality**
+
+Every finite patch of every infinite tiling has an outside. The lane only earns
+its keep if it distinguishes kinds of outside debt: bounded, collapsing,
+recursive, unbounded, undecidable, etc.
+
+## Phase Ladder
+
+### Phase 0 - Vocabulary and Fence Lock
+
+- Keep this document as the governing scaffold.
+- Decide whether "ghost", "outside debt", and "ghost boundary" survive contact
+  with the literature.
+- Write a one-page claim boundary before any visual work.
+- Replace conjecture-shaped phrasing with reader/workbench phrasing unless a
+  formal upgrade gate is explicitly passed.
+
+Exit gate:
+
+- The lane can be explained in three sentences without claiming or implying a
+  theorem.
+
+### Phase 1 - Literature Pass
+
+- Read the Hat and Spectre papers closely enough to summarize the proof shape
+  without flattening it.
+- Identify the existing formal terms closest to "outside debt."
+- Expand and maintain [`GHOST_LITPASS_MEMO.md`](GHOST_LITPASS_MEMO.md) as the
+  citation spine, with vocabulary replacements and current-publication updates.
+
+Exit gate:
+
+- We know which existing technical terms should replace "outside debt" in
+  specialist-facing copy, and the public reader still works with no new
+  invariant.
+
+### Phase 2 - Toy Model Workbench
+
+- Build an internal finite-grid demo using known, simple systems.
+- Compare periodic closure to substitution-like non-periodic behavior.
+- Avoid Hat/Spectre implementation until source/licensing and proof vocabulary
+  are clean.
+
+Exit gate:
+
+- The ghost boundary is visible as an interaction, not merely explained in
+  prose.
+
+### Phase 3 - Aperiodic Reader
+
+- Add a reader mode for one real aperiodic substrate.
+- Prefer a substrate with clean public assets, known substitution rules, and an
+  explanation that can be cited.
+- Make the proof hierarchy visible as hierarchy, not as decoration.
+
+Exit gate:
+
+- A specialist would not object to the phrasing "this visualizes one aspect of
+  the known proof structure."
+
+### Phase 4 - Optional Metric Probe
+
+This phase is optional and must not gate the reader.
+
+- Prototype continuation count, ancestry ambiguity, repeat-cell capture radius,
+  or another finite-patch observable only after mapping it to existing
+  vocabulary.
+- Try to falsify the Ghost Boundary Heuristic on easy examples.
+- If the probe collapses into known theory, record that as success for the
+  reader lane, not as failure of the lane.
+
+Exit gate:
+
+- Either the metric is identified as known vocabulary, dies cleanly, or earns a
+  narrow technical memo with an explicit "not a new invariant" default.
+
+### Phase 5 - Public Page Candidate
+
+- Only after Phases 1-4, consider `ghost.html`.
+- Public page must lead with the reader/exhibit, not conjectural grandeur.
+- Keep the one-sentence payload:
+
+> Ordered does not mean repeating. Local does not mean closed.
+
+Exit gate:
+
+- Public copy is true even if every heuristic/probe sentence is deleted.
+
+## Current Best Shape
+
+The right near-term move is not "Sundog vs. Aperiodicity" as a theorem lane.
+It is:
+
+> Sundog Ghost: a reader/workbench for the hidden outside of local order, with
+> aperiodic tilings as the first hard test.
+
+That keeps the hook alive:
+
+> Draw the circle. Find the ghost.
+
+And it keeps the reader question honest:
+
+> Can we classify systems by how much outside a finite inside needs in order to
+> explain itself?

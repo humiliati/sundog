@@ -72,11 +72,21 @@ recovered endpoint        : (9+sqrt17)/32
 validation                : matches the Phase-4 closed form exactly
 ```
 
+Phase 7f removes the active-set assumption for the recorded KKT trace:
+
+```text
+input                      : raw box intervals
+discovered residuals       : AC = 0, BC = 0, AB > 0
+derived equation           : 4x^2 - 9x + 4 = 0
+negative control           : rational witness rejected; only AC active
+```
+
 The review is therefore not "is this benchmark impressive?" The review is:
 
 ```text
-Are the stable/variance mechanism and oracle-free recovery receipts clean, leakage-free,
-and semantically aligned, and what exact blocker remains before any wider claim?
+Are the stable/variance mechanism, oracle-free recovery, and active-set discovery receipts
+clean, leakage-free, and semantically aligned, and what exact blocker remains before any
+wider claim?
 ```
 
 ## Review Questions
@@ -154,6 +164,8 @@ scripts/boxsel_phase7d_stable_variance_mechanism.py
 scripts/test_boxsel_phase7d_stable_variance_mechanism.py
 scripts/boxsel_phase7e_oracle_free_recovery.py
 scripts/test_boxsel_phase7e_oracle_free_recovery.py
+scripts/boxsel_phase7f_active_set_discovery.py
+scripts/test_boxsel_phase7f_active_set_discovery.py
 ```
 
 The manifest records:
@@ -165,6 +177,7 @@ Phase-7 failure metrics
 Phase-7b pass metrics
 Phase-7d stable/variance mechanism summary
 Phase-7e oracle-free recovery summary
+Phase-7f active-set discovery summary
 frozen detector metadata
 leakage/boundary audit booleans
 review questions and possible outcomes
@@ -181,7 +194,7 @@ python scripts/test_boxsel_phase7c_review_packet.py
 Result at start:
 
 ```text
-28/28 checks pass, exit 0.
+32/32 checks pass, exit 0.
 ```
 
 ---
