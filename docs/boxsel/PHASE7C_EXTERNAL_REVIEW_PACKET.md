@@ -63,11 +63,20 @@ pressure-noop controls : seed_low_range = 0, false_closed = false, baseline acce
 equivalence pairs      : 24 trap/control pairs with identical variance observable and opposite labels
 ```
 
+Phase 7e then asks whether the trace can recover a boundary number:
+
+```text
+active-set pressure trace : AC and BC active, AB slack
+recovered equation        : 4x^2 - 9x + 4 = 0
+recovered endpoint        : (9+sqrt17)/32
+validation                : matches the Phase-4 closed form exactly
+```
+
 The review is therefore not "is this benchmark impressive?" The review is:
 
 ```text
-Is this stable/variance mechanism receipt clean, leakage-free, and semantically aligned,
-and what exact blocker remains before any wider claim?
+Are the stable/variance mechanism and oracle-free recovery receipts clean, leakage-free,
+and semantically aligned, and what exact blocker remains before any wider claim?
 ```
 
 ## Review Questions
@@ -143,6 +152,8 @@ scripts/boxsel_phase7c_review_packet.py
 scripts/test_boxsel_phase7c_review_packet.py
 scripts/boxsel_phase7d_stable_variance_mechanism.py
 scripts/test_boxsel_phase7d_stable_variance_mechanism.py
+scripts/boxsel_phase7e_oracle_free_recovery.py
+scripts/test_boxsel_phase7e_oracle_free_recovery.py
 ```
 
 The manifest records:
@@ -153,6 +164,7 @@ non-claims
 Phase-7 failure metrics
 Phase-7b pass metrics
 Phase-7d stable/variance mechanism summary
+Phase-7e oracle-free recovery summary
 frozen detector metadata
 leakage/boundary audit booleans
 review questions and possible outcomes
@@ -169,7 +181,7 @@ python scripts/test_boxsel_phase7c_review_packet.py
 Result at start:
 
 ```text
-25/25 checks pass, exit 0.
+28/28 checks pass, exit 0.
 ```
 
 ---

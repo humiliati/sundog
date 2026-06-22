@@ -3,14 +3,14 @@
     {
       "exists": true,
       "path": "docs/SUNDOG_V_BOXSEL.md",
-      "sha256": "3983bc5132b1f03a72bbb9a7c143d416d7fad17e56f767b6f26e7a752d9a5303",
-      "sizeBytes": 37210
+      "sha256": "eba32c1d8f0de9da27ea36233d2e56f22dbc3a98c455239eac79892694a55fdf",
+      "sizeBytes": 38111
     },
     {
       "exists": true,
       "path": "docs/boxsel/BOXSEL_LITPASS_MEMO.md",
-      "sha256": "a9c2530d44f5b6055c3a9931247652a12fb054dc9f33292c6d8ba16c9d3c34e0",
-      "sizeBytes": 25638
+      "sha256": "032c741600d46ae415c99e158b7b14e9d3829e2904a7eff9251b110983574b57",
+      "sizeBytes": 26133
     },
     {
       "exists": true,
@@ -57,14 +57,20 @@
     {
       "exists": true,
       "path": "docs/boxsel/PHASE7C_EXTERNAL_REVIEW_PACKET.md",
-      "sha256": "1c5eac114abe9e2f3b9dcaa611f6ccd4b19540c659c6ead36129d5064147f091",
-      "sizeBytes": 5500
+      "sha256": "20dcaf27a5f99b5b400dd88fd2822b25776cccdcdc233f65ef041b7e9f239271",
+      "sizeBytes": 5956
     },
     {
       "exists": true,
       "path": "docs/boxsel/PHASE7D_STABLE_VARIANCE_MECHANISM.md",
       "sha256": "ed78b3878406a5155f6e25b8fae9c49d4d33cb472a7511c5ff67dfdff6e4bd43",
       "sizeBytes": 3189
+    },
+    {
+      "exists": true,
+      "path": "docs/boxsel/PHASE7E_ORACLE_FREE_RECOVERY.md",
+      "sha256": "f73bb66fabde1312bef942c260038fe9b12a2819bc91365e5183ac5caf72d677",
+      "sizeBytes": 2812
     },
     {
       "exists": true,
@@ -117,14 +123,20 @@
     {
       "exists": true,
       "path": "scripts/boxsel_phase7c_review_packet.py",
-      "sha256": "bb791eaa7440b64cc19e7472901dbc245e5596b6581fba584d5d5981f284b9b7",
-      "sizeBytes": 13839
+      "sha256": "f89c98f2eb59b6ebf935cb0c9731ced9ab3c62e18e1d6594739a693f739e146b",
+      "sizeBytes": 14582
     },
     {
       "exists": true,
       "path": "scripts/boxsel_phase7d_stable_variance_mechanism.py",
       "sha256": "27f9b9f98e2922d9e633fc977aa8da3cccad850a23ea19f638fc78cd85e332b7",
       "sizeBytes": 8788
+    },
+    {
+      "exists": true,
+      "path": "scripts/boxsel_phase7e_oracle_free_recovery.py",
+      "sha256": "0e21ad1f1ea7825def6c3306b350e3bc46cfb7702d46255699440779f2712dab",
+      "sizeBytes": 9098
     },
     {
       "exists": true,
@@ -135,14 +147,20 @@
     {
       "exists": true,
       "path": "scripts/test_boxsel_phase7c_review_packet.py",
-      "sha256": "69e31376bde291887d3bdf723f90f85de938c99898938c3a3dcabdcfe06d369f",
-      "sizeBytes": 7591
+      "sha256": "22a40a1b8039f84d3d571c99a6fdb4f27c2f663188a4e2c3e8b1334b78fc67e0",
+      "sizeBytes": 8746
     },
     {
       "exists": true,
       "path": "scripts/test_boxsel_phase7d_stable_variance_mechanism.py",
       "sha256": "f9c2c7a5836d87848d645c5979df1ca33133f25a6bfead55952557161986601d",
       "sizeBytes": 6192
+    },
+    {
+      "exists": true,
+      "path": "scripts/test_boxsel_phase7e_oracle_free_recovery.py",
+      "sha256": "7146e0b14a510e50ef00ea4f3518d8569e49f91578462241473698c39bc0f370",
+      "sizeBytes": 5412
     },
     {
       "exists": true,
@@ -161,6 +179,12 @@
       "path": "results/boxsel/phase7d_stable_variance_mechanism/manifest.json",
       "sha256": "9dd0193ab9cc5732e580757206ad4907669034746b8762da1ca2a65da6fea04e",
       "sizeBytes": 17652
+    },
+    {
+      "exists": true,
+      "path": "results/boxsel/phase7e_oracle_free_recovery/manifest.json",
+      "sha256": "19b75433ee1ba4e59ae31455c4957e8b0d25f6c626f204b1dd8787f0486cef25",
+      "sizeBytes": 2699
     },
     {
       "exists": true,
@@ -305,6 +329,34 @@
     "varianceObservables": [
       "seed_low_range"
     ]
+  },
+  "phase7eRecovery": {
+    "boundary": "Toy micro-SEL box fragment only. This is not a general optimizer, not exact SEL inference, not a real-KG claim, and not an Ask Sundog product claim. It assumes the active-set trace is available; it does not prove that ordinary search will find that trace.",
+    "closedFormPayload": {
+      "a": "9/32",
+      "b": "1/32",
+      "float": 0.4100970508005519,
+      "repr": "(9/32 + 1/32*sqrt17)"
+    },
+    "primaryRecoveryClaim": "For the Helly-seed n>=2 box fragment, an oracle-free active-set pressure trace recovers the lower endpoint by solving 4x^2 - 9x + 4 = 0 and returning 1/(4x); closed-form validation then confirms the recovered value is (9+sqrt17)/32.",
+    "recoveredEndpointPayload": {
+      "a": "9/32",
+      "b": "1/32",
+      "float": 0.4100970508005519,
+      "repr": "(9/32 + 1/32*sqrt17)"
+    },
+    "recoveryRule": {
+      "activeEquation": "4x^2 - 9x + 4 = 0",
+      "endpointFormula": "1/(4x)",
+      "feasibleRoot": "(9 - sqrt17)/8",
+      "input": "active-set pressure trace",
+      "usesClosedFormForRecovery": false,
+      "usesClosedFormForValidation": true,
+      "usesExactOracle": false
+    },
+    "recoveryVersion": "phase7e_oracle_free_recovery_v0",
+    "status": "RECOVERY_RECEIPT",
+    "traceInputOracleFree": true
   },
   "primaryReviewClaim": "On the locked tiny role-free micro-SEL fragment, restart-variance-only detection is structurally blind to stable false closure because it observes only seed_low_range; the stable PMP traps and pressure-noop controls share seed_low_range=0 while pressure-response traces separate the labels.",
   "reviewOutcomeStatus": "NOT_REVIEWED",

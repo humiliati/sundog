@@ -18,6 +18,7 @@ import boxsel_phase7b_prereg as prereg
 import boxsel_phase7b_run as run
 import boxsel_phase7b_v2_detector as detector
 import boxsel_phase7d_stable_variance_mechanism as phase7d
+import boxsel_phase7e_oracle_free_recovery as phase7e
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -60,6 +61,7 @@ REVIEW_ARTIFACTS = (
     "docs/boxsel/PHASE7B_FALSE_CLOSURE_RUN.md",
     "docs/boxsel/PHASE7C_EXTERNAL_REVIEW_PACKET.md",
     "docs/boxsel/PHASE7D_STABLE_VARIANCE_MECHANISM.md",
+    "docs/boxsel/PHASE7E_ORACLE_FREE_RECOVERY.md",
     "docs/boxsel/PHASE8_WORKBENCH_START.md",
     "scripts/boxsel_phase6b_trace_schema.py",
     "scripts/boxsel_phase7_run.py",
@@ -70,12 +72,15 @@ REVIEW_ARTIFACTS = (
     "scripts/boxsel_phase7b_run.py",
     "scripts/boxsel_phase7c_review_packet.py",
     "scripts/boxsel_phase7d_stable_variance_mechanism.py",
+    "scripts/boxsel_phase7e_oracle_free_recovery.py",
     "scripts/test_boxsel_phase7b_run.py",
     "scripts/test_boxsel_phase7c_review_packet.py",
     "scripts/test_boxsel_phase7d_stable_variance_mechanism.py",
+    "scripts/test_boxsel_phase7e_oracle_free_recovery.py",
     "results/boxsel/phase7_false_closure_run/manifest.json",
     "results/boxsel/phase7b_false_closure_run/manifest.json",
     "results/boxsel/phase7d_stable_variance_mechanism/manifest.json",
+    "results/boxsel/phase7e_oracle_free_recovery/manifest.json",
     "boxsel.html",
     "public/data/boxsel-phase8-workbench.json",
 )
@@ -279,6 +284,21 @@ def packet_payload() -> dict[str, object]:
                 "allEquivalencePairsProveNonSeparation",
                 "varianceObservables",
                 "pressureObservables",
+            }
+        },
+        "phase7eRecovery": {
+            key: value
+            for key, value in phase7e.recovery_summary().items()
+            if key
+            in {
+                "recoveryVersion",
+                "status",
+                "primaryRecoveryClaim",
+                "boundary",
+                "traceInputOracleFree",
+                "recoveryRule",
+                "recoveredEndpointPayload",
+                "closedFormPayload",
             }
         },
         "frozenDetector": detector.detector_summary(),

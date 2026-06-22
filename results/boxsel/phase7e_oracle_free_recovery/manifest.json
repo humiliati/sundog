@@ -1,0 +1,75 @@
+{
+  "boundary": "Toy micro-SEL box fragment only. This is not a general optimizer, not exact SEL inference, not a real-KG claim, and not an Ask Sundog product claim. It assumes the active-set trace is available; it does not prove that ordinary search will find that trace.",
+  "closedFormPayload": {
+    "a": "9/32",
+    "b": "1/32",
+    "float": 0.4100970508005519,
+    "repr": "(9/32 + 1/32*sqrt17)"
+  },
+  "primaryRecoveryClaim": "For the Helly-seed n>=2 box fragment, an oracle-free active-set pressure trace recovers the lower endpoint by solving 4x^2 - 9x + 4 = 0 and returning 1/(4x); closed-form validation then confirms the recovered value is (9+sqrt17)/32.",
+  "recovered": {
+    "applicable": true,
+    "observed_matches_recovered": true,
+    "observed_query_value": "(9/32 + 1/32*sqrt17)",
+    "ordinary_restart_gap_above_recovered": 0.10785257182930108,
+    "ordinary_restart_lower": 0.517949622629853,
+    "rational_witness_gap_above_recovered": 0.000302949199448066,
+    "rational_witness_q": 0.4104,
+    "recovered_endpoint": "(9/32 + 1/32*sqrt17)",
+    "recovered_endpoint_float": 0.4100970508005519,
+    "recovered_x": "(9/8 + -1/8*sqrt17)",
+    "trace_id": "phase7e-helly-kkt-active-trace",
+    "validation_closed_form": "(9/32 + 1/32*sqrt17)",
+    "validation_matches_closed_form": true
+  },
+  "recoveredEndpointPayload": {
+    "a": "9/32",
+    "b": "1/32",
+    "float": 0.4100970508005519,
+    "repr": "(9/32 + 1/32*sqrt17)"
+  },
+  "recoveryRule": {
+    "activeEquation": "4x^2 - 9x + 4 = 0",
+    "endpointFormula": "1/(4x)",
+    "feasibleRoot": "(9 - sqrt17)/8",
+    "input": "active-set pressure trace",
+    "usesClosedFormForRecovery": false,
+    "usesClosedFormForValidation": true,
+    "usesExactOracle": false
+  },
+  "recoveryVersion": "phase7e_oracle_free_recovery_v0",
+  "status": "RECOVERY_RECEIPT",
+  "traceInput": {
+    "active_equation": [
+      4,
+      -9,
+      4
+    ],
+    "active_pairs": [
+      "AC",
+      "BC"
+    ],
+    "atom_volumes": {
+      "A": "(1/2 + 0*sqrt17)",
+      "B": "(1/2 + 0*sqrt17)",
+      "C": "(1/2 + 0*sqrt17)"
+    },
+    "dimension": 2,
+    "family": "helly_seed_box_pressure_recovery",
+    "optimizer_mode": "query_pressure_extremal",
+    "oracle_fields_present": false,
+    "pair_volumes": {
+      "AB": "(9/16 + -1/16*sqrt17)",
+      "AC": "(1/4 + 0*sqrt17)",
+      "BC": "(1/4 + 0*sqrt17)"
+    },
+    "query_denominator": "(9/16 + -1/16*sqrt17)",
+    "query_value": "(9/32 + 1/32*sqrt17)",
+    "slack_pairs": [
+      "AB"
+    ],
+    "trace_id": "phase7e-helly-kkt-active-trace",
+    "triple_volume": "(1/8 + 0*sqrt17)"
+  },
+  "traceInputOracleFree": true
+}

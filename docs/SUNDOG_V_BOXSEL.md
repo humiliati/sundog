@@ -445,6 +445,17 @@ phase, never appended after.
     variance-observable/baseline action and opposite labels. This is the mechanism claim; still
     toy micro-SEL only. Note:
     [`boxsel/PHASE7D_STABLE_VARIANCE_MECHANISM.md`](boxsel/PHASE7D_STABLE_VARIANCE_MECHANISM.md).
+  - **PHASE-7E ORACLE-FREE RECOVERY 2026-06-21**
+    (`scripts/boxsel_phase7e_oracle_free_recovery.py` +test 19/19): the recovery slice now emits
+    a boundary number, not just an abstention. For the Helly-seed `n>=2` box fragment, an
+    oracle-free active-set pressure trace with active `AC`/`BC` constraints recovers
+    `4x^2 - 9x + 4 = 0`, chooses `x=(9-sqrt17)/8`, and returns
+    `q=1/(4x)=(9+sqrt17)/32`. The trace contains geometry/active-set facts, not `I*`, oracle
+    labels, exact `I_box`, or the Phase-4 theorem. Phase 4k is used only after recovery to
+    validate the recovered endpoint exactly. Ordinary restart sampling and the earlier rational
+    witness both sit above the recovered value. This is still a Helly-fragment recovery receipt,
+    not a general optimizer or real-KG claim. Note:
+    [`boxsel/PHASE7E_ORACLE_FREE_RECOVERY.md`](boxsel/PHASE7E_ORACLE_FREE_RECOVERY.md).
 
 - **Phase 8 — Workbench (gated on a Phase-7 pass).** Three nested interval bars (sampled ⊆
   box-attainable ⊆ exact); controls for dimension, restarts, loss tolerance, query pressure,

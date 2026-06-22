@@ -102,7 +102,21 @@ check("pressure-noop controls and equivalence pairs are carried through",
       and mechanism["baselineObservableEquivalencePairs"] == 24
       and mechanism["allEquivalencePairsProveNonSeparation"])
 
-print("(5) review questions are concrete breakpoints:")
+print("(5) recovery receipt is included in the review packet:")
+recovery = data["phase7eRecovery"]
+check("Phase-7e recovery summary is present",
+      recovery["recoveryVersion"] == "phase7e_oracle_free_recovery_v0"
+      and recovery["status"] == "RECOVERY_RECEIPT")
+check("recovery summary preserves oracle-free input and validation split",
+      recovery["traceInputOracleFree"]
+      and recovery["recoveryRule"]["usesExactOracle"] is False
+      and recovery["recoveryRule"]["usesClosedFormForRecovery"] is False
+      and recovery["recoveryRule"]["usesClosedFormForValidation"] is True)
+check("recovered endpoint matches the closed-form payload",
+      recovery["recoveredEndpointPayload"]["repr"] == recovery["closedFormPayload"]["repr"]
+      and recovery["recoveredEndpointPayload"]["repr"] == "(9/32 + 1/32*sqrt17)")
+
+print("(6) review questions are concrete breakpoints:")
 questions = data["reviewQuestions"]
 categories = {item["category"] for item in questions}
 check("seven named review questions are present",
@@ -119,17 +133,21 @@ check("review outcomes include pass, follow-up gate, and redesign paths",
       {item["name"] for item in outcomes}
       == {"toy_claim_review_pass", "followup_gate_required", "claim_withdrawn_or_redesigned"})
 
-print("(6) artifacts and note are packetized:")
+print("(7) artifacts and note are packetized:")
 hashes = data["artifactHashes"]
 by_path = {item["path"]: item for item in hashes}
 required_paths = {
     "docs/boxsel/PHASE7C_EXTERNAL_REVIEW_PACKET.md",
     "docs/boxsel/PHASE7D_STABLE_VARIANCE_MECHANISM.md",
+    "docs/boxsel/PHASE7E_ORACLE_FREE_RECOVERY.md",
     "scripts/boxsel_phase7c_review_packet.py",
     "scripts/boxsel_phase7d_stable_variance_mechanism.py",
+    "scripts/boxsel_phase7e_oracle_free_recovery.py",
     "scripts/test_boxsel_phase7c_review_packet.py",
     "scripts/test_boxsel_phase7d_stable_variance_mechanism.py",
+    "scripts/test_boxsel_phase7e_oracle_free_recovery.py",
     "results/boxsel/phase7d_stable_variance_mechanism/manifest.json",
+    "results/boxsel/phase7e_oracle_free_recovery/manifest.json",
     "results/boxsel/phase7b_false_closure_run/manifest.json",
     "boxsel.html",
 }
@@ -143,7 +161,8 @@ loaded = json.loads(manifest_path.read_text(encoding="utf-8"))
 check("manifest writes and round-trips",
       loaded["packetVersion"] == written["packetVersion"]
       and loaded["phase7bResult"]["detectorAcceptedFalseClosures"] == 0
-      and loaded["phase7dMechanism"]["baselineObservableEquivalencePairs"] == 24)
+      and loaded["phase7dMechanism"]["baselineObservableEquivalencePairs"] == 24
+      and loaded["phase7eRecovery"]["recoveredEndpointPayload"]["repr"] == "(9/32 + 1/32*sqrt17)")
 note = (ROOT / "docs" / "boxsel" / "PHASE7C_EXTERNAL_REVIEW_PACKET.md").read_text(encoding="utf-8")
 check("review note carries status, questions, and exact metrics",
       "READY_FOR_EXTERNAL_REVIEW" in note
