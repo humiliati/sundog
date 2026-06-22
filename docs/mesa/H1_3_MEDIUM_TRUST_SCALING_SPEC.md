@@ -1,11 +1,25 @@
 # H1.3 Medium Trust Scaling
 
-Status: **OPEN SPEC; H1.3-a PROBE SUPPORT.** Opened 2026-06-22 after
-[`H1_2F_RESULTS.md`](H1_2F_RESULTS.md) selected `H1_2F_SUPPORT` and
-[`H1_2G_MULTI_SEED_REPLICATION_SPEC.md`](H1_2G_MULTI_SEED_REPLICATION_SPEC.md)
-registered the PPO-seed replication hardening. Receipts:
-[`H1_3_SMOKE_RESULTS.md`](H1_3_SMOKE_RESULTS.md) and
-[`H1_3_PROBE_RESULTS.md`](H1_3_PROBE_RESULTS.md).
+Status: **CLOSED SPEC / H1.3-b `ATTRIBUTION_NULL`** (binding ran 2026-06-22;
+gates frozen before the run). Result: [`H1_3_RESULTS.md`](H1_3_RESULTS.md). The
+H1.2f **trust-feature mechanism does NOT transfer to Medium**: the council out-
+competes (0.766 vs 0.719) and out-resists the same-run monolith on GI basin
+(0.069 vs 0.199), but **ablating the trust features does not collapse that
+advantage — it grows it** (intact +0.130 vs ablated +0.192, delta −0.0625 <
+0.01), so the win is not creditable to the registered features (validity,
+competence, proxy-advantage, sovereignty gates all pass; attribution gate fails).
+Per §6/§7 this is a valid null that **bounds the scaling claim and preserves
+H1.2f as the Small-tier support**. Diagnostic (NOT gated): the Medium advantage
+appears structural — the monolith degrades hard at Medium while the council holds
+(consistent with the H1.2d "ignore-the-proxy edge may not scale" prediction);
+that structural-plurality hypothesis is owed its own registered rung
+([H1.4](H1_4_MEDIUM_STRUCTURAL_ATTRIBUTION_SPEC.md): role-separation ablation +
+multi-seed). The H1.3-a 3-cell probe had selected
+`H1_3_MEDIUM_SUPPORT` (attribution +0.1042); it did not replicate on the binding
+13-cell slate. Opened 2026-06-22 after `H1_2F_SUPPORT`. Receipts:
+[`H1_3_SMOKE_RESULTS.md`](H1_3_SMOKE_RESULTS.md),
+[`H1_3_PROBE_RESULTS.md`](H1_3_PROBE_RESULTS.md). Sibling hardening:
+[`H1_2G_MULTI_SEED_REPLICATION_SPEC.md`](H1_2G_MULTI_SEED_REPLICATION_SPEC.md).
 
 Parent specs:
 

@@ -257,6 +257,24 @@ the MESA controller-family architecture and capacity ladder.
 > **higher tier**. The Ornament Rule cuts both ways — the figure that lost its
 > [TYPED] stamp on four failed falsifiers earns it back on a creditable, gated,
 > pre-registered win.
+>
+> **H1.3 bounds it — the trust-feature mechanism is Small-tier-only
+> (`ATTRIBUTION_NULL` at Medium, 2026-06-22;
+> [`mesa/H1_3_RESULTS.md`](mesa/H1_3_RESULTS.md)).** Scaling the frozen heads
+> Small→Medium, the council still out-competes (0.766 vs 0.719) and out-resists
+> the matched monarch on basin (0.069 vs 0.199) — but **ablating the trust
+> features no longer collapses the advantage; it grows it** (intact +0.130,
+> ablated +0.192). At Medium the win is *not* carried by the trust features, so
+> the H1.2f mechanism does not transfer and the [TYPED] bounded-positive is
+> pinned to **Small-tier with trust features**. The honest twist: the Medium
+> advantage looks **structural** — the monarch degrades at the harder tier while
+> the bounded court holds, just as H1.2d guessed ("the king's freedom to look
+> away may not scale"). But that is an *un-attributed observation*, not a gated
+> win — the attribution gate refused to credit the registered mechanism for it,
+> and we do not relabel it. It is owed its own rung (**H1.4**: ablate the
+> role-separation structure, multi-seed). The gate is symmetric: the same
+> discipline that let H1.2f earn its stamp denies H1.3 a stamp it cannot
+> attribute — the thesis banks only what a mechanism can be shown to carry.
 
 ---
 
@@ -501,8 +519,18 @@ convert myth into typed result.
   **feature-discrimination limit**; supplying the signal fairly let plurality
   express the predicted advantage. **The thesis is promoted off blanket
   [ORNAMENT] to a [TYPED] bounded-positive for the MESA lane** (Small-tier,
-  in-vitro, single PPO seed). Owed hardening: multi-seed replication → higher
-  tier.
+  in-vitro, single PPO seed). Owed hardening: multi-seed replication
+  ([`H1.2g`](mesa/H1_2G_MULTI_SEED_REPLICATION_SPEC.md)) → higher tier
+  ([`H1.3`](mesa/H1_3_MEDIUM_TRUST_SCALING_SPEC.md)). **H1.3 (Medium) ran
+  `ATTRIBUTION_NULL` ([`mesa/H1_3_RESULTS.md`](mesa/H1_3_RESULTS.md)): the
+  trust-feature mechanism does NOT transfer to Medium** — the council still beats
+  the monarch on competence (0.766 vs 0.719) and basin (0.069 vs 0.199), but
+  ablating the features grows rather than collapses the advantage (+0.130 →
+  +0.192), so the win is not creditable to the registered features. The
+  bounded-positive is thus pinned to **Small-tier**; the apparent Medium edge
+  looks **structural** (monarch degrades at the harder tier, court holds — the
+  H1.2d scaling guess) but is un-attributed, owed a registered **H1.4**
+  (role-separation ablation + multi-seed) before any claim.
 - **H2 — The Averted Face.** Operationalize "oriented to the invariant, not the
   kill": a controller regularized toward the geometry-derived field vs one
   optimizing the proxy directly; measure the Goodhart gap. Home:

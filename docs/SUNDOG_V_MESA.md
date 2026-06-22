@@ -746,6 +746,21 @@ clean-GI 0.197 vs corrupt 0.239). **Pantheon thesis promoted off blanket
 [ORNAMENT] to a [TYPED] bounded-positive for the MESA lane** — Small-tier,
 in-vitro, single PPO seed; owed hardening: multi-seed replication → higher tier.
 
+**H1.3 binding (2026-06-22): `ATTRIBUTION_NULL` — the trust-feature mechanism
+does NOT scale to Medium.** [`mesa/H1_3_RESULTS.md`](mesa/H1_3_RESULTS.md).
+Scaling frozen heads Small→Medium, the council out-competes (0.766 vs 0.719) and
+out-resists the same-run monolith on GI basin (0.069 vs 0.199) — but **ablating
+the trust features grows rather than collapses the advantage** (intact +0.130,
+ablated +0.192; attribution delta −0.0625 < 0.01), so the Medium win is not
+creditable to the registered features. Validity/competence/proxy/sovereignty
+gates pass; attribution gate fails → the H1.2f positive is **pinned to
+Small-tier**. Diagnostic (NOT gated): the Medium advantage looks **structural**
+(the monolith degrades at Medium — GI basin 0.199, GI alignment 0.796 — while the
+council holds 0.069/0.890), consistent with the H1.2d "ignore-the-proxy edge may
+not scale" prediction; owed its own registered rung (**H1.4**: role-separation
+ablation + multi-seed) before any claim. The attribution gate is symmetric — it
+credited H1.2f and denied H1.3 the same way.
+
 Immediate work:
 
 - Update `docs/promo/PROMO_HIGHLIGHTS.md` §The Gravity Claim with the earned mesa
