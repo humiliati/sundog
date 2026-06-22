@@ -10,6 +10,9 @@
 **Status:** Starter lit-pass memo filed as the citation spine for
 [`SUNDOG_V_GHOST.md`](SUNDOG_V_GHOST.md). Treat all "not found" statements as
 time-stamped: "not locked in this pass," not "does not exist."
+**Phase 1 disposition:** Reader lane by default. "Outside debt" is not a
+smooth gradient; bounded recognition examples and Domino-Problem/SFT
+undecidability belong to separate regimes.
 **Surfaces:** `docs/SUNDOG_V_GHOST.md`. No public page, workbench,
 `site-pages.json` entry, executable probe, external-review packet, or public
 launch claim is live.
@@ -251,17 +254,26 @@ That sounds innocent, but the general extension problem can encode computation.
 So the workbench must be substrate-specific. It may compare carefully chosen
 systems; it may not promise a universal finite-patch oracle.
 
-Admissible workbench tiers:
+Admissible workbench tiers should be split, not ranked as a smooth gradient.
+
+Bounded reader substrates:
 
 1. **Periodic controls:** repeat cell exists; ghost collapses when enough of the
    cell is captured.
 2. **Substitution controls:** hierarchy is recoverable or partially recoverable;
    ghost becomes ancestry/recognizability.
 3. **Cut-and-project controls:** outside is projection/window/phase data.
-4. **SFT/Wang controls:** extension can be computationally hard or undecidable;
+
+Computability cliff:
+
+4. **SFT/Wang edge cases:** extension can be computationally hard or undecidable;
    ghost may not be visualizable as a friendly hierarchy.
 
-This is one of the most important claim-boundary outcomes of the pass.
+This is one of the most important claim-boundary outcomes of the pass. The
+Domino-Problem result should appear in the public/exhibit planning as a cliff,
+not as the bottom rung of an "outside debt gradient." Otherwise the reader lane
+silently promises a scalar measure where the literature gives a hard
+computability boundary.
 
 ## Track D - Physical and Material Order
 
@@ -402,6 +414,13 @@ aperiodic tile system.
 
 The first internal workbench should avoid Hat/Spectre until licensing and proof
 vocabulary are clean.
+
+Phase 2 start selected the safe first substrate described below: a periodic
+`A B C D` stripe and a Fibonacci substitution stripe, implemented internally at
+`ghost/workbench.html` with spec
+[`ghost/PHASE2_TOY_WORKBENCH_SPEC.md`](ghost/PHASE2_TOY_WORKBENCH_SPEC.md).
+The computability cliff is represented as a boundary note, not a simulated
+metric.
 
 Safer first substrate:
 

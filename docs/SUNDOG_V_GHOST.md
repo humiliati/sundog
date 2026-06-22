@@ -15,6 +15,12 @@ Status: Brainstorm scaffold opened 2026-06-22 from the Inside/Outside Problem
 thread. Starter citation spine filed at
 [`GHOST_LITPASS_MEMO.md`](GHOST_LITPASS_MEMO.md). This is a reader-lane
 scaffold, not a theorem claim, public claim, or implementation commitment.
+Phase 1 disposition: Ghost is a reader/exhibit lane by default, and "outside
+debt" should be treated as distinct regimes with a Domino-Problem
+computability cliff, not as a smooth scalar gradient.
+Phase 2 start: internal toy closure workbench scaffolded at
+[`../ghost/workbench.html`](../ghost/workbench.html), with spec
+[`ghost/PHASE2_TOY_WORKBENCH_SPEC.md`](ghost/PHASE2_TOY_WORKBENCH_SPEC.md).
 
 The lane name is deliberately broader than `SUNDOG_V_APERIODICITY.md`.
 Aperiodicity is the mathematical pressure test. "Ghost" is the Sundog hook: the
@@ -238,24 +244,38 @@ Research upgrade gate:
 - name at least one example and one counterexample class;
 - get specialist review before any public theorem-shaped phrasing.
 
-### Outside Debt Gradient
+### Outside Debt Regimes
 
-> Systems differ by how much outside they require for a finite inside to be
-> certified as part of the whole.
+> Systems differ by what kind of outside a finite inside requires. That is not
+> necessarily a smooth gradient.
 
-Possible coarse ladder:
+There is an important discontinuity here. Periodic, quasiperiodic,
+substitution, and familiar hierarchical aperiodic examples can often be handled
+with finite, named recognition data inside a chosen formalism. The Domino
+Problem / SFT edge is different: extension can cross into computation and
+undecidability. Do not render that cliff as one more step on the same ladder.
+
+Bounded recognition / reader regime:
 
 | class | inside | ghost / outside debt |
 | --- | --- | --- |
 | finite object | bounded description | low once boundary is named |
 | periodic tiling | motif plus lattice | bounded by repeat cell |
 | quasiperiodic tiling | local patch plus projection/cut data | external phase/window data |
-| substitution tiling | patch plus hierarchy | scale-recursive ancestry |
-| aperiodic monotile | local geometry plus forced hierarchy | unbounded non-periodic context |
-| computation / SFT edge cases | local rules | extension/halting-like uncertainty |
+| substitution tiling | patch plus hierarchy | recognizability / supertile ancestry |
+| hierarchical aperiodic monotile examples | local geometry plus forced hierarchy | finite recognition data inside a non-periodic hull |
 
-This ladder is heuristic. Its job is to produce good questions, not to rank
-formal difficulty.
+Computability cliff:
+
+| class | inside | cliff |
+| --- | --- | --- |
+| general Wang / SFT edge cases | local rules plus finite patch | extension and global-existence questions can encode computation and become undecidable |
+
+The reader lane may compare these regimes, but it should not imply that
+"outside debt" is a single scalar that smoothly increases from finite objects
+to undecidable tiling systems. If a specialist asks what the metric is, the
+honest answer is: there may not be one. The first public exhibit should show
+the contrast, not pretend to measure it.
 
 ### Local Closure Failure
 
@@ -543,15 +563,34 @@ Exit gate:
 
 ### Phase 2 - Toy Model Workbench
 
-- Build an internal finite-grid demo using known, simple systems.
-- Compare periodic closure to substitution-like non-periodic behavior.
-- Avoid Hat/Spectre implementation until source/licensing and proof vocabulary
-  are clean.
+Status: started 2026-06-22.
+
+- Spec: [`ghost/PHASE2_TOY_WORKBENCH_SPEC.md`](ghost/PHASE2_TOY_WORKBENCH_SPEC.md).
+- Internal artifact: [`../ghost/workbench.html`](../ghost/workbench.html)
+  served locally as `/ghost/workbench.html` from a static dev server.
+- Pure core: `ghost/ghost-core.js`.
+- Acceptance test: `npm run ghost:test`.
+
+The Phase 2 start artifact uses one-dimensional symbolic stripes rather than
+planar tiles:
+
+- periodic control: repeated `A B C D`, where local closure can collapse to a
+  repeat cell;
+- substitution control: Fibonacci `A -> AB`, `B -> A`, where bounded ancestry
+  can be shown without a translational repeat cell;
+- computability cliff: named as a separate non-measured regime, not rendered as
+  another rung on a gradient.
+
+Hat/Spectre implementation remains deferred until source/licensing and proof
+vocabulary are clean.
 
 Exit gate:
 
 - The ghost boundary is visible as an interaction, not merely explained in
   prose.
+- The periodic/substitution contrast is visible without implying a new
+  invariant.
+- The Domino/SFT cliff remains a separate panel, not a smooth metric row.
 
 ### Phase 3 - Aperiodic Reader
 

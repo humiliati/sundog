@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<!--
+  Ghost Phase 2 toy closure workbench. INTERNAL.
+
+  This is not a public page: it lives in a non-root /ghost/ dir, carries no
+  site-pages.json entry, and is not launched. Open through a local static
+  server at /ghost/workbench.html.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="data:," />
+  <title>Ghost Toy Closure Workbench (internal)</title>
+  <style>
+    :root {
+      --ink: #1f2d36;
+      --muted: #61717c;
+      --bg: #f7faf8;
+      --paper: #ffffff;
+      --line: #cfd9d2;
+      --blue: #214f71;
+      --blue-soft: #e4eef5;
+      --gold: #a97718;
+      --gold-soft: #f5ebd5;
+      --green: #2f6f52;
+      --green-soft: #dff0e7;
+      --red: #9a4a3f;
+      --red-soft: #f1dedb;
+      --a: #244f73;
+      --b: #d6a533;
+      --c: #4f7f55;
+      --d: #9b5a4f;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--bg);
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    main {
+      width: min(1160px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 28px 0 44px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 3px 10px;
+      color: var(--muted);
+      background: #fff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    h1 {
+      margin: 10px 0 6px;
+      color: var(--blue);
+      font-size: clamp(1.7rem, 4vw, 2.8rem);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .lede {
+      max-width: 72ch;
+      margin: 0;
+      color: #40505a;
+      font-size: 1rem;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) minmax(180px, 1fr) minmax(180px, 1fr) minmax(140px, 0.6fr) auto auto auto;
+      gap: 10px;
+      align-items: end;
+      margin: 24px 0 16px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      border-radius: 8px;
+    }
+
+    label {
+      display: grid;
+      gap: 5px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    select,
+    input[type="range"],
+    button {
+      width: 100%;
+      font: inherit;
+    }
+
+    select,
+    button {
+      min-height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--ink);
+      background: #fff;
+    }
+
+    button {
+      min-width: 42px;
+      padding: 0 12px;
+      color: var(--blue);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    button:hover,
+    select:hover {
+      border-color: var(--blue);
+    }
+
+    .readout {
+      color: var(--ink);
+      font-weight: 800;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    .surface {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      padding: 14px;
+    }
+
+    .range-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 0.82rem;
+      margin-bottom: 10px;
+    }
+
+    .stripe-wrap {
+      overflow-x: auto;
+      padding-bottom: 6px;
+    }
+
+    #stripe {
+      display: grid;
+      grid-template-columns: repeat(var(--visible-count, 72), minmax(14px, 1fr));
+      min-width: min(980px, calc(var(--visible-count, 72) * 16px));
+      gap: 2px;
+      align-items: stretch;
+    }
+
+    .stripe-cell {
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 34px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .stripe-cell.context {
+      opacity: 0.34;
+      filter: saturate(0.65);
+    }
+
+    .stripe-cell.selected {
+      opacity: 1;
+      box-shadow: inset 0 -4px 0 var(--green);
+    }
+
+    .stripe-cell.left-edge {
+      border-left: 4px solid var(--red);
+    }
+
+    .stripe-cell.right-edge {
+      border-right: 4px solid var(--red);
+    }
+
+    .stripe-cell.ancestry-boundary::before {
+      content: "";
+      position: absolute;
+      left: -3px;
+      top: -6px;
+      bottom: -6px;
+      width: 2px;
+      background: var(--gold);
+    }
+
+    .sym-a { background: var(--a); }
+    .sym-b { background: var(--b); color: #36280b; }
+    .sym-c { background: var(--c); }
+    .sym-d { background: var(--d); }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: minmax(280px, 1fr) minmax(280px, 1fr) minmax(280px, 1fr);
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 14px;
+      min-height: 160px;
+    }
+
+    .panel h2 {
+      margin: 0 0 9px;
+      color: var(--blue);
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .stat {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px dotted var(--line);
+      padding: 5px 0;
+      font-size: 0.88rem;
+    }
+
+    .stat span {
+      color: var(--muted);
+    }
+
+    .stat b {
+      color: var(--ink);
+      text-align: right;
+    }
+
+    .verdict {
+      margin-top: 12px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+
+    .verdict.closed {
+      color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .verdict.open {
+      color: var(--blue);
+      background: var(--blue-soft);
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin: 8px 0 0;
+    }
+
+    .cliff {
+      border-color: #d9b2ac;
+      background: var(--red-soft);
+    }
+
+    .cliff h2 {
+      color: var(--red);
+    }
+
+    pre {
+      max-height: 230px;
+      overflow: auto;
+      margin: 10px 0 0;
+      padding: 10px;
+      border-radius: 6px;
+      color: #e9f2f7;
+      background: #122633;
+      font-size: 0.74rem;
+      white-space: pre-wrap;
+    }
+
+    footer {
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    @media (max-width: 980px) {
+      .controls,
+      .dashboard {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      main {
+        width: min(100vw - 18px, 1160px);
+        padding-top: 16px;
+      }
+
+      .controls,
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+
+      .stripe-cell {
+        min-height: 30px;
+        font-size: 0.68rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <span class="tag">internal / Ghost Phase 2 / not public</span>
+    <h1>Ghost Toy Closure Workbench</h1>
+    <p class="lede">
+      Draw a finite window around a symbolic pattern. The periodic control
+      closes to a repeat cell; the substitution control exposes ancestry without
+      becoming a repeat cell.
+    </p>
+
+    <section class="controls" aria-label="Workbench controls">
+      <label>
+        System
+        <select id="system-select"></select>
+      </label>
+      <label>
+        Center <span id="center-readout" class="readout"></span>
+        <input id="center-range" type="range" />
+      </label>
+      <label>
+        Radius <span id="radius-readout" class="readout"></span>
+        <input id="radius-range" type="range" />
+      </label>
+      <label>
+        Ancestry
+        <select id="ancestry-level"></select>
+      </label>
+      <button id="btn-shrink" type="button" title="Shrink selected window">-</button>
+      <button id="btn-grow" type="button" title="Grow selected window">+</button>
+      <button id="btn-center" type="button" title="Center selected window">Center</button>
+    </section>
+
+    <section class="surface" aria-label="Symbolic stripe">
+      <div class="range-row">
+        <span>visible <b id="visible-range"></b></span>
+        <span>selected window <b id="window-range"></b></span>
+        <span>sample length <b id="length-readout"></b></span>
+      </div>
+      <div class="stripe-wrap">
+        <div id="stripe"></div>
+      </div>
+    </section>
+
+    <section class="dashboard" aria-label="Analysis panels">
+      <div class="panel">
+        <h2>Local Closure</h2>
+        <div class="stat"><span>regime</span><b id="regime"></b></div>
+        <div class="stat"><span>window length</span><b id="metric-window"></b></div>
+        <div class="stat"><span>symbol counts</span><b id="metric-counts"></b></div>
+        <div class="stat"><span>local periods</span><b id="metric-periods"></b></div>
+        <div id="verdict" class="verdict"></div>
+      </div>
+
+      <div class="panel">
+        <h2>Recognition</h2>
+        <div class="stat"><span>current marker</span><b id="metric-ancestry"></b></div>
+        <p id="ancestry-note" class="note"></p>
+        <pre id="export-out"></pre>
+      </div>
+
+      <div class="panel cliff">
+        <h2>Computability Cliff</h2>
+        <p id="cliff-note" class="note"></p>
+        <p class="note">
+          Phase 2 compares bounded reader substrates only. General Wang/SFT
+          extension is deliberately not shown as a smooth next step.
+        </p>
+      </div>
+    </section>
+
+    <footer>
+      Spec: docs/ghost/PHASE2_TOY_WORKBENCH_SPEC.md. Ledger:
+      docs/SUNDOG_V_GHOST.md. This internal toy reframes known structure; it
+      does not introduce a Ghost invariant.
+    </footer>
+  </main>
+
+  <script type="module" src="./ghost-workbench.js"></script>
+</body>
+</html>
