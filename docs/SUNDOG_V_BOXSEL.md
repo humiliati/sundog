@@ -424,15 +424,27 @@ phase, never appended after.
     and detector-demonstration lane, **not** a real-KG/product claim. Result note:
     [`boxsel/PHASE7B_FALSE_CLOSURE_RUN.md`](boxsel/PHASE7B_FALSE_CLOSURE_RUN.md).
   - **PHASE-7C REVIEW PACKET READY 2026-06-21** (`scripts/boxsel_phase7c_review_packet.py`
-    +test 21/21): the review-worthy ask is now frozen as a packet, not a broad claim. Primary
-    claim: on the locked tiny role-free micro-SEL corpus, the frozen oracle-free Phase-7b v2
-    `GeneralTrace` detector accepted `0/16` false-closure traps while the restart-variance
-    baseline accepted `16/16`. The packet preserves the failed Phase-7 history, hashes all review
+    +test 25/25): the review-worthy ask is now mechanism-centered, not a broad benchmark claim.
+    Primary claim: on the locked tiny role-free micro-SEL fragment, restart-variance-only
+    detection is structurally blind to stable false closure because it observes only
+    `seed_low_range`; the stable PMP traps and pressure-noop controls share `seed_low_range = 0`
+    while pressure-response traces separate the labels. The packet still carries the Phase-7b
+    `0/16` vs `16/16` result as evidence, preserves the failed Phase-7 history, hashes review
     artifacts, audits detector/oracle leakage, records held-out hygiene, and names seven reviewer
-    breakpoints: leakage, held-out reuse, baseline strength, query-pressure legitimacy,
-    semantic-alignment of labels, control sufficiency, and scope. Outcome remains
-    `NOT_REVIEWED`; even a clean review would certify only the toy micro-SEL claim. Note:
+    breakpoints. Outcome remains `NOT_REVIEWED`; even a clean review would certify only the toy
+    micro-SEL claim. Note:
     [`boxsel/PHASE7C_EXTERNAL_REVIEW_PACKET.md`](boxsel/PHASE7C_EXTERNAL_REVIEW_PACKET.md).
+  - **PHASE-7D STABLE/VARIANCE MECHANISM 2026-06-21**
+    (`scripts/boxsel_phase7d_stable_variance_mechanism.py` +test 24/24): the clarity axis is
+    now explicit. `restart_variance_only_v0` observes only `seed_low_range`, so any false closure
+    with `seed_low_range <= 0.02` is accepted by construction. The stable PMP pressure family
+    instantiates that blind spot: `8/8` false-closed rows have `seed_low_range = 0`, are accepted
+    by restart variance, and are separated by pressure/optimizer movement. The pressure-noop
+    controls share the same variance observable (`seed_low_range = 0`) but have no pressure signal
+    and are accepted by v2. The receipt records `24` trap/control equivalence pairs with identical
+    variance-observable/baseline action and opposite labels. This is the mechanism claim; still
+    toy micro-SEL only. Note:
+    [`boxsel/PHASE7D_STABLE_VARIANCE_MECHANISM.md`](boxsel/PHASE7D_STABLE_VARIANCE_MECHANISM.md).
 
 - **Phase 8 — Workbench (gated on a Phase-7 pass).** Three nested interval bars (sampled ⊆
   box-attainable ⊆ exact); controls for dimension, restarts, loss tolerance, query pressure,

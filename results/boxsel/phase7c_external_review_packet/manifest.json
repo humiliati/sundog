@@ -3,14 +3,14 @@
     {
       "exists": true,
       "path": "docs/SUNDOG_V_BOXSEL.md",
-      "sha256": "a68cf49bcbba8e40b05c6c843467a615bbed4eb6ebe173f031597bca4c4badcf",
-      "sizeBytes": 36215
+      "sha256": "3983bc5132b1f03a72bbb9a7c143d416d7fad17e56f767b6f26e7a752d9a5303",
+      "sizeBytes": 37210
     },
     {
       "exists": true,
       "path": "docs/boxsel/BOXSEL_LITPASS_MEMO.md",
-      "sha256": "f86fc6fad5f9dad0550dcc372bbfe5176afb8415d948a6b9c35ef0445cd4a022",
-      "sizeBytes": 24904
+      "sha256": "a9c2530d44f5b6055c3a9931247652a12fb054dc9f33292c6d8ba16c9d3c34e0",
+      "sizeBytes": 25638
     },
     {
       "exists": true,
@@ -57,8 +57,14 @@
     {
       "exists": true,
       "path": "docs/boxsel/PHASE7C_EXTERNAL_REVIEW_PACKET.md",
-      "sha256": "66272c085c03f85d2b9ce4a9b426f24c7a50c6cbbab9bc5ba355039702a2fd13",
-      "sizeBytes": 4777
+      "sha256": "1c5eac114abe9e2f3b9dcaa611f6ccd4b19540c659c6ead36129d5064147f091",
+      "sizeBytes": 5500
+    },
+    {
+      "exists": true,
+      "path": "docs/boxsel/PHASE7D_STABLE_VARIANCE_MECHANISM.md",
+      "sha256": "ed78b3878406a5155f6e25b8fae9c49d4d33cb472a7511c5ff67dfdff6e4bd43",
+      "sizeBytes": 3189
     },
     {
       "exists": true,
@@ -111,8 +117,14 @@
     {
       "exists": true,
       "path": "scripts/boxsel_phase7c_review_packet.py",
-      "sha256": "ad6b43c2d653a861c0a9f5140fc40f295617f2aa90fb171c694fbd5ba5707f8e",
-      "sizeBytes": 12700
+      "sha256": "bb791eaa7440b64cc19e7472901dbc245e5596b6581fba584d5d5981f284b9b7",
+      "sizeBytes": 13839
+    },
+    {
+      "exists": true,
+      "path": "scripts/boxsel_phase7d_stable_variance_mechanism.py",
+      "sha256": "27f9b9f98e2922d9e633fc977aa8da3cccad850a23ea19f638fc78cd85e332b7",
+      "sizeBytes": 8788
     },
     {
       "exists": true,
@@ -123,8 +135,14 @@
     {
       "exists": true,
       "path": "scripts/test_boxsel_phase7c_review_packet.py",
-      "sha256": "a686a3b8b95b920ec0ade7405cfa2e44af333159d737840c6a34ad06693c283c",
-      "sizeBytes": 6195
+      "sha256": "69e31376bde291887d3bdf723f90f85de938c99898938c3a3dcabdcfe06d369f",
+      "sizeBytes": 7591
+    },
+    {
+      "exists": true,
+      "path": "scripts/test_boxsel_phase7d_stable_variance_mechanism.py",
+      "sha256": "f9c2c7a5836d87848d645c5979df1ca33133f25a6bfead55952557161986601d",
+      "sizeBytes": 6192
     },
     {
       "exists": true,
@@ -137,6 +155,12 @@
       "path": "results/boxsel/phase7b_false_closure_run/manifest.json",
       "sha256": "521e1a612a337a05e6d48440e4c8487d73436ef372b70427a8b3200ad166c12a",
       "sizeBytes": 30958
+    },
+    {
+      "exists": true,
+      "path": "results/boxsel/phase7d_stable_variance_mechanism/manifest.json",
+      "sha256": "9dd0193ab9cc5732e580757206ad4907669034746b8762da1ca2a65da6fea04e",
+      "sizeBytes": 17652
     },
     {
       "exists": true,
@@ -264,7 +288,25 @@
     "status": "PASS_PREREG_GATE",
     "trueNarrowAcceptRate": 1.0
   },
-  "primaryReviewClaim": "On a locked tiny role-free micro-SEL corpus, the frozen oracle-free Phase-7b v2 GeneralTrace detector accepted 0/16 false-closure traps, while the locked restart-variance baseline accepted 16/16.",
+  "phase7dMechanism": {
+    "allEquivalencePairsProveNonSeparation": true,
+    "baselineObservableEquivalencePairs": 24,
+    "mechanismVersion": "phase7d_stable_variance_mechanism_v0",
+    "pressureNoopControlCount": 3,
+    "pressureNoopControlsClear": 3,
+    "pressureObservables": [
+      "pressure_low_shift",
+      "optimizer_low_spread"
+    ],
+    "stablePmpBaselineBlindAccepts": 8,
+    "stablePmpDetectorSeparations": 8,
+    "stablePmpTrapCount": 8,
+    "status": "MECHANISM_RECEIPT",
+    "varianceObservables": [
+      "seed_low_range"
+    ]
+  },
+  "primaryReviewClaim": "On the locked tiny role-free micro-SEL fragment, restart-variance-only detection is structurally blind to stable false closure because it observes only seed_low_range; the stable PMP traps and pressure-noop controls share seed_low_range=0 while pressure-response traces separate the labels.",
   "reviewOutcomeStatus": "NOT_REVIEWED",
   "reviewOutcomes": [
     {
@@ -274,8 +316,8 @@
     },
     {
       "id": "P7C-O2",
-      "meaning": "Reviewer accepts the packet shape but requires a stricter baseline, more controls, or a larger registered corpus before any stronger claim.",
-      "name": "phase7d_required"
+      "meaning": "Reviewer accepts the packet shape but requires a stricter baseline, recovery test, more controls, or a larger registered corpus before any stronger claim.",
+      "name": "followup_gate_required"
     },
     {
       "id": "P7C-O3",
@@ -297,10 +339,10 @@
       "question": "Are Phase-7 diagnostic rows and seeds excluded from Phase-7b held-out validation?"
     },
     {
-      "breaksClaimIf": "A comparably simple oracle-free baseline catches the same traps while preserving controls.",
+      "breaksClaimIf": "The baseline has another observable that can separate the stable PMP traps from pressure-noop controls.",
       "category": "baseline",
       "id": "P7C-Q3",
-      "question": "Is restart_variance_only_v0 an adequate first comparator, and what stricter oracle-free baseline should be required before promotion?"
+      "question": "Is the Phase-7d stable/variance dichotomy correct: does restart_variance_only_v0 truly observe only seed_low_range, making stable false closure a blind spot by construction?"
     },
     {
       "breaksClaimIf": "Pressure traces smuggle in the exact endpoint or require access equivalent to the evaluator.",

@@ -17,6 +17,7 @@ import boxsel_phase7_run as phase7
 import boxsel_phase7b_prereg as prereg
 import boxsel_phase7b_run as run
 import boxsel_phase7b_v2_detector as detector
+import boxsel_phase7d_stable_variance_mechanism as phase7d
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -28,9 +29,10 @@ REVIEW_PACKET_STATUS = "READY_FOR_EXTERNAL_REVIEW"
 REVIEW_OUTCOME_STATUS = "NOT_REVIEWED"
 
 PRIMARY_REVIEW_CLAIM = (
-    "On a locked tiny role-free micro-SEL corpus, the frozen oracle-free Phase-7b v2 "
-    "GeneralTrace detector accepted 0/16 false-closure traps, while the locked "
-    "restart-variance baseline accepted 16/16."
+    "On the locked tiny role-free micro-SEL fragment, restart-variance-only detection is "
+    "structurally blind to stable false closure because it observes only seed_low_range; "
+    "the stable PMP traps and pressure-noop controls share seed_low_range=0 while "
+    "pressure-response traces separate the labels."
 )
 
 BOUNDARY = (
@@ -57,6 +59,7 @@ REVIEW_ARTIFACTS = (
     "docs/boxsel/PHASE7B_V2_FREEZE_LOCK.md",
     "docs/boxsel/PHASE7B_FALSE_CLOSURE_RUN.md",
     "docs/boxsel/PHASE7C_EXTERNAL_REVIEW_PACKET.md",
+    "docs/boxsel/PHASE7D_STABLE_VARIANCE_MECHANISM.md",
     "docs/boxsel/PHASE8_WORKBENCH_START.md",
     "scripts/boxsel_phase6b_trace_schema.py",
     "scripts/boxsel_phase7_run.py",
@@ -66,10 +69,13 @@ REVIEW_ARTIFACTS = (
     "scripts/boxsel_phase7b_evaluator.py",
     "scripts/boxsel_phase7b_run.py",
     "scripts/boxsel_phase7c_review_packet.py",
+    "scripts/boxsel_phase7d_stable_variance_mechanism.py",
     "scripts/test_boxsel_phase7b_run.py",
     "scripts/test_boxsel_phase7c_review_packet.py",
+    "scripts/test_boxsel_phase7d_stable_variance_mechanism.py",
     "results/boxsel/phase7_false_closure_run/manifest.json",
     "results/boxsel/phase7b_false_closure_run/manifest.json",
+    "results/boxsel/phase7d_stable_variance_mechanism/manifest.json",
     "boxsel.html",
     "public/data/boxsel-phase8-workbench.json",
 )
@@ -119,8 +125,8 @@ def review_questions() -> tuple[dict[str, str], ...]:
         {
             "id": "P7C-Q3",
             "category": "baseline",
-            "question": "Is restart_variance_only_v0 an adequate first comparator, and what stricter oracle-free baseline should be required before promotion?",
-            "breaksClaimIf": "A comparably simple oracle-free baseline catches the same traps while preserving controls.",
+            "question": "Is the Phase-7d stable/variance dichotomy correct: does restart_variance_only_v0 truly observe only seed_low_range, making stable false closure a blind spot by construction?",
+            "breaksClaimIf": "The baseline has another observable that can separate the stable PMP traps from pressure-noop controls.",
         },
         {
             "id": "P7C-Q4",
@@ -158,8 +164,8 @@ def review_outcomes() -> tuple[dict[str, str], ...]:
         },
         {
             "id": "P7C-O2",
-            "name": "phase7d_required",
-            "meaning": "Reviewer accepts the packet shape but requires a stricter baseline, more controls, or a larger registered corpus before any stronger claim.",
+            "name": "followup_gate_required",
+            "meaning": "Reviewer accepts the packet shape but requires a stricter baseline, recovery test, more controls, or a larger registered corpus before any stronger claim.",
         },
         {
             "id": "P7C-O3",
@@ -256,6 +262,24 @@ def packet_payload() -> dict[str, object]:
             "baselinePressureWarningRateOnStablePmp": phase7b_summary.baseline_pressure_warning_rate_on_stable_pmp,
             "killCriteriaTriggered": phase7b_summary.kill_criteria_triggered,
             "predictionsSupported": phase7b_summary.predictions_supported,
+        },
+        "phase7dMechanism": {
+            key: value
+            for key, value in phase7d.mechanism_summary().items()
+            if key
+            in {
+                "mechanismVersion",
+                "status",
+                "stablePmpTrapCount",
+                "stablePmpBaselineBlindAccepts",
+                "stablePmpDetectorSeparations",
+                "pressureNoopControlCount",
+                "pressureNoopControlsClear",
+                "baselineObservableEquivalencePairs",
+                "allEquivalencePairsProveNonSeparation",
+                "varianceObservables",
+                "pressureObservables",
+            }
         },
         "frozenDetector": detector.detector_summary(),
         "leakageAndBoundaryAudit": leakage_and_boundary_audit(phase7b_cases, phase7_summary, phase7b_summary),

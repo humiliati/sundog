@@ -9,9 +9,10 @@ Phase-7b result beyond the toy micro-SEL boundary.
 ## Review Claim
 
 ```text
-On a locked tiny role-free micro-SEL corpus, the frozen oracle-free Phase-7b v2
-GeneralTrace detector accepted 0/16 false-closure traps, while the locked
-restart-variance baseline accepted 16/16.
+On the locked tiny role-free micro-SEL fragment, restart-variance-only detection is
+structurally blind to stable false closure because it observes only seed_low_range;
+the stable PMP traps and pressure-noop controls share seed_low_range=0 while
+pressure-response traces separate the labels.
 ```
 
 That is the whole claim being sent for review. It is not a real-KG claim, not a calibration
@@ -53,10 +54,19 @@ stable-PMP pressure warnings            : 8 / 8
 baseline stable-PMP pressure warnings   : 0 / 8
 ```
 
-The review is therefore not "is this impressive?" The review is:
+Phase 7d extracts the mechanism from those numbers:
 
 ```text
-Is this a clean, leakage-free, reproducible toy demonstration of trace-based false-closure gating,
+restart_variance_only_v0 observes only seed_low_range
+stable PMP traps       : seed_low_range = 0, false_closed = true,  baseline accepts, v2 abstains
+pressure-noop controls : seed_low_range = 0, false_closed = false, baseline accepts, v2 accepts
+equivalence pairs      : 24 trap/control pairs with identical variance observable and opposite labels
+```
+
+The review is therefore not "is this benchmark impressive?" The review is:
+
+```text
+Is this stable/variance mechanism receipt clean, leakage-free, and semantically aligned,
 and what exact blocker remains before any wider claim?
 ```
 
@@ -71,8 +81,8 @@ P7C-Q2 heldout
 Are Phase-7 diagnostic rows and seeds excluded from Phase-7b held-out validation?
 
 P7C-Q3 baseline
-Is restart_variance_only_v0 an adequate first comparator, and what stricter oracle-free
-baseline should be required before promotion?
+Is the Phase-7d stable/variance dichotomy correct: does restart_variance_only_v0 truly
+observe only seed_low_range, making stable false closure a blind spot by construction?
 
 P7C-Q4 pressure
 Is query pressure a legitimate observable trace, or is it too close to extremal inference
@@ -109,9 +119,9 @@ the packet implies real-KG transfer, calibration, product behavior, or a retroac
 P7C-O1 toy_claim_review_pass
 Reviewer accepts only the bounded toy micro-SEL claim and finds no leakage or semantic-label break.
 
-P7C-O2 phase7d_required
-Reviewer accepts the packet shape but requires a stricter baseline, more controls, or a larger
-registered corpus before any stronger claim.
+P7C-O2 followup_gate_required
+Reviewer accepts the packet shape but requires a stricter baseline, recovery test, more controls,
+or a larger registered corpus before any stronger claim.
 
 P7C-O3 claim_withdrawn_or_redesigned
 Reviewer finds leakage, semantic mismatch, or overclaim sufficient to withdraw the Phase-7b
@@ -131,6 +141,8 @@ Generator and guard:
 ```text
 scripts/boxsel_phase7c_review_packet.py
 scripts/test_boxsel_phase7c_review_packet.py
+scripts/boxsel_phase7d_stable_variance_mechanism.py
+scripts/test_boxsel_phase7d_stable_variance_mechanism.py
 ```
 
 The manifest records:
@@ -140,6 +152,7 @@ primary review claim
 non-claims
 Phase-7 failure metrics
 Phase-7b pass metrics
+Phase-7d stable/variance mechanism summary
 frozen detector metadata
 leakage/boundary audit booleans
 review questions and possible outcomes
@@ -156,7 +169,7 @@ python scripts/test_boxsel_phase7c_review_packet.py
 Result at start:
 
 ```text
-21/21 checks pass, exit 0.
+25/25 checks pass, exit 0.
 ```
 
 ---

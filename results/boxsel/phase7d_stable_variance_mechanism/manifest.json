@@ -1,0 +1,502 @@
+{
+  "allEquivalencePairsProveNonSeparation": true,
+  "baselineObservableEquivalencePairs": 24,
+  "boundary": "This is a toy micro-SEL mechanism receipt. It proves a signal-access asymmetry on the Phase-7b fragment; it is not a real-KG, calibration, or product claim.",
+  "equivalencePairs": [
+    {
+      "baseline_action": "accept",
+      "control_case_id": "p7b-pressure-noop-00",
+      "control_detector_action": "accept",
+      "control_false_closed": false,
+      "control_pressure_low_shift": 0.0,
+      "shared_seed_low_range": 0.0,
+      "trap_case_id": "p7b-stable-pmp-00",
+      "trap_detector_action": "abstain",
+      "trap_false_closed": true,
+      "trap_pressure_low_shift": 0.1547777777777778
+    },
+    {
+      "baseline_action": "accept",
+      "control_case_id": "p7b-pressure-noop-01",
+      "control_detector_action": "accept",
+      "control_false_closed": false,
+      "control_pressure_low_shift": 0.0,
+      "shared_seed_low_range": 0.0,
+      "trap_case_id": "p7b-stable-pmp-00",
+      "trap_detector_action": "abstain",
+      "trap_false_closed": true,
+      "trap_pressure_low_shift": 0.1547777777777778
+    },
+    {
+      "baseline_action": "accept",
+      "control_case_id": "p7b-pressure-noop-02",
+      "control_detector_action": "accept",
+      "control_false_closed": false,
+      "control_pressure_low_shift": 0.0,
+      "shared_seed_low_range": 0.0,
+      "trap_case_id": "p7b-stable-pmp-00",
+      "trap_detector_action": "abstain",
+      "trap_false_closed": true,
+      "trap_pressure_low_shift": 0.1547777777777778
+    },
+    {
+      "baseline_action": "accept",
+      "control_case_id": "p7b-pressure-noop-00",
+      "control_detector_action": "accept",
+      "control_false_closed": false,
+      "control_pressure_low_shift": 0.0,
+      "shared_seed_low_range": 0.0,
+      "trap_case_id": "p7b-stable-pmp-01",
+      "trap_detector_action": "abstain",
+      "trap_false_closed": true,
+      "trap_pressure_low_shift": 0.14700000000000002
+    },
+    {
+      "baseline_action": "accept",
+      "control_case_id": "p7b-pressure-noop-01",
+      "control_detector_action": "accept",
+      "control_false_closed": false,
+      "control_pressure_low_shift": 0.0,
+      "shared_seed_low_range": 0.0,
+      "trap_case_id": "p7b-stable-pmp-01",
+      "trap_detector_action": "abstain",
+      "trap_false_closed": true,
+      "trap_pressure_low_shift": 0.14700000000000002
+    },
+    {
+      "baseline_action": "accept",
+      "control_case_id": "p7b-pressure-noop-02",
+      "control_detector_action": "accept",
+      "control_false_closed": false,
+      "control_pressure_low_shift": 0.0,
+      "shared_seed_low_range": 0.0,
+      "trap_case_id": "p7b-stable-pmp-01",
+      "trap_detector_action": "abstain",
+      "trap_false_closed": true,
+      "trap_pressure_low_shift": 0.14700000000000002
+    },
+    {
+      "baseline_action": "accept",
+      "control_case_id": "p7b-pressure-noop-00",
+      "control_detector_action": "accept",
+      "control_false_closed": false,
+      "control_pressure_low_shift": 0.0,
+      "shared_seed_low_range": 0.0,
+      "trap_case_id": "p7b-stable-pmp-02",
+      "trap_detector_action": "abstain",
+      "trap_false_closed": true,
+      "trap_pressure_low_shift": 0.14700000000000002
+    },
+    {
+      "baseline_action": "accept",
+      "control_case_id": "p7b-pressure-noop-01",
+      "control_detector_action": "accept",
+      "control_false_closed": false,
+      "control_pressure_low_shift": 0.0,
+      "shared_seed_low_range": 0.0,
+      "trap_case_id": "p7b-stable-pmp-02",
+      "trap_detector_action": "abstain",
+      "trap_false_closed": true,
+      "trap_pressure_low_shift": 0.14700000000000002
+    },
+    {
+      "baseline_action": "accept",
+      "control_case_id": "p7b-pressure-noop-02",
+      "control_detector_action": "accept",
+      "control_false_closed": false,
+      "control_pressure_low_shift": 0.0,
+      "shared_seed_low_range": 0.0,
+      "trap_case_id": "p7b-stable-pmp-02",
+      "trap_detector_action": "abstain",
+      "trap_false_closed": true,
+      "trap_pressure_low_shift": 0.14700000000000002
+    },
+    {
+      "baseline_action": "accept",
+      "control_case_id": "p7b-pressure-noop-00",
+      "control_detector_action": "accept",
+      "control_false_closed": false,
+      "control_pressure_low_shift": 0.0,
+      "shared_seed_low_range": 0.0,
+      "trap_case_id": "p7b-stable-pmp-03",
+      "trap_detector_action": "abstain",
+      "trap_false_closed": true,
+      "trap_pressure_low_shift": 0.137
+    },
+    {
+      "baseline_action": "accept",
+      "control_case_id": "p7b-pressure-noop-01",
+      "control_detector_action": "accept",
+      "control_false_closed": false,
+      "control_pressure_low_shift": 0.0,
+      "shared_seed_low_range": 0.0,
+      "trap_case_id": "p7b-stable-pmp-03",
+      "trap_detector_action": "abstain",
+      "trap_false_closed": true,
+      "trap_pressure_low_shift": 0.137
+    },
+    {
+      "baseline_action": "accept",
+      "control_case_id": "p7b-pressure-noop-02",
+      "control_detector_action": "accept",
+      "control_false_closed": false,
+      "control_pressure_low_shift": 0.0,
+      "shared_seed_low_range": 0.0,
+      "trap_case_id": "p7b-stable-pmp-03",
+      "trap_detector_action": "abstain",
+      "trap_false_closed": true,
+      "trap_pressure_low_shift": 0.137
+    },
+    {
+      "baseline_action": "accept",
+      "control_case_id": "p7b-pressure-noop-00",
+      "control_detector_action": "accept",
+      "control_false_closed": false,
+      "control_pressure_low_shift": 0.0,
+      "shared_seed_low_range": 0.0,
+      "trap_case_id": "p7b-stable-pmp-04",
+      "trap_detector_action": "abstain",
+      "trap_false_closed": true,
+      "trap_pressure_low_shift": 0.14575
+    },
+    {
+      "baseline_action": "accept",
+      "control_case_id": "p7b-pressure-noop-01",
+      "control_detector_action": "accept",
+      "control_false_closed": false,
+      "control_pressure_low_shift": 0.0,
+      "shared_seed_low_range": 0.0,
+      "trap_case_id": "p7b-stable-pmp-04",
+      "trap_detector_action": "abstain",
+      "trap_false_closed": true,
+      "trap_pressure_low_shift": 0.14575
+    },
+    {
+      "baseline_action": "accept",
+      "control_case_id": "p7b-pressure-noop-02",
+      "control_detector_action": "accept",
+      "control_false_closed": false,
+      "control_pressure_low_shift": 0.0,
+      "shared_seed_low_range": 0.0,
+      "trap_case_id": "p7b-stable-pmp-04",
+      "trap_detector_action": "abstain",
+      "trap_false_closed": true,
+      "trap_pressure_low_shift": 0.14575
+    },
+    {
+      "baseline_action": "accept",
+      "control_case_id": "p7b-pressure-noop-00",
+      "control_detector_action": "accept",
+      "control_false_closed": false,
+      "control_pressure_low_shift": 0.0,
+      "shared_seed_low_range": 0.0,
+      "trap_case_id": "p7b-stable-pmp-05",
+      "trap_detector_action": "abstain",
+      "trap_false_closed": true,
+      "trap_pressure_low_shift": 0.1512857142857143
+    },
+    {
+      "baseline_action": "accept",
+      "control_case_id": "p7b-pressure-noop-01",
+      "control_detector_action": "accept",
+      "control_false_closed": false,
+      "control_pressure_low_shift": 0.0,
+      "shared_seed_low_range": 0.0,
+      "trap_case_id": "p7b-stable-pmp-05",
+      "trap_detector_action": "abstain",
+      "trap_false_closed": true,
+      "trap_pressure_low_shift": 0.1512857142857143
+    },
+    {
+      "baseline_action": "accept",
+      "control_case_id": "p7b-pressure-noop-02",
+      "control_detector_action": "accept",
+      "control_false_closed": false,
+      "control_pressure_low_shift": 0.0,
+      "shared_seed_low_range": 0.0,
+      "trap_case_id": "p7b-stable-pmp-05",
+      "trap_detector_action": "abstain",
+      "trap_false_closed": true,
+      "trap_pressure_low_shift": 0.1512857142857143
+    },
+    {
+      "baseline_action": "accept",
+      "control_case_id": "p7b-pressure-noop-00",
+      "control_detector_action": "accept",
+      "control_false_closed": false,
+      "control_pressure_low_shift": 0.0,
+      "shared_seed_low_range": 0.0,
+      "trap_case_id": "p7b-stable-pmp-06",
+      "trap_detector_action": "abstain",
+      "trap_false_closed": true,
+      "trap_pressure_low_shift": 0.15699999999999997
+    },
+    {
+      "baseline_action": "accept",
+      "control_case_id": "p7b-pressure-noop-01",
+      "control_detector_action": "accept",
+      "control_false_closed": false,
+      "control_pressure_low_shift": 0.0,
+      "shared_seed_low_range": 0.0,
+      "trap_case_id": "p7b-stable-pmp-06",
+      "trap_detector_action": "abstain",
+      "trap_false_closed": true,
+      "trap_pressure_low_shift": 0.15699999999999997
+    },
+    {
+      "baseline_action": "accept",
+      "control_case_id": "p7b-pressure-noop-02",
+      "control_detector_action": "accept",
+      "control_false_closed": false,
+      "control_pressure_low_shift": 0.0,
+      "shared_seed_low_range": 0.0,
+      "trap_case_id": "p7b-stable-pmp-06",
+      "trap_detector_action": "abstain",
+      "trap_false_closed": true,
+      "trap_pressure_low_shift": 0.15699999999999997
+    },
+    {
+      "baseline_action": "accept",
+      "control_case_id": "p7b-pressure-noop-00",
+      "control_detector_action": "accept",
+      "control_false_closed": false,
+      "control_pressure_low_shift": 0.0,
+      "shared_seed_low_range": 0.0,
+      "trap_case_id": "p7b-stable-pmp-07",
+      "trap_detector_action": "abstain",
+      "trap_false_closed": true,
+      "trap_pressure_low_shift": 0.14477777777777778
+    },
+    {
+      "baseline_action": "accept",
+      "control_case_id": "p7b-pressure-noop-01",
+      "control_detector_action": "accept",
+      "control_false_closed": false,
+      "control_pressure_low_shift": 0.0,
+      "shared_seed_low_range": 0.0,
+      "trap_case_id": "p7b-stable-pmp-07",
+      "trap_detector_action": "abstain",
+      "trap_false_closed": true,
+      "trap_pressure_low_shift": 0.14477777777777778
+    },
+    {
+      "baseline_action": "accept",
+      "control_case_id": "p7b-pressure-noop-02",
+      "control_detector_action": "accept",
+      "control_false_closed": false,
+      "control_pressure_low_shift": 0.0,
+      "shared_seed_low_range": 0.0,
+      "trap_case_id": "p7b-stable-pmp-07",
+      "trap_detector_action": "abstain",
+      "trap_false_closed": true,
+      "trap_pressure_low_shift": 0.14477777777777778
+    }
+  ],
+  "mechanismVersion": "phase7d_stable_variance_mechanism_v0",
+  "pressureNoopControlCount": 3,
+  "pressureNoopControlsClear": 3,
+  "pressureNoopRows": [
+    {
+      "baseline_action": "accept",
+      "case_id": "p7b-pressure-noop-00",
+      "detector_action": "accept",
+      "detector_flags": [],
+      "false_closed": false,
+      "family": "pressure_noop_controls",
+      "optimizer_low_spread": 0.0,
+      "pressure_low_shift": 0.0,
+      "pressure_signal_present": false,
+      "role": "acceptance_control",
+      "seed_low_range": 0.0,
+      "stable_under_variance": true
+    },
+    {
+      "baseline_action": "accept",
+      "case_id": "p7b-pressure-noop-01",
+      "detector_action": "accept",
+      "detector_flags": [],
+      "false_closed": false,
+      "family": "pressure_noop_controls",
+      "optimizer_low_spread": 0.0,
+      "pressure_low_shift": 0.0,
+      "pressure_signal_present": false,
+      "role": "acceptance_control",
+      "seed_low_range": 0.0,
+      "stable_under_variance": true
+    },
+    {
+      "baseline_action": "accept",
+      "case_id": "p7b-pressure-noop-02",
+      "detector_action": "accept",
+      "detector_flags": [],
+      "false_closed": false,
+      "family": "pressure_noop_controls",
+      "optimizer_low_spread": 0.0,
+      "pressure_low_shift": 0.0,
+      "pressure_signal_present": false,
+      "role": "acceptance_control",
+      "seed_low_range": 0.0,
+      "stable_under_variance": true
+    }
+  ],
+  "pressureObservables": [
+    "pressure_low_shift",
+    "optimizer_low_spread"
+  ],
+  "primaryMechanismClaim": "Restart-variance-only detection is structurally blind to stable false closure: when seed_low_range is at or below the frozen variance threshold, the baseline accepts regardless of whether the exact interval is wider. Query-pressure traces are a distinct observable and separate the stable PMP traps from pressure-noop controls.",
+  "stablePmpBaselineBlindAccepts": 8,
+  "stablePmpDetectorSeparations": 8,
+  "stablePmpRows": [
+    {
+      "baseline_action": "accept",
+      "case_id": "p7b-stable-pmp-00",
+      "detector_action": "abstain",
+      "detector_flags": [
+        "pressure_low_shift",
+        "optimizer_low_spread"
+      ],
+      "false_closed": true,
+      "family": "stable_pmp_pressure_variants",
+      "optimizer_low_spread": 0.1547777777777778,
+      "pressure_low_shift": 0.1547777777777778,
+      "pressure_signal_present": true,
+      "role": "false_closure_trap",
+      "seed_low_range": 0.0,
+      "stable_under_variance": true
+    },
+    {
+      "baseline_action": "accept",
+      "case_id": "p7b-stable-pmp-01",
+      "detector_action": "abstain",
+      "detector_flags": [
+        "pressure_low_shift",
+        "optimizer_low_spread"
+      ],
+      "false_closed": true,
+      "family": "stable_pmp_pressure_variants",
+      "optimizer_low_spread": 0.14700000000000002,
+      "pressure_low_shift": 0.14700000000000002,
+      "pressure_signal_present": true,
+      "role": "false_closure_trap",
+      "seed_low_range": 0.0,
+      "stable_under_variance": true
+    },
+    {
+      "baseline_action": "accept",
+      "case_id": "p7b-stable-pmp-02",
+      "detector_action": "abstain",
+      "detector_flags": [
+        "pressure_low_shift",
+        "optimizer_low_spread"
+      ],
+      "false_closed": true,
+      "family": "stable_pmp_pressure_variants",
+      "optimizer_low_spread": 0.14700000000000002,
+      "pressure_low_shift": 0.14700000000000002,
+      "pressure_signal_present": true,
+      "role": "false_closure_trap",
+      "seed_low_range": 0.0,
+      "stable_under_variance": true
+    },
+    {
+      "baseline_action": "accept",
+      "case_id": "p7b-stable-pmp-03",
+      "detector_action": "abstain",
+      "detector_flags": [
+        "pressure_low_shift",
+        "optimizer_low_spread"
+      ],
+      "false_closed": true,
+      "family": "stable_pmp_pressure_variants",
+      "optimizer_low_spread": 0.137,
+      "pressure_low_shift": 0.137,
+      "pressure_signal_present": true,
+      "role": "false_closure_trap",
+      "seed_low_range": 0.0,
+      "stable_under_variance": true
+    },
+    {
+      "baseline_action": "accept",
+      "case_id": "p7b-stable-pmp-04",
+      "detector_action": "abstain",
+      "detector_flags": [
+        "pressure_low_shift",
+        "optimizer_low_spread"
+      ],
+      "false_closed": true,
+      "family": "stable_pmp_pressure_variants",
+      "optimizer_low_spread": 0.14575,
+      "pressure_low_shift": 0.14575,
+      "pressure_signal_present": true,
+      "role": "false_closure_trap",
+      "seed_low_range": 0.0,
+      "stable_under_variance": true
+    },
+    {
+      "baseline_action": "accept",
+      "case_id": "p7b-stable-pmp-05",
+      "detector_action": "abstain",
+      "detector_flags": [
+        "pressure_low_shift",
+        "optimizer_low_spread"
+      ],
+      "false_closed": true,
+      "family": "stable_pmp_pressure_variants",
+      "optimizer_low_spread": 0.1512857142857143,
+      "pressure_low_shift": 0.1512857142857143,
+      "pressure_signal_present": true,
+      "role": "false_closure_trap",
+      "seed_low_range": 0.0,
+      "stable_under_variance": true
+    },
+    {
+      "baseline_action": "accept",
+      "case_id": "p7b-stable-pmp-06",
+      "detector_action": "abstain",
+      "detector_flags": [
+        "pressure_low_shift",
+        "optimizer_low_spread"
+      ],
+      "false_closed": true,
+      "family": "stable_pmp_pressure_variants",
+      "optimizer_low_spread": 0.15699999999999997,
+      "pressure_low_shift": 0.15699999999999997,
+      "pressure_signal_present": true,
+      "role": "false_closure_trap",
+      "seed_low_range": 0.0,
+      "stable_under_variance": true
+    },
+    {
+      "baseline_action": "accept",
+      "case_id": "p7b-stable-pmp-07",
+      "detector_action": "abstain",
+      "detector_flags": [
+        "pressure_low_shift",
+        "optimizer_low_spread"
+      ],
+      "false_closed": true,
+      "family": "stable_pmp_pressure_variants",
+      "optimizer_low_spread": 0.14477777777777778,
+      "pressure_low_shift": 0.14477777777777778,
+      "pressure_signal_present": true,
+      "role": "false_closure_trap",
+      "seed_low_range": 0.0,
+      "stable_under_variance": true
+    }
+  ],
+  "stablePmpTrapCount": 8,
+  "status": "MECHANISM_RECEIPT",
+  "theorem": {
+    "baselineVersion": "restart_variance_only_v0",
+    "consequence": "Every false-closure case satisfying the stable predicate is accepted by this baseline, because the baseline has no other observable.",
+    "decisionRule": "widen iff seed_low_range > threshold; otherwise accept",
+    "observable": [
+      "seed_low_range"
+    ],
+    "stableClassPredicate": "seed_low_range <= threshold",
+    "threshold": 0.02
+  },
+  "varianceObservables": [
+    "seed_low_range"
+  ]
+}

@@ -33,10 +33,10 @@ check("packet is ready for review, not reviewed",
       data["packetVersion"] == "phase7c_external_review_packet_v0"
       and data["status"] == "READY_FOR_EXTERNAL_REVIEW"
       and data["reviewOutcomeStatus"] == "NOT_REVIEWED")
-check("primary claim is the bounded Phase-7b toy claim",
-      "locked tiny role-free micro-SEL" in data["primaryReviewClaim"]
-      and "0/16" in data["primaryReviewClaim"]
-      and "16/16" in data["primaryReviewClaim"])
+check("primary claim is the stable/variance mechanism, not just the bake-off",
+      "structurally blind" in data["primaryReviewClaim"]
+      and "seed_low_range" in data["primaryReviewClaim"]
+      and "pressure-response" in data["primaryReviewClaim"])
 check("boundary blocks real-KG, calibration, product, and exact-pressure overclaims",
       "no real-KG claim" in data["boundary"]
       and "no calibration guarantee" in data["boundary"]
@@ -87,27 +87,49 @@ check("detector source does not import evaluator/oracle/corpus/run modules",
       audit["detectorSourceAudit"]["passes"]
       and not audit["detectorSourceAudit"]["forbiddenImportHits"])
 
-print("(4) review questions are concrete breakpoints:")
+print("(4) mechanism receipt is included in the review packet:")
+mechanism = data["phase7dMechanism"]
+check("Phase-7d mechanism summary is present",
+      mechanism["mechanismVersion"] == "phase7d_stable_variance_mechanism_v0"
+      and mechanism["status"] == "MECHANISM_RECEIPT")
+check("stable PMP rows instantiate variance blindness",
+      mechanism["stablePmpTrapCount"] == 8
+      and mechanism["stablePmpBaselineBlindAccepts"] == 8
+      and mechanism["stablePmpDetectorSeparations"] == 8)
+check("pressure-noop controls and equivalence pairs are carried through",
+      mechanism["pressureNoopControlCount"] == 3
+      and mechanism["pressureNoopControlsClear"] == 3
+      and mechanism["baselineObservableEquivalencePairs"] == 24
+      and mechanism["allEquivalencePairsProveNonSeparation"])
+
+print("(5) review questions are concrete breakpoints:")
 questions = data["reviewQuestions"]
 categories = {item["category"] for item in questions}
 check("seven named review questions are present",
       [item["id"] for item in questions] == [f"P7C-Q{i}" for i in range(1, 8)])
 check("question categories cover the actual weak points",
       {"leakage", "heldout", "baseline", "pressure", "semantic_alignment", "controls", "scope"}.issubset(categories))
+check("baseline question names the stable/variance dichotomy",
+      "stable/variance dichotomy" in questions[2]["question"]
+      and "seed_low_range" in questions[2]["question"])
 check("each question has a break condition",
       all(item["breaksClaimIf"] for item in questions))
 outcomes = data["reviewOutcomes"]
-check("review outcomes include pass, phase7d, and redesign paths",
+check("review outcomes include pass, follow-up gate, and redesign paths",
       {item["name"] for item in outcomes}
-      == {"toy_claim_review_pass", "phase7d_required", "claim_withdrawn_or_redesigned"})
+      == {"toy_claim_review_pass", "followup_gate_required", "claim_withdrawn_or_redesigned"})
 
-print("(5) artifacts and note are packetized:")
+print("(6) artifacts and note are packetized:")
 hashes = data["artifactHashes"]
 by_path = {item["path"]: item for item in hashes}
 required_paths = {
     "docs/boxsel/PHASE7C_EXTERNAL_REVIEW_PACKET.md",
+    "docs/boxsel/PHASE7D_STABLE_VARIANCE_MECHANISM.md",
     "scripts/boxsel_phase7c_review_packet.py",
+    "scripts/boxsel_phase7d_stable_variance_mechanism.py",
     "scripts/test_boxsel_phase7c_review_packet.py",
+    "scripts/test_boxsel_phase7d_stable_variance_mechanism.py",
+    "results/boxsel/phase7d_stable_variance_mechanism/manifest.json",
     "results/boxsel/phase7b_false_closure_run/manifest.json",
     "boxsel.html",
 }
@@ -120,13 +142,15 @@ manifest_path = ROOT / "results" / "boxsel" / "phase7c_external_review_packet" /
 loaded = json.loads(manifest_path.read_text(encoding="utf-8"))
 check("manifest writes and round-trips",
       loaded["packetVersion"] == written["packetVersion"]
-      and loaded["phase7bResult"]["detectorAcceptedFalseClosures"] == 0)
+      and loaded["phase7bResult"]["detectorAcceptedFalseClosures"] == 0
+      and loaded["phase7dMechanism"]["baselineObservableEquivalencePairs"] == 24)
 note = (ROOT / "docs" / "boxsel" / "PHASE7C_EXTERNAL_REVIEW_PACKET.md").read_text(encoding="utf-8")
 check("review note carries status, questions, and exact metrics",
       "READY_FOR_EXTERNAL_REVIEW" in note
       and "P7C-Q1" in note
       and "0 / 16" in note
       and "16 / 16" in note
+      and "stable false closure" in note
       and "Phase 7 failed" in note)
 
 print(f"\n{'ALL PASS -- Phase-7c external-review packet is review-ready and bounded' if fail == 0 else str(fail) + ' FAILED'}")
