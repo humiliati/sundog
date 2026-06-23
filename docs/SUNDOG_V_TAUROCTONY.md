@@ -275,6 +275,33 @@ the MESA controller-family architecture and capacity ladder.
 > role-separation structure, multi-seed). The gate is symmetric: the same
 > discipline that let H1.2f earn its stamp denies H1.3 a stamp it cannot
 > attribute — the thesis banks only what a mechanism can be shown to carry.
+>
+> **H1.4 closes the structural question — and refutes the hypothesis as framed
+> (`NONROLE_NULL`, metric-design null, 2026-06-23;
+> [`mesa/H1_4_RESULTS.md`](mesa/H1_4_RESULTS.md)).** Stripping the trust axis
+> (base 17 features) and adding **singleton controls** — the field/reward heads
+> run *alone* — the test saturated: council, monarch, and Sol-alone all reached
+> **zero** gradient-intact basin capture, so role separation was *unidentifiable*
+> on the proxy metric. Two findings settled it without the full multi-seed run.
+> **(1) The reward-blind field head is the proxy-resistance *optimum*** — it never
+> sees the bull, so it never drifts to the bull's basin; a court that must seat a
+> bounded bull can at best *tie* it, never beat it. So "the pantheon out-resists
+> the proxy" is not merely unsupported but **structurally foreclosed**: *to refuse
+> the kill entirely is the best kill-avoidance, and a pantheon cannot refuse what
+> it is bound to seat.* **(2) H1.3's Medium edge was a trust-feature *training*
+> artifact** — change only trust(23)→base(17) and the monarch's basin liability
+> 0.199→0 vanishes; the gap was the trust regime *degrading the monarch*, not
+> plurality helping. So the H1.3 "structural advantage" is explained away. The
+> honest verdict: **no structural plurality advantage survives at Medium.** What
+> remains is a *reframed* question the singleton control itself revealed — not
+> "does plurality out-resist the proxy" (Sol-alone wins that by construction) but
+> "does plurality win the **competence–resistance trade-off** where the field is
+> necessary-but-insufficient" — owed a new rung with a frontier metric (this one
+> floored at zero and could not discriminate). The MESA-lane thesis is now
+> **[TYPED] BOUNDED-POSITIVE at Small-tier (H1.2f) and a documented NULL at
+> Medium (H1.3/H1.4)** — the figure earned one honest stamp and the lab refuted
+> its own three Medium escalations by code, including the tempting one it most
+> wanted to be true.
 
 ---
 
@@ -530,7 +557,22 @@ convert myth into typed result.
   bounded-positive is thus pinned to **Small-tier**; the apparent Medium edge
   looks **structural** (monarch degrades at the harder tier, court holds — the
   H1.2d scaling guess) but is un-attributed, owed a registered **H1.4**
-  (role-separation ablation + multi-seed) before any claim.
+  (role-separation ablation + multi-seed) before any claim. **H1.4 (Medium
+  structural attribution) ran `NONROLE_NULL` — a metric-design null
+  ([`mesa/H1_4_RESULTS.md`](mesa/H1_4_RESULTS.md), 2026-06-23):** stripping the
+  trust axis (base features) + adding **singleton controls** (field/reward heads
+  run alone), the GI-basin metric *saturated* — council, monarch, and Sol-alone
+  all hit **zero** GI basin → unidentifiable. Two findings closed it: **(1)** the
+  reward-blind field head is the proxy-resistance *optimum*, so a bull-seating
+  council can never beat it ⇒ `STRUCTURAL_SUPPORT` is **structurally foreclosed**
+  on any pure proxy-resistance metric (3-seed binding waived as predetermined);
+  **(2)** H1.3's Medium edge was a trust-feature *training* artifact (trust→base,
+  same seed, monarch basin 0.199→0). **No structural plurality advantage survives
+  at Medium.** Net: the MESA-lane thesis is **[TYPED] bounded-positive at
+  Small-tier (H1.2f), documented NULL at Medium (H1.3/H1.4)**. The reframed open
+  question (owed a new rung with a headroom/frontier metric): does plurality win
+  the **competence–resistance trade-off** on a field-necessary-but-insufficient
+  task — *not* proxy-resistance alone, which Sol-alone wins by construction.
 - **H2 — The Averted Face.** Operationalize "oriented to the invariant, not the
   kill": a controller regularized toward the geometry-derived field vs one
   optimizing the proxy directly; measure the Goodhart gap. Home:

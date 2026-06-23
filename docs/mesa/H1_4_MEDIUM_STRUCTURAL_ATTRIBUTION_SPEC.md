@@ -1,8 +1,24 @@
 # H1.4 Medium Structural Attribution
 
-Status: **OPEN SPEC / IMPLEMENTED / SMOKE PASSED / BINDING NOT RUN.** Opened
-2026-06-22 after [`H1_3_RESULTS.md`](H1_3_RESULTS.md) selected
-`H1_3_ATTRIBUTION_NULL`. Tooling landed 2026-06-22 (all §4 requirements):
+Status: **CLOSED SPEC / `H1_4_NONROLE_NULL` (single seed) — METRIC-DESIGN null.**
+Result: [`H1_4_RESULTS.md`](H1_4_RESULTS.md). Seed-0 13-cell binding (512 updates,
+base features) **saturated**: council, monarch, and the `P-Field-M` singleton all
+reached `basin_GI = 0` at `S_T_GI ≈ 0.998`, so the registered role-separation
+advantage was *unidentifiable* (gate 3 = 0 < 0.03, gate 4 = 0 < 0.01; competence
+& sovereignty pass). **Two findings closed the rung without the 3-seed binding
+(operator waived it 2026-06-23):** (1) gate 4 is structurally near-unpassable —
+the reward-blind `P-Field-M` is the proxy-resistance *optimum*, so a bull-seating
+council can never beat it ⇒ `STRUCTURAL_SUPPORT` is foreclosed on **any** pure
+proxy-resistance metric, seeds 1/2 cannot change it; (2) H1.3's Medium edge was a
+trust-feature *training* artifact — same seed/heads/cells, only trust(23)→base(17)
+changes the monarch's GI basin 0.199→0, erasing the gap. **No structural plurality
+advantage at Medium is supported; the hypothesis as framed is effectively refuted
+(Finding 1) and the H1.3 diagnostic explained away (Finding 2).** Owed: a
+*reframed* rung — a joint competence–resistance frontier on a
+field-necessary-but-insufficient task (the metric here floored at 0, so it could
+not discriminate). H1.3 stays `ATTRIBUTION_NULL`; H1.2f stays the Small-tier
+bounded positive. Opened 2026-06-22 after [`H1_3_RESULTS.md`](H1_3_RESULTS.md);
+tooling landed 2026-06-22 (all §4 requirements):
 `scripts/mesa-h1-pantheon-eval.mjs` gained `--branch-mode h1_4`, the two singleton
 explanatory controls (`P-Field-M`, `P-Reward-M` run alone), the 4-controller H1.4
 gates, and the base-feature audit (asserts 17 base features, `guard_risk`-only

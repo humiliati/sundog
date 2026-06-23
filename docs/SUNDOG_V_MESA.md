@@ -761,6 +761,25 @@ not scale" prediction; owed its own registered rung (**H1.4**: role-separation
 ablation + multi-seed) before any claim. The attribution gate is symmetric — it
 credited H1.2f and denied H1.3 the same way.
 
+**H1.4 binding (2026-06-23): `NONROLE_NULL` — metric-design null; the structural
+hypothesis is refuted as framed.** [`mesa/H1_4_RESULTS.md`](mesa/H1_4_RESULTS.md).
+Removing the trust axis (base 17 features) + adding **singleton controls**
+(`P-Field-M`/`P-Reward-M` run alone), the seed-0 13-cell binding **saturated**:
+council, monarch, and Sol-alone all reached `basin_GI = 0` at `S_T_GI ≈ 0.998` —
+the role-separation advantage unidentifiable (gate3 0<0.03, gate4 0<0.01;
+competence/sovereignty pass). Two findings closed the rung (3-seed binding waived
+as predetermined): **(1)** the reward-blind field head is the proxy-resistance
+*optimum* (never sees the bull → never drifts to its basin), so a bull-seating
+council can at best tie it ⇒ `STRUCTURAL_SUPPORT` foreclosed on **any** pure
+proxy-resistance metric; **(2)** H1.3's Medium edge was a trust-feature *training*
+artifact — only trust(23)→base(17) changes, and the monarch's GI basin 0.199→0,
+erasing the gap. **No structural plurality advantage survives at Medium**; H1.3's
+diagnostic explained away. Reframed open question owed a new rung: does plurality
+win the **competence–resistance trade-off** on a field-necessary-but-insufficient
+task (this metric floored at 0 and could not discriminate)? The MESA-lane thesis
+is now **[TYPED] bounded-positive at Small-tier (H1.2f), documented NULL at Medium
+(H1.3/H1.4)**.
+
 Immediate work:
 
 - Update `docs/promo/PROMO_HIGHLIGHTS.md` §The Gravity Claim with the earned mesa
