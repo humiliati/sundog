@@ -1,7 +1,6 @@
 # H2.2 Learned-Headroom Multi-Fork Frontier Spec
 
-Status: **OPEN SPEC / H2.2-0 FIXED ADMITTED / H2.2-1 LEARNED HEADROOM
-ADMITTED / H2.2-a NOT RUN.** Opened 2026-06-23
+Status: **H2.2-a `H2_2_LEARNED_HEADROOM_VOID` / BINDING NOT RUN.** Opened 2026-06-23
 after [`H2_1_RESULTS.md`](H2_1_RESULTS.md) returned `H2_1_MONOLITH_NULL`. The
 binding-budget learned-headroom-VOID clause (§8) was added before any build.
 **H2.2-0 fixed-control admission PASSED 2026-06-23**
@@ -23,10 +22,15 @@ Python mirror parity passed at `1.32e-14` max diff over 2240 trace steps; the
 64-update learned monolith improved over the field singleton (C +0.229, fork
 completion +0.552) but stayed far below the oracle frontier
 (`oracle_gap_monolith=1.427`) with all validity gates clean. Branch:
-`H2_2_LEARNED_HEADROOM_ADMITTED`. This admits the Family-C task for a real
-controller frontier probe; it does **not** score the pantheon thesis. Next:
-H2.2-a frontier probe needs the H2.2 support-gate eval/aggregator, not another
-admission run.
+`H2_2_LEARNED_HEADROOM_ADMITTED`. This admitted the Family-C task for a real
+controller frontier probe; it did **not** score the pantheon thesis.
+**H2.2-a frontier probe returned `H2_2_LEARNED_HEADROOM_VOID` 2026-06-23**
+([`H2_2A_FRONTIER_PROBE_RESULTS.md`](H2_2A_FRONTIER_PROBE_RESULTS.md)): the
+support eval/aggregator were built, then a 128-update one-seed probe showed the
+matched monolith reaches the oracle frontier (`C=1/B=0`, `oracle_gap_monolith=0`).
+The pre-registered learned-headroom override fires before any support/null score,
+so H2.2-b binding is not run. Interpretation: Family C is too compressible for
+the intended frontier claim at controller-probe budget.
 
 Parent docs:
 
@@ -35,6 +39,7 @@ Parent docs:
 - [`H2_1_RESULTS.md`](H2_1_RESULTS.md)
 - [`H2_2_CELL_ADMISSION_RESULTS.md`](H2_2_CELL_ADMISSION_RESULTS.md)
 - [`H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md`](H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md)
+- [`H2_2A_FRONTIER_PROBE_RESULTS.md`](H2_2A_FRONTIER_PROBE_RESULTS.md)
 - [`H1_4_RESULTS.md`](H1_4_RESULTS.md)
 
 H2.1 did not fail because the council could not use reward safely. It succeeded
@@ -406,7 +411,8 @@ Exit:
 
 ### H2.2-b - Binding
 
-Run only if H2.2-a does not expose a design/runtime void.
+Run only if H2.2-a does not expose a design/runtime void. **H2.2-a did expose a
+learned-headroom void, so H2.2-b is not run for this Family-C slate.**
 
 Suggested shape:
 
@@ -450,4 +456,8 @@ and learned-headroom admission pass.
 - `v1` (2026-06-23): H2.2-0 fixed admission and H2.2-1 learned-headroom
   admission both passed. Python mirror parity passed before PPO; the 64-update
   learned monolith improved over Field without saturating the oracle frontier.
-  H2.2 is admitted for a frontier controller probe; support/null remains unrun.
+  H2.2 was admitted for a frontier controller probe; support/null was still
+  unrun at this version.
+- `v2` (2026-06-23): H2.2 frontier support eval/aggregator built. H2.2-a
+  returned `H2_2_LEARNED_HEADROOM_VOID`: at 128 updates the matched monolith
+  reaches `C=1/B=0`, firing the pre-registered override. Binding is skipped.

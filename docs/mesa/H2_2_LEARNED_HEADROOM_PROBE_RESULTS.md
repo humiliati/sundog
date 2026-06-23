@@ -6,6 +6,12 @@ Family-C multi-fork task admitted in
 admission result only; the council row is diagnostic and does not score the
 pantheon thesis.
 
+Superseding note: H2.2-a later returned
+[`H2_2_LEARNED_HEADROOM_VOID`](H2_2A_FRONTIER_PROBE_RESULTS.md). The 64-update
+probe admitted the task, but the 128-update frontier probe showed the matched
+monolith reaches the oracle frontier. H2.2-b binding is therefore skipped for
+this Family-C slate.
+
 ## What Was Built
 
 - JS canonical env/cells centralized in `scripts/h2-multifork-task.mjs`.
@@ -103,14 +109,15 @@ valid learned-headroom-admitted task for a real H2.2 controller probe/binding.
 
 This is not pantheon support. The diagnostic council is worse than the
 monolith on both C and B at 64 updates. That only says the cheap admission run
-does not itself carry a thesis win. H2.2 support or null requires the separate
-frontier gate harness plus the pre-registered H2.2-a/H2.2-b runs.
+does not itself carry a thesis win. The follow-up H2.2-a frontier probe is the
+scored next step for task validity, and it later voided the Family-C slate.
 
 Measured rate extrapolation:
 
 - H2.2-a shape (128 updates, 32 rollouts/update, one seed): about **5 minutes**.
-- H2.2-b binding shape (512 updates, 64 rollouts/update, three PPO seeds):
-  about **1.9-2.1 hours** total on this CPU-only machine, plus eval/aggregation.
+- H2.2-b binding shape (512 updates, 64 rollouts/update, three PPO seeds) would
+  have been about **1.9-2.1 hours** total on this CPU-only machine, plus
+  eval/aggregation.
 
-Per the repo long-run rule, H2.2-b should be staged for the operator after the
-frontier eval/aggregator exist and H2.2-a does not expose a design/runtime void.
+H2.2-a exposed the learned-headroom void, so H2.2-b should not be staged for
+this Family-C slate.

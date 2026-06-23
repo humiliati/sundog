@@ -1,8 +1,7 @@
 # H2 Frontier Task Family
 
 Status: **OPEN SPEC / H2.0 ADMITTED (Family B) / H2.1 BINDING =
-`H2_1_MONOLITH_NULL` / H2.2-0 FIXED ADMITTED / H2.2-1 LEARNED HEADROOM
-ADMITTED.** Opened
+`H2_1_MONOLITH_NULL` / H2.2-a `H2_2_LEARNED_HEADROOM_VOID`.** Opened
 2026-06-23 after [`H1_4_RESULTS.md`](H1_4_RESULTS.md) closed H1 as a Small-tier
 bounded positive plus Medium nulls. **H2.0 cell admission PASSED 2026-06-23**
 ([`H2_0_CELL_ADMISSION_RESULTS.md`](H2_0_CELL_ADMISSION_RESULTS.md)): Family B
@@ -35,8 +34,12 @@ learned-headroom admission passed
 ([`H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md`](H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md)):
 the learned monolith improves over the field singleton but leaves large oracle
 frontier slack, so the task is not a repeat of H2.1's monolith-saturation void.
-No H2.2 pantheon claim is scored yet; that requires the H2.2-a/H2.2-b frontier
-gates.
+H2.2-a then built the frontier support eval/aggregator and ran the one-seed
+128-update controller probe
+([`H2_2A_FRONTIER_PROBE_RESULTS.md`](H2_2A_FRONTIER_PROBE_RESULTS.md)). The
+monolith reached the oracle frontier (`C=1/B=0`), firing the learned-headroom
+override. H2.2 therefore records a **void**, not a support/null score, and H2.2-b
+binding is skipped for this Family-C slate.
 
 Parent docs:
 
@@ -49,6 +52,7 @@ Parent docs:
 - [`H2_2_LEARNED_HEADROOM_MULTIFORK_SPEC.md`](H2_2_LEARNED_HEADROOM_MULTIFORK_SPEC.md)
 - [`H2_2_CELL_ADMISSION_RESULTS.md`](H2_2_CELL_ADMISSION_RESULTS.md)
 - [`H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md`](H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md)
+- [`H2_2A_FRONTIER_PROBE_RESULTS.md`](H2_2A_FRONTIER_PROBE_RESULTS.md)
 - [`PHASE7_RESULTS.md`](PHASE7_RESULTS.md)
 
 H1 asked whether a role-separated, reward-bounded council could out-resist a
@@ -475,3 +479,6 @@ No H2 controller result is interpretable without a passed H2.0 admission record.
   admission both passed. Family C is now admitted for a controller frontier
   probe, but no H2.2 support/null is scored until the support-gate eval and
   seed-pooling aggregator exist.
+- `v3` (2026-06-23): H2.2 support-gate eval/aggregator built; H2.2-a returned
+  `H2_2_LEARNED_HEADROOM_VOID` because the matched monolith saturates the Family-C
+  task by 128 updates. H2.2-b binding is skipped.

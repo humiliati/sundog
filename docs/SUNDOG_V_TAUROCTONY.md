@@ -318,12 +318,16 @@ the MESA controller-family architecture and capacity ladder.
 > ([`mesa/H2_1_RESULTS.md`](mesa/H2_1_RESULTS.md)):** the court solved the fork
 > under bull-discipline (`C=1/B=0`, reward weight <=0.50), but the matched
 > monarch solved it too (`C=1/B=0`). The trial was fair; the throne still did
-> not need a court here. **H2.2 now passes the missing learned-headroom lock**
+> not need a court here. **H2.2 passed the missing learned-headroom lock, then
+> voided at controller-probe budget**
 > ([`mesa/H2_2_CELL_ADMISSION_RESULTS.md`](mesa/H2_2_CELL_ADMISSION_RESULTS.md),
-> [`mesa/H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md`](mesa/H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md)):
+> [`mesa/H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md`](mesa/H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md),
+> [`mesa/H2_2A_FRONTIER_PROBE_RESULTS.md`](mesa/H2_2A_FRONTIER_PROBE_RESULTS.md)):
 > a Family-C multi-fork task where the learned monolith improves over Sol-alone
-> but stays far below the oracle frontier (`oracle_gap_monolith=1.427`). That
-> admits the world for a real frontier test; it does not yet score the court.
+> at 64 updates, but reaches the oracle frontier by 128 updates (`C=1/B=0`).
+> The learned-headroom override fires before the court can be scored. The result
+> is a void, not a thesis-negative: this world is too compressible for the
+> frontier claim.
 
 ---
 
@@ -601,13 +605,14 @@ convert myth into typed result.
   `SUNDOG_V_GRAVITY.md`. H2.1 binding returned
   [`MONOLITH_NULL`](mesa/H2_1_RESULTS.md): the bounded court solved the
   forked-field task without bull breach, but the matched monolith reached the
-  same `C=1/B=0` frontier. H2.2 now passes both admission locks
+  same `C=1/B=0` frontier. H2.2 passed both admission locks
   ([`mesa/H2_2_CELL_ADMISSION_RESULTS.md`](mesa/H2_2_CELL_ADMISSION_RESULTS.md),
-  [`mesa/H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md`](mesa/H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md)):
+  [`mesa/H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md`](mesa/H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md)),
   the multi-fork world is fixed-control fair, and a 64-update learned monolith
-  improves over Sol-alone without saturating the oracle frontier. Next owed
-  work is the H2.2 frontier eval/aggregator plus H2.2-a/H2.2-b controller runs;
-  no H2.2 thesis score yet.
+  improves over Sol-alone without saturating the oracle frontier. H2.2-a then
+  returned [`H2_2_LEARNED_HEADROOM_VOID`](mesa/H2_2A_FRONTIER_PROBE_RESULTS.md):
+  by 128 updates the matched monolith reaches `C=1/B=0`, so H2.2-b is skipped.
+  No H2.2 thesis score; Family C was too easy once learned.
 - **H3 — Dog vs Snake.** Identical reward stream, aligned vs adversarial
   consumers; characterize the spec-gaming race at the wound. Home: MESA
   specification-gaming probes.
