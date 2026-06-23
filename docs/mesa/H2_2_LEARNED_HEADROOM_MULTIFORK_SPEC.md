@@ -1,6 +1,7 @@
 # H2.2 Learned-Headroom Multi-Fork Frontier Spec
 
-Status: **OPEN SPEC / H2.2-0 FIXED ADMITTED / H2.2-1 NOT RUN.** Opened 2026-06-23
+Status: **OPEN SPEC / H2.2-0 FIXED ADMITTED / H2.2-1 LEARNED HEADROOM
+ADMITTED / H2.2-a NOT RUN.** Opened 2026-06-23
 after [`H2_1_RESULTS.md`](H2_1_RESULTS.md) returned `H2_1_MONOLITH_NULL`. The
 binding-budget learned-headroom-VOID clause (§8) was added before any build.
 **H2.2-0 fixed-control admission PASSED 2026-06-23**
@@ -15,16 +16,25 @@ magnitude-gating "smart" control beats the reward singleton by +0.21 competence
 and +0.21 resistance → genuine learned headroom for a phase-aware controller
 (unlike two earlier degenerate designs — always-on-stale, where every field+reward
 blend collapsed to the greedy point; and interior-basins, which captured even the
-Oracle). Runner: `scripts/mesa-h2-2-fixed-admission.mjs`. **Next: H2.2-1
-learned-headroom probe** — needs the Python multi-fork mirror + trainer
-integration (extend the H2.1 `train_h2_frontier.py` / `h2_forked_task.py` pattern)
-+ the cheap one-seed monolith probe; not yet built.
+Oracle). Runner: `scripts/mesa-h2-2-fixed-admission.mjs`.
+**H2.2-1 learned-headroom probe PASSED 2026-06-23**
+([`H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md`](H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md)):
+Python mirror parity passed at `1.32e-14` max diff over 2240 trace steps; the
+64-update learned monolith improved over the field singleton (C +0.229, fork
+completion +0.552) but stayed far below the oracle frontier
+(`oracle_gap_monolith=1.427`) with all validity gates clean. Branch:
+`H2_2_LEARNED_HEADROOM_ADMITTED`. This admits the Family-C task for a real
+controller frontier probe; it does **not** score the pantheon thesis. Next:
+H2.2-a frontier probe needs the H2.2 support-gate eval/aggregator, not another
+admission run.
 
 Parent docs:
 
 - [`H2_FRONTIER_TASK_FAMILY_SPEC.md`](H2_FRONTIER_TASK_FAMILY_SPEC.md)
 - [`H2_0_CELL_ADMISSION_RESULTS.md`](H2_0_CELL_ADMISSION_RESULTS.md)
 - [`H2_1_RESULTS.md`](H2_1_RESULTS.md)
+- [`H2_2_CELL_ADMISSION_RESULTS.md`](H2_2_CELL_ADMISSION_RESULTS.md)
+- [`H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md`](H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md)
 - [`H1_4_RESULTS.md`](H1_4_RESULTS.md)
 
 H2.1 did not fail because the council could not use reward safely. It succeeded
@@ -437,3 +447,7 @@ and learned-headroom admission pass.
   `H2_1_MONOLITH_NULL`. Adds learned-headroom admission and upgrades Family C
   into a multi-fork phase/key task so the monolith ceiling is checked before any
   pantheon-support score.
+- `v1` (2026-06-23): H2.2-0 fixed admission and H2.2-1 learned-headroom
+  admission both passed. Python mirror parity passed before PPO; the 64-update
+  learned monolith improved over Field without saturating the oracle frontier.
+  H2.2 is admitted for a frontier controller probe; support/null remains unrun.

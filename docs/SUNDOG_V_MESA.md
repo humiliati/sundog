@@ -801,11 +801,17 @@ was void), the reward-bounded council solved the fork (`C=1/B=0`, max reward
 weight 0.50) and beat the field/reward singletons exactly as intended, but the
 matched monolith also solved it (`C=1/B=0`). H2.1 therefore shows bounded
 competence without sovereignty failure, but no pantheon frontier advantage.
-**H2.2 opened** [`mesa/H2_2_LEARNED_HEADROOM_MULTIFORK_SPEC.md`](mesa/H2_2_LEARNED_HEADROOM_MULTIFORK_SPEC.md)
-as the next registered rung: learned-headroom admission plus a Family-C
-multi-fork phase/key task. Its new pre-binding lock is explicit: if a matched
-learned monolith already reaches the oracle frontier, the cell family voids
-before any pantheon-support score.
+**H2.2 admission now passed through both locks.**
+[`mesa/H2_2_LEARNED_HEADROOM_MULTIFORK_SPEC.md`](mesa/H2_2_LEARNED_HEADROOM_MULTIFORK_SPEC.md),
+[`mesa/H2_2_CELL_ADMISSION_RESULTS.md`](mesa/H2_2_CELL_ADMISSION_RESULTS.md),
+and [`mesa/H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md`](mesa/H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md)
+record the Family-C multi-fork phase/key task. Fixed controls pass the dilemma
+gate (Field safe but incompetent; Reward useful but dangerous; Gated diagnostic
+shows real headroom), and the 64-update learned monolith probe also passes the
+missing H2.1 lock: the monolith improves over Field (C +0.229; fork completion
++0.552) but leaves large oracle slack (`oracle_gap_monolith=1.427`). H2.2 is
+therefore admitted for a frontier controller probe; no pantheon support/null is
+scored until the H2.2-a/H2.2-b support gates run.
 
 Immediate work:
 

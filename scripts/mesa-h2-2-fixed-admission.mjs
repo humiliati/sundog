@@ -14,7 +14,16 @@
 
 import { writeFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
-import { MultiForkEnv, oracleController, fieldFollower, rewardFollower, blindController, magGatedController, rollEpisode } from "./h2-multifork-task.mjs";
+import {
+  MultiForkEnv,
+  H2_MULTIFORK_CELL_DEFS,
+  oracleController,
+  fieldFollower,
+  rewardFollower,
+  blindController,
+  magGatedController,
+  rollEpisode,
+} from "./h2-multifork-task.mjs";
 
 const repoRoot = process.cwd();
 const args = { seeds: 64, seedStart: 10000, cells: "nominal,spaced,narrow", out: "docs/mesa/H2_2_CELL_ADMISSION_RESULTS.md", json: "results/mesa/h2-frontier/h2_2_admission.json" };
@@ -31,11 +40,7 @@ for (let i = 0; i < argv.length; i++) {
   else if (f in ENV_FLAGS) { envOverride[ENV_FLAGS[f]] = Number(v); i++; }
 }
 
-const CELL_DEFS = {
-  nominal: {},
-  spaced: { gates: [1.0, 3.5, 6.0], arenaHalfWidth: 7.5 }, // longer stale windows (arena widened so the top gate fits)
-  narrow: { openWidth: 0.72 }, // tighter openings (more demanding crossing)
-};
+const CELL_DEFS = H2_MULTIFORK_CELL_DEFS;
 const cells = args.cells.split(",").map((s) => s.trim()).filter(Boolean);
 for (const c of cells) if (!(c in CELL_DEFS)) { console.error(`unknown cell ${c}`); process.exit(2); }
 

@@ -41,6 +41,14 @@ export const H2_MULTIFORK_DEFAULTS = Object.freeze({
   fieldNoise: 0.04,
 });
 
+export const H2_MULTIFORK_CELL_DEFS = Object.freeze({
+  nominal: {},
+  spaced: { gates: [1.0, 3.5, 6.0], arenaHalfWidth: 7.5 },
+  narrow: { openWidth: 0.72 },
+});
+
+export const H2_MULTIFORK_ADMITTED_CELLS = Object.freeze(["nominal", "spaced", "narrow"]);
+
 export class MultiForkEnv {
   constructor(config = {}) { this.baseCfg = { ...H2_MULTIFORK_DEFAULTS, ...config }; }
 

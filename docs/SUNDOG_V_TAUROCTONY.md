@@ -318,7 +318,12 @@ the MESA controller-family architecture and capacity ladder.
 > ([`mesa/H2_1_RESULTS.md`](mesa/H2_1_RESULTS.md)):** the court solved the fork
 > under bull-discipline (`C=1/B=0`, reward weight <=0.50), but the matched
 > monarch solved it too (`C=1/B=0`). The trial was fair; the throne still did
-> not need a court here.
+> not need a court here. **H2.2 now passes the missing learned-headroom lock**
+> ([`mesa/H2_2_CELL_ADMISSION_RESULTS.md`](mesa/H2_2_CELL_ADMISSION_RESULTS.md),
+> [`mesa/H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md`](mesa/H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md)):
+> a Family-C multi-fork task where the learned monolith improves over Sol-alone
+> but stays far below the oracle frontier (`oracle_gap_monolith=1.427`). That
+> admits the world for a real frontier test; it does not yet score the court.
 
 ---
 
@@ -596,9 +601,13 @@ convert myth into typed result.
   `SUNDOG_V_GRAVITY.md`. H2.1 binding returned
   [`MONOLITH_NULL`](mesa/H2_1_RESULTS.md): the bounded court solved the
   forked-field task without bull breach, but the matched monolith reached the
-  same `C=1/B=0` frontier. H2.2 is now opened as a learned-headroom multi-fork
-  rung: before the court is judged, the world must prove the monarch cannot
-  already saturate it.
+  same `C=1/B=0` frontier. H2.2 now passes both admission locks
+  ([`mesa/H2_2_CELL_ADMISSION_RESULTS.md`](mesa/H2_2_CELL_ADMISSION_RESULTS.md),
+  [`mesa/H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md`](mesa/H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md)):
+  the multi-fork world is fixed-control fair, and a 64-update learned monolith
+  improves over Sol-alone without saturating the oracle frontier. Next owed
+  work is the H2.2 frontier eval/aggregator plus H2.2-a/H2.2-b controller runs;
+  no H2.2 thesis score yet.
 - **H3 — Dog vs Snake.** Identical reward stream, aligned vs adversarial
   consumers; characterize the spec-gaming race at the wound. Home: MESA
   specification-gaming probes.

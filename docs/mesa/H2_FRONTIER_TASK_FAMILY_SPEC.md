@@ -1,7 +1,8 @@
 # H2 Frontier Task Family
 
 Status: **OPEN SPEC / H2.0 ADMITTED (Family B) / H2.1 BINDING =
-`H2_1_MONOLITH_NULL` / H2.2 OPEN SPEC.** Opened
+`H2_1_MONOLITH_NULL` / H2.2-0 FIXED ADMITTED / H2.2-1 LEARNED HEADROOM
+ADMITTED.** Opened
 2026-06-23 after [`H1_4_RESULTS.md`](H1_4_RESULTS.md) closed H1 as a Small-tier
 bounded positive plus Medium nulls. **H2.0 cell admission PASSED 2026-06-23**
 ([`H2_0_CELL_ADMISSION_RESULTS.md`](H2_0_CELL_ADMISSION_RESULTS.md)): Family B
@@ -28,7 +29,14 @@ staying sovereign (`max_reward_w=0.50`), but the matched monolith also reached
 
 Next rung: [`H2_2_LEARNED_HEADROOM_MULTIFORK_SPEC.md`](H2_2_LEARNED_HEADROOM_MULTIFORK_SPEC.md)
 opens a learned-headroom admission gate plus a Family-C multi-fork phase/key
-task. It is spec-only: not implemented, not run.
+task. H2.2-0 fixed-control admission passed
+([`H2_2_CELL_ADMISSION_RESULTS.md`](H2_2_CELL_ADMISSION_RESULTS.md)), and H2.2-1
+learned-headroom admission passed
+([`H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md`](H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md)):
+the learned monolith improves over the field singleton but leaves large oracle
+frontier slack, so the task is not a repeat of H2.1's monolith-saturation void.
+No H2.2 pantheon claim is scored yet; that requires the H2.2-a/H2.2-b frontier
+gates.
 
 Parent docs:
 
@@ -39,6 +47,8 @@ Parent docs:
 - [`H2_1_IMPLEMENTATION_RESULTS.md`](H2_1_IMPLEMENTATION_RESULTS.md)
 - [`H2_1_RESULTS.md`](H2_1_RESULTS.md)
 - [`H2_2_LEARNED_HEADROOM_MULTIFORK_SPEC.md`](H2_2_LEARNED_HEADROOM_MULTIFORK_SPEC.md)
+- [`H2_2_CELL_ADMISSION_RESULTS.md`](H2_2_CELL_ADMISSION_RESULTS.md)
+- [`H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md`](H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md)
 - [`PHASE7_RESULTS.md`](PHASE7_RESULTS.md)
 
 H1 asked whether a role-separated, reward-bounded council could out-resist a
@@ -461,3 +471,7 @@ No H2 controller result is interpretable without a passed H2.0 admission record.
 - `v1` (2026-06-23): H2.1 binding returned `H2_1_MONOLITH_NULL`; H2.2 opened
   learned-headroom admission plus a Family-C multi-fork phase/key task to avoid
   scoring cells the matched monolith can already saturate.
+- `v2` (2026-06-23): H2.2-0 fixed admission and H2.2-1 learned-headroom
+  admission both passed. Family C is now admitted for a controller frontier
+  probe, but no H2.2 support/null is scored until the support-gate eval and
+  seed-pooling aggregator exist.
