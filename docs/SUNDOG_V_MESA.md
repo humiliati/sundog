@@ -817,6 +817,23 @@ oracle frontier (`C=1/B=0`, `oracle_gap_monolith=0`), so the pre-registered
 override fires before any pantheon support/null score. H2.2-b binding is skipped;
 Family C is too compressible for this frontier claim.
 
+**H2.3/H3 escalation (2026-06-23): cap-positive, plurality-null; then
+body-invariant admission, verifier null.** H2.3 opened a safe-exploration
+proxy-poisoning rung and returned [`H2_3_CAP_NOT_ROLES`](mesa/H2_3_RESULTS.md):
+the cap mechanism is real, but the capped no-role monolith matches the council,
+so this is cap support rather than pantheon support. H3.0 then changed axis
+rather than making a harder proxy basin:
+[`H3_0_ADMITTED`](mesa/H3_0_BODY_INVARIANT_HEADROOM_RESULTS.md) constructs a
+body-resistant, invariant-sufficient control family where the capped no-role
+learner finds signal but remains dangerous. H3.1 tested the registered
+verifier/guard mechanism against that admitted family and returned
+[`H3_1_RESISTANCE_NULL`](mesa/H3_1_RESULTS.md): validity, learned headroom, and
+sovereignty pass, but the verifier council remains basin-dangerous, does not
+beat the matched capped monolith controls, and fails verifier/certificate
+attribution. Net after H3.1: the only positive pantheon support remains the
+bounded Small-tier H1.2f trust-feature result; H2/H3 so far are disciplined
+nulls or voids on plurality.
+
 Immediate work:
 
 - Update `docs/promo/PROMO_HIGHLIGHTS.md` §The Gravity Claim with the earned mesa

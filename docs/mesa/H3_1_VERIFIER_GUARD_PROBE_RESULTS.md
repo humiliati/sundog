@@ -1,12 +1,16 @@
 # H3.1-a Verifier-Guard Probe Results
 
-Status: **INDICATIVE `H3_1_RESISTANCE_NULL` / MECHANISM INERT / BINDING NOT
-RUN.** Run 2026-06-23 for
+Status: **INDICATIVE `H3_1_RESISTANCE_NULL` / MECHANISM INERT / BINDING LATER
+RAN `H3_1_RESISTANCE_NULL`.** Run 2026-06-23 for
 [`H3_1_BODY_INVARIANT_VERIFIER_GUARD_SPEC.md`](H3_1_BODY_INVARIANT_VERIFIER_GUARD_SPEC.md).
 
 This is the one-seed 64-update probe. It tests whether the verifier factorization
 shows any early learning signal before an owner-gated 512-update binding. It is
 not a binding H3.1 result.
+
+Follow-up note: the owner-cleared three-seed binding was later run and is
+recorded in [`H3_1_RESULTS.md`](H3_1_RESULTS.md). It also selected
+`H3_1_RESISTANCE_NULL`.
 
 ## Commands
 
@@ -76,10 +80,10 @@ So the probe does not expose a fairness or headroom void; it exposes the current
 training-shape problem. PPO finds the same reward-ish, basin-dangerous policy in
 every learned architecture before the verifier has a live learning signal.
 
-## Binding Commands If Wanted
+## Binding Commands Used
 
-The formal binding is owner-gated because the measured full run is over the
-inline limit. If we decide to run it despite the inert probe, use:
+The formal binding was owner-gated because the measured full run exceeded the
+inline limit. The owner later cleared it. The binding used:
 
 ```powershell
 $root = "results/mesa/h3/body_invariant_verifier/h3_1_verifier_binding"

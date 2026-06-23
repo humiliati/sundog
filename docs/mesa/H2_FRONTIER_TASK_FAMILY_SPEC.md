@@ -2,7 +2,7 @@
 
 Status: **OPEN SPEC / H2.0 ADMITTED (Family B) / H2.1 BINDING =
 `H2_1_MONOLITH_NULL` / H2.2-a `H2_2_LEARNED_HEADROOM_VOID` / H2.3 BINDING
-`H2_3_CAP_NOT_ROLES` / H3.0 ADMITTED / H3.1 PROBE
+`H2_3_CAP_NOT_ROLES` / H3.0 ADMITTED / H3.1 BINDING
 `H3_1_RESISTANCE_NULL`.** Opened
 2026-06-23 after [`H1_4_RESULTS.md`](H1_4_RESULTS.md) closed H1 as a Small-tier
 bounded positive plus Medium nulls. **H2.0 cell admission PASSED 2026-06-23**
@@ -85,7 +85,10 @@ requires verifier/invariant ablations to collapse any claimed edge.
 The H3.1 implementation then landed and H3.1-a returned an indicative
 [`H3_1_RESISTANCE_NULL`](H3_1_VERIFIER_GUARD_PROBE_RESULTS.md): the verifier
 mechanism is inert at 64 updates, with council and monolith controls all
-matching the same basin-dangerous policy. Binding is staged but not run.
+matching the same basin-dangerous policy. The owner-cleared three-seed binding
+then returned [`H3_1_RESISTANCE_NULL`](H3_1_RESULTS.md): H3.0 admission survived,
+but the verifier council remained basin-dangerous, did not beat the matched
+capped monoliths, and failed mechanism attribution.
 
 Parent docs:
 
@@ -112,6 +115,7 @@ Parent docs:
 - [`H3_1_BODY_INVARIANT_VERIFIER_GUARD_SPEC.md`](H3_1_BODY_INVARIANT_VERIFIER_GUARD_SPEC.md)
 - [`H3_1_VERIFIER_GUARD_SMOKE_RESULTS.md`](H3_1_VERIFIER_GUARD_SMOKE_RESULTS.md)
 - [`H3_1_VERIFIER_GUARD_PROBE_RESULTS.md`](H3_1_VERIFIER_GUARD_PROBE_RESULTS.md)
+- [`H3_1_RESULTS.md`](H3_1_RESULTS.md)
 - [`PHASE7_RESULTS.md`](PHASE7_RESULTS.md)
 
 H1 asked whether a role-separated, reward-bounded council could out-resist a
@@ -574,4 +578,7 @@ No H2 controller result is interpretable without a passed H2.0 admission record.
   flat-veto, auxiliary-if-used, and ablation controls before any support claim.
 - `v13` (2026-06-23): H3.1 trainer/eval/aggregator implemented. H3.1-0 smoke is
   green; H3.1-a probe returns indicative `H3_1_RESISTANCE_NULL` with the
-  verifier mechanism inert. Binding remains unrun and owner-gated.
+  verifier mechanism inert. Binding is owner-gated until v14.
+- `v14` (2026-06-23): Owner-cleared H3.1 three-seed binding completed and
+  selected `H3_1_RESISTANCE_NULL`. The body/invariant admission remains useful,
+  but the registered verifier/guard factorization did not produce role support.

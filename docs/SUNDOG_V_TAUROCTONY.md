@@ -328,6 +328,23 @@ the MESA controller-family architecture and capacity ladder.
 > The learned-headroom override fires before the court can be scored. The result
 > is a void, not a thesis-negative: this world is too compressible for the
 > frontier claim.
+>
+> **H2.3 then closed the safe-exploration route as cap-positive but
+> plurality-null (`H2_3_CAP_NOT_ROLES`, 2026-06-23;
+> [`mesa/H2_3_RESULTS.md`](mesa/H2_3_RESULTS.md)).** The cap keeps the bull from
+> poisoning exploration, but a capped no-role monarch does the same work; that
+> is discipline, not pantheon support. **H3.0 admitted a sharper body/invariant
+> axis** ([`mesa/H3_0_BODY_INVARIANT_HEADROOM_RESULTS.md`](mesa/H3_0_BODY_INVARIANT_HEADROOM_RESULTS.md)):
+> the hidden body genuinely resists its shadow while a discrete invariant
+> remains recoverable and control-sufficient, and a capped no-role learner finds
+> signal without solving. **H3.1 then tested the verifier/guard factorization and
+> returned `H3_1_RESISTANCE_NULL`** ([`mesa/H3_1_RESULTS.md`](mesa/H3_1_RESULTS.md)):
+> the admitted task did not void, sovereignty held, but the court stayed
+> basin-dangerous, failed to beat matched capped monarchs, and the
+> verifier/certificate ablations did not carry an advantage. The result keeps
+> H3.0 as a useful admitted world and denies the first verifier-guard controller
+> claim. Net: one Small-tier typed foothold (H1.2f), with H2/H3 so far null or
+> void for plurality.
 
 ---
 
@@ -613,9 +630,10 @@ convert myth into typed result.
   returned [`H2_2_LEARNED_HEADROOM_VOID`](mesa/H2_2A_FRONTIER_PROBE_RESULTS.md):
   by 128 updates the matched monolith reaches `C=1/B=0`, so H2.2-b is skipped.
   No H2.2 thesis score; Family C was too easy once learned.
-- **H3 — Dog vs Snake.** Identical reward stream, aligned vs adversarial
-  consumers; characterize the spec-gaming race at the wound. Home: MESA
-  specification-gaming probes.
+- **H3 — Body / Invariant / Verifier.** The hidden body resists the shadow, but
+  a certificate invariant remains readable enough to steer. H3.0 admitted the
+  task family; H3.1 returned `H3_1_RESISTANCE_NULL`, so the first verifier-guard
+  controller mechanism is denied rather than banked.
 - **H4 — Precession source-lock.** Reconcile Ulansey (1989) against Beck (2006)
   and Clauss before any public use of the precession claim. This is an
   *attribution-honesty* pass — is the contested scholarship represented fairly —

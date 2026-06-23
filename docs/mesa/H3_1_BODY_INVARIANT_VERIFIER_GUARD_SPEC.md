@@ -1,7 +1,6 @@
 # H3.1 Body-Invariant Verifier-Guard Frontier Spec
 
-Status: **IMPLEMENTED / SMOKE GREEN / PROBE `H3_1_RESISTANCE_NULL` /
-BINDING NOT RUN.** Drafted
+Status: **BINDING `H3_1_RESISTANCE_NULL` / VERIFIER MECHANISM NOT LIVE.** Drafted
 2026-06-23 after [`H3_0_ADMITTED`](H3_0_BODY_INVARIANT_HEADROOM_RESULTS.md).
 
 Parent docs:
@@ -14,21 +13,23 @@ Parent docs:
 - [`H3_0_BODY_INVARIANT_HEADROOM_RESULTS.md`](H3_0_BODY_INVARIANT_HEADROOM_RESULTS.md)
 - [`H3_1_VERIFIER_GUARD_SMOKE_RESULTS.md`](H3_1_VERIFIER_GUARD_SMOKE_RESULTS.md)
 - [`H3_1_VERIFIER_GUARD_PROBE_RESULTS.md`](H3_1_VERIFIER_GUARD_PROBE_RESULTS.md)
+- [`H3_1_RESULTS.md`](H3_1_RESULTS.md)
 - [`../CROSS_SUBSTRATE_NOTES.md`](../CROSS_SUBSTRATE_NOTES.md)
 
 H3.0 admitted the task family. H3.1 is the first controller test on that family.
 It may support or null the role-separated claim; it does not revisit H3.0
 admission unless a validity/headroom gate fails at binding budget.
 
-Implementation/probe note (2026-06-23): H3.1 trainer/eval/aggregator now exist
-and the H3.1-0 smoke is green
-([`H3_1_VERIFIER_GUARD_SMOKE_RESULTS.md`](H3_1_VERIFIER_GUARD_SMOKE_RESULTS.md)).
-The H3.1-a 64-update probe returned indicative `H3_1_RESISTANCE_NULL`
-([`H3_1_VERIFIER_GUARD_PROBE_RESULTS.md`](H3_1_VERIFIER_GUARD_PROBE_RESULTS.md)):
-all learned rows matched a reward-ish, basin-dangerous policy, and the verifier
-ablation plus certificate-scramble ablation were exact no-ops. This is not a
-binding result; it says the current PPO shape has not made the verifier a live
-mechanism.
+Implementation/result note (2026-06-23): H3.1 trainer/eval/aggregator exist;
+the H3.1-0 smoke is green
+([`H3_1_VERIFIER_GUARD_SMOKE_RESULTS.md`](H3_1_VERIFIER_GUARD_SMOKE_RESULTS.md))
+and the H3.1-a probe returned indicative `H3_1_RESISTANCE_NULL`
+([`H3_1_VERIFIER_GUARD_PROBE_RESULTS.md`](H3_1_VERIFIER_GUARD_PROBE_RESULTS.md)).
+The three-seed 512-update binding then selected
+[`H3_1_RESISTANCE_NULL`](H3_1_RESULTS.md): the task remained valid and
+headroom-positive, and sovereignty held, but the council stayed basin-dangerous,
+failed the role-benefit gates against matched capped monoliths, and the
+verifier/certificate ablations did not collapse any advantage.
 
 ---
 
@@ -496,3 +497,8 @@ ablation controls.
   because all learned rows match the same basin-dangerous policy and the
   verifier/certificate ablations are no-ops. Binding commands are staged but not
   run under the long-run rule.
+- `v2` (2026-06-23): owner-cleared three-seed 512-update binding completed.
+  Aggregate branch is `H3_1_RESISTANCE_NULL`: validity/headroom/sovereignty
+  pass, but resistance, role benefit, verifier engagement, verifier mechanism,
+  and robustness all fail. H3.0 remains admission-only; H3.1 is a controller
+  null for this verifier factorization.
