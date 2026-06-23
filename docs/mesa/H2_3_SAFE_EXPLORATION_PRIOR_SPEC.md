@@ -1,7 +1,6 @@
 # H2.3 Cap-as-Safe-Exploration-Prior Spec
 
-Status: **H2.3-0 FIXED ADMITTED / H2.3-1 `H2_3_SUPPORT_COMPATIBLE_SINGLE_SEED` /
-BINDING SEEDS 0-1 `H2_3_CAP_NOT_ROLES` / POOLED BINDING INCOMPLETE.**
+Status: **BINDING `H2_3_CAP_NOT_ROLES` / CAP-POSITIVE / PLURALITY-NULL.**
 Opened 2026-06-23 after [`H2_2A_FRONTIER_PROBE_RESULTS.md`](H2_2A_FRONTIER_PROBE_RESULTS.md)
 returned `H2_2_LEARNED_HEADROOM_VOID` (Family C too compressible — a matched
 monolith reaches the oracle frontier by 128 updates).
@@ -12,6 +11,7 @@ Implementation/probe docs:
 - [`H2_3_SAFE_EXPLORATION_PROBE_RESULTS.md`](H2_3_SAFE_EXPLORATION_PROBE_RESULTS.md)
 - [`H2_3_BINDING_SEED0_RESULTS.md`](H2_3_BINDING_SEED0_RESULTS.md)
 - [`H2_3_BINDING_SEED0_1_RESULTS.md`](H2_3_BINDING_SEED0_1_RESULTS.md)
+- [`H2_3_RESULTS.md`](H2_3_RESULTS.md)
 
 Parent docs:
 
@@ -265,6 +265,12 @@ distinguishes `role_benefit` from `cap_benefit`.
 
 ## 10. Versioning
 
+- `v5` (2026-06-23, final binding): 512-update seed 2 completed and also
+  selected `H2_3_CAP_NOT_ROLES`. Final three-seed aggregate selects
+  `H2_3_CAP_NOT_ROLES`: the uncapped monolith Goodharts (`C=0/B=1/proxy=1`),
+  reward-capped controllers solve (`C=1/B=0`), and the capped no-role monolith
+  matches the council exactly (`role_benefit=0`). H2.3 is cap-positive and
+  plurality-null.
 - `v4` (2026-06-23, seed-1 partial binding): 512-update seed 1 completed and
   also selects `H2_3_CAP_NOT_ROLES`. The two-seed aggregate has
   `support_seeds=0`, `cap_benefit=1`, and `role_benefit=0`. Formal binding is

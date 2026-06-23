@@ -13,6 +13,10 @@ Superseding partial-binding note: 512-update seed 0 later returned
 effect persists, but the capped no-role monolith catches the council at full
 budget on seed 0.
 
+Final superseding note: the three-seed binding returned
+[`H2_3_CAP_NOT_ROLES`](H2_3_RESULTS.md). H2.3 is cap-positive and
+plurality-null.
+
 ## Harness Additions
 
 - `scripts/h2-safeexp-task.mjs`: canonical JS safe-exploration proxy-basin env.

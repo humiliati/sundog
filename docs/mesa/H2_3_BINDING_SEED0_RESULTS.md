@@ -10,6 +10,9 @@ the first 512-update PPO seed and its held-out eval.
 Superseding partial-binding note: seed 1 later repeated the same branch; see
 [`H2_3_BINDING_SEED0_1_RESULTS.md`](H2_3_BINDING_SEED0_1_RESULTS.md).
 
+Final superseding note: the three-seed binding returned
+[`H2_3_CAP_NOT_ROLES`](H2_3_RESULTS.md).
+
 ## Training
 
 Command:

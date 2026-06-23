@@ -1,8 +1,8 @@
 # H2 Frontier Task Family
 
 Status: **OPEN SPEC / H2.0 ADMITTED (Family B) / H2.1 BINDING =
-`H2_1_MONOLITH_NULL` / H2.2-a `H2_2_LEARNED_HEADROOM_VOID` / H2.3 seeds 0-1
-`H2_3_CAP_NOT_ROLES` / H2.3 pooled binding incomplete.** Opened
+`H2_1_MONOLITH_NULL` / H2.2-a `H2_2_LEARNED_HEADROOM_VOID` / H2.3 BINDING
+`H2_3_CAP_NOT_ROLES`.** Opened
 2026-06-23 after [`H1_4_RESULTS.md`](H1_4_RESULTS.md) closed H1 as a Small-tier
 bounded positive plus Medium nulls. **H2.0 cell admission PASSED 2026-06-23**
 ([`H2_0_CELL_ADMISSION_RESULTS.md`](H2_0_CELL_ADMISSION_RESULTS.md)): Family B
@@ -56,8 +56,10 @@ but the capped no-role monolith catches the council on seed 0. The pooled
 two-seed aggregate then repeated the result
 ([`H2_3_BINDING_SEED0_1_RESULTS.md`](H2_3_BINDING_SEED0_1_RESULTS.md)):
 `support_seeds=0`, `cap_benefit=1`, `role_benefit=0`. The formal three-seed
-H2.3-b binding remains incomplete until seed 2, but plurality support is no
-longer reachable under the registered seed-robustness rule.
+H2.3-b binding then returned
+[`H2_3_CAP_NOT_ROLES`](H2_3_RESULTS.md): the cap mechanism is real, but the
+capped no-role monolith matches the council, so the plurality claim is null on
+this axis.
 
 Parent docs:
 
@@ -76,6 +78,7 @@ Parent docs:
 - [`H2_3_SAFE_EXPLORATION_PROBE_RESULTS.md`](H2_3_SAFE_EXPLORATION_PROBE_RESULTS.md)
 - [`H2_3_BINDING_SEED0_RESULTS.md`](H2_3_BINDING_SEED0_RESULTS.md)
 - [`H2_3_BINDING_SEED0_1_RESULTS.md`](H2_3_BINDING_SEED0_1_RESULTS.md)
+- [`H2_3_RESULTS.md`](H2_3_RESULTS.md)
 - [`PHASE7_RESULTS.md`](PHASE7_RESULTS.md)
 
 H1 asked whether a role-separated, reward-bounded council could out-resist a
@@ -517,3 +520,6 @@ No H2 controller result is interpretable without a passed H2.0 admission record.
   `H2_3_CAP_NOT_ROLES`. The two-seed aggregate has `support_seeds=0`, so
   plurality support is no longer reachable; seed 2 remains to close the formal
   three-seed branch.
+- `v7` (2026-06-23): H2.3 512-update binding seed 2 also returned
+  `H2_3_CAP_NOT_ROLES`; final three-seed aggregate closes H2.3 as cap-positive
+  and plurality-null.

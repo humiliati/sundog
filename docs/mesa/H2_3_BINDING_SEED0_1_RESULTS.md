@@ -8,6 +8,9 @@ This is not the formal three-seed H2.3-b verdict, but it is already enough to
 rule out `H2_3_PLURALITY_SUPPORT` under the seed-robustness rule: seeds 0 and 1
 both fail the role-attribution gate.
 
+Final superseding note: seed 2 repeated the same branch and the three-seed
+binding returned [`H2_3_CAP_NOT_ROLES`](H2_3_RESULTS.md).
+
 ## Seed 1 Training
 
 Command:
