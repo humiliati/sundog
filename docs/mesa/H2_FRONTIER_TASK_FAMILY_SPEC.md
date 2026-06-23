@@ -2,7 +2,7 @@
 
 Status: **OPEN SPEC / H2.0 ADMITTED (Family B) / H2.1 BINDING =
 `H2_1_MONOLITH_NULL` / H2.2-a `H2_2_LEARNED_HEADROOM_VOID` / H2.3 BINDING
-`H2_3_CAP_NOT_ROLES` / H3.0-a STATIC ADMITTED.** Opened
+`H2_3_CAP_NOT_ROLES` / H3.0 ADMITTED.** Opened
 2026-06-23 after [`H1_4_RESULTS.md`](H1_4_RESULTS.md) closed H1 as a Small-tier
 bounded positive plus Medium nulls. **H2.0 cell admission PASSED 2026-06-23**
 ([`H2_0_CELL_ADMISSION_RESULTS.md`](H2_0_CELL_ADMISSION_RESULTS.md)): Family B
@@ -69,7 +69,14 @@ It requires a genuinely resistant body, a recoverable discrete invariant, and
 learned headroom against a capped no-role monolith before any H3.1 council test.
 H3.0-a then passed its static body/invariant audit
 ([`H3_0_BODY_INVARIANT_STATIC_AUDIT_RESULTS.md`](H3_0_BODY_INVARIANT_STATIC_AUDIT_RESULTS.md));
-H3.0-b fixed-control admission remains unbuilt.
+H3.0-b then passed fixed-control admission
+([`H3_0_BODY_INVARIANT_FIXED_CONTROL_RESULTS.md`](H3_0_BODY_INVARIANT_FIXED_CONTROL_RESULTS.md));
+H3.0-c then passed learned capped no-role headroom
+([`H3_0_BODY_INVARIANT_HEADROOM_RESULTS.md`](H3_0_BODY_INVARIANT_HEADROOM_RESULTS.md)),
+selecting `H3_0_ADMITTED`: the capped no-role learner finds signal but remains
+dangerous and far below the invariant oracle. The next owed rung is H3.1, which
+must test the verifier/guard role mechanism against that capped no-role
+monolith; H3.0 itself is admission only.
 
 Parent docs:
 
@@ -91,6 +98,8 @@ Parent docs:
 - [`H2_3_RESULTS.md`](H2_3_RESULTS.md)
 - [`H3_0_BODY_RESISTANT_INVARIANT_CONTROL_ADMISSION_SPEC.md`](H3_0_BODY_RESISTANT_INVARIANT_CONTROL_ADMISSION_SPEC.md)
 - [`H3_0_BODY_INVARIANT_STATIC_AUDIT_RESULTS.md`](H3_0_BODY_INVARIANT_STATIC_AUDIT_RESULTS.md)
+- [`H3_0_BODY_INVARIANT_FIXED_CONTROL_RESULTS.md`](H3_0_BODY_INVARIANT_FIXED_CONTROL_RESULTS.md)
+- [`H3_0_BODY_INVARIANT_HEADROOM_RESULTS.md`](H3_0_BODY_INVARIANT_HEADROOM_RESULTS.md)
 - [`PHASE7_RESULTS.md`](PHASE7_RESULTS.md)
 
 H1 asked whether a role-separated, reward-bounded council could out-resist a
@@ -542,3 +551,9 @@ No H2 controller result is interpretable without a passed H2.0 admission record.
 - `v9` (2026-06-23): H3.0-a static body/invariant audit passed; the Gate 1/Gate
   2 crux is constructible on the first continuous-body / discrete-certificate
   family. H3.0-b fixed-control admission remains owed.
+- `v10` (2026-06-23): H3.0-b fixed-control admission passed. Static
+  body/invariant + fixed singleton-dilemma layers are admitted; H3.0-c learned
+  capped no-role headroom remains owed before full H3.0 admission.
+- `v11` (2026-06-23): H3.0-c learned capped no-role headroom passed, selecting
+  full `H3_0_ADMITTED`. The next rung is H3.1, with verifier/guard attribution
+  owed against the capped no-role monolith.

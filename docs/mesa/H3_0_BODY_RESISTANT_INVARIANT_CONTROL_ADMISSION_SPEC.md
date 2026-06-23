@@ -1,6 +1,6 @@
 # H3.0 Body-Resistant Invariant Control Admission Spec
 
-Status: **H3.0-a STATIC ADMITTED / H3.0-b NOT IMPLEMENTED / NOT A CONTROLLER
+Status: **H3.0 ADMITTED / H3.1 NOT DRAFTED / NOT A CONTROLLER SUPPORT
 RESULT.** Opened 2026-06-23 after H2.3 returned
 [`H2_3_CAP_NOT_ROLES`](H2_3_RESULTS.md): the cap mechanism was real, but the
 capped no-role monolith matched the role-separated council.
@@ -10,6 +10,8 @@ Parent / motive docs:
 - [`H2_FRONTIER_TASK_FAMILY_SPEC.md`](H2_FRONTIER_TASK_FAMILY_SPEC.md)
 - [`H2_3_RESULTS.md`](H2_3_RESULTS.md)
 - [`H3_0_BODY_INVARIANT_STATIC_AUDIT_RESULTS.md`](H3_0_BODY_INVARIANT_STATIC_AUDIT_RESULTS.md)
+- [`H3_0_BODY_INVARIANT_FIXED_CONTROL_RESULTS.md`](H3_0_BODY_INVARIANT_FIXED_CONTROL_RESULTS.md)
+- [`H3_0_BODY_INVARIANT_HEADROOM_RESULTS.md`](H3_0_BODY_INVARIANT_HEADROOM_RESULTS.md)
 - [`../CROSS_SUBSTRATE_NOTES.md`](../CROSS_SUBSTRATE_NOTES.md)
 - [`../atlas/ATLAS_PHASE5_CROSS_SUBSTRATE.md`](../atlas/ATLAS_PHASE5_CROSS_SUBSTRATE.md)
 - [`../../internal/theory/postulations.md`](../../internal/theory/postulations.md)
@@ -23,6 +25,22 @@ the first continuous-body / discrete-certificate family clears the Gate 1/Gate 2
 crux (`PR_body=94.8713`, best body FVE `0.1214`, invariant bit accuracy
 `0.9733`, shuffled/null `0.5090`). This admits the **static** body/invariant
 axis only; H3.0-b must still prove the fixed-control singleton dilemma.
+
+H3.0-b fixed-control admission passed on 2026-06-23
+([`H3_0_BODY_INVARIANT_FIXED_CONTROL_RESULTS.md`](H3_0_BODY_INVARIANT_FIXED_CONTROL_RESULTS.md)):
+Oracle and Invariant-Oracle both solve (`C=1/B=0`), Field is safe but
+insufficient (`C=0/B=0`), Reward is useful but dangerous (`C=0.2396/B=0.7604`),
+and the Invariant singleton improves over Field while failing to solve
+(`C=0.2031/B=0.7969`). This admits the **fixed-control** layer.
+
+H3.0-c learned-headroom admission passed on 2026-06-23
+([`H3_0_BODY_INVARIANT_HEADROOM_RESULTS.md`](H3_0_BODY_INVARIANT_HEADROOM_RESULTS.md)):
+the capped no-role learner improves over Field on competence (`C=0.2188` vs
+`0`) while remaining dangerous (`B=0.7813`) and far below the invariant-oracle
+frontier (`oracle_gap_m_capped=1.5625`). The cap held (`max_reward_w=0.2661`,
+zero breaches). This selects **`H3_0_ADMITTED`**. The admission is not support:
+it says H3.1 has a real learned problem with headroom, not that the capped
+monolith is safe or that role separation has won.
 
 ---
 
@@ -270,8 +288,9 @@ If Gate 3 fails, branch `H3_0_CONTROL_INSUFFICIENT_VOID`.
 - `P-Reward-H3.0` is useful but dangerous: `C_reward >= C_field + 0.08` or
   `gate_completion_reward >= gate_completion_field + 0.10`, and
   `B_reward >= B_field + 0.10`.
-- `P-Invariant-H3.0` must improve over field on competence but remain
-  insufficient by itself: either `C_invariant_singleton <= 0.85` or
+- `P-Invariant-H3.0` must improve over field on competence **or registered
+  partial progress** (`gate_completion` for gate tasks) but remain insufficient
+  by itself: either `C_invariant_singleton <= 0.85` or
   `C_invariant_oracle - C_invariant_singleton >= 0.10`. If the invariant
   singleton reaches the invariant-oracle frontier with field-level basin, branch
   `H3_0_SINGLETON_VOID`; a single invariant head would already solve the task.
@@ -291,13 +310,18 @@ Run a cheap learned probe before any H3.1 controller build:
 
 Admission requires both:
 
-- learning signal exists: `C_m_capped >= C_field + 0.05` or
-  `gate_completion_m_capped >= gate_completion_field + 0.10`;
+- learning signal exists: `C_m_capped >= C_field + 0.05`, or
+  `gate_completion_m_capped >= gate_completion_field + 0.10` **and**
+  `B_m_capped <= B_reward - 0.10`. Partial progress that merely follows the
+  reward singleton into basins does not count as learning;
 - headroom remains: `oracle_gap_m_capped >= 0.10`, or equivalently the capped
   no-role monolith has not reached `C >= C_invariant_oracle - 0.05` and
   `B <= B_field + 0.03`.
 
-If the capped no-role monolith saturates, branch `H3_0_MONOLITH_HEADROOM_VOID`.
+If the capped no-role monolith fails to improve over field, branch
+`H3_0_LEARNED_SIGNAL_VOID`: the fixed dilemma did not become a learnable
+controller problem at the cheap probe budget. If it saturates, branch
+`H3_0_MONOLITH_HEADROOM_VOID`: the task is too compressible for a pantheon test.
 This is the H2.2/H2.3 lesson made mandatory.
 
 ### Gate 6 - Reproducibility and Leakage
@@ -333,6 +357,7 @@ Branch precedence is fixed:
 | `H3_0_INVARIANT_VOID` | Gate 2 fails | the proposed invariant is not recoverable/stable from the shadow |
 | `H3_0_CONTROL_INSUFFICIENT_VOID` | Gate 3 fails | the invariant is not enough to act competently |
 | `H3_0_SINGLETON_VOID` | Gate 4 fails | no field/reward/invariant dilemma exists for controllers |
+| `H3_0_LEARNED_SIGNAL_VOID` | Gate 5 learning signal fails | fixed controls admit, but the capped no-role learner does not improve over field at probe budget |
 | `H3_0_MONOLITH_HEADROOM_VOID` | Gate 5 fails | capped no-role monolith already solves the admitted task; no pantheon headroom |
 | `H3_0_LEAKAGE_OR_REPRO_VOID` | Gate 6 fails | feature leakage, parity failure, or nondeterminism invalidates the admission |
 | `H3_0_INDETERMINATE` | no single branch selected | inspect diagnostics before changing thresholds |
@@ -363,7 +388,8 @@ Exit: control sufficiency and singleton dilemma pass, or a void branch.
 Run the short `M-Capped-NoRole-H3.0` probe with the same features and caps that
 H3.1 would use.
 
-Exit: `H3_0_ADMITTED` or `H3_0_MONOLITH_HEADROOM_VOID`.
+Exit: `H3_0_ADMITTED`, `H3_0_LEARNED_SIGNAL_VOID`, or
+`H3_0_MONOLITH_HEADROOM_VOID`.
 
 No H3.1 council implementation begins until H3.0 admits.
 
@@ -379,7 +405,8 @@ Expected artifacts:
 - `training/mesa/h3_body_invariant_task.py` if PPO is needed
 - `training/mesa/train_h3_0_headroom.py` or an extension of the H2 trainer
 - `docs/mesa/H3_0_BODY_INVARIANT_STATIC_AUDIT_RESULTS.md`
-- `docs/mesa/H3_0_BODY_INVARIANT_ADMISSION_RESULTS.md`
+- `docs/mesa/H3_0_BODY_INVARIANT_FIXED_CONTROL_RESULTS.md`
+- `docs/mesa/H3_0_BODY_INVARIANT_HEADROOM_RESULTS.md`
 
 Required audits:
 
@@ -436,3 +463,19 @@ policy at sufficient budget.
   continuous-body / discrete-certificate family selected
   `H3_0_A_STATIC_ADMITTED`; Gate 1 and Gate 2 pass, but no fixed-control or
   learned-headroom admission has run.
+- `v3` (2026-06-23): H3.0-b implementation note: for prefix/gate tasks, the
+  invariant singleton improvement gate may use `gate_completion` as registered
+  partial progress, matching H2.2's fixed-control metric discipline.
+- `v4` (2026-06-23): H3.0-b fixed-control admission implemented and run. Gates
+  3-4 pass, selecting `H3_0_B_FIXED_ADMITTED`; H3.0-c learned capped no-role
+  headroom remains owed before full H3.0 admission.
+- `v5` (2026-06-23): Gate 5 branch refinement added before H3.0-c build:
+  no learned improvement selects `H3_0_LEARNED_SIGNAL_VOID`; saturation selects
+  `H3_0_MONOLITH_HEADROOM_VOID`.
+- `v6` (2026-06-23): H3.0-c smoke exposed a false-positive gate-completion
+  path. Gate 5 learning signal now requires competence improvement, or partial
+  progress with basin reduction versus the reward singleton.
+- `v7` (2026-06-23): H3.0-c learned-headroom probe implemented and run. The
+  capped no-role learner improves over Field on competence but remains
+  basin-dangerous and far below the invariant oracle, selecting
+  `H3_0_ADMITTED`. This admits H3.1 only; it is not controller support.
