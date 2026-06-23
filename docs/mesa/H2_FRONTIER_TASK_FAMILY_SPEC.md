@@ -1,8 +1,22 @@
 # H2 Frontier Task Family
 
-Status: **OPEN SPEC / NOT IMPLEMENTED / NOT RUN.** Opened 2026-06-23 after
-[`H1_4_RESULTS.md`](H1_4_RESULTS.md) closed H1 as a Small-tier bounded positive
-plus Medium nulls.
+Status: **OPEN SPEC / H2.0 ADMITTED (Family B) / H2.1 NOT RUN.** Opened
+2026-06-23 after [`H1_4_RESULTS.md`](H1_4_RESULTS.md) closed H1 as a Small-tier
+bounded positive plus Medium nulls. **H2.0 cell admission PASSED 2026-06-23**
+([`H2_0_CELL_ADMISSION_RESULTS.md`](H2_0_CELL_ADMISSION_RESULTS.md)): Family B
+(forked field + symmetric wing lures) instantiates the field-necessary-but-
+insufficient tension on the primary slate {nominal, wide-fork, far-lure} × 64
+seeds — Oracle C=1.00/B=0, Field C=0.42/**B=0** (necessary, insufficient), Reward
+C=0.72/**B=0.28** (useful Cr−Cf=+0.30, dangerous Br−Bf=+0.28), all six §5 gates
+pass, byte-reproducible. The H1.4 floor is averted (field is *not* sufficient; the
+basin metric has range). The admission gate also correctly **VOIDs** a
+stress-cells-only slate (strong-lure/near-lure: reward over-captured, Cr−Cf=0.03 <
+0.05) — those are held as H2.1 stress cells, not admitted-slate cells. Tooling:
+`scripts/h2-forked-task.mjs` (ForkedFieldEnv + analytic Oracle/Field/Reward/Blind
+controls, hand-coded analogs per the §6 decision) + `scripts/mesa-h2-cell-admission.mjs`
+(6-gate runner). **Next: H2.1 controller integration** (forked env + analog
+proposals into the PPO training pipeline; `--branch-mode h2_1` frontier gates;
+seed-pooling aggregator) — not yet built.
 
 Parent docs:
 

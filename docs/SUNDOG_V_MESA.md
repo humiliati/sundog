@@ -780,6 +780,23 @@ task (this metric floored at 0 and could not discriminate)? The MESA-lane thesis
 is now **[TYPED] bounded-positive at Small-tier (H1.2f), documented NULL at Medium
 (H1.3/H1.4)**.
 
+**H2 frontier task family (opened 2026-06-23) — the reframed rung; H2.0 cell
+admission PASSED.** [`mesa/H2_FRONTIER_TASK_FAMILY_SPEC.md`](mesa/H2_FRONTIER_TASK_FAMILY_SPEC.md),
+[`mesa/H2_0_CELL_ADMISSION_RESULTS.md`](mesa/H2_0_CELL_ADMISSION_RESULTS.md). H2
+abandons the pure proxy-resistance metric (foreclosed by H1.4 Finding 1) for a
+**joint competence–resistance frontier** on a Family-B *forked-field* task: a
+symmetric two-peak field routes to a fork (field reaches a branch but picks the
+correct one ≈chance), a reward cue helps pick correctly, and symmetric wing
+**false basins** trap a reward-greedy agent. The H2.0 admission gate (a fixed-
+control pre-check that forbids a repeat of the H1.4 floor) **admitted** the
+primary slate: Field C=0.42/B=0 (necessary+insufficient), Reward C=0.72/B=0.28
+(useful+dangerous), Oracle C=1.0, all six gates pass, byte-reproducible — and
+correctly **VOIDs** cells lacking the tension. The H2.1 support gate is built to
+escape the H1.4 foreclosure: the council need only **tie** the reward-blind field
+on resistance (not beat it), while beating it on competence and out-resisting the
+*monolith* at competence parity. **H2.1 controller binding (PPO) is the next
+build/run; no thesis claim yet** — admission only proves the task can discriminate.
+
 Immediate work:
 
 - Update `docs/promo/PROMO_HIGHLIGHTS.md` §The Gravity Claim with the earned mesa

@@ -302,6 +302,19 @@ the MESA controller-family architecture and capacity ladder.
 > Medium (H1.3/H1.4)** — the figure earned one honest stamp and the lab refuted
 > its own three Medium escalations by code, including the tempting one it most
 > wanted to be true.
+>
+> **That reframed rung now exists: the H2 frontier task family
+> ([`mesa/H2_FRONTIER_TASK_FAMILY_SPEC.md`](mesa/H2_FRONTIER_TASK_FAMILY_SPEC.md)),
+> whose H2.0 cell-admission gate PASSED (2026-06-23).** A *forked-field* world
+> where Sol reaches the fork but cannot tell which branch is true (≈chance), the
+> bull's cue names the branch but its wing-basins trap the reward-greedy: the
+> court must keep Sol's restraint *and* borrow the bull's knowledge without
+> enthroning it. The admission gate — built so the H1.4 floor can never recur
+> silently — confirms the world actually poses the dilemma (Sol
+> necessary-but-insufficient, bull useful-but-dangerous, metrics un-floored)
+> before any court is judged on it. The H2.1 gate is shaped to escape the H1.4
+> foreclosure: the court need only *match* Sol's restraint, not exceed the
+> unexceedable. No verdict yet — admission only proves the trial is fair.
 
 ---
 
