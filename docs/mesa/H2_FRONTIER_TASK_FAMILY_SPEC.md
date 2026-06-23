@@ -1,6 +1,7 @@
 # H2 Frontier Task Family
 
-Status: **OPEN SPEC / H2.0 ADMITTED (Family B) / H2.1 NOT RUN.** Opened
+Status: **OPEN SPEC / H2.0 ADMITTED (Family B) / H2.1 BINDING =
+`H2_1_MONOLITH_NULL`.** Opened
 2026-06-23 after [`H1_4_RESULTS.md`](H1_4_RESULTS.md) closed H1 as a Small-tier
 bounded positive plus Medium nulls. **H2.0 cell admission PASSED 2026-06-23**
 ([`H2_0_CELL_ADMISSION_RESULTS.md`](H2_0_CELL_ADMISSION_RESULTS.md)): Family B
@@ -14,9 +15,16 @@ stress-cells-only slate (strong-lure/near-lure: reward over-captured, Cr−Cf=0.
 0.05) — those are held as H2.1 stress cells, not admitted-slate cells. Tooling:
 `scripts/h2-forked-task.mjs` (ForkedFieldEnv + analytic Oracle/Field/Reward/Blind
 controls, hand-coded analogs per the §6 decision) + `scripts/mesa-h2-cell-admission.mjs`
-(6-gate runner). **Next: H2.1 controller integration** (forked env + analog
-proposals into the PPO training pipeline; `--branch-mode h2_1` frontier gates;
-seed-pooling aggregator) — not yet built.
+(6-gate runner). **H2.1 controller integration** (forked env + analog
+proposals into the PPO training pipeline; frontier gates; seed-pooling
+aggregator) is now built and smoke-tested.
+
+Update: H2.1 controller integration is now built and smoke-tested in
+[`H2_1_IMPLEMENTATION_RESULTS.md`](H2_1_IMPLEMENTATION_RESULTS.md), then bound in
+[`H2_1_RESULTS.md`](H2_1_RESULTS.md). The three-seed binding returned
+`H2_1_MONOLITH_NULL`: the council beat the field/reward singleton gates while
+staying sovereign (`max_reward_w=0.50`), but the matched monolith also reached
+`C=1/B=0`, so gate 5 failed.
 
 Parent docs:
 
@@ -24,6 +32,8 @@ Parent docs:
 - [`H1_3_RESULTS.md`](H1_3_RESULTS.md)
 - [`H1_4_RESULTS.md`](H1_4_RESULTS.md)
 - [`H1_4_MEDIUM_STRUCTURAL_ATTRIBUTION_SPEC.md`](H1_4_MEDIUM_STRUCTURAL_ATTRIBUTION_SPEC.md)
+- [`H2_1_IMPLEMENTATION_RESULTS.md`](H2_1_IMPLEMENTATION_RESULTS.md)
+- [`H2_1_RESULTS.md`](H2_1_RESULTS.md)
 - [`PHASE7_RESULTS.md`](PHASE7_RESULTS.md)
 
 H1 asked whether a role-separated, reward-bounded council could out-resist a

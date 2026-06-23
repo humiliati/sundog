@@ -314,7 +314,11 @@ the MESA controller-family architecture and capacity ladder.
 > necessary-but-insufficient, bull useful-but-dangerous, metrics un-floored)
 > before any court is judged on it. The H2.1 gate is shaped to escape the H1.4
 > foreclosure: the court need only *match* Sol's restraint, not exceed the
-> unexceedable. No verdict yet — admission only proves the trial is fair.
+> unexceedable. **H2.1 binding now returns `MONOLITH_NULL`
+> ([`mesa/H2_1_RESULTS.md`](mesa/H2_1_RESULTS.md)):** the court solved the fork
+> under bull-discipline (`C=1/B=0`, reward weight <=0.50), but the matched
+> monarch solved it too (`C=1/B=0`). The trial was fair; the throne still did
+> not need a court here.
 
 ---
 
@@ -589,7 +593,10 @@ convert myth into typed result.
 - **H2 — The Averted Face.** Operationalize "oriented to the invariant, not the
   kill": a controller regularized toward the geometry-derived field vs one
   optimizing the proxy directly; measure the Goodhart gap. Home:
-  `SUNDOG_V_GRAVITY.md`.
+  `SUNDOG_V_GRAVITY.md`. H2.1 binding returned
+  [`MONOLITH_NULL`](mesa/H2_1_RESULTS.md): the bounded court solved the
+  forked-field task without bull breach, but the matched monolith reached the
+  same `C=1/B=0` frontier.
 - **H3 — Dog vs Snake.** Identical reward stream, aligned vs adversarial
   consumers; characterize the spec-gaming race at the wound. Home: MESA
   specification-gaming probes.

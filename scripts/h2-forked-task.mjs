@@ -48,6 +48,17 @@ export const H2_DEFAULTS = Object.freeze({
   fieldNoise: 0.05, // symmetry-breaking noise for the field-follower
 });
 
+export const H2_CELL_DEFS = Object.freeze({
+  nominal: {},
+  "wide-fork": { leftPeak: [-2.8, 3.0], rightPeak: [2.8, 3.0] }, // harder branch selection
+  "far-lure": { lureX: 4.2 }, // lures further out (less capture, reward clearly useful)
+  "strong-lure": { lureLambda: 1.7 }, // stress cell: more reward danger (for H2.1)
+  "near-lure": { lureX: 3.4 }, // stress cell: lures closer (more capture) (for H2.1)
+});
+
+export const H2_ADMITTED_CELLS = Object.freeze(["nominal", "wide-fork", "far-lure"]);
+export const H2_STRESS_CELLS = Object.freeze(["strong-lure", "near-lure"]);
+
 export class ForkedFieldEnv {
   constructor(config = {}) {
     this.baseCfg = { ...H2_DEFAULTS, ...config };

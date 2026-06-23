@@ -7,17 +7,17 @@
 // monolith training. No learned controllers here — this is the anti-H1.4-floor gate.
 //
 // Usage:
-//   node scripts/mesa-h2-cell-admission.mjs [--seeds 64] [--cells nominal,wide-fork,strong-lure]
+//   node scripts/mesa-h2-cell-admission.mjs [--seeds 64] [--cells nominal,wide-fork,far-lure]
 //     [--out docs/mesa/H2_0_CELL_ADMISSION_RESULTS.md] [--json results/.../h2_0_admission.json]
 //     [env-param overrides: --cue-kappa 1.25 --lure-lambda 1.35 --proxy-x 2.6 --proxy-y -0.6
 //      --sigma-cue 2.2 --sigma-basin 1.0 --start-jitter 1.4 --field-noise 0.05 ...]
 
 import { writeFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
-import { ForkedFieldEnv, oracleController, fieldFollower, rewardFollower, blindController, rollEpisode } from "./h2-forked-task.mjs";
+import { ForkedFieldEnv, H2_CELL_DEFS, oracleController, fieldFollower, rewardFollower, blindController, rollEpisode } from "./h2-forked-task.mjs";
 
 const repoRoot = process.cwd();
-const args = { seeds: 64, seedStart: 10000, cells: "nominal,wide-fork,strong-lure", out: "docs/mesa/H2_0_CELL_ADMISSION_RESULTS.md", json: "results/mesa/h2-frontier/h2_0_admission.json" };
+const args = { seeds: 64, seedStart: 10000, cells: "nominal,wide-fork,far-lure", out: "docs/mesa/H2_0_CELL_ADMISSION_RESULTS.md", json: "results/mesa/h2-frontier/h2_0_admission.json" };
 const envOverride = {};
 const ENV_FLAGS = { "--cue-kappa": "cueKappa", "--lure-lambda": "lureLambda", "--sigma-cue": "sigmaCue", "--sigma-basin": "sigmaBasin", "--sigma-s": "sigmaS", "--start-jitter": "startJitter", "--field-noise": "fieldNoise", "--branch-radius": "branchRadius", "--basin-radius": "basinRadius", "--action-max": "actionMax", "--horizon": "horizon", "--lure-x": "lureX", "--lure-y": "lureY" };
 const argv = process.argv.slice(2);
@@ -37,16 +37,8 @@ if (envOverride.proxyX !== undefined || envOverride.proxyY !== undefined) {
   delete envOverride.proxyX; delete envOverride.proxyY;
 }
 
-// Cell slate: each cell is a set of env-param overrides (on top of CLI overrides).
-const CELL_DEFS = {
-  nominal: {},
-  "wide-fork": { leftPeak: [-2.8, 3.0], rightPeak: [2.8, 3.0] }, // harder branch selection
-  "far-lure": { lureX: 4.2 }, // lures further out (less capture, reward clearly useful)
-  "strong-lure": { lureLambda: 1.7 }, // stress cell: more reward danger (for H2.1)
-  "near-lure": { lureX: 3.4 }, // stress cell: lures closer (more capture) (for H2.1)
-};
 const cells = args.cells.split(",").map((s) => s.trim()).filter(Boolean);
-for (const c of cells) if (!(c in CELL_DEFS)) { console.error(`unknown cell ${c}`); process.exit(2); }
+for (const c of cells) if (!(c in H2_CELL_DEFS)) { console.error(`unknown cell ${c}`); process.exit(2); }
 
 const CONTROLS = [
   ["Oracle-H2", oracleController],
@@ -65,7 +57,7 @@ for (const [label] of CONTROLS) agg[label] = { Cs: [], Bs: [] };
 
 for (const cell of cells) {
   perCell[cell] = {};
-  const cellOverrides = { ...envOverride, ...CELL_DEFS[cell] };
+  const cellOverrides = { ...envOverride, ...H2_CELL_DEFS[cell] };
   for (const [label, make] of CONTROLS) {
     const env = new ForkedFieldEnv();
     const Cs = []; const Bs = []; const outc = { correct: 0, wrong: 0, basin: 0, timeout: 0 };

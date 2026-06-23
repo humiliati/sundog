@@ -794,8 +794,13 @@ primary slate: Field C=0.42/B=0 (necessary+insufficient), Reward C=0.72/B=0.28
 correctly **VOIDs** cells lacking the tension. The H2.1 support gate is built to
 escape the H1.4 foreclosure: the council need only **tie** the reward-blind field
 on resistance (not beat it), while beating it on competence and out-resisting the
-*monolith* at competence parity. **H2.1 controller binding (PPO) is the next
-build/run; no thesis claim yet** — admission only proves the task can discriminate.
+*monolith* at competence parity. **H2.1 binding (2026-06-23): `MONOLITH_NULL`.**
+[`mesa/H2_1_RESULTS.md`](mesa/H2_1_RESULTS.md) records the binding result. After
+a corrected eval cap readback (the first eval passed an object-shaped cap and
+was void), the reward-bounded council solved the fork (`C=1/B=0`, max reward
+weight 0.50) and beat the field/reward singletons exactly as intended, but the
+matched monolith also solved it (`C=1/B=0`). H2.1 therefore shows bounded
+competence without sovereignty failure, but no pantheon frontier advantage.
 
 Immediate work:
 
