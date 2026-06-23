@@ -124,9 +124,10 @@ regime where the field signal is *necessary but insufficient*:
 3. **Keep the singleton + non-role controls** (they are the load-bearing
    guardrail and worked exactly as intended here).
 
-This is a new registered rung (owner to draft); the tooling additions are likely
-a new task-cell family and a frontier-dominance gate. Until then, no structural
-plurality advantage is claimed at any tier.
+This is now registered as [`H2 Frontier Task Family`](H2_FRONTIER_TASK_FAMILY_SPEC.md):
+a new task-cell family plus a frontier-dominance gate. Until that separately
+registered rung succeeds, no structural plurality advantage is claimed at any
+tier.
 
 ## Honest caveats
 

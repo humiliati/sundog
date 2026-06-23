@@ -14,9 +14,10 @@ trust-feature *training* artifact — same seed/heads/cells, only trust(23)→ba
 changes the monarch's GI basin 0.199→0, erasing the gap. **No structural plurality
 advantage at Medium is supported; the hypothesis as framed is effectively refuted
 (Finding 1) and the H1.3 diagnostic explained away (Finding 2).** Owed: a
-*reframed* rung — a joint competence–resistance frontier on a
-field-necessary-but-insufficient task (the metric here floored at 0, so it could
-not discriminate). H1.3 stays `ATTRIBUTION_NULL`; H1.2f stays the Small-tier
+*reframed* rung — [`H2 Frontier Task Family`](H2_FRONTIER_TASK_FAMILY_SPEC.md),
+a joint competence–resistance frontier on a field-necessary-but-insufficient
+task (the metric here floored at 0, so it could not discriminate). H1.3 stays
+`ATTRIBUTION_NULL`; H1.2f stays the Small-tier
 bounded positive. Opened 2026-06-22 after [`H1_3_RESULTS.md`](H1_3_RESULTS.md);
 tooling landed 2026-06-22 (all §4 requirements):
 `scripts/mesa-h1-pantheon-eval.mjs` gained `--branch-mode h1_4`, the two singleton
