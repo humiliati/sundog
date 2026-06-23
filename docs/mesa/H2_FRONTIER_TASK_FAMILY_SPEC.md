@@ -2,7 +2,8 @@
 
 Status: **OPEN SPEC / H2.0 ADMITTED (Family B) / H2.1 BINDING =
 `H2_1_MONOLITH_NULL` / H2.2-a `H2_2_LEARNED_HEADROOM_VOID` / H2.3 BINDING
-`H2_3_CAP_NOT_ROLES` / H3.0 ADMITTED / H3.1 DRAFTED.** Opened
+`H2_3_CAP_NOT_ROLES` / H3.0 ADMITTED / H3.1 PROBE
+`H3_1_RESISTANCE_NULL`.** Opened
 2026-06-23 after [`H1_4_RESULTS.md`](H1_4_RESULTS.md) closed H1 as a Small-tier
 bounded positive plus Medium nulls. **H2.0 cell admission PASSED 2026-06-23**
 ([`H2_0_CELL_ADMISSION_RESULTS.md`](H2_0_CELL_ADMISSION_RESULTS.md)): Family B
@@ -81,6 +82,10 @@ monolith; H3.0 itself is admission only. H3.1 is now drafted in
 it registers the verifier-cheaper-than-generation mechanism, requires a
 flat-veto monolith to separate transform benefit from role factorization, and
 requires verifier/invariant ablations to collapse any claimed edge.
+The H3.1 implementation then landed and H3.1-a returned an indicative
+[`H3_1_RESISTANCE_NULL`](H3_1_VERIFIER_GUARD_PROBE_RESULTS.md): the verifier
+mechanism is inert at 64 updates, with council and monolith controls all
+matching the same basin-dangerous policy. Binding is staged but not run.
 
 Parent docs:
 
@@ -105,6 +110,8 @@ Parent docs:
 - [`H3_0_BODY_INVARIANT_FIXED_CONTROL_RESULTS.md`](H3_0_BODY_INVARIANT_FIXED_CONTROL_RESULTS.md)
 - [`H3_0_BODY_INVARIANT_HEADROOM_RESULTS.md`](H3_0_BODY_INVARIANT_HEADROOM_RESULTS.md)
 - [`H3_1_BODY_INVARIANT_VERIFIER_GUARD_SPEC.md`](H3_1_BODY_INVARIANT_VERIFIER_GUARD_SPEC.md)
+- [`H3_1_VERIFIER_GUARD_SMOKE_RESULTS.md`](H3_1_VERIFIER_GUARD_SMOKE_RESULTS.md)
+- [`H3_1_VERIFIER_GUARD_PROBE_RESULTS.md`](H3_1_VERIFIER_GUARD_PROBE_RESULTS.md)
 - [`PHASE7_RESULTS.md`](PHASE7_RESULTS.md)
 
 H1 asked whether a role-separated, reward-bounded council could out-resist a
@@ -565,3 +572,6 @@ No H2 controller result is interpretable without a passed H2.0 admission record.
 - `v12` (2026-06-23): H3.1 verifier/guard spec drafted. It registers
   verifier-cheaper-than-generation as the mechanism and adds capped no-role,
   flat-veto, auxiliary-if-used, and ablation controls before any support claim.
+- `v13` (2026-06-23): H3.1 trainer/eval/aggregator implemented. H3.1-0 smoke is
+  green; H3.1-a probe returns indicative `H3_1_RESISTANCE_NULL` with the
+  verifier mechanism inert. Binding remains unrun and owner-gated.

@@ -1,6 +1,6 @@
 # H3.0 Body-Resistant Invariant Control Admission Spec
 
-Status: **H3.0 ADMITTED / H3.1 DRAFTED / NOT A CONTROLLER SUPPORT
+Status: **H3.0 ADMITTED / H3.1 IMPLEMENTED + PROBED / NOT A CONTROLLER SUPPORT
 RESULT.** Opened 2026-06-23 after H2.3 returned
 [`H2_3_CAP_NOT_ROLES`](H2_3_RESULTS.md): the cap mechanism was real, but the
 capped no-role monolith matched the role-separated council.
@@ -13,6 +13,8 @@ Parent / motive docs:
 - [`H3_0_BODY_INVARIANT_FIXED_CONTROL_RESULTS.md`](H3_0_BODY_INVARIANT_FIXED_CONTROL_RESULTS.md)
 - [`H3_0_BODY_INVARIANT_HEADROOM_RESULTS.md`](H3_0_BODY_INVARIANT_HEADROOM_RESULTS.md)
 - [`H3_1_BODY_INVARIANT_VERIFIER_GUARD_SPEC.md`](H3_1_BODY_INVARIANT_VERIFIER_GUARD_SPEC.md)
+- [`H3_1_VERIFIER_GUARD_SMOKE_RESULTS.md`](H3_1_VERIFIER_GUARD_SMOKE_RESULTS.md)
+- [`H3_1_VERIFIER_GUARD_PROBE_RESULTS.md`](H3_1_VERIFIER_GUARD_PROBE_RESULTS.md)
 - [`../CROSS_SUBSTRATE_NOTES.md`](../CROSS_SUBSTRATE_NOTES.md)
 - [`../atlas/ATLAS_PHASE5_CROSS_SUBSTRATE.md`](../atlas/ATLAS_PHASE5_CROSS_SUBSTRATE.md)
 - [`../../internal/theory/postulations.md`](../../internal/theory/postulations.md)
@@ -453,6 +455,12 @@ It pins the verifier/guard mechanism, the capped no-role and flat-veto monolith
 controls, and the invariant/verifier ablation gates required before any support
 claim.
 
+The H3.1 implementation and one-seed probe now live in
+[`H3_1_VERIFIER_GUARD_PROBE_RESULTS.md`](H3_1_VERIFIER_GUARD_PROBE_RESULTS.md).
+The probe is an indicative `H3_1_RESISTANCE_NULL`: all learned rows match the
+same basin-dangerous policy and the verifier/certificate ablations are no-ops.
+This does not revise H3.0 admission.
+
 ---
 
 ## 10. Versioning
@@ -489,3 +497,6 @@ claim.
 - `v8` (2026-06-23): H3.1 verifier/guard spec drafted. The handoff now points
   to the controller rung that tests verifier-cheaper-than-generation against
   capped no-role and flat-veto monolith controls.
+- `v9` (2026-06-23): H3.1 trainer/eval/aggregator implemented and smoked.
+  H3.1-a probe returns indicative `H3_1_RESISTANCE_NULL`; H3.0 remains an
+  admission result only.

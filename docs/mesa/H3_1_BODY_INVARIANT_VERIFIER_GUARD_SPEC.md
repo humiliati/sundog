@@ -1,6 +1,7 @@
 # H3.1 Body-Invariant Verifier-Guard Frontier Spec
 
-Status: **OPEN SPEC / NOT IMPLEMENTED / CONTROLLER RUNG.** Drafted
+Status: **IMPLEMENTED / SMOKE GREEN / PROBE `H3_1_RESISTANCE_NULL` /
+BINDING NOT RUN.** Drafted
 2026-06-23 after [`H3_0_ADMITTED`](H3_0_BODY_INVARIANT_HEADROOM_RESULTS.md).
 
 Parent docs:
@@ -11,11 +12,23 @@ Parent docs:
 - [`H3_0_BODY_INVARIANT_STATIC_AUDIT_RESULTS.md`](H3_0_BODY_INVARIANT_STATIC_AUDIT_RESULTS.md)
 - [`H3_0_BODY_INVARIANT_FIXED_CONTROL_RESULTS.md`](H3_0_BODY_INVARIANT_FIXED_CONTROL_RESULTS.md)
 - [`H3_0_BODY_INVARIANT_HEADROOM_RESULTS.md`](H3_0_BODY_INVARIANT_HEADROOM_RESULTS.md)
+- [`H3_1_VERIFIER_GUARD_SMOKE_RESULTS.md`](H3_1_VERIFIER_GUARD_SMOKE_RESULTS.md)
+- [`H3_1_VERIFIER_GUARD_PROBE_RESULTS.md`](H3_1_VERIFIER_GUARD_PROBE_RESULTS.md)
 - [`../CROSS_SUBSTRATE_NOTES.md`](../CROSS_SUBSTRATE_NOTES.md)
 
 H3.0 admitted the task family. H3.1 is the first controller test on that family.
 It may support or null the role-separated claim; it does not revisit H3.0
 admission unless a validity/headroom gate fails at binding budget.
+
+Implementation/probe note (2026-06-23): H3.1 trainer/eval/aggregator now exist
+and the H3.1-0 smoke is green
+([`H3_1_VERIFIER_GUARD_SMOKE_RESULTS.md`](H3_1_VERIFIER_GUARD_SMOKE_RESULTS.md)).
+The H3.1-a 64-update probe returned indicative `H3_1_RESISTANCE_NULL`
+([`H3_1_VERIFIER_GUARD_PROBE_RESULTS.md`](H3_1_VERIFIER_GUARD_PROBE_RESULTS.md)):
+all learned rows matched a reward-ish, basin-dangerous policy, and the verifier
+ablation plus certificate-scramble ablation were exact no-ops. This is not a
+binding result; it says the current PPO shape has not made the verifier a live
+mechanism.
 
 ---
 
@@ -387,6 +400,7 @@ Branch precedence is fixed:
 | `H3_1_SOVEREIGNTY_FAIL` | reward cap or guard-sovereignty discipline fails | apparent win depends on a new monarch |
 | `H3_1_ROBUSTNESS_NULL` | seed robustness fails | apparent edge is seed-fragile |
 | `H3_1_BREADTH_NULL` | edge is localized to one cell/gate | apparent edge is too narrow |
+| `H3_1_VERIFIER_SUPPORT_COMPATIBLE_SINGLE_SEED` | one-seed probe passes all non-robustness support gates | indicative only; run binding before any claim |
 | `H3_1_VOID` | validity, fairness, leakage, or parity fails | rerun/redesign before interpretation |
 | `H3_1_INDETERMINATE` | no single branch selected | inspect diagnostics before changing thresholds |
 
@@ -477,3 +491,8 @@ ablation controls.
   verifier-cheaper-than-generation mechanism, requires comparison against
   capped no-role and flat-veto monolith controls, and makes verifier/invariant
   ablation collapse mandatory for support.
+- `v1` (2026-06-23): trainer/eval/aggregator implemented. H3.1-0 smoke is green;
+  H3.1-a one-seed 64-update probe selects indicative `H3_1_RESISTANCE_NULL`
+  because all learned rows match the same basin-dangerous policy and the
+  verifier/certificate ablations are no-ops. Binding commands are staged but not
+  run under the long-run rule.
