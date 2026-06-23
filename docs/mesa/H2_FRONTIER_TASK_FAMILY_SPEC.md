@@ -2,7 +2,7 @@
 
 Status: **OPEN SPEC / H2.0 ADMITTED (Family B) / H2.1 BINDING =
 `H2_1_MONOLITH_NULL` / H2.2-a `H2_2_LEARNED_HEADROOM_VOID` / H2.3 BINDING
-`H2_3_CAP_NOT_ROLES` / H3.0 ADMITTED.** Opened
+`H2_3_CAP_NOT_ROLES` / H3.0 ADMITTED / H3.1 DRAFTED.** Opened
 2026-06-23 after [`H1_4_RESULTS.md`](H1_4_RESULTS.md) closed H1 as a Small-tier
 bounded positive plus Medium nulls. **H2.0 cell admission PASSED 2026-06-23**
 ([`H2_0_CELL_ADMISSION_RESULTS.md`](H2_0_CELL_ADMISSION_RESULTS.md)): Family B
@@ -76,7 +76,11 @@ H3.0-c then passed learned capped no-role headroom
 selecting `H3_0_ADMITTED`: the capped no-role learner finds signal but remains
 dangerous and far below the invariant oracle. The next owed rung is H3.1, which
 must test the verifier/guard role mechanism against that capped no-role
-monolith; H3.0 itself is admission only.
+monolith; H3.0 itself is admission only. H3.1 is now drafted in
+[`H3_1_BODY_INVARIANT_VERIFIER_GUARD_SPEC.md`](H3_1_BODY_INVARIANT_VERIFIER_GUARD_SPEC.md):
+it registers the verifier-cheaper-than-generation mechanism, requires a
+flat-veto monolith to separate transform benefit from role factorization, and
+requires verifier/invariant ablations to collapse any claimed edge.
 
 Parent docs:
 
@@ -100,6 +104,7 @@ Parent docs:
 - [`H3_0_BODY_INVARIANT_STATIC_AUDIT_RESULTS.md`](H3_0_BODY_INVARIANT_STATIC_AUDIT_RESULTS.md)
 - [`H3_0_BODY_INVARIANT_FIXED_CONTROL_RESULTS.md`](H3_0_BODY_INVARIANT_FIXED_CONTROL_RESULTS.md)
 - [`H3_0_BODY_INVARIANT_HEADROOM_RESULTS.md`](H3_0_BODY_INVARIANT_HEADROOM_RESULTS.md)
+- [`H3_1_BODY_INVARIANT_VERIFIER_GUARD_SPEC.md`](H3_1_BODY_INVARIANT_VERIFIER_GUARD_SPEC.md)
 - [`PHASE7_RESULTS.md`](PHASE7_RESULTS.md)
 
 H1 asked whether a role-separated, reward-bounded council could out-resist a
@@ -557,3 +562,6 @@ No H2 controller result is interpretable without a passed H2.0 admission record.
 - `v11` (2026-06-23): H3.0-c learned capped no-role headroom passed, selecting
   full `H3_0_ADMITTED`. The next rung is H3.1, with verifier/guard attribution
   owed against the capped no-role monolith.
+- `v12` (2026-06-23): H3.1 verifier/guard spec drafted. It registers
+  verifier-cheaper-than-generation as the mechanism and adds capped no-role,
+  flat-veto, auxiliary-if-used, and ablation controls before any support claim.

@@ -1,6 +1,6 @@
 # H3.0 Body-Resistant Invariant Control Admission Spec
 
-Status: **H3.0 ADMITTED / H3.1 NOT DRAFTED / NOT A CONTROLLER SUPPORT
+Status: **H3.0 ADMITTED / H3.1 DRAFTED / NOT A CONTROLLER SUPPORT
 RESULT.** Opened 2026-06-23 after H2.3 returned
 [`H2_3_CAP_NOT_ROLES`](H2_3_RESULTS.md): the cap mechanism was real, but the
 capped no-role monolith matched the role-separated council.
@@ -12,6 +12,7 @@ Parent / motive docs:
 - [`H3_0_BODY_INVARIANT_STATIC_AUDIT_RESULTS.md`](H3_0_BODY_INVARIANT_STATIC_AUDIT_RESULTS.md)
 - [`H3_0_BODY_INVARIANT_FIXED_CONTROL_RESULTS.md`](H3_0_BODY_INVARIANT_FIXED_CONTROL_RESULTS.md)
 - [`H3_0_BODY_INVARIANT_HEADROOM_RESULTS.md`](H3_0_BODY_INVARIANT_HEADROOM_RESULTS.md)
+- [`H3_1_BODY_INVARIANT_VERIFIER_GUARD_SPEC.md`](H3_1_BODY_INVARIANT_VERIFIER_GUARD_SPEC.md)
 - [`../CROSS_SUBSTRATE_NOTES.md`](../CROSS_SUBSTRATE_NOTES.md)
 - [`../atlas/ATLAS_PHASE5_CROSS_SUBSTRATE.md`](../atlas/ATLAS_PHASE5_CROSS_SUBSTRATE.md)
 - [`../../internal/theory/postulations.md`](../../internal/theory/postulations.md)
@@ -446,6 +447,12 @@ Without a verifier-cheaper-than-generation mechanism, H3.1's stated prior should
 be `CAP_NOT_ROLES`: the capped no-role monolith can represent the same blended
 policy at sufficient budget.
 
+The registered H3.1 draft now lives at
+[`H3_1_BODY_INVARIANT_VERIFIER_GUARD_SPEC.md`](H3_1_BODY_INVARIANT_VERIFIER_GUARD_SPEC.md).
+It pins the verifier/guard mechanism, the capped no-role and flat-veto monolith
+controls, and the invariant/verifier ablation gates required before any support
+claim.
+
 ---
 
 ## 10. Versioning
@@ -479,3 +486,6 @@ policy at sufficient budget.
   capped no-role learner improves over Field on competence but remains
   basin-dangerous and far below the invariant oracle, selecting
   `H3_0_ADMITTED`. This admits H3.1 only; it is not controller support.
+- `v8` (2026-06-23): H3.1 verifier/guard spec drafted. The handoff now points
+  to the controller rung that tests verifier-cheaper-than-generation against
+  capped no-role and flat-veto monolith controls.
