@@ -1,7 +1,8 @@
 # H2 Frontier Task Family
 
 Status: **OPEN SPEC / H2.0 ADMITTED (Family B) / H2.1 BINDING =
-`H2_1_MONOLITH_NULL` / H2.2-a `H2_2_LEARNED_HEADROOM_VOID`.** Opened
+`H2_1_MONOLITH_NULL` / H2.2-a `H2_2_LEARNED_HEADROOM_VOID` / H2.3-1
+`H2_3_SUPPORT_COMPATIBLE_SINGLE_SEED`.** Opened
 2026-06-23 after [`H1_4_RESULTS.md`](H1_4_RESULTS.md) closed H1 as a Small-tier
 bounded positive plus Medium nulls. **H2.0 cell admission PASSED 2026-06-23**
 ([`H2_0_CELL_ADMISSION_RESULTS.md`](H2_0_CELL_ADMISSION_RESULTS.md)): Family B
@@ -41,6 +42,17 @@ monolith reached the oracle frontier (`C=1/B=0`), firing the learned-headroom
 override. H2.2 therefore records a **void**, not a support/null score, and H2.2-b
 binding is skipped for this Family-C slate.
 
+Next rung after the H2.2 void:
+[`H2_3_SAFE_EXPLORATION_PRIOR_SPEC.md`](H2_3_SAFE_EXPLORATION_PRIOR_SPEC.md)
+opens a safe-exploration proxy-poisoning task. H2.3-0 fixed admission passed
+([`H2_3_CELL_ADMISSION_RESULTS.md`](H2_3_CELL_ADMISSION_RESULTS.md)): the field
+is safe but insufficient, the reward proxy is a high-return basin, and a
+reward-capped reference recovers competence without basin capture. H2.3-1 then
+implemented the trainer/eval/aggregator and returned
+[`H2_3_SUPPORT_COMPATIBLE_SINGLE_SEED`](H2_3_SAFE_EXPLORATION_PROBE_RESULTS.md).
+This is not a binding claim; the three-seed H2.3-b binding is staged in the
+probe results doc.
+
 Parent docs:
 
 - [`H1_2F_RESULTS.md`](H1_2F_RESULTS.md)
@@ -53,6 +65,9 @@ Parent docs:
 - [`H2_2_CELL_ADMISSION_RESULTS.md`](H2_2_CELL_ADMISSION_RESULTS.md)
 - [`H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md`](H2_2_LEARNED_HEADROOM_PROBE_RESULTS.md)
 - [`H2_2A_FRONTIER_PROBE_RESULTS.md`](H2_2A_FRONTIER_PROBE_RESULTS.md)
+- [`H2_3_SAFE_EXPLORATION_PRIOR_SPEC.md`](H2_3_SAFE_EXPLORATION_PRIOR_SPEC.md)
+- [`H2_3_CELL_ADMISSION_RESULTS.md`](H2_3_CELL_ADMISSION_RESULTS.md)
+- [`H2_3_SAFE_EXPLORATION_PROBE_RESULTS.md`](H2_3_SAFE_EXPLORATION_PROBE_RESULTS.md)
 - [`PHASE7_RESULTS.md`](PHASE7_RESULTS.md)
 
 H1 asked whether a role-separated, reward-bounded council could out-resist a
@@ -482,3 +497,7 @@ No H2 controller result is interpretable without a passed H2.0 admission record.
 - `v3` (2026-06-23): H2.2 support-gate eval/aggregator built; H2.2-a returned
   `H2_2_LEARNED_HEADROOM_VOID` because the matched monolith saturates the Family-C
   task by 128 updates. H2.2-b binding is skipped.
+- `v4` (2026-06-23): H2.3 safe-exploration proxy-poisoning rung opened and
+  implemented. Fixed admission returned `H2_3_FIXED_ADMITTED`; one-seed
+  learned probe returned `H2_3_SUPPORT_COMPATIBLE_SINGLE_SEED`. H2.3-b binding
+  is staged but not run under the long-run rule.
