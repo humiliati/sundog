@@ -1,7 +1,7 @@
 # H2.3 Cap-as-Safe-Exploration-Prior Spec
 
 Status: **H2.3-0 FIXED ADMITTED / H2.3-1 `H2_3_SUPPORT_COMPATIBLE_SINGLE_SEED` /
-BINDING NOT RUN.**
+BINDING SEEDS 0-1 `H2_3_CAP_NOT_ROLES` / POOLED BINDING INCOMPLETE.**
 Opened 2026-06-23 after [`H2_2A_FRONTIER_PROBE_RESULTS.md`](H2_2A_FRONTIER_PROBE_RESULTS.md)
 returned `H2_2_LEARNED_HEADROOM_VOID` (Family C too compressible — a matched
 monolith reaches the oracle frontier by 128 updates).
@@ -10,6 +10,8 @@ Implementation/probe docs:
 
 - [`H2_3_CELL_ADMISSION_RESULTS.md`](H2_3_CELL_ADMISSION_RESULTS.md)
 - [`H2_3_SAFE_EXPLORATION_PROBE_RESULTS.md`](H2_3_SAFE_EXPLORATION_PROBE_RESULTS.md)
+- [`H2_3_BINDING_SEED0_RESULTS.md`](H2_3_BINDING_SEED0_RESULTS.md)
+- [`H2_3_BINDING_SEED0_1_RESULTS.md`](H2_3_BINDING_SEED0_1_RESULTS.md)
 
 Parent docs:
 
@@ -263,6 +265,16 @@ distinguishes `role_benefit` from `cap_benefit`.
 
 ## 10. Versioning
 
+- `v4` (2026-06-23, seed-1 partial binding): 512-update seed 1 completed and
+  also selects `H2_3_CAP_NOT_ROLES`. The two-seed aggregate has
+  `support_seeds=0`, `cap_benefit=1`, and `role_benefit=0`. Formal binding is
+  still incomplete until seed 2, but `H2_3_PLURALITY_SUPPORT` is no longer
+  reachable under the registered `>=2/3` robustness rule.
+- `v3` (2026-06-23, seed-0 partial binding): 512-update seed 0 completed and
+  evaluated. The seed selects `H2_3_CAP_NOT_ROLES`: the cap works and the
+  uncapped monolith Goodharts, but the capped no-role monolith matches the
+  council at `C=1/B=0`, so role benefit is zero. Pooled binding remains
+  incomplete until seeds 1/2 run.
 - `v2` (2026-06-23, Codex implementation/probe): H2.3 env, Python mirror,
   admission, PPO trainer, eval, and aggregator implemented. Fixed admission
   returned `H2_3_FIXED_ADMITTED`; 64-update one-seed learned probe returned

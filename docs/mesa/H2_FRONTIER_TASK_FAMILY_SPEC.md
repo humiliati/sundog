@@ -1,8 +1,8 @@
 # H2 Frontier Task Family
 
 Status: **OPEN SPEC / H2.0 ADMITTED (Family B) / H2.1 BINDING =
-`H2_1_MONOLITH_NULL` / H2.2-a `H2_2_LEARNED_HEADROOM_VOID` / H2.3-1
-`H2_3_SUPPORT_COMPATIBLE_SINGLE_SEED`.** Opened
+`H2_1_MONOLITH_NULL` / H2.2-a `H2_2_LEARNED_HEADROOM_VOID` / H2.3 seeds 0-1
+`H2_3_CAP_NOT_ROLES` / H2.3 pooled binding incomplete.** Opened
 2026-06-23 after [`H1_4_RESULTS.md`](H1_4_RESULTS.md) closed H1 as a Small-tier
 bounded positive plus Medium nulls. **H2.0 cell admission PASSED 2026-06-23**
 ([`H2_0_CELL_ADMISSION_RESULTS.md`](H2_0_CELL_ADMISSION_RESULTS.md)): Family B
@@ -50,8 +50,14 @@ is safe but insufficient, the reward proxy is a high-return basin, and a
 reward-capped reference recovers competence without basin capture. H2.3-1 then
 implemented the trainer/eval/aggregator and returned
 [`H2_3_SUPPORT_COMPATIBLE_SINGLE_SEED`](H2_3_SAFE_EXPLORATION_PROBE_RESULTS.md).
-This is not a binding claim; the three-seed H2.3-b binding is staged in the
-probe results doc.
+This is not a binding claim. The first 512-update binding seed then returned
+[`H2_3_CAP_NOT_ROLES`](H2_3_BINDING_SEED0_RESULTS.md): the cap effect survives,
+but the capped no-role monolith catches the council on seed 0. The pooled
+two-seed aggregate then repeated the result
+([`H2_3_BINDING_SEED0_1_RESULTS.md`](H2_3_BINDING_SEED0_1_RESULTS.md)):
+`support_seeds=0`, `cap_benefit=1`, `role_benefit=0`. The formal three-seed
+H2.3-b binding remains incomplete until seed 2, but plurality support is no
+longer reachable under the registered seed-robustness rule.
 
 Parent docs:
 
@@ -68,6 +74,8 @@ Parent docs:
 - [`H2_3_SAFE_EXPLORATION_PRIOR_SPEC.md`](H2_3_SAFE_EXPLORATION_PRIOR_SPEC.md)
 - [`H2_3_CELL_ADMISSION_RESULTS.md`](H2_3_CELL_ADMISSION_RESULTS.md)
 - [`H2_3_SAFE_EXPLORATION_PROBE_RESULTS.md`](H2_3_SAFE_EXPLORATION_PROBE_RESULTS.md)
+- [`H2_3_BINDING_SEED0_RESULTS.md`](H2_3_BINDING_SEED0_RESULTS.md)
+- [`H2_3_BINDING_SEED0_1_RESULTS.md`](H2_3_BINDING_SEED0_1_RESULTS.md)
 - [`PHASE7_RESULTS.md`](PHASE7_RESULTS.md)
 
 H1 asked whether a role-separated, reward-bounded council could out-resist a
@@ -501,3 +509,11 @@ No H2 controller result is interpretable without a passed H2.0 admission record.
   implemented. Fixed admission returned `H2_3_FIXED_ADMITTED`; one-seed
   learned probe returned `H2_3_SUPPORT_COMPATIBLE_SINGLE_SEED`. H2.3-b binding
   is staged but not run under the long-run rule.
+- `v5` (2026-06-23): H2.3 512-update binding seed 0 completed and returned
+  `H2_3_CAP_NOT_ROLES`. The uncapped monolith still Goodharts, but the capped
+  no-role monolith matches the council at `C=1/B=0`; pooled binding is
+  incomplete until seeds 1/2 run.
+- `v6` (2026-06-23): H2.3 512-update binding seed 1 also returned
+  `H2_3_CAP_NOT_ROLES`. The two-seed aggregate has `support_seeds=0`, so
+  plurality support is no longer reachable; seed 2 remains to close the formal
+  three-seed branch.

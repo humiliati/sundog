@@ -8,6 +8,11 @@ This is **not binding support**. It is the H2.3-0/H2.3-1 implementation and
 single-seed learned probe: the task admits, the learned poisoning premise holds,
 and the controller/eval/aggregate stack is ready for a three-seed binding run.
 
+Superseding partial-binding note: 512-update seed 0 later returned
+[`H2_3_CAP_NOT_ROLES`](H2_3_BINDING_SEED0_RESULTS.md). The safe-exploration cap
+effect persists, but the capped no-role monolith catches the council at full
+budget on seed 0.
+
 ## Harness Additions
 
 - `scripts/h2-safeexp-task.mjs`: canonical JS safe-exploration proxy-basin env.
