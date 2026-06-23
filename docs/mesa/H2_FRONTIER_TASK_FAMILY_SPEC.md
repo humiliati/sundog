@@ -2,7 +2,7 @@
 
 Status: **OPEN SPEC / H2.0 ADMITTED (Family B) / H2.1 BINDING =
 `H2_1_MONOLITH_NULL` / H2.2-a `H2_2_LEARNED_HEADROOM_VOID` / H2.3 BINDING
-`H2_3_CAP_NOT_ROLES`.** Opened
+`H2_3_CAP_NOT_ROLES` / H3.0-a STATIC ADMITTED.** Opened
 2026-06-23 after [`H1_4_RESULTS.md`](H1_4_RESULTS.md) closed H1 as a Small-tier
 bounded positive plus Medium nulls. **H2.0 cell admission PASSED 2026-06-23**
 ([`H2_0_CELL_ADMISSION_RESULTS.md`](H2_0_CELL_ADMISSION_RESULTS.md)): Family B
@@ -61,6 +61,16 @@ H2.3-b binding then returned
 capped no-role monolith matches the council, so the plurality claim is null on
 this axis.
 
+H2.3 therefore closes the safe-exploration cap lane as plurality-null. The next
+registered hook is not a harder proxy basin, but a new axis:
+[`H3_0_BODY_RESISTANT_INVARIANT_CONTROL_ADMISSION_SPEC.md`](H3_0_BODY_RESISTANT_INVARIANT_CONTROL_ADMISSION_SPEC.md)
+drafts an admission-only rung for body-resistant, invariant-sufficient control.
+It requires a genuinely resistant body, a recoverable discrete invariant, and
+learned headroom against a capped no-role monolith before any H3.1 council test.
+H3.0-a then passed its static body/invariant audit
+([`H3_0_BODY_INVARIANT_STATIC_AUDIT_RESULTS.md`](H3_0_BODY_INVARIANT_STATIC_AUDIT_RESULTS.md));
+H3.0-b fixed-control admission remains unbuilt.
+
 Parent docs:
 
 - [`H1_2F_RESULTS.md`](H1_2F_RESULTS.md)
@@ -79,6 +89,8 @@ Parent docs:
 - [`H2_3_BINDING_SEED0_RESULTS.md`](H2_3_BINDING_SEED0_RESULTS.md)
 - [`H2_3_BINDING_SEED0_1_RESULTS.md`](H2_3_BINDING_SEED0_1_RESULTS.md)
 - [`H2_3_RESULTS.md`](H2_3_RESULTS.md)
+- [`H3_0_BODY_RESISTANT_INVARIANT_CONTROL_ADMISSION_SPEC.md`](H3_0_BODY_RESISTANT_INVARIANT_CONTROL_ADMISSION_SPEC.md)
+- [`H3_0_BODY_INVARIANT_STATIC_AUDIT_RESULTS.md`](H3_0_BODY_INVARIANT_STATIC_AUDIT_RESULTS.md)
 - [`PHASE7_RESULTS.md`](PHASE7_RESULTS.md)
 
 H1 asked whether a role-separated, reward-bounded council could out-resist a
@@ -523,3 +535,10 @@ No H2 controller result is interpretable without a passed H2.0 admission record.
 - `v7` (2026-06-23): H2.3 512-update binding seed 2 also returned
   `H2_3_CAP_NOT_ROLES`; final three-seed aggregate closes H2.3 as cap-positive
   and plurality-null.
+- `v8` (2026-06-23): H3.0 handoff drafted. The safe-exploration cap lane is
+  closed as plurality-null; the next admissible mechanism is body-resistant,
+  invariant-sufficient control with capped no-role learned-headroom required
+  before any H3.1 council test.
+- `v9` (2026-06-23): H3.0-a static body/invariant audit passed; the Gate 1/Gate
+  2 crux is constructible on the first continuous-body / discrete-certificate
+  family. H3.0-b fixed-control admission remains owed.
