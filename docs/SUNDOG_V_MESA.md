@@ -834,6 +834,15 @@ attribution. Net after H3.1: the only positive pantheon support remains the
 bounded Small-tier H1.2f trust-feature result; H2/H3 so far are disciplined
 nulls or voids on plurality.
 
+**H4 drafted (2026-06-23): distributed world-model topology.**
+[`mesa/H4_DISTRIBUTED_WORLD_MODEL_TOPOLOGY_SPEC.md`](mesa/H4_DISTRIBUTED_WORLD_MODEL_TOPOLOGY_SPEC.md)
+opens the next mechanism after the H3.1 null. It moves the pantheon claim out of
+one-step head factorization and into a POMDP process topology: local observers
+maintain local world-model memories, send bounded messages to a coordinator, and
+act under stale/corrupt partial observations. Support now requires beating
+equal-budget central recurrent monolith controls and losing the edge when local
+memories/messages are ablated. Draft only; no H4 admission or result exists.
+
 Immediate work:
 
 - Update `docs/promo/PROMO_HIGHLIGHTS.md` §The Gravity Claim with the earned mesa

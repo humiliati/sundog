@@ -345,6 +345,14 @@ the MESA controller-family architecture and capacity ladder.
 > H3.0 as a useful admitted world and denies the first verifier-guard controller
 > claim. Net: one Small-tier typed foothold (H1.2f), with H2/H3 so far null or
 > void for plurality.
+>
+> **H4 is now drafted as distributed world-model topology**
+> ([`mesa/H4_DISTRIBUTED_WORLD_MODEL_TOPOLOGY_SPEC.md`](mesa/H4_DISTRIBUTED_WORLD_MODEL_TOPOLOGY_SPEC.md)).
+> The claim shifts from "many heads inside one timestep" to "many local models
+> under bounded communication": local observers keep histories, send compact
+> messages, and a coordinator acts under a shared field. Support would require
+> beating equal-budget central recurrent monarchs and losing the advantage when
+> local memories/messages are scrambled. Draft only; no H4 result exists.
 
 ---
 
@@ -428,7 +436,7 @@ arresting one. The *historical thesis itself* — that the Mithraists meant
 precession — is [ORNAMENT], permanently: no source-lock outcome promotes it.
 A convergence of shape is not a derivation, and "the ancients agreed with us" is
 not evidence; it is, at most, a sign we have found a deep and recurrent way of
-seeing. Source-lock (H4) governs only how honestly we cite the contested
+seeing. Source-lock (H5) governs only how honestly we cite the contested
 scholarship — not whether the reading promotes; it does not.
 
 ---
@@ -634,15 +642,19 @@ convert myth into typed result.
   a certificate invariant remains readable enough to steer. H3.0 admitted the
   task family; H3.1 returned `H3_1_RESISTANCE_NULL`, so the first verifier-guard
   controller mechanism is denied rather than banked.
-- **H4 — Precession source-lock.** Reconcile Ulansey (1989) against Beck (2006)
+- **H4 — Distributed World-Model Topology.** Local observers keep bounded
+  memories and send bounded messages under a coordinator. Draft:
+  [`mesa/H4_DISTRIBUTED_WORLD_MODEL_TOPOLOGY_SPEC.md`](mesa/H4_DISTRIBUTED_WORLD_MODEL_TOPOLOGY_SPEC.md).
+  No admission or result yet.
+- **H5 — Precession source-lock.** Reconcile Ulansey (1989) against Beck (2006)
   and Clauss before any public use of the precession claim. This is an
   *attribution-honesty* pass — is the contested scholarship represented fairly —
   not an evidential one: the historical reading stays [ORNAMENT] regardless of
   outcome. There is no promotion path.
-- **H5 — Public cosmogram artifact** *(ornament-allowed, gated)*. A single
+- **H6 — Public cosmogram artifact** *(ornament-allowed, gated)*. A single
   annotated tauroctony with the typed map as caption. Gated behind
   `SEO_AND_SOCIAL_READINESS_ROADMAP.md` like every other public surface; ships
-  only after H4.
+  only after H5.
 
 ---
 

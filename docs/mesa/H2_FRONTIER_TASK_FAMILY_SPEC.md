@@ -3,7 +3,7 @@
 Status: **OPEN SPEC / H2.0 ADMITTED (Family B) / H2.1 BINDING =
 `H2_1_MONOLITH_NULL` / H2.2-a `H2_2_LEARNED_HEADROOM_VOID` / H2.3 BINDING
 `H2_3_CAP_NOT_ROLES` / H3.0 ADMITTED / H3.1 BINDING
-`H3_1_RESISTANCE_NULL`.** Opened
+`H3_1_RESISTANCE_NULL` / H4 DRAFTED.** Opened
 2026-06-23 after [`H1_4_RESULTS.md`](H1_4_RESULTS.md) closed H1 as a Small-tier
 bounded positive plus Medium nulls. **H2.0 cell admission PASSED 2026-06-23**
 ([`H2_0_CELL_ADMISSION_RESULTS.md`](H2_0_CELL_ADMISSION_RESULTS.md)): Family B
@@ -90,6 +90,13 @@ then returned [`H3_1_RESISTANCE_NULL`](H3_1_RESULTS.md): H3.0 admission survived
 but the verifier council remained basin-dangerous, did not beat the matched
 capped monoliths, and failed mechanism attribution.
 
+The next registered rung is
+[`H4_DISTRIBUTED_WORLD_MODEL_TOPOLOGY_SPEC.md`](H4_DISTRIBUTED_WORLD_MODEL_TOPOLOGY_SPEC.md).
+H4 moves the mechanism out of one-step role heads and into process topology:
+local world models, bounded messages, stale partial observations, and matched
+central recurrent monolith controls. It is drafted only; no H4 admission or
+controller result exists yet.
+
 Parent docs:
 
 - [`H1_2F_RESULTS.md`](H1_2F_RESULTS.md)
@@ -116,6 +123,7 @@ Parent docs:
 - [`H3_1_VERIFIER_GUARD_SMOKE_RESULTS.md`](H3_1_VERIFIER_GUARD_SMOKE_RESULTS.md)
 - [`H3_1_VERIFIER_GUARD_PROBE_RESULTS.md`](H3_1_VERIFIER_GUARD_PROBE_RESULTS.md)
 - [`H3_1_RESULTS.md`](H3_1_RESULTS.md)
+- [`H4_DISTRIBUTED_WORLD_MODEL_TOPOLOGY_SPEC.md`](H4_DISTRIBUTED_WORLD_MODEL_TOPOLOGY_SPEC.md)
 - [`PHASE7_RESULTS.md`](PHASE7_RESULTS.md)
 
 H1 asked whether a role-separated, reward-bounded council could out-resist a
@@ -582,3 +590,6 @@ No H2 controller result is interpretable without a passed H2.0 admission record.
 - `v14` (2026-06-23): Owner-cleared H3.1 three-seed binding completed and
   selected `H3_1_RESISTANCE_NULL`. The body/invariant admission remains useful,
   but the registered verifier/guard factorization did not produce role support.
+- `v15` (2026-06-23): H4 distributed world-model topology spec drafted. The next
+  mechanism is process topology under partial observability, not another
+  one-step role-head factorization.
