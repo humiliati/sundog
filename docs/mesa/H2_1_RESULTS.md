@@ -84,6 +84,11 @@ sovereignty failure and not a failed task-admission record. The task poses the
 right dilemma to the fixed controls; at the registered PPO/budget level, both
 learned controller families solve it perfectly.
 
+Registered reopening path: [`H2_2_LEARNED_HEADROOM_MULTIFORK_SPEC.md`](H2_2_LEARNED_HEADROOM_MULTIFORK_SPEC.md)
+adds learned-headroom admission and a Family-C multi-fork phase/key task. It
+voids any cell family where the matched learned monolith already reaches the
+oracle frontier before a pantheon-support score is attempted.
+
 Safe language:
 
 > H2.1 showed that a reward-bounded council can use reward information without

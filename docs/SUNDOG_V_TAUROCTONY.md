@@ -596,7 +596,9 @@ convert myth into typed result.
   `SUNDOG_V_GRAVITY.md`. H2.1 binding returned
   [`MONOLITH_NULL`](mesa/H2_1_RESULTS.md): the bounded court solved the
   forked-field task without bull breach, but the matched monolith reached the
-  same `C=1/B=0` frontier.
+  same `C=1/B=0` frontier. H2.2 is now opened as a learned-headroom multi-fork
+  rung: before the court is judged, the world must prove the monarch cannot
+  already saturate it.
 - **H3 — Dog vs Snake.** Identical reward stream, aligned vs adversarial
   consumers; characterize the spec-gaming race at the wound. Home: MESA
   specification-gaming probes.

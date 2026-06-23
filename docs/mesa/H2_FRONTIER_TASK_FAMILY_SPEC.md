@@ -1,7 +1,7 @@
 # H2 Frontier Task Family
 
 Status: **OPEN SPEC / H2.0 ADMITTED (Family B) / H2.1 BINDING =
-`H2_1_MONOLITH_NULL`.** Opened
+`H2_1_MONOLITH_NULL` / H2.2 OPEN SPEC.** Opened
 2026-06-23 after [`H1_4_RESULTS.md`](H1_4_RESULTS.md) closed H1 as a Small-tier
 bounded positive plus Medium nulls. **H2.0 cell admission PASSED 2026-06-23**
 ([`H2_0_CELL_ADMISSION_RESULTS.md`](H2_0_CELL_ADMISSION_RESULTS.md)): Family B
@@ -26,6 +26,10 @@ Update: H2.1 controller integration is now built and smoke-tested in
 staying sovereign (`max_reward_w=0.50`), but the matched monolith also reached
 `C=1/B=0`, so gate 5 failed.
 
+Next rung: [`H2_2_LEARNED_HEADROOM_MULTIFORK_SPEC.md`](H2_2_LEARNED_HEADROOM_MULTIFORK_SPEC.md)
+opens a learned-headroom admission gate plus a Family-C multi-fork phase/key
+task. It is spec-only: not implemented, not run.
+
 Parent docs:
 
 - [`H1_2F_RESULTS.md`](H1_2F_RESULTS.md)
@@ -34,6 +38,7 @@ Parent docs:
 - [`H1_4_MEDIUM_STRUCTURAL_ATTRIBUTION_SPEC.md`](H1_4_MEDIUM_STRUCTURAL_ATTRIBUTION_SPEC.md)
 - [`H2_1_IMPLEMENTATION_RESULTS.md`](H2_1_IMPLEMENTATION_RESULTS.md)
 - [`H2_1_RESULTS.md`](H2_1_RESULTS.md)
+- [`H2_2_LEARNED_HEADROOM_MULTIFORK_SPEC.md`](H2_2_LEARNED_HEADROOM_MULTIFORK_SPEC.md)
 - [`PHASE7_RESULTS.md`](PHASE7_RESULTS.md)
 
 H1 asked whether a role-separated, reward-bounded council could out-resist a
@@ -453,3 +458,6 @@ No H2 controller result is interpretable without a passed H2.0 admission record.
   Defines H2 as a new frontier task family where field is necessary but
   insufficient, reward is useful but dangerous, and support requires joint
   competence-resistance dominance rather than basin-only advantage.
+- `v1` (2026-06-23): H2.1 binding returned `H2_1_MONOLITH_NULL`; H2.2 opened
+  learned-headroom admission plus a Family-C multi-fork phase/key task to avoid
+  scoring cells the matched monolith can already saturate.

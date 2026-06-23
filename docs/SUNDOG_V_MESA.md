@@ -801,6 +801,11 @@ was void), the reward-bounded council solved the fork (`C=1/B=0`, max reward
 weight 0.50) and beat the field/reward singletons exactly as intended, but the
 matched monolith also solved it (`C=1/B=0`). H2.1 therefore shows bounded
 competence without sovereignty failure, but no pantheon frontier advantage.
+**H2.2 opened** [`mesa/H2_2_LEARNED_HEADROOM_MULTIFORK_SPEC.md`](mesa/H2_2_LEARNED_HEADROOM_MULTIFORK_SPEC.md)
+as the next registered rung: learned-headroom admission plus a Family-C
+multi-fork phase/key task. Its new pre-binding lock is explicit: if a matched
+learned monolith already reaches the oracle frontier, the cell family voids
+before any pantheon-support score.
 
 Immediate work:
 
