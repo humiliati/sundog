@@ -346,13 +346,18 @@ the MESA controller-family architecture and capacity ladder.
 > claim. Net: one Small-tier typed foothold (H1.2f), with H2/H3 so far null or
 > void for plurality.
 >
-> **H4 is now drafted as distributed world-model topology**
+> **H4 is now opened as distributed world-model topology**
 > ([`mesa/H4_DISTRIBUTED_WORLD_MODEL_TOPOLOGY_SPEC.md`](mesa/H4_DISTRIBUTED_WORLD_MODEL_TOPOLOGY_SPEC.md)).
 > The claim shifts from "many heads inside one timestep" to "many local models
 > under bounded communication": local observers keep histories, send compact
 > messages, and a coordinator acts under a shared field. Support would require
 > beating equal-budget central recurrent monarchs and losing the advantage when
-> local memories/messages are scrambled. Draft only; no H4 result exists.
+> local memories/messages are scrambled. H4.0-a/b now admits the fixed-control
+> layer ([`mesa/H4_0_TOPOLOGY_ADMISSION_RESULTS.md`](mesa/H4_0_TOPOLOGY_ADMISSION_RESULTS.md)):
+> JS/Python parity is exact and the Distributed Relay Grid selects
+> `H4_0_FIXED_ADMITTED`. No learned topology score exists yet; H4.0-c must still
+> prove learned headroom and an in->OOD generalization gap before H4 is fully
+> admitted.
 
 ---
 
@@ -643,9 +648,10 @@ convert myth into typed result.
   task family; H3.1 returned `H3_1_RESISTANCE_NULL`, so the first verifier-guard
   controller mechanism is denied rather than banked.
 - **H4 — Distributed World-Model Topology.** Local observers keep bounded
-  memories and send bounded messages under a coordinator. Draft:
+  memories and send bounded messages under a coordinator. H4.0-a/b fixed
+  admission is green; learned headroom/OOD-gap admission is pending:
   [`mesa/H4_DISTRIBUTED_WORLD_MODEL_TOPOLOGY_SPEC.md`](mesa/H4_DISTRIBUTED_WORLD_MODEL_TOPOLOGY_SPEC.md).
-  No admission or result yet.
+  [`mesa/H4_0_TOPOLOGY_ADMISSION_RESULTS.md`](mesa/H4_0_TOPOLOGY_ADMISSION_RESULTS.md).
 - **H5 — Precession source-lock.** Reconcile Ulansey (1989) against Beck (2006)
   and Clauss before any public use of the precession claim. This is an
   *attribution-honesty* pass — is the contested scholarship represented fairly —

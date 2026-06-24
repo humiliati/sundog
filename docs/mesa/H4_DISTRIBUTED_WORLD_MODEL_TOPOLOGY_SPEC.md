@@ -1,7 +1,15 @@
 # H4 Distributed World Model Topology Spec
 
-Status: **DRAFT / NOT IMPLEMENTED.** Opened 2026-06-23 after
-[`H3_1_RESISTANCE_NULL`](H3_1_RESULTS.md).
+Status: **H4.0-a/b BUILT + FIXED ADMITTED / H4.0-c PENDING (v2 - deterministic
+relay admission).** Opened 2026-06-23 after
+[`H3_1_RESISTANCE_NULL`](H3_1_RESULTS.md). Revised 2026-06-23 to move the
+support path off in-distribution frontier (where the superset monolith is the
+upper bound) and onto **held-out / out-of-distribution corruption**, and to add
+a **same-size** central control so any edge is attributable to topology, not to
+the monolith being handicapped by its own larger size.
+H4.0-a/b were implemented on 2026-06-24 as the Distributed Relay Grid and
+selected `H4_0_FIXED_ADMITTED`; full H4.0 admission still requires H4.0-c
+learned-headroom/OOD-gap admission.
 
 Parent docs:
 
@@ -10,6 +18,7 @@ Parent docs:
 - [`H3_0_BODY_RESISTANT_INVARIANT_CONTROL_ADMISSION_SPEC.md`](H3_0_BODY_RESISTANT_INVARIANT_CONTROL_ADMISSION_SPEC.md)
 - [`H3_1_BODY_INVARIANT_VERIFIER_GUARD_SPEC.md`](H3_1_BODY_INVARIANT_VERIFIER_GUARD_SPEC.md)
 - [`H3_1_RESULTS.md`](H3_1_RESULTS.md)
+- [`H4_0_TOPOLOGY_ADMISSION_RESULTS.md`](H4_0_TOPOLOGY_ADMISSION_RESULTS.md)
 - [`../SUNDOG_V_MESA.md`](../SUNDOG_V_MESA.md)
 - [`../SUNDOG_V_TAUROCTONY.md`](../SUNDOG_V_TAUROCTONY.md)
 - [`../CROSS_SUBSTRATE_NOTES.md`](../CROSS_SUBSTRATE_NOTES.md)
@@ -53,10 +62,32 @@ control process:
 - local state can become stale or corrupted;
 - reward-like cues are useful locally but dangerous when globally over-trusted.
 
-The honest prior remains hard: a sufficiently strong central recurrent monolith
-may still absorb the advantage. H4 support is allowed only if the distributed
-topology beats the strongest matched monolith and the edge collapses when local
-memories or messages are disrupted.
+**The structural problem this version confronts head-on.** Under the fairness
+rules a central recurrent monolith is the *information superset at the decision
+point*: it receives the same raw observation events (§5.1), the pantheon may send
+no more than the monolith's public input (§5.2), and it has equal-or-greater
+memory and budget (§5.3-4). So the distributed system is, again, a constrained
+*subset* — handicapped by a bottleneck the monolith does not face. On any
+**in-distribution** competence/resistance metric the superset monolith is an
+upper bound, and the honest prior is `H4_MONOLITH_NULL`. This is the same wall
+H1-H3 hit, relocated to the observation/memory topology.
+
+A bottleneck can only beat a superset model where the **bottleneck is a beneficial
+regularizer the superset cannot learn around** — and the one regime where that is
+literature-backed is **robustness / out-of-distribution generalization**: a
+compressed local belief is more fault-tolerant than a model that fits the full
+corrupted stream. So H4 (v1) makes the **primary support path out-of-distribution**:
+controllers train on a clean / mildly-corrupted distribution and are scored on
+**held-out corruption** (unseen staleness, drops, decoy patterns). In-distribution
+frontier is a secondary diagnostic only — the claim is *robustness*, not
+in-distribution dominance.
+
+The honest prior remains hard even so: a sufficiently strong central monolith may
+generalize too, or the win may be capacity (a smaller model trains/generalizes
+better) rather than topology. H4 support is therefore allowed only if the
+distributed topology beats the strongest matched monolith **including a same-size
+central control** on held-out corruption, **and** the OOD edge collapses when
+local memories or messages are disrupted.
 
 ---
 
@@ -64,16 +95,24 @@ memories or messages are disrupted.
 
 If H4 returns `H4_TOPOLOGY_SUPPORT`, the allowed claim is:
 
-> On an admitted distributed partially observed control task, a bounded
-> pantheon of local world models plus a coordinator reached a
-> competence-resistance frontier that equal-budget central recurrent monoliths
-> did not, and the advantage was attributable to the distributed topology:
-> local-memory and message-topology ablations collapsed the edge.
+> On an admitted distributed partially observed control task, a bounded pantheon
+> of local world models plus a coordinator generalized to **held-out corruption**
+> (unseen staleness/drops/decoys) better than equal-budget central recurrent
+> monoliths — **including a same-size central control** — reaching a
+> competence-resistance frontier on the OOD slate that the monoliths did not, and
+> the advantage was attributable to distributed topology rather than capacity:
+> local-memory and message-topology ablations collapsed the OOD edge.
 
-If H4 returns `H4_MONOLITH_NULL`, the allowed claim is only:
+If H4 returns `H4_MONOLITH_NULL` or `H4_OOD_NULL`, the allowed claim is only:
 
-> The distributed POMDP was valid, but the matched central recurrent monolith
-> absorbed the topology benefit at this budget.
+> The distributed POMDP was valid, but a matched central recurrent monolith
+> generalized to the held-out corruption as well as the distributed topology at
+> this budget; the bottleneck was not a beneficial robustness regularizer here.
+
+If H4 returns `H4_CAPACITY_NULL`, the allowed claim is only:
+
+> Any OOD edge over the *larger* monolith was capacity-conditioning, not topology:
+> the same-size central control matched the distributed system.
 
 H4 may not claim:
 
@@ -122,6 +161,27 @@ The first slate should use three cells:
 
 Stress cells may be built later, but the primary slate must pass H4.0 admission
 before any controller result is interpreted.
+
+### Train vs Held-Out (OOD) Corruption Split
+
+The primary support path is out-of-distribution, so the corruption regime is split
+and **registered before any controller training**:
+
+- **Train distribution** (controllers learn here): `nominal-relay` plus *mild*
+  corruption — short sensor lag, low drop rate, weak decoy lures — at parameters
+  fixed in the spec/config.
+- **Held-out OOD eval** (never trained on): *stronger / structurally novel*
+  corruption — longer staleness, higher drop rates, multi-site simultaneous drops,
+  decoy patterns or site-permutations absent from training. The held-out
+  corruption parameters and seeds are disjoint from training and recorded.
+
+Both the distributed controller and every monolith control train *only* on the
+train distribution and are scored on both the in-distribution eval and the held-out
+OOD eval. The hypothesis is that the bottleneck regularizer degrades less under the
+unseen corruption than a superset monolith that fit the training stream more
+tightly. If the held-out corruption is not actually harder for a current-budget
+central monolith than the training distribution (no generalization gap to exploit),
+H4.0 admission voids — see Gate 8.
 
 ---
 
@@ -193,6 +253,18 @@ learn the factorization without explicit local memory boundaries.
 - Equal budget.
 - Tests whether site identity and specialized local memories are necessary.
 
+`M-Central-RNN-SameSize-H4` (**capacity-attribution control**)
+
+- Single recurrent trunk, identical to `M-Central-RNN-H4` in input access, **but
+  with total recurrent state dimension and trainable actor budget matched to the
+  distributed system within 5% (same size, NOT ≥).**
+- Tests whether any OOD edge is attributable to *topology* or merely to the
+  distributed system being a *smaller* model that generalizes better at fixed
+  budget. If this same-size central control matches the distributed system on the
+  held-out OOD slate, the result is `H4_CAPACITY_NULL`, not topology support.
+- Both `M-Central-RNN-H4` (≥ size) and `M-Central-RNN-SameSize-H4` (= size) are
+  required; support must beat both.
+
 ### Topology Ablations
 
 Run these at eval on the trained distributed controller:
@@ -235,6 +307,14 @@ Run these at eval on the trained distributed controller:
    is used, every monolith gets an equal auxiliary target and budget.
 7. **Topology attribution.** A pantheon win is not support unless local-memory
    and message-topology ablations collapse the edge.
+8. **OOD split is pre-registered.** The train vs held-out corruption parameters
+   and seed ranges are fixed in the spec/config before any controller trains.
+   No controller (pantheon or monolith) trains on the held-out corruption regime.
+   Tuning the OOD parameters after seeing controller results selects `H4_VOID`.
+9. **Capacity attribution.** Support must beat both the ≥-size `M-Central-RNN-H4`
+   and the =-size `M-Central-RNN-SameSize-H4` on the held-out OOD slate; if only
+   the larger monolith is beaten, the edge is capacity, not topology
+   (`H4_CAPACITY_NULL`).
 
 ---
 
@@ -270,6 +350,15 @@ Admission requires all:
 7. **Learned headroom.** The cheap central monolith improves over Field by at
    least `0.05` but does not reach the Oracle frontier:
    not (`C >= 0.95` and `B <= B_field + 0.03`).
+8. **OOD generalization gap exists.** The held-out corruption must be genuinely
+   harder for a current-budget central monolith than the train distribution, so
+   there is a robustness gap for a regularizer to exploit: the cheap
+   `M-Central-RNN-H4` headroom probe must drop by at least `0.10` on `J` from the
+   in-distribution eval to the held-out OOD eval. If the monolith generalizes with
+   no gap, there is nothing for the bottleneck to win and admission voids
+   (`H4_0_NO_OOD_GAP_VOID`). Conversely, if the OOD corruption is so severe that
+   the Oracle itself falls below `C >= 0.85` on the held-out slate, the OOD regime
+   is unsolvable and also voids (`H4_0_TASK_VOID`).
 
 Failure selects an H4.0 void branch, not a pantheon null.
 
@@ -296,9 +385,26 @@ World-model and topology diagnostics:
 - `drop_sensitivity_i`: performance drop when message `i` is removed.
 - `shuffle_drop`: drop under message-site permutation.
 - `memory_ablation_drop`: drop when local recurrent memories are reset.
-- `centralization_gap`: `J_pantheon - max(J_central_controls)`.
+- `centralization_gap`: `J_pantheon - max(J_central_controls)` (in-distribution;
+  secondary diagnostic).
 - `topology_attribution_drop`: `centralization_gap_intact -
   centralization_gap_topology_ablated`.
+
+Out-of-distribution (PRIMARY support) metrics, computed on the held-out
+corruption slate:
+
+- `J_ood_<controller>`: joint frontier score on the held-out OOD slate, for the
+  pantheon and every monolith control (incl. the same-size control).
+- `centralization_gap_ood`: `J_ood_pantheon - max(J_ood_central_controls)`, where
+  the max is taken over `M-Central-RNN-H4`, `M-Central-RNN-SameSize-H4`,
+  `M-Central-Message-H4`, `M-Shared-Local-H4`. **This is the primary support
+  quantity.**
+- `samesize_gap_ood`: `J_ood_pantheon - J_ood_M-Central-RNN-SameSize-H4` (the
+  capacity-attribution margin).
+- `robustness_drop_<controller>`: `J_in_distribution - J_ood` per controller; the
+  topology claim is `robustness_drop_pantheon < robustness_drop_M_best`.
+- `topology_attribution_drop_ood`: `centralization_gap_ood_intact -
+  centralization_gap_ood_topology_ablated`.
 
 Sovereignty diagnostics:
 
@@ -345,29 +451,45 @@ The distributed controller must be a real controller:
 Failure on competence selects `H4_COMPETENCE_NULL`. Failure on resistance
 selects `H4_RESISTANCE_NULL`.
 
-### Gate 3 - Monolith Comparison
+### Gate 3 - OOD Monolith Comparison (PRIMARY support gate)
 
-Let `M_best` be the strongest matched monolith by `J`, including
-`M-Central-RNN-H4`, `M-Central-Message-H4`, and `M-Shared-Local-H4`.
+Scored on the **held-out corruption slate**. Let `M_best_ood` be the strongest
+matched monolith by `J_ood`, taken over `M-Central-RNN-H4`,
+`M-Central-RNN-SameSize-H4`, `M-Central-Message-H4`, and `M-Shared-Local-H4`.
 
 Support requires all:
 
-- `centralization_gap = J_pantheon - J_M_best >= 0.12` pooled;
-- `C_pantheon - C_M_best >= -0.03`;
-- `B_M_best - B_pantheon >= 0.08`;
-- at least 2 of 3 PPO seeds have positive `centralization_gap`.
+- `centralization_gap_ood = J_ood_pantheon - J_ood_M_best_ood >= 0.12` pooled;
+- `samesize_gap_ood = J_ood_pantheon - J_ood_(M-Central-RNN-SameSize) >= 0.06`
+  pooled (the win must survive the *same-size* control, not only the larger one);
+- `C_ood_pantheon - C_ood_M_best_ood >= -0.03`;
+- `B_ood_M_best_ood - B_ood_pantheon >= 0.08`;
+- `robustness_drop_pantheon < robustness_drop_M_best_ood` (the pantheon degrades
+  *less* from in-distribution to the held-out corruption);
+- at least 2 of 3 PPO seeds have positive `centralization_gap_ood`.
 
-If a monolith matches or dominates within those margins, select
-`H4_MONOLITH_NULL`.
+Branch selection on failure:
+
+- if `centralization_gap_ood >= 0.12` against the ≥-size monolith **but**
+  `samesize_gap_ood < 0.06` (the same-size central control matches the pantheon),
+  select `H4_CAPACITY_NULL` — the edge is model size, not topology;
+- otherwise, if any monolith matches or dominates `J_ood` within these margins,
+  select `H4_OOD_NULL`.
+
+In-distribution `centralization_gap` is reported as a **secondary diagnostic**; it
+is **not** required to be positive — the registered claim is OOD robustness, not
+in-distribution dominance, because in-distribution the superset monolith is the
+upper bound.
 
 ### Gate 4 - Topology Attribution
 
-Support requires the advantage to depend on distributed topology:
+Support requires the **OOD** advantage to depend on distributed topology (all
+ablations scored on the held-out corruption slate):
 
-- local-memory reset reduces `centralization_gap` by at least `0.08` and at
+- local-memory reset reduces `centralization_gap_ood` by at least `0.08` and at
   least 50%;
-- message shuffle reduces `centralization_gap` by at least `0.08` and at least
-  50%;
+- message shuffle reduces `centralization_gap_ood` by at least `0.08` and at
+  least 50%;
 - at least two site-specific message drops cause cell-appropriate performance
   degradation;
 - local diagnostic probes recover distinct site latents from distinct local
@@ -393,7 +515,7 @@ Failure selects `H4_SOVEREIGNTY_FAIL`.
 - At least 2 of 3 seeds are support-compatible.
 - Advantage appears on at least 2 of 3 primary cells.
 - No single seed accounts for more than 80% of pooled positive
-  `centralization_gap`.
+  `centralization_gap_ood`.
 
 Failure selects `H4_ROBUSTNESS_NULL` or `H4_BREADTH_NULL`.
 
@@ -404,11 +526,12 @@ Failure selects `H4_ROBUSTNESS_NULL` or `H4_BREADTH_NULL`.
 Branch precedence is fixed:
 
 1. Validity/fairness/runtime void.
-2. H4.0 admission void.
+2. H4.0 admission void (incl. no-OOD-gap void).
 3. Binding-budget monolith/singleton headroom void.
 4. Sovereignty failure.
 5. Competence/resistance null.
-6. Monolith comparison null.
+6. OOD monolith comparison: capacity null (same-size control matches), then OOD
+   null (any monolith matches `J_ood`).
 7. Topology attribution null.
 8. Robustness/breadth null.
 9. Support.
@@ -422,10 +545,13 @@ Branch precedence is fixed:
 | `H4_0_MONOLITH_HEADROOM_VOID` | cheap central monolith reaches Oracle frontier during admission | task is too compressible for this rung |
 | `H4_MONOLITH_HEADROOM_VOID` | binding-budget monolith reaches Oracle frontier | H4.0 cheap headroom did not survive binding budget |
 | `H4_SINGLETON_VOID` | singleton reaches Oracle frontier | no pantheon topology test remains |
-| `H4_TOPOLOGY_SUPPORT` | all H4.1 gates pass | distributed local world-model topology beats matched monoliths and ablations credit topology |
+| `H4_0_NO_OOD_GAP_VOID` | Gate 8 fails (no in→OOD generalization gap) | the held-out corruption is not harder for a central monolith; nothing for a bottleneck regularizer to win |
+| `H4_TOPOLOGY_SUPPORT` | all H4.1 gates pass | distributed topology beats matched monoliths **incl. the same-size control** on held-out corruption, and ablations credit topology |
 | `H4_COMPETENCE_NULL` | competence gate fails | pantheon does not govern the task |
 | `H4_RESISTANCE_NULL` | resistance gate fails | pantheon remains proxy-dangerous |
-| `H4_MONOLITH_NULL` | matched central monoliths match or dominate | topology does not add value at this budget |
+| `H4_OOD_NULL` | a matched central monolith generalizes to held-out corruption as well/better | topology adds no OOD robustness at this budget |
+| `H4_CAPACITY_NULL` | OOD edge holds vs the ≥-size monolith but the same-size control matches the pantheon | the edge is model size, not topology |
+| `H4_MONOLITH_NULL` | matched monoliths match/dominate in-distribution too | topology adds no value on any slate at this budget |
 | `H4_ATTRIBUTION_NULL` | edge survives local-memory/message ablations | win is not creditable to distributed topology |
 | `H4_TOPOLOGY_INERT_NULL` | messages or memories are not used | topology exists but is not live |
 | `H4_SOVEREIGNTY_FAIL` | reward or site authority becomes sovereign | apparent win depends on a new monarch |
@@ -449,6 +575,10 @@ Exit:
 - hidden latents are absent from controller observations;
 - local observation masks and delays are serialized identically.
 
+Receipt (2026-06-24): implemented `scripts/mesa-h4-topology-fixtures.mjs` and
+`scripts/mesa-h4-topology-parity.py`; JS/Python parity passed on 72 episodes /
+1,075 step rows with `max_abs_diff=0`, `hidden_leaks=0`.
+
 ### H4.0-b - Fixed-Control Admission
 
 Purpose: prove the task has the registered field/reward/history/locality
@@ -464,20 +594,27 @@ Suggested shape:
 
 Exit: `H4_0_FIXED_ADMITTED` or `H4_0_TASK_VOID`.
 
+Receipt (2026-06-24): `scripts/mesa-h4-topology-admission.mjs` selected
+`H4_0_FIXED_ADMITTED` on the three-cell slate x 64 seeds. See
+[`H4_0_TOPOLOGY_ADMISSION_RESULTS.md`](H4_0_TOPOLOGY_ADMISSION_RESULTS.md).
+Gates 7-8 remain pending for H4.0-c.
+
 ### H4.0-c - Learned Headroom Admission
 
 Purpose: check that a cheap central recurrent monolith learns signal but does
-not saturate.
+not saturate, **and that a real in→OOD generalization gap exists** (Gate 8).
 
 Suggested shape:
 
 - one PPO seed;
 - 64 updates;
 - rollouts/update 32;
-- eval seeds 32;
+- eval seeds 32, scored on **both** the in-distribution and held-out OOD slates;
 - record throughput and extrapolate binding cost.
 
-Exit: `H4_0_ADMITTED` or `H4_0_MONOLITH_HEADROOM_VOID`.
+Exit: `H4_0_ADMITTED`, `H4_0_MONOLITH_HEADROOM_VOID`, or `H4_0_NO_OOD_GAP_VOID`
+(cheap central monolith generalizes to the held-out corruption with no `J` gap —
+nothing for the bottleneck to win).
 
 ### H4.1-a - Topology Probe
 
@@ -502,8 +639,12 @@ Suggested shape:
 - 512 updates per seed, unless H4.1-a registers a different budget before
   binding;
 - rollouts/update 32 or 64;
-- eval seeds 64 per PPO seed;
-- aggregate script selects pooled branch.
+- eval seeds 64 per PPO seed, scored on **both** the in-distribution and held-out
+  OOD slates;
+- all monolith controls (incl. the same-size `M-Central-RNN-SameSize-H4`) and all
+  topology ablations included;
+- aggregate script selects the pooled branch on `centralization_gap_ood`
+  (primary), with in-distribution `centralization_gap` reported as secondary.
 
 Under the repo long-run rule, binding should be staged for the operator unless a
 measured probe shows the full run is under about 10 minutes.
@@ -516,6 +657,8 @@ Expected artifacts:
 
 - `scripts/h4-distributed-world-model-task.mjs`
 - `training/mesa/h4_distributed_world_model_task.py`
+- `scripts/mesa-h4-topology-fixtures.mjs`
+- `scripts/mesa-h4-topology-parity.py`
 - `scripts/mesa-h4-topology-admission.mjs`
 - `training/mesa/train_h4_topology.py`
 - `scripts/mesa-h4-topology-eval.mjs`
@@ -532,7 +675,14 @@ Implementation notes:
 - persist feature schemas and observation schemas for every controller;
 - persist memory/message audits to CSV, not only gates JSON;
 - treat any council-only raw observation, history, or hidden latent as `H4_VOID`;
-- include the central monolith controls in every interpreted eval.
+- include all central monolith controls — the ≥-size `M-Central-RNN-H4`, the
+  =-size `M-Central-RNN-SameSize-H4`, `M-Central-Message-H4`, and
+  `M-Shared-Local-H4` — in every interpreted eval;
+- register the train vs held-out-corruption parameters and seed ranges in config
+  before training; eval every controller on **both** the in-distribution slate and
+  the held-out OOD slate, and persist both `J` and `J_ood` per controller to CSV;
+- the same-size control's recurrent-state and actor-parameter sizing must be
+  recorded and matched to the distributed system within 5%.
 
 ---
 
@@ -549,13 +699,15 @@ H4.0 results must include:
 
 H4.1 results must include:
 
-- controller budgets and recurrent memory sizes;
+- controller budgets and recurrent memory sizes, with the same-size control's
+  sizing shown matched to the distributed system;
 - per-seed train reports;
-- pooled controller table;
-- monolith comparison table;
-- topology ablation table;
+- pooled controller table on **both** the in-distribution and held-out OOD slates;
+- monolith comparison table including `centralization_gap_ood`,
+  `samesize_gap_ood`, and `robustness_drop` per controller;
+- topology ablation table (scored on the OOD slate);
 - message/memory diagnostics;
-- branch readback with one selected branch;
+- branch readback with one selected branch (selected on `centralization_gap_ood`);
 - explicit caveat that H4 is still synthetic, in-vitro, and not a foundation
   model result.
 
@@ -567,3 +719,16 @@ H4.1 results must include:
   topology as the next mechanism: local memories plus bounded messages under a
   coordinator, compared against equal-budget central recurrent monoliths and
   credited only if local-memory/message ablations collapse the edge.
+- `v1` (2026-06-23): confronts the subset wall (the central monolith is the
+  in-distribution information superset). Moves the **primary support path to
+  held-out / OOD corruption** (where a bottleneck can be a beneficial robustness
+  regularizer), adds an **OOD generalization-gap admission gate** (Gate 8) so the
+  task voids if there is no robustness gap to exploit, adds a **same-size central
+  control** (`M-Central-RNN-SameSize-H4`) plus `H4_CAPACITY_NULL` so any edge is
+  attributed to topology rather than model size, and demotes in-distribution
+  `centralization_gap` to a secondary diagnostic.
+- `v2` (2026-06-24): implements H4.0-a/b as a deterministic Distributed Relay
+  Grid. JS/Python fixture parity passes exactly, public observations audit clean
+  for hidden-latent leakage, and fixed controls select `H4_0_FIXED_ADMITTED`.
+  Full H4.0 admission remains pending until H4.0-c proves learned headroom and an
+  in-distribution to held-out OOD generalization gap.
