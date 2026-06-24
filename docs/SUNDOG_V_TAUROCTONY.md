@@ -355,9 +355,10 @@ the MESA controller-family architecture and capacity ladder.
 > local memories/messages are scrambled. H4.0-a/b now admits the fixed-control
 > layer ([`mesa/H4_0_TOPOLOGY_ADMISSION_RESULTS.md`](mesa/H4_0_TOPOLOGY_ADMISSION_RESULTS.md)):
 > JS/Python parity is exact and the Distributed Relay Grid selects
-> `H4_0_FIXED_ADMITTED`. No learned topology score exists yet; H4.0-c must still
-> prove learned headroom and an in->OOD generalization gap before H4 is fully
-> admitted.
+> `H4_0_FIXED_ADMITTED`. H4.0-c then voided full admission as
+> `H4_0_NO_OOD_GAP_VOID`: the cheap central RNN found only weak competence
+> headroom, and the held-out corruption did not create the registered OOD gap
+> (`J_ID - J_OOD = -0.0146`, below `>=0.10`). H4.1 is blocked on this slate.
 
 ---
 
@@ -649,7 +650,8 @@ convert myth into typed result.
   controller mechanism is denied rather than banked.
 - **H4 — Distributed World-Model Topology.** Local observers keep bounded
   memories and send bounded messages under a coordinator. H4.0-a/b fixed
-  admission is green; learned headroom/OOD-gap admission is pending:
+  admission is green, but H4.0-c returns `H4_0_NO_OOD_GAP_VOID`; H4.1 is blocked
+  on this slate:
   [`mesa/H4_DISTRIBUTED_WORLD_MODEL_TOPOLOGY_SPEC.md`](mesa/H4_DISTRIBUTED_WORLD_MODEL_TOPOLOGY_SPEC.md).
   [`mesa/H4_0_TOPOLOGY_ADMISSION_RESULTS.md`](mesa/H4_0_TOPOLOGY_ADMISSION_RESULTS.md).
 - **H5 — Precession source-lock.** Reconcile Ulansey (1989) against Beck (2006)

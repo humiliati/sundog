@@ -46,6 +46,53 @@ export const H4_RELAY_CELL_DEFS = Object.freeze({
 
 export const H4_RELAY_PRIMARY_CELLS = Object.freeze(["nominal-relay", "stale-relay", "decoy-relay"]);
 
+export const H4_RELAY_TRAIN_CELL_DEFS = Object.freeze({
+  "train-nominal-relay": Object.freeze({}),
+  "train-mild-stale-relay": Object.freeze({
+    obsCorrect: 0.84,
+    rewardCorrect: 0.70,
+    dropRate: 0.03,
+    staleTicks: 1,
+    staleSites: Object.freeze([2]),
+  }),
+  "train-mild-decoy-relay": Object.freeze({
+    obsCorrect: 0.82,
+    rewardCorrect: 0.70,
+    decoyRewardCorrect: 0.46,
+    dropRate: 0.03,
+    decoySites: Object.freeze([2]),
+  }),
+});
+
+export const H4_RELAY_OOD_CELL_DEFS = Object.freeze({
+  "ood-long-stale-relay": Object.freeze({
+    obsCorrect: 0.76,
+    rewardCorrect: 0.64,
+    dropRate: 0.10,
+    staleTicks: 3,
+    staleSites: Object.freeze([0, 1, 2, 3]),
+  }),
+  "ood-drop-decoy-relay": Object.freeze({
+    obsCorrect: 0.74,
+    rewardCorrect: 0.60,
+    decoyRewardCorrect: 0.24,
+    dropRate: 0.14,
+    decoySites: Object.freeze([0, 2, 3]),
+  }),
+  "ood-shifted-decoy-relay": Object.freeze({
+    obsCorrect: 0.76,
+    rewardCorrect: 0.62,
+    decoyRewardCorrect: 0.26,
+    dropRate: 0.09,
+    staleTicks: 2,
+    staleSites: Object.freeze([1, 3]),
+    decoySites: Object.freeze([0, 1]),
+  }),
+});
+
+export const H4_RELAY_TRAIN_CELLS = Object.freeze(Object.keys(H4_RELAY_TRAIN_CELL_DEFS));
+export const H4_RELAY_OOD_CELLS = Object.freeze(Object.keys(H4_RELAY_OOD_CELL_DEFS));
+
 function normalizeConfig(config = {}) {
   const cfg = { ...H4_RELAY_DEFAULTS, ...config };
   cfg.K = Math.trunc(cfg.K);

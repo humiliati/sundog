@@ -834,7 +834,7 @@ attribution. Net after H3.1: the only positive pantheon support remains the
 bounded Small-tier H1.2f trust-feature result; H2/H3 so far are disciplined
 nulls or voids on plurality.
 
-**H4 opened (2026-06-23; H4.0-a/b fixed admission 2026-06-24): distributed
+**H4 opened (2026-06-23; H4.0 `NO_OOD_GAP_VOID` 2026-06-24): distributed
 world-model topology.**
 [`mesa/H4_DISTRIBUTED_WORLD_MODEL_TOPOLOGY_SPEC.md`](mesa/H4_DISTRIBUTED_WORLD_MODEL_TOPOLOGY_SPEC.md)
 opens the next mechanism after the H3.1 null. It moves the pantheon claim out of
@@ -844,9 +844,10 @@ act under stale/corrupt partial observations. Support now requires beating
 equal-budget central recurrent monolith controls and losing the edge when local
 memories/messages are ablated. H4.0-a/b built the deterministic Distributed
 Relay Grid, passed JS/Python fixture parity, and selected
-[`H4_0_FIXED_ADMITTED`](mesa/H4_0_TOPOLOGY_ADMISSION_RESULTS.md). Full H4.0
-admission still requires H4.0-c learned headroom and the registered in->OOD
-generalization gap.
+[`H4_0_FIXED_ADMITTED`](mesa/H4_0_TOPOLOGY_ADMISSION_RESULTS.md). H4.0-c then
+voided full admission as `H4_0_NO_OOD_GAP_VOID`: the cheap central RNN found only
+weak competence headroom and the held-out corruption was not harder (`J_ID -
+J_OOD = -0.0146`, below the required `>=0.10`). H4.1 is blocked on this slate.
 
 Immediate work:
 

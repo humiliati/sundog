@@ -1,15 +1,15 @@
 # H4 Distributed World Model Topology Spec
 
-Status: **H4.0-a/b BUILT + FIXED ADMITTED / H4.0-c PENDING (v2 - deterministic
-relay admission).** Opened 2026-06-23 after
+Status: **H4.0 `NO_OOD_GAP_VOID` (v3 - fixed admitted, learned OOD gate
+failed).** Opened 2026-06-23 after
 [`H3_1_RESISTANCE_NULL`](H3_1_RESULTS.md). Revised 2026-06-23 to move the
 support path off in-distribution frontier (where the superset monolith is the
 upper bound) and onto **held-out / out-of-distribution corruption**, and to add
 a **same-size** central control so any edge is attributable to topology, not to
 the monolith being handicapped by its own larger size.
 H4.0-a/b were implemented on 2026-06-24 as the Distributed Relay Grid and
-selected `H4_0_FIXED_ADMITTED`; full H4.0 admission still requires H4.0-c
-learned-headroom/OOD-gap admission.
+selected `H4_0_FIXED_ADMITTED`; H4.0-c then selected `H4_0_NO_OOD_GAP_VOID`,
+so H4.1 is blocked on this slate.
 
 Parent docs:
 
@@ -597,7 +597,7 @@ Exit: `H4_0_FIXED_ADMITTED` or `H4_0_TASK_VOID`.
 Receipt (2026-06-24): `scripts/mesa-h4-topology-admission.mjs` selected
 `H4_0_FIXED_ADMITTED` on the three-cell slate x 64 seeds. See
 [`H4_0_TOPOLOGY_ADMISSION_RESULTS.md`](H4_0_TOPOLOGY_ADMISSION_RESULTS.md).
-Gates 7-8 remain pending for H4.0-c.
+Gates 7-8 were subsequently adjudicated by H4.0-c.
 
 ### H4.0-c - Learned Headroom Admission
 
@@ -615,6 +615,13 @@ Suggested shape:
 Exit: `H4_0_ADMITTED`, `H4_0_MONOLITH_HEADROOM_VOID`, or `H4_0_NO_OOD_GAP_VOID`
 (cheap central monolith generalizes to the held-out corruption with no `J` gap —
 nothing for the bottleneck to win).
+
+Receipt (2026-06-24): `training/mesa/train_h4_topology.py` ran the cheap
+central RNN for 64 updates / 17,210 env steps in 82.46 s. The monolith found
+weak competence headroom (`C_ID=0.0625` vs Field `0`) without saturating, but
+Gate 8 failed: `J_ID - J_OOD = -0.0146`, below the required `>=0.10` OOD
+generalization gap. Branch: `H4_0_NO_OOD_GAP_VOID`. H4.1 must not proceed on
+this slate.
 
 ### H4.1-a - Topology Probe
 
@@ -732,3 +739,8 @@ H4.1 results must include:
   for hidden-latent leakage, and fixed controls select `H4_0_FIXED_ADMITTED`.
   Full H4.0 admission remains pending until H4.0-c proves learned headroom and an
   in-distribution to held-out OOD generalization gap.
+- `v3` (2026-06-24): H4.0-c runs the cheap central RNN headroom/OOD-gap gate and
+  selects `H4_0_NO_OOD_GAP_VOID`: the learner finds weak competence headroom but
+  no positive in-distribution to held-out-OOD `J` drop. H4.1 is blocked on this
+  slate; reopening requires a new pre-registered harder held-out corruption
+  family.

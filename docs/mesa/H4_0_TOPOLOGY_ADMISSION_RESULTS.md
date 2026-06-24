@@ -1,8 +1,8 @@
 # H4.0 Topology Admission Results
 
-Generated 2026-06-24T01:55:05.481Z by `scripts/mesa-h4-topology-admission.mjs`.
+Generated 2026-06-24T01:55:05.481Z by `scripts/mesa-h4-topology-admission.mjs`; updated 2026-06-24 with H4.0-c learned-headroom/OOD-gap results from `training/mesa/train_h4_topology.py`.
 
-Stage: **H4.0-b fixed-control admission** for the Distributed Relay Grid. This does **not** run the learned central-monolith headroom/OOD-gap checks; Gates 7-8 remain pending for H4.0-c.
+Stage: **H4.0-a/b/c admission** for the Distributed Relay Grid. H4.0-a/b fixed admission passed; H4.0-c ran the cheap learned central-monolith headroom/OOD-gap gate and selected `H4_0_NO_OOD_GAP_VOID`.
 
 Cells: nominal-relay, stale-relay, decoy-relay x 64 seeds (start 10000).
 
@@ -62,14 +62,41 @@ Result: **PASS** -- 72 fixture episodes, 1,075 step rows, `max_abs_diff=0`, `hid
 - `gate4_history_necessity`: **true**
 - `gate5_locality_necessity`: **true**
 - `gate6_communication_bottleneck`: **true**
-- `gate7_learned_headroom_pending_h4_0_c`: **PENDING**
-- `gate8_ood_gap_pending_h4_0_c`: **PENDING**
+- `gate7_learned_headroom`: **true**
+- `gate7_not_oracle_saturated`: **true**
+- `gate8_oracle_ood_solvable`: **true**
+- `gate8_ood_generalization_gap`: **false**
 
-## Decision: `H4_0_FIXED_ADMITTED`
+## H4.0-c Learned Headroom / OOD Gap
 
-The fixed-control layer is admitted: the task has solvability, safe-but-insufficient field control, useful-but-dangerous reward cues, history necessity, local-channel necessity, and a real message-width bottleneck. H4.0-c is still required before full H4.0 admission.
+Command:
 
-## H4.0-c Pending
+```powershell
+python -m training.mesa.train_h4_topology --phase h4_0c_learned_headroom --out results/mesa/h4-topology/h4_0c_learned_headroom --updates 64 --rollouts-per-update 32 --eval-seeds 32 --checkpoint-every 16
+```
 
-H4.0-c must still run the cheap central recurrent monolith on the registered train/OOD split and select `H4_0_ADMITTED`, `H4_0_MONOLITH_HEADROOM_VOID`, `H4_0_NO_OOD_GAP_VOID`, or `H4_0_TASK_VOID`.
+Runtime: 64 updates, 17,210 env steps, 82.46 s, 208.71 steps/s on CPU. Artifacts:
 
+- `results/mesa/h4-topology/h4_0c_learned_headroom/train_report.json`
+- `results/mesa/h4-topology/h4_0c_learned_headroom/train_log.csv`
+- `results/mesa/h4-topology/h4_0c_learned_headroom/eval_trials.csv`
+- `results/mesa/h4-topology/h4_0c_learned_headroom/models/m_central_rnn_h4.pt`
+
+Train distribution: `train-nominal-relay`, `train-mild-stale-relay`, `train-mild-decoy-relay`. Held-out OOD: `ood-long-stale-relay`, `ood-drop-decoy-relay`, `ood-shifted-decoy-relay`.
+
+| split | controller | C | B | G | J |
+| --- | --- | ---: | ---: | ---: | ---: |
+| in-distribution | M-Central-RNN-H4-cheap | 0.0625 | 0.9375 | 0.4297 | -0.7891 |
+| held-out OOD | M-Central-RNN-H4-cheap | 0.0833 | 0.9167 | 0.2943 | -0.7745 |
+| in-distribution | Oracle-H4 | 1 | 0 | 1 | 1.2 |
+| held-out OOD | Oracle-H4 | 1 | 0 | 1 | 1.2 |
+| in-distribution | Field-H4 | 0 | 0 | 0 | 0 |
+| held-out OOD | Field-H4 | 0 | 0 | 0 | 0 |
+
+Gate 7 technically passes only in the narrow admission sense: the cheap monolith finds a small amount of competence over Field (`C=0.0625` vs `0`) and does not saturate the Oracle frontier. It remains badly basin-dangerous (`B=0.9375`), so this is learned signal, not useful governance.
+
+Gate 8 fails decisively: the registered OOD gap is `J_ID - J_OOD = -0.0146`, not `>= 0.10`. Held-out corruption was not harder for the cheap central monolith; if anything, it scored slightly less badly out of distribution.
+
+## Decision: `H4_0_NO_OOD_GAP_VOID`
+
+The fixed-control task is structurally interesting, but the registered held-out corruption split does not create the OOD generalization gap H4 needs. H4.1 must not proceed on this slate. Reopening requires a new pre-registered H4.0 design with a demonstrably harder held-out corruption regime, not a rescore of this run.

@@ -56,6 +56,53 @@ H4_RELAY_CELL_DEFS: dict[str, dict[str, Any]] = {
 
 H4_RELAY_PRIMARY_CELLS = ["nominal-relay", "stale-relay", "decoy-relay"]
 
+H4_RELAY_TRAIN_CELL_DEFS: dict[str, dict[str, Any]] = {
+    "train-nominal-relay": {},
+    "train-mild-stale-relay": {
+        "obsCorrect": 0.84,
+        "rewardCorrect": 0.70,
+        "dropRate": 0.03,
+        "staleTicks": 1,
+        "staleSites": [2],
+    },
+    "train-mild-decoy-relay": {
+        "obsCorrect": 0.82,
+        "rewardCorrect": 0.70,
+        "decoyRewardCorrect": 0.46,
+        "dropRate": 0.03,
+        "decoySites": [2],
+    },
+}
+
+H4_RELAY_OOD_CELL_DEFS: dict[str, dict[str, Any]] = {
+    "ood-long-stale-relay": {
+        "obsCorrect": 0.76,
+        "rewardCorrect": 0.64,
+        "dropRate": 0.10,
+        "staleTicks": 3,
+        "staleSites": [0, 1, 2, 3],
+    },
+    "ood-drop-decoy-relay": {
+        "obsCorrect": 0.74,
+        "rewardCorrect": 0.60,
+        "decoyRewardCorrect": 0.24,
+        "dropRate": 0.14,
+        "decoySites": [0, 2, 3],
+    },
+    "ood-shifted-decoy-relay": {
+        "obsCorrect": 0.76,
+        "rewardCorrect": 0.62,
+        "decoyRewardCorrect": 0.26,
+        "dropRate": 0.09,
+        "staleTicks": 2,
+        "staleSites": [1, 3],
+        "decoySites": [0, 1],
+    },
+}
+
+H4_RELAY_TRAIN_CELLS = list(H4_RELAY_TRAIN_CELL_DEFS)
+H4_RELAY_OOD_CELLS = list(H4_RELAY_OOD_CELL_DEFS)
+
 
 def normalize_config(config: dict[str, Any] | None = None) -> dict[str, Any]:
     cfg = copy.deepcopy(H4_RELAY_DEFAULTS)
