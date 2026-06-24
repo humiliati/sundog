@@ -100,3 +100,11 @@ Gate 8 fails decisively: the registered OOD gap is `J_ID - J_OOD = -0.0146`, not
 ## Decision: `H4_0_NO_OOD_GAP_VOID`
 
 The fixed-control task is structurally interesting, but the registered held-out corruption split does not create the OOD generalization gap H4 needs. H4.1 must not proceed on this slate. Reopening requires a new pre-registered H4.0 design with a demonstrably harder held-out corruption regime, not a rescore of this run.
+
+## H4.0-c 128-update Diagnostic (2026-06-24)
+
+Re-ran the cheap central-monolith headroom probe at **128 updates** (2x budget) to disambiguate "monolith robust" (OOD premise dead) from "monolith at floor" (slate mis-tuned / too hard). Command: `python -m training.mesa.train_h4_topology --phase h4_0c_headroom_128 --updates 128 --rollouts-per-update 32 --eval-seeds 32` (179.84 s, 42,380 env steps).
+
+Verdict: the monolith stays **floored** — ID `C=0.0625 / B=0.9375 / J=-0.7896`, OOD `C=0.0833 / B=0.9167 / J=-0.7750`, byte-identical to the 64-update row; training `C` bounced 0.03-0.13 without climbing. `ood_gap_J=-0.0146`, gate 8 still false -> `H4_0_NO_OOD_GAP_VOID` confirmed at 2x budget.
+
+Interpretation: doubling the budget changed nothing. The relay POMDP is **solvable** (privileged `FullHistory-H4` reaches `C=0.80`) but **not learnable by a cheap RNN at probe budget** — a learning/optimization wall, not a robustness finding. The OOD premise cannot be tested on this slate at probe budget because no learned controller (monolith or distributed) reaches the competence where an ID->OOD gap could be measured. A valid reopening needs an **easier base task** (learnable at probe budget) that still carries a held-out gap, not a rescore or more budget on this one. Artifacts: `results/mesa/h4-topology/h4_0c_headroom_128/`.
