@@ -358,7 +358,30 @@ the MESA controller-family architecture and capacity ladder.
 > `H4_0_FIXED_ADMITTED`. H4.0-c then voided full admission as
 > `H4_0_NO_OOD_GAP_VOID`: the cheap central RNN found only weak competence
 > headroom, and the held-out corruption did not create the registered OOD gap
-> (`J_ID - J_OOD = -0.0146`, below `>=0.10`). H4.1 is blocked on this slate.
+> (`J_ID - J_OOD = -0.0146`, below `>=0.10`; confirmed at 2× budget). H4.1 is
+> blocked on this slate.
+>
+> **The competence lane closes on a lemma, and the thesis is reposed
+> (2026-06-24; [`mesa/PANTHEON_DOMINANCE_LEMMA_AND_NONSOVEREIGNTY_REFRAME.md`](mesa/PANTHEON_DOMINANCE_LEMMA_AND_NONSOVEREIGNTY_REFRAME.md)).**
+> Seven mechanisms, one verdict — and the verdict turns out to be near-trivial.
+> The lane's own fairness discipline (same inputs, ≤ budget, cap as pure
+> constraint) is exactly the hypothesis `Π_council ⊆ Π_monolith`, and from a
+> subset relation the conclusion is two lines: *removing constraints cannot lower
+> the optimum, so the competence-optimal monolith weakly dominates the council on
+> any fixed return.* The seven rungs rigorously enforced the premises of a lemma
+> that predicts its own verdict. So **"assemble a pantheon *for competence*"
+> earns [RETIRED]** — not refuted by surprise but foreclosed by definition; the
+> service was to kill it with honest controls rather than leave it as ambient
+> hope. **"Kill the bull" survives as the [TYPED] positive** (the cap: bounded at
+> deployment, a safe-exploration prior at training; the H2.3 `CAP_NOT_ROLES`
+> attribution proved it is the *cap*, not the roles). And the thesis is reposed
+> where the lemma cannot answer it for free — the **Non-Sovereignty Premium
+> Conjecture [TYPED, OPEN]**: a non-sovereign controller commands a robustness /
+> corrigibility premium over the competence-optimal monolith, *on a different
+> objective than return* (worst-case-over-uncertain-`R`, survival-under-defection,
+> correctability) — the one the bull was always about. The competence test was
+> the wrong test; the pantheon was never *for* being smarter, it was for never
+> letting one value eat the world.
 
 ---
 
@@ -654,6 +677,19 @@ convert myth into typed result.
   on this slate:
   [`mesa/H4_DISTRIBUTED_WORLD_MODEL_TOPOLOGY_SPEC.md`](mesa/H4_DISTRIBUTED_WORLD_MODEL_TOPOLOGY_SPEC.md).
   [`mesa/H4_0_TOPOLOGY_ADMISSION_RESULTS.md`](mesa/H4_0_TOPOLOGY_ADMISSION_RESULTS.md).
+- **H1–H4 closed → the Non-Sovereignty Premium** *(the reposed mesa lane;
+  successor to H1–H4)*. The competence lane (H1–H4) is **closed by the
+  Competence-Dominance Lemma**: the lane's own fairness discipline is the subset
+  hypothesis `Π_council ⊆ Π_monolith`, from which monolith dominance on any fixed
+  return is two lines. "Pantheon *for competence*" → **[RETIRED]**; the cap →
+  **[TYPED]**. The thesis is reposed onto the axis the lemma cannot reach — the
+  **Non-Sovereignty Premium Conjecture [TYPED, OPEN]**: a non-sovereign controller
+  buys a robustness / corrigibility premium on a *different objective than return*
+  (worst-case-over-uncertain-`R`, survival-under-defection, correctability). First
+  child rung owed on that axis (unknown/shifting reward → regret; defecting head →
+  fault-tolerance; shutdown signal → corrigibility), with coral / immune system /
+  BFT as cross-substrate witnesses. Home + full statement:
+  [`mesa/PANTHEON_DOMINANCE_LEMMA_AND_NONSOVEREIGNTY_REFRAME.md`](mesa/PANTHEON_DOMINANCE_LEMMA_AND_NONSOVEREIGNTY_REFRAME.md).
 - **H5 — Precession source-lock.** Reconcile Ulansey (1989) against Beck (2006)
   and Clauss before any public use of the precession claim. This is an
   *attribution-honesty* pass — is the contested scholarship represented fairly —

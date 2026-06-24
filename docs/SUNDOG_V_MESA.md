@@ -847,7 +847,22 @@ Relay Grid, passed JS/Python fixture parity, and selected
 [`H4_0_FIXED_ADMITTED`](mesa/H4_0_TOPOLOGY_ADMISSION_RESULTS.md). H4.0-c then
 voided full admission as `H4_0_NO_OOD_GAP_VOID`: the cheap central RNN found only
 weak competence headroom and the held-out corruption was not harder (`J_ID -
-J_OOD = -0.0146`, below the required `>=0.10`). H4.1 is blocked on this slate.
+J_OOD = -0.0146`, below the required `>=0.10`). H4.1 is blocked on this slate. A
+128-update diagnostic (2× budget) confirmed the void is a **learning wall** (the
+RNN stays floored, byte-identical to 64 updates), not a robustness finding.
+
+**Lane closure + reframe (2026-06-24):
+[`mesa/PANTHEON_DOMINANCE_LEMMA_AND_NONSOVEREIGNTY_REFRAME.md`](mesa/PANTHEON_DOMINANCE_LEMMA_AND_NONSOVEREIGNTY_REFRAME.md).**
+The seven-mechanism competence lane (H1–H4) closes on the **Competence-Dominance
+Lemma**: the lane's fairness discipline *is* the subset hypothesis
+`Π_council ⊆ Π_monolith`, from which the competence-optimal monolith weakly
+dominates on any fixed return — two lines. So "pantheon for competence" is
+[RETIRED] (near-trivial, not refuted-by-surprise), the cap is the [TYPED] positive
+(H2.3 `CAP_NOT_ROLES` isolated it to the cap, not the roles), and the thesis is
+reposed as the **Non-Sovereignty Premium Conjecture [TYPED, OPEN]** on a different
+objective than return (regret-under-objective-uncertainty / Byzantine
+fault-tolerance / corrigibility) — the axis the lemma cannot foreclose. The
+competence lane is closed; the correct question is open.
 
 Immediate work:
 
