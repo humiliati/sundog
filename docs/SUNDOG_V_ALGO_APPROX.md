@@ -163,9 +163,10 @@ Each hook is stated so it can come back **NULL**. None is promoted.
   *approximable* (ε > 0), which is where o-minimality/Newton error analysis lives —
   outside this exact core; (ii) **linear gate-COUNT needs a DAG** — the `max` identity
   shares an operand, so a *tree* blows up under nested min/max; only wire fan-out keeps it
-  linear (depth is tree-stable, hence proved; gate-count is named as the next increment, a
-  compiler-correctness proof with wire-index refinement); (iii) **trainability** (SGD
-  finds the weights) is imported, as everywhere in this development.
+  linear. First increment now landed: `appendMax_eval` proves the local typed-DAG max
+  gadget appends exactly four ReLU gates and reuses `q` by index. The remaining wall is
+  the full recursive source-DAG → target-DAG compiler; (iii) **trainability** (SGD finds
+  the weights) is imported, as everywhere in this development.
 
   *Registration:* wired into `Sundogcert.lean` root + `AxiomAudit.lean`; README file-map
   row added; public-safety grep clean (no frozen-lane terms). The sundog-site
@@ -346,9 +347,9 @@ reread → `SUPPORT_NO_SIZE_SEPARATION`), **H-A4** (Atlas short-program →
 `ATLAS_IS_A_SHORT_PROGRAM`), and **H-A5** (shadow-tower floor check →
 `ORTHOGONAL_FLOORS` / `NO_SHARED_SEPARATOR`) are closed. Owner-gated follow-ups
 now owed off H-A1 + H-A2: (a) the sundog-site `SUNDOG_V_CERTIFICATE_LEAN` "Nth pillar"
-bump + deploy; (b) the **DAG/sharing** extension upgrading linear-*depth* to
-linear-*gate-count* (a compiler-correctness proof with wire-index refinement — the named
-wall of `CircuitNet`); (c) the generic `StraightLineProgram.cost` of which both
+bump + deploy; (b) the **full DAG/sharing compiler** upgrading linear-*depth* to
+linear-*gate-count* (the local `appendMax_eval` max-gadget receipt has landed; recursive
+source-DAG → target-DAG compilation remains); (c) the generic `StraightLineProgram.cost` of which both
 `CircuitNet` circuit size and `CheckCost.verifyCost` are instances (the H-A1 unification,
 formalized — gated by (b)). No hook is scheduled; this file is the registration, not a
 commitment.

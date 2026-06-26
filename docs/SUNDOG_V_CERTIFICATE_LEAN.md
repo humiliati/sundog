@@ -1,7 +1,7 @@
-# Sundog Lean Certificate - Seven Machine-Checked Cores
+# Sundog Lean Certificate - Eight Machine-Checked Cores
 
 > **Deductive complement to the public Sundog lanes.** The public Lean repo now
-> carries seven worked examples of the same discipline: machine-check the
+> carries eight worked examples of the same discipline: machine-check the
 > deductive core, then name the imported wall. The first is the
 > [P-vs-NP certificate-syndrome lane](SUNDOG_V_P_V_NP.md); the second is a
 > real-analysis shadow-decay example; the third is the halo minimum-deviation
@@ -10,10 +10,16 @@
 > the general characteristic-function law behind the shadow decay (real analysis
 > again); the sixth is a machine-checked Karp reduction
 > `3SAT <= 3DM <= X3C <= decoding` that anchors the certificate's
-> decoding-hardness import to 3SAT (reduction correctness only); and the seventh
+> decoding-hardness import to 3SAT (reduction correctness only); the seventh
 > is a finite audit game — a proved-cheap full-access audit paired with
-> ∀-verifier blindness of the pooled-mean channel — seven examples across six
-> kinds of math.
+> ∀-verifier blindness of the pooled-mean channel; and the eighth is
+> `Sundogcert/CircuitNet.lean` — an exact tropical / piecewise-linear
+> circuit-to-ReLU compilation (`compile_eval`) with a linear depth bound
+> (`compile_depth_le`) and an exact min-plus Bellman-Ford gate
+> (`bellmanStep_compiles_exactly`), the ε = 0 piecewise-linear core for
+> arXiv:2606.26705 Thm 3.2 / Cor 5.1, in the AxiomAudit gate. Eight examples
+> across seven kinds of math; not a learnability claim and not a full
+> analytic-gate approximation theorem.
 
 **Public and reproducible:**
 [`github.com/humiliati/sundogcert`](https://github.com/humiliati/sundogcert) -
@@ -26,7 +32,7 @@ Working hook:
 > A claim gets smaller and cleaner when its proof goes into Lean and its
 > assumptions stay outside the proof, named in plain view.
 
-## Seven worked examples
+## Eight worked examples
 
 | Lean surface | kind of math | checked deductive core | imported wall |
 |---|---|---|---|
@@ -37,6 +43,7 @@ Working hook:
 | `ShadowDecayGeneral` | real analysis (generalizing example 2) | `shadow_decay_charFun` + the determine/resist corollaries — averaging over any probability measure factors through its characteristic function; resist ⟺ `‖charFun‖→0` (Riemann–Lebesgue), determine ⟺ a finite centered mean (two independent conditions); the Gaussian discharges both | that a real system instantiates the characteristic-function averaging; the Cauchy separator is named, not built (mathlib lacks `charFun_cauchy`) |
 | `SATReduction*` / `VarWheel` / `ClauseGadget` (on `MatchingNPHard` / `DecodingNPHard`) | combinatorics / computational complexity | `sat_iff_decodes` — a machine-checked Karp reduction `3SAT ≤ 3DM ≤ X3C ≤ bounded-weight GF(2) decoding`, both directions proved; a 3-CNF formula is satisfiable iff its decoding image decodes within the weight bound | the NP class, the poly-time-ness of the reduction maps, and 3SAT's own NP-hardness (Cook–Levin) — hardness imported, any "NP-hard" reading conditional on P ≠ NP, no P-vs-NP claim |
 | `AuditCost` | finite decidability / audit game | `pooled_channel_blind` + `no_verifier_checks_perUnit` — a proved-cheap full-access audit (sound + complete against an adversarial reporter at `auditCost ≤ 3n+2`) paired with ∀-verifier blindness: an explicit same-mean fiber pair defeats *every* decidable channel verifier at any prescribed per-unit `δ` | that the pooled-mean channel is the operative observation model (non-vacuity proved: `n = 1` determines; the second moment separates the blind pair) |
+| `CircuitNet` (`AxiomAudit`-gated) | tropical / piecewise-linear algorithmic approximation | `compile_eval` — an exact (ε = 0) compilation of tropical / piecewise-linear circuits to ReLU networks; `compile_depth_le` — a linear depth bound; `bellmanStep_compiles_exactly` — an exact min-plus / Bellman-Ford gate compiling to a ReLU sub-network. The ε = 0 piecewise-linear core for [arXiv:2606.26705](https://arxiv.org/abs/2606.26705) Thm 3.2 / Cor 5.1 | the **linear gate-count** claim, which still needs the DAG / sharing follow-up; the **analytic** reciprocal / radical gates (and any non-piecewise-linear primitive), which remain approximate / imported; learnability and the full Kratsios analytic-approximation theorem (neither is asserted by this core) |
 
 The third example matters because it breaks the first two examples' shared
 shape. The certificate and shadow-decay examples both involve a lossy shadow
@@ -58,7 +65,7 @@ closed loop is exactly zero, so the loop observable keeps only the enclosed
 flux (an `H^1` period) while the gauge freedom `grad chi` washes out. The fifth,
 the general characteristic-function law, *is* the shadow-decay shape stated in
 full — it names which spectral condition of the averaging measure governs each
-half. So five of the seven share the deeper shape across a finite-field coset, a
+half. So five of the eight share the deeper shape across a finite-field coset, a
 measure-theoretic label and its characteristic-function spectrum, a topological
 period, and a pooled-mean audit channel that loses every per-unit claim; the
 halo stands apart as the pure-extremization breaker, and the Karp reduction —
@@ -177,9 +184,17 @@ concrete Gaussian decay and its general characteristic-function law), halo
 minimum-deviation, and Aharonov-Bohm gauge-invariance examples extend the method
 to three more mathematical shapes; a machine-checked Karp reduction
 `3SAT <= 3DM <= X3C <= decoding` anchors the certificate's decoding-hardness
-import to 3SAT; and a finite audit game proves a cheap full-access audit blind to
-every decidable channel verifier — seven worked examples across six kinds of math. Hardness, model
-realization, physical optics, the physical gauge field, and the NP-class /
-poly-time / Cook-Levin complexity wrapping remain imported. Not a cryptographic
-one-wayness claim; not a claim about P versus NP; not a claim that Lean proves
-the sky realizes the halo or that nature realizes the Aharonov-Bohm effect.
+import to 3SAT; a finite audit game proves a cheap full-access audit blind to
+every decidable channel verifier; and `Sundogcert/CircuitNet.lean` machine-checks
+an exact tropical / piecewise-linear circuit-to-ReLU compilation (with a linear
+depth bound and an exact min-plus Bellman-Ford gate) — the ε = 0
+piecewise-linear core for arXiv:2606.26705 Thm 3.2 / Cor 5.1, in the AxiomAudit
+gate — eight worked examples across seven kinds of math. Hardness, model
+realization, physical optics, the physical gauge field, the NP-class /
+poly-time / Cook-Levin complexity wrapping, the **linear gate-count** claim
+(still waiting on the DAG / sharing follow-up), and the **analytic** reciprocal /
+radical gates (which remain approximate / imported) all remain named walls. Not
+a cryptographic one-wayness claim; not a claim about P versus NP; not a claim
+that Lean proves the sky realizes the halo or that nature realizes the
+Aharonov-Bohm effect; not a learnability claim; not a full analytic-gate
+approximation theorem.

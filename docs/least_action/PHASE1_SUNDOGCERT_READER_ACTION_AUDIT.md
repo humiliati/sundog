@@ -75,7 +75,7 @@ cost; a reader must hold the whole numbered list in working memory to parse one 
    the honesty of the cost model and the definition of *Safe* — that is the entire falsifiable
    surface." Lifts F from ❌ to ✅ at the point of entry.
 4. **Split the module table by role.** Three groups: **headline cores** (`Certificate`…`CheckCost`,
-   `CertWall`), **method demonstrations** (the seven worked examples), **reduction-chain machinery**
+   `CertWall`), **method demonstrations** (the eight worked examples, incl. `CircuitNet`), **reduction-chain machinery**
    (`SATReduction*`, `VarWheel`, `ClauseGadget`, `ThreeDM*`, gadget files). Lets the reader find the
    load-bearing rows without reading 22 lines of equal weight.
 5. **Replace the taxonomy paragraph with the chart.** Swap the lines-38–63 narration for a small
