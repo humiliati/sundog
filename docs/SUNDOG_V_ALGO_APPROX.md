@@ -1,7 +1,7 @@
 # Sundog vs. Algorithmic Approximation Theory
 
-> **Lane status: ONE MACHINE-CHECKED CORE LANDED + four analytical hooks closed
-> (2026-06-26); one hook remains.** Five of six hooks closed: **H-A0** (PDF-verify);
+> **Lane status: ONE MACHINE-CHECKED CORE LANDED + five non-Lean hooks closed
+> (2026-06-26); slate complete.** Six of six hooks closed: **H-A0** (PDF-verify);
 > **H-A2** → a real axiom-clean Lean core `Sundogcert/CircuitNet.lean` (`CORE_EARNED`:
 > exact tropical→ReLU compilation, the ε = 0 piecewise-linear case of arXiv:2606.26705
 > Thm 3.2 / Cor 5.1; full `lake build` green, in the AxiomAudit gate); **H-A1**
@@ -11,13 +11,15 @@
 > `SUPPORT_NO_SIZE_SEPARATION`, no revival of pantheon-for-competence); **H-A4** Atlas
 > short-program (deductive → `ATLAS_IS_A_SHORT_PROGRAM`: the halo atlas is bounded-depth,
 > polylog-in-1/ε — the √x side of the paper's divide, with the Atlas's own
-> multi-scattering failure boundary the Brownian side). Remaining: H-A5 (o-minimality as a
-> shadow-tower floor). Spun off
+> multi-scattering failure boundary the Brownian side); **H-A5** shadow-tower floor check
+> (deductive → `ORTHOGONAL_FLOORS` / `NO_SHARED_SEPARATOR`: o-minimality is the
+> syntax/realizability floor, charFun decay is the semantic lossy-shadow/invertibility
+> floor; they compose only as a two-stage discipline, not one separator). Spun off
 > [arXiv:2606.26705](https://arxiv.org/abs/2606.26705) — *"Algorithmic Foundations of
 > Deep Learning: Complexity-Theoretic Rates and a Characterization of Universal
 > Approximation"* (Kratsios, Brugiapaglia, Kim, Cousins, Sáez de Ocáriz Borde). It
-> registers the lane, carries the H-A2 deductive receipt, and names what the remaining
-> hooks (H-A1/H-A4/H-A5) would have to show to earn a place on the
+> registers the lane, carries the H-A2 deductive receipt, and records what the
+> cross-substrate hooks did and did not earn for the
 > [Cross-Substrate Generality Failure Map](CROSS_SUBSTRATE_NOTES.md).
 
 > **PDF-verification note (H-A0 closed 2026-06-26):** theorem numbers below were
@@ -83,7 +85,7 @@ shape but point opposite directions, so this gets its own ledger:
 
 ---
 
-## 3. Hypothesis slate (H-A0 + H-A1 + H-A2 + H-A3 + H-A4 closed; H-A5 NOT-YET-RUN)
+## 3. Hypothesis slate (H-A0 + H-A1 + H-A2 + H-A3 + H-A4 + H-A5 closed)
 
 Each hook is stated so it can come back **NULL**. None is promoted.
 
@@ -268,12 +270,55 @@ Each hook is stated so it can come back **NULL**. None is promoted.
   (like H-A1/H-A3). No claim promoted; it records that the Atlas sits firmly on the
   cheap-to-compute side of the paper's own divide.
 
-- **H-A5 — Definability as the next shadow-tower floor (→ [charFun law](SUNDOG_V_CERTIFICATE_LEAN.md), shadow-invertibility).**
-  *Claim to test:* "definable in an o-minimal structure" is the structural sibling of
+- **H-A5 — Definability as the next shadow-tower floor (→ [charFun law](SUNDOG_V_CERTIFICATE_LEAN.md), shadow-invertibility) — RAN 2026-06-26, verdict `ORTHOGONAL_FLOORS` (bounded null; the strong-form falsifier `NO_SHARED_SEPARATOR` fires). Deductive/reading hook, no new Lean.**
+  *Claim tested:* "definable in an o-minimal structure" is the structural sibling of
   the charFun-spectrum determine/resist separator — both are *one structural condition
-  on a function class* that the whole tower hangs from. *Falsifier*
-  (`NO_SHARED_SEPARATOR`): o-minimality and the Riemann-Lebesgue charFun tail govern
-  unrelated phenomena and don't compose into one tower.
+  on a function class* that the whole tower hangs from.
+
+  **Result — there is a useful composition bridge, but not a shared separator.**
+
+  Apples-to-apples, the two predicates live on different objects and buy different
+  guarantees:
+
+  | predicate | lives on | what it buys | what it cannot buy |
+  | --- | --- | --- | --- |
+  | **O-minimal definability** | target maps / sets / architectures | tame description, finite decomposition, closure under composition, and circuit→net realizability in the paper's admissible class | lossy-shadow survival, characteristic-function decay, or invertibility |
+  | **charFun decay / determine-resist law** | averaging measures / kernels in a lossy shadow | whether continuous information washes out (`‖charFun μ‖→0`) and whether a centered label can be determined | a short program, tame syntax, or membership in `ℝ_{an,exp}` |
+
+  **Why `NO_SHARED_SEPARATOR` fires.** Neither direction of implication survives the
+  existing Lean examples. Definable / finite does **not** imply resistance: the
+  two-point lattice law is a perfectly short, tame object, but its characteristic
+  function recurs (`cos`) and the shadow survives (`ShadowDecayLattice`). Conversely,
+  resistance does **not** imply definability: absolutely-continuous and Rajchman
+  measures can have decaying characteristic functions without any o-minimal / short
+  description. So o-minimality and charFun decay cannot be collapsed into "one
+  structural condition on a function class."
+
+  **Sharper — the floors stay orthogonal *inside* the definable class.** The
+  independence is not an artifact of exotic non-definable witnesses; it survives even
+  when both predicates are restricted to tame, definable measures, where charFun-decay
+  still varies freely:
+  - **Cauchy** — density `1/(π(1+x²))` is *rational*, hence semialgebraic / definable in
+    the bare real field — yet **resists** (`charFun = e^{−|s|} → 0`; it is exactly the
+    resist-but-no-mean separator, `ShadowDecayCauchy`).
+  - **Gaussian** — density `e^{−x²/2}/√(2π)` is definable in `ℝ_exp` — and **resists**
+    (`charFun = e^{−s²/2} → 0`; Debye–Waller, `ShadowDecay`).
+  - **Two-point lattice** — a finite/tame atomic law — yet **survives**
+    (`charFun = cos` recurs, `ShadowDecayLattice`).
+
+  So within one and the same tame class {Cauchy, Gaussian, two-point}, definability is
+  held fixed while resist/survive flips. Definability therefore does **no** predictive
+  work on the resist/survive axis — the charFun predicate does genuinely independent work
+  even where the syntactic floor is most favorable. This is the strong form of
+  `NO_SHARED_SEPARATOR`: the floors are orthogonal not merely off in the wild but on the
+  definable class itself.
+
+  **The retained bridge.** They still compose as a two-layer discipline:
+  **definability makes the forward generator short and scoreable** (H-A4/Atlas, H-A2's
+  exact PL core as the algebraic fragment), while the **charFun law decides what
+  survives a lossy averaged shadow** (`ShadowDecayGeneral` + Cauchy/lattice sharpenings).
+  That is a syntax/realizability floor followed by a semantic/invertibility floor, not
+  a new single floor of the shadow tower.
 
 ---
 
@@ -297,9 +342,9 @@ Each hook is stated so it can come back **NULL**. None is promoted.
 
 H-A0 (PDF verify), **H-A1** (cost-certificate isomorphism → `UNIFIES_ON_EXACT_FRAGMENT`),
 **H-A2** (the Lean `CircuitNet` core, `CORE_EARNED`), **H-A3** (competence-dominance
-reread → `SUPPORT_NO_SIZE_SEPARATION`), and **H-A4** (Atlas short-program →
-`ATLAS_IS_A_SHORT_PROGRAM`) are closed. Remaining hook: **H-A5** (o-minimality as a
-shadow-tower floor). Owner-gated follow-ups
+reread → `SUPPORT_NO_SIZE_SEPARATION`), **H-A4** (Atlas short-program →
+`ATLAS_IS_A_SHORT_PROGRAM`), and **H-A5** (shadow-tower floor check →
+`ORTHOGONAL_FLOORS` / `NO_SHARED_SEPARATOR`) are closed. Owner-gated follow-ups
 now owed off H-A1 + H-A2: (a) the sundog-site `SUNDOG_V_CERTIFICATE_LEAN` "Nth pillar"
 bump + deploy; (b) the **DAG/sharing** extension upgrading linear-*depth* to
 linear-*gate-count* (a compiler-correctness proof with wire-index refinement — the named

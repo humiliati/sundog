@@ -221,7 +221,7 @@ theme-matching.
   constructive **upper-bound** mirror of the P-vs-NP lane's **lower-bound** /
   resistance object (same op-count ledger arithmetic, inverted question: cheaper to
   *emulate the program* than to approximate the worst smoothness sibling).
-  **Five of six hooks closed (2026-06-26):** H-A0 PDF verification (labels confirmed,
+  **Six of six hooks closed (2026-06-26):** H-A0 PDF verification (labels confirmed,
   formal Cor/Prop resource summaries corrected); **H-A4 Atlas short-program →
   `ATLAS_IS_A_SHORT_PROGRAM`** (deductive): the Atlas forward generator is a fixed
   composition of analytic gates (sin/cos/arccos/arctan2/sqrt/abs) over ~1 continuous param
@@ -247,8 +247,18 @@ theme-matching.
   exploit (Cor 5.1 structured-circuit cheapness is a *target* property available to both
   classes, not a plural-topology win; and as an existence/optimum theory it is blind to
   the lone learnability loophole, the H2.3 cap), its only positive output a *sharpening*
-  relocating the live question onto **objective selection** (the §4 non-sovereignty axis).
-  Remaining one hook (o-minimality as a shadow-tower floor) not-yet-run.
+  relocating the live question onto **objective selection** (the §4 non-sovereignty axis);
+  and **H-A5 → `ORTHOGONAL_FLOORS` / `NO_SHARED_SEPARATOR`** (deductive): the
+  apples-to-apples check rejects a single shared separator. O-minimality is a
+  syntax/realizability predicate on target maps and architectures; the charFun law is a
+  semantic spectral predicate on averaging measures in lossy shadows. Definable/finite
+  does not imply resist (the two-point lattice is short/tame but survives via recurring
+  `cos`), and resist does not imply definability (AC/Rajchman measures can decay without
+  a short o-minimal description). Strong form: the independence holds even *inside* the
+  definable class — Cauchy (rational density) and Gaussian (`ℝ_exp`) both resist while the
+  tame two-point lattice survives, so definability does no work on the resist/survive axis.
+  The retained bridge is two-stage only: definable generators make shadows scoreable;
+  charFun decay decides what washes out.
   The H-A2 core is a **method/deductive example** (like the Halo/Faraday/ShadowDecay Lean
   cores), not generality evidence, so the map entry stays LIT-NOTE.
   -> [`SUNDOG_V_ALGO_APPROX.md`](SUNDOG_V_ALGO_APPROX.md).
