@@ -1,15 +1,18 @@
 # Sundog vs. Algorithmic Approximation Theory
 
-> **Lane status: ONE MACHINE-CHECKED CORE LANDED + three analytical hooks closed
-> (2026-06-26); two hooks remain.** Four of six hooks closed: **H-A0** (PDF-verify);
+> **Lane status: ONE MACHINE-CHECKED CORE LANDED + four analytical hooks closed
+> (2026-06-26); one hook remains.** Five of six hooks closed: **H-A0** (PDF-verify);
 > **H-A2** → a real axiom-clean Lean core `Sundogcert/CircuitNet.lean` (`CORE_EARNED`:
 > exact tropical→ReLU compilation, the ε = 0 piecewise-linear case of arXiv:2606.26705
 > Thm 3.2 / Cor 5.1; full `lake build` green, in the AxiomAudit gate); **H-A1**
 > cost-certificate isomorphism (deductive → `UNIFIES_ON_EXACT_FRAGMENT`: one gate-count
 > measure, coinciding exactly on the linear/PL fragment with the P-vs-NP `verifyCost`,
 > bounded by direction/ε/lossiness); **H-A3** competence-dominance reread (deductive →
-> `SUPPORT_NO_SIZE_SEPARATION`, no revival of pantheon-for-competence). Remaining:
-> H-A4 (Atlas short-program), H-A5 (o-minimality as a shadow-tower floor). Spun off
+> `SUPPORT_NO_SIZE_SEPARATION`, no revival of pantheon-for-competence); **H-A4** Atlas
+> short-program (deductive → `ATLAS_IS_A_SHORT_PROGRAM`: the halo atlas is bounded-depth,
+> polylog-in-1/ε — the √x side of the paper's divide, with the Atlas's own
+> multi-scattering failure boundary the Brownian side). Remaining: H-A5 (o-minimality as a
+> shadow-tower floor). Spun off
 > [arXiv:2606.26705](https://arxiv.org/abs/2606.26705) — *"Algorithmic Foundations of
 > Deep Learning: Complexity-Theoretic Rates and a Characterization of Universal
 > Approximation"* (Kratsios, Brugiapaglia, Kim, Cousins, Sáez de Ocáriz Borde). It
@@ -80,7 +83,7 @@ shape but point opposite directions, so this gets its own ledger:
 
 ---
 
-## 3. Hypothesis slate (H-A0 + H-A1 + H-A2 + H-A3 closed; H-A4/H-A5 NOT-YET-RUN)
+## 3. Hypothesis slate (H-A0 + H-A1 + H-A2 + H-A3 + H-A4 closed; H-A5 NOT-YET-RUN)
 
 Each hook is stated so it can come back **NULL**. None is promoted.
 
@@ -227,13 +230,43 @@ Each hook is stated so it can come back **NULL**. None is promoted.
   and existence-theory-blindness observations. No claim promoted; the Mesa retirement of
   "pantheon for competence" stands, now witnessed from a second formalism.
 
-- **H-A4 — Short-description ↔ small-parameter forward model (→ [Atlas](SUNDOG_V_ATLAS.md)).**
-  *Claim to test:* the Atlas's "whole classified halo atlas from ~1 free continuous
-  parameter + fixed ice lattice" is itself a **short-program / low-gate-count** target
-  in this paper's sense — the √x-vs-Brownian distinction made physical (a halo atlas
-  has a short algorithmic description; a turbulent caustic field does not). *Falsifier*
-  (`ATLAS_NOT_A_CIRCUIT`): the forward generator isn't expressible in any of the
-  paper's gate languages without unbounded depth → the analogy is decorative.
+- **H-A4 — Short-description ↔ small-parameter forward model (→ [Atlas](SUNDOG_V_ATLAS.md)) — RAN 2026-06-26, verdict `ATLAS_IS_A_SHORT_PROGRAM` (typed-positive, bounded; the falsifier `ATLAS_NOT_A_CIRCUIT` did NOT fire). Deductive/reading hook, no new Lean.**
+  *Claim tested:* the Atlas's "whole classified halo atlas from ~1 continuous parameter +
+  fixed ice lattice" is a **short-program / bounded-depth** target in the paper's sense —
+  the √x-vs-Brownian distinction made physical.
+
+  **Result — grounded in the actual generator** (`scripts/atlas_model.py`,
+  `atlas_bifurcation_set.py`, `atlas_caustic_map.py`). The forward generator is a
+  **fixed composition of definable/analytic gates** — `sin/cos/arccos/arctan2`, `sqrt`,
+  `abs` — over `~1` continuous parameter (`n ≈ 1.31`) + the *fixed* ice lattice
+  (`c/a = 1.628`, zero free geometry) + a *finite* habit branch (~7 cases). The **only**
+  iterative element in the whole generator is a single **bisection**
+  (`while hi − lo > tol` in `atlas_caustic_map.py`, locating the A₃-cusp merge elevation),
+  whose inner `is_merged` test is a *fixed finite-grid* closed-form evaluation. Bisection
+  converges in `O(log(1/ε))` steps ⟹ the generator is **bounded depth**, gate count
+  **polylog in 1/ε** — squarely the paper's regime. So the falsifier (which needs
+  *unbounded* depth) fails.
+
+  **The √x-vs-Brownian dichotomy maps cleanly, two ways:**
+  - **√x side (short program):** the classified atlas itself — closed-form analytic
+    forward model + one log-depth bisection. Confirmed.
+  - **Brownian side (no short description):** the Atlas's *own named failure boundaries* —
+    multi-scattering, turbulent/random caustic fields, the §0.2 angular smear — explicitly
+    out-of-scope in the Phase-11 capstone. The paper's dichotomy *is* the Atlas's
+    in-scope/out-of-scope boundary.
+  - **Cost-profile resonance:** the atlas's single hardest feature (the caustic merge,
+    needing the bisection) has cost `O(log 1/ε)` — the *same* log-in-1/ε profile as the
+    paper's APSP headline (Cor 5.1). The cheap-physics target and the cheap-algorithm
+    target share a rate.
+
+  **Honest bounds.** (i) The generator uses **transcendental** gates (trig), *outside* the
+  exact algebraic fragment H-A2 nailed — they live in the paper's broader **definable
+  (`ℝ_an,exp`) + ε-approximate** regime, the same ε-boundary as H-A1/H-A2's analytic wall;
+  so "short program" holds in the paper's *general* definable-architecture sense, not the
+  exact tropical fragment. (ii) This is a **qualitative** correspondence (a "short
+  description" match + a rate resonance), not a quantitative gate-count theorem — no Lean
+  (like H-A1/H-A3). No claim promoted; it records that the Atlas sits firmly on the
+  cheap-to-compute side of the paper's own divide.
 
 - **H-A5 — Definability as the next shadow-tower floor (→ [charFun law](SUNDOG_V_CERTIFICATE_LEAN.md), shadow-invertibility).**
   *Claim to test:* "definable in an o-minimal structure" is the structural sibling of
@@ -263,9 +296,10 @@ Each hook is stated so it can come back **NULL**. None is promoted.
 ## 5. Next admissible action
 
 H-A0 (PDF verify), **H-A1** (cost-certificate isomorphism → `UNIFIES_ON_EXACT_FRAGMENT`),
-**H-A2** (the Lean `CircuitNet` core, `CORE_EARNED`), and **H-A3** (competence-dominance
-reread → `SUPPORT_NO_SIZE_SEPARATION`) are closed. Remaining hooks: **H-A4** (Atlas
-short-program), **H-A5** (o-minimality as a shadow-tower floor). Owner-gated follow-ups
+**H-A2** (the Lean `CircuitNet` core, `CORE_EARNED`), **H-A3** (competence-dominance
+reread → `SUPPORT_NO_SIZE_SEPARATION`), and **H-A4** (Atlas short-program →
+`ATLAS_IS_A_SHORT_PROGRAM`) are closed. Remaining hook: **H-A5** (o-minimality as a
+shadow-tower floor). Owner-gated follow-ups
 now owed off H-A1 + H-A2: (a) the sundog-site `SUNDOG_V_CERTIFICATE_LEAN` "Nth pillar"
 bump + deploy; (b) the **DAG/sharing** extension upgrading linear-*depth* to
 linear-*gate-count* (a compiler-correctness proof with wire-index refinement — the named

@@ -221,8 +221,14 @@ theme-matching.
   constructive **upper-bound** mirror of the P-vs-NP lane's **lower-bound** /
   resistance object (same op-count ledger arithmetic, inverted question: cheaper to
   *emulate the program* than to approximate the worst smoothness sibling).
-  **Four of six hooks closed (2026-06-26):** H-A0 PDF verification (labels confirmed,
-  formal Cor/Prop resource summaries corrected); **H-A1 cost-certificate isomorphism →
+  **Five of six hooks closed (2026-06-26):** H-A0 PDF verification (labels confirmed,
+  formal Cor/Prop resource summaries corrected); **H-A4 Atlas short-program →
+  `ATLAS_IS_A_SHORT_PROGRAM`** (deductive): the Atlas forward generator is a fixed
+  composition of analytic gates (sin/cos/arccos/arctan2/sqrt/abs) over ~1 continuous param
+  + fixed ice lattice + finite habit branch, the only iterative element a log-depth
+  bisection → bounded depth / polylog-in-1/ε, the √x side of the paper's divide (the
+  Atlas's own multi-scattering / turbulent-caustic failure boundary is the Brownian side;
+  cost profile O(log 1/ε) rhymes with the APSP headline); **H-A1 cost-certificate isomorphism →
   `UNIFIES_ON_EXACT_FRAGMENT`** (deductive): one shared measure — the faithful op-count of
   a straight-line program over a fixed algebraic dictionary — coincides *exactly* on the
   linear/PL fragment (`CheckCost.verifyCost`'s dominant `m·n` = the gate count of the GF(2)
@@ -242,8 +248,7 @@ theme-matching.
   classes, not a plural-topology win; and as an existence/optimum theory it is blind to
   the lone learnability loophole, the H2.3 cap), its only positive output a *sharpening*
   relocating the live question onto **objective selection** (the §4 non-sovereignty axis).
-  Remaining two hooks (Atlas short-description ↔ small-parameter; o-minimality as a
-  shadow-tower floor) not-yet-run.
+  Remaining one hook (o-minimality as a shadow-tower floor) not-yet-run.
   The H-A2 core is a **method/deductive example** (like the Halo/Faraday/ShadowDecay Lean
   cores), not generality evidence, so the map entry stays LIT-NOTE.
   -> [`SUNDOG_V_ALGO_APPROX.md`](SUNDOG_V_ALGO_APPROX.md).
