@@ -1,12 +1,15 @@
 # Sundog vs. Algorithmic Approximation Theory
 
-> **Lane status: ONE MACHINE-CHECKED CORE LANDED + two analytical hooks closed
-> (2026-06-26).** Three of six hooks closed: **H-A0** (PDF-verify); **H-A2** → a real
-> axiom-clean Lean core `Sundogcert/CircuitNet.lean` (`CORE_EARNED`: exact tropical→ReLU
-> compilation, the ε = 0 piecewise-linear case of arXiv:2606.26705 Thm 3.2 / Cor 5.1;
-> full `lake build` green, in the AxiomAudit gate); **H-A3** competence-dominance reread
-> (deductive → `SUPPORT_NO_SIZE_SEPARATION`, no revival of pantheon-for-competence).
-> Spun off
+> **Lane status: ONE MACHINE-CHECKED CORE LANDED + three analytical hooks closed
+> (2026-06-26); two hooks remain.** Four of six hooks closed: **H-A0** (PDF-verify);
+> **H-A2** → a real axiom-clean Lean core `Sundogcert/CircuitNet.lean` (`CORE_EARNED`:
+> exact tropical→ReLU compilation, the ε = 0 piecewise-linear case of arXiv:2606.26705
+> Thm 3.2 / Cor 5.1; full `lake build` green, in the AxiomAudit gate); **H-A1**
+> cost-certificate isomorphism (deductive → `UNIFIES_ON_EXACT_FRAGMENT`: one gate-count
+> measure, coinciding exactly on the linear/PL fragment with the P-vs-NP `verifyCost`,
+> bounded by direction/ε/lossiness); **H-A3** competence-dominance reread (deductive →
+> `SUPPORT_NO_SIZE_SEPARATION`, no revival of pantheon-for-competence). Remaining:
+> H-A4 (Atlas short-program), H-A5 (o-minimality as a shadow-tower floor). Spun off
 > [arXiv:2606.26705](https://arxiv.org/abs/2606.26705) — *"Algorithmic Foundations of
 > Deep Learning: Complexity-Theoretic Rates and a Characterization of Universal
 > Approximation"* (Kratsios, Brugiapaglia, Kim, Cousins, Sáez de Ocáriz Borde). It
@@ -77,7 +80,7 @@ shape but point opposite directions, so this gets its own ledger:
 
 ---
 
-## 3. Hypothesis slate (H-A0 + H-A2 + H-A3 closed; H-A1/H-A4/H-A5 NOT-YET-RUN)
+## 3. Hypothesis slate (H-A0 + H-A1 + H-A2 + H-A3 closed; H-A4/H-A5 NOT-YET-RUN)
 
 Each hook is stated so it can come back **NULL**. None is promoted.
 
@@ -87,12 +90,45 @@ Each hook is stated so it can come back **NULL**. None is promoted.
   `HTML_EXTRACTION_TOO_COARSE_ON_FORMAL_BOUNDS`; §1 has been fixed before any
   downstream hook is allowed to run.
 
-- **H-A1 — Cost-certificate isomorphism (→ [P-vs-NP](SUNDOG_V_P_V_NP.md)).**
-  *Claim to test:* the paper's gate-count construction cost and the P-vs-NP lane's
-  op-count check cost are instances of one measure on a shared toy (e.g. the radical
-  √· that both lanes already touch — Prop 5.4 here, `𝔾_rt-alg` radicals, vs the
-  certificate's algebraic lossiness). *Falsifier* (`COST_MEASURE_NONUNIFIABLE`): the
-  two costs need incompatible normalizations and only rhyme verbally.
+- **H-A1 — Cost-certificate isomorphism (→ [P-vs-NP](SUNDOG_V_P_V_NP.md)) — RAN 2026-06-26, verdict `UNIFIES_ON_EXACT_FRAGMENT` (typed-positive, bounded; the falsifier `COST_MEASURE_NONUNIFIABLE` did NOT fire). Deductive/reading hook, no new Lean.**
+  *Claim tested:* the paper's gate-count *construction* cost (Def 2.6: a `𝔾`-circuit's
+  depth/width/gate-count `N`) and the P-vs-NP lane's op-count *check* cost
+  (`Sundogcert/CheckCost.lean` `verifyCost ≤ 2(m·n)+n+m+2`) are instances of one measure.
+
+  **Result — a genuine common measure exists, so the falsifier fails; but the
+  unification is bounded.**
+
+  1. **The shared measure is real, not verbal.** Both are *the faithful structural
+     op-count of a straight-line program over a fixed algebraic gate dictionary.* The
+     certificate's `verifyCost` is dominated by `syndromeMulCost = ∑_{i,j} 1 = m·n`, the
+     gate count of the **matrix–vector product** `y ↦ H·y` over GF(2). The paper's `N`
+     counts gates of an ℝ-circuit over `𝔾_alg ⊂ 𝔾_t-alg ⊂ …`. The *affine map* `y ↦ H·y`
+     is literally an affine gate in both dictionaries — its cost is the nonzero-entry
+     count in either, GF(2) or ℝ. So the measures coincide **exactly on the linear /
+     piecewise-linear (exact, ε = 0) fragment**, and **H-A2's `compile_eval` (ε = 0
+     exactness of the tropical fragment) is the formal witness that this fragment needs
+     no error term** — the two cost notions are the *same number* there.
+
+  2. **The bound (why it is `_ON_EXACT_FRAGMENT`, not full).** Three honest limits keep
+     it a shared *yardstick*, not a merged theorem:
+     - **direction** — the certificate counts the *verifier* circuit, the paper counts the
+       *constructor* circuit. That is not a contradiction; it is the **find-vs-check axis
+       itself** — the P-vs-NP gap *is* `gateCount(verifier) ≪ gateCount(any solver)`, and
+       the paper supplies *constructor* upper bounds. Same measure, two circuits.
+     - **ε-dependence** — the paper's *analytic* gates (reciprocal/radical, Prop 5.2/5.4)
+       carry a polylog-in-`1/ε` cost the exact GF(2) certificate has no analog for. The
+       unification *locus is exactly the exact fragment*; it dissolves where ε enters.
+     - **lossiness** — the certificate's load-bearing property (`H·e` drops the secret) is
+       an *information* property, not a cost one; the paper has no lossiness analog. The
+       lanes share the cost axis and nothing else.
+
+  **Net + a named follow-up.** The earlier "shared toy = the radical √·" framing was
+  wrong (the certificate is GF(2) linear algebra and never touches radicals); the *true*
+  shared toy is the **affine / matrix–vector map**. Both Lean witnesses already live in
+  the *same* repo — `CircuitNet` (gate-count-able `Trop`/`Net`) and `CheckCost`
+  (`verifyCost`) — so a generic `StraightLineProgram.cost` of which both are instances is
+  a concrete future Lean hook (gated by the same DAG/gate-count wall named in H-A2; not
+  built now). No claim promoted; this records a real but bounded yardstick-sharing.
 
 - **H-A2 — Definability core in Lean (→ [certificate cores](SUNDOG_V_CERTIFICATE_LEAN.md)) — RAN 2026-06-26, verdict `CORE_EARNED` (the falsifier `CORE_IMPORTS_THE_THEOREM` did NOT fire). Real Lean, axiom-clean, full build green.**
   *Claim tested:* a circuit→net compilation step is machine-checkable axiom-clean,
@@ -226,15 +262,17 @@ Each hook is stated so it can come back **NULL**. None is promoted.
 
 ## 5. Next admissible action
 
-H-A0 (PDF verify), **H-A2** (the Lean `CircuitNet` core, `CORE_EARNED`), and **H-A3**
-(competence-dominance reread → `SUPPORT_NO_SIZE_SEPARATION`) are closed. Remaining hooks:
-**H-A1** (cost-certificate isomorphism into P-vs-NP, an analytical hook like H-A3),
-**H-A4** (Atlas short-program), **H-A5** (o-minimality as a shadow-tower floor). Two
-owner-gated follow-ups owed off H-A2: (a) the sundog-site `SUNDOG_V_CERTIFICATE_LEAN`
-"Nth pillar" bump + deploy; (b) the **DAG/sharing** extension that would upgrade the
-linear-*depth* bound to a linear-*gate-count* bound (a compiler-correctness proof with
-wire-index refinement — the named wall of `CircuitNet`). No hook is scheduled; this file
-is the registration, not a commitment.
+H-A0 (PDF verify), **H-A1** (cost-certificate isomorphism → `UNIFIES_ON_EXACT_FRAGMENT`),
+**H-A2** (the Lean `CircuitNet` core, `CORE_EARNED`), and **H-A3** (competence-dominance
+reread → `SUPPORT_NO_SIZE_SEPARATION`) are closed. Remaining hooks: **H-A4** (Atlas
+short-program), **H-A5** (o-minimality as a shadow-tower floor). Owner-gated follow-ups
+now owed off H-A1 + H-A2: (a) the sundog-site `SUNDOG_V_CERTIFICATE_LEAN` "Nth pillar"
+bump + deploy; (b) the **DAG/sharing** extension upgrading linear-*depth* to
+linear-*gate-count* (a compiler-correctness proof with wire-index refinement — the named
+wall of `CircuitNet`); (c) the generic `StraightLineProgram.cost` of which both
+`CircuitNet` circuit size and `CheckCost.verifyCost` are instances (the H-A1 unification,
+formalized — gated by (b)). No hook is scheduled; this file is the registration, not a
+commitment.
 
 > Cross-links: [`SUNDOG_V_P_V_NP.md`](SUNDOG_V_P_V_NP.md) ·
 > [`SUNDOG_V_CERTIFICATE_LEAN.md`](SUNDOG_V_CERTIFICATE_LEAN.md) ·
