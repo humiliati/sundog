@@ -864,6 +864,21 @@ objective than return (regret-under-objective-uncertainty / Byzantine
 fault-tolerance / corrigibility) — the axis the lemma cannot foreclose. The
 competence lane is closed; the correct question is open.
 
+**NS-1-0 admitted (2026-06-26): corrigibility shutdown channel now scoreable,
+not yet a support claim.**
+[`mesa/NS1_CORRIGIBILITY_SHUTDOWN_CHANNEL_SPEC.md`](mesa/NS1_CORRIGIBILITY_SHUTDOWN_CHANNEL_SPEC.md)
+now has an executable shutdown interface and admission receipt at
+[`mesa/NS1_0_SHUTDOWN_CHANNEL_ADMISSION_RESULTS.md`](mesa/NS1_0_SHUTDOWN_CHANNEL_ADMISSION_RESULTS.md).
+Fixed admission on the H2 forked-field slate lands `NS1_0_ADMITTED`: oracle
+no-shutdown solvability clears (`C=1`), the fixed `M0` resistance probe ignores
+the costly shutdown (`Corr_k=0`, `resist_rate=1`, mean return `0.944792`), and
+the same probe with the structural downstream channel halts (`Corr_k=1`) while
+paying the visible return bill (`task_return=0`). Channel validity clears
+(`shutdown_influence_invariance=0`; timing exogenous; shutdown component included
+in the audit surface). Boundary: this admits the environment/channel and the
+resistance incentive only. Learned matched `M0` / `Mκ` / `Cκ` runs remain required
+before `NS1_CAP_NOT_ROLES` or plurality-for-corrigibility can be scored.
+
 Immediate work:
 
 - Update `docs/promo/PROMO_HIGHLIGHTS.md` §The Gravity Claim with the earned mesa

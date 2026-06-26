@@ -107,6 +107,7 @@
     "mesa:phase6:shard": "node scripts/mesa-phase6-shard.mjs",
     "mesa:phase6:probe:concurrent": "node scripts/mesa-phase6-probe-concurrent.mjs",
     "mesa:phase6:postlock": "node scripts/mesa-phase6-postlock.mjs",
+    "mesa:ns1:admission": "node scripts/mesa-ns1-shutdown-admission.mjs",
     "threebody:phase4:iad:shard": "node scripts/threebody-phase4-iad-shard.mjs",
     "threebody:phase4:iad:concurrent": "node scripts/threebody-phase4-iad-concurrent.mjs",
     "threebody:phase4:iad:merge": "node scripts/threebody-phase4-iad-merge.mjs",

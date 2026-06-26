@@ -214,6 +214,28 @@ theme-matching.
   *exact* regime-2 witness, on a **topological** (not dimensional) resistance
   axis (§8.2). Landed as Phase 7 case 3 (B7-topology).
   -> [`faraday/FARADAY_PHASE7_BOUNDARY.md`](faraday/FARADAY_PHASE7_BOUNDARY.md).
+- **Algorithmic approximation - LIT-NOTE / SUBSTANTIVE HOOKS NOT-YET-RUN (registered 2026-06-26).** A
+  reading note + falsifiable hook-slate spun off arXiv:2606.26705 (Kratsios et al.),
+  which prices network size by the **algorithmic complexity** (gate-count of a
+  circuit over a fixed gate language) of the target rather than its regularity - the
+  constructive **upper-bound** mirror of the P-vs-NP lane's **lower-bound** /
+  resistance object (same op-count ledger arithmetic, inverted question: cheaper to
+  *emulate the program* than to approximate the worst smoothness sibling). No
+  experiments; six hooks named with falsifiers. **Two closed (2026-06-26):** H-A0 PDF
+  verification (labels confirmed, formal Cor/Prop resource summaries corrected); and
+  **H-A3, a deductive/reading competence-dominance re-read → `SUPPORT_NO_SIZE_SEPARATION`**
+  — the paper's universality (Thm 3.1) + compilation (Thm 3.2) re-derive the
+  Competence-Dominance Lemma in circuit-complexity vocabulary and add no return-axis
+  size gap a plural topology could exploit (the structured-circuit cheapness of Cor 5.1
+  is a target property available to *both* classes, not a plural-topology win; and as an
+  existence/optimum theory it is blind to the lone learnability loophole, the H2.3 cap).
+  Its only positive output is a *sharpening*: by making representability free it
+  relocates the live question onto **objective selection**, the §4 non-sovereignty axis —
+  a second formalism agreeing the Mesa retirement of "pantheon for competence" holds. The
+  remaining four hooks (cost-certificate isomorphism into P-vs-NP; a candidate eighth Lean
+  definability core; Atlas short-description ↔ small-parameter; o-minimality as a
+  shadow-tower floor) are not-yet-run. Map entry stays LIT-NOTE (H-A3 added no
+  return-axis evidence). -> [`SUNDOG_V_ALGO_APPROX.md`](SUNDOG_V_ALGO_APPROX.md).
 
 **Failure-mode taxonomy.** Eight distinct ways a cross-substrate generalization
 *fails*: *marginal* (body doesn't resist), *numerical* (shadow unmeasurable),
