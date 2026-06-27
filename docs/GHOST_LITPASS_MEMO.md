@@ -145,6 +145,78 @@ Early expectation rule:
 > complexity, extension complexity, or hull structure, that is a successful
 > reader-lane outcome, not a failed research program.
 
+## Q2 Resolution - Outside Debt Maps to Existing Objects
+
+**Added 2026-06-27.** Resolves Lit-Pass Question 2 (and Follow-Up Ratchet 7):
+is "outside debt" just recognizability, repetitivity, local derivability, MLD,
+cohomology, hull structure, or extension complexity in disguise? Short answer:
+**yes - it is not a new invariant.** It decomposes onto existing objects, and
+which one applies depends on the substrate.
+
+Definitions locked to source:
+
+- **Local derivability (radius r):** a tiling T is locally derivable from S if
+  there is a radius r such that whenever S agrees on the r-ball around x and the
+  r-ball around y up to translation, T agrees at x and y. **Mutual local
+  derivability (MLD)** is local derivability in both directions, and is an
+  equivalence relation. Origin: M. Baake, M. Schlottmann, P. D. Jarvis,
+  "Quasiperiodic tilings with tenfold symmetry and equivalence with respect to
+  local derivability," J. Phys. A: Math. Gen. 24 (1991) 4637-4654; definition
+  via the Bielefeld Tilings Encyclopedia,
+  https://tilings.math.uni-bielefeld.de/glossary/mld/.
+- **Recognizability = unique composition property:** a finite radius R such that
+  the level-1 supertile decomposition around any point is determined by the
+  radius-R patch - the substitution can be locally undone. Mosse (1992) for the
+  symbolic case; Solomyak proved for self-affine translationally finite tilings
+  that unique composition is equivalent to nonperiodicity (Boris Solomyak,
+  "Nonperiodicity implies unique composition for self-similar translationally
+  finite tilings," Discrete Comput. Geom. 20 (1998) 265-279,
+  https://link.springer.com/article/10.1007/PL00009386).
+- **Hull cohomology:** Cech / pattern-equivariant cohomology of the tiling space
+  is an MLD-invariant of the whole class (Kellendonk-Putnam; Lorenzo Sadun,
+  *Topology of Tiling Spaces*, AMS University Lecture Series 46, 2008).
+
+The mapping:
+
+| "Outside debt" sense | Existing object it already is |
+| --- | --- |
+| how much patch is needed to recover your supertile (ghost-as-ancestry) | recognizability radius / unique composition property |
+| how much patch to translate between two descriptions (Hat / CAP / rhombic / cut-and-project) | local-derivability radius / MLD |
+| what is invariant across the whole class (the "outside" of the entire hull) | Cech / pattern-equivariant cohomology |
+| order vs randomness, recurrence | patch-complexity function p(r), repetitivity - these measure growth, not debt |
+| "given a patch, how much outside is needed to extend at all" | extension / decision complexity (Domino Problem; undecidable in general) |
+
+Vocabulary consequence: keep "outside debt" as public umbrella language only.
+Any technical note must name which of {recognizability radius, local-derivability
+radius, cohomology, extension complexity} is meant.
+
+**Two-regime finding (the load-bearing part).** These objects do not lie on one
+axis. They split at a phase boundary:
+
+- **Bounded regime (substitution / hierarchical, including Hat/Spectre).** By
+  Mosse-Solomyak, nonperiodicity is exactly what makes the supertile ancestry
+  *locally recoverable at a finite radius*. The ghost here is finite and
+  measurable - the recognizability radius. The outside is *bounded*, not
+  unerasable.
+- **Unbounded regime (general local rules / SFT / Wang).** No finite radius
+  exists; the relevant quantity is the extension problem, which is undecidable in
+  general (Berger 1966; Robinson 1971; cf. the 2025 tromino result). This is a
+  computability wall, not a recognizability radius.
+
+This corrects the lane's central metaphor: "geometry with an unerasable outside"
+holds only in the unbounded regime. For the Hat/Spectre anchors the outside is
+bounded and recoverable, which is the *better* and more honest story. The
+"Outside Debt Gradient" ladder in `SUNDOG_V_GHOST.md` therefore conflated two
+regimes; it has been split at the phase boundary, and the aperiodic-monotile row
+relabeled from "unbounded non-periodic context" to a finite recognizability
+radius.
+
+Metric implication (informs Ratchet 3): **recognizability radius is the
+recommended first metric.** It is the only candidate that is simultaneously
+finite, classically defined (the unique composition property), and directly
+visualizable as the ghost collapsing as the window grows. Local-derivability
+radius is the natural second metric once more than one description is on screen.
+
 ## Primary Anchors
 
 | Source | Public URL | Supports | Boundary action |
@@ -460,7 +532,11 @@ Success condition:
    *not* being claimed.
 7. Ask a tiling/dynamical-systems specialist whether "outside debt" is merely
    recognizability, local derivability, patch complexity, extension complexity,
-   or a confused mixture.
+   or a confused mixture. (Lit-pass resolution filed 2026-06-27 - see "Q2
+   Resolution - Outside Debt Maps to Existing Objects": it is recognizability
+   radius / local-derivability radius / cohomology / extension complexity by
+   regime, not a new invariant. Specialist sign-off still worthwhile before
+   public copy.)
 
 ## Current Best Language
 

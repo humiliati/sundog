@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<!--
+  Ghost Phase 3 aperiodic reader. INTERNAL.
+
+  Substrate: rhombic Penrose (P3), generated from published substitution rules
+  (no figure reuse). Not a public page: non-root /ghost/ dir, no site-pages.json
+  entry, noindex. Open via `npm run ghost:serve` at /ghost/aperiodic.html.
+  Penrose name/asset caveat: see docs/ghost/PHASE3_APERIODIC_READER_SPEC.md s9.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="data:," />
+  <title>Ghost Aperiodic Reader - Penrose (internal)</title>
+  <style>
+    :root {
+      --ink: #1f2d36;
+      --muted: #61717c;
+      --bg: #f7faf8;
+      --paper: #ffffff;
+      --line: #cfd9d2;
+      --blue: #214f71;
+      --blue-soft: #e4eef5;
+      --green: #2f6f52;
+      --green-soft: #dff0e7;
+      --red: #9a4a3f;
+      --red-soft: #f1dedb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--bg);
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    main {
+      width: min(1160px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 28px 0 44px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 3px 10px;
+      color: var(--muted);
+      background: #fff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    h1 {
+      margin: 10px 0 6px;
+      color: var(--blue);
+      font-size: clamp(1.7rem, 4vw, 2.8rem);
+      line-height: 1.08;
+    }
+
+    .lede { max-width: 74ch; margin: 0; color: #40505a; font-size: 1rem; }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(150px, 1fr));
+      gap: 10px;
+      align-items: end;
+      margin: 24px 0 16px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      border-radius: 8px;
+    }
+
+    label {
+      display: grid;
+      gap: 5px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    input[type="range"] { width: 100%; }
+
+    .readout { color: var(--ink); font-weight: 800; text-transform: none; letter-spacing: 0; }
+
+    .surface {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      padding: 14px;
+    }
+
+    #tiling { width: 100%; height: auto; display: block; background: #fbfdfc; border-radius: 6px; }
+
+    .legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 10px; color: var(--muted); font-size: 0.82rem; }
+    .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; border: 2px solid; }
+    .lg-contained i { border-color: var(--green); background: var(--green-soft); }
+    .lg-crossing i { border-color: var(--red); background: var(--red-soft); }
+    .lg-outside i { border-color: #c4ccc7; background: #eef2ef; }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: minmax(280px, 1fr) minmax(280px, 1fr) minmax(280px, 1fr);
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .panel { border: 1px solid var(--line); border-radius: 8px; background: #fff; padding: 14px; min-height: 160px; }
+    .panel h2 { margin: 0 0 9px; color: var(--blue); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; }
+    .stat { display: flex; justify-content: space-between; gap: 16px; border-bottom: 1px dotted var(--line); padding: 5px 0; font-size: 0.88rem; }
+    .stat span { color: var(--muted); }
+    .stat b { color: var(--ink); text-align: right; }
+
+    .verdict { margin-top: 12px; padding: 8px 10px; border-radius: 6px; font-weight: 800; font-size: 0.9rem; }
+    .verdict.closed { color: var(--green); background: var(--green-soft); }
+    .verdict.open { color: var(--blue); background: var(--blue-soft); }
+
+    .note { color: var(--muted); font-size: 0.88rem; margin: 8px 0 0; }
+    .cliff { border-color: #d9b2ac; background: var(--red-soft); }
+    .cliff h2 { color: var(--red); }
+
+    pre { max-height: 230px; overflow: auto; margin: 10px 0 0; padding: 10px; border-radius: 6px; color: #e9f2f7; background: #122633; font-size: 0.74rem; white-space: pre-wrap; }
+
+    footer { margin-top: 20px; color: var(--muted); font-size: 0.78rem; }
+
+    @media (max-width: 980px) {
+      .controls { grid-template-columns: 1fr 1fr; }
+      .dashboard { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      main { width: min(100vw - 18px, 1160px); padding-top: 16px; }
+      .controls { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <span class="tag">internal / Ghost Phase 3 / not public</span>
+    <h1>Ghost Aperiodic Reader</h1>
+    <p class="lede">
+      A rhombic Penrose tiling, generated from its substitution rule. Draw a
+      circle and pick an ancestry level: supertiles fully inside the circle have
+      recoverable ancestry (the ghost has collapsed); supertiles crossing the
+      edge are ghost at the boundary. Penrose is recognizable, so the outside is
+      a finite radius, not unerasable.
+    </p>
+
+    <section class="controls" aria-label="Reader controls">
+      <label>Inflation depth <span id="depth-readout" class="readout"></span>
+        <input id="depth-range" type="range" min="2" max="7" step="1" />
+      </label>
+      <label>Ancestry level <span id="level-readout" class="readout"></span>
+        <input id="level-range" type="range" min="1" step="1" />
+      </label>
+      <label>Window x <span id="cx-readout" class="readout"></span>
+        <input id="cx-range" type="range" min="-0.9" max="0.9" step="0.01" />
+      </label>
+      <label>Window y <span id="cy-readout" class="readout"></span>
+        <input id="cy-range" type="range" min="-0.9" max="0.9" step="0.01" />
+      </label>
+      <label>Window radius <span id="r-readout" class="readout"></span>
+        <input id="r-range" type="range" min="0.1" max="1" step="0.01" />
+      </label>
+    </section>
+
+    <section class="surface" aria-label="Penrose tiling">
+      <svg id="tiling" viewBox="-1.15 -1.15 2.3 2.3" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"></svg>
+      <div class="legend">
+        <span class="lg-contained"><i></i>contained (ancestry recoverable)</span>
+        <span class="lg-crossing"><i></i>crossing (ghost at boundary)</span>
+        <span class="lg-outside"><i></i>outside window</span>
+        <span>fill hue = supertile at the chosen level</span>
+      </div>
+    </section>
+
+    <section class="dashboard" aria-label="Analysis panels">
+      <div class="panel">
+        <h2>Hierarchy</h2>
+        <div class="stat"><span>regime</span><b id="regime"></b></div>
+        <div class="stat"><span>tiles (thin / thick)</span><b id="metric-counts"></b></div>
+        <div class="stat"><span>thick : thin ratio</span><b id="metric-ratio"></b></div>
+        <div class="stat"><span>supertiles at level</span><b id="metric-supertiles"></b></div>
+        <div id="verdict" class="verdict"></div>
+      </div>
+
+      <div class="panel">
+        <h2>Recognition (in window)</h2>
+        <div class="stat"><span>tiles in window</span><b id="metric-inwindow"></b></div>
+        <div class="stat"><span>supertiles touching</span><b id="metric-touching"></b></div>
+        <div class="stat"><span>contained</span><b id="metric-contained"></b></div>
+        <div class="stat"><span>crossing (ghost)</span><b id="metric-crossing"></b></div>
+        <p id="recognition-note" class="note"></p>
+      </div>
+
+      <div class="panel cliff">
+        <h2>Computability Cliff</h2>
+        <p id="cliff-note" class="note"></p>
+        <p class="note">Penrose is in the bounded recognition regime. General Wang/SFT extension (undecidable) is deliberately not shown as a smooth next step.</p>
+      </div>
+    </section>
+
+    <section class="surface" aria-label="Reader export" style="margin-top:14px;">
+      <h2 style="margin:0 0 4px; color:var(--blue); font-size:0.82rem; text-transform:uppercase; letter-spacing:0.08em;">Reader export</h2>
+      <pre id="export-out"></pre>
+    </section>
+
+    <footer>
+      Spec: docs/ghost/PHASE3_APERIODIC_READER_SPEC.md. Ledger:
+      docs/SUNDOG_V_GHOST.md. Geometry generated from published Penrose
+      substitution rules; no figure reuse. This internal reader visualizes one
+      aspect of the known proof structure (the inflation hierarchy and its
+      recognizability); it introduces no Ghost invariant.
+    </footer>
+  </main>
+
+  <script type="module" src="./aperiodic-ui.js"></script>
+</body>
+</html>

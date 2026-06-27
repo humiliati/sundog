@@ -95,7 +95,7 @@ Each hook is stated so it can come back **NULL**. None is promoted.
   `HTML_EXTRACTION_TOO_COARSE_ON_FORMAL_BOUNDS`; §1 has been fixed before any
   downstream hook is allowed to run.
 
-- **H-A1 — Cost-certificate isomorphism (→ [P-vs-NP](SUNDOG_V_P_V_NP.md)) — RAN 2026-06-26, verdict `UNIFIES_ON_EXACT_FRAGMENT` (typed-positive, bounded; the falsifier `COST_MEASURE_NONUNIFIABLE` did NOT fire). Deductive/reading hook, no new Lean.**
+- **H-A1 — Cost-certificate isomorphism (→ [P-vs-NP](SUNDOG_V_P_V_NP.md)) — RAN 2026-06-26, verdict `UNIFIES_ON_EXACT_FRAGMENT` (typed-positive, bounded; the falsifier `COST_MEASURE_NONUNIFIABLE` did NOT fire). Deductive/reading hook; Lean bridge follow-up landed 2026-06-27.**
   *Claim tested:* the paper's gate-count *construction* cost (Def 2.6: a `𝔾`-circuit's
   depth/width/gate-count `N`) and the P-vs-NP lane's op-count *check* cost
   (`Sundogcert/CheckCost.lean` `verifyCost ≤ 2(m·n)+n+m+2`) are instances of one measure.
@@ -127,13 +127,16 @@ Each hook is stated so it can come back **NULL**. None is promoted.
        an *information* property, not a cost one; the paper has no lossiness analog. The
        lanes share the cost axis and nothing else.
 
-  **Net + a named follow-up.** The earlier "shared toy = the radical √·" framing was
+  **Net + Lean bridge.** The earlier "shared toy = the radical √·" framing was
   wrong (the certificate is GF(2) linear algebra and never touches radicals); the *true*
   shared toy is the **affine / matrix–vector map**. Both Lean witnesses already live in
   the *same* repo — `CircuitNet` (gate-count-able `Trop`/`Net`) and `CheckCost`
-  (`verifyCost`) — so a generic `StraightLineProgram.cost` of which both are instances is
-  a concrete future Lean hook (gated by the same DAG/gate-count wall named in H-A2; not
-  built now). No claim promoted; this records a real but bounded yardstick-sharing.
+  (`verifyCost`). The follow-up `Sundogcert/StraightLineCost.lean` now makes that common
+  yardstick explicit: `costOf` specializes to `RProg.gateCount` on the constructive
+  approximation side and to `verifyCost` on the certificate side; `compileToDag_cost_le`
+  and `verifier_cost_le` lift both linear bounds through the same interface, and
+  `shared_cost_instances` records the bounded unification. No claim promoted; this is a
+  shared cost ledger, not a merged theorem about finding versus checking.
 
 - **H-A2 — Definability core in Lean (→ [certificate cores](SUNDOG_V_CERTIFICATE_LEAN.md)) — RAN 2026-06-26, verdict `CORE_EARNED` (the falsifier `CORE_IMPORTS_THE_THEOREM` did NOT fire). Real Lean, axiom-clean, full build green.**
   *Claim tested:* a circuit→net compilation step is machine-checkable axiom-clean,
@@ -146,7 +149,7 @@ Each hook is stated so it can come back **NULL**. None is promoted.
   piecewise-linear** gate fragment — the gate set the APSP headline (Cor 5.1) runs on.
   Three headline theorems, all **axiom-clean** (`[propext, Classical.choice, Quot.sound]`,
   no `sorryAx`/`native_decide`; wired into the build-enforced `AxiomAudit` gate; full
-  `lake build` = 3534 jobs green):
+  current `lake build` = 3535 jobs green):
   - `compile_eval` — every tropical circuit (`var/const/+/scale/max`) compiles to a ReLU
     net computing the *same* function exactly, by structural induction; the only nonlinear
     case is the identity `max p q = q + relu(p−q)`.
@@ -352,11 +355,21 @@ reread → `SUPPORT_NO_SIZE_SEPARATION`), **H-A4** (Atlas short-program →
 extension is now DONE (2026-06-27):** `compileToDag` + `compileToDag_gate_count`
 (`≤ m + 4·nodeCount`) + `compileToDag_eval` (output wire computes the tree exactly), all
 axiom-clean and audited — linear *gate-count*, not just linear depth. Remaining
-owner-gated follow-ups: (a) the sundog-site `SUNDOG_V_CERTIFICATE_LEAN` "Nth pillar"
-bump + deploy; (b) the generic `StraightLineProgram.cost` of which both
-`CircuitNet` circuit size and `CheckCost.verifyCost` are instances (the H-A1 unification,
-formalized — now unblocked, since the DAG gate-count exists). No hook is scheduled; this file is the registration, not a
+owner-gated follow-up: the sundog-site `SUNDOG_V_CERTIFICATE_LEAN` "Nth pillar"
+bump + deploy. **The H-A1 `StraightLineProgram.cost` bridge is now DONE (2026-06-27):**
+`StraightLineCost.lean` supplies the common `costOf` interface for `RProg.gateCount` and
+`CheckCost.verifyCost`, with both linear bounds audited. No hook is scheduled; this file is the registration, not a
 commitment.
+
+**Next horizon (2026-06-27):** with the arithmetic machine-checked, a fresh
+conjecture slate aims it at classical questions — tropical geometry ⇄ exact ReLU
+expressivity, unconditional ReLU lower bounds via the monotone/cancellation barrier, the
+find/check ledger → certificates & fine-grained complexity, and frontier ML theory
+(depth separations, grokking, mech-interp, pruning targets / floors only after lower
+bounds). See
+[`ALGO_APPROX_CONJECTURE_SLATE.md`](ALGO_APPROX_CONJECTURE_SLATE.md). Top first attacks:
+`ShortestPathCert` Lean module (C-C1), the cancellation-free fragment (C-B1), the
+grokking-threshold experiment (C-D2).
 
 > Cross-links: [`SUNDOG_V_P_V_NP.md`](SUNDOG_V_P_V_NP.md) ·
 > [`SUNDOG_V_CERTIFICATE_LEAN.md`](SUNDOG_V_CERTIFICATE_LEAN.md) ·

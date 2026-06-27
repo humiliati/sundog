@@ -235,7 +235,9 @@ theme-matching.
   matrix–vector map `y↦H·y`, the same object as an affine gate over ℝ; H-A2's ε=0 exactness
   is the witness), bounded by direction (verifier-vs-constructor = the find/check axis),
   ε-dependence (the analytic gates), and lossiness (no cost analog) → a shared yardstick,
-  not a merged theorem; **H-A2 → a real axiom-clean Lean core**
+  not a merged theorem, now formalized in `Sundogcert/StraightLineCost.lean`
+  (`costOf` specializes to both `RProg.gateCount` and `CheckCost.verifyCost`, with
+  `compileToDag_cost_le` + `verifier_cost_le` audited); **H-A2 → a real axiom-clean Lean core**
   `Sundogcert/CircuitNet.lean` (`CORE_EARNED`, the falsifier did not fire): the exact
   (ε = 0) tropical→ReLU compilation `compile_eval` + linear-depth bound + min-plus /
   Bellman–Ford gates (the APSP/Cor 5.1 building blocks) proved exact, full `lake build`

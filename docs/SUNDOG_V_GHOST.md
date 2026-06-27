@@ -80,6 +80,15 @@ Candidate one-line thesis:
 
 > Aperiodicity is geometry with an unerasable outside.
 
+**Regime caveat (2026-06-27 lit pass).** This line is honest only for the
+computability-cliff regime (general Wang/SFT, where extension is undecidable).
+For substitution/hierarchical aperiodicity - including the Hat/Spectre anchors -
+the outside is *bounded and recoverable*: by Mosse-Solomyak, nonperiodicity is
+exactly what makes the supertile ancestry locally recoverable at a finite
+recognizability radius. Reserve "unerasable outside" for the undecidable
+regime; for Hat/Spectre prefer "the outside is finite but keeps moving outward
+as you zoom." See `GHOST_LITPASS_MEMO.md` Q2 Resolution.
+
 ## Claim Boundary
 
 This document does **not** claim:
@@ -464,7 +473,9 @@ Title candidates:
 - Draw the Circle, Find the Ghost
 - The Ghost Boundary
 - Aperiodicity and the Hidden Outside of Order
-- Geometry With an Unerasable Outside
+- Geometry With an Unerasable Outside (regime-restricted: honest for the
+  undecidable Wang/SFT substrate, misleading for Hat/Spectre where the outside
+  is bounded - see Q2 Resolution in `GHOST_LITPASS_MEMO.md`)
 - The Map Inside the Territory
 
 Hero lines:
@@ -563,13 +574,16 @@ Exit gate:
 
 ### Phase 2 - Toy Model Workbench
 
-Status: started 2026-06-22.
+Status: started 2026-06-22; **COMPLETE 2026-06-27** (acceptance suite
+`pass=13 fail=0`; browser QA passed desktop + mobile).
 
 - Spec: [`ghost/PHASE2_TOY_WORKBENCH_SPEC.md`](ghost/PHASE2_TOY_WORKBENCH_SPEC.md).
 - Internal artifact: [`../ghost/workbench.html`](../ghost/workbench.html)
   served locally as `/ghost/workbench.html` from a static dev server.
 - Pure core: `ghost/ghost-core.js`.
 - Acceptance test: `npm run ghost:test`.
+- Local QA server: `npm run ghost:serve` (static; the full-site Vite dev
+  server is not needed and its dependency optimizer hangs on this one page).
 
 The Phase 2 start artifact uses one-dimensional symbolic stripes rather than
 planar tiles:
@@ -592,17 +606,47 @@ Exit gate:
   invariant.
 - The Domino/SFT cliff remains a separate panel, not a smooth metric row.
 
+Exit gate MET 2026-06-27: window + boundary edges are interactive; periodic
+closes to a repeat cell while Fibonacci shows ancestry without a global period;
+the cliff is a separate panel. Next is Phase 3 (one real aperiodic substrate),
+which stays gated on clean public assets and cited substitution rules.
+
 ### Phase 3 - Aperiodic Reader
 
-- Add a reader mode for one real aperiodic substrate.
-- Prefer a substrate with clean public assets, known substitution rules, and an
-  explanation that can be cited.
-- Make the proof hierarchy visible as hierarchy, not as decoration.
+Status: started + built 2026-06-27; acceptance suite + browser QA passed.
+**Exit gate MET, pending owner sign-off to flip COMPLETE.**
+
+- Substrate: **rhombic Penrose (P3)**, generated from the published Robinson-
+  triangle deflation rule (no figure reuse). Owner-selected over Ammann-Beenker /
+  chair / Hat-Spectre.
+- Spec: [`ghost/PHASE3_APERIODIC_READER_SPEC.md`](ghost/PHASE3_APERIODIC_READER_SPEC.md).
+- Internal artifact: [`../ghost/aperiodic.html`](../ghost/aperiodic.html)
+  (`ghost/aperiodic-core.js` + `ghost/aperiodic-ui.js`), served at
+  `/ghost/aperiodic.html` via `npm run ghost:serve`.
+- Acceptance test: `npm run ghost:aperiodic:test` (`pass=13 fail=0`).
+
+What it does:
+
+- Adds a reader mode for one real aperiodic substrate (Penrose).
+- Substrate has clean public substitution rules and a citable explanation; the
+  geometry is self-generated, so no asset/licensing reuse (Penrose name caveat
+  for any future public page recorded in the spec, section 9).
+- Makes the inflation hierarchy visible as hierarchy: raising the ancestry level
+  merges tiles into larger supertiles; a circular window shows supertiles that
+  are contained (ancestry recoverable, ghost collapsed) vs crossing (ghost at
+  the boundary). Growing the window collapses more ghost; raising the level
+  recedes it upward - the recognizability-radius idea (Q2) made visual.
 
 Exit gate:
 
 - A specialist would not object to the phrasing "this visualizes one aspect of
   the known proof structure."
+
+Exit gate MET 2026-06-27: combinatorics verified against the substitution rule
+(phi^2 count growth, thick:thin -> phi); hierarchy is interactive; window shows
+bounded recoverable ancestry vs boundary ghost; cliff stays a separate regime.
+Verified via acceptance suite + accessibility snapshot + computed styles + DOM
+reads on desktop and mobile (environment screenshot pipeline unavailable).
 
 ### Phase 4 - Optional Metric Probe
 

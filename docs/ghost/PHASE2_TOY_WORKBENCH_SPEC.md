@@ -2,7 +2,9 @@
 
 - Artifact id: `GHOST-PHASE2-TOY-CLOSURE-WORKBENCH-SPEC`
 - Date: 2026-06-22
-- Status: Phase 2 start. Internal-only implementation target.
+- Status: **Phase 2 COMPLETE (2026-06-27).** Acceptance suite passes
+  (`pass=13 fail=0`) and browser QA confirmed render on desktop + mobile.
+  Internal-only artifact; no public route.
 - Ledger: [`../SUNDOG_V_GHOST.md`](../SUNDOG_V_GHOST.md)
 - Lit-pass: [`../GHOST_LITPASS_MEMO.md`](../GHOST_LITPASS_MEMO.md)
 
@@ -156,10 +158,20 @@ The pure core must pass:
 8. exported analysis contains no theorem/proof/verdict field that claims a new
    invariant.
 
+These 8 criteria are implemented as 13 granular checks (T1-T13) in
+`scripts/ghost-workbench-tests.mjs`; the suite reports `pass=13 fail=0` as of
+2026-06-27.
+
 Run:
 
 ```text
 npm run ghost:test
+```
+
+Serve the workbench for browser QA (no Vite needed):
+
+```text
+npm run ghost:serve   # http://127.0.0.1:5188/ghost/workbench.html
 ```
 
 ## 7. Exit Gate
@@ -176,3 +188,12 @@ Phase 2 is started when:
 Phase 2 is complete later only if browser QA confirms the selected window,
 boundary edges, periodic closure state, substitution ancestry state, and cliff
 note all render clearly on desktop and mobile.
+
+**Confirmed complete 2026-06-27.** Browser QA via `npm run ghost:serve` verified:
+window + L/R boundary edges render; periodic system reports "repeat cell
+captured" (closed/green); Fibonacci system reports "bounded substitution
+recognition" with level-N ancestry blocks/boundaries and no global period
+(open/blue); cliff note renders as a separate regime; controls and dashboard
+collapse to a single column at 375px with the stripe scrolling horizontally; no
+console errors. Verified via accessibility snapshot + computed styles + DOM
+reads (the environment's screenshot pipeline was unavailable).
