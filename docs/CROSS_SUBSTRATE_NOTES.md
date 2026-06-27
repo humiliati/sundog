@@ -240,9 +240,10 @@ theme-matching.
   (ε = 0) tropical→ReLU compilation `compile_eval` + linear-depth bound + min-plus /
   Bellman–Ford gates (the APSP/Cor 5.1 building blocks) proved exact, full `lake build`
   green and in the AxiomAudit gate; o-minimality does zero work, the analytic gates +
-  trainability remain imported, and the first DAG/sharing receipt (`appendMax_eval`,
-  four-gate max gadget with wire reuse) is now audited while the full source-DAG compiler
-  remains the gate-count wall; and **H-A3, a deductive
+  trainability remain imported, and the first DAG/sharing receipt
+  (`appendMax_gate_count` = exactly four gates, `appendMax_eval` = correctness with wire
+  reuse) is now landed (the latter audited) while the full recursive compiler remains the
+  gate-count wall; and **H-A3, a deductive
   competence-dominance re-read → `SUPPORT_NO_SIZE_SEPARATION`** — the paper's universality
   (Thm 3.1) + compilation (Thm 3.2) re-derive the Competence-Dominance Lemma in
   circuit-complexity vocabulary and add no return-axis size gap a plural topology could

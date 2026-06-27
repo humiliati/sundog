@@ -163,9 +163,10 @@ Each hook is stated so it can come back **NULL**. None is promoted.
   *approximable* (ε > 0), which is where o-minimality/Newton error analysis lives —
   outside this exact core; (ii) **linear gate-COUNT needs a DAG** — the `max` identity
   shares an operand, so a *tree* blows up under nested min/max; only wire fan-out keeps it
-  linear. First increment now landed: `appendMax_eval` proves the local typed-DAG max
-  gadget appends exactly four ReLU gates and reuses `q` by index. The remaining wall is
-  the full recursive source-DAG → target-DAG compiler; (iii) **trainability** (SGD finds
+  linear. First increment now landed: the local typed-DAG max gadget appends exactly
+  four ReLU gates (`appendMax_gate_count`) and computes `max p q` reusing `q` by index
+  (`appendMax_eval`). The remaining wall is the full recursive compiler that folds this
+  gadget over a source circuit; (iii) **trainability** (SGD finds
   the weights) is imported, as everywhere in this development.
 
   *Registration:* wired into `Sundogcert.lean` root + `AxiomAudit.lean`; README file-map
