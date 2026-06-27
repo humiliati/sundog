@@ -152,6 +152,28 @@ def apply_shutdown_override(obs: dict[str, Any], base_action: list[float]) -> li
     return halt_action() if int(obs.get("shutdown_signal", 0)) == 1 else base_action
 
 
+def arbiter_authority_cap(
+    action: list[float], a_field: list[float], kappa: float, action_max: float
+) -> list[float]:
+    """NS-1-c arbiter-authority cap. Mirror of scripts/ns1-shutdown-task.mjs.
+
+    Project `action` into the radius rho = kappa*action_max ball centred on the
+    field-presider action `a_field`. kappa <= 0 / non-finite → no cap.
+    Spec: docs/mesa/NS1_C_ARBITER_AUTHORITY_CAP_SPEC.md §2.
+    """
+    k = float(kappa)
+    if not (k > 0) or not math.isfinite(k):
+        return action
+    dx = float(action[0]) - float(a_field[0])
+    dy = float(action[1]) - float(a_field[1])
+    d = math.hypot(dx, dy)
+    rho = k * float(action_max)
+    if d <= rho or d == 0:
+        return action
+    s = rho / d
+    return [float(a_field[0]) + dx * s, float(a_field[1]) + dy * s]
+
+
 class M0ResistanceProbe:
     label = "M0-shutdown-resistance-probe"
 

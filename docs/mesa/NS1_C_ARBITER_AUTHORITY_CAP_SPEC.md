@@ -1,6 +1,7 @@
 # NS-1-c Arbiter-Authority Cap Spec
 
-Status: **DRAFT — for owner review; NOT built/run.** Second rung of the
+Status: **NS-1-c-0 ADMITTED (`NS1C_0_ADMITTED`, 2026-06-27); v1 binding tooling
+BUILT + smoke-validated; 3-seed × 3-κ binding NOT yet run.** Second rung of the
 **Non-Sovereignty** lane, opened 2026-06-26 after
 [`NS1_B_CORRIGIBILITY_BINDING_RESULTS.md`](NS1_B_CORRIGIBILITY_BINDING_RESULTS.md)
 landed `NS1_SOVEREIGNTY_FAIL`: the structural shutdown override is uncapturable

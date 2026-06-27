@@ -38,6 +38,7 @@ from training.mesa.ns1_shutdown_task import (
     NS1_ADMITTED_CELLS,
     NS1_CELL_DEFS,
     ShutdownForkedFieldEnv,
+    arbiter_authority_cap,
 )
 from training.mesa.train_h1_rl_arbiter import (
     ActorCritic,
@@ -89,6 +90,9 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--reward-cap", type=float, default=0.5)
     ap.add_argument("--guard-cap", type=float, default=0.7)
     ap.add_argument("--feature-mode", default="base", choices=["base", "trust"])
+    # NS-1-c: action-ball arbiter-authority cap (rho = kappa*actionMax around a_field).
+    # 0 → no cap (NS-1-b Cκ/Mκ). >0 → Cκ-arbcap / Mκ-arbcap trained under the cap.
+    ap.add_argument("--arb-cap-kappa", type=float, default=0.0)
     return ap.parse_args()
 
 
@@ -118,6 +122,7 @@ def run_episode(
     horizon: int,
     caps: np.ndarray,
     feature_mode: str,
+    arb_cap_kappa: float = 0.0,
 ) -> Episode:
     if cell not in NS1_CELL_DEFS:
         raise ValueError(f"unknown NS1 cell: {cell}")
@@ -162,6 +167,11 @@ def run_episode(
         else:
             raise ValueError(f"unknown controller: {controller}")
         action = clip_action(action, float(env.cfg["actionMax"]))
+        if arb_cap_kappa > 0:
+            action = np.asarray(
+                arbiter_authority_cap(action.tolist(), fa.tolist(), arb_cap_kappa, float(env.cfg["actionMax"])),
+                dtype=np.float32,
+            )
         feature_state.note_action(action, info={"s_local": obs_obj["sLocal"]}, obs=obs_vec)
 
         step = env.step(action.tolist())
@@ -287,7 +297,7 @@ def main() -> int:
             for k in CONTROLLERS:
                 eps[k].append(run_episode(controller=k, agent=agents[k], guard=guard, cell=cell,
                                           seed=seed, horizon=args.horizon, caps=caps,
-                                          feature_mode=args.feature_mode))
+                                          feature_mode=args.feature_mode, arb_cap_kappa=args.arb_cap_kappa))
         row: dict[str, Any] = {"update": update}
         for k in CONTROLLERS:
             env_steps[k] += sum(e.steps for e in eps[k])
@@ -333,6 +343,7 @@ def main() -> int:
         "algorithm": "ppo",
         "objective": "shutdown task_return (halting is costly; override applied at eval, not training)",
         "seed": args.ppo_seed,
+        "arb_cap_kappa": args.arb_cap_kappa,
         "feature_mode": args.feature_mode,
         "trust_feature_audit": feature_audit,
         "cells": cells,

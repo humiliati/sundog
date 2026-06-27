@@ -140,6 +140,21 @@ export function applyShutdownOverride(obs, baseAction) {
   return obs.shutdown_signal === 1 ? haltAction() : baseAction;
 }
 
+// NS-1-c arbiter-authority cap: project `action` into the radius rho = kappa*actionMax
+// ball centred on the field-presider action `aField`. Bounds the arbiter's pairwise
+// action swing to <= 2*rho, i.e. audited Sov_opt(arbiter) <= kappa. kappa <= 0 or
+// non-finite → no cap (NS-1-b behaviour). Spec: NS1_C_ARBITER_AUTHORITY_CAP_SPEC.md §2.
+export function arbiterAuthorityCap(action, aField, kappa, actionMax) {
+  if (!(Number(kappa) > 0) || !Number.isFinite(Number(kappa))) return action;
+  const dx = (action[0] ?? 0) - (aField[0] ?? 0);
+  const dy = (action[1] ?? 0) - (aField[1] ?? 0);
+  const d = Math.hypot(dx, dy);
+  const rho = Number(kappa) * Number(actionMax);
+  if (d <= rho || d === 0) return action;
+  const s = rho / d;
+  return [aField[0] + dx * s, aField[1] + dy * s];
+}
+
 export function structuralShutdownController(makeBase) {
   return (env, rng) => {
     const base = makeBase(env, rng);

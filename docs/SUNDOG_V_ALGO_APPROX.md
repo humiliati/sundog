@@ -161,13 +161,15 @@ Each hook is stated so it can come back **NULL**. None is promoted.
   not a wrapper around the definability import. **Named wall (honest boundary):** (i) the
   *analytic* gates (real ×, reciprocal, radical) are not piecewise-linear → only
   *approximable* (ε > 0), which is where o-minimality/Newton error analysis lives —
-  outside this exact core; (ii) **linear gate-COUNT needs a DAG** — the `max` identity
-  shares an operand, so a *tree* blows up under nested min/max; only wire fan-out keeps it
-  linear. First increment now landed: the local typed-DAG max gadget appends exactly
-  four ReLU gates (`appendMax_gate_count`) and computes `max p q` reusing `q` by index
-  (`appendMax_eval`). The remaining wall is the full recursive compiler that folds this
-  gadget over a source circuit; (iii) **trainability** (SGD finds
-  the weights) is imported, as everywhere in this development.
+  outside this exact core; (ii) **linear gate-COUNT needed a DAG — now CLOSED
+  (2026-06-27).** The `max` identity shares an operand, so a *tree* blows up under nested
+  min/max; only wire fan-out keeps it linear. A typed sharing-aware ReLU DAG (`RProg`,
+  wires reused by index) plus a recursive compiler `compileToDag : Trop n → RProg n _`
+  fold the four-gate max gadget (`appendMax_gate_count`/`appendMax_eval`) over a tropical
+  tree, proving an `N`-node tree compiles to a `≤ 4N`-gate DAG (`compileToDag_gate_count`)
+  that computes it **exactly** (`compileToDag_eval`) — both axiom-clean and in the
+  AxiomAudit gate. The only wall left here is the *analytic* gates of (i); (iii)
+  **trainability** (SGD finds the weights) is imported, as everywhere in this development.
 
   *Registration:* wired into `Sundogcert.lean` root + `AxiomAudit.lean`; README file-map
   row added; public-safety grep clean (no frozen-lane terms). The sundog-site
@@ -346,13 +348,14 @@ H-A0 (PDF verify), **H-A1** (cost-certificate isomorphism → `UNIFIES_ON_EXACT_
 **H-A2** (the Lean `CircuitNet` core, `CORE_EARNED`), **H-A3** (competence-dominance
 reread → `SUPPORT_NO_SIZE_SEPARATION`), **H-A4** (Atlas short-program →
 `ATLAS_IS_A_SHORT_PROGRAM`), and **H-A5** (shadow-tower floor check →
-`ORTHOGONAL_FLOORS` / `NO_SHARED_SEPARATOR`) are closed. Owner-gated follow-ups
-now owed off H-A1 + H-A2: (a) the sundog-site `SUNDOG_V_CERTIFICATE_LEAN` "Nth pillar"
-bump + deploy; (b) the **full DAG/sharing compiler** upgrading linear-*depth* to
-linear-*gate-count* (the local `appendMax_eval` max-gadget receipt has landed; recursive
-source-DAG → target-DAG compilation remains); (c) the generic `StraightLineProgram.cost` of which both
+`ORTHOGONAL_FLOORS` / `NO_SHARED_SEPARATOR`) are closed. **The DAG/sharing gate-count
+extension is now DONE (2026-06-27):** `compileToDag` + `compileToDag_gate_count`
+(`≤ m + 4·nodeCount`) + `compileToDag_eval` (output wire computes the tree exactly), all
+axiom-clean and audited — linear *gate-count*, not just linear depth. Remaining
+owner-gated follow-ups: (a) the sundog-site `SUNDOG_V_CERTIFICATE_LEAN` "Nth pillar"
+bump + deploy; (b) the generic `StraightLineProgram.cost` of which both
 `CircuitNet` circuit size and `CheckCost.verifyCost` are instances (the H-A1 unification,
-formalized — gated by (b)). No hook is scheduled; this file is the registration, not a
+formalized — now unblocked, since the DAG gate-count exists). No hook is scheduled; this file is the registration, not a
 commitment.
 
 > Cross-links: [`SUNDOG_V_P_V_NP.md`](SUNDOG_V_P_V_NP.md) ·
