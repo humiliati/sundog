@@ -121,25 +121,28 @@ witness-verifier as a tropical `RProg` and bound its `costOf`.
 ## Theme C — The find/check ledger → certificates & fine-grained complexity
 
 **C-C1 — Shortest-path tree as a cheap verification certificate (a tropical sibling of
-the syndrome cert). [FORMALIZABLE] — PHASE 1 LANDED 2026-06-27 (axiom-clean, audited).**
+the syndrome cert). [FORMALIZABLE] — CLOSED 2026-06-27, exact optimality certificate
+(both phases axiom-clean, audited).**
 *Claim.* A shortest-path feasible potential is a cheap-to-verify witness:
-`costOf(verifier) = O(edges)` (check source distance, all-edge relaxation *inequalities*,
+`costOf(verifier) = O(E + V)` (check source distance, all-edge relaxation *inequalities*,
 and tightness on *tree* edges only), while *finding* it is the full APSP construction.
-*Phase 1 (DONE) — `Sundogcert/ShortestPathCert.lean`:* the `Reaches` walk relation, a
-`Feasible` potential, and **`feasible_le_walk`** — a feasible potential **lower-bounds the
-weight of every walk** (the LP-dual "nothing is shorter" half, the non-trivial direction),
-proved by telescoping induction over the walk; `verifyCost = 2·|E|+1` with a
-`HasStraightLineCost (SPInstance n)` instance, so this is the **second concrete instance of
-the `StraightLineCost` find/check ledger** (after the syndrome verifier), alongside the
-ReLU-DAG gate count. Axiom-clean, wired into root + `AxiomAudit`, full `lake build` green.
-*Phase 2 (next):* the tree *achieves* `dist v` by a real walk (parent/tightness/rootedness)
-→ `dist v = ` the true shortest distance (the matching upper bound), upgrading the lower
-bound to an exact optimality certificate.
-*Classical hook.* Certifying algorithms; the NP-style "verification is easy" half, made
-concrete and machine-checked on an optimization problem; LP duality for shortest paths.
+*Phase 1 — `Sundogcert/ShortestPathCert.lean`:* the `Reaches` walk relation, a `Feasible`
+potential, and **`feasible_le_walk`** — a feasible potential **lower-bounds the weight of
+every walk** (the LP-dual "nothing is shorter" half), by telescoping induction;
+`verifyCost = 2·|E|+1` with a `HasStraightLineCost (SPInstance n)` instance — the **second
+concrete instance of the `StraightLineCost` find/check ledger** (after the syndrome
+verifier), alongside the ReLU-DAG gate count.
+*Phase 2 — the exact certificate:* `TightTree` (each non-source vertex tight on an incoming
+edge, with a `rank` decreasing to the source) + **`tree_achieves`** (the source reaches `v`
+by a walk of weight exactly `dist v`, by induction on the rank bound) ⟹ **`cert_isLeast`**:
+`dist v` is the `IsLeast` element of the walk-weight set — i.e. `dist` *is* the true
+shortest-path distance, **exactly**, not merely a lower bound. The cheap `O(E + V)` check
+certifies global optimality.
+*Classical hook.* Certifying algorithms; the NP-style "verification is easy" half, machine-
+checked on an optimization problem; LP duality / Bellman–Ford optimality for shortest paths.
 *Falsifier* (`VERIFY_NOT_CHEAPER`): the soundest verifier is not asymptotically below the
-constructor → no certificate-grade gap. (Phase-1 result holds: `O(E)` check is strictly
-below any search.) It also gives C-B2 its verifier side.
+constructor → no certificate-grade gap. (Held: `O(E+V)` check ≪ any search.) Also gives
+C-B2 its verifier side.
 
 **C-C2 — Fine-grained cornerstones as one cost-ledger family. [DAYDREAM→IMPORT]**
 *Claim.* APSP, edit distance, orthogonal-vectors and other SETH/fine-grained anchors
@@ -225,14 +228,15 @@ pruning experiment against the proved band.
 
 ## Recommended first attacks (ranked)
 
-1. **C-C1 — `ShortestPathCert` Lean module. ✅ PHASE 1 LANDED 2026-06-27** (axiom-clean,
-   audited): `feasible_le_walk` (the dual-certificate lower bound) + the `O(E)` cost ledger
-   instance. Next: Phase 2 (tree achieves `dist` → exact distance). It already adds the
-   *second* find/check instance to the cost ledger and supplies C-B2's verifier side.
-2. **C-B1 — characterize the cancellation-free ReLU fragment.** The deepest entry; it
+0. **C-C1 — `ShortestPathCert`. ✅ CLOSED 2026-06-27** (both phases axiom-clean, audited):
+   `feasible_le_walk` (dual-certificate lower bound) + `cert_isLeast` (the exact optimality
+   certificate via `tree_achieves`) + the `O(E+V)` cost-ledger instance. The find/check
+   ledger now has three instances (construct / check-syndrome / check-shortest-path); it
+   also supplies C-B2's verifier side.
+1. **C-B1 — characterize the cancellation-free ReLU fragment.** The deepest entry; it
    precisely locates the monotone-vs-general wall against a machine-checked compiler. Even
    a clean *definition* + the reverse-compilation lemma is a real contribution.
-3. **C-D2 — the grokking-threshold experiment.** Runnable frontier-ML with a sharp,
+2. **C-D2 — the grokking-threshold experiment.** Runnable frontier-ML with a sharp,
    falsifiable numeric target (the compiled-size band first; a true floor only after a
    lower bound); fast feedback, high signal.
 

@@ -613,8 +613,8 @@ which stays gated on clean public assets and cited substitution rules.
 
 ### Phase 3 - Aperiodic Reader
 
-Status: started + built 2026-06-27; acceptance suite + browser QA passed.
-**Exit gate MET, pending owner sign-off to flip COMPLETE.**
+Status: **COMPLETE 2026-06-27** (acceptance suite + browser QA passed; exit gate
+met; owner sign-off).
 
 - Substrate: **rhombic Penrose (P3)**, generated from the published Robinson-
   triangle deflation rule (no figure reuse). Owner-selected over Ammann-Beenker /

@@ -2,9 +2,9 @@
 
 - Artifact id: `GHOST-PHASE3-APERIODIC-READER-SPEC`
 - Date: 2026-06-27
-- Status: **Built + QA passed 2026-06-27** (acceptance `pass=13 fail=0`; browser
-  QA desktop + mobile). Exit gate met, pending owner sign-off to flip COMPLETE.
-  Internal-only artifact; no public route.
+- Status: **Phase 3 COMPLETE (2026-06-27).** Acceptance `pass=13 fail=0`; browser
+  QA passed desktop + mobile; exit gate met (owner sign-off). Internal-only
+  artifact; no public route.
 - Ledger: [`../SUNDOG_V_GHOST.md`](../SUNDOG_V_GHOST.md)
 - Lit-pass: [`../GHOST_LITPASS_MEMO.md`](../GHOST_LITPASS_MEMO.md)
 - Phase 2: [`PHASE2_TOY_WORKBENCH_SPEC.md`](PHASE2_TOY_WORKBENCH_SPEC.md)

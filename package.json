@@ -230,6 +230,7 @@
     "ghost:test": "node scripts/ghost-workbench-tests.mjs",
     "ghost:serve": "node scripts/ghost-serve.mjs",
     "ghost:aperiodic:test": "node scripts/ghost-aperiodic-tests.mjs",
+    "ghost:metric:test": "node scripts/ghost-metric-tests.mjs",
     "arc:phase0:inventory": "node scripts/arc-phase0-inventory.mjs",
     "arc:phase0:draft-register": "node scripts/arc-phase0-draft-register.mjs",
     "arc:phase0:baselines": "node scripts/arc-phase0-baselines.mjs",
