@@ -120,19 +120,22 @@ the transfer covers the compile-image fragment but not all monotone-computing ne
 monotone-vs-general / natural-proofs gap, sandwiched precisely between the two provable
 halves, imported not crossed. The Jerrum–Snir bound itself stays the named import.
 
-**C-B2 — A provable find-vs-check gap inside the tropical/monotone model. [FORMALIZABLE]**
-*Claim.* Exhibit an explicit family `f_n` where, in the `costOf` ledger,
-`costOf(any tropically-monotone net computing f_n)` is superpolynomially larger than
-`costOf(a verifier checking a supplied witness for f_n)` — a **provable, unconditional**
-find ≫ check separation **in the named restricted model**, sidestepping P≠NP exactly as
-the P-vs-NP lane's bounded version does, but now with both sides as `StraightLineCost`
-instances.
+**C-B2 — A provable find-vs-check gap inside the tropical/monotone model. [FORMALIZABLE] —
+RAN 2026-06-27, verdict BOUNDED: `CHEAP_MONOTONE_CONSTRUCTOR` *fires* for the shortest-path
+instance. Analytical close. See [`ALGO_APPROX_CB2_FINDCHECK.md`](ALGO_APPROX_CB2_FINDCHECK.md).**
+*Claim tested.* Exhibit a family where the monotone *constructor* cost is superpolynomially
+above the *verifier* cost, both as `StraightLineCost` instances, unconditional in-model.
+*Result.* With **`ShortestPathCert` as the verifier** (cheap side fully PROVED, `O(E)`), the
+instance is shortest paths — which is in **P**, so it has a *polynomial* constructor
+(Bellman–Ford `O(VE)`). The gap is therefore polynomial, an *exhibit* not a lower-bound
+separation, and `CHEAP_MONOTONE_CONSTRUCTOR` fires. A **superpolynomial** in-model gap
+requires a **monotone-hard** `f` (Jerrum–Snir) with a cheap verifier — i.e. exactly C-B1's
+`monotone_transfer` with the bound **imported**; an *unconditional* superpolynomial
+separation is not Lean-reachable (a complexity breakthrough). Net: the cost ledger proves
+the **CHECK is cheap** (3 instances) and the **FIND-hardness is the imported wall**
+everywhere — the same decomposition the P-vs-NP sibling lane rests on.
 *Classical hook.* P vs NP, restricted to a model where one side is provable; the lane's
 "safe to verify, hard to find" thesis.
-*Falsifier* (`CHEAP_MONOTONE_CONSTRUCTOR`): every candidate `f_n` also has a small
-monotone constructor → no gap in-model.
-*First move.* Reuse a Jerrum–Snir hard function as the constructor side; build its
-witness-verifier as a tropical `RProg` and bound its `costOf`.
 
 ---
 
@@ -286,11 +289,13 @@ pruning experiment against the proved band.
    all in the `CircuitNet` fragment, gate counts = DP sizes, reductions cost-preserving; 3SUM
    + `n^ω` algebraic route named out-of-fragment; hardness conjectures imported.
 
-**Status:** four hooks run + landed (C-C1 ✅, C-B1 ✅, C-D1 ✅ Lean; C-C2 ✅ analytical) plus
-C-D2 ▢ inconclusive — **four Lean closures + one analytical close + one documented empirical
-negative off this slate.** Remaining open, by tractability: **C-B2** (an in-model
-find-vs-check gap, reuses the `ShortestPathCert` verifier side), then the Theme-A region-count
-formalizables (**C-A1/C-A2**) and the remaining empirical D-hooks (**C-D3/C-D4**).
+**Status:** six hooks resolved — **four Lean closures** (C-C1 ✅, C-B1 ✅, C-D1 ✅, + the
+foundational compiler), **two analytical closes** (C-C2 ✅ fine-grained family; C-B2 ◐ bounded
+— find/check is cheap-check-proved + find-imported, no unconditional superpoly), and **one
+documented empirical negative** (C-D2 ▢). A recurring spine: every result proves a cheap
+CHECK / construction *upper* bound and names the *lower* bound (decoding / monotone /
+fine-grained / depth-vs-width) as the imported wall. Remaining open: the Theme-A region-count
+Lean targets (**C-A1/C-A2**) and the empirical D-hooks (**C-D3/C-D4**).
 
 > Cross-links: [`SUNDOG_V_ALGO_APPROX.md`](SUNDOG_V_ALGO_APPROX.md) (parent lane) ·
 > [`SUNDOG_V_P_V_NP.md`](SUNDOG_V_P_V_NP.md) (the find/check sibling) ·
