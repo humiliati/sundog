@@ -115,6 +115,7 @@
     "mesa:ns1c:aggregate": "node scripts/mesa-ns1c-aggregate.mjs",
     "mesa:ns2:eval": "node scripts/mesa-ns2-binding-eval.mjs",
     "mesa:ns2:admission": "node scripts/mesa-ns2-admission.mjs",
+    "mesa:ns2:aggregate": "node scripts/mesa-ns2-aggregate.mjs",
     "threebody:phase4:iad:shard": "node scripts/threebody-phase4-iad-shard.mjs",
     "threebody:phase4:iad:concurrent": "node scripts/threebody-phase4-iad-concurrent.mjs",
     "threebody:phase4:iad:merge": "node scripts/threebody-phase4-iad-merge.mjs",

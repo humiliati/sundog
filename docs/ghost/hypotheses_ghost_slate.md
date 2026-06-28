@@ -121,16 +121,54 @@ machine-checkable (radii from the Phase 4 suite; Thue-Morse singular-continuous
 per Baake-Gahler, "The singular continuous diffraction measure of the Thue-Morse
 chain"; Fibonacci / period-doubling pure-point per Baake-Grimm).
 
-**Named frontier (the one genuinely open hook).** Shadow-Invertibility also banked
-"a trained nonlinear encoder DEFEATS continuous-resist." Tiling analog: can a
-**non-local** reader recover structure the diffraction (charFun) declares absent
-(singular-continuous / Bragg-poor)? Baake-Lenz fixes the linear/spectral picture;
-the open question is whether a nonlinear / non-local map sees more - the tiling
-counterpart of the trained-encoder result. That is the next probe if H1a is
-pushed further.
+### H1a frontier RESOLVED 2026-06-28 - confirmed (refined), lands on known theory
 
-Status: **H1a SURVIVES** (recorded, cited); **H1b KILLED** (receipt); frontier
-OPEN (non-local / trained-encoder analog).
+The open hook (tiling analog of Shadow-Invertibility's "trained nonlinear encoder
+DEFEATS continuous-resist"): can a **non-local** reader recover structure the
+diffraction declares absent? Pre-registered probe `scripts/ghost-nonlocal-probe.mjs`
+on a common length N=987. Receipt:
+
+| substrate | Bragg B = max (1/N^2)\|sum w e^{-2pi i f n}\|^2 | non-local desub-validity (best phase) |
+| --- | --- | --- |
+| periodic `abab` | 1.000 (detector validated) | - |
+| Fibonacci | 0.352 (pure-point) | recognizable, L=1 |
+| period-doubling | 0.446 (pure-point) | 1.000 |
+| **Thue-Morse** | **0.058** (no Bragg; singular continuous) | **1.000** |
+| random | 0.009 (absolutely continuous) | 0.489 |
+
+**Load-bearing result (CONFIRMED):** the non-local deterministic reader recovers
+Thue-Morse perfectly (desub 1.000) and rejects randomness (0.489), while TM carries
+**no Bragg component** (B=0.058 sits in the singular-continuous tier, an order of
+magnitude below the pure-point tier 0.35-1.0). So a non-local reader recovers
+deterministic order that the **pure-point / Bragg channel of diffraction declares
+absent**. That is the frontier claim, with a receipt.
+
+**Honest refinement (two pre-registered Bragg thresholds FAILED, informatively):**
+the probe's other two checks assumed singular-continuous TM would read like random.
+It does not - TM (0.058) is ~7x random (0.009). **Diffraction is lossy, not
+blind:** it relegates TM's order to a faint *continuous* smear rather than erasing
+it. The thresholds were left as they fired (not re-tuned to force a pass); the
+mechanism is corrected here.
+
+**The clean van Enter-Miekisz instance the probe surfaced:** period-doubling is a
+*factor* of Thue-Morse and is pure-point (B=0.446, strong Bragg), yet TM's own
+diffraction is a faint SC smear (0.058) - even though both are equally
+deterministic and the non-local reader scores both 1.000. The order diffraction of
+TM under-reports is exactly the order visible in its factor / to the non-local
+reader. (Van Enter & Miekisz 1992: order at a "molecular" scale recovered by
+factor structures.)
+
+**Landing (the honest default holds).** This resolves into KNOWN theory, NOT a new
+invariant: diffraction = averaged **two-point** correlations and is homometry-
+limited; the **dynamical spectrum / higher-order correlations / factor structures**
+see more (Baake-Grimm, "Mathematical diffraction of aperiodic structures",
+arXiv:1205.3633; van Enter-Miekisz 1992). The Shadow-Invertibility "nonlinear
+encoder defeats continuous-resist" is the same phenomenon: a nonlinear / non-local
+statistic beats the linear power spectrum.
+
+Status: **H1a SURVIVES** (cited); **H1b KILLED** (receipt); **H1a frontier
+RESOLVED** - confirmed against the pure-point channel, refined for full diffraction
+(lossy not blind), lands on homometry / dynamical-spectrum theory.
 
 ## H2 - Recognizability is legibility (Ghost -> Least Reader-Action)
 
