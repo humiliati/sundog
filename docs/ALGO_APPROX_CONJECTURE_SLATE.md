@@ -189,23 +189,22 @@ explanation.
 `compile_depth_le`.
 
 **C-D2 — Grokking = SGD discovering `compileToDag`; the compiled-size threshold is the
-first test. [EMPIRICAL]**
-*Claim.* On algorithmic tasks with exact tropical targets (sorting, min/max-plus matrix
-product, single-source shortest path), delayed generalization ("grokking") is SGD
-converging to a symmetry-class of the exact compiled DAG. The `≤ 4N` gate count is a
-certified exact **upper** bound and the first numeric threshold to test; it becomes a
-floor only for tasks where an independent lower bound is proved. Prediction: generalization
-onset should cluster near the minimal exact-circuit size, with `compileToDag` as the
-initial upper-bound target.
-*Classical/frontier hook.* Grokking, algorithmic generalization, phase transitions in
-training.
-*Falsifier* (`GROKS_FAR_BELOW_COMPILED_SIZE`): clean generalization occurs far below the
-compiled exact DAG size, without a smaller exact circuit being identified → the compiled
-size is not the threshold driver.
-*First move.* Train a small MLP on min-plus 4×4 matrix product; sweep width across the
-compiled-size band; check generalization onset and whether learned weights match
-`compileToDag` up to permutation. Separately, prove or enumerate minimal exact size for
-the tiny task before calling any threshold a floor.
+first test. [EMPIRICAL] — RAN 2026-06-27, verdict INCONCLUSIVE (naive prediction NOT
+supported; `GROKS_FAR_BELOW_COMPILED_SIZE` fires but confounded). See
+[`ALGO_APPROX_CD2_GROKKING_RESULT.md`](ALGO_APPROX_CD2_GROKKING_RESULT.md).**
+*Claim tested.* The trained ReLU MLP's generalization-width threshold grows `~ k-1` in the
+tropical piece-count `k` (`compileToDag` size as the upper-bound target).
+*Result.* threshold(k) for k=[2,3,4,6,8]: smooth `[3,3,5,4,4]`, essential `[3,3,3,4,5]`,
+jagged (non-convex) `[3,3,10,3,5]` — none track `k`; far below `k` and/or erratic. No
+delayed generalization (no "grokking") on PL regression. **Two confounds, themselves the
+finding:** (i) **exact size ≠ ε-complexity** — convex/smooth targets are ε-approximable far
+below `k` (the lane's exact-vs-ε seam); (ii) **existence ≠ trainability** — for jagged
+targets SGD *fails to find* the representable solution at the capacity threshold (k=4 stuck
+at rel≈0.68 until w=10), the lane's standing imported wall, hit empirically. So the exact
+compiled size is an upper bound that does **not** predict the trained-generalization
+threshold; the operative quantities are ε-approximation complexity and SGD trainability.
+*Honest next step (not run):* decouple the confounds — measure the *representational*
+threshold via a fitting oracle (exhaustive small-width fit), not SGD.
 
 **C-D3 — Mechanistic interpretability has a canonical form on tropical tasks. [EMPIRICAL]**
 *Claim.* A tropical task admits a canonical minimal ReLU circuit (`compileToDag` up to
@@ -257,9 +256,16 @@ pruning experiment against the proved band.
    (imported-bound framing) + `compileToDag_maxCount_ge` (Phase 2). The monotone-vs-general
    / natural-proofs wall is machine-located, sandwiched between the two provable halves;
    the Jerrum–Snir bound stays the named import.
-1. **C-D2 — the grokking-threshold experiment.** Runnable frontier-ML with a sharp,
-   falsifiable numeric target (the compiled-size band first; a true floor only after a
-   lower bound); fast feedback, high signal. **The top open first-strike.**
+0. **C-D2 — grokking-threshold experiment. ▢ RAN 2026-06-27, INCONCLUSIVE** (naive
+   prediction unsupported; `GROKS_FAR_BELOW_COMPILED_SIZE` fires but confounded by
+   exact-vs-ε and existence-vs-trainability). Documented negative —
+   [`ALGO_APPROX_CD2_GROKKING_RESULT.md`](ALGO_APPROX_CD2_GROKKING_RESULT.md).
+
+**All three first-strikes are now run** (C-C1 ✅ closed, C-B1 ✅ closed, C-D2 ▢ inconclusive).
+Remaining open slate items, by tractability: **C-C2** (fine-grained min-plus tabulation,
+analytical), **C-D1** (depth separations = tropical-depth, import-and-check), **C-B2** (an
+in-model find-vs-check gap, reuses the new `ShortestPathCert` verifier side), then the
+Theme-A region-count formalizables (**C-A1/C-A2**) and the remaining empirical D-hooks.
 
 > Cross-links: [`SUNDOG_V_ALGO_APPROX.md`](SUNDOG_V_ALGO_APPROX.md) (parent lane) ·
 > [`SUNDOG_V_P_V_NP.md`](SUNDOG_V_P_V_NP.md) (the find/check sibling) ·

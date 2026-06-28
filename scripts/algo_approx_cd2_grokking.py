@@ -187,7 +187,7 @@ def main():
     print("\n=== CONTRAST ===")
     print("  If 'smooth' generalizes far below k but 'essential' tracks k, the driver is the")
     print("  EFFECTIVE (approximation) complexity, not the exact tropical piece count —")
-    print("  exact compiled size is an upper bound; the threshold tracks the ε-essential pieces.")
+    print("  exact compiled size is an upper bound; the threshold tracks the eps-essential pieces.")
     grokking_dynamics()
 
 
