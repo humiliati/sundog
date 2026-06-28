@@ -1159,3 +1159,44 @@ sundog the program is named for. That last is flavor, not a claim.
   change any public Faraday copy. The Faraday lane's public claim remains the
   registered Branch A clean structural zero on the classical-vacuum,
   magnetically-clean, contractible domain.
+
+## 9. Agentic trace: the override is body-determined, shadow-resisted [EMPIRICAL, BOUNDED]
+
+The determine/resist split (§6.2) showed up, unforced, in a live LLM. In the
+sundogcert agentic-trace lane, the H-I falsifier proved (in Lean,
+`no_word_function_determines_decisive`) that **which source is *decisive* is not a
+function of the observable** — it must be externally bound. A 2026-06 empirical
+campaign on hosted and local models then asked whether a deployed model *behaves*
+that way (`Dev/sundogcert/AGENTIC_TRACE_H1_CLIFF_TRANSFER_RUN_NOTE.md`).
+
+The task: one authoritative source states a (made-up) fact; a fraction λ of plausible,
+**unflagged** field reports contradict it. As λ rises past the majority-crossover the
+model can abandon the decisive source for the volume — the live analog of the RS
+falsifier (the *decisive minority pruned by the majority*). It does: gpt-3.5-turbo and
+even Qwen-0.5B adopt the contradiction as volume grows (graded, not a sharp cliff —
+verdict K1).
+
+The determine/resist content is in **what carries the override signal**:
+
+- **The output-shadow RESISTS it.** First-token entropy and self-consistency — the
+  cheap *observables* — predict a trial's override at **AUC ≈ 0.50** (chance), on the
+  same model, same trials. The model overrides *confidently*; its output gives no tell.
+- **The body DETERMINES it.** A cross-validated linear probe on the *internal* state
+  (last-prompt-token hidden vector, Qwen-0.5B) predicts the same override at **AUC 0.99**
+  (deeper layers crisper, 0.74 → 0.99). No leakage: the probe reads the pre-generation
+  state; the override is the post-generation answer that state already fixes.
+
+So the agentic override is **body-determined, shadow-resisted** — the same shape as the
+Shadow-Invertibility tower (the lossy shadow *determines* some properties, *resists*
+others), now in a transformer residual stream. It is the exact **complement** of the
+Lean result: decisiveness is not in the observable (entropy ≈ chance ✓), but it is in
+the body (probe ≈ 1.0). The theorem bounds the *shadow*; the body is not the shadow, so
+the theorem does not bound it.
+
+**What this licenses.** A precise, falsifiable bound on monitor-side syndrome-gating:
+to gate the decisive-source override you must **reach inside (white-box probe) or be
+told (external `decisive_indices` binding)** — you cannot read it off the output. This
+does **not** claim a general interpretability result: it is a bounded probe (0.5B model,
+n = 12/λ; a higher-n and larger/Mamba confirmation is staged but unrun), and it does not
+touch the §6.5 compander citation gate. It is recorded here because it is the first
+*live-substrate* instance of the determine/resist machinery this section names.

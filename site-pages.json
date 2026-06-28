@@ -156,6 +156,11 @@
       "entry": "receipts.html",
       "kind": "evidence-page",
       "publicLaunchIntent": "VERIFICATION SURFACE (owner decision 2026-06-11), un-promoted. Receipt hub for four completed pre-registered studies of probe-access asymmetries and certified recoverability (probe-ceiling audits synthetic + real-model, adversarial concealment, stale-reporter projection) plus the corrected baseline and the public Lean backbone (sundogcert). Deployed unlinked at /receipts.html with a visible NOT PEER REVIEWED banner and noindex; no public inbound path from index/legend/nav; sitemap-excluded. Every claim is checkable: frozen pre-registrations and result receipts ship in dist (docs/atlas/*), scripts and result JSONs link to the public GitHub repo. Explicit claim-language discipline on-page: probe-access only — no consciousness/valence/introspection-as-mental-phenomena claims, no frontier-model transfer claims."
+    },
+    {
+      "entry": "ghost.html",
+      "kind": "workbench",
+      "publicLaunchIntent": "Public Ghost reader: an interactive rhombic Penrose tiling with a movable circle showing which supertiles are recoverable from inside it. Payload: ordered does not mean repeating, local does not mean closed. The on-page point is that the missing context is a FINITE recognizability radius (Mosse; Durand-Leroy arXiv:1610.05577), not an unbounded outside - the Phase 4 metric-probe result. Geometry is generated from the published Penrose substitution rule (no figure reuse); Penrose attribution (Penrose 1974 / Gardner 1977) is on-page per the asset gate. Claims NO new tiling theorem, NO new invariant, and makes NO Goedel/incompleteness claim; reader/exhibit only. Copy is exit-gate-clean (true with every heuristic sentence deleted). Indexable launch page leading with the exhibit. PRE-DEPLOY OWED: generate og/ghost.png via public/og pipeline, owner asset/license check, post-deploy validator pass. Not yet deployed. Ledger docs/SUNDOG_V_GHOST.md (Phase 5); reader core ghost/aperiodic-core.js via js/ghost.mjs."
     }
   ]
 }

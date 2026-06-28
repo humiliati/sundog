@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Ghost: an interactive Penrose-tiling reader. Ordered does not mean repeating; local does not mean closed. A finite patch is lawful, yet its place in the larger pattern lives in a hierarchy you can recover from a bounded distance.">
+    <meta name="theme-color" content="#1A3A52">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://sundog.cc/ghost">
+    <title>Ghost - Ordered Without Repeating | Sundog</title>
+    <!-- OG-BLOCK-START (managed by public/og/_patch_meta.py; og/ghost.png pending generation before deploy) -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Sundog">
+    <meta property="og:title" content="Ghost - Ordered Without Repeating">
+    <meta property="og:description" content="An interactive Penrose reader. Ordered does not mean repeating; local does not mean closed. The missing context is a finite recognizability radius, not an unbounded outside.">
+    <meta property="og:image" content="https://sundog.cc/og/ghost.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="A Penrose rhombus tiling with a circle drawn on it; the caption reads 'Ordered does not mean repeating. Local does not mean closed.'">
+    <meta property="og:url" content="https://sundog.cc/ghost">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Ghost - Ordered Without Repeating">
+    <meta name="twitter:description" content="An interactive Penrose reader. Ordered does not mean repeating; local does not mean closed. The missing context is a finite recognizability radius.">
+    <meta name="twitter:image" content="https://sundog.cc/og/ghost.png">
+    <meta name="twitter:image:alt" content="A Penrose rhombus tiling with a circle drawn on it and the payload caption.">
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "headline": "Ghost - Ordered Without Repeating",
+  "description": "An interactive Penrose-tiling reader. Ordered does not mean repeating; local does not mean closed. A finite patch's place in the larger pattern is recoverable from a bounded distance (recognizability).",
+  "url": "https://sundog.cc/ghost",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Stellar Aqua LLC",
+    "url": "https://stellaraqua.com"
+  },
+  "inLanguage": "en",
+  "isAccessibleForFree": true,
+  "about": [
+    { "@type": "Thing", "name": "Penrose tiling" },
+    { "@type": "Thing", "name": "Aperiodic order" },
+    { "@type": "Thing", "name": "Recognizability" }
+  ]
+}
+    </script>
+    <!-- OG-BLOCK-END -->
+    <link rel="stylesheet" href="/css/sundog-theme.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        main { max-width: 900px; margin: 0 auto; padding: 1.5rem 1.5rem 4rem; }
+        .kicker { font-family: var(--sd-font-data, ui-monospace, monospace); font-size: 0.78rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--primary-mid, #2C5F7F); }
+        h1 { color: var(--primary-dark, #1A3A52); font-family: var(--sd-font-display, Georgia, serif); font-size: clamp(2rem, 6vw, 3rem); line-height: 1.05; margin: 0.5rem 0 0.6rem; }
+        .lede { color: #40505C; font-size: 1.15rem; line-height: 1.7; max-width: 64ch; }
+        h2 { color: var(--primary-dark, #1A3A52); font-size: 1.4rem; margin: 2.4rem 0 0.6rem; }
+        p { color: #40505C; line-height: 1.7; }
+        a { color: var(--primary-mid, #2C5F7F); font-weight: 700; }
+        code { background: rgba(244,196,48,0.12); padding: 0.1rem 0.35rem; border-radius: 3px; font-size: 0.95em; }
+        .payload { font-family: var(--sd-font-display, Georgia, serif); font-size: clamp(1.25rem, 3.4vw, 1.7rem); color: var(--primary-dark, #1A3A52); border-left: 4px solid var(--accent, #F4C430); padding: 0.4rem 0 0.4rem 1rem; margin: 1.6rem 0; line-height: 1.3; }
+
+        .exhibit { border: 1px solid var(--line, #d8e0e4); border-radius: 10px; background: #fff; padding: 1rem; margin: 1.4rem 0; }
+        .exhibit-controls { display: grid; grid-template-columns: repeat(3, minmax(140px, 1fr)); gap: 0.8rem 1rem; margin-bottom: 0.8rem; }
+        .exhibit-controls label { display: grid; gap: 4px; font-family: var(--sd-font-data, ui-monospace, monospace); font-size: 0.74rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #6A7680; }
+        .exhibit-controls .val { color: var(--primary-dark, #1A3A52); text-transform: none; letter-spacing: 0; }
+        .exhibit-controls input[type="range"] { width: 100%; }
+        #ghost-tiling { width: 100%; height: auto; display: block; background: #fbfdfc; border-radius: 8px; cursor: crosshair; touch-action: none; }
+        .legend { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 0.7rem; font-size: 0.82rem; color: #6A7680; }
+        .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; border: 2px solid; }
+        .lg-in i { border-color: #2E7D5A; background: rgba(46,125,90,0.12); }
+        .lg-cross i { border-color: #B53A2C; background: rgba(181,58,44,0.10); }
+        .lg-out i { border-color: #c4ccc7; background: #eef2ef; }
+        .readout { font-family: var(--sd-font-data, ui-monospace, monospace); font-size: 0.84rem; color: #40505C; margin-top: 0.6rem; }
+        .readout b { color: var(--primary-dark, #1A3A52); }
+        .hint { font-size: 0.82rem; color: #6A7680; margin-top: 0.4rem; }
+
+        .card { border: 1px solid var(--line, #d8e0e4); border-radius: 8px; padding: 1rem 1.25rem; margin: 1.2rem 0; background: #fff; }
+        .card.fence { border-color: rgba(181,58,44,0.35); background: rgba(181,58,44,0.03); }
+        .card h3 { margin: 0 0 0.5rem; color: var(--primary-dark, #1A3A52); font-size: 1.05rem; }
+        ul { line-height: 1.7; color: #40505C; }
+        .fine { font-family: var(--sd-font-data, ui-monospace, monospace); font-size: 0.8rem; color: #6A7680; }
+        @media (max-width: 620px) { .exhibit-controls { grid-template-columns: 1fr 1fr; } }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="/" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="/about">About</a>
+                <a href="/sundog">Atlas</a>
+                <a href="/applications-gallery">Applications</a>
+                <a href="/alignment">Align</a>
+                <a href="/chat">Chat</a>
+                <a href="docs/">Docs</a>
+                <a href="https://github.com/humiliati/sundog">GitHub</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <p class="kicker">Sundog &middot; Ghost</p>
+        <h1>Ordered, but never repeating</h1>
+        <p class="lede">A Penrose tiling is built from two rhombus shapes and a few local matching rules. It fills the plane with perfect order &mdash; yet no finite stamp ever repeats to cover it. Draw a circle anywhere below and watch what the circle can, and cannot, explain from the inside.</p>
+
+        <section class="exhibit" aria-label="Interactive Penrose reader">
+            <div class="exhibit-controls">
+                <label>Zoom (inflation) <span id="ghost-depth-val" class="val"></span>
+                    <input id="ghost-depth" type="range" min="3" max="6" step="1">
+                </label>
+                <label>Supertile level <span id="ghost-level-val" class="val"></span>
+                    <input id="ghost-level" type="range" min="1" step="1">
+                </label>
+                <label>Circle radius <span id="ghost-radius-val" class="val"></span>
+                    <input id="ghost-radius" type="range" min="0.12" max="0.95" step="0.01">
+                </label>
+            </div>
+            <svg id="ghost-tiling" viewBox="-1.15 -1.15 2.3 2.3" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" role="img" aria-label="A Penrose rhombus tiling with a movable circle; tiles are grouped and colored by the supertile they belong to."></svg>
+            <div class="legend">
+                <span class="lg-in"><i></i>inside the circle (place recoverable)</span>
+                <span class="lg-cross"><i></i>crossing the edge (place still open)</span>
+                <span class="lg-out"><i></i>outside the circle</span>
+                <span>fill colour = supertile at the chosen level</span>
+            </div>
+            <p class="readout" id="ghost-readout"></p>
+            <p class="hint">Click or drag on the tiling to move the circle. Raise the supertile level to see tiles gather into larger ancestors; widen the circle to pin down more of them.</p>
+        </section>
+
+        <p class="payload">Ordered does not mean repeating. Local does not mean closed.</p>
+
+        <h2>The repeat cell that never comes</h2>
+        <p>A wallpaper pattern closes its circle: capture one repeating cell and you have explained the whole wall. An aperiodic tiling keeps the circle open. Every finite patch is legal and concrete, but no finite patch is the whole law &mdash; the pattern is generated by a <em>hierarchy</em> of ever-larger supertiles rather than by a repeating unit. In the reader above, raising the supertile level shows that hierarchy: tiles merge into the larger ancestors they belong to.</p>
+
+        <h2>But the outside is finite</h2>
+        <p>"Open" is not "unbounded." Penrose tilings are <strong>recognizable</strong>: the supertile a patch belongs to is determined by a <em>bounded</em> neighbourhood around it. Widen the circle and the tiles inside stop crossing its edge &mdash; their place in the larger pattern becomes recoverable from the inside. You never have to look infinitely far. The context a patch is missing is a finite radius, and it recedes to a larger hierarchy as you zoom, rather than growing without bound.</p>
+        <p>How local is "bounded"? For the classic one-dimensional substitutions the radius is a couple of symbols; for this Penrose tiling it settles to about one tile-edge of neighbourhood. That number has a name in the literature &mdash; the <em>constant of recognizability</em> &mdash; and it is finite and computable.</p>
+
+        <div class="card fence">
+            <h3>What this is and is not</h3>
+            <ul>
+                <li>It <strong>is</strong> an interactive reader for a known, published object (the rhombic Penrose tiling), generated from its substitution rule.</li>
+                <li>It is <strong>not</strong> a new theorem, a new tiling, or a new invariant; the "bounded outside" is the known recognizability radius.</li>
+                <li>Aperiodic is <strong>not</strong> random: the tiling is perfectly ordered, just not periodic.</li>
+                <li>The picture is an intuition surface, <strong>not</strong> a proof, and the page makes no claim about Goedel, incompleteness, or self-reference.</li>
+            </ul>
+        </div>
+
+        <h2>Sources &amp; further reading</h2>
+        <ul>
+            <li>Penrose rhombus tiling: R. Penrose (1974); M. Gardner, <em>Scientific American</em> (1977). Geometry here is generated from the published substitution rule; no figures are reproduced.</li>
+            <li>Recognizability / constant of recognizability: B. Mosse; F. Durand &amp; J. Leroy, <a href="https://arxiv.org/abs/1610.05577">"The constant of recognizability is computable for primitive morphisms"</a> (arXiv:1610.05577).</li>
+            <li>Sundog write-up: <a href="docs/SUNDOG_V_GHOST.md">the Ghost ledger</a> and the <a href="docs/ghost/GHOST_PHASE4_METRIC_MEMO.md">recognizability-radius memo</a>.</li>
+        </ul>
+
+        <p class="fine">A Sundog reader/exhibit. Names a known boundary; claims no new mathematics.</p>
+    </main>
+
+    <footer>
+        <p>
+            The Sundog Project - <a href="docs/presentation/message-house.md">Alignment Without Sight</a>
+        </p>
+        <p class="footer-links">
+            <a href="https://github.com/humiliati/sundog">GitHub</a> |
+            <a href="/origin">Origin</a> |
+            <a href="/applications-gallery">Applications Gallery</a> |
+            <a href="docs/README.md">Documentation</a> |
+            <a href="docs/SUNDOG_V_GHOST.md">Ghost Roadmap</a>
+        </p>
+        <p class="footer-copyright">
+            &copy; 2026 Stellar Aqua LLC. All rights reserved.
+        </p>
+    </footer>
+
+    <script type="module" src="/js/ghost.mjs"></script>
+    <script type="module" src="/js/sundog-chat-widget.mjs"></script>
+</body>
+</html>

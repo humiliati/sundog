@@ -684,15 +684,39 @@ finite, citable referent all along.
 
 ### Phase 5 - Public Page Candidate
 
-- Only after Phases 1-4, consider `ghost.html`.
-- Public page must lead with the reader/exhibit, not conjectural grandeur.
-- Keep the one-sentence payload:
+Status: **BUILT + WIRED + QA passed 2026-06-27; launch-ready, NOT deployed.**
+Owner deploy + asset/license check still gate the public launch.
+
+- Page: `ghost.html` (indexable public page), reader module `js/ghost.mjs`
+  importing the shared core `ghost/aperiodic-core.js` (single source; no new
+  math, no figure reuse).
+- Wired: registered in `site-pages.json` (kind `workbench`); sitemap regenerated
+  and `npm run seo:sitemap:check` = OK (25 URLs, `/ghost` indexable); full
+  OG/Twitter/JSON-LD + canonical `https://sundog.cc/ghost`.
+- Leads with the interactive Penrose reader, not conjectural grandeur.
+- Carries the one-sentence payload:
 
 > Ordered does not mean repeating. Local does not mean closed.
+
+- Copy reflects the Phase 4 result: the missing context is a FINITE
+  recognizability radius, so the "unerasable outside" framings are deliberately
+  NOT used as the headline. Penrose attribution (Penrose 1974 / Gardner 1977) +
+  recognizability citation (Mosse; Durand-Leroy) are on-page. A fences card
+  states it is not a theorem / not a new invariant / aperiodic != random / no
+  Goedel claim.
 
 Exit gate:
 
 - Public copy is true even if every heuristic/probe sentence is deleted.
+
+Exit gate MET 2026-06-27 (copy is exhibit-led and true without any
+heuristic/probe sentence). QA: reader renders (890 tiles at depth 5, thick:thin
+= phi), the window shows recoverable vs crossing supertiles, widening the circle
+collapses more ghost and raising the level recedes it upward, theme applied,
+responsive desktop + mobile, no console errors. Pre-deploy OWED (owner-gated):
+generate `og/ghost.png` via the public/og pipeline; owner asset/license check on
+the Penrose name; decide an inbound link (nav / index / generality umbrella);
+post-deploy social-validator pass; then `npm run deploy`.
 
 ## Current Best Shape
 

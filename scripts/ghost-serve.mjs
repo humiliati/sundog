@@ -30,13 +30,26 @@ http
     try {
       let pathname = decodeURIComponent(new URL(req.url, `http://127.0.0.1:${PORT}`).pathname);
       if (pathname.endsWith("/")) pathname += "index.html";
-      const filePath = normalize(join(ROOT, pathname));
-      if (!filePath.startsWith(ROOT)) {
-        res.writeHead(403, { "Content-Type": "text/plain" }).end("forbidden");
+      // Try repo root, then public/ (Vite serves public/ at web root), so public
+      // pages QA faithfully (theme css, favicons, etc.).
+      const roots = [ROOT, join(ROOT, "public")];
+      let body, hit;
+      for (const base of roots) {
+        const filePath = normalize(join(base, pathname));
+        if (!filePath.startsWith(normalize(base))) continue; // path traversal guard
+        try {
+          body = await readFile(filePath);
+          hit = filePath;
+          break;
+        } catch {
+          /* try next root */
+        }
+      }
+      if (body === undefined) {
+        res.writeHead(404, { "Content-Type": "text/plain" }).end("not found");
         return;
       }
-      const body = await readFile(filePath);
-      res.writeHead(200, { "Content-Type": TYPES[extname(filePath)] || "application/octet-stream" });
+      res.writeHead(200, { "Content-Type": TYPES[extname(hit)] || "application/octet-stream" });
       res.end(body);
     } catch {
       res.writeHead(404, { "Content-Type": "text/plain" }).end("not found");
