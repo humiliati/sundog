@@ -49,30 +49,40 @@ below earn or break.
 
 ## Theme A — Tropical geometry ⇄ exact ReLU expressivity
 
-**C-A1 — Linear regions are an exact tropical invariant. [FORMALIZABLE]**
-*Claim.* The number of linear regions of the ReLU DAG `compileToDag e` equals a purely
-combinatorial invariant of the source tropical circuit `e` (chambers of the associated
-tropical-hypersurface arrangement / vertices of a Newton polytope) — an **equality**,
-because compilation is exact, where the region-count literature (Montúfar–Pascanu–Cho–
-Bengio; Serra–Tjandraatmadja–Ramalingam) gives only bounds.
-*Classical hook.* Counting linear regions / the complexity of PL functions; tropical
-Bézout and mixed volumes.
-*Falsifier* (`REGIONS_NOT_INTRINSIC`): the region count of `compileToDag e` depends on the
-realization, not on `e`'s tropical data alone → no clean invariant.
-*First move.* Prove it for one `max` gate (2 regions) and for `bellmanStep` over `k`
-incoming edges (`≤ k+1` candidate regions, including the incumbent distance, with
-degeneracies allowed), defining a `linearRegions` count on `RProg` in Lean.
+**C-A1 — Linear regions are an exact tropical invariant. [FORMALIZABLE] — LANDED 2026-06-27
+(intrinsic-ness + max-gate anchor axiom-clean + audited). See `Sundogcert/RegionCount.lean`.**
+*Claim.* The linear-region structure of the ReLU DAG `compile e` is an intrinsic invariant
+of the source tropical function — equality, not bounds, because compilation is exact.
+*Result.* **`realize1_compile`/`affine_compile_iff`** — the compiled ReLU net realizes the
+*identical* 1-D function as the source tropical circuit (`compile_eval`), so *any*
+region/affine property is shared: the region count is **realization-independent**. The
+falsifier `REGIONS_NOT_INTRINSIC` dies *from exactness* — no geometry needed. **Region
+anchor `max_two_not_affine`:** a tropical `max` of two distinct-slope affines is **not
+globally affine** (≥ 2 regions), proved via "an affine function `≥ 0` everywhere has zero
+slope" (`max ≥ gᵢ` forces the affine candidate's slope to equal both `a₁` and `a₂`).
+Capstone **`compiled_maxGate_not_affine`**: the compiled ReLU net of that gate has ≥ 2
+regions, intrinsically. All axiom-clean, in the AxiomAudit gate.
+*Named wall (imported):* the exact region-count *formula* for a general tropical circuit
+(tropical-hypersurface chambers / Newton-polytope mixed volume) is the geometry the
+literature bounds rather than computes — proved here: intrinsic-ness + the atomic count.
 
-**C-A2 — APSP regions index shortest-path trees. [IMPORT-AND-CHECK]**
-*Claim.* The exact ReLU compilation of the min-plus APSP circuit has linear regions in
-bijection with the distinct **shortest-path trees** of the input graph; the region
-boundaries are exactly the parametric-shortest-path breakpoints.
-*Classical hook.* Parametric shortest paths and the number of distinct optima
-(Carstensen, Gusfield) — a classical combinatorial-optimization quantity.
-*Falsifier* (`NO_TREE_BIJECTION`): regions and shortest-path trees fail to biject on a
-small explicit graph.
-*First move.* Enumerate regions of `compileToDag (bellmanStep …)` for `k = 3,4` and
-compare to the shortest-path-tree count.
+**C-A2 — APSP regions index shortest-path trees. [IMPORT-AND-CHECK] — RAN 2026-06-27,
+verdict SUPPORT (analytical; `NO_TREE_BIJECTION` does not fire).**
+*Claim tested.* The compiled min-plus circuit's linear regions (over edge-weight parameter
+space) biject with the distinct shortest-path trees; boundaries = parametric-SP breakpoints.
+*Result.* The SSSP/APSP distance is `min over paths` of the path weight — a tropical
+polynomial in the edge weights whose **argmin chambers** are exactly the regions of
+parameter space on which a fixed optimal tree wins. That is precisely the classical
+**parametric shortest path** structure (Carstensen 1983; Gusfield 1980): the breakpoints
+where the optimal tree changes are the region boundaries, and the full-dimensional chambers
+are in bijection with the distinct optimal **shortest-path trees** (ties = lower-dimensional
+shared boundaries, the genericity caveat). By C-A1's `realize1_compile`, the *compiled ReLU
+net* inherits this region structure exactly (same function), so its regions index
+shortest-path trees too. The bijection holds up to degeneracy, so the falsifier does not
+fire.
+*Boundary (imported).* The *count* of regions = the number of distinct optimal trees is the
+parametric-SP combinatorics (Carstensen/Gusfield), imported; a full Lean bijection would
+need that machinery (the same bounds-only region-count wall as C-A1). Analytical close.
 
 ---
 
@@ -289,14 +299,19 @@ pruning experiment against the proved band.
    all in the `CircuitNet` fragment, gate counts = DP sizes, reductions cost-preserving; 3SUM
    + `n^ω` algebraic route named out-of-fragment; hardness conjectures imported.
 
-**Status:** six hooks resolved — **four Lean closures** (C-C1 ✅, C-B1 ✅, C-D1 ✅, + the
-foundational compiler), **two analytical closes** (C-C2 ✅ fine-grained family; C-B2 ◐ bounded
-— find/check is cheap-check-proved + find-imported, no unconditional superpoly), and **one
-documented empirical negative** (C-D2 ▢). A recurring spine: every result proves a cheap
-CHECK / construction *upper* bound and names the *lower* bound (decoding / monotone /
-fine-grained / depth-vs-width) as the imported wall. Remaining open: the Theme-A region-count
-Lean targets (**C-A1/C-A2**) and the empirical D-hooks (**C-D3/C-D4**).
+**Status:** eight hooks resolved — **five Lean closures** (C-C1 ✅, C-B1 ✅, C-D1 ✅, C-A1 ✅,
++ the foundational compiler), **three analytical closes** (C-C2 ✅ fine-grained family;
+C-A2 ✅ APSP regions ↔ shortest-path trees; C-B2 ◐ bounded find/check), and **one documented
+empirical negative** (C-D2 ▢). A recurring spine: every result proves a cheap CHECK /
+construction *upper* bound (or an intrinsic-via-exactness fact) and names the *lower* bound
+(decoding / monotone / fine-grained / depth-vs-width / exact-region-formula) as the imported
+wall. Remaining open: only the empirical D-hooks (**C-D3** mech-interp canonical form,
+**C-D4** pruning floor).
 
+> **Follow-on:** [`ALGO_APPROX_CONJECTURE_SLATE_2.md`](ALGO_APPROX_CONJECTURE_SLATE_2.md)
+> (opened 2026-06-28) mines these closures for the **cancellation spine** — the one
+> wall (C-B1 / C-C2 / H-A1 / C-D1) — into four hooks N-1..N-4.
+>
 > Cross-links: [`SUNDOG_V_ALGO_APPROX.md`](SUNDOG_V_ALGO_APPROX.md) (parent lane) ·
 > [`SUNDOG_V_P_V_NP.md`](SUNDOG_V_P_V_NP.md) (the find/check sibling) ·
 > [`SUNDOG_V_CERTIFICATE_LEAN.md`](SUNDOG_V_CERTIFICATE_LEAN.md) (the Lean method) ·

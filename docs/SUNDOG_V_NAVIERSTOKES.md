@@ -847,6 +847,34 @@ candidate has run.
   template — but the vorticity-equation analog isn't pinned yet.
   Re-open after Candidate 1 lands.
 
+### Candidate 6 — Resist-side construction (recover the marginal by constructing resistance, not scaling)
+
+- **Attacks failure mode(s):** the C1 marginality itself — the body is
+  *recoverable* (low-Fourier shadow reconstructs it at FVE ~ 0.99), so the
+  regime-2 split is non-vacuous but soft. This candidate attacks the
+  **"compute-bound" reading** of that marginality.
+- **Cost:** Low — constructed resistance at **fixed compute**; no high-G / 3D
+  scaling (deliberately not the C2 numerical-wall path).
+- **Front:** B (empirical), hybrid construction.
+- **Sketch.** Inject a constructed resistant hidden channel into the C1 control
+  task (computational / syndrome-style first, then topological / dimensional),
+  sweep a resistance dial `rho` with compute and dimension held fixed, and measure
+  whether the regime-2 split **sharpens with `rho`**. Anchored by the portfolio's
+  existing cheap sharp split (the P-vs-NP syndrome certificate). "Recovers" the
+  marginal in the constructive sense: a sharp, measured split on a hybrid body.
+- **Pre-registered negative.** If sharpness tracks compute / dimension and not
+  `rho`, the resist-side reframe is false and the original "needs a high-dimensional
+  body unreachable at accessible resources" diagnosis stands — record the null.
+- **Fence.** Builds a **hybrid** body (the natural recoverable shadow + a
+  constructed resistant channel). Does **not** claim natural 2D NSE secretly
+  resists — recoverability stays a stated boundary. Constructed resistance is
+  imported.
+- **Artifact.** Proposed pre-registration (Passes 0–4) at
+  [`RESIST_SIDE_CONSTRUCTION_ROADMAP.md`](RESIST_SIDE_CONSTRUCTION_ROADMAP.md);
+  motivated by Ghost lane H3 (internal, unratified) and
+  [`CROSS_SUBSTRATE_NOTES.md`](CROSS_SUBSTRATE_NOTES.md) sections 6.3, 10. NSE C1 is
+  the lead testbed; Mesa `net.7` is the second.
+
 ## Shortlist Recommendation
 
 As of 2026-05-28, the recommended sequencing is:
