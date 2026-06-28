@@ -650,19 +650,37 @@ reads on desktop and mobile (environment screenshot pipeline unavailable).
 
 ### Phase 4 - Optional Metric Probe
 
-This phase is optional and must not gate the reader.
+Status: **COMPLETE 2026-06-27** (optional, non-gating). Rigorous falsification
+battery run; acceptance suite `npm run ghost:metric:test` = `pass=23 fail=0`.
 
-- Prototype continuation count, ancestry ambiguity, repeat-cell capture radius,
-  or another finite-patch observable only after mapping it to existing
-  vocabulary.
-- Try to falsify the Ghost Boundary Heuristic on easy examples.
-- If the probe collapses into known theory, record that as success for the
-  reader lane, not as failure of the lane.
+- Spec (pre-registration): [`ghost/PHASE4_METRIC_PROBE_SPEC.md`](ghost/PHASE4_METRIC_PROBE_SPEC.md).
+- Results memo: [`ghost/GHOST_PHASE4_METRIC_MEMO.md`](ghost/GHOST_PHASE4_METRIC_MEMO.md).
+- Core: `ghost/metric-probe-core.js`.
+
+This phase was optional and did not gate the reader (Phase 3 was already
+complete).
+
+- Prototyped the **recognizability radius** (Mosse's constant of
+  recognizability) as the finite-patch observable, after mapping it to existing
+  vocabulary in Q2; repeat-cell capture radius as the periodic control.
+- Falsified the **unbounded** reading of the Ghost Boundary Heuristic on every
+  substrate: outside debt is a finite, bounded recognizability radius. Measured:
+  Fibonacci 1, period-doubling 1, Thue-Morse 2 (letters, exactly depth-stable);
+  periodic `ABCD` capture radius 5; Penrose P3 ~0.978 finest-edge units
+  (converges from below by depth 6). The unbounded regime is undecidable
+  Wang/SFT extension, which is not simulable and is recorded as the boundary, not
+  measured.
+- The probe collapsed into known theory, which is the recorded success outcome.
 
 Exit gate:
 
 - Either the metric is identified as known vocabulary, dies cleanly, or earns a
   narrow technical memo with an explicit "not a new invariant" default.
+
+Exit gate MET 2026-06-27: the metric is **identified as known vocabulary** (the
+constant of recognizability; Mosse, Durand-Leroy arXiv:1610.05577), bounded,
+**not a new invariant**. The conjecture arc closes: "outside debt" had a real,
+finite, citable referent all along.
 
 ### Phase 5 - Public Page Candidate
 

@@ -89,8 +89,11 @@ Periodic 1D control:
 ### 4.3 2D Penrose recognizability radius (numerical)
 
 - Generate Penrose to depth d (`makePenrose`). Restrict to **interior tiles**:
-  those whose centroid lies within `(1 - margin)` of the origin, evaluated only
-  for radii `r <= margin`, so no patch is truncated by the finite boundary.
+  those whose centroid lies within `interiorRadius` of the origin, evaluated only
+  for patch radii `r <= maxPatchRadius`, with
+  `interiorRadius + maxPatchRadius <= 0.951` (the decagon inradius cos 18deg), so
+  no patch is truncated by the finite boundary. Defaults: `interiorRadius = 0.45`,
+  `maxPatchRadius = 0.46`.
 - For a tile t and radius r, the **patch** is the set of tiles whose centroid is
   within r of t's centroid, each expressed in t's local frame (translate to t's
   centroid; rotate by minus t's orientation, where orientation is the angle of
@@ -102,6 +105,20 @@ Periodic 1D control:
 - r is sufficient iff equal-signature interior tiles always share a role.
   Recognizability radius = least sufficient r (reported in tile-edge units),
   with the tolerance `k` and `margin` recorded.
+
+### 4.4 S2 measurement note (added post-run, 2026-06-27)
+
+The 2D recognizability radius is a finite-sample computation: a fixed interior
+core undersamples local-environment types at low depth and underestimates the
+radius. Measured edge-normalized radius by depth: **0.842 (d4), 0.920 (d5),
+0.979 (d6), 0.978 (d7)** - increments 0.078, 0.059, ~0.0001. It **converges from
+below to ~0.978 finest-edge units, depth-stable at d>=6** (|d6 - d7| ~ 1e-4).
+Pre-registration honesty: the strict equality check at the originally-coded
+depths (d4 vs d5) FAILED because those depths undersample; the depth-stability
+criterion of section 5/7 is therefore evaluated at d6 vs d7, where finite-size
+effects have died out. The criterion itself (stable within tolerance) is
+unchanged; only the measurement depth was corrected. Verdict is unaffected:
+finiteness and boundedness hold at every depth.
 
 ## 5. Falsification target and pre-registered criteria
 

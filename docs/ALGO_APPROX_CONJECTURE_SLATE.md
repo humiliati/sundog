@@ -79,7 +79,9 @@ compare to the shortest-path-tree count.
 ## Theme B — Unconditional ReLU lower bounds, and the cancellation barrier *(the heart)*
 
 **C-B1 — Monotone `(min,+)` lower bounds transfer to the cancellation-free ReLU
-fragment. [IMPORT-AND-CHECK]**
+fragment. [IMPORT-AND-CHECK] — PHASES 1+2 LANDED 2026-06-27 (fragment proper + reverse
+compilation + imported-bound transfer; the Jerrum–Snir bound itself remains the named
+wall, axiom-clean, audited).**
 *Claim.* `CircuitNet` compiles tropical *polynomials* into ReLU exactly; if the *reverse*
 holds on a "cancellation-free" ReLU fragment (no effective use of subtraction to cancel),
 then the classical **unconditional** monotone `(min,+)`-circuit lower bounds
@@ -87,20 +89,36 @@ then the classical **unconditional** monotone `(min,+)`-circuit lower bounds
 shortest-path / spanning-tree / permanent-style functions) become **unconditional
 ReLU-DAG gate-count lower bounds** for the same explicit functions — a rarity for neural
 nets.
+*Phase 1 (DONE) — `Sundogcert/CancellationFree.lean`:* the fragment is defined and proven
+proper. `IsMono` = the monotone (max-plus polynomial) sub-grammar of `Trop` (no negative
+scaling). **`monotone_of_isMono`** — a cancellation-free circuit computes a **monotone**
+function (and `monotone_compile_of_isMono` — so does its compiled ReLU net). **The
+barrier, witnessed:** `abs` is in the general fragment (`abs_in_general`) but not monotone
+(`abs_not_monotone`), so **no cancellation-free circuit computes it** (`abs_not_isMono`).
+Cancellation buys exactly the non-monotone functions — *that* is why the monotone bound is
+not automatically a ReLU bound. Axiom-clean, wired into root + `AxiomAudit`.
 *The honest barrier (this is the contribution).* A general ReLU net is tropical
 *rational* and can use cancellation to beat any monotone bound (exactly as general
-circuits beat monotone ones). So the transfer is **not** unconditional in general; the
-real research object is to **characterize the cancellation-free fragment** where it *is*
-valid, and to measure how far it reaches. This re-states the monotone-vs-general wall —
-and the Razborov–Rudich natural-proofs barrier — in the lane's own vocabulary, where it
-is at least *precisely located* against a machine-checked compiler.
+circuits beat monotone ones). The Phase-1 result *precisely locates* the monotone-vs-
+general wall — and the Razborov–Rudich natural-proofs barrier — against a machine-checked
+compiler.
 *Classical hook.* Monotone circuit lower bounds; the monotone/general gap; natural proofs.
 *Falsifier* (`CANCELLATION_DOMINATES`): for the candidate functions, small ReLU nets with
 cancellation exist, and the cancellation-free fragment is too weak to be interesting → the
-transfer is vacuous.
-*First move.* Formalize "tropically monotone `RProg`" (a syntactic no-cancellation
-predicate) and prove the reverse compilation `tropically-monotone RProg → (min,+) circuit`
-of comparable size; then state C-B1 as a conditional on that predicate.
+transfer is vacuous. (Held in spirit: the fragment is non-trivial — it is exactly the
+monotone functions — and properly excludes `abs`.)
+*Phase 2 (DONE 2026-06-27) — reverse compilation + imported-bound transfer:*
+**`decompile`** (`Net → Trop`, `relu a ↦ max a 0`) + **`decompile_eval`** prove every ReLU
+net is a tropical(-rational) circuit exactly — the converse of `compile`, completing
+`Net ≅ Trop`. **`monotone_transfer`** is the imported-bound framing: given the Jerrum–Snir
+monotone max-gate lower bound as an explicit hypothesis `hLB` (every `IsMono` circuit for
+`f` has `≥ B` max-gates — the imported content), *every* cancellation-free ReLU net for `f`
+has `≥ B` gates; the bridge is **`compileToDag_maxCount_ge`** (`maxCount e ≤` compiled gate
+count, a lower bound mirroring `compileToDag_gate_count`). All axiom-clean, audited. **The
+wall, named:** `decompile` sends a *general* net to a *general* (non-`IsMono`) `Trop`, so
+the transfer covers the compile-image fragment but not all monotone-computing nets — the
+monotone-vs-general / natural-proofs gap, sandwiched precisely between the two provable
+halves, imported not crossed. The Jerrum–Snir bound itself stays the named import.
 
 **C-B2 — A provable find-vs-check gap inside the tropical/monotone model. [FORMALIZABLE]**
 *Claim.* Exhibit an explicit family `f_n` where, in the `costOf` ledger,
@@ -233,12 +251,15 @@ pruning experiment against the proved band.
    certificate via `tree_achieves`) + the `O(E+V)` cost-ledger instance. The find/check
    ledger now has three instances (construct / check-syndrome / check-shortest-path); it
    also supplies C-B2's verifier side.
-1. **C-B1 — characterize the cancellation-free ReLU fragment.** The deepest entry; it
-   precisely locates the monotone-vs-general wall against a machine-checked compiler. Even
-   a clean *definition* + the reverse-compilation lemma is a real contribution.
-2. **C-D2 — the grokking-threshold experiment.** Runnable frontier-ML with a sharp,
+0. **C-B1 — cancellation-free fragment. ✅ CLOSED 2026-06-27** (both phases axiom-clean,
+   audited): `IsMono` fragment + `monotone_of_isMono` + `abs` separation (Phase 1);
+   `decompile`/`decompile_eval` (reverse compilation) + `monotone_transfer`
+   (imported-bound framing) + `compileToDag_maxCount_ge` (Phase 2). The monotone-vs-general
+   / natural-proofs wall is machine-located, sandwiched between the two provable halves;
+   the Jerrum–Snir bound stays the named import.
+1. **C-D2 — the grokking-threshold experiment.** Runnable frontier-ML with a sharp,
    falsifiable numeric target (the compiled-size band first; a true floor only after a
-   lower bound); fast feedback, high signal.
+   lower bound); fast feedback, high signal. **The top open first-strike.**
 
 > Cross-links: [`SUNDOG_V_ALGO_APPROX.md`](SUNDOG_V_ALGO_APPROX.md) (parent lane) ·
 > [`SUNDOG_V_P_V_NP.md`](SUNDOG_V_P_V_NP.md) (the find/check sibling) ·

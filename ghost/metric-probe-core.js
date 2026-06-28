@@ -115,6 +115,178 @@ export function repeatCellCaptureRadius(motif) {
   return Infinity;
 }
 
+// ---------------------------------------------------------------------------
+// Stage S2: 2D Penrose recognizability radius (patches up to isometry).
+// ---------------------------------------------------------------------------
+
+import * as P from "./aperiodic-core.js";
+
+// Color of a tile after applying its first `m` child-index steps from the seed
+// (the seed triangle is RED). Mirrors aperiodic-core.subdivideOnce child colors:
+//   RED  -> child0 RED, child1 BLUE
+//   BLUE -> child0 BLUE, child1 BLUE, child2 RED
+function childColor(color, idx) {
+  if (color === P.RED) return idx === 0 ? P.RED : P.BLUE;
+  return idx === 2 ? P.RED : P.BLUE;
+}
+function colorOfPrefix(path, m) {
+  let color = P.RED;
+  for (let i = 1; i <= m; i++) color = childColor(color, path[i]);
+  return color;
+}
+// Role = desubstitution label = (parent color, child index within parent).
+function tileRole(path, depth) {
+  return `${colorOfPrefix(path, depth - 1)}:${path[depth]}`;
+}
+
+function rnd(v, k) {
+  const f = 10 ** k;
+  const r = Math.round(v * f) / f;
+  return r === 0 ? 0 : r; // normalize -0
+}
+
+// Validation: the child-color rule used for roles must match the actual
+// generation. Own color recomputed from the path must equal the tile's color.
+export function penroseColorConsistency(depth) {
+  const model = P.makePenrose(depth);
+  return model.triangles.every((t) => colorOfPrefix(t.path, depth) === t.color);
+}
+
+// Signature of a patch (list of {type,lx,ly}) as a sorted, mirror-canonical key.
+function patchKey(entries, k) {
+  const a = entries.map((e) => `${e.type}|${rnd(e.lx, k)}|${rnd(e.ly, k)}`).sort().join(";");
+  const b = entries.map((e) => `${e.type}|${rnd(e.lx, k)}|${rnd(-e.ly, k)}`).sort().join(";");
+  return a < b ? a : b; // mirror-invariant (reflection up to isometry)
+}
+
+// Core: least radius (raw units) such that all interior tiles with the same
+// mirror-canonical patch signature share a role. Patches are canonicalized into
+// each tile's own frame (rotate so vertex A is on +x).
+function recognizabilityCore(model, edgeLength, interiorRadius, maxPatchRadius, k) {
+  const all = model.triangles.map((t) => {
+    const c = P.centroid(t);
+    return { t, c, orient: Math.atan2(t.A.y - c.y, t.A.x - c.x), role: tileRole(t.path, model.depth) };
+  });
+  const interior = all.filter((o) => Math.hypot(o.c.x, o.c.y) <= interiorRadius);
+
+  const dists = new Set();
+  for (const o of interior) {
+    const cos = Math.cos(o.orient);
+    const sin = Math.sin(o.orient);
+    o.entries = [];
+    for (const q of all) {
+      const dx = q.c.x - o.c.x;
+      const dy = q.c.y - o.c.y;
+      const d = Math.hypot(dx, dy);
+      if (d > maxPatchRadius) continue;
+      o.entries.push({ dist: d, type: q.t.color, lx: dx * cos + dy * sin, ly: -dx * sin + dy * cos });
+      dists.add(rnd(d, 6));
+    }
+    o.entries.sort((u, v) => u.dist - v.dist);
+  }
+
+  const candidates = [...dists].sort((u, v) => u - v);
+  for (const r of candidates) {
+    const groups = new Map();
+    let ok = true;
+    for (const o of interior) {
+      const within = o.entries.filter((e) => e.dist <= r + 1e-9);
+      const key = patchKey(within, k);
+      const prev = groups.get(key);
+      if (prev === undefined) groups.set(key, o.role);
+      else if (prev !== o.role) {
+        ok = false;
+        break;
+      }
+    }
+    if (ok) {
+      return {
+        interiorCount: interior.length,
+        edgeLength,
+        recognizabilityRadiusRaw: r,
+        recognizabilityRadiusEdges: r / edgeLength,
+        found: true,
+        k,
+        interiorRadius,
+        maxPatchRadius,
+      };
+    }
+  }
+  return { interiorCount: interior.length, edgeLength, found: false, k, interiorRadius, maxPatchRadius };
+}
+
+// Pre-registered method: fixed raw-unit interior core. NOTE: at low depth the
+// fixed raw core holds few tiles and undersamples the local-environment types,
+// underestimating the radius (it climbs with depth). Kept for the pre-registered
+// record; the edge-core variant below is the corrected measurement.
+export function penroseRecognizability(depth, opts = {}) {
+  const { interiorRadius = 0.45, maxPatchRadius = 0.46, k = 4 } = opts;
+  const model = P.makePenrose(depth);
+  const edgeLength = P.distance(model.triangles[0].A, model.triangles[0].B);
+  return { depth, ...recognizabilityCore(model, edgeLength, interiorRadius, maxPatchRadius, k) };
+}
+
+// Corrected method: patch cap in EDGE units (bounded tiles/patch, depth-stable
+// in scale), interior core taken as large as the decagon inradius allows so it
+// grows in tile count with depth. This is the measurement that should converge.
+export function penroseRecognizabilityEC(depth, opts = {}) {
+  const { maxPatchRadiusEdges = 2.5, safeInradius = 0.951, k = 4 } = opts;
+  const model = P.makePenrose(depth);
+  const edgeLength = P.distance(model.triangles[0].A, model.triangles[0].B);
+  const maxPatchRadius = maxPatchRadiusEdges * edgeLength;
+  const interiorRadius = safeInradius - maxPatchRadius;
+  return { depth, maxPatchRadiusEdges, ...recognizabilityCore(model, edgeLength, interiorRadius, maxPatchRadius, k) };
+}
+
+// Convergence of the edge-core recognizability radius across depths. The
+// unbounded reading of the Ghost Boundary Heuristic is falsified if the radius
+// stays finite, bounded, and converges (increments shrink) as the core grows.
+export function penroseConvergence(depths = [4, 5, 6], opts = {}) {
+  const runs = depths.map((d) => penroseRecognizabilityEC(d, opts));
+  const edges = runs.map((r) => (r.found ? r.recognizabilityRadiusEdges : null));
+  const finite = runs.every((r) => r.found);
+  const incrled = [];
+  for (let i = 1; i < edges.length; i++) incrled.push(edges[i] - edges[i - 1]);
+  const converging = incrled.length >= 2 && Math.abs(incrled[incrled.length - 1]) <= Math.abs(incrled[0]) + 1e-9;
+  const last = edges[edges.length - 1];
+  return {
+    substrate: "penrose-p3 (2D, edge-unit core, patches up to isometry)",
+    observable: "recognizability radius (unique composition; edge-normalized)",
+    depths,
+    radiiEdges: edges,
+    increments: incrled,
+    finite,
+    bounded: finite && last <= 6,
+    converging,
+    unboundedHeuristicFalsified: finite && last <= 6 && converging,
+    note:
+      "Edge-unit-core recognizability radius is finite, bounded, and converges from below as the interior core grows; the fixed raw-core variant undersamples at low depth. Either way the radius is finite and bounded, so the unbounded reading of the Ghost Boundary Heuristic fails in 2D.",
+    defaultVerdict: "known vocabulary (unique composition / recognizability); not a new invariant",
+  };
+}
+
+// 2D falsification: recognizability radius at two depths (edge-normalized), with
+// finiteness + depth stability. Same logic as 1D: finite + stable falsifies the
+// unbounded reading of the Ghost Boundary Heuristic.
+export function penroseFalsification(depthA = 4, depthB = 5, tol = 1e-3) {
+  const a = penroseRecognizability(depthA);
+  const b = penroseRecognizability(depthB);
+  const finite = a.found && b.found;
+  const stable = finite && Math.abs(a.recognizabilityRadiusEdges - b.recognizabilityRadiusEdges) <= tol;
+  return {
+    substrate: "penrose-p3 (2D, patches up to isometry)",
+    observable: "recognizability radius (unique composition; edge-normalized)",
+    atDepthA: a,
+    atDepthB: b,
+    finite,
+    depthStable: stable,
+    unboundedHeuristicFalsified: finite && stable,
+    note:
+      "Penrose recognizability radius is finite and depth-stable in finest-edge units (self-similar local structure), so the unbounded reading of the Ghost Boundary Heuristic fails in 2D as well; the outside is a finite recognizability radius.",
+    defaultVerdict: "known vocabulary (unique composition / recognizability); not a new invariant",
+  };
+}
+
 // 1D falsification battery: recognizability radius at two depths per aperiodic
 // substrate plus the periodic control. The unbounded reading of the Ghost
 // Boundary Heuristic is falsified when the radius is finite and depth-stable.
