@@ -1200,3 +1200,78 @@ does **not** claim a general interpretability result: it is a bounded probe (0.5
 n = 12/λ; a higher-n and larger/Mamba confirmation is staged but unrun), and it does not
 touch the §6.5 compander citation gate. It is recorded here because it is the first
 *live-substrate* instance of the determine/resist machinery this section names.
+
+## 10. Shadow-Invertibility charFun = the diffraction spectrum of aperiodic order [CITED UNIFICATION + RECEIPT, not a new theorem]
+
+§§6.2, 8, 9 keep invoking the determine/resist split of the Shadow-Invertibility
+tower. This section names exactly what that split *is* in one more substrate -
+aperiodic order / tilings - and the answer is concrete, not a theme: it is the
+**diffraction spectrum**. Hardened from the Ghost lane's cross-lane hypothesis H1
+([`ghost/hypotheses_ghost_slate.md`](ghost/hypotheses_ghost_slate.md)); full
+provenance and the killed sub-claim are there.
+
+**The typed correspondence [PROVED both sides].** The Lean core
+`Sundogcert.ShadowDecayGeneral.shadow_decay_charFun` (axiom-clean) proves that
+averaging the continuous fringe factors through the population's **characteristic
+function**: `int cos(2pi(c+lam x)t) dmu = Re[ exp(2pi i c t) * charFun mu(2pi lam t) ]`.
+And `charFun mu` is the Fourier transform of the population = the **diffraction
+amplitude** of mathematical diffraction theory (Baake-Grimm, *Aperiodic Order*
+Vol. 1; "Mathematical diffraction of aperiodic structures", arXiv:1205.3633). So
+the two halves of the tower are the two diffraction classes:
+
+- **RESIST** = `||charFun mu|| -> 0` (Riemann-Lebesgue; absolutely-continuous
+  populations) = **continuous diffraction, no Bragg** (`resistance_general`;
+  Cauchy separator `cauchy_is_separator`).
+- **DETERMINE** = `charFun` does not decay = **pure-point / Bragg**.
+
+**The quasicrystal sharpening [CITED].** DETERMINE is strictly larger than
+periodic: cut-and-project sets (Penrose) have **pure-point diffraction despite
+being aperiodic** (Shechtman 1984). So "a discrete label survives the lossy
+shadow" = "ordered-but-aperiodic still diffracts to points" - the determine/resist
+tower meets the Ghost lane's "ordered != periodic" exactly at the quasicrystal.
+And Baake-Lenz (arXiv:math/0302061) gives pure-point diffraction <=> pure-point
+**dynamical** spectrum, so the charFun axis is the hull / dynamical-spectrum
+global invariant (the Ghost Q2 cohomology slot), not a local one.
+
+**The fence - what this is NOT [KILLED by receipt].** The charFun/diffraction axis
+is **not** the recognizability axis (the Ghost lane's headline finite-patch
+metric). Recognizability (Mosse's constant; Durand-Leroy arXiv:1610.05577) holds
+for *all* primitive substitutions regardless of diffraction type. Receipt
+(measured, `npm run ghost:metric:test`): Thue-Morse is recognizable (radius L=2)
+yet **singular-continuous** (RESIST side); Fibonacci and period-doubling are
+recognizable (L=1) **and** pure-point (DETERMINE). So recognizability is
+independent of diffraction - the over-strong "charFun separator = recognizability
+radius" was checked and **killed**. The cross-lane bridge is on the spectral axis
+only.
+
+**Frontier instance - non-local beats the power spectrum [EMPIRICAL, BOUNDED].**
+Probe `scripts/ghost-nonlocal-probe.mjs` (N=987): Thue-Morse carries **no Bragg**
+(Bragg intensity 0.058, vs the pure-point tier 0.35-1.0) yet a non-local
+deterministic reader recovers it perfectly (desubstitution-validity 1.000) while
+rejecting randomness (0.489). So a non-local reader recovers deterministic order
+the **pure-point channel declares absent**. Refinement the probe forced (two
+pre-registered thresholds failed, kept honest): diffraction is **lossy, not
+blind** - singular-continuous != absolutely-continuous (TM Bragg ~7x random), and
+period-doubling is a *factor* of TM that *is* pure-point (Bragg 0.446), so TM's
+order lives in its factor / in higher-order correlations. This is the known
+homometry / diffraction-vs-dynamical-spectrum gap (van Enter & Miekisz 1992:
+order at a "molecular" scale recovered by factor structures; diffraction = 2-point
+correlations only). The Shadow-Invertibility banked result "a trained nonlinear
+encoder defeats continuous-resist" is the **same phenomenon**: nonlinear / non-local
+recovery beats the linear power spectrum.
+
+**What this licenses, and does not.** Licenses: treating §6.2 / §8 / §9's
+determine/resist machinery and aperiodic-order diffraction as **one named
+statement**, both sides proven or cited - a genuinely typed cross-substrate
+generalization, the kind this doc exists to separate from theme-matching. Does
+not: claim a new theorem (both halves are established results), and does not
+collapse the lanes' distinct invariants - **recognizability (local recovery) and
+diffraction (global spectral) are orthogonal axes**, per the receipt above. Honest
+default: a cross-substrate *reading* that earns its keep by being exact
+(`charFun` = diffraction amplitude) and fenced (recognizability excluded by a
+measured counterexample), not a unification slogan.
+
+Backlinks: [`ghost/hypotheses_ghost_slate.md`](ghost/hypotheses_ghost_slate.md)
+(H1, provenance + receipts); [`SUNDOG_V_GHOST.md`](SUNDOG_V_GHOST.md) (Q2);
+`sundogcert/Sundogcert/ShadowDecayGeneral.lean` + `ShadowDecayCauchy.lean`
+(axiom-clean cores); the Shadow-Invertibility lane (Phase-5 charFun separator).

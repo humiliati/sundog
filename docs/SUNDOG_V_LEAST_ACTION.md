@@ -131,6 +131,65 @@ This deliberately uses the mature "stationary action" reading rather than the
 folk "always shortest path" reading. The goal is not minimum word count. The
 goal is a stable explanatory path.
 
+## Scoring the Locality Coordinate: the Reader-Recognizability Radius
+
+Added 2026-06-28, imported from the Ghost lane's cross-lane hypotheses slate
+([`ghost/hypotheses_ghost_slate.md`](ghost/hypotheses_ghost_slate.md), H2a). A
+borrowed measurement instrument, not a new physics or legibility theorem.
+
+The open question "does `J` need real scoring, or is a qualitative audit enough?"
+has a partial, honest answer: **`J` splits into two axes, and one of them is
+measurable.**
+
+- **Locality axis** - the `missing-inference`, `notation-hop`, and
+  `cross-reference` costs. They all ask the same thing: *how far must a cold reader
+  look to recover a coordinate's role?* That is a **recovery radius**.
+- **Coverage axis** - the `hidden-import`, `status-ambiguity`, and
+  `replay-friction` costs. They ask whether a role *exists, is correct, and is
+  runnable at all* - a completeness / closure property, not a distance.
+
+The locality axis has a real per-coordinate score:
+
+> **Reader-recognizability radius** `r(coord)` = the smallest window of the
+> document from which a cold reader can recover that coordinate's role
+> (`B / Phi / T / A / I / F / R`), without private memory.
+
+The Phase 1 audit's recoverability marks are already a coarse three-bucket version
+of this radius:
+
+| audit mark | meaning | reader-recognizability radius |
+| --- | --- | --- |
+| recoverable | named where it is used | bounded, small |
+| recoverable with a hop | one notation / context hop | bounded, +1 hop |
+| not recoverable without help | role lives elsewhere or nowhere | unbounded at the front door |
+
+Restated this way, the **Euler pass** is: bring every coordinate's
+reader-recognizability radius down to bounded-at-the-front-door; and the
+**pre-registered falsifier** ("two cold readers cannot name import, falsifier, and
+receipt without help") is exactly the statement that `r(I)`, `r(F)`, `r(R)` are not
+finite at the front door.
+
+**The borrowed backbone, and its fence.** The recovery radius has a precise formal
+cousin: in symbolic dynamics a primitive substitution is *recognizable* with a
+finite **constant of recognizability** - a bounded window that determines each
+symbol's role in the next level up (B. Mosse; F. Durand & J. Leroy, "The constant
+of recognizability is computable for primitive morphisms," arXiv:1610.05577). The
+typed map: a document's block structure (sections, lemmas) plays the role of the
+substitution's supertiles, and `r(coord)` plays the role of the recognizability
+constant. The disanalogy is load-bearing and stays stated: **a document is not a
+substitution system.** No theorem makes `r` finite - making it finite is exactly
+what the Euler pass is for. So this is a measurement template with a named
+mathematical cousin, NOT a claim that legibility *is* recognizability, and not a
+physics claim. (The over-strong version "reader-action `J` = recognizability
+radius" was checked and cleanly killed; provenance and receipt are in the Ghost
+slate.)
+
+Coverage stays qualitative: a role is present-or-not, correct-or-not,
+runnable-or-not. The headline catch of the Phase 1 audit - a stale worked-example
+count - was a *coverage* failure, not a radius failure (the number was present at
+small radius but wrong), which is why the locality score would not have caught it
+and the coverage flags must stay.
+
 ## Meta-Generality Rule
 
 Sundog generality must be earned at the role level, not at the slogan level.
@@ -371,7 +430,10 @@ Use:
 - "stationary explanatory path";
 - "role-preserving generality";
 - "coordinate chart for claims";
-- "deduction/import/falsifier made visible."
+- "deduction/import/falsifier made visible.";
+- "reader-recognizability radius" — the locality score of `J`; a borrowed
+  measurement instrument (the Mosse constant of recognizability), never a
+  substitution or physics claim.
 
 Avoid:
 
@@ -381,7 +443,10 @@ Avoid:
   the legibility functional only — promoting it to public copy does not promote
   the physics claim it still disavows);
 - "Euler would have approved";
-- "Snell proves the agent claim."
+- "Snell proves the agent claim.";
+- "legibility is recognizability" / "a document is a substitution system" — the
+  over-strong identity, checked and killed; the radius is the locality coordinate
+  of reader-action only, and `J` keeps a separate coverage axis.
 
 ## First Concrete Edits
 
@@ -397,8 +462,12 @@ Avoid:
 - ~~Should the public name be **Least Action**, **Least Reader-Action**, or
   **Lagrangian Legibility**?~~ **Resolved 2026-06-17: Least Reader-Action;
   "the Sundog Lagrangian" promoted to public as the functional/chart name.**
-- Does `J(doc, reader, task)` need real scoring, or is a qualitative audit
-  enough for the first pass?
+- ~~Does `J(doc, reader, task)` need real scoring, or is a qualitative audit
+  enough for the first pass?~~ **Partially resolved 2026-06-28:** `J` splits into
+  a measurable **locality axis** (the reader-recognizability radius per
+  coordinate) and a **coverage axis** that stays qualitative (role present /
+  correct / runnable). See "Scoring the Locality Coordinate: the
+  Reader-Recognizability Radius."
 - Which existing document is the best negative control: a file that should not
   accept the coordinate chart?
 - Should the template become a reusable doc snippet, or stay prose-only until

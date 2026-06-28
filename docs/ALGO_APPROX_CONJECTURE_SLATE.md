@@ -162,31 +162,45 @@ checked on an optimization problem; LP duality / Bellman–Ford optimality for s
 constructor → no certificate-grade gap. (Held: `O(E+V)` check ≪ any search.) Also gives
 C-B2 its verifier side.
 
-**C-C2 — Fine-grained cornerstones as one cost-ledger family. [DAYDREAM→IMPORT]**
-*Claim.* APSP, edit distance, orthogonal-vectors and other SETH/fine-grained anchors
-share min-plus/tropical structure; they compile to ReLU DAGs whose gate counts track their
-fine-grained hardness, and fine-grained reductions are (approximately) `costOf`-preserving
-maps.
-*Classical hook.* Fine-grained complexity — the APSP conjecture, the OV conjecture, SETH.
-*Falsifier* (`REDUCTIONS_NOT_COST_PRESERVING`): the standard reductions blow up gate count
-beyond the conjectured factor.
-*First move.* Tabulate the known min-plus formulations and their gate counts under
-`CircuitNet`; check one reduction (OV → …) for cost preservation by hand.
+**C-C2 — Fine-grained cornerstones as one cost-ledger family. [DAYDREAM→IMPORT] — RAN
+2026-06-27, verdict `UNIFIES_AS_TROPICAL_COST_FAMILY` (typed-positive, bounded). Analytical
+tabulation, no Lean. See [`ALGO_APPROX_CC2_FINEGRAINED.md`](ALGO_APPROX_CC2_FINEGRAINED.md).**
+*Claim tested.* APSP, edit distance, OV and other SETH/fine-grained anchors share
+tropical structure, compile to ReLU DAGs whose gate counts track their DP/brute-force size,
+and the reductions preserve the cost measure.
+*Result.* Two semirings, **both in the `CircuitNet` fragment**: `(min,+)` (APSP / min-plus
+matmul / negative-triangle `Θ(n³)`; edit distance / LCS / Fréchet `Θ(n²)`) and Boolean
+`(OR,AND)` on `{0,1}` = `(max,min)` (BMM; **OV = `max_{(i,j)} min_k(1−min(a_k,b_k))`**,
+`Θ(n²d)` — worked out exactly). Gate counts = DP/brute-force sizes; the canonical reductions
+(APSP≡min-plus-matmul≡neg-triangle; OV→edit-distance/LCS/Fréchet; SETH→OV) are
+gate-count-preserving up to the fine-grained factor, so the falsifier does **not** fire.
+*Boundary (named).* **3SUM is out of fragment** (needs exact additive cancellation, not
+min/max/Boolean), as is the `n^ω` algebraic-matmul route (cancellation side — the same C-B1
+monotone-vs-general wall). The fine-grained *hardness conjectures* (the lower bounds) stay
+imported; the cost ledger gives construction *upper* bounds only.
 
 ---
 
 ## Theme D — Frontier ML theory
 
-**C-D1 — Depth separations are tropical-depth separations. [IMPORT-AND-CHECK]**
-*Claim.* The classical PL depth-separation results (Telgarsky's sawtooth; Eldan–Shamir)
-are, for piecewise-linear targets, exactly **tropical-circuit depth lower bounds**, made
-tight by exact compilation: every such separation has a tropical-depth witness and
-`CircuitNet` realizes the optimal-depth net.
-*Classical hook.* Why depth helps; depth-vs-width separations.
+**C-D1 — Depth separations are tropical-depth separations. [IMPORT-AND-CHECK] — LANDED
+2026-06-27 (constructive half axiom-clean + audited; the depth-vs-width lower bound is the
+named import). See `Sundogcert/DepthSeparation.lean`.**
+*Claim.* The classical PL depth-separation results (Telgarsky's sawtooth) are tropical-depth
+separations: the witness is a tropical circuit of linear depth producing exponentially many
+linear regions.
+*Result.* The **tent map** `T(x)=1−|2x−1|` is in the tropical fragment (`tent_eval`); its
+`d`-fold composition `iterTent d` (via `subst0`) is a tropical circuit computing `T^[d]`
+(`iterTent_eval`) of depth **linear in d** (`iterTent_depth_le ≤ d·depth(tent)`; ReLU depth
+`O(d)` via `compile_depth_le`). The punchline **`tent_iterate_dyadic`** proves
+`T^[d](j/2^d) = parity(j)` — the `2^d+1` dyadic samples alternate `0,1,0,1,…`, so the
+depth-`O(d)` circuit has **≥ 2^d linear pieces**: exponential expressivity from linear
+depth, the formal core of "depth = computation". All axiom-clean, in the AxiomAudit gate.
 *Falsifier* (`SEPARATION_NOT_TROPICAL`): a PL depth separation with no tropical-depth
-explanation.
-*First move.* Re-derive Telgarsky's sawtooth as a tropical circuit and read its depth off
-`compile_depth_le`.
+explanation — did not fire; the canonical witness (sawtooth/tent) *is* a tropical circuit.
+*Named wall (imported):* the matching depth-vs-**width** lower bound — that no shallow
+sub-exponential-width net matches `2^d` regions — is Telgarsky 2016, imported (this module
+proves the upper/achievability side).
 
 **C-D2 — Grokking = SGD discovering `compileToDag`; the compiled-size threshold is the
 first test. [EMPIRICAL] — RAN 2026-06-27, verdict INCONCLUSIVE (naive prediction NOT
@@ -261,11 +275,22 @@ pruning experiment against the proved band.
    exact-vs-ε and existence-vs-trainability). Documented negative —
    [`ALGO_APPROX_CD2_GROKKING_RESULT.md`](ALGO_APPROX_CD2_GROKKING_RESULT.md).
 
-**All three first-strikes are now run** (C-C1 ✅ closed, C-B1 ✅ closed, C-D2 ▢ inconclusive).
-Remaining open slate items, by tractability: **C-C2** (fine-grained min-plus tabulation,
-analytical), **C-D1** (depth separations = tropical-depth, import-and-check), **C-B2** (an
-in-model find-vs-check gap, reuses the new `ShortestPathCert` verifier side), then the
-Theme-A region-count formalizables (**C-A1/C-A2**) and the remaining empirical D-hooks.
+0. **C-D1 — depth separations = tropical-depth. ✅ LANDED 2026-06-27** (`DepthSeparation.lean`,
+   axiom-clean + audited): the tent map is a tropical circuit, its `d`-fold composition is a
+   depth-`O(d)` circuit (`iterTent_depth_le`) with `≥ 2^d` linear pieces
+   (`tent_iterate_dyadic`) — exponential expressivity from linear depth ("depth =
+   computation"); the depth-vs-width lower bound is the named import.
+
+0. **C-C2 — fine-grained tropical cost-family. ✅ LANDED 2026-06-27** (analytical tabulation,
+   `ALGO_APPROX_CC2_FINEGRAINED.md`): APSP/edit-distance `(min,+)` + OV/BMM Boolean-on-`{0,1}`
+   all in the `CircuitNet` fragment, gate counts = DP sizes, reductions cost-preserving; 3SUM
+   + `n^ω` algebraic route named out-of-fragment; hardness conjectures imported.
+
+**Status:** four hooks run + landed (C-C1 ✅, C-B1 ✅, C-D1 ✅ Lean; C-C2 ✅ analytical) plus
+C-D2 ▢ inconclusive — **four Lean closures + one analytical close + one documented empirical
+negative off this slate.** Remaining open, by tractability: **C-B2** (an in-model
+find-vs-check gap, reuses the `ShortestPathCert` verifier side), then the Theme-A region-count
+formalizables (**C-A1/C-A2**) and the remaining empirical D-hooks (**C-D3/C-D4**).
 
 > Cross-links: [`SUNDOG_V_ALGO_APPROX.md`](SUNDOG_V_ALGO_APPROX.md) (parent lane) ·
 > [`SUNDOG_V_P_V_NP.md`](SUNDOG_V_P_V_NP.md) (the find/check sibling) ·

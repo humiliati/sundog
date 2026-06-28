@@ -196,14 +196,100 @@ recognizability" stays metaphor and the lane keeps its folk metric.
 
 Links: [[project_sundog_least_reader_action]]; [[SUNDOG_V_GHOST.md]] Q2.
 
+### H2 HARDENED 2026-06-28 - SURVIVES (refined), with an independent receipt
+
+First hardening pass read the actual Least Reader-Action artifacts
+(`SUNDOG_V_LEAST_ACTION.md`; `docs/least_action/PHASE1_SUNDOGCERT_READER_ACTION_AUDIT.md`)
+rather than the memory summary. Outcome: H2 splits like H1 - a strong surviving
+core and a killed over-strong identity - and the surviving core is grounded by an
+audit the lane ran *before* this hypothesis existed.
+
+**H2a (SURVIVES) - the lane's recoverability scale IS a reader-recognizability
+radius.** The Phase 1 audit scores each `B/Phi/T/A/I/F/R` coordinate on a
+recoverability scale: check = recoverable by a cold reader; warn = recoverable but
+costs a reread / context-hop; cross = not recoverable without help. That scale is
+a coarse **reader-recognizability radius**: check = bounded-small; warn =
+bounded-with-a-hop (look further / elsewhere); cross = unbounded (role not
+recoverable from the document without going non-local). The lane's pre-registered
+falsifier ("two cold readers cannot name import / falsifier / receipt without
+help") is exactly "the reader-recognizability radius for I / F / R is not finite at
+the front door." An Euler pass = shrink every coordinate's reader-radius to
+bounded-at-the-front-door. Backbone: Mosse's *constant of recognizability*
+(Durand-Leroy). This also answers the lane's open question ("does `J` need real
+scoring?"): the **locality** terms of `J` admit a real per-coordinate score - the
+reader-recognizability radius - even while the rest of `J` stays qualitative.
+
+**H2b (KILLED) - reader-action `J` is NOT the recognizability radius.** `J` is a
+sum of six costs (missing-inference, notation-hop, cross-reference, hidden-import,
+status-ambiguity, replay-friction). The recognizability radius captures only the
+**locality** terms (notation-hop, cross-reference, missing-inference: how far you
+must look to recover a coordinate's role). The **coverage** terms (hidden-import,
+status-ambiguity, replay-friction) are a separate axis: whether a role *exists / is
+correct / is runnable at all*, not how far you look. So recognizability radius is
+**one coordinate of reader-action**, not the whole functional - same shape as H1b.
+
+**Receipt (independent, privileged-truth).** Applying the reader-recognizability
+lens reproduces the Phase 1 audit's own per-coordinate verdict:
+
+| coordinate | audit verdict | reader-recognizability radius reading |
+| --- | --- | --- |
+| `I` imports | check-check (strongest; stated up front) | bounded-small |
+| `R` receipt | check-check (referee-free, self-enforcing) | bounded-small |
+| `B` body | warn ("the word 'body' never appears"; one notation-hop) | bounded + one hop |
+| `F` falsifier | cross->warn (weakest; lives in the sibling ledger, not the README) | unbounded at the front door (recoverable only non-locally) |
+
+And the audit's **headline catch** - a stale worked-example count
+(status-ambiguity) - is a **coverage** failure (the info was present at small radius
+but WRONG), which the lens correctly classifies as OFF the radius axis, matching
+the audit's own "status-ambiguity cost" label. The lens agrees with a human audit
+run before the hypothesis - that is the check.
+
+**Honest scope.** H2's receipt is **analytic** (lens reproduces an independent
+audit), not machine-computed like H1's. A computable version - model a document as
+role-tagged sentences and measure the window needed to recover each tag on a
+structured vs scrambled version, or via an LLM-reader proxy - is a possible
+follow-up if a number is wanted; it is not built here.
+
+**Landing (not a new invariant).** Recognizability radius is a borrowed instrument
+(Mosse), not a new legibility theorem: it gives the *locality coordinate* of
+reader-action a citable backbone and a real score, while reader-action as a whole
+stays a Sundog construct with a separate coverage axis.
+
+Status: **H2a SURVIVES** (grounds an active lane's metric + answers its open
+J-scoring question; receipt reproduces the Phase 1 audit); **H2b KILLED**
+(recognizability radius = the locality coordinate of reader-action, coverage is
+orthogonal).
+
 ## Next
 
-**H1 hardened 2026-06-28** (above): the charFun <-> diffraction bridge is REAL
-(H1a survives, both sides proven/cited), and the naive charFun<->recognizability
-bridge is killed with a machine-checkable receipt (H1b). Open choices:
+Both shippable hooks are now hardened, and they hardened to the **same shape**: an
+`a` half that survives + a `b` half killed as an over-strong identity, with
+"recognizability is ONE coordinate, not the whole thing" as the recurring verdict.
 
-- promote **H1a** to its own pre-registered entry / short note (it is a genuine
-  cross-lane unification on the spectral axis) and/or probe the named frontier
-  (non-local / trained-encoder analog of "defeats continuous-resist");
-- harden **H2** next (recognizability = legibility), the other theorem-shaped hook;
-- leave the internal siblings (H3-H5) parked unless one earns attention.
+- **H1** (2026-06-28): H1a SURVIVES (charFun = diffraction, both sides
+  proven/cited), H1b KILLED (recognizability != diffraction, receipt), H1a
+  frontier RESOLVED (non-local reader recovers what the pure-point channel
+  declares absent; diffraction lossy-not-blind; lands on homometry /
+  van Enter-Miekisz).
+- **H2** (2026-06-28): H2a SURVIVES (the lane's recoverability scale + falsifier
+  ARE a reader-recognizability radius; answers its open "does J need scoring?"
+  question; receipt reproduces the Phase 1 audit), H2b KILLED (J != radius; radius
+  = the locality coordinate, coverage is orthogonal).
+
+Highest-utility follow-through (actionable, in an ACTIVE lane): **DONE 2026-06-28
+(owner license).** H2a landed in `SUNDOG_V_LEAST_ACTION.md`: new section "Scoring
+the Locality Coordinate: the Reader-Recognizability Radius" (the locality/coverage
+split of `J`, the per-coordinate radius score, the Mosse backbone with the
+"a document is not a substitution" fence); the lane's open "does `J` need real
+scoring?" question marked partially-resolved; Safe Language updated (Use +=
+"reader-recognizability radius", Avoid += "legibility is recognizability" /
+"a document is a substitution system"). This revived a lane that had been left
+stale and nearly quietly closed.
+
+H1a write-up: **DONE 2026-06-28** - promoted to its own cross-substrate home at
+[`../CROSS_SUBSTRATE_NOTES.md`](../CROSS_SUBSTRATE_NOTES.md) section 10
+("Shadow-Invertibility charFun = the diffraction spectrum of aperiodic order"),
+the portfolio's typed-generalization catch-can. Both shippable hooks are now
+hardened AND landed (H2a in `SUNDOG_V_LEAST_ACTION.md`, H1a in
+`CROSS_SUBSTRATE_NOTES.md` section 10). Remaining: internal siblings (H3-H5)
+parked unless one earns attention.
