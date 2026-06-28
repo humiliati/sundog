@@ -713,10 +713,26 @@ Exit gate MET 2026-06-27 (copy is exhibit-led and true without any
 heuristic/probe sentence). QA: reader renders (890 tiles at depth 5, thick:thin
 = phi), the window shows recoverable vs crossing supertiles, widening the circle
 collapses more ghost and raising the level recedes it upward, theme applied,
-responsive desktop + mobile, no console errors. Pre-deploy OWED (owner-gated):
-generate `og/ghost.png` via the public/og pipeline; owner asset/license check on
-the Penrose name; decide an inbound link (nav / index / generality umbrella);
-post-deploy social-validator pass; then `npm run deploy`.
+responsive desktop + mobile, no console errors.
+
+Pre-deploy checklist (SEO/webdev items DONE 2026-06-27):
+
+- `og/ghost.png` 1200x630 generated via the public/og pipeline (added `viz_ghost`
+  + `ghost` card to `public/og/_gen2.py`; Penrose rosette + drawn circle, on
+  brand); rasterized through the sharp fallback. DONE.
+- Clean-URL redirect `/ghost.html -> /ghost 301` added to `public/_redirects`.
+  DONE.
+- Inbound link added: `geometry.html` hero actions ("Open Ghost reader"). DONE.
+- Sitemap regenerated; `npm run seo:sitemap:check` = OK (25 URLs, `/ghost`
+  indexable). DONE.
+- Penrose asset/license diligence: US patent (1979) expired; usage is
+  self-generated geometry from published rules, no figure reuse, on-page
+  attribution = the clean path. Researched, NOT legal advice; owner makes the
+  final sign-off. PENDING owner call.
+
+Still owner-gated (NOT done): owner asset/license sign-off; `npm run deploy`
+(publishes https://sundog.cc/ghost); post-deploy social-validator pass. Assistant
+will not deploy without an explicit go.
 
 ## Current Best Shape
 

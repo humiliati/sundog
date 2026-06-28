@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDFDFC"/>
+      <stop offset="100%" stop-color="#F5F4EE"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.18" cy="0.12" r="0.6">
+      <stop offset="0%" stop-color="#F4C430" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#F4C430" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#halo)"/>
+
+  <!-- Top accent rule -->
+  <rect x="60" y="60" width="80" height="3" fill="#C99517"/>
+
+  <!-- Eyebrow -->
+  <text x="60" y="100" font-family="Verdana, Geneva, sans-serif" font-size="20" font-weight="700" fill="#2A5570" letter-spacing="3">SUNDOG · GHOST</text>
+
+  <!-- Headline -->
+  <text x="60" y="200" font-family="Georgia, 'Times New Roman', serif" font-size="56" font-weight="700" fill="#1A3A52">Ordered, but</text>
+  <text x="60" y="259" font-family="Georgia, 'Times New Roman', serif" font-size="56" font-weight="700" fill="#1A3A52">never repeating.</text>
+
+  <!-- Lede -->
+  <text x="60" y="366" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">A Penrose reader: local</text>
+  <text x="60" y="398" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">does not mean closed, yet</text>
+  <text x="60" y="430" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">the outside stays finite.</text>
+
+  <!-- URL -->
+  <text x="60" y="560" font-family="Courier New, Courier, monospace" font-size="22" font-weight="700" fill="#1A3A52">sundog.cc/ghost</text>
+
+  <!-- Per-page visualization (right side, ~620 to ~1140) -->
+  <g transform="translate(880,300)">
+  <circle cx="0" cy="0" r="120" fill="none" stroke="#1A3A52" stroke-width="2" stroke-dasharray="7 6" opacity="0.7"/>
+  <polygon points="0,0 51.7,-71.2 0.0,-142.4 -51.7,-71.2" fill="#F4C430" fill-opacity="0.92" stroke="#C99517" stroke-width="1.6" stroke-linejoin="round"/>
+  <polygon points="0,0 -51.7,-71.2 -135.4,-44.0 -83.7,27.2" fill="#FFFFFF" fill-opacity="0.92" stroke="#C99517" stroke-width="1.6" stroke-linejoin="round"/>
+  <polygon points="0,0 -83.7,27.2 -83.7,115.2 -0.0,88.0" fill="#F4C430" fill-opacity="0.92" stroke="#C99517" stroke-width="1.6" stroke-linejoin="round"/>
+  <polygon points="0,0 -0.0,88.0 83.7,115.2 83.7,27.2" fill="#FFFFFF" fill-opacity="0.92" stroke="#C99517" stroke-width="1.6" stroke-linejoin="round"/>
+  <polygon points="0,0 83.7,27.2 135.4,-44.0 51.7,-71.2" fill="#F4C430" fill-opacity="0.92" stroke="#C99517" stroke-width="1.6" stroke-linejoin="round"/>
+  </g>
+  <text x="880" y="505" font-family="Verdana, Geneva, sans-serif" font-size="13" fill="#6A7680" text-anchor="middle">Penrose rhombi &#183; ordered, never repeating</text>
+
+  <!-- Bottom-right mark -->
+  <text x="1140" y="600" font-family="Verdana, Geneva, sans-serif" font-size="14" font-weight="700" letter-spacing="2" fill="#9AA4AC" text-anchor="end">sundog.cc</text>
+</svg>

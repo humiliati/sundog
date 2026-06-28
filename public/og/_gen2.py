@@ -343,6 +343,32 @@ def viz_safety_method_bridge() -> str:
 
 # ---------- Card configs ----------
 
+def viz_ghost() -> str:
+    """Penrose 'sun' rosette (5 fat rhombi) with a drawn circle. For ghost.html."""
+    import math
+    cx, cy = 880, 300
+    L = 88
+    fills = ["#F4C430", "#FFFFFF", "#F4C430", "#FFFFFF", "#F4C430"]
+    parts = [f'<g transform="translate({cx},{cy})">']
+    parts.append('<circle cx="0" cy="0" r="120" fill="none" stroke="#1A3A52" '
+                 'stroke-width="2" stroke-dasharray="7 6" opacity="0.7"/>')
+    for i in range(5):
+        a = math.radians(90 + i * 72)
+        a1, a2 = a - math.radians(36), a + math.radians(36)
+        e1 = (L * math.cos(a1), L * math.sin(a1))
+        e2 = (L * math.cos(a2), L * math.sin(a2))
+        outer = (e1[0] + e2[0], e1[1] + e2[1])
+        pts = (f"0,0 {e1[0]:.1f},{-e1[1]:.1f} "
+               f"{outer[0]:.1f},{-outer[1]:.1f} {e2[0]:.1f},{-e2[1]:.1f}")
+        parts.append(f'<polygon points="{pts}" fill="{fills[i]}" fill-opacity="0.92" '
+                     'stroke="#C99517" stroke-width="1.6" stroke-linejoin="round"/>')
+    parts.append('</g>')
+    parts.append('<text x="880" y="505" font-family="Verdana, Geneva, sans-serif" '
+                 'font-size="13" fill="#6A7680" text-anchor="middle">'
+                 'Penrose rhombi &#183; ordered, never repeating</text>')
+    return "\n  ".join(parts)
+
+
 CARDS = {
     "index": {
         "filename": "home.png",
@@ -449,6 +475,18 @@ CARDS = {
         ],
         "url": "sundog.cc/safety-method",
         "viz": viz_safety_method_bridge,
+    },
+    "ghost": {
+        "filename": "ghost.png",
+        "eyebrow": "SUNDOG · GHOST",
+        "headline": ["Ordered, but", "never repeating."],
+        "lede": [
+            "A Penrose reader: local",
+            "does not mean closed, yet",
+            "the outside stays finite.",
+        ],
+        "url": "sundog.cc/ghost",
+        "viz": viz_ghost,
     },
 }
 
