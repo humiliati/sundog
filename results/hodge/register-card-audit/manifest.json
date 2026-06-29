@@ -1,0 +1,89 @@
+{
+  "artifact_id": "HODGE-HK1-REGISTER-CARD-AUDIT",
+  "date": "2026-06-29",
+  "input": "docs\\hodge\\register-problem-cards.jsonl",
+  "card_count": 10,
+  "pass": 10,
+  "blocked": 0,
+  "duplicate_ids": false,
+  "body_kinds": {
+    "cycle": 7,
+    "none-licensed": 3
+  },
+  "falsifier": {
+    "name": "REGISTER_PROBLEMS_VACUOUS",
+    "fires": false
+  },
+  "cards": [
+    {
+      "id": "HODGE-RG-001",
+      "body_kind": "cycle",
+      "pass": true,
+      "failed": [],
+      "vacuous_contrib": false
+    },
+    {
+      "id": "HODGE-RG-002",
+      "body_kind": "none-licensed",
+      "pass": true,
+      "failed": [],
+      "vacuous_contrib": false
+    },
+    {
+      "id": "HODGE-RG-003",
+      "body_kind": "cycle",
+      "pass": true,
+      "failed": [],
+      "vacuous_contrib": false
+    },
+    {
+      "id": "HODGE-RG-004",
+      "body_kind": "cycle",
+      "pass": true,
+      "failed": [],
+      "vacuous_contrib": false
+    },
+    {
+      "id": "HODGE-RG-005",
+      "body_kind": "cycle",
+      "pass": true,
+      "failed": [],
+      "vacuous_contrib": false
+    },
+    {
+      "id": "HODGE-RG-006",
+      "body_kind": "cycle",
+      "pass": true,
+      "failed": [],
+      "vacuous_contrib": false
+    },
+    {
+      "id": "HODGE-RG-007",
+      "body_kind": "cycle",
+      "pass": true,
+      "failed": [],
+      "vacuous_contrib": false
+    },
+    {
+      "id": "HODGE-RG-008",
+      "body_kind": "none-licensed",
+      "pass": true,
+      "failed": [],
+      "vacuous_contrib": false
+    },
+    {
+      "id": "HODGE-RG-009",
+      "body_kind": "none-licensed",
+      "pass": true,
+      "failed": [],
+      "vacuous_contrib": false
+    },
+    {
+      "id": "HODGE-RG-010",
+      "body_kind": "cycle",
+      "pass": true,
+      "failed": [],
+      "vacuous_contrib": false
+    }
+  ]
+}

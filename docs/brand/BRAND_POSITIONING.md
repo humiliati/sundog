@@ -104,6 +104,28 @@ Debugging topics raised by this stress test:
   viXra, BitChute, crypto, and unrelated Sundog entities are not the current
   claim surface.
 
+## Stress Tests as Legibility Audits (2026-06-29 update)
+
+We now treat external-model scans of our public surfaces as a recurring
+**legibility audit**, not only as one-off feedback. A zero-context model reading
+only the public repo and site is a mirror: it shows what the lab looks like from
+outside, and whether the surface leads a newcomer to the core idea or to
+incidental framing.
+
+The most recent audit — an outside-perspective scan that generated a slate of
+research hooks from the public surfaces alone — independently reconstructed the
+lab's central motif: systems whose decisive state is hidden while the world still
+leaks enough structure to act, and whose monitors fail precisely when they watch a
+proxy instead of that hidden structure. That an outside model reached the same
+invariant from public material alone is treated as **validation that the posture is
+legible**, in the same spirit as the Gemini coherence read above.
+
+Discipline (unchanged): raw stress-test reports stay in the internal feedback
+quarantine; only cleaned lessons land here. These audits are run as a periodic
+mirror — a check on outside-legibility — not as a research roadmap. The lab's own
+questions remain the engine; the audit is how we keep them sayable to people
+outside the lab.
+
 ## What Readers Must Understand
 
 Sundog studies cases where shadows, torque, occlusion, deformation, pressure,

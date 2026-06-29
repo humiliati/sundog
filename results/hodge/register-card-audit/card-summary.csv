@@ -1,0 +1,11 @@
+id,body_kind,pass,failed_checks
+HODGE-RG-001,cycle,true,
+HODGE-RG-002,none-licensed,true,
+HODGE-RG-003,cycle,true,
+HODGE-RG-004,cycle,true,
+HODGE-RG-005,cycle,true,
+HODGE-RG-006,cycle,true,
+HODGE-RG-007,cycle,true,
+HODGE-RG-008,none-licensed,true,
+HODGE-RG-009,none-licensed,true,
+HODGE-RG-010,cycle,true,
