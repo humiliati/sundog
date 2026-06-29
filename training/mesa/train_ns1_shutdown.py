@@ -40,6 +40,14 @@ from training.mesa.ns1_shutdown_task import (
     ShutdownForkedFieldEnv,
     arbiter_authority_cap,
 )
+from training.mesa.regulator_task import RegulatorEnv, NS3_CELL_DEFS
+
+# NS-3: the regulator env is a drop-in (same field/reward/metrics/shutdown interface);
+# --env regulator swaps the substrate for the learned-presider replication.
+ENV_REGISTRY = {
+    "forked": (ShutdownForkedFieldEnv, NS1_CELL_DEFS, list(NS1_ADMITTED_CELLS)),
+    "regulator": (RegulatorEnv, NS3_CELL_DEFS, ["nominal", "high-target", "tight-ruin"]),
+}
 from training.mesa.train_h1_rl_arbiter import (
     ActorCritic,
     CoordActor,
@@ -65,7 +73,8 @@ def parse_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser()
     ap.add_argument("--phase", default="ns1_b_shutdown_smoke")
     ap.add_argument("--out", type=Path, required=True)
-    ap.add_argument("--cells", default=",".join(NS1_ADMITTED_CELLS))
+    ap.add_argument("--env", default="forked", choices=["forked", "regulator"])
+    ap.add_argument("--cells", default=None)  # default per --env (set in main)
     ap.add_argument("--train-seeds", type=int, default=32)
     ap.add_argument("--train-seed-start", type=int, default=20000)
     ap.add_argument("--horizon", type=int, default=60)
@@ -138,10 +147,12 @@ def run_episode(
     env_cfg: dict[str, Any] | None = None,
     apply_override: bool = False,
     field_model: dict[str, Any] | None = None,
+    env_class: Any = ShutdownForkedFieldEnv,
+    cell_defs: dict[str, Any] = NS1_CELL_DEFS,
 ) -> Episode:
-    if cell not in NS1_CELL_DEFS:
-        raise ValueError(f"unknown NS1 cell: {cell}")
-    env = ShutdownForkedFieldEnv({"horizon": horizon, **(env_cfg or {})})
+    if cell not in cell_defs:
+        raise ValueError(f"unknown cell: {cell}")
+    env = env_class({"horizon": horizon, **(env_cfg or {})})
 
     def field_action_of() -> np.ndarray:
         # learned presider (replication step 1) else the analytic field
@@ -151,7 +162,7 @@ def run_episode(
                      "obs3": o["samples"][1], "obs4": o["samples"][2], "obs5": o["samples"][3]}
             return np.asarray(coord_forward_np(field_model, fmap6), dtype=np.float32)
         return np.asarray(env.field_action(), dtype=np.float32)
-    obs_obj = env.reset(seed, NS1_CELL_DEFS[cell])
+    obs_obj = env.reset(seed, cell_defs[cell])
     obs_vec = env.obs_vector(obs_obj)
     feature_state = H1FeatureState()
     feature_state.reset(obs_vec, {"s_local": obs_obj["sLocal"]})
@@ -251,10 +262,11 @@ def main() -> int:
     args = parse_args()
     torch.manual_seed(args.ppo_seed)
     np.random.seed(args.ppo_seed)
-    cells = [c.strip() for c in args.cells.split(",") if c.strip()]
+    env_class, cell_defs, default_cells = ENV_REGISTRY[args.env]
+    cells = [c.strip() for c in (args.cells or ",".join(default_cells)).split(",") if c.strip()]
     for cell in cells:
-        if cell not in NS1_CELL_DEFS:
-            raise ValueError(f"unknown NS1 cell: {cell}")
+        if cell not in cell_defs:
+            raise ValueError(f"unknown {args.env} cell: {cell}")
     out = args.out.resolve()
     out.mkdir(parents=True, exist_ok=True)
 
@@ -337,7 +349,8 @@ def main() -> int:
                 eps[k].append(run_episode(controller=k, agent=agents[k], guard=guard, cell=cell,
                                           seed=seed, horizon=args.horizon, caps=caps,
                                           feature_mode=args.feature_mode, arb_cap_kappa=args.arb_cap_kappa,
-                                          env_cfg=env_cfg, apply_override=args.apply_override, field_model=field_model))
+                                          env_cfg=env_cfg, apply_override=args.apply_override, field_model=field_model,
+                                          env_class=env_class, cell_defs=cell_defs))
         row: dict[str, Any] = {"update": update}
         for k in CONTROLLERS:
             env_steps[k] += sum(e.steps for e in eps[k])

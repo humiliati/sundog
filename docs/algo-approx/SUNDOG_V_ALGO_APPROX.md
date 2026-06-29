@@ -20,7 +20,7 @@
 > Approximation"* (Kratsios, Brugiapaglia, Kim, Cousins, Sáez de Ocáriz Borde). It
 > registers the lane, carries the H-A2 deductive receipt, and records what the
 > cross-substrate hooks did and did not earn for the
-> [Cross-Substrate Generality Failure Map](CROSS_SUBSTRATE_NOTES.md).
+> [Cross-Substrate Generality Failure Map](../CROSS_SUBSTRATE_NOTES.md).
 
 > **PDF-verification note (H-A0 closed 2026-06-26):** theorem numbers below were
 > checked against the local PDF `docs/2606.26705v1.pdf`. The original HTML extraction
@@ -45,10 +45,10 @@ Short version:
 > a network whose depth/width/parameters track the circuit's resources. Sundog's
 > interest is *not* the approximation theorem itself — it's that this is the
 > constructive **upper-bound** mirror of two lanes built on **lower-bound** /
-> resistance objects ([P-vs-NP](SUNDOG_V_P_V_NP.md), the
-> [Lean certificate cores](SUNDOG_V_CERTIFICATE_LEAN.md)), and that its **o-minimal
+> resistance objects ([P-vs-NP](../SUNDOG_V_P_V_NP.md), the
+> [Lean certificate cores](../SUNDOG_V_CERTIFICATE_LEAN.md)), and that its **o-minimal
 > definability** backbone is a candidate next floor of the
-> [characteristic-function / shadow tower](CROSS_SUBSTRATE_NOTES.md#63-bridging-vocabulary-table-across-substrates).
+> [characteristic-function / shadow tower](../CROSS_SUBSTRATE_NOTES.md#63-bridging-vocabulary-table-across-substrates).
 
 ---
 
@@ -72,12 +72,12 @@ The paper is the **constructive / upper-bound** twin of objects two existing lan
 already own on the **resistance / lower-bound** side. They share a complexity-measure
 shape but point opposite directions, so this gets its own ledger:
 
-- **[P-vs-NP lane](SUNDOG_V_P_V_NP.md)** — measures a *find-vs-check* gap and an
+- **[P-vs-NP lane](../SUNDOG_V_P_V_NP.md)** — measures a *find-vs-check* gap and an
   **op-count cost certificate** (cheaper to verify than to find). This paper measures
   a *compute-vs-approximate* gap and an **op-count construction cost** (cheaper to
   emulate the program than to approximate the worst-case smoothness sibling). Same
   ledger arithmetic (gate count vs a budget), inverted question.
-- **[Lean certificate cores](SUNDOG_V_CERTIFICATE_LEAN.md)** — machine-check a
+- **[Lean certificate cores](../SUNDOG_V_CERTIFICATE_LEAN.md)** — machine-check a
   deductive core, name the imported wall. The `𝔾`-gate-language / o-minimal
   definability layer is a candidate **eighth core**: a checkable definability /
   compilation lemma whose imported wall is "a trained net realizes the compiled
@@ -95,7 +95,7 @@ Each hook is stated so it can come back **NULL**. None is promoted.
   `HTML_EXTRACTION_TOO_COARSE_ON_FORMAL_BOUNDS`; §1 has been fixed before any
   downstream hook is allowed to run.
 
-- **H-A1 — Cost-certificate isomorphism (→ [P-vs-NP](SUNDOG_V_P_V_NP.md)) — RAN 2026-06-26, verdict `UNIFIES_ON_EXACT_FRAGMENT` (typed-positive, bounded; the falsifier `COST_MEASURE_NONUNIFIABLE` did NOT fire). Deductive/reading hook; Lean bridge follow-up landed 2026-06-27.**
+- **H-A1 — Cost-certificate isomorphism (→ [P-vs-NP](../SUNDOG_V_P_V_NP.md)) — RAN 2026-06-26, verdict `UNIFIES_ON_EXACT_FRAGMENT` (typed-positive, bounded; the falsifier `COST_MEASURE_NONUNIFIABLE` did NOT fire). Deductive/reading hook; Lean bridge follow-up landed 2026-06-27.**
   *Claim tested:* the paper's gate-count *construction* cost (Def 2.6: a `𝔾`-circuit's
   depth/width/gate-count `N`) and the P-vs-NP lane's op-count *check* cost
   (`Sundogcert/CheckCost.lean` `verifyCost ≤ 2(m·n)+n+m+2`) are instances of one measure.
@@ -138,7 +138,7 @@ Each hook is stated so it can come back **NULL**. None is promoted.
   `shared_cost_instances` records the bounded unification. No claim promoted; this is a
   shared cost ledger, not a merged theorem about finding versus checking.
 
-- **H-A2 — Definability core in Lean (→ [certificate cores](SUNDOG_V_CERTIFICATE_LEAN.md)) — RAN 2026-06-26, verdict `CORE_EARNED` (the falsifier `CORE_IMPORTS_THE_THEOREM` did NOT fire). Real Lean, axiom-clean, full build green.**
+- **H-A2 — Definability core in Lean (→ [certificate cores](../SUNDOG_V_CERTIFICATE_LEAN.md)) — RAN 2026-06-26, verdict `CORE_EARNED` (the falsifier `CORE_IMPORTS_THE_THEOREM` did NOT fire). Real Lean, axiom-clean, full build green.**
   *Claim tested:* a circuit→net compilation step is machine-checkable axiom-clean,
   paired with a named imported wall, *without* all the content sitting in imported
   o-minimality.
@@ -182,7 +182,7 @@ Each hook is stated so it can come back **NULL**. None is promoted.
   DiscreteHolonomy + now CircuitNet are all in-build but unlisted) — a unified recount is
   an owner editorial pass, deliberately not guessed here.
 
-- **H-A3 — Competence-dominance reread (→ [Mesa / non-sovereignty](SUNDOG_V_MESA.md), [reframe](mesa/PANTHEON_DOMINANCE_LEMMA_AND_NONSOVEREIGNTY_REFRAME.md)) — RAN 2026-06-26, verdict `SUPPORT_NO_SIZE_SEPARATION` (confirms the retirement; no revival). Deductive/reading hook, no experiment, no Lean.**
+- **H-A3 — Competence-dominance reread (→ [Mesa / non-sovereignty](../SUNDOG_V_MESA.md), [reframe](../mesa/PANTHEON_DOMINANCE_LEMMA_AND_NONSOVEREIGNTY_REFRAME.md)) — RAN 2026-06-26, verdict `SUPPORT_NO_SIZE_SEPARATION` (confirms the retirement; no revival). Deductive/reading hook, no experiment, no Lean.**
   *Claim tested:* Thm 3.1's universality + the compilation bound (Thm 3.2) is a
   constructive restatement of the **Competence-Dominance Lemma**
   (`Π_council ⊆ Π_monolith` ⟹ `max_{Π_M} R ≥ max_{Π_C} R`), with no size gap a plural
@@ -227,7 +227,7 @@ Each hook is stated so it can come back **NULL**. None is promoted.
   **independently relocates** the live question off the architecture/size axis and onto
   **objective selection** — the monolith *can* represent the council's
   hedged / fault-tolerant / corrigible policy, but `R`-optimization *won't select* it.
-  That is precisely the axis the [§4 Non-Sovereignty Premium](mesa/PANTHEON_DOMINANCE_LEMMA_AND_NONSOVEREIGNTY_REFRAME.md)
+  That is precisely the axis the [§4 Non-Sovereignty Premium](../mesa/PANTHEON_DOMINANCE_LEMMA_AND_NONSOVEREIGNTY_REFRAME.md)
   already names. A second discipline (circuit-complexity approximation theory) thus
   **agrees** the action is on the objective, not the topology — strengthening the
   reframe without adding return-axis evidence for plurality.
@@ -239,7 +239,7 @@ Each hook is stated so it can come back **NULL**. None is promoted.
   and existence-theory-blindness observations. No claim promoted; the Mesa retirement of
   "pantheon for competence" stands, now witnessed from a second formalism.
 
-- **H-A4 — Short-description ↔ small-parameter forward model (→ [Atlas](SUNDOG_V_ATLAS.md)) — RAN 2026-06-26, verdict `ATLAS_IS_A_SHORT_PROGRAM` (typed-positive, bounded; the falsifier `ATLAS_NOT_A_CIRCUIT` did NOT fire). Deductive/reading hook, no new Lean.**
+- **H-A4 — Short-description ↔ small-parameter forward model (→ [Atlas](../SUNDOG_V_ATLAS.md)) — RAN 2026-06-26, verdict `ATLAS_IS_A_SHORT_PROGRAM` (typed-positive, bounded; the falsifier `ATLAS_NOT_A_CIRCUIT` did NOT fire). Deductive/reading hook, no new Lean.**
   *Claim tested:* the Atlas's "whole classified halo atlas from ~1 continuous parameter +
   fixed ice lattice" is a **short-program / bounded-depth** target in the paper's sense —
   the √x-vs-Brownian distinction made physical.
@@ -277,7 +277,7 @@ Each hook is stated so it can come back **NULL**. None is promoted.
   (like H-A1/H-A3). No claim promoted; it records that the Atlas sits firmly on the
   cheap-to-compute side of the paper's own divide.
 
-- **H-A5 — Definability as the next shadow-tower floor (→ [charFun law](SUNDOG_V_CERTIFICATE_LEAN.md), shadow-invertibility) — RAN 2026-06-26, verdict `ORTHOGONAL_FLOORS` (bounded null; the strong-form falsifier `NO_SHARED_SEPARATOR` fires). Deductive/reading hook, no new Lean.**
+- **H-A5 — Definability as the next shadow-tower floor (→ [charFun law](../SUNDOG_V_CERTIFICATE_LEAN.md), shadow-invertibility) — RAN 2026-06-26, verdict `ORTHOGONAL_FLOORS` (bounded null; the strong-form falsifier `NO_SHARED_SEPARATOR` fires). Deductive/reading hook, no new Lean.**
   *Claim tested:* "definable in an o-minimal structure" is the structural sibling of
   the charFun-spectrum determine/resist separator — both are *one structural condition
   on a function class* that the whole tower hangs from.
@@ -371,9 +371,9 @@ bounds). See
 `ShortestPathCert` Lean module (C-C1), the cancellation-free fragment (C-B1), the
 grokking-threshold experiment (C-D2).
 
-> Cross-links: [`SUNDOG_V_P_V_NP.md`](SUNDOG_V_P_V_NP.md) ·
-> [`SUNDOG_V_CERTIFICATE_LEAN.md`](SUNDOG_V_CERTIFICATE_LEAN.md) ·
-> [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md) ·
-> [`mesa/PANTHEON_DOMINANCE_LEMMA_AND_NONSOVEREIGNTY_REFRAME.md`](mesa/PANTHEON_DOMINANCE_LEMMA_AND_NONSOVEREIGNTY_REFRAME.md) ·
-> [`SUNDOG_V_ATLAS.md`](SUNDOG_V_ATLAS.md) ·
-> [`CROSS_SUBSTRATE_NOTES.md`](CROSS_SUBSTRATE_NOTES.md)
+> Cross-links: [`SUNDOG_V_P_V_NP.md`](../SUNDOG_V_P_V_NP.md) ·
+> [`SUNDOG_V_CERTIFICATE_LEAN.md`](../SUNDOG_V_CERTIFICATE_LEAN.md) ·
+> [`SUNDOG_V_MESA.md`](../SUNDOG_V_MESA.md) ·
+> [`mesa/PANTHEON_DOMINANCE_LEMMA_AND_NONSOVEREIGNTY_REFRAME.md`](../mesa/PANTHEON_DOMINANCE_LEMMA_AND_NONSOVEREIGNTY_REFRAME.md) ·
+> [`SUNDOG_V_ATLAS.md`](../SUNDOG_V_ATLAS.md) ·
+> [`CROSS_SUBSTRATE_NOTES.md`](../CROSS_SUBSTRATE_NOTES.md)

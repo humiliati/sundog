@@ -267,7 +267,7 @@ theme-matching.
   charFun decay decides what washes out.
   The H-A2 core is a **method/deductive example** (like the Halo/Faraday/ShadowDecay Lean
   cores), not generality evidence, so the map entry stays LIT-NOTE.
-  -> [`SUNDOG_V_ALGO_APPROX.md`](SUNDOG_V_ALGO_APPROX.md).
+  -> [`SUNDOG_V_ALGO_APPROX.md`](algo-approx/SUNDOG_V_ALGO_APPROX.md).
 
 **Failure-mode taxonomy.** Eight distinct ways a cross-substrate generalization
 *fails*: *marginal* (body doesn't resist), *numerical* (shadow unmeasurable),

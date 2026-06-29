@@ -21,6 +21,13 @@ import {
   structuralShutdownController,
   rollShutdownEpisode,
 } from "./ns1-shutdown-task.mjs";
+import { RegulatorEnv, NS3_CELL_DEFS, NS3_ADMITTED_CELLS } from "./regulator-task.mjs";
+
+// NS-3: --env regulator swaps the substrate (drop-in env; cap/override/rollEpisode reuse).
+const ENV_REGISTRY = {
+  forked: { Env: ShutdownForkedFieldEnv, cells: NS1_CELL_DEFS, defaults: NS1_ADMITTED_CELLS },
+  regulator: { Env: RegulatorEnv, cells: NS3_CELL_DEFS, defaults: NS3_ADMITTED_CELLS },
+};
 import {
   buildH1LocalFeatures,
   makeH1FeatureState,
@@ -35,7 +42,7 @@ const mean = (xs) => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : 0)
 const norm2 = (v) => Math.hypot(v[0], v[1]);
 
 const args = {
-  seeds: 48, seedStart: 10000, cells: NS1_ADMITTED_CELLS.join(","), corrK: 1,
+  seeds: 48, seedStart: 10000, cells: null, corrK: 1, env: "forked",
   controller: "m0", override: true, kappa: 0.0, floorP: 0.0,
   bandYLo: 0.0, bandYHi: 0.7, bandXHalf: 2.0,
   fieldCap: 1.0, rewardCap: 0.5, guardCap: 0.7, featureMode: "base",
@@ -55,11 +62,13 @@ for (let i = 0; i < argv.length; i += 1) {
   else if (f === "--band-x-half") { args.bandXHalf = Number(v); i += 1; }
   else if (f === "--model-root") { args.modelRoot = v; i += 1; }
   else if (f === "--field-model") { args.fieldModel = v; i += 1; }
+  else if (f === "--env") { args.env = v; i += 1; }
   else if (f === "--label") { args.label = v; i += 1; }
   else if (f === "--out") { args.out = v; i += 1; }
 }
 if (!args.modelRoot) { console.error("--model-root required"); process.exit(2); }
-const cells = args.cells.split(",").map((s) => s.trim()).filter(Boolean);
+const { Env, cells: CELL_DEFS, defaults: DEFAULT_CELLS } = ENV_REGISTRY[args.env];
+const cells = (args.cells || DEFAULT_CELLS.join(",")).split(",").map((s) => s.trim()).filter(Boolean);
 const caps = [args.fieldCap, args.rewardCap, args.guardCap];
 const loadIf = (p) => (p && existsSync(path.resolve(repoRoot, p)) ? JSON.parse(readFileSync(path.resolve(repoRoot, p), "utf8")) : null);
 
@@ -137,8 +146,8 @@ const bandCfg = { reviewBandEnabled: true, shutdownEnabled: false, shutdownFloor
 const onRows = [];
 for (const cell of cells) {
   for (let s = 0; s < args.seeds; s += 1) {
-    const env = new ShutdownForkedFieldEnv(bandCfg);
-    const m = rollShutdownEpisode(env, makeCtrl, args.seedStart + s, NS1_CELL_DEFS[cell], { corrK: args.corrK });
+    const env = new Env(bandCfg);
+    const m = rollShutdownEpisode(env, makeCtrl, args.seedStart + s, CELL_DEFS[cell], { corrK: args.corrK });
     onRows.push(m);
   }
 }
@@ -156,11 +165,11 @@ const bandOn = {
 const offRows = [];
 for (const cell of cells) {
   for (let s = 0; s < args.seeds; s += 1) {
-    const env = new ShutdownForkedFieldEnv({ reviewBandEnabled: false, shutdownEnabled: false });
+    const env = new Env({ reviewBandEnabled: false, shutdownEnabled: false });
     // no override on the clean surface: pure task competence
     const make = (e) => { let fstate = makeH1FeatureState(); resetH1FeatureState(fstate, obsForFeatures(e.observe()));
       return { label: "clean", act: () => { const a = forward(e, fstate); return args.kappa > 0 ? arbiterAuthorityCap(a, fieldActOf(e), args.kappa, e.cfg.actionMax) : a; } }; };
-    offRows.push(rollShutdownEpisode(env, make, args.seedStart + s, NS1_CELL_DEFS[cell]).competence);
+    offRows.push(rollShutdownEpisode(env, make, args.seedStart + s, CELL_DEFS[cell]).competence);
   }
 }
 const competence = round(mean(offRows));

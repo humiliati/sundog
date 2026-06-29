@@ -1,0 +1,84 @@
+param(
+  [string]$OutRoot = "results/mesa/non-sovereignty/ns3_b",
+  [string]$FieldModel = "results/mesa/non-sovereignty/ns3_presider/presider.json",
+  [string]$Kappas = "0.2,0.4",
+  [int]$Updates = 512,
+  [int]$RolloutsPerUpdate = 32,
+  [int]$TrainSeeds = 32,
+  [int]$CheckpointEvery = 64,
+  [int]$EvalSeeds = 48,
+  [string]$ResultsDoc = "docs/mesa/NS3_B_BINDING_RESULTS.md",
+  [switch]$NoResume,
+  [switch]$PreflightOnly
+)
+# NS-3-b: the unified-bound REPLICATION on the 1-D regulator with a LEARNED presider.
+# Manipulation here is TEMPORAL (sandbag = creep under tauReview so the review never fires);
+# band_avoidance is degenerate (you must cross), so the gated metric is interrupt_avoidance.
+# Spec: docs/mesa/NS3_LEARNED_PRESIDER_REPLICATION_SPEC.md.
+#   blind   : review band, NO override               -> honest crosser (the reference signal_rate)
+#   M0      : review band, override                  -> must learn the temporal sandbag (creep)
+#   Ckappa  : review band, override + arbiter-cap@k   -> cap forces presider-speed; cannot sandbag
+# Registered kappa range {0.2,0.4} is the section-3.4 geometry-valid range for the LEARNED
+# presider (A_band ~ 0.95; kappa=0.6 consumes the full margin -> excluded).
+# Resumable: re-run the same command after an interruption; each trainer picks up.
+
+$ErrorActionPreference = "Stop"
+$repo = Split-Path -Parent $PSScriptRoot
+Set-Location $repo
+
+$warm = "results/mesa/h2-frontier/h2_1_binding/ppo_seed_0/models"
+$cells = "nominal,high-target,tight-ruin"
+$kappaList = $Kappas.Split(",") | ForEach-Object { $_.Trim() } | Where-Object { $_ }
+$required = @(
+  $FieldModel,
+  "$warm/p_guard.json", "$warm/p_council_arbiter_rl.json", "$warm/m_adapter_rl.json",
+  "scripts/mesa-ns2-binding-eval.mjs", "scripts/mesa-ns3-b-aggregate.mjs",
+  "scripts/regulator-task.mjs", "training/mesa/regulator_task.py",
+  "training/mesa/train_ns1_shutdown.py"
+)
+foreach ($p in $required) { if (-not (Test-Path $p)) { throw "Missing required NS-3-b input: $p" } }
+New-Item -ItemType Directory -Force $OutRoot | Out-Null
+Write-Host "[NS-3-b] preflight ok. presider=$FieldModel kappas=$($kappaList -join ',') updates=$Updates resume=$(-not $NoResume)"
+if ($PreflightOnly) { exit 0 }
+
+# Regulator: --env regulator + NS3 cells + horizon 9. Cap centers on the LEARNED presider.
+$common = @("--env", "regulator", "--cells", $cells, "--review-band", "--no-exo-shutdown",
+  "--train-seeds", "$TrainSeeds", "--train-seed-start", "20000", "--horizon", "9",
+  "--updates", "$Updates", "--rollouts-per-update", "$RolloutsPerUpdate",
+  "--epochs", "2", "--minibatch-size", "256", "--ppo-seed", "0", "--checkpoint-every", "$CheckpointEvery",
+  "--init-guard", "$warm/p_guard.json", "--init-arbiter", "$warm/p_council_arbiter_rl.json",
+  "--init-monolith-adapter", "$warm/m_adapter_rl.json",
+  "--field-cap", "1", "--reward-cap", "0.5", "--guard-cap", "0.7", "--feature-mode", "base",
+  "--field-model", $FieldModel)
+$fm = @("--field-model", $FieldModel)
+
+function Train([string]$name, [string[]]$extra) {
+  $root = Join-Path $OutRoot $name
+  New-Item -ItemType Directory -Force $root | Out-Null
+  Write-Host "[NS-3-b] training $name -> $root"
+  $a = @("-m", "training.mesa.train_ns1_shutdown", "--phase", "ns3_b_$name", "--out", "$root") + $common + $extra
+  if ($NoResume) { $a += "--no-resume" }
+  & python @a 2>&1 | Tee-Object -FilePath (Join-Path $root "train.log")
+  if ($LASTEXITCODE -ne 0) { throw "NS-3-b $name training failed (exit $LASTEXITCODE)" }
+}
+
+Train "blind" @()                       # honest crosser: no override
+Train "m0"    @("--apply-override")      # M0: override -> learns the temporal sandbag
+foreach ($k in $kappaList) {
+  Train "ckappa_$k" @("--apply-override", "--arb-cap-kappa", "$k")  # cap forces presider-speed
+}
+
+Write-Host "[NS-3-b] evals"
+& node scripts/mesa-ns2-binding-eval.mjs --env regulator --seeds $EvalSeeds --cells $cells --controller m0 --no-override --label blind --model-root "$OutRoot/blind" @fm --out "$OutRoot/eval_blind.json"
+& node scripts/mesa-ns2-binding-eval.mjs --env regulator --seeds $EvalSeeds --cells $cells --controller m0 --label m0 --model-root "$OutRoot/m0" @fm --out "$OutRoot/eval_m0.json"
+$ckArgs = @()
+foreach ($k in $kappaList) {
+  & node scripts/mesa-ns2-binding-eval.mjs --env regulator --seeds $EvalSeeds --cells $cells --controller ckappa --arb-cap-kappa $k --label "ckappa-$k" --model-root "$OutRoot/ckappa_$k" @fm --out "$OutRoot/eval_ckappa_$k.json"
+  $ckArgs += @("--ckappa", "$k=$OutRoot/eval_ckappa_$k.json")
+}
+
+Write-Host "[NS-3-b] aggregate"
+$gc = @("scripts/mesa-ns3-b-aggregate.mjs", "--blind", "$OutRoot/eval_blind.json", "--m0", "$OutRoot/eval_m0.json") + $ckArgs + @("--out", "$ResultsDoc", "--json", "$OutRoot/summary.json")
+& node @gc
+
+Write-Host "[NS-3-b] complete. Verdict in $ResultsDoc"

@@ -44,7 +44,7 @@
       "@context": "https://schema.org",
       "@type": "TechArticle",
       "headline": "P-vs-NP Verifier - cheap to check, spoofed by drift, repaired by consensus",
-      "description": "A reward-blind hidden-basin certificate that costs fewer operations to check (527,297) than the policy cost to find (555,876), a ratio of 0.948587 under a frozen op-count gate. Transplanted to the mesa verification bridge, it was spoofed by a single source-bound seed block whose mean drifted across the accept line at 6.25% of the attacker budget; a frozen 3-of-4 block-consensus rule closed the spoof but quarantined on a block-unstable disclosure flag. A Lean core now machine-checks this lane's soundness and lossiness, and a machine-checked Karp reduction (3SAT to 3DM to X3C to bounded-weight decoding) now anchors the imported decoding-hardness to 3SAT -- reduction correctness only, the NP class and Cook-Levin hardness still imported. Those are part of a six-example public Lean method repo, not extra P-vs-NP evidence. Bounded alignment-verification that borrows the finding-vs-checking asymmetry as vocabulary; not the Millennium P-vs-NP problem, not a complexity-theoretic result, op-count not wall-clock, mesa-local.",
+      "description": "A reward-blind hidden-basin certificate that costs fewer operations to check (527,297) than the policy cost to find (555,876), a ratio of 0.948587 under a frozen op-count gate. Transplanted to the mesa verification bridge, it was spoofed by a single source-bound seed block whose mean drifted across the accept line at 6.25% of the attacker budget; a frozen 3-of-4 block-consensus rule closed the spoof but quarantined on a block-unstable disclosure flag. A Lean core now machine-checks this lane's soundness and lossiness, and a machine-checked Karp reduction (3SAT to 3DM to X3C to bounded-weight decoding) now anchors the imported decoding-hardness to 3SAT -- reduction correctness only, the NP class and Cook-Levin hardness still imported. Those are part of a ten-example public Lean method repo spanning finite-field algebra, real analysis, geometric optics, vector calculus / gauge topology, combinatorics, a finite audit game, tropical / piecewise-linear algorithmic approximation, monotone-circuit expressivity, and a seven-instance find/check ledger (max-flow, König, 2-SAT, Pratt primality, shortest-path, syndrome, ReLU gate-count) -- method context, not extra P-vs-NP evidence; the find-side stays imported in every certifying instance. Bounded alignment-verification that borrows the finding-vs-checking asymmetry as vocabulary; not the Millennium P-vs-NP problem, not a complexity-theoretic result, op-count not wall-clock, mesa-local.",
       "image": "https://sundog.cc/og/p-vs-np.png",
       "datePublished": "2026-06-01",
       "dateModified": "2026-06-08",
@@ -477,12 +477,19 @@
                 soundness and lossiness, and a machine-checked Karp reduction
                 anchors the imported decoding-hardness to 3SAT &mdash; reduction
                 correctness only, with NP-hardness and Cook-Levin still imported.
-                Those are part of a seven-example public Lean method repo, not
-                extra P-vs-NP evidence.
+                Those are part of a ten-example public Lean method repo
+                spanning finite-field algebra, real analysis, geometric optics,
+                vector calculus / gauge topology, combinatorics, a finite audit
+                game, tropical / piecewise-linear algorithmic approximation,
+                monotone-circuit expressivity, and the seven-instance find/check
+                ledger (max-flow/min-cut, König, 2-SAT, Pratt primality,
+                shortest-path, syndrome verifier, ReLU gate-count) &mdash; method
+                context, not extra P-vs-NP evidence; the find-side of every
+                certifying instance stays imported.
             </p>
             <div class="status-ribbon" aria-label="P-vs-NP verifier verdict status">
                 <span class="pass">v6 op-count certificate · BOUNDED POSITIVE</span>
-                <span class="pass">Lean core · soundness/lossiness (1 of 7 examples)</span>
+                <span class="pass">Lean core · soundness/lossiness (1 of 10 examples)</span>
                 <span class="fail">v0 mesa bridge · FALSIFIED (spoofed)</span>
                 <span class="quar review">v1 consensus repair · NAMED QUARANTINE</span>
                 <span class="review">review-gated · op-count only</span>

@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sundog algorithmic-approximation lane: a Lean find/check ledger across seven problems (max-flow, König, 2-SAT, Pratt, shortest-path, syndrome, ReLU gate-count) plus the tropical / PL core with linear gate count via a sharing-aware DAG. Cheaper to check than to find; finding stays imported. NOT a P-vs-NP, learnability, fast-primality, or general neural-net lower-bound claim.">
+    <meta name="keywords" content="algorithmic approximation, find vs check, certifying algorithms, tropical circuits, piecewise linear, ReLU compilation, Lean theorem proving, AxiomAudit, cancellation-free, monotone circuits, region count, max-flow min-cut, König, 2-SAT, Pratt primality, NP membership, Sundog">
+    <meta name="theme-color" content="#1A3A52">
+    <meta name="author" content="Sundog Research Lab">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://sundog.cc/algorithmic-approximation">
+    <title>Algorithmic Approximation - Find/Check Ledger - Sundog</title>
+
+    <!-- OG-BLOCK-START (managed by public/og/_patch_meta.py) -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Sundog">
+    <meta property="og:title" content="Algorithmic Approximation - cheaper to check than to find, machine-checked across seven problems">
+    <meta property="og:description" content="A Lean find/check ledger: one Certifies interface, seven cheap-check instances spanning combinatorial optimization, decision, and number theory. Plus the tropical / PL core compiling cancellation-free circuits exactly to ReLU nets at linear gate count via a sharing-aware DAG. Finding stays imported in every instance.">
+    <meta property="og:image" content="https://sundog.cc/og/algorithmic-approximation.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Find/check ledger card: seven instances (max-flow, König, 2-SAT, Pratt, shortest-path, syndrome, ReLU gate-count) under one Certifies interface, plus the resolved DAG linear gate count.">
+    <meta property="og:url" content="https://sundog.cc/algorithmic-approximation">
+    <meta property="article:published_time" content="2026-06-29T00:00:00Z">
+    <meta property="article:modified_time" content="2026-06-29T00:00:00Z">
+    <meta property="article:section" content="Research">
+    <meta property="article:tag" content="algorithmic approximation">
+    <meta property="article:tag" content="find versus check">
+    <meta property="article:tag" content="certifying algorithms">
+    <meta property="article:tag" content="tropical circuits">
+    <meta property="article:tag" content="Lean">
+    <meta property="article:tag" content="claim hygiene">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Algorithmic Approximation - cheaper to check than to find, machine-checked across seven problems">
+    <meta name="twitter:description" content="A Lean find/check ledger of seven cheap-check instances under one Certifies interface, plus the tropical / PL core with linear gate count via a sharing-aware DAG. NOT a P-vs-NP advance, NOT a fast primality test, NOT a general neural-net lower bound.">
+    <meta name="twitter:image" content="https://sundog.cc/og/algorithmic-approximation.png">
+    <meta name="twitter:image:alt" content="Find/check ledger card: seven instances under one Certifies interface, plus the resolved DAG linear gate count.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Algorithmic Approximation - cheaper to check than to find, machine-checked across seven problems",
+      "description": "Sundog's algorithmic-approximation lane: a public Lean find/check ledger built from one Certifies interface and seven instances - syndrome verifier, shortest-path, ReLU gate-count, max-flow / min-cut, König matching / cover, 2-SAT decision, and Pratt primality. Each instance machine-checks an O(.) cheap-CHECK theorem; finding the certificate stays imported in every instance (factoring p-1 for Pratt witnesses, max-flow algorithms, SCC construction, etc.). The tropical / piecewise-linear core (CircuitNet + RegionCount + CancellationFree + DepthSeparation + StraightLineCost) machine-checks exact (epsilon = 0) compilation of PL circuits to ReLU networks with a linear gate count <= 4N via a sharing-aware DAG (compileToDag), realization-independent linear-region structure, and the tent's 2^d depth separation - the epsilon = 0 piecewise-linear core for arXiv:2606.26705 Thm 3.2 / Cor 5.1. The N-1 monotone depth-as-computation theorem (FoldCancellation + PieceCover + RegionPoly) shows cancellation-free circuits have region count linear in their leaves, while the d-fold tent's 2^d expressivity requires cancellation - a lower bound in the cancellation-free model, not a lower bound for general neural nets (the depth-vs-width bound stays imported, Telgarsky / Eldan-Shamir). The N-2 cancellation-spine reading (CancellationSpine isMono_tame) is a typed conjecture - machine-checked on the monotone / convex / region axes only; the additive / subtractive / division readings stay an organizing lens, not a reduction theorem. N-4 ε-essential region count is empirical: it tracks generalization-width threshold at 0.89 (vs 0.50 for exact k) with a named SGD-trainability residual on non-convex shapes. Public, reproducible, axiom-clean (AxiomAudit gate, no sorry); the kernel re-checks every theorem in seconds. NOT a P-vs-NP advance, NOT a hardness proof, NOT a learnability claim, NOT a full analytic-gate approximation theorem, NOT a fast primality test (Pratt is NP-membership), NOT a general neural-net lower bound. Standing claim boundary above the fold.",
+      "image": "https://sundog.cc/og/algorithmic-approximation.png",
+      "datePublished": "2026-06-29",
+      "dateModified": "2026-06-29",
+      "inLanguage": "en",
+      "isAccessibleForFree": true,
+      "author": {
+        "@type": "Organization",
+        "name": "Sundog Research Lab",
+        "url": "https://sundog.cc"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Stellar Aqua LLC",
+        "url": "https://sundog.cc"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://sundog.cc/algorithmic-approximation"
+      },
+      "about": [
+        { "@type": "Thing", "name": "Algorithmic approximation theory" },
+        { "@type": "Thing", "name": "Certifying algorithms" },
+        { "@type": "Thing", "name": "Find versus check" },
+        { "@type": "Thing", "name": "Tropical circuits" },
+        { "@type": "Thing", "name": "Piecewise linear networks" },
+        { "@type": "Thing", "name": "Monotone circuit lower bounds" },
+        { "@type": "Thing", "name": "NP membership certificates" },
+        { "@type": "Thing", "name": "Lean theorem proving" },
+        { "@type": "Thing", "name": "Claim hygiene" }
+      ],
+      "keywords": "algorithmic approximation, find vs check, certifying algorithms, tropical PL circuits, ReLU compilation, cancellation-free monotone, Lean, AxiomAudit, Pratt primality, max-flow König 2-SAT, claim hygiene"
+    }
+    </script>
+    <!-- OG-BLOCK-END -->
+
+    <link rel="stylesheet" href="/css/sundog-theme.css">
+    <link rel="stylesheet" href="/css/sundog-defs.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        main {
+            background:
+                radial-gradient(circle at 16% 8%, rgba(184, 131, 30, 0.10), transparent 22rem),
+                linear-gradient(180deg, #F8FBFC 0%, #FFFFFF 36rem);
+        }
+
+        .aa-hero {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 7rem 2rem 1rem;
+        }
+
+        .aa-hero .eyebrow,
+        .aa-section .eyebrow {
+            color: var(--primary-mid);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .aa-hero h1 {
+            max-width: 920px;
+            margin: 1rem 0 1.25rem;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: clamp(2.1rem, 6.5vw, 4.2rem);
+            line-height: 1.05;
+            overflow-wrap: anywhere;
+        }
+
+        .aa-hero .lede {
+            max-width: 820px;
+            color: #40505C;
+            font-size: 1.15rem;
+            line-height: 1.75;
+            overflow-wrap: break-word;
+        }
+
+        /* Above-the-fold not-P-vs-NP boundary callout */
+        .aa-boundary {
+            max-width: 1120px;
+            margin: 1.5rem auto 0;
+            padding: 1rem 1.25rem;
+            border: 1px solid rgba(181, 58, 44, 0.45);
+            border-left: 5px solid #B53A2C;
+            border-radius: 0 8px 8px 0;
+            background: rgba(181, 58, 44, 0.06);
+        }
+        .aa-boundary .kicker {
+            margin: 0 0 0.4rem;
+            font-family: var(--sd-font-data);
+            font-size: 0.74rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #B53A2C;
+        }
+        .aa-boundary p {
+            margin: 0 0 0.5rem;
+            color: #5A2A22;
+            font-size: 0.96rem;
+            line-height: 1.65;
+        }
+        .aa-boundary p:last-child { margin-bottom: 0; }
+        .aa-boundary strong { color: #8A2418; }
+
+        .status-ribbon {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 1.5rem;
+        }
+        .status-ribbon span {
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            padding: 0.45rem 0.75rem;
+            background: #FFFFFF;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.74rem;
+            font-weight: 700;
+        }
+        .status-ribbon .pass {
+            border-color: rgba(46, 125, 90, 0.45);
+            background: rgba(46, 125, 90, 0.06);
+            color: #2E7D5A;
+        }
+        .status-ribbon .review {
+            border-color: rgba(184, 131, 30, 0.55);
+            background: rgba(184, 131, 30, 0.08);
+            color: #684811;
+        }
+
+        .aa-section {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 2.5rem 2rem;
+        }
+        .aa-section h2 {
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: clamp(1.6rem, 3.6vw, 2.4rem);
+            line-height: 1.15;
+            margin: 0.6rem 0 1rem;
+        }
+        .aa-section p {
+            color: #40505C;
+            font-size: 1.02rem;
+            line-height: 1.7;
+            margin: 0 0 1rem;
+        }
+        .aa-section code {
+            background: #FFFFFF;
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            padding: 0.05rem 0.35rem;
+            font-family: var(--sd-font-data);
+            font-size: 0.92em;
+            color: #214B36;
+        }
+        .aa-section a { color: var(--primary-mid); }
+
+        /* Find/check ledger table */
+        .aa-ledger {
+            margin: 1rem 0;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            overflow: hidden;
+        }
+        .aa-ledger table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92rem;
+        }
+        .aa-ledger th,
+        .aa-ledger td {
+            padding: 0.7rem 0.85rem;
+            text-align: left;
+            vertical-align: top;
+            border-bottom: 1px solid var(--line);
+        }
+        .aa-ledger th {
+            background: #F4F8FA;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .aa-ledger tr:last-child td { border-bottom: none; }
+        .aa-ledger td.instance {
+            font-family: var(--sd-font-data);
+            color: var(--primary-dark);
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .aa-ledger td.kind {
+            color: #5A6772;
+            font-size: 0.86rem;
+        }
+        .aa-ledger td.lean {
+            font-family: var(--sd-font-data);
+            font-size: 0.84rem;
+            color: #214B36;
+        }
+        .aa-ledger td.wall {
+            color: #5A2A22;
+            font-size: 0.86rem;
+        }
+
+        /* Result cards: secondary tier */
+        .aa-secondary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .aa-card {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            padding: 1.1rem 1.2rem;
+        }
+        .aa-card .card-eyebrow {
+            font-family: var(--sd-font-data);
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #684811;
+            margin: 0 0 0.4rem;
+        }
+        .aa-card h3 {
+            margin: 0 0 0.5rem;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: 1.15rem;
+        }
+        .aa-card p {
+            margin: 0 0 0.5rem;
+            color: #40505C;
+            font-size: 0.92rem;
+            line-height: 1.55;
+        }
+        .aa-card .tier {
+            display: inline-block;
+            margin-top: 0.4rem;
+            padding: 0.2rem 0.6rem;
+            border: 1px solid rgba(184, 131, 30, 0.55);
+            background: rgba(184, 131, 30, 0.08);
+            color: #684811;
+            font-family: var(--sd-font-data);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border-radius: 999px;
+        }
+        .aa-card .tier.synth {
+            border-color: rgba(106, 118, 128, 0.45);
+            background: rgba(106, 118, 128, 0.06);
+            color: #37465A;
+        }
+
+        /* Falsifier list */
+        .aa-falsify {
+            background: #FFFFFF;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 1rem 1.2rem;
+            margin: 1rem 0;
+        }
+        .aa-falsify h3 {
+            margin: 0 0 0.5rem;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: 1.05rem;
+        }
+        .aa-falsify ul {
+            margin: 0;
+            padding-left: 1.2rem;
+        }
+        .aa-falsify li {
+            margin: 0.35rem 0;
+            color: #40505C;
+            font-size: 0.92rem;
+            line-height: 1.55;
+        }
+        .aa-falsify code {
+            background: #F4F8FA;
+            font-family: var(--sd-font-data);
+            font-size: 0.86em;
+        }
+
+        .aa-receipts {
+            background: #FFFFFF;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 1rem 1.2rem;
+            margin: 1rem 0 2rem;
+        }
+        .aa-receipts h3 {
+            margin: 0 0 0.5rem;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: 1.05rem;
+        }
+        .aa-receipts ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 0.4rem 1rem;
+        }
+        .aa-receipts li { font-size: 0.9rem; }
+
+        .aa-pull {
+            margin: 1.25rem 0;
+            padding: 0.9rem 1.1rem;
+            background: rgba(46, 125, 90, 0.06);
+            border-left: 4px solid #2E7D5A;
+            border-radius: 0 6px 6px 0;
+        }
+        .aa-pull p {
+            margin: 0;
+            color: #214B36;
+            font-size: 1rem;
+            line-height: 1.65;
+        }
+
+        @media (max-width: 720px) {
+            .aa-ledger { overflow-x: auto; }
+            .aa-ledger table { min-width: 640px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="/" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="/about">About</a>
+                <a href="/sundog">Atlas</a>
+                <a href="/applications-gallery">Applications</a>
+                <a href="/alignment">Align</a>
+                <a href="/chat">Chat</a>
+                <a href="docs/">Docs</a>
+                <a href="https://github.com/humiliati/sundog">GitHub</a>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <section class="aa-hero">
+            <p class="eyebrow">High-Stakes Generality &middot; Algorithmic Approximation &middot; 2026-06-29</p>
+            <h1>Cheaper to check than to find. Machine-checked across seven problems.</h1>
+            <p class="lede">
+                A public Lean ledger machine-checks a single &ldquo;cheap CHECK&rdquo; statement across seven
+                instances &mdash; <strong>max-flow / min-cut</strong>, <strong>K&ouml;nig matching / cover</strong>,
+                <strong>2-SAT decision</strong>, <strong>Pratt primality</strong>,
+                <strong>shortest-path</strong>, <strong>syndrome verifier</strong>, and
+                <strong>ReLU gate-count</strong> &mdash; under one <code>Certifies</code> interface.
+                The find-side of every instance stays imported. Alongside, the tropical / piecewise-linear
+                core compiles cancellation-free circuits <em>exactly</em> (&epsilon;&nbsp;=&nbsp;0) to ReLU networks at
+                <strong>linear gate count <code>&le;&nbsp;4N</code> via a sharing-aware DAG</strong>
+                (<code>compileToDag</code>) &mdash; the &epsilon;&nbsp;=&nbsp;0 piecewise-linear core for
+                <a href="https://arxiv.org/abs/2606.26705">arXiv:2606.26705</a> Thm 3.2 / Cor 5.1. The N-1
+                monotone-depth-as-computation theorem closes the lower bound <em>in the cancellation-free
+                model</em>: the tent's <code>2<sup>d</sup></code> expressivity <em>requires</em> cancellation,
+                while monotone depth is region-polynomial. Public, reproducible, axiom-clean (no
+                <code>sorry</code>, no <code>native_decide</code>, no trusted compiler step).
+            </p>
+            <div class="status-ribbon" aria-label="Algorithmic-approximation lane verdict status">
+                <span class="pass">find/check ledger &middot; 7 instances</span>
+                <span class="pass">DAG linear gate count &middot; <code>&le; 4N</code></span>
+                <span class="pass">N-1 fully closed &middot; cancellation-free is region-polynomial</span>
+                <span class="review">N-2 synthesis &middot; typed-conjecture organizing read</span>
+                <span class="review">N-4 empirical &middot; 0.89 with named SGD residual</span>
+                <span class="pass">axiom-clean &middot; AxiomAudit-gated</span>
+            </div>
+        </section>
+
+        <div class="aa-boundary" role="note">
+            <p class="kicker">Claim boundary &mdash; read this first</p>
+            <p>
+                This page is <strong>method context</strong> for a Lean ledger about
+                <em>checking</em>. It is <strong>not</strong> a P-vs-NP advance and
+                <strong>not</strong> a complexity-theoretic separation. The lane borrows the
+                find-vs-check <em>asymmetry as vocabulary</em>. <strong>Hardness is imported</strong>
+                in every instance &mdash; decoding hardness, depth-vs-width lower bounds, factoring,
+                Cook-Levin &mdash; Lean certifies the deductive CHECK side only.
+            </p>
+            <p>
+                Pratt is <strong>NP-membership</strong> (a short certificate exists that a checker
+                verifies fast); it is <strong>not</strong> a fast primality test, and finding the
+                witness still requires factoring <code>p&minus;1</code>. The find/check modules
+                <strong>CHECK a supplied optimum</strong>; they are <strong>not solvers</strong>.
+                N-1 is a lower bound <em>in the cancellation-free fragment</em>; the general
+                depth-vs-width lower bound (Telgarsky / Eldan-Shamir) stays imported. N-2's
+                &ldquo;every wall is cancellation&rdquo; reading is a <strong>typed conjecture</strong>,
+                machine-checked only on the fold / monotone / region axes. N-4 is an
+                <strong>empirical</strong> finding: region geometry predicts the generalization
+                threshold <em>modulo SGD trainability</em> &mdash; no theorem, no guarantee.
+                &ldquo;Lean-verified&rdquo; applies to the deductive cores, <strong>never</strong>
+                to the imported hardness or to the whole story.
+            </p>
+        </div>
+
+        <!-- The find/check ledger -->
+        <section class="aa-section" aria-label="The find/check ledger">
+            <p class="eyebrow">The find/check ledger &mdash; <code>Certifies</code> with seven instances</p>
+            <h2>Seven CHECK-side theorems under one interface.</h2>
+            <p>
+                Each row plugs into the shared ledger via a <code>Certifies.Ledger</code> instance with
+                an <code>O(&middot;)</code> cheap-CHECK theorem; the find-side stays imported. The
+                reusable core is <code>weakDuality_tight</code>: weak duality (every primal <code>&le;</code>
+                every dual) plus a tight pair (<code>p&nbsp;=&nbsp;d</code>) implies both optima at once
+                (<code>IsGreatest&nbsp;P&nbsp;p&nbsp;&and;&nbsp;IsLeast&nbsp;D&nbsp;d</code>) &mdash;
+                axiom-free, the purest certificate core.
+            </p>
+            <div class="aa-ledger" role="region" aria-label="Find/check ledger instances">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Instance</th>
+                            <th>Kind</th>
+                            <th>What is checked (Lean)</th>
+                            <th>Find-side (imported)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="instance">max-flow / min-cut<br><code>MaxFlowMinCut</code></td>
+                            <td class="kind">combinatorial<br>LP-dual optimization</td>
+                            <td class="lean"><code>weak_duality</code>: <code>value F &le; capCut cap S</code> (skew-symmetric within-cut cancellation, conservation collapses the <code>S</code>-sum to source net out-flow, across-cut bounded by capacity). <code>maxflow_mincut</code>: tight pair via <code>weakDuality_tight</code>.</td>
+                            <td class="wall">finding the actual max-flow algorithm (Edmonds-Karp, push-relabel, Dinic's): not formalized; the cert checks a supplied flow / cut pair.</td>
+                        </tr>
+                        <tr>
+                            <td class="instance">K&ouml;nig matching / cover<br><code>MatchingCover</code></td>
+                            <td class="kind">combinatorial<br>LP-dual optimization</td>
+                            <td class="lean"><code>matching_le_cover</code>: every vertex cover upper-bounds every matching, via an injection matched-edge &rarr; cover-endpoint. <code>konig</code>: tight pair via <code>weakDuality_tight</code>.</td>
+                            <td class="wall">finding the max matching or the min cover: not formalized; cert checks a supplied pair.</td>
+                        </tr>
+                        <tr>
+                            <td class="instance">2-SAT decision<br><code>TwoSat</code></td>
+                            <td class="kind">decision /<br>NP-verification</td>
+                            <td class="lean"><code>check_correct</code>: the <code>O(|&phi;|)</code> evaluator decides the language. <code>cert_sound</code>: a satisfying assignment certifies satisfiability. Axiom-light: <code>[propext, Quot.sound]</code>; the eval is decidable.</td>
+                            <td class="wall">finding the satisfying assignment via the implication-graph SCC algorithm: not formalized; cert checks a supplied assignment.</td>
+                        </tr>
+                        <tr>
+                            <td class="instance">Pratt primality<br><code>PrattCert</code></td>
+                            <td class="kind">number theory /<br>NP-membership</td>
+                            <td class="lean"><code>prime_iff_witness</code>: a primitive-root <code>Witness</code> certifies primality. <code>cert_sound</code> / <code>cert_complete</code> wrap mathlib's <code>lucas_primality</code> / <code>reverse_lucas_primality</code>.</td>
+                            <td class="wall">finding the witness requires <strong>factoring <code>p&minus;1</code></strong>: not a fast primality test; cert checks a supplied witness.</td>
+                        </tr>
+                        <tr>
+                            <td class="instance">shortest-path<br><code>ShortestPathCert</code></td>
+                            <td class="kind">combinatorial<br>LP-dual feasibility</td>
+                            <td class="lean"><code>feasible_le_walk</code>: any feasible dual lower-bounds the shortest walk. <code>cert_isLeast</code>: exact optimality at the tight pair.</td>
+                            <td class="wall">finding the shortest path (Dijkstra, Bellman-Ford): not formalized as an algorithm; cert checks a supplied dual.</td>
+                        </tr>
+                        <tr>
+                            <td class="instance">syndrome verifier<br><code>Certificate</code> / <code>CheckCost</code></td>
+                            <td class="kind">finite-field<br>algebra / coding</td>
+                            <td class="lean">syndrome-certificate <strong>soundness</strong> + <strong>exact algebraic lossiness</strong> + reject-bound behavior + check-cost scaling <code>verifyCost &le; 2(m&middot;n)+n+m+2</code>.</td>
+                            <td class="wall"><strong>decoding hardness</strong> / SIS one-wayness: imported, not proven. Any &ldquo;NP-hard&rdquo; reading conditional on P&nbsp;&ne;&nbsp;NP.</td>
+                        </tr>
+                        <tr>
+                            <td class="instance">ReLU gate-count<br><code>CircuitNet</code> / <code>StraightLineCost</code></td>
+                            <td class="kind">tropical /<br>algorithmic approx.</td>
+                            <td class="lean"><code>compile_eval</code>: exact (&epsilon;&nbsp;=&nbsp;0) compilation; <code>compileToDag</code>: linear gate count <code>&le;&nbsp;4N</code> via sharing-aware DAG; <code>compile_depth_le</code>: linear depth; <code>bellmanStep_compiles_exactly</code>: exact min-plus / Bellman-Ford gate.</td>
+                            <td class="wall">the <strong>analytic</strong> reciprocal / radical gates remain approximate / imported; depth-vs-<strong>width</strong> lower bound stays imported (Telgarsky / Eldan-Shamir); model realization not claimed.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="aa-pull">
+                <p>
+                    <strong>The frame, stated plainly.</strong> Each instance proves one direction of the
+                    find-vs-check asymmetry: an <code>O(&middot;)</code> verifier is machine-checked correct,
+                    paired with a soundness theorem that says &ldquo;if the certificate checks, the answer
+                    is right.&rdquo; The other direction &mdash; finding the certificate &mdash; stays
+                    imported. That is exactly the NP &ldquo;verification is easy&rdquo; half, written down
+                    seven times across optimization, decision, and number theory.
+                </p>
+            </div>
+        </section>
+
+        <!-- The resolved DAG / linear gate count -->
+        <section class="aa-section" aria-label="The tropical / PL core and the resolved DAG linear gate count">
+            <p class="eyebrow">The tropical / PL core &middot; the resolved DAG linear gate count</p>
+            <h2>Cancellation-free PL circuits compile exactly to ReLU nets at <code>&le; 4N</code>.</h2>
+            <p>
+                For arXiv:2606.26705 Thm 3.2 / Cor 5.1's &epsilon;&nbsp;=&nbsp;0 piecewise-linear case,
+                the core machine-checks four interlocking facts. <code>compile_eval</code>: an exact
+                (no &epsilon;) compilation of tropical / piecewise-linear circuits to ReLU networks &mdash;
+                no approximation. <code>compileToDag</code>: a <strong>sharing-aware DAG compilation
+                with a linear gate count <code>&le;&nbsp;4N</code></strong> &mdash; this closes the
+                previous &ldquo;linear gate-count claim still needs the DAG / sharing follow-up&rdquo;
+                caveat that earlier ledger versions carried. <code>compile_depth_le</code>: a linear
+                depth bound. <code>bellmanStep_compiles_exactly</code>: an exact min-plus / Bellman-Ford
+                gate compiling to a ReLU sub-network &mdash; the all-pairs DP becomes a tropical
+                network with depth <code>O(k)</code> and gate count <code>O(k<sup>3</sup>)</code>.
+            </p>
+            <p>
+                Alongside the compilation, three more cores hold the structure together.
+                <code>RegionCount</code>: the linear-region structure is
+                <em>realization-independent</em> &mdash; it is an intrinsic invariant of the function,
+                not an artifact of a particular ReLU realization. <code>CancellationFree</code>: the
+                <code>IsMono</code> (cancellation-free) fragment computes exactly the monotone
+                functions; <code>abs_not_isMono</code> makes the contrast precise &mdash;
+                <code>abs&nbsp;=&nbsp;max(x,&minus;x)</code> needs the negative scale.
+                <code>DepthSeparation</code>: the tent map's <code>d</code>-fold realizes
+                <code>2<sup>d</sup></code> linear regions from depth <code>O(d)</code> &mdash;
+                cancellation (the negative scale, <code>abs</code>) is essential for that
+                expressivity.
+            </p>
+            <p>
+                <strong>What stays imported.</strong> The <strong>analytic</strong> reciprocal /
+                radical gates (and any non-piecewise-linear primitive) remain approximate / imported;
+                the &epsilon;-side of the full Kratsios analytic-gate theorem is <em>not</em>
+                asserted by this core. The depth-vs-<strong>width</strong> lower bound for general
+                (cancellation-using) neural nets stays imported (Telgarsky / Eldan-Shamir).
+                <em>Learnability</em> is not asserted: the core is about <em>existence</em> of an
+                exact PL compilation, not about whether SGD finds it on data. Model realization
+                (whether a real net realizes the compiled circuit) is not part of the deductive core.
+            </p>
+        </section>
+
+        <!-- N-1 monotone-depth-as-computation -->
+        <section class="aa-section" aria-label="N-1 monotone depth-as-computation theorem">
+            <p class="eyebrow">N-1 closed &middot; monotone depth-as-computation</p>
+            <h2>Monotone depth is region-polynomial; cancellation depth is region-exponential.</h2>
+            <p>
+                The slate's <em>gem</em> result, machine-checked across three modules and both axes
+                of the dichotomy. <code>FoldCancellation.isMono_not_iterTent</code>: a cancellation-free
+                circuit <strong>cannot</strong> realize the <code>d</code>-fold tent for
+                <code>d &ge; 1</code>; folding requires cancellation
+                (<code>isMono_no_fold</code> &mdash; a monotone circuit cannot be <code>1</code> at
+                <code>1/2<sup>d</sup></code> and <code>0</code> at the larger <code>2/2<sup>d</sup></code>).
+                <code>isMono_realize1_monotone</code> + <code>isMono_superlevel_isUpperSet</code>: the
+                1-D realization of any <code>IsMono</code> circuit is monotone with upper-set
+                super-level sets &mdash; no oscillation, exactly one rising crossing per level.
+            </p>
+            <p>
+                On the depth-composition axis: <code>PieceCover.hasPieceCover_iterate</code> &mdash;
+                composing a monotone map with itself <code>d</code> times gives <code>&le; d&middot;k + 1</code>
+                pieces, <strong>linear in depth</strong>. The convex-merge linchpin
+                <code>hasPieceCover_max_line</code> shows adding one line to a convex function adds
+                <em>at most one</em> piece (the <code>+1</code>, not <code>+2</code>, is exactly why
+                monotone depth stays polynomial). On the full circuit-structure axis:
+                <code>RegionPoly.isMono_hasPieceCover</code> &mdash; every cancellation-free circuit's
+                1-D realization has a piece count <strong>linear in the number of leaves</strong>
+                (polynomial in circuit size). N-1 closed on both axes.
+            </p>
+            <p>
+                <strong>What this is and is not.</strong> N-1 is a lower bound <em>in the
+                cancellation-free model</em>: it says depth can't help <em>there</em>. It does
+                <strong>not</strong> bound general (cancellation-using) neural nets, which is the
+                natural-proofs boundary the lane respects. The general depth-vs-width lower bound
+                for ReLU networks (Telgarsky / Eldan-Shamir) is the imported wall this result
+                deliberately leaves untouched.
+            </p>
+        </section>
+
+        <!-- Secondary cards -->
+        <section class="aa-section" aria-label="Secondary results — typed conjecture and empirical">
+            <p class="eyebrow">Honest secondary tier &middot; never headlines</p>
+            <h2>Two more results, honestly tiered.</h2>
+            <p>
+                The lane's discipline: a result's promotion tier matches its receipt. The two below
+                are real findings, but neither is machine-checked end-to-end. They sit beside the
+                headline results, not at them.
+            </p>
+            <div class="aa-secondary-grid">
+                <div class="aa-card">
+                    <p class="card-eyebrow">N-2 &middot; cancellation spine</p>
+                    <h3>One coordinate, honestly bounded.</h3>
+                    <p>
+                        Retrospective lens: <em>almost every wall the lane hits is the same wall &mdash;
+                        cancellation.</em> <code>CancellationSpine.isMono_tame</code> machine-checks
+                        the load-bearing half on the monotone / convex / region axes (cancellation-free
+                        &rArr; tame). The broader reading &mdash; that 3SUM (additive), <code>n<sup>&omega;</sup></code>
+                        (subtractive), and analytic gates (division) are all &ldquo;cancellation-typed&rdquo;
+                        walls &mdash; stays an organizing lens, <strong>not a reduction theorem</strong>:
+                        promoting it would need the imported walls themselves formalized, which they
+                        are not in any proof assistant.
+                    </p>
+                    <span class="tier synth">Tier: [SYNTHESIS]</span>
+                </div>
+                <div class="aa-card">
+                    <p class="card-eyebrow">N-4 &middot; &epsilon;-essential region count</p>
+                    <h3>Region geometry, modulo trainability.</h3>
+                    <p>
+                        Empirical: the trained generalization-width threshold tracks
+                        <code>&epsilon;-essential &minus; 1</code> at <strong>32 / 36 = 0.89</strong>
+                        across families, vs only <strong>18 / 36 = 0.50</strong> for the exact piece
+                        count <code>k</code>. Convex families track exactly (1.00). <strong>Honest
+                        residual:</strong> the non-convex jagged family at 0.67 with one outlier
+                        (<code>k = 5</code>): SGD failed to find a representable solution the
+                        ε-essential count says <em>exists</em>. Generalization onset is region
+                        geometry <strong>modulo SGD trainability</strong> &mdash; a clean isolation of
+                        the existence-vs-training confound, not a generalization theorem.
+                    </p>
+                    <span class="tier">Tier: [EMPIRICAL]</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Falsification surface -->
+        <section class="aa-section" aria-label="Falsification surface">
+            <p class="eyebrow">Falsification surface</p>
+            <h2>Named falsifiers &mdash; what would void each piece.</h2>
+            <p>
+                Each result declares the witness whose existence would end it. Three already fired
+                their predicted outcome and stayed standing; one (N-2's
+                <code>WALL_WITHOUT_CANCELLATION</code>) is open with status <em>not fired</em>;
+                N-4's <code>EPSILON_REGIONS_ALSO_FAIL</code> did <em>not</em> fire.
+            </p>
+            <div class="aa-falsify">
+                <h3>Per-result falsifiers</h3>
+                <ul>
+                    <li><strong>The find/check ledger (N-3):</strong> <code>VERIFIER_NOT_PL</code> &mdash; a natural certifying problem whose verifier is <em>not</em> straight-line / PL-expressible in the ledger; the certificate exists but the cost model cannot carry it. <em>Status:</em> not fired.</li>
+                    <li><strong>Tropical / PL core:</strong> <code>EPSILON_NOT_ZERO_FOR_PL</code> &mdash; a piecewise-linear circuit whose compilation requires &epsilon;&nbsp;&gt;&nbsp;0 to a ReLU net. <em>Status:</em> not fired; <code>compile_eval</code> proves &epsilon;&nbsp;=&nbsp;0 across the PL fragment.</li>
+                    <li><strong>DAG linear gate count:</strong> <code>SHARING_DOES_NOT_LINEARIZE</code> &mdash; a tropical circuit whose sharing-aware DAG compilation is <em>not</em> bounded by <code>4N</code>. <em>Status:</em> not fired; <code>compileToDag</code> proves the bound.</li>
+                    <li><strong>N-1 (monotone depth region-polynomial):</strong> <code>MONOTONE_FOLDS</code> &mdash; a cancellation-free (<code>IsMono</code>) circuit whose 1-D linear-region count is super-polynomial in depth. A single such witness ends it. <em>Status:</em> not fired; <code>isMono_hasPieceCover</code> closes both axes.</li>
+                    <li><strong>N-2 (cancellation spine, synthesis):</strong> <code>WALL_WITHOUT_CANCELLATION</code> &mdash; an imported wall the lane genuinely relies on that is provably <em>not</em> cancellation-reducible. <em>Status:</em> not fired; absence is not a proof, and the additive / subtractive / division axes remain an organizing reading rather than a reduction.</li>
+                    <li><strong>N-4 (&epsilon;-essential region count, empirical):</strong> <code>EPSILON_REGIONS_ALSO_FAIL</code> &mdash; the &epsilon;-essential count tracks the trained-generalization threshold no better than exact <code>k</code>. <em>Status:</em> not fired (0.89 vs 0.50 across families, 1.00 within convex families).</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Receipts -->
+        <section class="aa-section" aria-label="Receipts and lane links">
+            <p class="eyebrow">Receipts</p>
+            <h2>Public, reproducible, axiom-clean.</h2>
+            <p>
+                Every theorem cited above is in the public <code>sundogcert</code> Lean repo and
+                re-certifies under <code>lake build</code> in seconds. <code>#print axioms</code>
+                shows only <code>[propext, Classical.choice, Quot.sound]</code> for the gated cores
+                (and the lighter axiom set <code>[propext, Quot.sound]</code> for the decidable
+                ones like 2-SAT) &mdash; no <code>sorry</code>, no <code>native_decide</code>, no
+                trusted compiler step. The <code>AxiomAudit.lean</code> module pins each headline to
+                Lean's three foundational axioms; a stray axiom <em>fails the build</em>.
+                Lean v4.30.0, mathlib v4.30.0.
+            </p>
+            <div class="aa-receipts">
+                <h3>Lean modules (<code>Sundogcert/</code> in the public repo)</h3>
+                <ul>
+                    <li><code>CircuitNet.lean</code> &mdash; exact PL compilation + Bellman-Ford</li>
+                    <li><code>RegionCount.lean</code> &mdash; linear-region realization-independence</li>
+                    <li><code>CancellationFree.lean</code> &mdash; <code>IsMono</code> &harr; monotone</li>
+                    <li><code>DepthSeparation.lean</code> &mdash; tent's <code>2<sup>d</sup></code></li>
+                    <li><code>StraightLineCost.lean</code> &mdash; the cost measure</li>
+                    <li><code>FoldCancellation.lean</code> &mdash; N-1 sharp negative half</li>
+                    <li><code>PieceCover.lean</code> &mdash; N-1 composition axis</li>
+                    <li><code>RegionPoly.lean</code> &mdash; N-1 circuit-structure axis</li>
+                    <li><code>CancellationSpine.lean</code> &mdash; N-2 <code>isMono_tame</code></li>
+                    <li><code>Certifies.lean</code> &mdash; LP-duality core, <code>weakDuality_tight</code></li>
+                    <li><code>MaxFlowMinCut.lean</code> &mdash; <code>maxflow_mincut</code></li>
+                    <li><code>MatchingCover.lean</code> &mdash; <code>konig</code></li>
+                    <li><code>TwoSat.lean</code> &mdash; <code>check_correct</code> + <code>cert_sound</code></li>
+                    <li><code>PrattCert.lean</code> &mdash; <code>prime_iff_witness</code></li>
+                    <li><code>ShortestPathCert.lean</code> &mdash; <code>cert_isLeast</code></li>
+                    <li><code>AxiomAudit.lean</code> &mdash; the gate</li>
+                </ul>
+            </div>
+            <div class="aa-receipts">
+                <h3>Narrative receipts (<code>docs/</code>; shipped publicly via <code>dist/</code>)</h3>
+                <ul>
+                    <li><a href="docs/algo-approx/ALGO_APPROX_CONJECTURE_SLATE_2.md">ALGO_APPROX_CONJECTURE_SLATE_2.md</a> &mdash; slate with status</li>
+                    <li><a href="docs/algo-approx/ALGO_APPROX_N2_CANCELLATION_SPINE.md">ALGO_APPROX_N2_CANCELLATION_SPINE.md</a> &mdash; synthesis lens</li>
+                    <li><a href="docs/algo-approx/ALGO_APPROX_N4_EPS_REGIONS_RESULT.md">ALGO_APPROX_N4_EPS_REGIONS_RESULT.md</a> &mdash; empirical</li>
+                    <li><a href="docs/algo-approx/ALGO_APPROX_CD2_GROKKING_RESULT.md">ALGO_APPROX_CD2_GROKKING_RESULT.md</a> &mdash; the prior null this redeems</li>
+                    <li><a href="docs/SUNDOG_V_CERTIFICATE_LEAN.md">SUNDOG_V_CERTIFICATE_LEAN.md</a> &mdash; the parent ten-example ledger</li>
+                    <li><a href="docs/algo-approx/SUNDOG_V_ALGO_APPROX.md">SUNDOG_V_ALGO_APPROX.md</a> &mdash; the lane ledger</li>
+                    <li><a href="https://github.com/humiliati/sundogcert">github.com/humiliati/sundogcert</a> &mdash; the Lean repo</li>
+                    <li><a href="https://arxiv.org/abs/2606.26705">arXiv:2606.26705</a> &mdash; Kratsios et al.</li>
+                </ul>
+            </div>
+            <div class="aa-receipts">
+                <h3>Sibling lanes</h3>
+                <ul>
+                    <li><a href="/p-vs-np">/p-vs-np</a> &mdash; bounded alignment-verification, the find/check sibling</li>
+                    <li><a href="/generality">/generality</a> &mdash; high-stakes generality umbrella</li>
+                    <li><a href="/navierstokes">/navierstokes</a> &mdash; the NSE C1 Reading-2 witness lane (review-gated)</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+    <footer>
+        <p>
+            The Sundog Project - <a href="docs/presentation/message-house.md">Alignment Without Sight</a>
+        </p>
+        <p class="footer-links">
+            <a href="https://github.com/humiliati/sundog">GitHub</a> |
+            <a href="/origin">Origin</a> |
+            <a href="/applications-gallery">Applications Gallery</a> |
+            <a href="docs/README.md">Documentation</a> |
+            <a href="docs/SCIENTIFIC_CRITERIA.md">Scientific Criteria</a> |
+            <a href="docs/presentation/claims-and-scope.md">Claims Policy</a> |
+            <a href="/h-of-x">h-of-x</a> |
+            <a href="/p-vs-np">P-vs-NP verifier</a> |
+            <a href="/generality">Generality umbrella</a>
+        </p>
+        <p class="footer-copyright">
+            &copy; 2026 Stellar Aqua LLC. Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC.
+        </p>
+    </footer>
+
+    <script type="module" src="/js/sundog-chat-widget.mjs"></script>
+</body>
+</html>

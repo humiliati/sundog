@@ -66,7 +66,7 @@ C-B2 does **not** add a new unconditional separation. What it establishes:
   Jerrum–Snir bound) paired with a cheap verifier; **unconditional** is out of reach.
 
 This is the same wall the whole lane respects and the P-vs-NP sibling lane is built on
-([`SUNDOG_V_P_V_NP.md`](SUNDOG_V_P_V_NP.md)): *verification is provably cheap; the hardness
+([`SUNDOG_V_P_V_NP.md`](../SUNDOG_V_P_V_NP.md)): *verification is provably cheap; the hardness
 of finding is the imported assumption.* C-B2 makes that decomposition explicit on the
 find/check axis and locates the one place (C-B1, imported) a superpolynomial gap could come
 from. No promotion.

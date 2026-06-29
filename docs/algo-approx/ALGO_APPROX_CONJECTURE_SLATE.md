@@ -313,6 +313,6 @@ wall. Remaining open: only the empirical D-hooks (**C-D3** mech-interp canonical
 > wall (C-B1 / C-C2 / H-A1 / C-D1) — into four hooks N-1..N-4.
 >
 > Cross-links: [`SUNDOG_V_ALGO_APPROX.md`](SUNDOG_V_ALGO_APPROX.md) (parent lane) ·
-> [`SUNDOG_V_P_V_NP.md`](SUNDOG_V_P_V_NP.md) (the find/check sibling) ·
-> [`SUNDOG_V_CERTIFICATE_LEAN.md`](SUNDOG_V_CERTIFICATE_LEAN.md) (the Lean method) ·
+> [`SUNDOG_V_P_V_NP.md`](../SUNDOG_V_P_V_NP.md) (the find/check sibling) ·
+> [`SUNDOG_V_CERTIFICATE_LEAN.md`](../SUNDOG_V_CERTIFICATE_LEAN.md) (the Lean method) ·
 > `Sundogcert/CircuitNet.lean` · `Sundogcert/StraightLineCost.lean`.

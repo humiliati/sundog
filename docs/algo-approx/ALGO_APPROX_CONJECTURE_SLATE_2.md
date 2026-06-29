@@ -352,6 +352,6 @@ machine-checked theorem cluster, not as an active target.
 > Cross-links: [`ALGO_APPROX_CONJECTURE_SLATE.md`](ALGO_APPROX_CONJECTURE_SLATE.md)
 > (slate 1, the closed results this mines) ·
 > [`SUNDOG_V_ALGO_APPROX.md`](SUNDOG_V_ALGO_APPROX.md) (parent lane) ·
-> [`SUNDOG_V_P_V_NP.md`](SUNDOG_V_P_V_NP.md) (find/check sibling) ·
+> [`SUNDOG_V_P_V_NP.md`](../SUNDOG_V_P_V_NP.md) (find/check sibling) ·
 > `Sundogcert/CancellationFree.lean` · `Sundogcert/RegionCount.lean` ·
 > `Sundogcert/DepthSeparation.lean` · `Sundogcert/StraightLineCost.lean`.

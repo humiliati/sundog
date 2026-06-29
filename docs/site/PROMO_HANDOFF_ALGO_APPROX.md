@@ -32,9 +32,11 @@ the kernel re-checks in seconds, so validity is author-independent. The narrativ
 | **N-2: the cancellation spine** | `CancellationSpine` | `isMono_tame` (cancellation-free ⇒ monotone ∧ convex ∧ region-polynomial) — the machine-checked half of "cancellation is the single coordinate"; the full claim stays a typed conjecture |
 | **N-4: ε-essential regions (empirical)** | `scripts/algo_approx_n4_eps_regions.py` | the ε-essential region count predicts a net's generalization threshold (0.89 vs 0.50 for exact `k`), **modulo SGD trainability** |
 
-Narrative receipts (in `Dev/sundog/docs/`): `ALGO_APPROX_CONJECTURE_SLATE_2.md` (the slate, with
-every hook's status), `ALGO_APPROX_N2_CANCELLATION_SPINE.md`, `ALGO_APPROX_N4_EPS_REGIONS_RESULT.md`,
-`ALGO_APPROX_CD2_GROKKING_RESULT.md`, and the pillar `SUNDOG_V_CERTIFICATE_LEAN.md`.
+Narrative receipts (the lane docs now live in `Dev/sundog/docs/algo-approx/`):
+`ALGO_APPROX_CONJECTURE_SLATE_2.md` (the slate, with every hook's status),
+`ALGO_APPROX_N2_CANCELLATION_SPINE.md`, `ALGO_APPROX_N4_EPS_REGIONS_RESULT.md`,
+`ALGO_APPROX_CD2_GROKKING_RESULT.md`. The cross-lane pillar stays at
+`Dev/sundog/docs/SUNDOG_V_CERTIFICATE_LEAN.md` (it is not algo-approx-specific).
 
 ---
 
@@ -101,8 +103,8 @@ entry, an inbound internal link, and a **post-deploy LinkedIn/Twitter validator 
 ## Part 4 — Build / deploy mechanics
 
 - Source is the repo **root** (`index.html`, Vite); publish **only `dist/`** (`npm run build` →
-  `npm run deploy`). `npm run build` copies `docs/**` into `dist/`, so all the `ALGO_APPROX_*.md`
-  receipts are already publicly linkable once deployed.
+  `npm run deploy`). `npm run build` copies `docs/**` into `dist/`, so all the
+  `docs/algo-approx/ALGO_APPROX_*.md` receipts are already publicly linkable once deployed.
 - New `site-pages.json` entry ⇒ matching row in `docs/site/SEO_AND_SOCIAL_READINESS_ROADMAP.md`,
   Bucket 1 cleared before `publicLaunchIntent` is treated as satisfied (per `AGENTS.md`).
 - `npm run sundog:check` only gates `sundog.html` + the geometry module — not relevant unless you
@@ -128,6 +130,6 @@ entry, an inbound internal link, and a **post-deploy LinkedIn/Twitter validator 
 ## Appendix — source pointers
 
 - Lean: `Dev/sundogcert/Sundogcert/{CircuitNet,RegionCount,CancellationFree,DepthSeparation,FoldCancellation,PieceCover,RegionPoly,CancellationSpine,Certifies,MaxFlowMinCut,MatchingCover,TwoSat,PrattCert,ShortestPathCert,StraightLineCost}.lean`; gate `Sundogcert/AxiomAudit.lean`; `README.md` (module table).
-- Docs: `Dev/sundog/docs/ALGO_APPROX_CONJECTURE_SLATE_2.md`, `…/ALGO_APPROX_N2_CANCELLATION_SPINE.md`, `…/ALGO_APPROX_N4_EPS_REGIONS_RESULT.md`, `…/ALGO_APPROX_CD2_GROKKING_RESULT.md`, pillar `…/SUNDOG_V_CERTIFICATE_LEAN.md`.
+- Docs: `Dev/sundog/docs/algo-approx/ALGO_APPROX_CONJECTURE_SLATE_2.md`, `…/ALGO_APPROX_N2_CANCELLATION_SPINE.md`, `…/ALGO_APPROX_N4_EPS_REGIONS_RESULT.md`, `…/ALGO_APPROX_CD2_GROKKING_RESULT.md`; cross-lane pillar `Dev/sundog/docs/SUNDOG_V_CERTIFICATE_LEAN.md`.
 - Experiment: `Dev/sundog/scripts/algo_approx_n4_eps_regions.py`.
 - Site mechanics: `AGENTS.md`, `docs/site/SEO_AND_SOCIAL_READINESS_ROADMAP.md`, `docs/site/WEBSITE_DEVELOPMENT.md`; page templates `p-vs-np.html`, `ghost.html`.

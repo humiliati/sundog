@@ -240,6 +240,8 @@
     "kakeya:shadow-collision:all": "npm run kakeya:shadow-collision && npm run kakeya:shadow-collision:q7",
     "hodge:register-audit": "node scripts/hodge-register-card-audit.mjs",
     "hodge:register-eval": "node scripts/hodge-register-eval.mjs",
+    "hodge:register-modeleval": "node scripts/hodge-register-modeleval.mjs",
+    "hodge:register-judge": "node scripts/hodge-register-judge.mjs",
     "ghost:test": "node scripts/ghost-workbench-tests.mjs",
     "ghost:serve": "node scripts/ghost-serve.mjs",
     "ghost:aperiodic:test": "node scripts/ghost-aperiodic-tests.mjs",
