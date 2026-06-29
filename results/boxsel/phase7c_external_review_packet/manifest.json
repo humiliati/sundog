@@ -57,8 +57,8 @@
     {
       "exists": true,
       "path": "docs/boxsel/PHASE7C_EXTERNAL_REVIEW_PACKET.md",
-      "sha256": "6df522b67ccb7fe819efadb4cc2ec3617a0c9e4c448e20f35fbb30b78cd79b7c",
-      "sizeBytes": 6418
+      "sha256": "c7a23c3713049d88ea9f86e108453dec9c3a4005331df7abdda24517c85e9222",
+      "sizeBytes": 8268
     },
     {
       "exists": true,
@@ -129,8 +129,8 @@
     {
       "exists": true,
       "path": "scripts/boxsel_phase7c_review_packet.py",
-      "sha256": "5ec93ff3ada5e6ab2419663f02caabc3360d2b5579029d6eb47cee832d38bcfb",
-      "sizeBytes": 15312
+      "sha256": "cdedbd7fa12d9e93895d7f5b88f2ee47bfc2647cf86b37d30b034ca33216a07e",
+      "sizeBytes": 15811
     },
     {
       "exists": true,
@@ -159,8 +159,8 @@
     {
       "exists": true,
       "path": "scripts/test_boxsel_phase7c_review_packet.py",
-      "sha256": "2aed2d9d615ef981120513e027a4c2d030bc72908fbe09ecdc3359744631e149",
-      "sizeBytes": 10335
+      "sha256": "1c6e7d1348bf3a2d3e5f13c8b317677defd5dfe3d20fe2e67ac3235e1815ed49",
+      "sizeBytes": 10646
     },
     {
       "exists": true,
@@ -528,6 +528,12 @@
       "category": "scope",
       "id": "P7C-Q7",
       "question": "Does every outward sentence preserve the toy micro-SEL boundary and the failed Phase-7 history?"
+    },
+    {
+      "breaksClaimIf": "Phase 7e/7f are presented as recovering the endpoint without already holding the optimal config -- i.e. the open search gap is smuggled shut.",
+      "category": "recovery_conditionality",
+      "id": "P7C-Q8",
+      "question": "Do Phases 7e/7f anywhere imply BLIND recovery? Confirm both presuppose a held config (7e: a named active set; 7f: a given config's raw intervals), and that neither claims ordinary restarts find it."
     }
   ],
   "schemaVersion": 1,

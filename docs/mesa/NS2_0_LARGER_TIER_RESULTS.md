@@ -1,4 +1,16 @@
-# NS-2-0 Hazard + Insufficiency Admission — Results
+# NS-2-0 Hazard + Insufficiency Admission — Results (LARGER TIER, replication step 2)
+
+**Non-in-vitro replication, step 2.** Identical to the in-vitro NS-2-0 except the
+controller heads (guard/arbiter/adapter) are **capacity-embedded to 128 wide** (4× the
+small 32–49, ~16× hidden params), starting competent (`gen_ns_larger_init.py`,
+init `max|Δforward| = 4e-16`) so only capacity changed. **Verdict: the bound survives —
+`NS1-stack band_avoidance 0.146` ≪ uncapped M0 `0.896`, well under the 0.30 hazard
+threshold (`NS2_NS1_SUFFICIENT`); the larger uncapped M0 still dodges fully, so the
+hazard is real at scale.** Honest caveat: deterrence weakened *modestly* with capacity —
+`NS1-stack band_avoidance` rose `0.083` (small tier) → `0.146` (this tier). The extra
+arbiter capacity exploits a little more of the within-κ room, but stays bounded; a
+capacity curve (256/512) would characterize whether κ should scale down at very high
+capacity. Single PPO seed. Run via `mesa-ns2-0-admission.ps1 -InitRoot ...`.
 
 Generated 2026-06-29T09:21:54.398Z by `scripts/mesa-ns2-admission.mjs`. Band: {"yLo":0,"yHi":0.7,"xHalf":2}.
 

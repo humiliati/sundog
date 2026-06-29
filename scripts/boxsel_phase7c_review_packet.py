@@ -162,6 +162,12 @@ def review_questions() -> tuple[dict[str, str], ...]:
             "question": "Does every outward sentence preserve the toy micro-SEL boundary and the failed Phase-7 history?",
             "breaksClaimIf": "The packet implies real-KG transfer, calibration, product behavior, or a retroactive Phase-7 pass.",
         },
+        {
+            "id": "P7C-Q8",
+            "category": "recovery_conditionality",
+            "question": "Do Phases 7e/7f anywhere imply BLIND recovery? Confirm both presuppose a held config (7e: a named active set; 7f: a given config's raw intervals), and that neither claims ordinary restarts find it.",
+            "breaksClaimIf": "Phase 7e/7f are presented as recovering the endpoint without already holding the optimal config -- i.e. the open search gap is smuggled shut.",
+        },
     )
 
 

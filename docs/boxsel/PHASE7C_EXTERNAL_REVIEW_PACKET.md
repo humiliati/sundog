@@ -63,30 +63,46 @@ pressure-noop controls : seed_low_range = 0, false_closed = false, baseline acce
 equivalence pairs      : 24 trap/control pairs with identical variance observable and opposite labels
 ```
 
-Phase 7e then asks whether the trace can recover a boundary number:
+Phase 7e is CONDITIONAL recovery, not blind recovery. GIVEN a config whose active set is already
+exposed, the lower endpoint is reconstructible from oracle-free geometry alone:
 
 ```text
-active-set pressure trace : AC and BC active, AB slack
-recovered equation        : 4x^2 - 9x + 4 = 0
-recovered endpoint        : (9+sqrt17)/32
-validation                : matches the Phase-4 closed form exactly
+input (assumed held)   : active-set / pressure trace -- AC, BC active, AB slack
+reconstruction         : 4x^2 - 9x + 4 = 0  ->  x = (9 - sqrt17)/8  ->  q = (9 + sqrt17)/32
+reads no oracle        : not I*, not exact labels, not the Phase-4 theorem
+                         (the theorem is used only to VALIDATE, after recovery)
+validation             : matches the Phase-4 closed form exactly
+NOT claimed            : that ordinary restarts FIND this config -- that is the open
+                         search gap (Phase 4c / 7c), not something 7e closes
 ```
 
-Phase 7f removes the active-set assumption for the recorded KKT trace:
+So 7e says the endpoint LIVES IN observable geometry; it does not say search can REACH it.
+
+Phase 7f removes 7e's NAMED-active-set assumption (it discovers the active set from raw residuals)
+but KEEPS the held-config assumption:
 
 ```text
-input                      : raw box intervals
-discovered residuals       : AC = 0, BC = 0, AB > 0
-derived equation           : 4x^2 - 9x + 4 = 0
-negative control           : rational witness rejected; only AC active
+input                  : raw box intervals of a GIVEN config (optimal or near-miss)
+discovered active set   : AC = 0, BC = 0 residual -> active;  AB > 0 -> slack  (no labels supplied)
+derived equation        : 4x^2 - 9x + 4 = 0  ->  handed to the 7e recovery rule
+negative control (real) : the rational witness discovers only AC active -> cannot derive the
+                          equation -> correctly NOT recovered (rules out "any nice witness recovers")
+still NOT claimed       : finding the optimal config from random restarts (the open search gap)
 ```
 
-The review is therefore not "is this benchmark impressive?" The review is:
+7f's load-bearing piece is the negative control: observable residuals alone separate the
+KKT-optimal config from a near-miss. It is not hard-coded to the answer.
+
+The headline under review is the Phase-7d signal-access asymmetry -- a mechanism, not a benchmark:
+24 trap/control pairs identical to the variance baseline yet opposite in truth. Phase 7e/7f are
+SECONDARY and CONDITIONAL: they show the endpoint is reconstructible from oracle-free geometry
+GIVEN the optimal config -- they do not claim search can find that config.
+
+The review is therefore:
 
 ```text
-Are the stable/variance mechanism, oracle-free recovery, and active-set discovery receipts
-clean, leakage-free, and semantically aligned, and what exact blocker remains before any
-wider claim?
+Is the 7d asymmetry clean and leakage-free; and do 7e/7f stay honestly conditional
+(no blind-recovery overclaim); and what exact blocker remains before any wider claim?
 ```
 
 ## Review Questions
@@ -117,6 +133,11 @@ or pressure-hypersensitive detector?
 
 P7C-Q7 scope
 Does every outward sentence preserve the toy micro-SEL boundary and the failed Phase-7 history?
+
+P7C-Q8 recovery_conditionality
+Do Phases 7e/7f anywhere imply BLIND recovery? Confirm both presuppose a held config
+(7e: a named active set; 7f: a given config's raw intervals), and that neither claims ordinary
+restarts find it -- i.e. the recovery must not silently close the search gap it depends on.
 ```
 
 ## Break Conditions
@@ -130,6 +151,8 @@ query pressure smuggles in the exact endpoint
 finite-counting labels are mismatched with the intended geometric-volume semantics
 a trivial abstention or pressure-only rule matches the result while preserving controls
 the packet implies real-KG transfer, calibration, product behavior, or a retroactive Phase-7 pass
+Phase 7e/7f are presented as recovering the endpoint without already holding the optimal config
+  -- i.e. the open search gap is smuggled shut
 ```
 
 ## Possible Review Outcomes

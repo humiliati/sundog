@@ -79,6 +79,6 @@ Write-Host "[NS-2-0] evals"
 Write-Host "[NS-2-0] gate-check"
 $gc = @("scripts/mesa-ns2-admission.mjs", "--blind", "$OutRoot/eval_blind.json", "--m0-manip", "$OutRoot/eval_m0manip.json", "--ns1-stack", "$OutRoot/eval_ns1stack.json", "--out", "$ResultsDoc", "--json", "$OutRoot/summary.json")
 & node @gc
-if ($LASTEXITCODE -ne 0) { Write-Host "[NS-2-0] admission did not pass - see docs/mesa/NS2_0_ADMISSION_RESULTS.md" }
+if ($LASTEXITCODE -ne 0) { Write-Host "[NS-2-0] gate did not flag ADMITTED (NS1_SUFFICIENT is the replication success) - see $ResultsDoc" }
 
-Write-Host "[NS-2-0] complete. Verdict in docs/mesa/NS2_0_ADMISSION_RESULTS.md"
+Write-Host "[NS-2-0] complete. Verdict in $ResultsDoc"

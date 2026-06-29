@@ -139,13 +139,18 @@ check("negative control is not applicable to Phase-7e recovery",
 print("(7) review questions are concrete breakpoints:")
 questions = data["reviewQuestions"]
 categories = {item["category"] for item in questions}
-check("seven named review questions are present",
-      [item["id"] for item in questions] == [f"P7C-Q{i}" for i in range(1, 8)])
+check("eight named review questions are present",
+      [item["id"] for item in questions] == [f"P7C-Q{i}" for i in range(1, 9)])
 check("question categories cover the actual weak points",
-      {"leakage", "heldout", "baseline", "pressure", "semantic_alignment", "controls", "scope"}.issubset(categories))
+      {"leakage", "heldout", "baseline", "pressure", "semantic_alignment", "controls", "scope",
+       "recovery_conditionality"}.issubset(categories))
 check("baseline question names the stable/variance dichotomy",
       "stable/variance dichotomy" in questions[2]["question"]
       and "seed_low_range" in questions[2]["question"])
+check("recovery-conditionality question guards 7e/7f against blind-recovery overclaim",
+      questions[7]["category"] == "recovery_conditionality"
+      and "BLIND recovery" in questions[7]["question"]
+      and "search gap is smuggled shut" in questions[7]["breaksClaimIf"])
 check("each question has a break condition",
       all(item["breaksClaimIf"] for item in questions))
 outcomes = data["reviewOutcomes"]
