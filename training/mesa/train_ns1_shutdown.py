@@ -283,7 +283,7 @@ def main() -> int:
                         "bandYHi": args.band_y_hi, "bandXHalf": args.band_x_half})
     if args.shutdown_floor_p > 0:
         env_cfg["shutdownFloorP"] = args.shutdown_floor_p
-    field_model = json.loads(repo_path(args.field_model).read_text(encoding="utf-8")) if args.field_model else None
+    field_model = CoordActor(json.loads(repo_path(args.field_model).read_text(encoding="utf-8"))) if args.field_model else None
 
     history: list[dict[str, Any]] = []
     start_time = time.time()

@@ -125,11 +125,33 @@ upward ray (`{x | β ≤ h x} = Ici (crossing)`), so crossings can't multiply. I
 headline **`hasPieceCover_iterate`**: a monotone map with `k` pieces composed with itself `d` times has
 `≤ d·k + 1` pieces — **linear in depth**, the exact quantitative contrast to the tent's `2^d`
 (`DepthSeparation`). So monotone depth is region-*polynomial*; cancellation depth is
-region-*exponential* — now a theorem on the 1-D depth axis. **Remaining (narrower):** the only gap to a
-fully general `isMono_regions_poly` over *arbitrary* `IsMono` circuits is the per-gate piece lemmas
-(`+`, `max`, `scale`) over `Trop` — `HasPieceCover` for each gate — to lift the function-level
-composition core to circuit structure; the depth/composition axis (the one that produces the `2^d`
-blow-up) is done.
+region-*exponential* — now a theorem on the 1-D depth axis.
+
+*Circuit-structural lift — PHASE 1 LANDED 2026-06-28, axiom-clean (`Sundogcert/RegionPoly.lean`,
+10th Lean module, gated).* Toward a fully general `isMono_regions_poly` over *arbitrary* `IsMono`
+circuits: the **convexity bridge** **`isMono_realize1_convexOn`** (every cancellation-free circuit's
+1-D realization is `ConvexOn ℝ univ` — `var`/`const`/`add`/nonneg-`scale`/`max` all preserve
+convexity) plus the two cut-based gate lemmas that need no convexity — **`hasPieceCover_add`** (`+` is
+piece-additive, `n + m`, cuts union) and **`hasPieceCover_smul`** (scaling preserves the cut set, `n`).
+
+*The convex-merge linchpin (B) — LANDED 2026-06-29, axiom-clean, gated (`hasPieceCover_max_line`).*
+The hardest analytic lemma is machine-checked: **adding one line to a convex function adds at most one
+piece** — `ConvexOn h → HasPieceCover h k → HasPieceCover (fun x => max (ℓ x) (h x)) (k+1)`. The proof
+realizes the full convex-merge: `{x | h x ≤ ℓ x}` is order-connected (a direct convex-combination
+argument, no `ConcaveOn`-of-affine needed); split on `BddBelow`/`BddAbove` into ∅ / `univ` / ray /
+bounded; and the **bounded case is the absorption** — either `h` carries a breakpoint inside `(α,β)`
+(so the two new endpoint cuts are paid for by removing it, `card ≤ k`) or `h = ℓ` on `[α,β]` and
+`max = h` globally. Uses convex continuity (`ConvexOn.continuousOn`), `sInf`/`sSup`-membership in the
+closed agreement region, and closure boundary values. This `+1` (not `+2`) is exactly why monotone
+depth stays polynomial.
+
+*Remaining (structural assembly).* With (B) done, the rest is formalization-heavy but contains no new
+analytic content: **(A)** a convex `HasPieceCover`-`n` function is the sup of its `n` piece-lines
+(supporting lines + piece enumeration from the cut set); the **envelope fold** (sup of a length-`N`
+line list ⇒ `HasPieceCover N`, by folding (B) — sup-of-lines is manifestly convex); **convex-convex
+`max`** = envelope of `na+nb` lines ⇒ `na+nb`; and the **circuit induction** `isMono_hasPieceCover`
+(linear in leaves). The bridge + cut gates + the (B) linchpin + the entire depth/composition axis are
+done; the remaining is the cut-set→line-list enumeration and the structural recursion.
 
 ---
 

@@ -81,6 +81,39 @@ accessible scale.
   arithmetic object, and the expected clean confirmation is a bankable "the toy is faithful" receipt. Caps at
   5.5 because the expected outcome is confirmatory (a null-shaped positive), not a discovery.
 
+#### P-2 RESULT (run 2026-06-29): prediction HELD - barrier confirmed at accessible scale
+
+Receipt: `scripts/parity_p2_liouville_ordermeter.py` (real lambda(n) sieved to N=1e7;
+order-k Markov ladder k=1..12; sample M=5000; own-R2 = 4-fold CV max(linear, MLP-24),
+a faithful copy of `epsilon_machine_shadow.own_r2`). Runtime ~70s.
+
+| k | own-R2(lambda) | own-R2(LFSR d=5) | own-R2(residue q=3) |
+| --- | --- | --- | --- |
+| 1 | 0.001 | 0.002 | 0.249 |
+| 2 | 0.001 | 0.031 | **1.000** |
+| 3 | 0.001 | 0.172 | 1.000 |
+| 4 | 0.001 | 0.431 | 1.000 |
+| 5 | 0.001 | **1.000** | 1.000 |
+| 6-12 | 0.001 -> 0.000 | 1.000 | 1.000 |
+
+- **lambda invisible at every accessible order:** own-R2 ~ 0.001, flat to 0.000 across k=1..12,
+  **linear AND nonlinear** - the empirical face of "no finite-order sufficient statistic" (max over k = 0.001).
+- **Order-meter confirms the apparatus:** the finite-order parity LFSR is caught **exactly at its order**
+  (own-R2 -> 1.0 at k=d=5), the arithmetic residue at k=2. A null on lambda therefore means *invisible*, not
+  *dead apparatus*.
+- **lin-vs-MLP split at the LFSR crossing:** linear-only R2 = 0.029 vs MLP R2 = 1.000 - finite-order PARITY needs
+  the nonlinear model, and the trained encoder DOES crack it at order d. The **same** MLP cannot touch lambda at
+  any order: the trained nonlinear encoder defeats *finite*-order parity but not lambda's *infinite*-order parity
+  (the Sarnak/Chowla content; ties to the Ghost H1a determine/resist frontier - nonlinear beats finite, not
+  infinite, order).
+- **Known finite-n bias, reported not mistaken:** L(1e7) = -842, mean lambda = -0.00008 (Polya-region summatory
+  drift) - an ORDER-0 mean effect, tiny, not finite-order predictability. No order-k>=1 signal exceeded the CV
+  floor, so the kill/interest-flip (a spurious predictor) did not fire.
+
+**Verdict: barrier HOLDS empirically at accessible scale; apparatus confirmed; the toy is faithful.** Chowla is
+imported (this is consistent-with, never a proof); P-2 **cannot breach** the barrier and does not. Bankable
+null-shaped positive, exactly as pre-registered (strength 5.5).
+
 ### Rank 3 — P-3: "where the pigeonhole stalls" instrument (strength 4.5)
 **Instrument the Maynard–Tao tuple pigeonhole at small admissible k-tuples and make the factor-of-2 parity loss
 concrete — show numerically the exact step where P₂→P₁ is blocked.** A didactic receipt, not an attack.

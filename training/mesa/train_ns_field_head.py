@@ -118,6 +118,7 @@ def main() -> int:
                 "bias": lin.bias.detach().numpy().tolist(), "activation": act}
 
     payload = {
+        "format": "mesa-coordinator-json-v1",
         "kind": "ns_field_head",
         "head": "learned_presider",
         "note": "Frozen learned approximation of the analytic field presider (replication step 1).",

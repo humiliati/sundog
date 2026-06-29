@@ -6,6 +6,7 @@ param(
   [int]$CheckpointEvery = 64,
   [int]$EvalSeeds = 48,
   [double]$Kappa = 0.6,
+  [string]$FieldModel = "",
   [switch]$NoResume,
   [switch]$PreflightOnly
 )
@@ -41,6 +42,10 @@ $common = @("--cells", $cells, "--review-band", "--no-exo-shutdown",
   "--init-guard", "$warm/p_guard.json", "--init-arbiter", "$warm/p_council_arbiter_rl.json",
   "--init-monolith-adapter", "$warm/m_adapter_rl.json",
   "--field-cap", "1", "--reward-cap", "0.5", "--guard-cap", "0.7", "--feature-mode", "base")
+# Replication step 1: learned presider. If -FieldModel is given, the cap centers on a
+# LEARNED frozen field head instead of the analytic field (trainer + eval both).
+$fm = @()
+if ($FieldModel) { $common += @("--field-model", $FieldModel); $fm = @("--field-model", $FieldModel) }
 function Train([string]$name, [string[]]$extra) {
   $root = Join-Path $OutRoot $name
   New-Item -ItemType Directory -Force $root | Out-Null
@@ -56,9 +61,9 @@ Train "m0manip"  @("--apply-override")                            # M0-manip: ov
 Train "ns1stack" @("--apply-override", "--arb-cap-kappa", "$Kappa")  # NS1-stack: override + cap
 
 Write-Host "[NS-2-0] evals"
-& node scripts/mesa-ns2-binding-eval.mjs --seeds $EvalSeeds --cells $cells --controller m0 --no-override --label signal-blind --model-root "$OutRoot/blind" --out "$OutRoot/eval_blind.json"
-& node scripts/mesa-ns2-binding-eval.mjs --seeds $EvalSeeds --cells $cells --controller m0 --label m0-manip --model-root "$OutRoot/m0manip" --out "$OutRoot/eval_m0manip.json"
-& node scripts/mesa-ns2-binding-eval.mjs --seeds $EvalSeeds --cells $cells --controller ckappa --arb-cap-kappa $Kappa --label ns1-stack --model-root "$OutRoot/ns1stack" --out "$OutRoot/eval_ns1stack.json"
+& node scripts/mesa-ns2-binding-eval.mjs --seeds $EvalSeeds --cells $cells --controller m0 --no-override --label signal-blind --model-root "$OutRoot/blind" @fm --out "$OutRoot/eval_blind.json"
+& node scripts/mesa-ns2-binding-eval.mjs --seeds $EvalSeeds --cells $cells --controller m0 --label m0-manip --model-root "$OutRoot/m0manip" @fm --out "$OutRoot/eval_m0manip.json"
+& node scripts/mesa-ns2-binding-eval.mjs --seeds $EvalSeeds --cells $cells --controller ckappa --arb-cap-kappa $Kappa --label ns1-stack --model-root "$OutRoot/ns1stack" @fm --out "$OutRoot/eval_ns1stack.json"
 
 Write-Host "[NS-2-0] gate-check"
 $gc = @("scripts/mesa-ns2-admission.mjs", "--blind", "$OutRoot/eval_blind.json", "--m0-manip", "$OutRoot/eval_m0manip.json", "--ns1-stack", "$OutRoot/eval_ns1stack.json", "--out", "docs/mesa/NS2_0_ADMISSION_RESULTS.md", "--json", "$OutRoot/summary.json")

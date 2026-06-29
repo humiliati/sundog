@@ -39,7 +39,7 @@ const args = {
   controller: "m0", override: true, kappa: 0.0, floorP: 0.0,
   bandYLo: 0.0, bandYHi: 0.7, bandXHalf: 2.0,
   fieldCap: 1.0, rewardCap: 0.5, guardCap: 0.7, featureMode: "base",
-  modelRoot: null, label: null, out: null,
+  modelRoot: null, label: null, out: null, fieldModel: null,
 };
 const argv = process.argv.slice(2);
 for (let i = 0; i < argv.length; i += 1) {
@@ -54,6 +54,7 @@ for (let i = 0; i < argv.length; i += 1) {
   else if (f === "--band-y-hi") { args.bandYHi = Number(v); i += 1; }
   else if (f === "--band-x-half") { args.bandXHalf = Number(v); i += 1; }
   else if (f === "--model-root") { args.modelRoot = v; i += 1; }
+  else if (f === "--field-model") { args.fieldModel = v; i += 1; }
   else if (f === "--label") { args.label = v; i += 1; }
   else if (f === "--out") { args.out = v; i += 1; }
 }
@@ -75,7 +76,14 @@ function coordForward(model, featMap) {
   return v;
 }
 const clipAction = (a, m) => { const n = norm2(a); return n > m && n > 0 ? [a[0] * m / n, a[1] * m / n] : a; };
-const fieldActOf = (env) => env.fieldProposal().map((x) => x * env.cfg.actionMax);
+const learnedFieldModel = args.fieldModel ? loadIf(args.fieldModel) : null;
+const fieldActOf = (env) => {
+  if (learnedFieldModel) {
+    const o = env.observe();
+    return coordForward(learnedFieldModel, { obs0: o.x[0], obs1: o.x[1], obs2: o.samples[0], obs3: o.samples[1], obs4: o.samples[2], obs5: o.samples[3] });
+  }
+  return env.fieldProposal().map((x) => x * env.cfg.actionMax);
+};
 const obsForFeatures = (obs) => ({ observation: [obs.x[0], obs.x[1], ...obs.samples], samples: obs.samples, sLocal: obs.sLocal, t: obs.t });
 
 function councilForward(guard, arbiter, env, fstate) {

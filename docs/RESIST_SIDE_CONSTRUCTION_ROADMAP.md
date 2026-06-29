@@ -1,10 +1,11 @@
 # Resist-Side Construction - Roadmap (PROPOSED / pre-registration)
 
-- Status: **PROPOSED 2026-06-28; Passes 0-3 RUN 2026-06-28 - whole-program WIN
+- Status: **PROPOSED 2026-06-28; Passes 0-4 ALL RUN 2026-06-28 - whole-program WIN
   condition MET.** Pass 0 (gate MET), Pass 1 (prediction HELD), Pass 2 (gate MET,
-  3/3 axes), Pass 3 (marginal RECOVERED, constructive). A pre-registration of a
-  falsifiable research program; NOT an owner-ratified plan. Pass 4 is optional and
-  not run. Each pass froze its prediction / falsifier / receipt before execution.
+  3/3 axes), Pass 3 (marginal RECOVERED, constructive), Pass 4 (natural high-dim
+  resistance UNREACHED cheaply; located + flagged compute-gated). A pre-registration
+  of a falsifiable research program; NOT an owner-ratified plan. Each pass froze its
+  prediction / falsifier / receipt before execution.
 - Motivation: Ghost lane **H3** (internal, unratified) -
   `internal/slates/GHOST_HYP_INTERNAL_2026-06-28.md`; the recoverability axis in
   [`CROSS_SUBSTRATE_NOTES.md`](CROSS_SUBSTRATE_NOTES.md) sections 6.3 + 10;
@@ -279,6 +280,40 @@ non-recoverability - explicitly NOT the compute-bound Sabra measurement wall.
 - Exit: either flag a natural resistant candidate for a later (compute-gated)
   measurement, or record that natural resistance stays unreached and **constructed
   resistance is the demonstrated path**. Either outcome is informative.
+
+#### Pass 4 - RESULT (run 2026-06-28): natural HIGH-DIM resistance UNREACHED cheaply; located + flagged
+
+Receipt: `scripts/resist-pass4.mjs` (Kolmogorov mode-counting; no simulation;
+shadow rank `K=8` fixed). Tested the obvious natural candidate - high-Reynolds
+turbulence - on two axes:
+
+| axis | sweep Re -> | reading |
+| --- | --- | --- |
+| **energy** recoverability | 3D energy-FVE stays ~0.83-0.92; **2D stays ~0.99** across Re | the low-Fourier shadow keeps the body's ENERGY: "high-Re => natural resistance by energy" is **refuted** (and reproduces why NSE C1 is marginal) |
+| **degrees of freedom** | DOF beyond `K` -> 0.99+ with Re | the body outgrows the fixed shadow in COUNT - but those modes are **low-energy** (dissipation / intermittency) |
+
+The two diverge: turbulence has unboundedly many small-scale DOF (resistant by
+count) that carry little energy (recoverable by energy). Whether those low-energy
+DOF are **control-relevant** (a true regime-2 split) is exactly the C2 / Sabra
+intermittency target - the **compute-gated** measurement wall, not a cheap check.
+
+**Verdict (both honest exit branches):**
+
+- Natural **high-dimensional** resistance stays **UNREACHED at cheap assessment**:
+  the obvious energy candidate fails; the real candidate (low-energy small-scale
+  intermittency) is **flagged for a later compute-gated measurement** (the Sabra
+  wall), not claimed.
+- One natural **exact** resistance is already in hand - **Aharonov-Bohm**
+  (topological) - but it is low-dimensional (one integer per `H^1` generator) and
+  does not close the high-dim control frontier.
+- **Computational axis:** no clean *natural* example outside constructed
+  codes/crypto.
+
+So **constructed resistance is the demonstrated path** (Passes 0-3). Pass 4 does
+NOT claim a natural high-stakes body resists; its contribution is to **locate**
+where natural resistance must live (low-energy / high-DOF structure) and to confirm
+that region is compute-gated, not cheap - sharpening the open §6.3 frontier rather
+than closing it.
 
 ## Pre-registration discipline
 
