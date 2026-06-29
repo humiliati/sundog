@@ -142,6 +142,17 @@ redundant; residue promoted to C1.**
 > *verify-mode* signal (finite budget); soundness is a *predict-mode* property (∞ for σ=∞ closures).
 > C2's break IS that verify-vs-predict mode-confusion.
 
+## B — the law, named + Lean-anchored — **LANDED 2026-06-29**
+
+> The slate's one statement, machine-checked: the **Order-Relative Resolution Law** — `Resolves k t ↔
+> ord t ≤ k`; determine ⟺ finite order, resist ⟺ `⊤`. `Sundogcert/OrderRelative.lean` (public repo;
+> full `lake build` green, 8530 jobs, axiom-clean, in the `AxiomAudit` gate): `structure Problem` + the
+> single law field; `budget_monotone` / `resolvable_iff_finite` / `resists_iff_infinite` proved ONCE;
+> instances `parityProblem` (grounded — `parityProblem_ord` ties its `ord` to the machine-checked
+> `suffStatOrder`) and `resistPole` (`⊤`); and `order_is_schema_not_scalar` — the C3 / H1 guard in Lean
+> (two instances assign INCOMPARABLE orders) so this anchors the SCHEMA, not the falsified one-scalar
+> form. ([ORDER_RELATIVE_LAW.md](ORDER_RELATIVE_LAW.md))
+
 ## M0 — Methodological meta-move (almost free)
 
 **Statement.** *Which other lane can get an exact-oracle closed-form ground truth?* BoxSEL minted
@@ -169,6 +180,9 @@ inherits the same leverage.
   (verify-order ⊥ predict-order), not a scalar — and that mode-split *explains* C2 (verify-mode signal
   vs predict-mode soundness). Confirming-first would have laundered C2 past its own falsifier; breaking
   first is what produced the order-relative repair and the C4 diagnosis.
+- **B names + Lean-anchors the law** (`Sundogcert/OrderRelative.lean`, axiom-clean, in the gate): the
+  schema `Resolves k t ↔ ord t ≤ k` with the determine/resist dichotomy proved once, the parity
+  instance grounded to `suffStatOrder`, and the `order_is_schema_not_scalar` guard. Schema, not scalar.
 - **Flagship-bound follow-up — DONE (Phase 7g, `INHERITS_order_relative`):** the frozen Phase-7b v2
   pressure detector inherits C2's order-relative law — its reach **is its pressure repertoire**; a
   false closure whose witness is outside the handed repertoire (Helly under a PMP-only family) is
