@@ -1,0 +1,182 @@
+{
+  "schema": "sundog.non_sovereignty.release_manifest.v1",
+  "status": "LEGAL_BLOCKED_UNTIL_LICENSE_SELECTED",
+  "generated_at": "2026-06-29T06:14:02.677Z",
+  "files": [
+    {
+      "path": "released/non-sovereignty/README.md",
+      "bytes": 1338,
+      "sha256": "5d9da83ea35567deb0fce9cd32920ba2ac480bf518638ce91c373eff912dba14"
+    },
+    {
+      "path": "released/non-sovereignty/REPRODUCE.md",
+      "bytes": 1696,
+      "sha256": "06a8cd8ef5102e2e90a37be6541d7d39d2321058a9ebe8af90a4b5e6804aaba8"
+    },
+    {
+      "path": "released/non-sovereignty/TASK_SPEC.md",
+      "bytes": 2199,
+      "sha256": "4dd545ecde0a2bb2ecdec148998822ff7a637ce848919dd5a0bf43df4501e713"
+    },
+    {
+      "path": "released/non-sovereignty/METRICS.md",
+      "bytes": 1718,
+      "sha256": "7e991042fd2057ad8364cbb631a3042d496d75ff649bddad484f63b70b57190e"
+    },
+    {
+      "path": "released/non-sovereignty/LICENSE.md",
+      "bytes": 408,
+      "sha256": "c4b2e0b157c1e151251d843364cb4d9b0db8c40e8a66e877212d12dd138be9b7"
+    },
+    {
+      "path": "docs/mesa/NON_SOVEREIGNTY_RELEASED_TASK_FAMILY_SPEC.md",
+      "bytes": 6904,
+      "sha256": "0fe23801e59ccbe707c71190d18a17d082e24446c4744c755eac9942d68c5d87"
+    },
+    {
+      "path": "docs/mesa/NS1_CORRIGIBILITY_SHUTDOWN_CHANNEL_SPEC.md",
+      "bytes": 17068,
+      "sha256": "2246d09df42d5ed9a2b73e4c82a02a1cbc31f100f4720dd848565d82bb314eb5"
+    },
+    {
+      "path": "docs/mesa/NS1_C_ARBITER_AUTHORITY_CAP_SPEC.md",
+      "bytes": 18799,
+      "sha256": "238414691976107f3c3f8fdaba77ca35971e6283657ce2c4e064e6a21d21084c"
+    },
+    {
+      "path": "docs/mesa/NS2_SHUTDOWN_MANIPULATION_SPEC.md",
+      "bytes": 20448,
+      "sha256": "df8b3ef86dc1efc605c5aa72106b6e724455a8060c0ed828d34509d35461190b"
+    },
+    {
+      "path": "docs/mesa/NS1_0_SHUTDOWN_CHANNEL_ADMISSION_RESULTS.md",
+      "bytes": 2241,
+      "sha256": "caac63536ffca8a98b61895efbaa28461d1878670c2c425c975bacc7b84828ec"
+    },
+    {
+      "path": "docs/mesa/NS1_B_CORRIGIBILITY_BINDING_RESULTS.md",
+      "bytes": 2376,
+      "sha256": "18df2fc696e8eadeb1b07433dd9ca179e929a022e6c25ca23ff518c8f9fbaaec"
+    },
+    {
+      "path": "docs/mesa/NS1_C0_CAP_VALIDITY_RESULTS.md",
+      "bytes": 1298,
+      "sha256": "817b84dfea79ec5063a0fa8b5c3cd003767a87277f846281cb9abb43c867863f"
+    },
+    {
+      "path": "docs/mesa/NS1_C_ARBITER_AUTHORITY_CAP_RESULTS.md",
+      "bytes": 1474,
+      "sha256": "2041f0b10063892e4a3290d486c392e541c2c748c4e9b6b44d48ea3b7c1c8e02"
+    },
+    {
+      "path": "docs/mesa/NS2_0_ADMISSION_RESULTS.md",
+      "bytes": 1753,
+      "sha256": "3837aaae8802e221d3e2b2e09ebe6a3b5f6047bd5506decb60e849412548e702"
+    },
+    {
+      "path": "docs/mesa/NS2_B_UNIFIED_BOUND_RESULTS.md",
+      "bytes": 2716,
+      "sha256": "5bc8454fab626966de54cdd1418e27dbe0fce5ae22662885bf9ddb2f2c903c01"
+    },
+    {
+      "path": "scripts/h2-forked-task.mjs",
+      "bytes": 8764,
+      "sha256": "86af6ee08f104189e7ea7063a6deaf90ce63c48d4718204f3c92bb79264e3a89"
+    },
+    {
+      "path": "scripts/ns1-shutdown-task.mjs",
+      "bytes": 9120,
+      "sha256": "5b35a66ab16f8c33dcd585debbc2f2be264c7f3f9cff8b1473c78120a50a46a2"
+    },
+    {
+      "path": "scripts/mesa-ns1-shutdown-admission.mjs",
+      "bytes": 11954,
+      "sha256": "fa350a9ff2ded35e440ea8c4e6ffc44e0b1b426ea89552d59a9fd1eb8cc9ca12"
+    },
+    {
+      "path": "scripts/mesa-ns1c-cap-validity.mjs",
+      "bytes": 10711,
+      "sha256": "4d3e01ac94a8d96eb43c061297ebc66dd4ae62bb13aab49194b07985bc03dd9b"
+    },
+    {
+      "path": "scripts/mesa-ns2-admission.mjs",
+      "bytes": 7130,
+      "sha256": "399341b098752db37b1c379a0d99cee06469230b4ee905d21185bc04b9f97fe3"
+    },
+    {
+      "path": "scripts/mesa-ns1c-binding-eval.mjs",
+      "bytes": 13373,
+      "sha256": "4c95211c82f0fbe79f060762c500c1a02ee7aac563ab215d249b523088593862"
+    },
+    {
+      "path": "scripts/mesa-ns2-binding-eval.mjs",
+      "bytes": 9654,
+      "sha256": "83ca94f4eb7aec3a09de3061bc01c5800314c19467f988802ebd7ecfc9d5fda0"
+    },
+    {
+      "path": "scripts/mesa-ns1c-aggregate.mjs",
+      "bytes": 8306,
+      "sha256": "b5943956b4730499af882362ec3b5d8779ade62bbf5e0260291a6157114752b8"
+    },
+    {
+      "path": "scripts/mesa-ns2-aggregate.mjs",
+      "bytes": 9889,
+      "sha256": "2313249a5369af561ed8be44ab8f041ce55430e83d6bfea5b38c07375bfeb677"
+    },
+    {
+      "path": "scripts/mesa-ns1-b-binding.ps1",
+      "bytes": 4586,
+      "sha256": "71b6d8714897b69e80508a2fcf2a0feed392f1b872fe1432350f867b965ad5a2"
+    },
+    {
+      "path": "scripts/mesa-ns1c-binding.ps1",
+      "bytes": 4358,
+      "sha256": "54701f765d11fe589e4956b2fe755cb1733bd8b7665bb3dec8091dacdcc8e43d"
+    },
+    {
+      "path": "scripts/mesa-ns2-0-admission.ps1",
+      "bytes": 4101,
+      "sha256": "3e6b270c7d78e85abe65f46f16ca7ea46e20762f2a717e77d7d88ee9aaa569b8"
+    },
+    {
+      "path": "scripts/mesa-ns2-b-binding.ps1",
+      "bytes": 4854,
+      "sha256": "e840465558ed5c10d1c90d3949470fd56656b3b85249fe12d0b8cffb51a0120a"
+    },
+    {
+      "path": "training/mesa/h2_forked_task.py",
+      "bytes": 10124,
+      "sha256": "0b51346ea55db43ac8e6ee381f0e9ca9d7a3685972da95517fd9ca413b05c447"
+    },
+    {
+      "path": "training/mesa/ns1_shutdown_task.py",
+      "bytes": 10221,
+      "sha256": "c4eaf5e4530ddf1001b96e4e1f178664afb6ecd4db4ffffb716cd321ba5daa9a"
+    },
+    {
+      "path": "training/mesa/train_ns1_shutdown.py",
+      "bytes": 18929,
+      "sha256": "6fd026951cebb5b7ea7ea6ed6647870a54ad0a4cdc9437f1fe44d0f5dea631eb"
+    },
+    {
+      "path": "scripts/mesa-ns-release-manifest.mjs",
+      "bytes": 4157,
+      "sha256": "7ef16a751ddb8f4f62e301d4a14bf96c2e5107acaea4e70c8f652b8e6ca2072f"
+    },
+    {
+      "path": "scripts/mesa-ns-release-parity-smoke.mjs",
+      "bytes": 6128,
+      "sha256": "84d29692acbf19ad9f86d6f81d36cbf8cb926cf9d611cb440119a14b06abf758"
+    },
+    {
+      "path": "scripts/mesa-ns-release-smoke.mjs",
+      "bytes": 2864,
+      "sha256": "2d4c9c665032f16e5759f806f2f3f48cffbd79fe4b67eda97228c97dc7596b90"
+    },
+    {
+      "path": "package.json",
+      "bytes": 66044,
+      "sha256": "1e6300aadfd76189b7b7301ed6b03ed97d2e3059cfa18030cb1a759ee5ec2022"
+    }
+  ]
+}

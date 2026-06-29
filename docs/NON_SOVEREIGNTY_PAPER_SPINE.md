@@ -217,11 +217,16 @@ in-vitro shadow-field tier or for adversaries that tamper with the presider's *i
 ## 9. Gaps to close before submission (in priority order)
 
 1. **A clean, released task family** — the field-necessary/reward-dangerous +
-   endogenous-shutdown environment with the admission gates baked in, open-sourced and
-   independently runnable. The long pole. (The harness exists; packaging + docs do not.)
+   endogenous-shutdown environment with the admission gates baked in, publicly released
+   and independently runnable. Release gate now drafted:
+   [`mesa/NON_SOVEREIGNTY_RELEASED_TASK_FAMILY_SPEC.md`](mesa/NON_SOVEREIGNTY_RELEASED_TASK_FAMILY_SPEC.md).
+   The remaining work is packaging (`released/non-sovereignty/`), JS/Python parity
+   smoke, release smoke command, runtime table, and license decision.
 2. **A tier above in-vitro** — every result is Small/Medium with frozen analytic presider
-   heads on a shadow field; at minimum one axis replicated with learned heads / a larger
-   tier, to show the unified bound is not a low-capacity artifact.
+   heads on a shadow field. First replication rung now drafted:
+   [`mesa/NS3_LEARNED_PRESIDER_REPLICATION_SPEC.md`](mesa/NS3_LEARNED_PRESIDER_REPLICATION_SPEC.md),
+   which replaces the analytic presider with a frozen learned presider and reruns the
+   NS-2 capstone/non-sovereignty gates.
 3. **`Δp > 0` stated as worst-case-over-uncertain-objective** — the three non-return axes
    are the operational `Δp`; tightening the link to the `ruin_break_even` premise (the
    bound lowers ruin probability *because* it caps the manipulation/sovereignty channels)

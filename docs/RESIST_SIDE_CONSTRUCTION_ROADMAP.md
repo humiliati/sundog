@@ -1,8 +1,9 @@
 # Resist-Side Construction - Roadmap (PROPOSED / pre-registration)
 
-- Status: **PROPOSED 2026-06-28.** A pre-registration of a falsifiable research
-  program. NOT an owner-ratified plan, not yet run. Each pass freezes its
-  prediction / falsifier / receipt before execution.
+- Status: **PROPOSED 2026-06-28; Pass 0 RUN 2026-06-28 - exit gate MET.** A
+  pre-registration of a falsifiable research program. NOT an owner-ratified plan;
+  Passes 1-4 not yet run. Each pass freezes its prediction / falsifier / receipt
+  before execution.
 - Motivation: Ghost lane **H3** (internal, unratified) -
   `internal/slates/GHOST_HYP_INTERNAL_2026-06-28.md`; the recoverability axis in
   [`CROSS_SUBSTRATE_NOTES.md`](CROSS_SUBSTRATE_NOTES.md) sections 6.3 + 10;
@@ -71,6 +72,47 @@ topological, syndrome = computational). Measure shadow->body reconstruction for 
 - Falsifier: a marginal that is actually non-recoverable (low FVE) yet still gave a
   soft split => recoverability is not the axis; reframe or close.
 - Cost: ~zero (re-reads existing receipts + one reconstruction metric).
+
+#### Pass 0 - RESULT (run 2026-06-28): exit gate MET
+
+Recoverability axis = "does the shadow determine the body?", read as a
+shadow->body reconstruction figure (FVE for the continuous substrates; the
+lossiness mechanism + magnitude for the constructed wins). The metric is native
+per substrate; the axis is the common ordinal.
+
+| substrate | role | shadow->body recoverability | mechanism | source |
+| --- | --- | --- | --- | --- |
+| NSE C1 (2D Kolmogorov) | marginal | **FVE ~0.99** (both physical norms) | low-Fourier shadow reconstructs the field | NSE ledger / failure map |
+| Mesa `net.7` (5D) | marginal | **FVE ~0.97-0.99** | shadow reconstructs the hidden subspace | P-vs-NP entry / Mesa |
+| Syndrome / SIS (computational) | win | **chance** (0.513 measured, 0.5 exact) | `z = eH^T` is independent of `s`; 2^64 preimages/syndrome; decoding NP-hard | Lean lossiness + Pass-0 anchor `scripts/resist-pass0-anchor.mjs` |
+| Aharonov-Bohm (topological) | win | **0, exact** | flux `Phi=oint A` is one int per `H^1` class; interior `B(x)` not rebuildable; many bodies -> one shadow | CSN section 8.2 (B7-topology receipt) |
+| chatv2 `d_dec` 7->14 (dimensional) | win | resistant, at-the-bar SHARP (toy) | de-confounded high-dim body resists + scales; contrast 0.205+/-0.022, 3 seeds | CSN section 8.2 / chatv2 |
+| (NSE C2 / Sabra) | - | **unmeasured** (tooling wall) | shadow unmeasurable with current integrator | NSE ledger |
+
+**Exit gate MET.** The two marginals land at the recoverable end (FVE 0.97-0.99);
+all three constructed wins land at the resistant end (chance / exact-lossy). Clean
+separation on one axis. The Pass-0 anchor makes the resistant end concrete on the
+reconstruction-accuracy version of the metric: the same secret reads ~0.94 from
+the body but ~chance (0.513; exactly 0.5 in theory) from the lossy shadow - the
+same axis where NSE/Mesa read 0.99.
+
+**Falsifier did NOT fire.** No marginal is non-recoverable: both gave soft splits
+*and* are high-FVE, consistent with recoverability being the axis.
+
+**The H3 sharpener, confirmed (load-bearing).** Recoverability is **orthogonal to
+dimension/compute**: Aharonov-Bohm resists *exactly* with a **tiny** body (one
+integer per `H^1` generator); the syndrome win resists at small/cheap scale; the
+dimensional win is `d_dec < 20` (toy). Conversely NSE C1 is a PDE field
+(effectively high-dimensional) yet **recoverable**. So resistance is neither bought
+with scale nor needs it - directly against the "high-dimensional body, unreachable
+at accessible resources" diagnosis. Pass 0 does not *prove* H3, but it removes its
+cheapest disconfirmation and clears the path to Pass 1.
+
+**Honest caveats.** The axis is ordinal across incommensurable native metrics (FVE
+vs algebraic/topological lossiness); the anchor computation only operationalizes
+the resistant end. Sabra stays an unmeasured tooling wall, not a recoverability
+data point. Constructed-win resistances are imported (decoding hardness; AB
+topology).
 
 ### Pass 1 - Minimal computational-resistance injection (core)
 
