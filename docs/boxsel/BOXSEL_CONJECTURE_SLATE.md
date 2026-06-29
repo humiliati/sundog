@@ -129,6 +129,19 @@ collapses into the suffstat schema; its only live residue is **C1: search-reacha
 7th filtration**, with the one lane that has closed-form ground truth to test it. **C3 closed as
 redundant; residue promoted to C1.**
 
+## C4 — find/check, a 4th *kind* of axis — **LANDED 2026-06-29** (`EXTENDS_mode_relative`)
+
+> The first three axes each assign ONE order per target. The find/check axis (σ-slate H3) assigns TWO:
+> verify-order (witness-check budget) and predict-order (history budget). Probe
+> ([C4_FIND_CHECK_ORDER.md](C4_FIND_CHECK_ORDER.md), test 12/12, reuses `suffstat_h3` + `order_meter`):
+> parity λ has verify-order **finite** (17 = max Ω over n ≤ 2e5) but predict-order **∞** — the same
+> target, two divergent orders ⟹ no single scalar budget; the law holds **per-mode** only. Finite-σ
+> LFSR control: both orders finite (5, 6) → modes agree, meter live (non-vacuity guard). **The "order"
+> is a mode-vector, not a scalar** — the find/check analog of the σ-schema's "not one comparable
+> scalar." **It explains C2:** a pressure detector's "stable under the pressures I applied" is a
+> *verify-mode* signal (finite budget); soundness is a *predict-mode* property (∞ for σ=∞ closures).
+> C2's break IS that verify-vs-predict mode-confusion.
+
 ## M0 — Methodological meta-move (almost free)
 
 **Statement.** *Which other lane can get an exact-oracle closed-form ground truth?* BoxSEL minted
@@ -150,10 +163,12 @@ inherits the same leverage.
     pressure family's order. ([C2_PRESSURE_ABSTENTION_BREAK.md](C2_PRESSURE_ABSTENTION_BREAK.md))
   - **C3 — CLOSED as redundant** with the σ-order schema (census above).
   - **M0** — opportunistic, untouched.
-- **The through-line all three landed on:** every result is *order-relative* — search reach (C1),
-  pressure reach (C2), determination order (C3/σ-schema) are the same finite/∞ dichotomy on different
-  axes. Confirming-first would have laundered C2 past its own falsifier; breaking it first is what
-  produced the order-relative repair.
+- **The through-line:** every result is *order-relative* — search reach (C1), pressure reach (C2),
+  pressure repertoire (Phase 7g), and determination order (C3/σ-schema) are the same finite/∞ dichotomy
+  on different axes. **C4 adds the 4th *kind*:** on the find/check axis the order is a *mode-vector*
+  (verify-order ⊥ predict-order), not a scalar — and that mode-split *explains* C2 (verify-mode signal
+  vs predict-mode soundness). Confirming-first would have laundered C2 past its own falsifier; breaking
+  first is what produced the order-relative repair and the C4 diagnosis.
 - **Flagship-bound follow-up — DONE (Phase 7g, `INHERITS_order_relative`):** the frozen Phase-7b v2
   pressure detector inherits C2's order-relative law — its reach **is its pressure repertoire**; a
   false closure whose witness is outside the handed repertoire (Helly under a PMP-only family) is

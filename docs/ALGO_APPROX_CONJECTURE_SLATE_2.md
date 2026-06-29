@@ -271,7 +271,22 @@ the cost model can't carry it. Names the boundary of the ledger's reach.
 
 ---
 
-## N-4 — The `ε`-essential region count is the *learnable* invariant. [EMPIRICAL]
+## N-4 — The `ε`-essential region count is the *learnable* invariant. [EMPIRICAL] — **REDEEMS** 2026-06-29: `scripts/algo_approx_n4_eps_regions.py` + `docs/ALGO_APPROX_N4_EPS_REGIONS_RESULT.md`.
+
+*Result — REDEEMS 2026-06-29 (with a named residual; falsifier did NOT fire).* The trained
+generalization-width threshold tracks **(ε-essential − 1)** at **32/36 = 0.89** across families
+and bars, vs only **18/36 = 0.50** for **(exact `k` − 1)**; and the ε-essential count **moves
+with the bar** (mean spread 1.33; exact `k` spread 0). The convex families (smooth, essential)
+track the ε-essential count **exactly** (1.00), which *explains* the C-D2 mystery — they
+generalize at `≈ ε-essential ≪ k`, with `k` the `bar → 0` limit. Method: optimal DP PL
+segmentation for the ε-essential count (recomputed per bar) + a best-of-6-restarts fitting
+**oracle** for the threshold (the lever against C-D2's trainability confound). **Honest residual:**
+the non-convex jagged family tracks at 0.67 (one outlier, `k=5`: the oracle still can't ε-fit
+below width 5 though ε-essential says 2–3) — C-D2's **existence ≠ trainability** confound,
+surviving on non-convex shapes. So N-4 **redeems confound (1)** [exact-vs-ε: ε-essential is the
+right geometric invariant] and **cleanly isolates confound (2)** [trainability]: generalization
+onset = ε-essential region count **modulo** SGD trainability. C-D2's documented null is now a
+positive — region geometry *is* the predictor, read at the operative scale.
 
 *Claim.* C-A1 proved the **exact** region count is an intrinsic invariant; C-D2
 found it does **not** drive generalization (`ε`-approximability + trainability did,

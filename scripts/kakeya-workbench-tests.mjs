@@ -81,6 +81,28 @@ for (const q of Qs) {
     bitsEqual(K.shadowBitset(q, a), K.shadowBitset(q, b)) && !sameSet(a, b),
   );
 
+  // 8b. Shadow collision with different body sizes. Adding one off-line point
+  //     to a full line changes the body but does not cover a new full line.
+  const linePlusPoint = new Set(a);
+  const extraPoint = [...Array(n).keys()].find((p) => !a.has(p));
+  linePlusPoint.add(extraPoint);
+  check(
+    `q=${q} T8b shadow-collision-different-size`,
+    bitsEqual(K.shadowBitset(q, a), K.shadowBitset(q, linePlusPoint)) &&
+      !sameSet(a, linePlusPoint) &&
+      a.size !== linePlusPoint.size,
+  );
+
+  // 8c. The complete shadow is also many-to-one and does not recover body size.
+  const whole = K.bWholePlane(q);
+  const wholeMinus = K.bWholeMinusOne(q, 0);
+  check(
+    `q=${q} T8c complete-shadow-different-size`,
+    bitsEqual(K.shadowBitset(q, whole), K.shadowBitset(q, wholeMinus)) &&
+      !sameSet(whole, wholeMinus) &&
+      whole.size !== wholeMinus.size,
+  );
+
   // 9. Greedy line-cover construction covers all directions.
   check(
     `q=${q} T9 greedy-complete`,

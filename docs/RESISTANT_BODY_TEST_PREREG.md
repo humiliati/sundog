@@ -57,4 +57,37 @@
 
 ## Receipt
 
-`scripts/resistant_body_test.py` → RESULT block appended below after the run.
+`scripts/resistant_body_test.py`.
+
+## RESULT (run 2026-06-29): PREDICTION HELD — recoverability is the axis, dimension is NOT
+
+| ρ_rec | sharpness @ D=8 | @ D=32 | @ D=128 | spread across D |
+| --- | --- | --- | --- | --- |
+| 0.25 | 0.746 | 0.746 | 0.746 | 0.000 |
+| 0.50 | 0.498 | 0.498 | 0.498 | 0.000 |
+| 0.75 | 0.249 | 0.249 | 0.249 | 0.000 |
+| 0.90 | 0.124 | 0.093 | 0.101 | 0.031 (r-rounding) |
+
+All four frozen checks passed; no falsifier fired:
+
+1. **`control_suff` = 0.995 in every cell** — control-sufficient regardless of `D` or recoverability.
+2. **`recon_FVE` = r/D exactly**, and the 2× MLP reconstructor scores **0.000** on the dropped
+   coordinates — the information floor is not beaten by compute (the resistance is information-theoretic,
+   the H5 fiber/recon axis, not computational).
+3. **Sharpness flat in `D` at matched `ρ_rec`** (spread 0.000; the 0.90 row's 0.031 is `r = round(ρ·D)`
+   rounding, not a `D` effect).
+4. **Sharpness rises one-for-one as `ρ_rec` falls** at fixed `D` (= `1 − ρ_rec`).
+
+**Decisive cells:** high-`D` recoverable (`D=128, ρ_rec=0.90`, the `net.7` analogue) → **MARGINAL**
+(sharpness 0.101); low-`D` resistant (`D=8, ρ_rec=0.25`, the Aharonov-Bohm analogue) → **SHARP** (0.746).
+**High dimension buys no sharpness at fixed recoverability; low recoverability buys sharpness at any
+dimension.**
+
+**Disposition.** The H3 axis question is **resolved internally**: regime-2 sharpness is driven by
+**recoverability** (can the shadow rebuild the body), not dimension — deconfounded, on a clean test, with
+the dimension/compute falsifiers explicitly not firing. This *confirms the page's `net.7` natural data
+point* (256-wide, ~2-D, ~99% rebuilt, marginal) is the rule, not an exception.
+
+**Still fenced (unchanged):** constructed/toy; not an NSE result; not a change to C1. The public page's
+justification rests on the **natural `net.7` data already on the page**, not on this toy — the toy's job
+was only to decide *which axis the sentence names*, and it says **recoverability, not dimension.**

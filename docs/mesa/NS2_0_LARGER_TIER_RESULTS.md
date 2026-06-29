@@ -8,9 +8,12 @@ init `max|Δforward| = 4e-16`) so only capacity changed. **Verdict: the bound su
 threshold (`NS2_NS1_SUFFICIENT`); the larger uncapped M0 still dodges fully, so the
 hazard is real at scale.** Honest caveat: deterrence weakened *modestly* with capacity —
 `NS1-stack band_avoidance` rose `0.083` (small tier) → `0.146` (this tier). The extra
-arbiter capacity exploits a little more of the within-κ room, but stays bounded; a
-capacity curve (256/512) would characterize whether κ should scale down at very high
-capacity. Single PPO seed. Run via `mesa-ns2-0-admission.ps1 -InitRoot ...`.
+arbiter capacity exploits a little more of the within-κ room, but stays bounded.
+**→ RESOLVED by the capacity curve** ([`NS2_CAPACITY_CURVE_RESULTS.md`](NS2_CAPACITY_CURVE_RESULTS.md)):
+band_avoidance across hidden 32/128/256/512 = 0.083/0.146/0.021/0.083 (slope −0.007 per
+doubling = `ROBUST_PLATEAU`) — **this 0.146 was single-seed noise, not a capacity trend**;
+the cap deters robustly across a 16× capacity range. Single PPO seed. Run via
+`mesa-ns2-0-admission.ps1 -InitRoot ...`.
 
 Generated 2026-06-29T09:21:54.398Z by `scripts/mesa-ns2-admission.mjs`. Band: {"yLo":0,"yHi":0.7,"xHalf":2}.
 

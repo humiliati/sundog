@@ -136,3 +136,28 @@ R1 is **met** iff every cell: pre-check ≈ chance, gen learned, body resists
   `--curriculum` / `--warm-start` from an arity-2 checkpoint (the UNLEARNED guard
   keeps it out of any marginality/body-resistance claim) — same fix that cracked
   H=16.
+
+## F-opt falsifier resolution — seed-stability (pre-registered 2026-06-29)
+
+F-opt (lr=1e-3) returned `objective_excess = 0.095 < 0.10` on **seed 0 only** — but the
+model learned cleanly (z1=0.934, d_dec=7.74, leak=0.503; gen body_carry 0.639 vs twin
+0.544). One seed cannot tell "lr=1e-3 genuinely collapses the objective effect"
+(falsifier real) from a low-seed fluke. Resolve by re-running **seeds 1 and 2** at the
+*identical* config (only `--seed` changes; new out dirs, the seed-0 result untouched).
+
+**Frozen verdict (recorded before the seed-1/2 numbers):**
+- **CLEARED (falsifier was noise):** mean `objective_excess` over seeds {0,1,2} **≥ 0.10**,
+  each seed learned (gen `eval_loss < log2 − 0.02`, z1 ≥ 0.70, leak ≈ chance, d_dec ≥ H/2)
+  → the optimizer axis does **not** falsify R1.
+- **FIRED (falsifier real):** mean `objective_excess` **< 0.10** while the models learned
+  → R1-generality fails on the optimizer axis; re-scope the R1 claim to the lr it holds
+  for (3e-4), per this doc's "rewrite around what actually generalized."
+- **UNINFORMATIVE (F3′):** a seed is UNLEARNED (`eval_loss ≈ chance`) → exclude it (training
+  failure, not a body-resistance read); re-run if < 2 learned seeds remain.
+
+```bash
+python scripts/chatv2_phase0_bodyresist.py --mode full --stage all --latent computed --fair-readout \
+  --h-sweep 8 --d-model 192 --delta 0.45 --bits-per-channel 24 --lr 1e-3 \
+  --max-steps 6000 --min-steps 3000 --patience 10 --seed 1 \
+  --out results/chatv2/phase1-r1/Fopt_lr1e-3_seed1     # and --seed 2 --out .../Fopt_lr1e-3_seed2
+```

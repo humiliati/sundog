@@ -1,0 +1,1020 @@
+{
+  "artifactId": "KAK-HK3-SHADOW-COLLISION-AUDIT",
+  "generatedAt": "2026-06-29T19:07:18.468Z",
+  "status": "internal measurement receipt",
+  "hook": "H-K3 direction-shadow collision audit for finite-field Kakeya",
+  "parameters": {
+    "q": 7,
+    "maxSize": 6,
+    "maxStates": 300000
+  },
+  "command": "node scripts/kakeya-shadow-collision-audit.mjs --q 7 --max-size 6 --max-states 300000",
+  "core": {
+    "supportedQ": [
+      5,
+      7,
+      11
+    ],
+    "directionOrder": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "inf"
+    ],
+    "pointCount": 49,
+    "dvirFloor": 28
+  },
+  "registeredGuard": {
+    "q": 7,
+    "pass": true,
+    "witnesses": [
+      {
+        "name": "single-direction parallel-line collision",
+        "pass": true,
+        "sameSignature": true,
+        "bodiesDiffer": true,
+        "bodiesDifferInSize": false,
+        "signature": "10000000",
+        "bodies": [
+          {
+            "name": "slope-0 intercept-0 line",
+            "source": {
+              "kind": "registered-guard",
+              "guard": "single-direction-collision"
+            },
+            "size": 7,
+            "pointIndices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "coordinates": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": 2,
+                "y": 0
+              },
+              {
+                "x": 3,
+                "y": 0
+              },
+              {
+                "x": 4,
+                "y": 0
+              },
+              {
+                "x": 5,
+                "y": 0
+              },
+              {
+                "x": 6,
+                "y": 0
+              }
+            ],
+            "shadow": {
+              "q": 7,
+              "bodySize": 7,
+              "bodyFraction": 0.14285714285714285,
+              "directionsCovered": 1,
+              "directionCount": 8,
+              "coverageFraction": 0.125,
+              "covered": [
+                "0"
+              ],
+              "missing": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "inf"
+              ],
+              "complete": false,
+              "dvirFloor": 28,
+              "dvirFloorConsistent": null,
+              "bitset": "10000000",
+              "bits": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            }
+          },
+          {
+            "name": "slope-0 intercept-1 line",
+            "source": {
+              "kind": "registered-guard",
+              "guard": "single-direction-collision"
+            },
+            "size": 7,
+            "pointIndices": [
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13
+            ],
+            "coordinates": [
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": 2,
+                "y": 1
+              },
+              {
+                "x": 3,
+                "y": 1
+              },
+              {
+                "x": 4,
+                "y": 1
+              },
+              {
+                "x": 5,
+                "y": 1
+              },
+              {
+                "x": 6,
+                "y": 1
+              }
+            ],
+            "shadow": {
+              "q": 7,
+              "bodySize": 7,
+              "bodyFraction": 0.14285714285714285,
+              "directionsCovered": 1,
+              "directionCount": 8,
+              "coverageFraction": 0.125,
+              "covered": [
+                "0"
+              ],
+              "missing": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "inf"
+              ],
+              "complete": false,
+              "dvirFloor": 28,
+              "dvirFloorConsistent": null,
+              "bitset": "10000000",
+              "bits": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "complete-shadow whole-plane collision",
+        "pass": true,
+        "sameSignature": true,
+        "bodiesDiffer": true,
+        "bodiesDifferInSize": true,
+        "signature": "11111111",
+        "bodies": [
+          {
+            "name": "whole plane",
+            "source": {
+              "kind": "registered-guard",
+              "guard": "complete-shadow-collision"
+            },
+            "size": 49,
+            "pointIndices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              20,
+              21,
+              22,
+              23,
+              24,
+              25,
+              26,
+              27,
+              28,
+              29,
+              30,
+              31,
+              32,
+              33,
+              34,
+              35,
+              36,
+              37,
+              38,
+              39,
+              40,
+              41,
+              42,
+              43,
+              44,
+              45,
+              46,
+              47,
+              48
+            ],
+            "coordinates": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": 2,
+                "y": 0
+              },
+              {
+                "x": 3,
+                "y": 0
+              },
+              {
+                "x": 4,
+                "y": 0
+              },
+              {
+                "x": 5,
+                "y": 0
+              },
+              {
+                "x": 6,
+                "y": 0
+              },
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": 2,
+                "y": 1
+              },
+              {
+                "x": 3,
+                "y": 1
+              },
+              {
+                "x": 4,
+                "y": 1
+              },
+              {
+                "x": 5,
+                "y": 1
+              },
+              {
+                "x": 6,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": 2
+              },
+              {
+                "x": 1,
+                "y": 2
+              },
+              {
+                "x": 2,
+                "y": 2
+              },
+              {
+                "x": 3,
+                "y": 2
+              },
+              {
+                "x": 4,
+                "y": 2
+              },
+              {
+                "x": 5,
+                "y": 2
+              },
+              {
+                "x": 6,
+                "y": 2
+              },
+              {
+                "x": 0,
+                "y": 3
+              },
+              {
+                "x": 1,
+                "y": 3
+              },
+              {
+                "x": 2,
+                "y": 3
+              },
+              {
+                "x": 3,
+                "y": 3
+              },
+              {
+                "x": 4,
+                "y": 3
+              },
+              {
+                "x": 5,
+                "y": 3
+              },
+              {
+                "x": 6,
+                "y": 3
+              },
+              {
+                "x": 0,
+                "y": 4
+              },
+              {
+                "x": 1,
+                "y": 4
+              },
+              {
+                "x": 2,
+                "y": 4
+              },
+              {
+                "x": 3,
+                "y": 4
+              },
+              {
+                "x": 4,
+                "y": 4
+              },
+              {
+                "x": 5,
+                "y": 4
+              },
+              {
+                "x": 6,
+                "y": 4
+              },
+              {
+                "x": 0,
+                "y": 5
+              },
+              {
+                "x": 1,
+                "y": 5
+              },
+              {
+                "x": 2,
+                "y": 5
+              },
+              {
+                "x": 3,
+                "y": 5
+              },
+              {
+                "x": 4,
+                "y": 5
+              },
+              {
+                "x": 5,
+                "y": 5
+              },
+              {
+                "x": 6,
+                "y": 5
+              },
+              {
+                "x": 0,
+                "y": 6
+              },
+              {
+                "x": 1,
+                "y": 6
+              },
+              {
+                "x": 2,
+                "y": 6
+              },
+              {
+                "x": 3,
+                "y": 6
+              },
+              {
+                "x": 4,
+                "y": 6
+              },
+              {
+                "x": 5,
+                "y": 6
+              },
+              {
+                "x": 6,
+                "y": 6
+              }
+            ],
+            "shadow": {
+              "q": 7,
+              "bodySize": 49,
+              "bodyFraction": 1,
+              "directionsCovered": 8,
+              "directionCount": 8,
+              "coverageFraction": 1,
+              "covered": [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "inf"
+              ],
+              "missing": [],
+              "complete": true,
+              "dvirFloor": 28,
+              "dvirFloorConsistent": true,
+              "bitset": "11111111",
+              "bits": [
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1
+              ]
+            }
+          },
+          {
+            "name": "whole plane minus point 0",
+            "source": {
+              "kind": "registered-guard",
+              "guard": "complete-shadow-collision"
+            },
+            "size": 48,
+            "pointIndices": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              20,
+              21,
+              22,
+              23,
+              24,
+              25,
+              26,
+              27,
+              28,
+              29,
+              30,
+              31,
+              32,
+              33,
+              34,
+              35,
+              36,
+              37,
+              38,
+              39,
+              40,
+              41,
+              42,
+              43,
+              44,
+              45,
+              46,
+              47,
+              48
+            ],
+            "coordinates": [
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": 2,
+                "y": 0
+              },
+              {
+                "x": 3,
+                "y": 0
+              },
+              {
+                "x": 4,
+                "y": 0
+              },
+              {
+                "x": 5,
+                "y": 0
+              },
+              {
+                "x": 6,
+                "y": 0
+              },
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": 2,
+                "y": 1
+              },
+              {
+                "x": 3,
+                "y": 1
+              },
+              {
+                "x": 4,
+                "y": 1
+              },
+              {
+                "x": 5,
+                "y": 1
+              },
+              {
+                "x": 6,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": 2
+              },
+              {
+                "x": 1,
+                "y": 2
+              },
+              {
+                "x": 2,
+                "y": 2
+              },
+              {
+                "x": 3,
+                "y": 2
+              },
+              {
+                "x": 4,
+                "y": 2
+              },
+              {
+                "x": 5,
+                "y": 2
+              },
+              {
+                "x": 6,
+                "y": 2
+              },
+              {
+                "x": 0,
+                "y": 3
+              },
+              {
+                "x": 1,
+                "y": 3
+              },
+              {
+                "x": 2,
+                "y": 3
+              },
+              {
+                "x": 3,
+                "y": 3
+              },
+              {
+                "x": 4,
+                "y": 3
+              },
+              {
+                "x": 5,
+                "y": 3
+              },
+              {
+                "x": 6,
+                "y": 3
+              },
+              {
+                "x": 0,
+                "y": 4
+              },
+              {
+                "x": 1,
+                "y": 4
+              },
+              {
+                "x": 2,
+                "y": 4
+              },
+              {
+                "x": 3,
+                "y": 4
+              },
+              {
+                "x": 4,
+                "y": 4
+              },
+              {
+                "x": 5,
+                "y": 4
+              },
+              {
+                "x": 6,
+                "y": 4
+              },
+              {
+                "x": 0,
+                "y": 5
+              },
+              {
+                "x": 1,
+                "y": 5
+              },
+              {
+                "x": 2,
+                "y": 5
+              },
+              {
+                "x": 3,
+                "y": 5
+              },
+              {
+                "x": 4,
+                "y": 5
+              },
+              {
+                "x": 5,
+                "y": 5
+              },
+              {
+                "x": 6,
+                "y": 5
+              },
+              {
+                "x": 0,
+                "y": 6
+              },
+              {
+                "x": 1,
+                "y": 6
+              },
+              {
+                "x": 2,
+                "y": 6
+              },
+              {
+                "x": 3,
+                "y": 6
+              },
+              {
+                "x": 4,
+                "y": 6
+              },
+              {
+                "x": 5,
+                "y": 6
+              },
+              {
+                "x": 6,
+                "y": 6
+              }
+            ],
+            "shadow": {
+              "q": 7,
+              "bodySize": 48,
+              "bodyFraction": 0.9795918367346939,
+              "directionsCovered": 8,
+              "directionCount": 8,
+              "coverageFraction": 1,
+              "covered": [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "inf"
+              ],
+              "missing": [],
+              "complete": true,
+              "dvirFloor": 28,
+              "dvirFloorConsistent": true,
+              "bitset": "11111111",
+              "bits": [
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "enumeration": {
+    "q": 7,
+    "pointCount": 49,
+    "maxBodySize": 6,
+    "maxStates": 300000,
+    "stateCount": 300000,
+    "truncated": true,
+    "lastCompletedSize": 4,
+    "signatureCount": 1,
+    "collisionSignatureCount": 1,
+    "differentSizeCollisionSignatureCount": 1,
+    "maxCollisionClassCount": 300000,
+    "maxNonemptyCollisionClassCount": 0,
+    "largestCollision": {
+      "bitset": "00000000",
+      "bits": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "covered": [],
+      "missing": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "inf"
+      ],
+      "directionsCovered": 0,
+      "complete": false,
+      "count": 300000,
+      "minSize": 0,
+      "maxSize": 5,
+      "hasDifferentSizes": true,
+      "witnessA": {
+        "name": "enum-size-0-state-0",
+        "source": {
+          "kind": "bounded-enumeration",
+          "bodySize": 0
+        },
+        "size": 0,
+        "pointIndices": []
+      },
+      "witnessB": {
+        "name": "enum-size-1-state-1",
+        "source": {
+          "kind": "bounded-enumeration",
+          "bodySize": 1
+        },
+        "size": 1,
+        "pointIndices": [
+          0
+        ]
+      }
+    },
+    "largestNonemptyCollision": null
+  },
+  "structuredLineExtensions": {
+    "q": 7,
+    "family": "line-plus-one-outside-point",
+    "pointCount": 49,
+    "stateCount": 2408,
+    "signatureCount": 8,
+    "collisionSignatureCount": 8,
+    "differentSizeCollisionSignatureCount": 8,
+    "maxCollisionClassCount": 301,
+    "maxNonemptyCollisionClassCount": 301,
+    "largestCollision": {
+      "bitset": "10000000",
+      "bits": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "covered": [
+        "0"
+      ],
+      "missing": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "inf"
+      ],
+      "directionsCovered": 1,
+      "complete": false,
+      "count": 301,
+      "minSize": 7,
+      "maxSize": 8,
+      "hasDifferentSizes": true,
+      "witnessA": {
+        "name": "line-extension-dir-0-b-0",
+        "source": {
+          "kind": "line-extension-family",
+          "direction": "0",
+          "directionIndex": 0,
+          "intercept": 0,
+          "extraPoint": null
+        },
+        "size": 7,
+        "pointIndices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "witnessB": {
+        "name": "line-extension-dir-0-b-0-plus-7",
+        "source": {
+          "kind": "line-extension-family",
+          "direction": "0",
+          "directionIndex": 0,
+          "intercept": 0,
+          "extraPoint": 7
+        },
+        "size": 8,
+        "pointIndices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ]
+      }
+    },
+    "largestNonemptyCollision": {
+      "bitset": "10000000",
+      "bits": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "covered": [
+        "0"
+      ],
+      "missing": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "inf"
+      ],
+      "directionsCovered": 1,
+      "complete": false,
+      "count": 301,
+      "minSize": 7,
+      "maxSize": 8,
+      "hasDifferentSizes": true,
+      "witnessA": {
+        "name": "line-extension-dir-0-b-0",
+        "source": {
+          "kind": "line-extension-family",
+          "direction": "0",
+          "directionIndex": 0,
+          "intercept": 0,
+          "extraPoint": null
+        },
+        "size": 7,
+        "pointIndices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "witnessB": {
+        "name": "line-extension-dir-0-b-0-plus-7",
+        "source": {
+          "kind": "line-extension-family",
+          "direction": "0",
+          "directionIndex": 0,
+          "intercept": 0,
+          "extraPoint": 7
+        },
+        "size": 8,
+        "pointIndices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ]
+      }
+    }
+  },
+  "falsifier": {
+    "name": "KAK_SHADOW_REENCODING_EMPIRICAL",
+    "fired": false,
+    "reason": "The registered q=7 shadow is many-to-one on bounded or structured states and on guard witnesses."
+  },
+  "interpretation": "The direction-coverage bitset is a lossy projection. Collision classes are expected and pedagogically useful; they do not provide new Kakeya mathematics."
+}

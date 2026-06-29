@@ -1,0 +1,7 @@
+bitset,directions_covered,covered_labels,count,min_size,max_size,has_different_sizes,witness_a_name,witness_a_size,witness_a_points,witness_b_name,witness_b_size,witness_b_points
+100000,1,0,105,5,6,true,line-extension-dir-0-b-0,5,0 1 2 3 4,line-extension-dir-0-b-0-plus-5,6,0 1 2 3 4 5
+010000,1,1,105,5,6,true,line-extension-dir-1-b-0,5,0 6 12 18 24,line-extension-dir-1-b-0-plus-1,6,0 1 6 12 18 24
+001000,1,2,105,5,6,true,line-extension-dir-2-b-0,5,0 8 11 19 22,line-extension-dir-2-b-0-plus-1,6,0 1 8 11 19 22
+000100,1,3,105,5,6,true,line-extension-dir-3-b-0,5,0 7 14 16 23,line-extension-dir-3-b-0-plus-1,6,0 1 7 14 16 23
+000010,1,4,105,5,6,true,line-extension-dir-4-b-0,5,0 9 13 17 21,line-extension-dir-4-b-0-plus-1,6,0 1 9 13 17 21
+000001,1,inf,105,5,6,true,line-extension-dir-inf-b-0,5,0 5 10 15 20,line-extension-dir-inf-b-0-plus-1,6,0 1 5 10 15 20

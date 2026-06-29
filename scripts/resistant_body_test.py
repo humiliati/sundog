@@ -36,7 +36,7 @@ def recon_fve_mlp(S, X, ncols=6):
     cols = list(range(X.shape[1]))[-ncols:]  # the dropped/back coords
     scores = []
     for j in cols:
-        s = cross_val_score(MLPRegressor((64, 64), max_iter=400, random_state=0),
+        s = cross_val_score(MLPRegressor(hidden_layer_sizes=(64, 64), max_iter=400, random_state=0),
                             S, X[:, j], cv=kf, scoring="r2").mean()
         scores.append(max(0.0, s))
     return float(np.mean(scores))
