@@ -99,16 +99,40 @@ other rows cite existing axiom-clean cores for their *side*; the σ-*value* is a
 
 **Honest label & disposition:** H1 is a **synthesis/organization** result (the schema), not a new
 theorem. Lead promise downgraded **high → medium**. Spin-offs: **H2 is exactly the schema's
-coordinate-locality (κ) instance** → promote H2 to "the schema's spatial instance." **Open frontier
-(named, not built):** is there a *universal* filtration (Kolmogorov / description-length order) into
-which the lane-filtrations embed, restoring a comparable scalar? That is the only route to rescue strong
-H1 — parked. **Lean follow-up DONE 2026-06-29:** `Sundogcert/ParityNoSufficientStat.lean` now defines
+coordinate-locality (κ) instance** → promote H2 to "the schema's spatial instance." **Lean follow-up DONE 2026-06-29:** `Sundogcert/ParityNoSufficientStat.lean` now defines
 `IsSufficient` + `suffStatOrder` and proves **`suffStatOrder_eq : suffStatOrder n = n`** — the total
 parity's only sufficient subset-parity is the full tuple, so σ = `n` (grows without bound; no fixed
 finite order suffices). Supporting: `isSufficient_univ`, `not_isSufficient_of_ne_univ`,
 `isSufficient_iff_univ`. Axiom-clean (`[propext, Classical.choice, Quot.sound]`), in the `AxiomAudit`
 `#guard_msgs` gate, full `lake build` green (8525 jobs). The σ-anchor is now a machine-checked *order*,
 not just a non-sufficiency.
+
+#### H1 FRONTIER RESOLVED (2026-06-29): the universal description-length filtration does NOT rescue strong H1
+
+Receipt: `scripts/suffstat_h1b_kolmogorov_frontier.py`. The one candidate route to rescue strong H1 was a
+*universal* filtration — order statistics by description length / Kolmogorov complexity `K`, a single
+comparable scale (bits, up to `O(1)`) into which every lane-filtration embeds. The universal comparable
+scalar **does exist** (`K`); the test is whether it **preserves** the determine/resist dichotomy. It does
+not — and **parity is the witness**:
+
+| object | K (unbounded) | locality (bounded) | finite-order σ (bounded) | dichotomy |
+| --- | --- | --- | --- | --- |
+| finite-Markov (period q) | finite | finite | finite | determine (all agree) |
+| info-loss (GF(2) shadow w/ kernel) | ∞ (≥ lost dims) | ∞ | ∞ | resist (all agree) |
+| **parity** | **finite** (≤212 bits; fixed program `XOR-all`, size independent of n) | **∞** (reads all n) | **∞** | **SPLIT — K says determine** |
+
+Mechanism: parity's latent `T = XOR(all bits)` is a (short-program, whole-shadow) function of the shadow
+— fiber = 1 — so `K(T | shadow) = O(1)`: `K` calls it **determine**, while the bounded axes (locality,
+finite-order) call it **resist**. *Any* info-present latent (fiber = 1) is K-determine, so the only
+bound-free filtration **collapses "resist" down to exactly the info-loss (fiber > 1) cases**, missing
+computational/parity resistance entirely.
+
+**Resolution: strong H1 is UNRESCUABLE — not merely unproven.** "Resist" is **bound-relative**: it is
+defined against a resource/locality bound, and that bound *is* the filtration. The unique bound-free
+scalar (`K`) exists but does not preserve the dichotomy, so **no single filtration is both universal and
+dichotomy-preserving** — the **schema** (H1 restricted) is the genuine ceiling, not a failure of effort.
+This is the same fact as H5's fiber × σ split (parity is info-present yet finite-order-inaccessible); the
+H1 frontier and the H5 resistance-type split are one phenomenon seen twice.
 
 ### H2 — recognizability radius ↔ σ (space vs time)
 
@@ -217,7 +241,7 @@ imports its predict-∞ into the verify column — the exact category error the 
 
 | hook | promise | risk | home | status |
 | --- | --- | --- | --- | --- |
-| H1 | high→**medium** | low | this file (public) | **HARDENED 2026-06-29** — strong form falsified, restricted (schema) form survives |
+| H1 | high→**medium** | low | this file (public) | **HARDENED 2026-06-29** — strong form falsified, restricted (schema) form survives; **frontier RESOLVED** — strong form *unrescuable* (Kolmogorov filtration doesn't preserve the dichotomy) |
 | H2 | medium | low | this file (public) | **HARDENED 2026-06-29** — strong "same coordinate" falsified (Thue–Morse: r finite, σ_predict=∞); schema (structural-instance) form survives |
 | H3 | medium | medium | this file (public) | **HARDENED 2026-06-29** — KILLED as stated (category error: "check" equivocates); salvage = find/check ⊥ predict-σ are orthogonal axes |
 | H4 | utility | low | internal slate | PROPOSED (tooling) |
@@ -239,4 +263,7 @@ finding survived:
   ledger and the predict-σ axis are orthogonal — conflating them is a category error.
 
 Net: at least six distinct filtrations appear (coordinate-count, rank, moments, parametric, verify-witness,
-predict-σ); σ is a *family* of order-invariants, one per filtration, unified in form, not in scale.
+predict-σ); σ is a *family* of order-invariants, one per filtration, unified in form, not in scale. **The
+one universal candidate — Kolmogorov / description-length (a 7th axis) — was then tested directly and
+*fails to preserve the dichotomy* (it makes parity determine), so the schema is the *provable* ceiling,
+not merely the observed one: "resist" is bound-relative (H1 FRONTIER block).**

@@ -167,7 +167,22 @@ depth/composition axis (`PieceCover`, linear-in-depth) and the full circuit-stru
 
 ---
 
-## N-2 — Cancellation is the single imported-wall coordinate. [SYNTHESIS]
+## N-2 — Cancellation is the single imported-wall coordinate. [SYNTHESIS] — **WRITTEN + ANCHORED** 2026-06-29: `docs/ALGO_APPROX_N2_CANCELLATION_SPINE.md` + `Sundogcert/CancellationSpine.lean`.
+
+*Result — DELIVERABLE COMPLETE 2026-06-29 (the claim stays a typed conjecture, not promoted).*
+The retrospective is written with a disciplined PROVEN-vs-organizing-reading split, and rests on
+a Lean anchor (the slate's own condition: pursue *after* N-1 gives fold↔cancellation a proof).
+**Machine-checked half:** `CancellationSpine.isMono_tame` — a cancellation-free circuit is
+*uniformly tame* (monotone **and** convex **and** region-polynomial), all from `IsMono`; paired
+with the negative `FoldCancellation.isMono_not_iterTent` (the cancellation-using tent is
+unreachable cancellation-free). So on the monotone / convex / region / fold axes, cancellation
+*is* the coordinate, earned. **Organizing-reading half:** the 3SUM (additive), `n^ω`
+(subtractive), and analytic-gate (division) walls are *typed* by cancellation by analogy, with
+**no** formal reduction — they stay a lens, not a theorem. The honest limit: "cancellation-
+reducible" lacks a precise common definition across the four axes, and promoting it would need
+the imported walls themselves formalized (out of reach by the same wall the lane respects).
+Falsifier `WALL_WITHOUT_CANCELLATION`: **not fired** (no cancellation-free wall found), but
+absence ≠ proof.
 
 *Claim.* *Every* imported wall in the lane — the monotone-circuit lower bound
 (C-B1), 3SUM and the `n^ω` route (C-C2), the analytic/division gates (H-A1/A2),
@@ -195,20 +210,31 @@ pursued *after* N-1 gives the fold↔cancellation half a proof.
 
 ---
 
-## N-3 — The find/check ledger is a general certificate theory. [FORMALIZABLE] — **ABSTRACTION + FIRST INSTANCE LANDED** 2026-06-29 (axiom-clean, gated): `Sundogcert/Certifies.lean` + `Sundogcert/MaxFlowMinCut.lean`.
+## N-3 — The find/check ledger is a general certificate theory. [FORMALIZABLE] — **COMPLETE** 2026-06-29 (axiom-clean, gated): `Certifies.lean` + `MaxFlowMinCut.lean` + `MatchingCover.lean` + `TwoSat.lean` + `PrattCert.lean`.
 
-*Result — LANDED 2026-06-29.* The `Certifies` abstraction is built around the reusable
+*Result — COMPLETE 2026-06-29.* The `Certifies` abstraction is built around the reusable
 **LP-duality core `weakDuality_tight`**: weak duality (every primal `≤` every dual) + a
-*tight pair* (`p = d`) ⇒ `IsGreatest P p ∧ IsLeast D d` (both optima at once). The first new
-instance is **max-flow / min-cut** (`MaxFlowMinCut.lean`): a skew-symmetric, capacity-bounded,
-conserved `Flow`; a cut `capCut`; **`weak_duality`** (`value F ≤ capCut cap S` — conservation
-collapses the `S`-sum to the source's net out-flow, the within-`S` double sum cancels by
-skew-symmetry, the across-cut flow is `≤` capacity edge by edge); and **`maxflow_mincut`** (a
-tight flow/cut pair certifies both optima, via `weakDuality_tight`). Plugged into the find/check
-ledger: a `Certifies (CutCert V)` instance with `cutcert_cost_le` (`O(|S|·|Sᶜ|)` check). The
-ledger is now **4 instances** (syndrome / shortest-path / ReLU gate-count / max-flow-min-cut),
-unified under one `Certifies`/`StraightLineCost` interface. Remaining candidate instances
-(König matching / 2-SAT / Pratt) are each another small module on the same pattern.
+*tight pair* (`p = d`) ⇒ `IsGreatest P p ∧ IsLeast D d` (both optima at once) — axiom-free, the
+purest certificate core. All four candidate instances landed, spanning three cert *shapes*:
+
+> - **max-flow / min-cut** (`MaxFlowMinCut.lean`) — LP-dual optimization: `weak_duality`
+>   (`value F ≤ capCut cap S`; conservation collapses the `S`-sum to the source's net out-flow,
+>   the within-`S` double sum cancels by skew-symmetry, across-cut flow `≤` capacity) +
+>   `maxflow_mincut` (tight pair ⟹ both optima, via `weakDuality_tight`).
+> - **König** (`MatchingCover.lean`) — LP-dual optimization: `matching_le_cover` (a cover
+>   upper-bounds every matching, via an injection matched-edge ↦ cover-endpoint) + `konig`.
+> - **2-SAT** (`TwoSat.lean`) — *decision* / NP-verification: `check_correct` (the `O(|φ|)`
+>   evaluator decides the language) + `cert_sound` (a satisfying assignment certifies
+>   satisfiability). Axiom-light (`[propext, Quot.sound]` — the eval is decidable).
+> - **Pratt** (`PrattCert.lean`) — *number-theoretic* succinct cert: a primitive-root `Witness`,
+>   `cert_sound`/`cert_complete`/`prime_iff_witness` (primality is in NP), wrapping mathlib's
+>   `lucas_primality` / `reverse_lucas_primality`.
+
+Each plugs into the shared ledger via a `Certifies.Ledger` instance with an `O(·)` cheap-check
+theorem. The ledger is now **7 instances** (syndrome / shortest-path / ReLU gate-count /
+max-flow-min-cut / König / 2-SAT / Pratt), unified under one `Certifies`/`StraightLineCost`
+interface — check cheap, find imported, across optimization, decision, and number-theoretic
+problems. **N-3 closed.**
 
 *Claim (original).* The three `StraightLineCost` instances (syndrome / shortest-path / ReLU
 gate-count) are cases of one structure: **a witness whose verifier is a cheap
