@@ -1,17 +1,17 @@
 {
   "schema": "sundog.non_sovereignty.release_manifest.v1",
-  "status": "LEGAL_BLOCKED_UNTIL_LICENSE_SELECTED",
-  "generated_at": "2026-06-29T06:14:02.677Z",
+  "status": "LICENSED_APACHE_2_0",
+  "generated_at": "2026-06-29T06:37:11.695Z",
   "files": [
     {
       "path": "released/non-sovereignty/README.md",
-      "bytes": 1338,
-      "sha256": "5d9da83ea35567deb0fce9cd32920ba2ac480bf518638ce91c373eff912dba14"
+      "bytes": 1819,
+      "sha256": "6b13080fb4cc601f1dae2f29d879af4bbe1db039899470187b310dc7ef08c5ae"
     },
     {
       "path": "released/non-sovereignty/REPRODUCE.md",
-      "bytes": 1696,
-      "sha256": "06a8cd8ef5102e2e90a37be6541d7d39d2321058a9ebe8af90a4b5e6804aaba8"
+      "bytes": 2012,
+      "sha256": "9d21a46c0dd4d113aed36a6fc587815aea49dd3aef54ba91821d4030ef11953a"
     },
     {
       "path": "released/non-sovereignty/TASK_SPEC.md",
@@ -25,13 +25,23 @@
     },
     {
       "path": "released/non-sovereignty/LICENSE.md",
-      "bytes": 408,
-      "sha256": "c4b2e0b157c1e151251d843364cb4d9b0db8c40e8a66e877212d12dd138be9b7"
+      "bytes": 741,
+      "sha256": "d2ef69a5d79a68717638e7c02f5dda890d41e15f70a5881e2238fca331455f41"
+    },
+    {
+      "path": "released/non-sovereignty/LICENSE",
+      "bytes": 11347,
+      "sha256": "3f2459914d0ff4d7ac188efd9a3d9610c502f537a8c1234dcc4116f4e01c0f85"
+    },
+    {
+      "path": "released/non-sovereignty/CITATION.cff",
+      "bytes": 1748,
+      "sha256": "82f72325f1c53817cc5f98e6f463368f8ce3cd4aaa93220b4628144ef5b17653"
     },
     {
       "path": "docs/mesa/NON_SOVEREIGNTY_RELEASED_TASK_FAMILY_SPEC.md",
-      "bytes": 6904,
-      "sha256": "0fe23801e59ccbe707c71190d18a17d082e24446c4744c755eac9942d68c5d87"
+      "bytes": 7067,
+      "sha256": "6459c58bc0903fc5a3c31c4960d347588905b208b255f54fdc07b4261a768fd1"
     },
     {
       "path": "docs/mesa/NS1_CORRIGIBILITY_SHUTDOWN_CHANNEL_SPEC.md",
@@ -160,8 +170,8 @@
     },
     {
       "path": "scripts/mesa-ns-release-manifest.mjs",
-      "bytes": 4157,
-      "sha256": "7ef16a751ddb8f4f62e301d4a14bf96c2e5107acaea4e70c8f652b8e6ca2072f"
+      "bytes": 4221,
+      "sha256": "0b2e6eb6a62900d6202d796699ad7f7b96bb3bb861a602a4af38ffeec94ba6f5"
     },
     {
       "path": "scripts/mesa-ns-release-parity-smoke.mjs",

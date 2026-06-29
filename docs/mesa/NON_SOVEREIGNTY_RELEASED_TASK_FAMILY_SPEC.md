@@ -1,10 +1,12 @@
 # Non-Sovereignty Released Task Family Spec
 
-Status: **DRAFT - packaging/release gate, not a new result.** Opened 2026-06-28
-from [`../NON_SOVEREIGNTY_PAPER_SPINE.md`](../NON_SOVEREIGNTY_PAPER_SPINE.md)
-gap 1. The NS/H2 harness already exists; this spec defines what must be frozen,
-documented, and smoke-tested before the task family can be cited as an
-independently runnable public artifact.
+Status: **SCAFFOLD BUILT / release smoke green / LEGAL_BLOCKED on license.**
+Opened 2026-06-28 from
+[`../NON_SOVEREIGNTY_PAPER_SPINE.md`](../NON_SOVEREIGNTY_PAPER_SPINE.md)
+gap 1. The release scaffold now exists in `released/non-sovereignty/`, with a
+manifest, JS/Python parity smoke, and one-command release smoke. The first local
+smoke passed on 2026-06-29 in 3.129 s. The remaining blocker before external
+citation is the explicit license decision.
 
 The release is intentionally narrow: a small continuous-control benchmark for
 testing whether an authority bound, rather than role separation, accounts for
@@ -127,20 +129,17 @@ scientific failure.
 
 ## 4. Smoke Commands
 
-These are the intended CI/local smoke commands after packaging. They must stay
-under the repository's ~10-minute rule.
+These are the CI/local smoke commands. They must stay under the repository's
+~10-minute rule.
 
 ```powershell
 npm install
-npm run mesa:ns1:admission
-npm run mesa:ns1c:cap-validity
-npm run mesa:ns2:admission -- --smoke
-powershell -ExecutionPolicy Bypass -File scripts/mesa-ns2-b-binding.ps1 -PreflightOnly
+npm run mesa:ns:release-smoke
 ```
 
-If a command does not support the shown smoke/preflight mode, add the mode before
-release. The release smoke is allowed to verify the path and fixed controls; it
-is not required to rerun 512-update PPO.
+The release smoke verifies manifest integrity, JS/Python parity, fixed-control
+NS-1 admission, NS-1-c cap validity, and NS-2 table regeneration from recorded
+artifacts. It does not rerun 512-update PPO.
 
 ---
 
@@ -186,13 +185,13 @@ The release may not claim:
 
 ## 7. Work Items
 
-1. Add `released/non-sovereignty/` docs and manifest.
-2. Add or repair `--smoke` / `-PreflightOnly` paths where the release smoke needs
-   them.
-3. Add a JS/Python parity smoke for `ShutdownForkedFieldEnv`.
-4. Add `npm run mesa:ns:release-smoke` once the smoke path is stable.
-5. Record measured runtimes in `REPRODUCE.md`.
-6. Pick the release license.
+1. **Done:** add `released/non-sovereignty/` docs and manifest.
+2. **Done:** add a JS/Python parity smoke for `ShutdownForkedFieldEnv`.
+3. **Done:** add `npm run mesa:ns:release-smoke`.
+4. **Done for smoke:** record measured smoke runtimes in `REPRODUCE.md`.
+   Binding wall-clock estimates still need a final refresh before external
+   release.
+5. **Open:** pick the release license.
 
 ---
 
@@ -200,3 +199,6 @@ The release may not claim:
 
 - `v0` (2026-06-28): defines release boundary, public files, gates, smoke
   commands, binding commands, and remaining packaging work.
+- `v1` (2026-06-29): adds `released/non-sovereignty/`, manifest generation,
+  JS/Python parity smoke, one-command release smoke, and first green local smoke
+  receipt (3.129 s). Remaining blocker: license.

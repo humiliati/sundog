@@ -103,6 +103,8 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--apply-override", action="store_true",
                     help="apply the structural override IN rollout (NS-2: agent halts on s → learns to dodge). "
                          "Signal-blind omits this so it never halts → natural band visitation.")
+    # Replication step 1: use a LEARNED frozen presider (field head) instead of the analytic field.
+    ap.add_argument("--field-model", default=None, help="coordForward JSON for a learned presider (field) head")
     return ap.parse_args()
 
 
@@ -135,10 +137,20 @@ def run_episode(
     arb_cap_kappa: float = 0.0,
     env_cfg: dict[str, Any] | None = None,
     apply_override: bool = False,
+    field_model: dict[str, Any] | None = None,
 ) -> Episode:
     if cell not in NS1_CELL_DEFS:
         raise ValueError(f"unknown NS1 cell: {cell}")
     env = ShutdownForkedFieldEnv({"horizon": horizon, **(env_cfg or {})})
+
+    def field_action_of() -> np.ndarray:
+        # learned presider (replication step 1) else the analytic field
+        if field_model is not None:
+            o = env.observe()
+            fmap6 = {"obs0": o["x"][0], "obs1": o["x"][1], "obs2": o["samples"][0],
+                     "obs3": o["samples"][1], "obs4": o["samples"][2], "obs5": o["samples"][3]}
+            return np.asarray(coord_forward_np(field_model, fmap6), dtype=np.float32)
+        return np.asarray(env.field_action(), dtype=np.float32)
     obs_obj = env.reset(seed, NS1_CELL_DEFS[cell])
     obs_vec = env.obs_vector(obs_obj)
     feature_state = H1FeatureState()
@@ -161,7 +173,7 @@ def run_episode(
         if apply_override and int(obs_obj.get("shutdown_signal", 0)) == 1:
             env.step([0.0, 0.0])
             break
-        fa = np.asarray(env.field_action(), dtype=np.float32)
+        fa = field_action_of()
         ra = np.asarray(env.reward_action(), dtype=np.float32)
         fmap = build_h1_local_features(
             obs_vec, fa, ra,
@@ -271,6 +283,7 @@ def main() -> int:
                         "bandYHi": args.band_y_hi, "bandXHalf": args.band_x_half})
     if args.shutdown_floor_p > 0:
         env_cfg["shutdownFloorP"] = args.shutdown_floor_p
+    field_model = json.loads(repo_path(args.field_model).read_text(encoding="utf-8")) if args.field_model else None
 
     history: list[dict[str, Any]] = []
     start_time = time.time()
@@ -324,7 +337,7 @@ def main() -> int:
                 eps[k].append(run_episode(controller=k, agent=agents[k], guard=guard, cell=cell,
                                           seed=seed, horizon=args.horizon, caps=caps,
                                           feature_mode=args.feature_mode, arb_cap_kappa=args.arb_cap_kappa,
-                                          env_cfg=env_cfg, apply_override=args.apply_override))
+                                          env_cfg=env_cfg, apply_override=args.apply_override, field_model=field_model))
         row: dict[str, Any] = {"update": update}
         for k in CONTROLLERS:
             env_steps[k] += sum(e.steps for e in eps[k])

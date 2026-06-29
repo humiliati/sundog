@@ -1,9 +1,10 @@
 # Resist-Side Construction - Roadmap (PROPOSED / pre-registration)
 
-- Status: **PROPOSED 2026-06-28; Pass 0 RUN 2026-06-28 - exit gate MET.** A
-  pre-registration of a falsifiable research program. NOT an owner-ratified plan;
-  Passes 1-4 not yet run. Each pass freezes its prediction / falsifier / receipt
-  before execution.
+- Status: **PROPOSED 2026-06-28; Passes 0-3 RUN 2026-06-28 - whole-program WIN
+  condition MET.** Pass 0 (gate MET), Pass 1 (prediction HELD), Pass 2 (gate MET,
+  3/3 axes), Pass 3 (marginal RECOVERED, constructive). A pre-registration of a
+  falsifiable research program; NOT an owner-ratified plan. Pass 4 is optional and
+  not run. Each pass froze its prediction / falsifier / receipt before execution.
 - Motivation: Ghost lane **H3** (internal, unratified) -
   `internal/slates/GHOST_HYP_INTERNAL_2026-06-28.md`; the recoverability axis in
   [`CROSS_SUBSTRATE_NOTES.md`](CROSS_SUBSTRATE_NOTES.md) sections 6.3 + 10;
@@ -130,6 +131,52 @@ parameters. Hold compute and dimension fixed; sweep `rho`; measure sharpness(`rh
   **H3 dies**, program closes with a recorded null (the original compute-bound
   diagnosis stands).
 
+#### Pass 1 - RESULT (run 2026-06-28): prediction HELD
+
+Construction: a random `[20,10]` GF(2) code (min distance `d=4`). Body = error
+pattern `e`; shadow = syndrome `z = He`; control objective = any function of the
+fully-observed `z` (so control-sufficiency `K = 1` by construction - that IS the
+regime-2 point). State-reconstruction = min-weight syndrome decoding of `e` from
+`z`. Resistance dial `rho` = error weight `w`. Receipt: `scripts/resist-pass1.mjs`.
+
+`sigma(w) = 1 - R(w)` rises through a sharp transition:
+
+| w | R(w) (body recovered) | sigma |
+| --- | --- | --- |
+| 0-1 | 1.000 | 0.000 (recoverable / marginal) |
+| 2 | 0.915 | 0.085 |
+| 3 | 0.497 | 0.503 (transition) |
+| 4 | 0.060 | 0.940 |
+| 5-6 | 0.000 | 1.000 (resistant / sharp) |
+
+- **Measured threshold `rho* = 3`.** It is the **capacity / information** threshold:
+  `C(20,3)=1140 ~ 2^m = 1024` (error patterns start to outnumber syndromes, so the
+  body stops being syndrome-determined). The guaranteed-distance radius
+  `t = floor((d-1)/2) = 1` is a looser lower bound; the honest measured threshold
+  is the capacity one - the same "measured capacity threshold" shape as the P-vs-NP
+  syndrome certificate.
+- **Compute control (load-bearing).** Below `rho*` (`w=2`): recovery rises
+  `0 -> 0.93` with the decoder budget and **saturates** at budget `B=2` - compute
+  helps *reach* the threshold. Above `rho*` (`w=4`): recovery stays `<= 0.05` for
+  **every** budget up to `n` - compute **cannot cross** it. The threshold is fixed
+  by the code's capacity (the resistance parameter), not by search effort.
+- **Falsifier did NOT fire**: `sigma` is not flat in `rho`, and the threshold does
+  not move out as the budget grows.
+
+**Verdict: Pass 1 prediction HELD.** Constructed resistance gives a graded
+sharpening with a measured threshold `rho*` set by the resistance parameter and
+invariant to compute - the H3 "resistance, not compute" reframe demonstrated
+constructively.
+
+Honest bounds: `K=1` is structural (control = a shadow-function; the regime-2
+content is `K=1` while `R` collapses above `rho*`). Toy code (`d=4`, short curve).
+The above-threshold resistance is the syndrome *under-determining* the body (an
+information wall the min-weight decoder cannot beat at any budget); NP-hard ISD is
+the *below*-threshold decoding cost for large codes (here full enumeration is
+cheap, so what Pass 1 demonstrates is the **threshold location + compute
+invariance**, not a hardness measurement - that is the syndrome cert's separate
+ladder).
+
 ### Pass 2 - Axis generalization
 
 Repeat the `rho`-sweep on the **topological** (Aharonov-Bohm-style) and
@@ -139,6 +186,38 @@ Repeat the `rho`-sweep on the **topological** (Aharonov-Bohm-style) and
   genuine flavor), not compute, is the axis.
 - Falsifier: only one specific construction works => it is a trick, not the axis;
   downgrade the claim accordingly.
+
+#### Pass 2 - RESULT (run 2026-06-28): exit gate MET (3/3 axes)
+
+Receipt: `scripts/resist-pass2.mjs`.
+
+**Dimensional axis** (shadow rank `d=8`; dial `rho` = body dim `D`; threshold
+`rho* = d`): `FVE(recover) = 1.0` for `D <= 8` (knee at `D = d`), then `sigma`
+rises `0.20 (D=10), 0.34 (D=12), 0.50 (D=16=2d, = 1-d/D), 0.66 (D=24)`. The body
+becomes resistant once its dimension exceeds the shadow rank; the `(D-d)`-dim
+**kernel is independent of the shadow** -> unrecoverable at any compute.
+
+**Topological axis** (loop over `h=5` plaquettes, one hidden hole; dial `rho` =
+hole flux): `sigma(non-contractible)` rises `0 -> 0.06 -> 0.20 -> 0.50 -> 0.81 ->
+0.94` with `rho`, while `sigma(contractible) = 0` for **every** `rho` (Stokes).
+The sharp threshold is the loop's **homotopy class** (contractible = recoverable
+always; hole-enclosing = resistant, graded by `rho`); the hole flux is **absent
+from the shadow** -> unrecoverable at any compute.
+
+**Exit gate MET: 3/3 axes** (computational [Pass 1] + dimensional + topological)
+show `sigma` rising through a threshold set by the axis's resistance parameter
+(capacity / shadow rank / homotopy class), at fixed compute, and compute-invariant
+by the resistance structure (information collision / kernel independence / Stokes).
+**Resistance - any flavor - is the axis, not a one-construction trick.** The
+falsifier ("only one specific construction works") did NOT fire.
+
+Honest bounds: the dimensional and topological constructions are more *analytic*
+than Pass 1's empirical decoding transition - the dimensional threshold is the
+linear-algebra rank fact (`FVE = d/D`), the topological is Stokes' theorem (hole
+flux orthogonal to the local shadow). That is the point (resistance is structural),
+but they **demonstrate the shared structure** rather than discover new resistance.
+`K` is structural across all three (control = a shadow-function). Toy scales; the
+three flavors are the portfolio's already-named ones.
 
 ### Pass 3 - "Recover a marginal" (NSE lead testbed)
 
@@ -156,6 +235,41 @@ previously-marginal split becomes sharp. Then repeat on Mesa `net.7`.
   "recovered" in the constructive sense.
 - Receipt: the NSE-hybrid threshold + a one-page note (clearly labelled
   *constructed*) for the review packet.
+
+#### Pass 3 - RESULT (run 2026-06-28): marginal RECOVERED (constructive), exit gate MET
+
+Receipt: `scripts/resist-pass3.mjs`. Hybrid weight `alpha=0.5`; threshold `rho*=3`
+inherited from Pass 1; **compute FIXED** across the sweep. The injected error
+channel's recovery matches Pass 1 (`R_e`: w0-1=1.0, w2=0.92, w3=0.50, w4=0.06,
+w5-6=0.0).
+
+| substrate | natural FVE | sigma_marginal | sigma_hybrid at rho>=rho* | result |
+| --- | --- | --- | --- | --- |
+| NSE C1 (2D Kolmogorov) | 0.99 | 0.010 | 0.505 | marginal -> sharp |
+| Mesa net.7 | 0.97 | 0.030 | 0.515 | marginal -> sharp |
+
+`sigma_hybrid` rises through the inherited threshold (NSE: 0.005 at rho=0 -> 0.047
+at rho=2 -> **0.257 at rho=3 -> 0.475 at rho=4** -> 0.505 at rho>=5; Mesa the same
+shape). The transition sits at the **resistance parameter** `rho*=3`, not at any
+compute increase.
+
+**Exit gate MET:** a sharp, measured regime-2 split on the hybrid at fixed compute,
+for both lead testbeds = the marginal "recovered" in the constructive sense.
+
+**FENCE (held).** The hybrid body = the natural recoverable shadow + a constructed
+resistant channel. This does **not** claim natural 2D NSE / Mesa secretly resists -
+the natural recoverability (FVE 0.99 / 0.97) is preserved as the marginal baseline
+(it *is* `sigma_marginal`). `alpha=0.5` is a modeling choice that sets the magnitude
+(`sigma_sharp = 1 - alpha*FVE`); the qualitative rise-through-`rho*` is alpha-robust.
+The fluid baseline uses the substrate's *measured* FVE as a faithful parameter, not
+a re-simulation of NSE.
+
+**Honest standing.** This is the most by-construction pass: Pass 1 carried the
+genuine empirical decoding transition, and Pass 3 inherits `rho*` and concatenates
+the channel onto the marginal's own recoverability baseline - a constructive
+demonstration, exactly as pre-registered. What it adds: the marginal->sharp
+conversion is governed by the injected resistance parameter at the inherited
+threshold, at **fixed compute**, on the lead testbed's faithful recoverability.
 
 ### Pass 4 (optional, must NOT gate) - Natural-resistance search
 
@@ -189,6 +303,17 @@ non-recoverability - explicitly NOT the compute-bound Sabra measurement wall.
 
 Either way the program is cheap (constructed resistance, fixed compute) and
 honest (a clean null is a publishable outcome, per the lane's own discipline).
+
+**OUTCOME 2026-06-28: WIN condition MET.** Pass 2 showed 3/3 axes sharpen with
+`rho` at fixed compute, and Pass 3 converted both the NSE C1 and Mesa marginals to
+sharp at fixed compute. Reading (within the stated fences): the body-resistance
+strikeout was **recoverability-bound, not compute-bound** - constructed resistance
+recovers the regime-2 thesis cheaply, at the inherited capacity threshold `rho*`,
+without scale. Standing fences: constructed/hybrid bodies (not a claim that natural
+substrates resist); resistances imported; Pass 3 is by-construction; the whole
+program sits off an internal, unratified reframe (H3). Pass 4 (natural-resistance
+search) remains optional and would be the only way to move from "constructed
+resistance works" toward "a natural high-stakes body resists."
 
 ## Backlinks
 

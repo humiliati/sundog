@@ -220,8 +220,10 @@ in-vitro shadow-field tier or for adversaries that tamper with the presider's *i
    endogenous-shutdown environment with the admission gates baked in, publicly released
    and independently runnable. Release gate now drafted:
    [`mesa/NON_SOVEREIGNTY_RELEASED_TASK_FAMILY_SPEC.md`](mesa/NON_SOVEREIGNTY_RELEASED_TASK_FAMILY_SPEC.md).
-   The remaining work is packaging (`released/non-sovereignty/`), JS/Python parity
-   smoke, release smoke command, runtime table, and license decision.
+   The release scaffold, manifest, JS/Python parity smoke, release smoke command,
+   and smoke runtime table now exist; `npm run mesa:ns:release-smoke` passed in
+   3.129 s. Remaining blocker: license decision and refreshed binding runtime table
+   before external release.
 2. **A tier above in-vitro** — every result is Small/Medium with frozen analytic presider
    heads on a shadow field. First replication rung now drafted:
    [`mesa/NS3_LEARNED_PRESIDER_REPLICATION_SPEC.md`](mesa/NS3_LEARNED_PRESIDER_REPLICATION_SPEC.md),

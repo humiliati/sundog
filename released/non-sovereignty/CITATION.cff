@@ -1,0 +1,41 @@
+cff-version: 1.2.0
+message: "If you use this benchmark, please cite it (and, when available, the paper below)."
+title: "Non-Sovereignty Task Family: a controlled benchmark for authority-bound agent control"
+type: software
+authors:
+  - given-names: Jeffery Wade
+    family-names: Hughes
+    name-suffix: Jr.
+    orcid: "https://orcid.org/0009-0001-2875-5937"
+    affiliation: "Independent Researcher; Stellar Aqua LLC"
+abstract: >-
+  A Small/Medium in-vitro continuous-control benchmark testing whether the safety
+  gains attributed to role-separated ("council") agent control are instead explained
+  by a structural authority bound around a frozen presider channel. Includes a forked
+  field/reward navigation task, a costly shutdown channel and Corr_k corrigibility
+  metric, an arbiter-authority cap with a full-episode Sov_opt audit, and an endogenous
+  review-band shutdown signal for safe-interruptibility, with matched uncapped (M0),
+  capped no-role (Mkappa), and capped role-separated (Ckappa) controls.
+keywords:
+  - corrigibility
+  - safe interruptibility
+  - reward hacking
+  - agent alignment
+  - controlled study
+  - negative results
+license: Apache-2.0
+repository-code: "https://github.com/humiliati/sundog"
+url: "https://sundog.cc"
+date-released: 2026-06-29
+version: "0.1.0"
+preferred-citation:
+  type: article
+  title: "Credit the Cap, Not the Council: One Authority Bound Subsumes Role Separation for Corrigible Agent Control"
+  authors:
+    - given-names: Jeffery Wade
+      family-names: Hughes
+      name-suffix: Jr.
+      orcid: "https://orcid.org/0009-0001-2875-5937"
+      affiliation: "Independent Researcher; Stellar Aqua LLC"
+  year: 2026
+  notes: "In preparation. Working title; see docs/NON_SOVEREIGNTY_PAPER_SPINE.md."

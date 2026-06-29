@@ -1,6 +1,6 @@
 # Non-Sovereignty Task Family
 
-Status: **release scaffold / license pending**. This directory is the public
+Status: **release smoke green / Apache-2.0 licensed**. This directory is the public
 entry point for the non-sovereignty benchmark used by the paper spine
 [`docs/NON_SOVEREIGNTY_PAPER_SPINE.md`](../../docs/NON_SOVEREIGNTY_PAPER_SPINE.md).
 
@@ -29,6 +29,15 @@ npm run mesa:ns:release-smoke
 The smoke verifies manifest integrity, JS/Python parity, fixed-control admission,
 cap validity, and NS-2 table regeneration from recorded artifacts. Long PPO
 bindings are staged in [REPRODUCE.md](REPRODUCE.md); they are not CI tasks.
+First green local smoke: **PASS** in 3.129 s. Fresh runtimes are written to
+`results/mesa/non-sovereignty/release_smoke/summary.json`.
 
 Scope boundary: this is a Small/Medium in-vitro task family, not a foundation
 model result and not a deployed-agent safety claim.
+
+## License & citation
+
+The files enumerated in [`MANIFEST.json`](MANIFEST.json) are released under the
+**Apache License 2.0** ([`LICENSE`](LICENSE), [`LICENSE.md`](LICENSE.md));
+copyright 2026 Stellar Aqua LLC. The rest of the repository remains `UNLICENSED`.
+If you use this benchmark, please cite it via [`CITATION.cff`](CITATION.cff).

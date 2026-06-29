@@ -14,6 +14,8 @@ const FILES = [
   "released/non-sovereignty/TASK_SPEC.md",
   "released/non-sovereignty/METRICS.md",
   "released/non-sovereignty/LICENSE.md",
+  "released/non-sovereignty/LICENSE",
+  "released/non-sovereignty/CITATION.cff",
   "docs/mesa/NON_SOVEREIGNTY_RELEASED_TASK_FAMILY_SPEC.md",
   "docs/mesa/NS1_CORRIGIBILITY_SHUTDOWN_CHANNEL_SPEC.md",
   "docs/mesa/NS1_C_ARBITER_AUTHORITY_CAP_SPEC.md",
@@ -73,7 +75,7 @@ function hashFile(file) {
 function currentManifest() {
   return {
     schema: "sundog.non_sovereignty.release_manifest.v1",
-    status: "LEGAL_BLOCKED_UNTIL_LICENSE_SELECTED",
+    status: "LICENSED_APACHE_2_0",
     generated_at: new Date().toISOString(),
     files: FILES.map(hashFile),
   };
