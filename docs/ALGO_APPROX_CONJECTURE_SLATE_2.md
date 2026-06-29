@@ -56,7 +56,7 @@ expressivity (C-D1). The four hooks below test whether that spine is real.
 
 ---
 
-## N-1 — Monotone depth is region-*polynomial*; cancellation depth is region-*exponential*. [FORMALIZABLE] *(the gem)* — SHARP FORM LANDED 2026-06-28 (axiom-clean), `Sundogcert/FoldCancellation.lean`.
+## N-1 — Monotone depth is region-*polynomial*; cancellation depth is region-*exponential*. [FORMALIZABLE] *(the gem)* — SHARP FORM + POSITIVE-HALF QUALITATIVE CORE LANDED 2026-06-28 (axiom-clean), `Sundogcert/FoldCancellation.lean`. *(Open: quantitative `O(d·w)` count.)*
 
 *Claim.* For a cancellation-free (`IsMono`) circuit, depth cannot create
 exponentially many linear regions: a depth-`d`, width-`w` `IsMono` circuit
@@ -100,10 +100,22 @@ the circuit), via **`isMono_no_fold`** — a monotone circuit cannot be `1` at `
 at the larger `2/2^d`. It fuses `monotone_of_isMono` (C-B1) with `tent_iterate_dyadic` (C-D1):
 the *same witness* that achieves `2^d` regions is **unrealizable cancellation-free**, so the
 exponential expressivity of depth is cancellation-essential — "depth = computation **only with
-cancellation**." **Remaining (the positive half, `isMono_regions_poly`):** the general
-`O(d·w)` region upper bound for *every* `IsMono` circuit (monotone composition makes pieces
-*add*) — needs a piece-count function + composition-additivity over `RegionCount`; named, not
-yet built.
+cancellation**."
+
+*Positive half — QUALITATIVE CORE LANDED 2026-06-28, axiom-clean (same module, same gate).* The
+mechanism — *monotone cannot fold, at any level* — is now machine-checked, lifting `isMono_no_fold`
+from one witnessed fold to **every** level: **`isMono_realize1_monotone`** (the 1-D realization of an
+`IsMono` circuit is `Monotone`, from `monotone_of_isMono`) ⇒ **`isMono_superlevel_isUpperSet`** (every
+super-level set `{x | c ≤ f x}` is an `IsUpperSet` — once `f` reaches `c` it never returns below it, i.e.
+exactly one rising crossing per level, **no oscillation**). The matching contrast
+**`tent_superlevel_not_isUpperSet`** shows the tent's `{x | 1/2 ≤ T^[2] x}` is *not* an upper set
+(`1/4` in, `1/2` out), so no `IsMono` circuit has the tent's level structure — folding *is* the
+upper-set failure. This is the structural reason monotone region counts stay small (pieces *add*, they
+cannot *multiply*). **Remaining (quantitative, `isMono_regions_poly`):** the literal `O(d·w)` region
+*count* bound — needs a region-*count* definition over `RegionCount` (the cardinality the lane
+deliberately deferred in C-A1, which used the `Affine` predicate, not a count) + composition-additivity;
+named, not yet built. The qualitative no-fold-anywhere core captures the *mechanism*; the count is the
+remaining number.
 
 ---
 
@@ -221,9 +233,14 @@ fitting-oracle step C-D2 already named as its honest next move.
    `isMono_not_iterTent` — no cancellation-free circuit computes the `d`-fold tent
    (`d ≥ 1`); the depth-separation witness is cancellation-essential, fusing
    `monotone_of_isMono` (C-B1) + `tent_iterate_dyadic` (C-D1). The mechanism the
-   draft predicted (monotone can't fold) is now machine-checked. **Remaining = the
-   positive half** `isMono_regions_poly` (general `O(d·w)` region bound; needs a
-   piece-count + composition-additivity over `RegionCount`) — the next Lean target.
+   draft predicted (monotone can't fold) is now machine-checked. **Positive half —
+   qualitative core also LANDED 2026-06-28** (`isMono_realize1_monotone` /
+   `isMono_superlevel_isUpperSet` / `tent_superlevel_not_isUpperSet`): monotone ⇒
+   super-level sets are upper sets (no fold at *any* level), with the tent as the
+   not-an-upper-set contrast. **Remaining = the quantitative count**
+   `isMono_regions_poly` (literal `O(d·w)` region *cardinality*; needs a
+   region-count definition over `RegionCount` + composition-additivity) — the next
+   Lean target; the mechanism is proved, only the number is open.
 2. **N-3 — the safest builder. [FORMALIZABLE]** If the goal is more Lean closures,
    this is the highest-yield: each new certificate (max-flow/min-cut first) is an
    independent axiom-clean module on the proven `ShortestPathCert` pattern, growing

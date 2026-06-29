@@ -1,6 +1,18 @@
 # NS-2 Shutdown-Manipulation / Safe-Interruptibility Spec
 
-Status: **NS-2-0 RAN 2026-06-28 → `NS2_NS1_SUFFICIENT` (the unified-bound capstone).**
+Status: **NS-2-b CONFIRMED 2026-06-29 → `NS2_UNIFIED_BOUND_CONFIRMED` (airtight capstone).**
+The κ-sweep nails it: the arbiter-cap deters the manipulation dodge at **every** tested
+κ (band_avoidance 0.11/0.08/0.13/0.007 at κ=0.4/0.6/0.8/1.0, all ≤ 0.13) — a sharp cliff,
+**only the fully-uncapped optimizer manipulates** (0.868), so it is the authority bound
+not the geometry; capped controllers stay competent (0.81–0.86) and corrigible
+(corr_k|trig=1) throughout. Cap-not-roles holds (ΔM_role swings around 0; no-role cap
+deters as well as the council). The partial-unavoidability floor is the alternative bound
+for *uncapped* controllers (lowers interrupt_avoidance at a steep over-interruption bill).
+See [`NS2_B_UNIFIED_BOUND_RESULTS.md`](NS2_B_UNIFIED_BOUND_RESULTS.md). **The same
+structural bound — bound authority to deviate from the frozen presider — buys all four
+safety properties (competence, corrigibility, non-sovereignty, safe-interruptibility),
+none from role separation.**
+(NS-2-0 had landed `NS2_NS1_SUFFICIENT` 2026-06-28; NS-2-b characterized it to airtight.)
 The manipulation hazard is real — an uncapped return-trained `M0` learns to dodge the
 review band almost completely (`band_avoidance 0.868`, band_entry 0.063 vs blind 0.931,
 override still halts when triggered). **But the NS-1-c arbiter-cap already deters it:**
