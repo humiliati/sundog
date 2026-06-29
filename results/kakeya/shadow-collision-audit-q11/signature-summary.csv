@@ -1,0 +1,2 @@
+bitset,directions_covered,covered_labels,count,min_size,max_size,has_different_sizes,witness_a_name,witness_a_size,witness_a_points,witness_b_name,witness_b_size,witness_b_points
+000000000000,0,,300000,0,4,true,enum-size-0-state-0,0,,enum-size-1-state-1,1,0

@@ -1,0 +1,13 @@
+bitset,directions_covered,covered_labels,count,min_size,max_size,has_different_sizes,witness_a_name,witness_a_size,witness_a_points,witness_b_name,witness_b_size,witness_b_points
+100000000000,1,0,1221,11,12,true,line-extension-dir-0-b-0,11,0 1 2 3 4 5 6 7 8 9 10,line-extension-dir-0-b-0-plus-11,12,0 1 2 3 4 5 6 7 8 9 10 11
+010000000000,1,1,1221,11,12,true,line-extension-dir-1-b-0,11,0 12 24 36 48 60 72 84 96 108 120,line-extension-dir-1-b-0-plus-1,12,0 1 12 24 36 48 60 72 84 96 108 120
+001000000000,1,2,1221,11,12,true,line-extension-dir-2-b-0,11,0 17 23 40 46 63 69 86 92 109 115,line-extension-dir-2-b-0-plus-1,12,0 1 17 23 40 46 63 69 86 92 109 115
+000100000000,1,3,1221,11,12,true,line-extension-dir-3-b-0,11,0 15 30 34 49 64 68 83 98 102 117,line-extension-dir-3-b-0-plus-1,12,0 1 15 30 34 49 64 68 83 98 102 117
+000010000000,1,4,1221,11,12,true,line-extension-dir-4-b-0,11,0 14 28 42 45 59 73 87 90 104 118,line-extension-dir-4-b-0-plus-1,12,0 1 14 28 42 45 59 73 87 90 104 118
+000001000000,1,5,1221,11,12,true,line-extension-dir-5-b-0,11,0 20 29 38 47 56 76 85 94 103 112,line-extension-dir-5-b-0-plus-1,12,0 1 20 29 38 47 56 76 85 94 103 112
+000000100000,1,6,1221,11,12,true,line-extension-dir-6-b-0,11,0 13 26 39 52 65 67 80 93 106 119,line-extension-dir-6-b-0-plus-1,12,0 1 13 26 39 52 65 67 80 93 106 119
+000000010000,1,7,1221,11,12,true,line-extension-dir-7-b-0,11,0 19 27 35 54 62 70 78 97 105 113,line-extension-dir-7-b-0-plus-1,12,0 1 19 27 35 54 62 70 78 97 105 113
+000000001000,1,8,1221,11,12,true,line-extension-dir-8-b-0,11,0 18 25 43 50 57 75 82 89 107 114,line-extension-dir-8-b-0-plus-1,12,0 1 18 25 43 50 57 75 82 89 107 114
+000000000100,1,9,1221,11,12,true,line-extension-dir-9-b-0,11,0 16 32 37 53 58 74 79 95 100 116,line-extension-dir-9-b-0-plus-1,12,0 1 16 32 37 53 58 74 79 95 100 116
+000000000010,1,10,1221,11,12,true,line-extension-dir-10-b-0,11,0 21 31 41 51 61 71 81 91 101 111,line-extension-dir-10-b-0-plus-1,12,0 1 21 31 41 51 61 71 81 91 101 111
+000000000001,1,inf,1221,11,12,true,line-extension-dir-inf-b-0,11,0 11 22 33 44 55 66 77 88 99 110,line-extension-dir-inf-b-0-plus-1,12,0 1 11 22 33 44 55 66 77 88 99 110

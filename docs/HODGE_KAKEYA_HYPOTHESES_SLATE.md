@@ -183,6 +183,17 @@ deterministic line-extension family (`2408` states, `8` one-direction signatures
 max nonempty collision class `301`) and the core regression suite now pins
 different-size same-shadow collisions across `q in {5, 7, 11}`.
 
+*q=11 + scaling law (PHASE3C, 2026-06-29).* Extended to the largest supported
+field (`npm run kakeya:shadow-collision:q11`; receipt
+[`kakeya/PHASE3C_SHADOW_COLLISION_Q11.md`](kakeya/PHASE3C_SHADOW_COLLISION_Q11.md)):
+`12` structured signatures, max nonempty collision class `1221`, guard pass,
+falsifier clear, regression `39/39`. Across all three rungs the largest nonempty
+collision class is **exactly `q(q^2 - q + 1)`** (`5->105, 7->301, 11->1221`),
+i.e. the shadow's lossiness grows **cubically in `q`** - a closed-form derived
+from the `q` slope-0 lines plus their `q^2-q` one-point extensions. Note the
+bounded brute force is line-free (vacuous) for `q>=7` since a line needs `q>6`
+points, so the structured family is the ceiling of this approach.
+
 *Claim.* A finite-field Kakeya workbench becomes more than a spectacle if its
 displayed direction shadow is provably many-to-one: different point sets can
 produce the same coverage signature. The many-to-one collision count is the
