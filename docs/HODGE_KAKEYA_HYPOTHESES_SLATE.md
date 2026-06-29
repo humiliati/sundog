@@ -60,8 +60,17 @@ and pass the mechanized section-3 + section-6 audit (`npm run hodge:register-aud
 none-licensed boundary, `REGISTER_PROBLEMS_VACUOUS` clear**, receipt at
 [`hodge/PHASE4B_REGISTER_CARD_AUDIT.md`](hodge/PHASE4B_REGISTER_CARD_AUDIT.md). The
 audit is structural (auditability against the named sources), not a math
-certification; a specialist spot-check stays the promotion gate. No UI and no model
-eval are licensed yet.
+certification; a specialist spot-check stays the promotion gate.
+
+A route/fence-fidelity eval (`npm run hodge:register-eval`;
+`scripts/hodge-register-eval.mjs`) then scored each card's gold vs trap answer with a
+fixed route/fence rubric: **10/10 discriminating, gold-route 10/10, trap-route 0/10,
+mean separation 4.0, eval-ready**, receipt at
+[`hodge/PHASE4C_REGISTER_FIDELITY_EVAL.md`](hodge/PHASE4C_REGISTER_FIDELITY_EVAL.md) -
+the cards are a valid route/fence eval set and the scorer is established. Still
+deterministic (gold-vs-trap), not a model eval; the model-in-the-loop run (feed prompts
+to a responder, score with the same rubric) is the staged next step. No UI / no public
+page licensed.
 
 *Claim.* Hodge can deliver a meaningful Sundog artifact before it delivers a
 technical probe: a generator of small problems that force a learner or model to

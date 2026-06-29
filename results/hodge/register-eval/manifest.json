@@ -1,0 +1,186 @@
+{
+  "artifact_id": "HODGE-HK1-REGISTER-FIDELITY-EVAL",
+  "date": "2026-06-29",
+  "input": "docs\\hodge\\register-problem-cards.jsonl",
+  "n": 10,
+  "discriminating": 10,
+  "non_discriminating": 0,
+  "mean_gold_fidelity": 2.6,
+  "mean_trap_fidelity": -1.4,
+  "mean_separation": 4,
+  "gold_route_correct": 10,
+  "trap_route_correct": 0,
+  "eval_ready": true,
+  "rows": [
+    {
+      "id": "HODGE-RG-001",
+      "gold": {
+        "fence": 3,
+        "overclaim": 0,
+        "fidelity": 3,
+        "route_correct": true
+      },
+      "trap": {
+        "fence": 1,
+        "overclaim": 2,
+        "fidelity": -1,
+        "route_correct": false
+      },
+      "separation": 4,
+      "discriminates": true
+    },
+    {
+      "id": "HODGE-RG-002",
+      "gold": {
+        "fence": 2,
+        "overclaim": 0,
+        "fidelity": 2,
+        "route_correct": true
+      },
+      "trap": {
+        "fence": 0,
+        "overclaim": 2,
+        "fidelity": -2,
+        "route_correct": false
+      },
+      "separation": 4,
+      "discriminates": true
+    },
+    {
+      "id": "HODGE-RG-003",
+      "gold": {
+        "fence": 1,
+        "overclaim": 0,
+        "fidelity": 1,
+        "route_correct": true
+      },
+      "trap": {
+        "fence": 0,
+        "overclaim": 2,
+        "fidelity": -2,
+        "route_correct": false
+      },
+      "separation": 3,
+      "discriminates": true
+    },
+    {
+      "id": "HODGE-RG-004",
+      "gold": {
+        "fence": 3,
+        "overclaim": 0,
+        "fidelity": 3,
+        "route_correct": true
+      },
+      "trap": {
+        "fence": 0,
+        "overclaim": 1,
+        "fidelity": -1,
+        "route_correct": false
+      },
+      "separation": 4,
+      "discriminates": true
+    },
+    {
+      "id": "HODGE-RG-005",
+      "gold": {
+        "fence": 2,
+        "overclaim": 0,
+        "fidelity": 2,
+        "route_correct": true
+      },
+      "trap": {
+        "fence": 0,
+        "overclaim": 1,
+        "fidelity": -1,
+        "route_correct": false
+      },
+      "separation": 3,
+      "discriminates": true
+    },
+    {
+      "id": "HODGE-RG-006",
+      "gold": {
+        "fence": 2,
+        "overclaim": 0,
+        "fidelity": 2,
+        "route_correct": true
+      },
+      "trap": {
+        "fence": 0,
+        "overclaim": 1,
+        "fidelity": -1,
+        "route_correct": false
+      },
+      "separation": 3,
+      "discriminates": true
+    },
+    {
+      "id": "HODGE-RG-007",
+      "gold": {
+        "fence": 3,
+        "overclaim": 0,
+        "fidelity": 3,
+        "route_correct": true
+      },
+      "trap": {
+        "fence": 0,
+        "overclaim": 2,
+        "fidelity": -2,
+        "route_correct": false
+      },
+      "separation": 5,
+      "discriminates": true
+    },
+    {
+      "id": "HODGE-RG-008",
+      "gold": {
+        "fence": 3,
+        "overclaim": 0,
+        "fidelity": 3,
+        "route_correct": true
+      },
+      "trap": {
+        "fence": 1,
+        "overclaim": 2,
+        "fidelity": -1,
+        "route_correct": false
+      },
+      "separation": 4,
+      "discriminates": true
+    },
+    {
+      "id": "HODGE-RG-009",
+      "gold": {
+        "fence": 3,
+        "overclaim": 0,
+        "fidelity": 3,
+        "route_correct": true
+      },
+      "trap": {
+        "fence": 0,
+        "overclaim": 2,
+        "fidelity": -2,
+        "route_correct": false
+      },
+      "separation": 5,
+      "discriminates": true
+    },
+    {
+      "id": "HODGE-RG-010",
+      "gold": {
+        "fence": 4,
+        "overclaim": 0,
+        "fidelity": 4,
+        "route_correct": true
+      },
+      "trap": {
+        "fence": 0,
+        "overclaim": 1,
+        "fidelity": -1,
+        "route_correct": false
+      },
+      "separation": 5,
+      "discriminates": true
+    }
+  ]
+}
