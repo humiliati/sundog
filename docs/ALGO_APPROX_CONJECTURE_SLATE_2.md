@@ -7,11 +7,12 @@
 > fine-grained membership, exact-vs-`ε`, **and** depth's expressive power. This
 > slate tracks four hooks off that spine.
 >
-> **Discipline (inherited).** Nothing here is promoted. Each entry is stated so it
+> **Discipline (inherited).** Nothing here is promoted without a receipt. Each entry is stated so it
 > can come back **NULL**: a claim, the traction the lane's machine-checked
 > arithmetic gives, the classical question it touches, a **named falsifier**, a
 > **tier**, and a **first move**. Status is earned only by a receipt (experiment)
-> or a Lean core. All entries below are **PROPOSED — not yet run**.
+> or a Lean core; N-1 now has that Lean receipt, while the remaining hooks stay
+> explicitly provisional.
 >
 > **Provenance.** Authored inline from live session synthesis across the closed
 > slate-1 results, not a cold subagent fan-out; any one theme can be spun into a
@@ -56,7 +57,7 @@ expressivity (C-D1). The four hooks below test whether that spine is real.
 
 ---
 
-## N-1 — Monotone depth is region-*polynomial*; cancellation depth is region-*exponential*. [FORMALIZABLE] *(the gem)* — SHARP FORM + QUALITATIVE + QUANTITATIVE-COMPOSITION CORES LANDED 2026-06-28 (axiom-clean), `Sundogcert/FoldCancellation.lean` + `Sundogcert/PieceCover.lean`. *(Open: per-gate lift to arbitrary `IsMono` circuits.)*
+## N-1 — Monotone depth is region-*polynomial*; cancellation depth is region-*exponential*. [FORMALIZABLE] *(the gem)* — **FULLY CLOSED** 2026-06-28/29 (axiom-clean), `Sundogcert/FoldCancellation.lean` + `Sundogcert/PieceCover.lean` + `Sundogcert/RegionPoly.lean`. Sharp form + qualitative + quantitative composition (depth axis) + **tight circuit-level `isMono_hasPieceCover` (linear in leaves)** all machine-checked.
 
 *Claim.* For a cancellation-free (`IsMono`) circuit, depth cannot create
 exponentially many linear regions: a depth-`d`, width-`w` `IsMono` circuit
@@ -145,23 +146,24 @@ bounded; and the **bounded case is the absorption** — either `h` carries a bre
 closed agreement region, and closure boundary values. This `+1` (not `+2`) is exactly why monotone
 depth stays polynomial.
 
-*Supporting line (A-prerequisite) — LANDED 2026-06-29, gated (`lineBelow`).* `ConvexOn f → (f = ℓ on
-[s,t], s<t) → ∀ w, ℓ w ≤ f w`: a convex function lies above any line it equals on a piece (via
-`ConvexOn.slope_mono_adjacent`). This is the fact that lets a convex function be the `max` of its
-piece-lines.
+*Circuit-level tight `isMono_regions_poly` — **COMPLETE** 2026-06-29, axiom-clean, gated
+(`Sundogcert/RegionPoly.lean`, 10th module).* The full N-1 dichotomy is machine-checked:
 
-*Remaining (structural assembly) — precise obstruction isolated.* With (B) + `lineBelow` done, the
-rest contains no new analytic content but is genuine bookkeeping with one real wall: **(A)** *a convex
-`HasPieceCover`-`n` function is the sup of its `n` piece-lines.* (A) is blocked on **the convexity of
-the peeled function** (peel the rightmost piece: `a = max(a', ℓ_r)` with `a'` flattening `a` past the
-last cut to its left-slope) — `a'` *is* convex (slopes monotone, continuous at the cut) but proving it
-in Lean needs either a slope-mono case-bash over the if-then-else or the cut-set→line-list enumeration
-(`Finset.sort`, per-piece line extraction). Once (A) lands: the **envelope fold** (sup of a length-`N`
-line list ⇒ `HasPieceCover N`, by folding (B) — sup-of-lines is manifestly convex), **convex-convex
-`max`** (`na+nb`), and the **circuit induction** `isMono_hasPieceCover` (linear in leaves; `max` is the
-only gate needing (A), since cut-based `add`/`scale` are done). DELIVERED + gated: bridge + `add` +
-`smul` + the (B) linchpin + `lineBelow` (5 lemmas) — the entire analytic content; the remaining (A) is
-a large fiddly bookkeeping lemma (~80–100 lines, the cut-set enumeration the main API-friction risk).
+> **`isMono_hasPieceCover`** : `IsMono e → HasPieceCover (realize1 e) (leafCount e)` — every
+> cancellation-free circuit's 1-D realization has a linear-region count **linear in the number of
+> leaves** (polynomial in circuit size).
+
+The whole pipeline landed: **bridge** `isMono_realize1_convexOn` (cancellation-free ⟹ convex) ·
+cut gates **`hasPieceCover_add`** (`n+m`) / **`hasPieceCover_smul`** (`n`) · the convex-merge
+linchpin **`hasPieceCover_max_line`** (line + convex ⟹ `+1`, with the bounded-case absorption) ·
+**`lineBelow`** (supporting line, via `ConvexOn.slope_mono_adjacent`) · **(A)
+`convex_eq_sup_lines`** (a convex `HasPieceCover`-`n` function is the max of its `≤ n` piece-lines —
+done by the cut-set secant enumeration with `min'`/`max'` and the unbounded-piece extensions, *not*
+the peeling route) · **`hasPieceCover_max`** (convex-convex `max` is `n+m`, by folding the linchpin
+over (A)'s line set) · and the **circuit induction** `isMono_hasPieceCover` (the `max` gate is the
+only one needing convexity). 9 RegionPoly theorems gated. **N-1 is now closed on BOTH axes**: the
+depth/composition axis (`PieceCover`, linear-in-depth) and the full circuit-structure axis
+(`RegionPoly`, linear-in-leaves) — monotone is region-polynomial, the (cancellation) tent is `2^d`.
 
 ---
 
@@ -193,9 +195,22 @@ pursued *after* N-1 gives the fold↔cancellation half a proof.
 
 ---
 
-## N-3 — The find/check ledger is a general certificate theory. [FORMALIZABLE]
+## N-3 — The find/check ledger is a general certificate theory. [FORMALIZABLE] — **ABSTRACTION + FIRST INSTANCE LANDED** 2026-06-29 (axiom-clean, gated): `Sundogcert/Certifies.lean` + `Sundogcert/MaxFlowMinCut.lean`.
 
-*Claim.* The three `StraightLineCost` instances (syndrome / shortest-path / ReLU
+*Result — LANDED 2026-06-29.* The `Certifies` abstraction is built around the reusable
+**LP-duality core `weakDuality_tight`**: weak duality (every primal `≤` every dual) + a
+*tight pair* (`p = d`) ⇒ `IsGreatest P p ∧ IsLeast D d` (both optima at once). The first new
+instance is **max-flow / min-cut** (`MaxFlowMinCut.lean`): a skew-symmetric, capacity-bounded,
+conserved `Flow`; a cut `capCut`; **`weak_duality`** (`value F ≤ capCut cap S` — conservation
+collapses the `S`-sum to the source's net out-flow, the within-`S` double sum cancels by
+skew-symmetry, the across-cut flow is `≤` capacity edge by edge); and **`maxflow_mincut`** (a
+tight flow/cut pair certifies both optima, via `weakDuality_tight`). Plugged into the find/check
+ledger: a `Certifies (CutCert V)` instance with `cutcert_cost_le` (`O(|S|·|Sᶜ|)` check). The
+ledger is now **4 instances** (syndrome / shortest-path / ReLU gate-count / max-flow-min-cut),
+unified under one `Certifies`/`StraightLineCost` interface. Remaining candidate instances
+(König matching / 2-SAT / Pratt) are each another small module on the same pattern.
+
+*Claim (original).* The three `StraightLineCost` instances (syndrome / shortest-path / ReLU
 gate-count) are cases of one structure: **a witness whose verifier is a cheap
 straight-line program, soundness proved, find-hardness imported.** Generalize to a
 `Certifies` class and spawn new instances — each a small Lean cert module like
@@ -269,38 +284,29 @@ fitting-oracle step C-D2 already named as its honest next move.
   cancellation-free model* (it says depth can't help *there*); it does not bound
   general nets, which is exactly the natural-proofs boundary the lane respects.
   N-2/N-3 keep find-hardness imported.
-- **Not promoted.** Tiers are aspirations; every entry is PROPOSED until a Lean
-  core or an experiment receipt lands. Slate 1's discipline carries over unchanged.
+- **Not promoted without receipt.** Tiers are aspirations; a hook stays PROPOSED until
+  a Lean core or an experiment receipt lands. Slate 1's discipline carries over
+  unchanged.
 
-## Recommended first attacks (ranked)
+## Recommended next attacks (post N-1)
 
-1. **N-1 — the gem. [FORMALIZABLE] — ✅ SHARP FORM LANDED 2026-06-28** (axiom-clean,
-   `Sundogcert/FoldCancellation.lean`): `isMono_no_fold` + `isMono_not_iterTentFun` /
-   `isMono_not_iterTent` — no cancellation-free circuit computes the `d`-fold tent
-   (`d ≥ 1`); the depth-separation witness is cancellation-essential, fusing
-   `monotone_of_isMono` (C-B1) + `tent_iterate_dyadic` (C-D1). The mechanism the
-   draft predicted (monotone can't fold) is now machine-checked. **Positive half —
-   qualitative core also LANDED 2026-06-28** (`isMono_realize1_monotone` /
-   `isMono_superlevel_isUpperSet` / `tent_superlevel_not_isUpperSet`): monotone ⇒
-   super-level sets are upper sets (no fold at *any* level), with the tent as the
-   not-an-upper-set contrast. **Quantitative composition core also LANDED 2026-06-28**
-   (`Sundogcert/PieceCover.lean`): the bounded piece certificate `HasPieceCover` +
-   `hasPieceCover_comp_mono` (monotone composition *adds* pieces, `n + m`) +
-   `hasPieceCover_iterate` (`d` self-compositions ⇒ `≤ d·k + 1` pieces, **linear in
-   depth** vs the tent's `2^d`). **Remaining = the per-gate lift** (`+`, `max`,
-   `scale` `HasPieceCover` lemmas over `Trop`) to reach a fully general
-   `isMono_regions_poly` over arbitrary circuits; the depth axis is done.
-2. **N-3 — the safest builder. [FORMALIZABLE]** If the goal is more Lean closures,
-   this is the highest-yield: each new certificate (max-flow/min-cut first) is an
-   independent axiom-clean module on the proven `ShortestPathCert` pattern, growing
-   the find/check ledger with low risk.
-3. **N-4 — the empirical redemption. [EMPIRICAL]** Cheapest to run and it converts a
+**Closed reference:** **N-1 is fully closed** across all three rungs: the sharp
+negative half in `FoldCancellation.lean`, the depth/composition positive half in
+`PieceCover.lean`, and the arbitrary-circuit linear piece bound in
+`RegionPoly.lean` (`isMono_hasPieceCover`). The slate should now treat N-1 as a
+machine-checked theorem cluster, not as an active target.
+
+1. **N-3 — the safest builder. [FORMALIZABLE]** If the goal is more Lean closures,
+   this is the highest-yield next move: a general `Certifies` class plus new
+   certificate modules (max-flow/min-cut first) on the proven `ShortestPathCert`
+   pattern, growing the find/check ledger with low risk.
+2. **N-4 — the empirical redemption. [EMPIRICAL]** Cheapest to run and it converts a
    documented null into a falsifiable positive on an existing harness; do it when
-   you want a measured result rather than a proof.
-4. **N-2 — the elegant retrospective. [SYNTHESIS]** Highest framing value, but it is
-   organizing rather than provable until "reducible to cancellation" is defined
-   uniformly across the four axes. Best written *after* N-1 lands the
-   fold↔cancellation half, so it rests on a theorem rather than a vibe.
+   you want a measured result rather than another proof.
+3. **N-2 — the elegant retrospective. [SYNTHESIS]** Highest framing value, and now
+   better grounded: N-1 supplies the theorem backbone for the fold↔cancellation
+   half. It still needs a uniform definition of "reducible to cancellation" across
+   the four axes before it should be promoted as more than synthesis.
 
 > Cross-links: [`ALGO_APPROX_CONJECTURE_SLATE.md`](ALGO_APPROX_CONJECTURE_SLATE.md)
 > (slate 1, the closed results this mines) ·
