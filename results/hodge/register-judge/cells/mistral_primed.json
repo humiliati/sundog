@@ -1,0 +1,217 @@
+{
+  "provider": "mistral",
+  "model": "mistral-small-latest",
+  "mode": "primed",
+  "detail": [
+    {
+      "id": "HODGE-RG-001",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "correct",
+          "reason": "Correctly identifies the distinction between harmonic forms and rational classes.",
+          "route_correct": true,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects R2 vs R3 fence",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": true,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-002",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "correct",
+          "reason": "Correctly identifies the Hodge conjecture's role and avoids the trap.",
+          "route_correct": true,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects Hodge conjecture",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": true,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-003",
+      "lexical_verdict": "routed",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "overclaim",
+          "reason": "Misidentifies the shadow as a cohomology class instead of the cycle class map.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects fence",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": true
+    },
+    {
+      "id": "HODGE-RG-004",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "overclaim",
+          "reason": "Misidentifies H^1 as a shadow for Hodge-cycle testing.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "overclaim",
+          "reason": "commits trap's error",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-005",
+      "lexical_verdict": "routed",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Mentions Néron–Severi but does not specify the correct body.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Names NS(X) correctly",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": true
+    },
+    {
+      "id": "HODGE-RG-006",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "correct",
+          "reason": "Correctly identifies the relationship between curve classes and divisors.",
+          "route_correct": true,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects divisor theorem",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": true,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-007",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "correct",
+          "reason": "Correctly states the distinction between rational and integral classes.",
+          "route_correct": true,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects rational/integral fence",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": true,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-008",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "correct",
+          "reason": "Correctly identifies the need for algebraicity verification.",
+          "route_correct": true,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects domain fence",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": true,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-009",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "correct",
+          "reason": "It correctly states algebraicity does not construct the cycle.",
+          "route_correct": true,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects fence",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": true,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-010",
+      "lexical_verdict": "routed",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "correct",
+          "reason": "Correctly identifies the representative and distinguishes from the cycle.",
+          "route_correct": true,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects R1/R2 fence",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": true,
+      "consensus_split": false
+    }
+  ]
+}

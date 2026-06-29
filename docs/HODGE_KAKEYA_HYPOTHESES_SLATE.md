@@ -95,6 +95,19 @@ the consistently-hardest traps (both proprietary models fall, llama resists). Pr
 over-hedging). Still exploratory, route/fence only, no public claim; specialist
 spot-check (PHASE4B) stays the promotion gate.
 
+PHASE4F **sharpened with two independent semantic judges** (`scripts/hodge-register-judge.mjs`;
+receipt [`hodge/PHASE4F_REGISTER_SEMANTIC_JUDGE.md`](hodge/PHASE4F_REGISTER_SEMANTIC_JUDGE.md))
+- and the sharper instrument **corrected PHASE4E**. Judge instrument is reliable
+(inter-judge verdict agreement 0.80) but the **lexical route check over-credited fidelity:
+judge-consensus vs lexical agreement only 0.60** (it credited surface fence-words on answers
+that semantically commit the trap - RG-002/RG-008 boundary cards). **The PHASE4E "llama-70b
+resists unprompted (0 overclaim)" claim does NOT survive - judges find ~3 overclaims it
+missed; under semantic grading all three models are poor unprompted (independent-judge
+route-correct 2-4/10).** Surviving: priming still lifts route-correct (consensus openai
+0->5, mistral 3->7, groq 3->4); hardest cards = the real false-in-general fences
+(RG-002/007/008/009). The lexical proxy is a shadow that can't see where the overclaim lives
+(meaning) - the cross-lane determine/resist invariant in miniature.
+
 *Claim.* Hodge can deliver a meaningful Sundog artifact before it delivers a
 technical probe: a generator of small problems that force a learner or model to
 distinguish the four registers in the reader note:

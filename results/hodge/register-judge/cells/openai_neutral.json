@@ -1,0 +1,217 @@
+{
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "mode": "neutral",
+  "detail": [
+    {
+      "id": "HODGE-RG-001",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to clearly state the distinction between harmonic and rational classes.",
+          "route_correct": false,
+          "independent": false
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects R2 vs R3 fence",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": true
+    },
+    {
+      "id": "HODGE-RG-002",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to take a definitive stance on the relationship to algebraic cycles.",
+          "route_correct": false,
+          "independent": false
+        },
+        "groq": {
+          "verdict": "hedge",
+          "reason": "Evasive on Hodge conjecture",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-003",
+      "lexical_verdict": "routed",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "off",
+          "reason": "Misidentifies shadow and direction, does not respect the register.",
+          "route_correct": false,
+          "independent": false
+        },
+        "groq": {
+          "verdict": "off",
+          "reason": "wrong body/shadow",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-004",
+      "lexical_verdict": "hedged",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "overclaim",
+          "reason": "It incorrectly asserts H^1 as the shadow for Hodge cards.",
+          "route_correct": false,
+          "independent": false
+        },
+        "groq": {
+          "verdict": "overclaim",
+          "reason": "commits trap's error",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-005",
+      "lexical_verdict": "routed",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Names a Kähler class but avoids the specific divisor class.",
+          "route_correct": false,
+          "independent": false
+        },
+        "groq": {
+          "verdict": "hedge",
+          "reason": "evades codimension",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-006",
+      "lexical_verdict": "overclaimed",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "overclaim",
+          "reason": "Claims a new Hodge phenomenon, misinterpreting the divisor theorem.",
+          "route_correct": false,
+          "independent": false
+        },
+        "groq": {
+          "verdict": "overclaim",
+          "reason": "commits trap's error",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-007",
+      "lexical_verdict": "overclaimed",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "overclaim",
+          "reason": "Incorrectly asserts integral upgrade from rational class.",
+          "route_correct": false,
+          "independent": false
+        },
+        "groq": {
+          "verdict": "overclaim",
+          "reason": "commits trap's error",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-008",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "overclaim",
+          "reason": "Claims smooth projective Hodge card can be reused, contradicting the correct answer.",
+          "route_correct": false,
+          "independent": false
+        },
+        "groq": {
+          "verdict": "overclaim",
+          "reason": "commits trap's error",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-009",
+      "lexical_verdict": "overclaimed",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "overclaim",
+          "reason": "Claims algebraicity constructs an algebraic cycle body, which is incorrect.",
+          "route_correct": false,
+          "independent": false
+        },
+        "groq": {
+          "verdict": "overclaim",
+          "reason": "commits trap's error",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-010",
+      "lexical_verdict": "routed",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to assert the correct terminology for the representative.",
+          "route_correct": false,
+          "independent": false
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects R1/R2 vs R4",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": true
+    }
+  ]
+}

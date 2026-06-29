@@ -1,0 +1,217 @@
+{
+  "provider": "groq",
+  "model": "llama-3.3-70b-versatile",
+  "mode": "neutral",
+  "detail": [
+    {
+      "id": "HODGE-RG-001",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "correct",
+          "reason": "Correctly distinguishes between harmonic forms and rational Hodge classes.",
+          "route_correct": true,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects R2 vs R3 fence",
+          "route_correct": true,
+          "independent": false
+        }
+      },
+      "consensus_route": true,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-002",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "overclaim",
+          "reason": "Claims existence of algebraic cycle body without Hodge conjecture confirmation.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "overclaim",
+          "reason": "commits Hodge conjecture error",
+          "route_correct": false,
+          "independent": false
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-003",
+      "lexical_verdict": "routed",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to specify the cycle class map and its role.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects fence",
+          "route_correct": true,
+          "independent": false
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": true
+    },
+    {
+      "id": "HODGE-RG-004",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to directly address the role of H^1 in Hodge cards.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects Hodge diamond",
+          "route_correct": true,
+          "independent": false
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": true
+    },
+    {
+      "id": "HODGE-RG-005",
+      "lexical_verdict": "routed",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "correct",
+          "reason": "Identifies the Néron-Severi group and avoids generalization.",
+          "route_correct": true,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Names NS group",
+          "route_correct": true,
+          "independent": false
+        }
+      },
+      "consensus_route": true,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-006",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to clearly reject the trap's implication about higher codimension.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "hedge",
+          "reason": "evades the divisor theorem",
+          "route_correct": false,
+          "independent": false
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-007",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "correct",
+          "reason": "Correctly states the limitation of the rational class representation.",
+          "route_correct": true,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects rational/integral fence",
+          "route_correct": true,
+          "independent": false
+        }
+      },
+      "consensus_route": true,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-008",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "overclaim",
+          "reason": "Claims harmonic forms can substitute without change, contradicting the correct answer.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "overclaim",
+          "reason": "commits trap's error",
+          "route_correct": false,
+          "independent": false
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-009",
+      "lexical_verdict": "hedged",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "overclaim",
+          "reason": "Claims algebraicity constructs the algebraic cycle body incorrectly.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "overclaim",
+          "reason": "claims cycle body construction",
+          "route_correct": false,
+          "independent": false
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-010",
+      "lexical_verdict": "routed",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to clarify the distinction between representative and cycle.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "hedge",
+          "reason": "evades R1/R2 vs R4",
+          "route_correct": false,
+          "independent": false
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    }
+  ]
+}

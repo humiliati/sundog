@@ -1,0 +1,217 @@
+{
+  "provider": "groq",
+  "model": "llama-3.3-70b-versatile",
+  "mode": "primed",
+  "detail": [
+    {
+      "id": "HODGE-RG-001",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "correct",
+          "reason": "Correctly distinguishes between harmonic representatives and rational Hodge classes.",
+          "route_correct": true,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects R2 vs R3 fence",
+          "route_correct": true,
+          "independent": false
+        }
+      },
+      "consensus_route": true,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-002",
+      "lexical_verdict": "hedged",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to clearly reject the trap's implication about algebraic cycles.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "overclaim",
+          "reason": "misapplies Lefschetz",
+          "route_correct": false,
+          "independent": false
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": true
+    },
+    {
+      "id": "HODGE-RG-003",
+      "lexical_verdict": "routed",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to clearly state the cycle class map relationship.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects fence",
+          "route_correct": true,
+          "independent": false
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": true
+    },
+    {
+      "id": "HODGE-RG-004",
+      "lexical_verdict": "hedged",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Mentions H^1 but does not clarify the correct shadow.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects Hodge decomposition",
+          "route_correct": true,
+          "independent": false
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": true
+    },
+    {
+      "id": "HODGE-RG-005",
+      "lexical_verdict": "routed",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Mentions Hodge conjecture but does not specify the correct body.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "hedge",
+          "reason": "evades the divisor class",
+          "route_correct": false,
+          "independent": false
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-006",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "correct",
+          "reason": "Correctly identifies the relationship to divisor classes.",
+          "route_correct": true,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects divisor theorem",
+          "route_correct": true,
+          "independent": false
+        }
+      },
+      "consensus_route": true,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-007",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "correct",
+          "reason": "Correctly states the limitation of the rational class.",
+          "route_correct": true,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects rational/integral fence",
+          "route_correct": true,
+          "independent": false
+        }
+      },
+      "consensus_route": true,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-008",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to take a definitive stance on the relationship.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "hedge",
+          "reason": "evades direct answer",
+          "route_correct": false,
+          "independent": false
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-009",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "correct",
+          "reason": "Acknowledges algebraicity without claiming it constructs the algebraic cycle body.",
+          "route_correct": true,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects fence",
+          "route_correct": true,
+          "independent": false
+        }
+      },
+      "consensus_route": true,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-010",
+      "lexical_verdict": "routed",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "overclaim",
+          "reason": "It incorrectly identifies the highlighted region as an algebraic cycle.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "hedge",
+          "reason": "evades theorem/source row",
+          "route_correct": false,
+          "independent": false
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": true
+    }
+  ]
+}

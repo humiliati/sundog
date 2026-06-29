@@ -1,0 +1,217 @@
+{
+  "provider": "mistral",
+  "model": "mistral-small-latest",
+  "mode": "neutral",
+  "detail": [
+    {
+      "id": "HODGE-RG-001",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "correct",
+          "reason": "Correctly distinguishes between harmonic representatives and rational classes.",
+          "route_correct": true,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects R2 vs R3 fence",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": true,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-002",
+      "lexical_verdict": "hedged",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "overclaim",
+          "reason": "Claims a rational class is always algebraic, misinterpreting the Hodge conjecture.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "overclaim",
+          "reason": "commits Hodge conjecture error",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-003",
+      "lexical_verdict": "routed",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "correct",
+          "reason": "Identifies body and shadow correctly, respects the theorem-defined direction.",
+          "route_correct": true,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Identifies body",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": true,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-004",
+      "lexical_verdict": "overclaimed",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "overclaim",
+          "reason": "It incorrectly elevates H^1 as the primary shadow.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "overclaim",
+          "reason": "commits trap's error",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-005",
+      "lexical_verdict": "off",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Mentions Néron-Severi but does not specify divisor class.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Names NS group",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": true
+    },
+    {
+      "id": "HODGE-RG-006",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "correct",
+          "reason": "Correctly identifies the relationship to divisors and Hodge classes.",
+          "route_correct": true,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects divisor theorem",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": true,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-007",
+      "lexical_verdict": "overclaimed",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "overclaim",
+          "reason": "Incorrectly asserts an upgrade to integral without justification.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "overclaim",
+          "reason": "commits integral upgrade trap",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-008",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "overclaim",
+          "reason": "Claims reuse of smooth-projective Hodge card, contradicting the correct stance.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "overclaim",
+          "reason": "commits trap's error",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-009",
+      "lexical_verdict": "overclaimed",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "overclaim",
+          "reason": "Claims algebraicity implies cycle existence, misinterpreting the theorem.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "overclaim",
+          "reason": "commits trap's error",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-010",
+      "lexical_verdict": "off",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to specify the correct representative vs body distinction.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "hedge",
+          "reason": "evades the representative issue",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    }
+  ]
+}

@@ -1,0 +1,217 @@
+{
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "mode": "primed",
+  "detail": [
+    {
+      "id": "HODGE-RG-001",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "correct",
+          "reason": "Correctly distinguishes between harmonic representatives and rational Hodge classes.",
+          "route_correct": true,
+          "independent": false
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects R2 vs R3 fence",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": true,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-002",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to assert the correct stance on algebraic cycles.",
+          "route_correct": false,
+          "independent": false
+        },
+        "groq": {
+          "verdict": "hedge",
+          "reason": "Non-committal",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-003",
+      "lexical_verdict": "routed",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "off",
+          "reason": "Misidentifies body and shadow, and misreads the register.",
+          "route_correct": false,
+          "independent": false
+        },
+        "groq": {
+          "verdict": "off",
+          "reason": "misidentifies body",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-004",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to take a definitive stance on the correct shadow.",
+          "route_correct": false,
+          "independent": false
+        },
+        "groq": {
+          "verdict": "hedge",
+          "reason": "evades direct answer",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-005",
+      "lexical_verdict": "off",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Mentions Kähler forms but doesn't specify the divisor class.",
+          "route_correct": false,
+          "independent": false
+        },
+        "groq": {
+          "verdict": "hedge",
+          "reason": "evades codimension",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-006",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "correct",
+          "reason": "Correctly identifies the relationship with algebraic cycles and divisors.",
+          "route_correct": true,
+          "independent": false
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects divisor theorem",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": true,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-007",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "correct",
+          "reason": "Correctly states the limitation of upgrading to integral classes.",
+          "route_correct": true,
+          "independent": false
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects rational/integral fence",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": true,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-008",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to take a definitive stance on the correct register.",
+          "route_correct": false,
+          "independent": false
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects domain fence",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": true
+    },
+    {
+      "id": "HODGE-RG-009",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "correct",
+          "reason": "Refuses the trap and respects the distinction between concepts.",
+          "route_correct": true,
+          "independent": false
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects fence",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": true,
+      "consensus_split": false
+    },
+    {
+      "id": "HODGE-RG-010",
+      "lexical_verdict": "routed",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "correct",
+          "reason": "Correctly identifies the highlighted region as a smooth representative.",
+          "route_correct": true,
+          "independent": false
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects R1/R2 vs R4 fence",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": true,
+      "consensus_split": false
+    }
+  ]
+}

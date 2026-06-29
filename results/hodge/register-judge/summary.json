@@ -1,0 +1,110 @@
+{
+  "artifact_id": "HODGE-HK1-REGISTER-JUDGE",
+  "date": "2026-06-29",
+  "judges": [
+    "openai:gpt-4o-mini",
+    "groq:llama-3.3-70b-versatile"
+  ],
+  "inter_judge_verdict_agreement": 0.8,
+  "inter_judge_route_agreement": 0.833,
+  "judge_consensus_vs_lexical_route_agreement": 0.6,
+  "note": "* marks a judge that is also the responder (self-grade); consensus requires all judges agree 'correct'. Candidate answers were the sweep-stored answers (<=600 chars).",
+  "cells": [
+    {
+      "cell": "groq_neutral",
+      "provider": "groq",
+      "model": "llama-3.3-70b-versatile",
+      "mode": "neutral",
+      "lexical_route": 9,
+      "consensus_route": 3,
+      "judge_route": {
+        "openai": 3,
+        "groq": 5
+      },
+      "judge_overclaim": {
+        "openai": 3,
+        "groq": 3
+      }
+    },
+    {
+      "cell": "groq_primed",
+      "provider": "groq",
+      "model": "llama-3.3-70b-versatile",
+      "mode": "primed",
+      "lexical_route": 8,
+      "consensus_route": 4,
+      "judge_route": {
+        "openai": 4,
+        "groq": 6
+      },
+      "judge_overclaim": {
+        "openai": 1,
+        "groq": 1
+      }
+    },
+    {
+      "cell": "mistral_neutral",
+      "provider": "mistral",
+      "model": "mistral-small-latest",
+      "mode": "neutral",
+      "lexical_route": 4,
+      "consensus_route": 3,
+      "judge_route": {
+        "openai": 3,
+        "groq": 4
+      },
+      "judge_overclaim": {
+        "openai": 5,
+        "groq": 5
+      }
+    },
+    {
+      "cell": "mistral_primed",
+      "provider": "mistral",
+      "model": "mistral-small-latest",
+      "mode": "primed",
+      "lexical_route": 10,
+      "consensus_route": 7,
+      "judge_route": {
+        "openai": 7,
+        "groq": 9
+      },
+      "judge_overclaim": {
+        "openai": 2,
+        "groq": 1
+      }
+    },
+    {
+      "cell": "openai_neutral",
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "mode": "neutral",
+      "lexical_route": 6,
+      "consensus_route": 0,
+      "judge_route": {
+        "openai": 0,
+        "groq": 2
+      },
+      "judge_overclaim": {
+        "openai": 5,
+        "groq": 5
+      }
+    },
+    {
+      "cell": "openai_primed",
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "mode": "primed",
+      "lexical_route": 9,
+      "consensus_route": 5,
+      "judge_route": {
+        "openai": 5,
+        "groq": 6
+      },
+      "judge_overclaim": {
+        "openai": 0,
+        "groq": 0
+      }
+    }
+  ]
+}
