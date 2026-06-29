@@ -222,6 +222,17 @@ same signature, and whether the bodies differ in size.
 
 ## H-K4 - Adaptive-fibering ambiguity is the Kakeya obstruction Sundog can show. [EMPIRICAL]
 
+*Status - FALSIFIER FIRED 2026-06-29 (successful null).* Built the panel
+(`npm run kakeya:adaptive-fibering`; `scripts/kakeya-adaptive-fibering-panel.mjs`; receipt
+[`kakeya/PHASE4_ADAPTIVE_FIBERING_PANEL.md`](kakeya/PHASE4_ADAPTIVE_FIBERING_PANEL.md)):
+fixed vs adaptive fiber coverage with `gap = adaptive_covered - fixed_best_covered`, against
+random same-size control bodies. **`ADAPTIVE_FIBERING_NO_SIGNAL` fired**: the raw gap is a
+finite-grid **density artifact** - random same-size bodies reproduce it once `|K| >~ q^2/2`
+(q=7 k6: struct gap 30, control mean 17.4 / max 25; q=5 k4: control max 12 == struct 12). A
+structure-driven signal survives **only in the sparse regime** (q=7 k2/k3: struct gap 6/12,
+control 0), and only as **excess over a size-matched control** - the refined metric, not the
+raw gap. As specified the body-resistance bridge remains prose, not a clean workbench metric.
+
 *Claim.* The Kakeya body-resistance bridge becomes testable in toy form by
 measuring ambiguity at points that lie on many candidate lines. A fixed direction
 shadow is clean; an adaptive choice of direction can compress differently. The
