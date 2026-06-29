@@ -61,6 +61,40 @@ correspondence, with the parity barrier as the named wall.** The contentful, bui
   explicit). Caps at 6 — not 6.5+ — because the Lean core is a modest extension of the existing parity work and
   the dictionary is exposition, not new mathematics.
 
+#### P-1 RESULT (run 2026-06-29): LANDED — machine-checked, axiom-clean, named wall fenced
+
+Lean core: `sundogcert/Sundogcert/ParityNoSufficientStat.lean` (namespace
+`Sundog.ParityNoSufficientStat`); dictionary: `docs/parity/PARITY_DICTIONARY.md`.
+Full `lake build` green (8523 jobs); the new results are in the build-enforced
+`#guard_msgs` axiom gate (`Sundogcert/AxiomAudit.lean`), so the axiom-clean promise is
+self-checking, not human-attested.
+
+- **What is PROVED (about the TOY, not λ).** Over uniform bits `b : Fin n → ZMod 2`:
+  - `parity_split` — `T b = pS A b + pS Aᶜ b` (total parity = partial ⊕ complementary).
+  - `pS_flip` / `pS_compl_flip` — flipping a coordinate `j ∉ A` fixes the partial parity
+    over `A` and toggles the complementary parity (the free fair coin).
+  - `partial_parity_underdetermines_total` — for any proper `A` and any `b`, the flip
+    yields `b'` with the SAME partial parity but the OPPOSITE total parity.
+  - `partial_not_sufficient` (**headline**) — for `A ≠ univ` there exist two inputs
+    agreeing on the partial parity yet disagreeing on the total: a finite-order partial
+    parity is **not a sufficient statistic** for the full-history total parity.
+- **Axiom audit:** `parity_split` and `partial_not_sufficient` both report exactly
+  `[propext, Classical.choice, Quot.sound]` — no `sorryAx`, no `native_decide`. Pinned in
+  `AxiomAudit.lean`; any future regression fails `lake build`.
+- **Kill conditions cleared.** (1) No claim about λ — the theorem quantifies over uniform
+  `b`; λ appears only in the dictionary as the named analog. (2) No `sorry`. (3) Not a
+  vacuous restatement of "independent fair coins": the content is the *parity*
+  decomposition `T = pS A + pS Aᶜ` and the complement-randomizes-the-total mechanism — the
+  proper-subset structure is load-bearing.
+- **Named wall, non-transfer fenced.** Sarnak (λ ⟂ zero-entropy) and Chowla are named as
+  the imported wall; `PARITY_DICTIONARY.md` §3 states explicitly that the toy's positive
+  does NOT transfer (we own the toy's driver; λ's driver is the primes, causal state
+  uncomputable — which is exactly why Sarnak/Chowla are open).
+
+**Verdict: P-1 LANDED (strength 6).** Together with P-2 (empirical, run same day) the lane
+now has both a deductive (machine-checked toy theorem) and an empirical (λ to 10⁷) receipt
+that the parity barrier holds at accessible scale — and both are fenced as confirm-not-breach.
+
 ### Rank 2 — P-2: the Liouville "order-meter" experiment (strength 5.5)
 **Run the exact H9-strong order-k surrogate ladder on the REAL Liouville sequence `λ(n)`, n ≤ ~10⁷–10⁸.** A
 genuinely runnable, falsifiable empirical confirmation that the toy is faithful and the barrier is real at

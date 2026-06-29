@@ -145,13 +145,23 @@ bounded; and the **bounded case is the absorption** — either `h` carries a bre
 closed agreement region, and closure boundary values. This `+1` (not `+2`) is exactly why monotone
 depth stays polynomial.
 
-*Remaining (structural assembly).* With (B) done, the rest is formalization-heavy but contains no new
-analytic content: **(A)** a convex `HasPieceCover`-`n` function is the sup of its `n` piece-lines
-(supporting lines + piece enumeration from the cut set); the **envelope fold** (sup of a length-`N`
-line list ⇒ `HasPieceCover N`, by folding (B) — sup-of-lines is manifestly convex); **convex-convex
-`max`** = envelope of `na+nb` lines ⇒ `na+nb`; and the **circuit induction** `isMono_hasPieceCover`
-(linear in leaves). The bridge + cut gates + the (B) linchpin + the entire depth/composition axis are
-done; the remaining is the cut-set→line-list enumeration and the structural recursion.
+*Supporting line (A-prerequisite) — LANDED 2026-06-29, gated (`lineBelow`).* `ConvexOn f → (f = ℓ on
+[s,t], s<t) → ∀ w, ℓ w ≤ f w`: a convex function lies above any line it equals on a piece (via
+`ConvexOn.slope_mono_adjacent`). This is the fact that lets a convex function be the `max` of its
+piece-lines.
+
+*Remaining (structural assembly) — precise obstruction isolated.* With (B) + `lineBelow` done, the
+rest contains no new analytic content but is genuine bookkeeping with one real wall: **(A)** *a convex
+`HasPieceCover`-`n` function is the sup of its `n` piece-lines.* (A) is blocked on **the convexity of
+the peeled function** (peel the rightmost piece: `a = max(a', ℓ_r)` with `a'` flattening `a` past the
+last cut to its left-slope) — `a'` *is* convex (slopes monotone, continuous at the cut) but proving it
+in Lean needs either a slope-mono case-bash over the if-then-else or the cut-set→line-list enumeration
+(`Finset.sort`, per-piece line extraction). Once (A) lands: the **envelope fold** (sup of a length-`N`
+line list ⇒ `HasPieceCover N`, by folding (B) — sup-of-lines is manifestly convex), **convex-convex
+`max`** (`na+nb`), and the **circuit induction** `isMono_hasPieceCover` (linear in leaves; `max` is the
+only gate needing (A), since cut-based `add`/`scale` are done). DELIVERED + gated: bridge + `add` +
+`smul` + the (B) linchpin + `lineBelow` (5 lemmas) — the entire analytic content; the remaining (A) is
+a large fiddly bookkeeping lemma (~80–100 lines, the cut-set enumeration the main API-friction risk).
 
 ---
 

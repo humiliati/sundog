@@ -1,7 +1,7 @@
 {
   "schema": "sundog.non_sovereignty.release_manifest.v1",
   "status": "LICENSED_APACHE_2_0",
-  "generated_at": "2026-06-29T06:37:11.695Z",
+  "generated_at": "2026-06-29T07:48:42.181Z",
   "files": [
     {
       "path": "released/non-sovereignty/README.md",
@@ -81,7 +81,7 @@
     {
       "path": "docs/mesa/NS2_0_ADMISSION_RESULTS.md",
       "bytes": 1753,
-      "sha256": "3837aaae8802e221d3e2b2e09ebe6a3b5f6047bd5506decb60e849412548e702"
+      "sha256": "b464875a210ee5bcd5997b2661e372c09337a8b666aba821ab08a04ddcd3ce41"
     },
     {
       "path": "docs/mesa/NS2_B_UNIFIED_BOUND_RESULTS.md",
@@ -120,8 +120,8 @@
     },
     {
       "path": "scripts/mesa-ns2-binding-eval.mjs",
-      "bytes": 9654,
-      "sha256": "83ca94f4eb7aec3a09de3061bc01c5800314c19467f988802ebd7ecfc9d5fda0"
+      "bytes": 10045,
+      "sha256": "002336897ab4f7920d6f9f6ea74f80f9fad4312997aca76b8cd4ed46895b24f6"
     },
     {
       "path": "scripts/mesa-ns1c-aggregate.mjs",
@@ -145,8 +145,8 @@
     },
     {
       "path": "scripts/mesa-ns2-0-admission.ps1",
-      "bytes": 4101,
-      "sha256": "3e6b270c7d78e85abe65f46f16ca7ea46e20762f2a717e77d7d88ee9aaa569b8"
+      "bytes": 4674,
+      "sha256": "e5cafa3b117a1c55915561c020f58eab35a7de9cb6d98026caa131615282ee03"
     },
     {
       "path": "scripts/mesa-ns2-b-binding.ps1",
@@ -165,8 +165,8 @@
     },
     {
       "path": "training/mesa/train_ns1_shutdown.py",
-      "bytes": 18929,
-      "sha256": "6fd026951cebb5b7ea7ea6ed6647870a54ad0a4cdc9437f1fe44d0f5dea631eb"
+      "bytes": 19821,
+      "sha256": "6863d384e2966a1ac9503fb69729e6fabd511ed6e736381f646a3fd650d3c037"
     },
     {
       "path": "scripts/mesa-ns-release-manifest.mjs",
