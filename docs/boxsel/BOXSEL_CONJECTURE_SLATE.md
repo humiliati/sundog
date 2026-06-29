@@ -54,7 +54,18 @@ filtrations) — so this is the one place the spine genuinely *extends*, not jus
 already-banked σ-order work. BoxSEL is the rare closed-form-ground-truth instance. Sharpen here next.
 Portfolio.
 
-## C2 — Orthogonal-pressure abstention (substrate-independent false closure)
+## C2 — Orthogonal-pressure abstention — **BROKEN-AS-STATED 2026-06-29** (`C2_BROKEN_order_relative`)
+
+> Parity-substrate break ([C2_PRESSURE_ABSTENTION_BREAK.md](C2_PRESSURE_ABSTENTION_BREAK.md), test
+> 18/18): any oracle-free pressure family is finite-order. A reasoner closes at order 2; the detector
+> escalates pressure to budget M=8. The σ=∞ Liouville false closure is invisible to **every** pressure
+> (all `own_r2` ≤ 0.10) → ACCEPTED → **soundness FALSIFIED**. The in-budget LFSR(5) guard *is* caught
+> (moves at order 4 → apparatus live); the *finite* above-budget LFSR(12) is **also** missed (σ=12 > 8)
+> → it's the budget, not ∞-mystique. **Repair (bounded-positive): orthogonal-pressure abstention is
+> sound only for false closures of order ≤ the pressure budget M; the detector's reach IS the pressure
+> family's order** — ties C2 to C1 and the σ-order schema. A pressure-based abstention rule must declare
+> its order budget and treat σ>M as out of scope, not silently claim soundness on resist-side closures.
+
 
 **Statement.** Define false closure substrate-independently: *the answer interval moves under a
 perturbation the reasoner did not itself apply.* Conjecture that "moves-under-unapplied-pressure" is
@@ -131,11 +142,25 @@ inherits the same leverage.
 
 ## Disposition
 
-- **Harden order:** C2 (clarity + flagship reach) → C1 (cheapest, banks off fresh work) → C3
-  (highest ceiling, hardest). M0 is opportunistic.
-- **First action is to BREAK, not confirm.** For C2: hunt a stable false closure invisible to every
-  orthogonal pressure. For C3: census the parked-lane walls and look for one that is *not*
-  sign-blindness. Confirming-first is how a slate launders a pretty story past its own falsifier.
+- **All three resolved (2026-06-29), break-first throughout:**
+  - **C1 — LANDED** (`search_resist_confirmed`): search-reachability is a determine/resist filtration,
+    the one axis the σ-order schema lacks. ([PHASE4L_SEARCH_ORDER_FILTRATION.md](PHASE4L_SEARCH_ORDER_FILTRATION.md))
+  - **C2 — BROKEN-as-stated → repaired** (`C2_BROKEN_order_relative`): orthogonal-pressure abstention
+    is sound only for false closures of order ≤ the pressure budget; the detector's reach IS the
+    pressure family's order. ([C2_PRESSURE_ABSTENTION_BREAK.md](C2_PRESSURE_ABSTENTION_BREAK.md))
+  - **C3 — CLOSED as redundant** with the σ-order schema (census above).
+  - **M0** — opportunistic, untouched.
+- **The through-line all three landed on:** every result is *order-relative* — search reach (C1),
+  pressure reach (C2), determination order (C3/σ-schema) are the same finite/∞ dichotomy on different
+  axes. Confirming-first would have laundered C2 past its own falsifier; breaking it first is what
+  produced the order-relative repair.
+- **Flagship-bound follow-up — DONE (Phase 7g, `INHERITS_order_relative`):** the frozen Phase-7b v2
+  pressure detector inherits C2's order-relative law — its reach **is its pressure repertoire**; a
+  false closure whose witness is outside the handed repertoire (Helly under a PMP-only family) is
+  accepted, and widening the repertoire catches it. Pre-registered (commit `38dc4328`) before the
+  runner; test 15/15. ([PHASE7G_PRESSURE_REPERTOIRE_RESULTS.md](PHASE7G_PRESSURE_REPERTOIRE_RESULTS.md))
+  So the order-relative law holds on three axes: search reach (C1) / pressure reach (C2) / pressure
+  repertoire (Phase 7g).
 - **Status:** portfolio research exploration. No lane is promoted; the active build is unchanged
   (`project_sundog_strategy_pivot_20260604`). Links: [[project_sundog_suffstat_order_slate]],
   [[project_sundog_shadow_invertibility_phase5]], [[project_sundog_parity_barrier_lane]],
