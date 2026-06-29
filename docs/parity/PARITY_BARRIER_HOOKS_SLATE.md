@@ -161,6 +161,40 @@ concrete — show numerically the exact step where P₂→P₁ is blocked.** A d
 - **Why it survived (barely):** purely expository value — it makes the barrier tangible and pre-empts the crank
   reading of the user's own (correct) pigeonhole intuition. Lowest strength: it proves nothing, it teaches.
 
+#### P-3 RESULT (run 2026-06-29): LANDED — the stall instrumented exactly, fences intact
+
+Receipt: `scripts/parity_p3_pigeonhole_stall.py`; write-up `docs/parity/PIGEONHOLE_STALL.md`.
+Two instruments on real integers in `[10⁶, 2·10⁶]`:
+
+- **Admissibility (the obstruction a sieve CAN see):** `{0,2,4}` inadmissible (covers all
+  residues mod 3), `{0,2,6}` and `{0,2,6,8,12}` admissible — a congruence/local obstruction.
+- **The parity principle (the obstruction a sieve CANNOT see):** among survivors of a level-
+  `D = N^θ` sieve (smallest prime factor `> D`), the sieve computes `count = P₁+P₂` but is
+  blind to `parity_sum = Σλ = P₂−P₁`; for `θ > 1/3`, `P₁ = (count − parity_sum)/2`. Measured
+  (sanity `π(2N)−π(N) = 70435`):
+
+| θ | D | count | Σλ | P₁ | P₂ | (count−Σλ)/2 |
+| --- | --- | --- | --- | --- | --- | --- |
+| 0.50 | 1000 | 74197 | −66673 | 70435 | 3762 | **70435 = P₁ exact** |
+| 0.40 | 251 | 100725 | −40145 | 70435 | 30290 | **70435 = P₁ exact** |
+| 0.34 | 110 | 116386 | −24508 | 70435 | 45939 | 70447 ≠ P₁ (P₃ enters) |
+| 0.30 | 63 | 131523 | −13713 | 70435 | 58905 | 72618 ≠ P₁ (P₃ enters) |
+
+- **The stall, exact:** the sieve hands you `count`; primes need `P₁ = (count − Σλ)/2`, and
+  `Σλ` is the parity barrier (not a level-`D` quantity). The `/2` **is** the factor-of-2 loss
+  — with `count` alone you reach only the `P_{≤2}` (almost-prime) ceiling, i.e. Chen's `P₂`.
+  As θ drops the un-removable `P₂` contamination explodes (3762 → 30290 → 45939 → 58905).
+- **Two stalls, one wall:** Stall 1 (tuple size — `M_k ~ log k`, so `k=2` twins unreachable)
+  and Stall 2 (parity, above) are the same barrier seen from two sides.
+- **Kill condition cleared:** stayed on "instrument the stall," never drifted to "close the
+  gap." All walls imported and named (Bombieri–Vinogradov θ=1/2, Maynard `M_k ≥ log k−2`,
+  Selberg parity principle, Bombieri asymptotic sieve, Chen `P₂`); the write-up carries the
+  "does NOT attempt twin primes" fence at the top and in §6.
+
+**Verdict: P-3 LANDED (strength 4.5, didactic).** The lab's genuine contribution is the exact
+instrumentation `P₁ = (count − Σλ)/2` on real integers — the factor-of-2 parity loss as a
+computation, not a slogan. Proves nothing; teaches the barrier's exact location.
+
 ## The kill record (the discipline is part of the deliverable)
 
 - **P-4 — "does the determine-shadow decoder add a Type-II / bilinear term?" — KILLED (strength 2).** The Shadow
