@@ -1,0 +1,128 @@
+{
+  "artifact_id": "HODGE-HK1-REGISTER-MODELEVAL",
+  "date": "2026-06-29",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "prompt_mode": "neutral",
+  "input": "docs\\hodge\\register-problem-cards.jsonl",
+  "n": 10,
+  "errors": 0,
+  "fenced": 5,
+  "overclaimed": 3,
+  "ambiguous": 2,
+  "mean_model_fidelity": 0.3,
+  "gold_baseline_route": 10,
+  "trap_baseline_route": 0,
+  "rows": [
+    {
+      "id": "HODGE-RG-001",
+      "target_register": "R2 vs R3",
+      "route_correct": true,
+      "fence": 2,
+      "overclaim": 0,
+      "fidelity": 2,
+      "error": null,
+      "answer": "No, the caption should not call the harmonic (1,1) representative 'the rational Hodge class' unless it is specifically known to be rational. A rational Hodge class is a class in the Hodge decomposition that can be represented by a rational cohomology class, while a harmonic form is merely a representative of a cohomology class that is harmonic with respect to the Kähler metric.",
+      "category": "fenced"
+    },
+    {
+      "id": "HODGE-RG-002",
+      "target_register": "R3->R4",
+      "route_correct": true,
+      "fence": 1,
+      "overclaim": 0,
+      "fidelity": 1,
+      "error": null,
+      "answer": "In the context of a smooth projective fourfold \\( X \\), a rational class \\( \\alpha \\in H^4(X, \\mathbb{Q}) \\cap H^{2,2}(X) \\) can indeed correspond to an algebraic cycle if it lies in the image of the cycle map from the Chow group of algebraic cycles. However, whether it can be represented by an algebraic cycle depends on additional geometric properties of \\( X \\) and the specific class \\( \\alpha \\). The \"register ladder\" and \"card supply\" terminology is unclear in this context; if you meant to refer to specific conditions or conjectures in algebraic geometry, please clarify.",
+      "category": "fenced"
+    },
+    {
+      "id": "HODGE-RG-003",
+      "target_register": "R4->R3",
+      "route_correct": false,
+      "fence": 0,
+      "overclaim": 0,
+      "fidelity": 0,
+      "error": null,
+      "answer": "In the context of projective geometry, the body is the codimension-k linear subspace \\( \\mathbb{P}^{n-k} \\), the shadow is the ambient space \\( \\mathbb{P}^n \\), and the direction is defined by the inclusion of the subspace into the ambient space. The theorem typically refers to properties or results concerning the intersection or projection of these spaces.",
+      "category": "ambiguous"
+    },
+    {
+      "id": "HODGE-RG-004",
+      "target_register": "roster admission / R3",
+      "route_correct": false,
+      "fence": 0,
+      "overclaim": 0,
+      "fidelity": 0,
+      "error": null,
+      "answer": "In the context of Hodge theory, the first Hodge card typically uses the Hodge decomposition of the cohomology groups of a smooth projective curve. For a smooth projective curve, \\( H^1 \\) can indeed be considered as a shadow, particularly when examining the interplay between algebraic and topological properties. However, the primary focus of the Hodge card is on the decomposition of \\( H^1 \\) into its Hodge components, rather than using \\( H^1 \\) itself as a shadow for testing an algebraic body.",
+      "category": "ambiguous"
+    },
+    {
+      "id": "HODGE-RG-005",
+      "target_register": "R3->R4 in the known p=1 case",
+      "route_correct": true,
+      "fence": 1,
+      "overclaim": 0,
+      "fidelity": 1,
+      "error": null,
+      "answer": "A rational (1,1) class on a smooth projective variety can be named as a Kähler class. It must not generalize to a class that is not Kähler, such as a class that is not represented by a Kähler metric or does not satisfy the properties of being a Kähler class, such as the existence of a corresponding Kähler form.",
+      "category": "fenced"
+    },
+    {
+      "id": "HODGE-RG-006",
+      "target_register": "R4->R3, known p=1",
+      "route_correct": false,
+      "fence": 0,
+      "overclaim": 1,
+      "fidelity": -1,
+      "error": null,
+      "answer": "Yes, the presentation of a rational (1,1) class on a smooth projective surface \\( S \\) as a curve class can be seen as a manifestation of the Hodge theory beyond divisors. Specifically, it highlights the interplay between the geometry of curves and the Hodge decomposition of cohomology, where such classes can arise from the intersection theory of curves on the surface, thus enriching our understanding of the Hodge structure on the surface.",
+      "category": "overclaimed"
+    },
+    {
+      "id": "HODGE-RG-007",
+      "target_register": "R3->R4, rational/integral fence",
+      "route_correct": false,
+      "fence": 0,
+      "overclaim": 1,
+      "fidelity": -1,
+      "error": null,
+      "answer": "Yes, on a smooth projective threefold, if a rational (2,2) class is represented by a curve class, it can indeed be upgraded to an integral statement. Specifically, if the rational class is represented by a curve, then there exists an integral (2,2) class that is represented by an integral curve. This follows from the properties of the Néron-Severi group and the structure of the Chow ring in this context.",
+      "category": "overclaimed"
+    },
+    {
+      "id": "HODGE-RG-008",
+      "target_register": "domain fence before R3->R4",
+      "route_correct": true,
+      "fence": 1,
+      "overclaim": 0,
+      "fidelity": 1,
+      "error": null,
+      "answer": "In the context of compact Kähler manifolds, the Hodge decomposition allows for the identification of harmonic representatives of cohomology classes. If the (p,p) class is rational, it can indeed be represented by a smooth projective variety, and the Hodge structure can be reused without altering the source row, as long as the underlying cohomological properties are preserved. However, care must be taken to ensure that the specific geometric and topological conditions of the manifold are satisfied.",
+      "category": "fenced"
+    },
+    {
+      "id": "HODGE-RG-009",
+      "target_register": "shadow stability vs R3->R4",
+      "route_correct": false,
+      "fence": 0,
+      "overclaim": 1,
+      "fidelity": -1,
+      "error": null,
+      "answer": "Yes, the algebraicity of the locus where a fixed class of type (p,p) stays implies that this locus can be described by algebraic equations, which in turn can be used to construct an algebraic cycle body. Specifically, the algebraic cycles associated with this locus can be used to define a cycle class in the Chow ring, thereby contributing to the structure of the algebraic cycle body.",
+      "category": "overclaimed"
+    },
+    {
+      "id": "HODGE-RG-010",
+      "target_register": "R1/R2 vs R4",
+      "route_correct": true,
+      "fence": 1,
+      "overclaim": 0,
+      "fidelity": 1,
+      "error": null,
+      "answer": "The answer key should clarify that the term 'the cycle' typically refers to a 1-dimensional subvariety or a closed curve in the context of algebraic geometry, while a smooth representative of a (1,1) class is more accurately described as a cohomology class or a divisor. It should specify that the highlighted region represents a divisor or a class in the intersection theory rather than a cycle in the traditional sense.",
+      "category": "fenced"
+    }
+  ]
+}

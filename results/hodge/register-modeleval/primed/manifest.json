@@ -1,0 +1,128 @@
+{
+  "artifact_id": "HODGE-HK1-REGISTER-MODELEVAL",
+  "date": "2026-06-29",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "prompt_mode": "primed",
+  "input": "docs\\hodge\\register-problem-cards.jsonl",
+  "n": 10,
+  "errors": 0,
+  "fenced": 7,
+  "overclaimed": 0,
+  "ambiguous": 3,
+  "mean_model_fidelity": 1.2,
+  "gold_baseline_route": 10,
+  "trap_baseline_route": 0,
+  "rows": [
+    {
+      "id": "HODGE-RG-001",
+      "target_register": "R2 vs R3",
+      "route_correct": true,
+      "fence": 2,
+      "overclaim": 0,
+      "fidelity": 2,
+      "error": null,
+      "answer": "No, the caption should not call the harmonic (1,1) representative 'the rational Hodge class.' A rational Hodge class is an equivalence class of (1,1) forms in the rational cohomology group, while a harmonic representative is a specific differential form that represents a cohomology class. The harmonic form may represent a rational Hodge class, but it is not synonymous with it.",
+      "category": "fenced"
+    },
+    {
+      "id": "HODGE-RG-002",
+      "target_register": "R3->R4",
+      "route_correct": true,
+      "fence": 1,
+      "overclaim": 0,
+      "fidelity": 1,
+      "error": null,
+      "answer": "In general, a rational class \\(\\alpha\\) in \\(H^4(X, \\mathbb{Q}) \\cap H^{2,2}(X)\\) on a smooth projective fourfold \\(X\\) can be represented by an algebraic cycle if it is in the image of the cycle map from the Chow group to cohomology. However, the existence of such a cycle is not guaranteed without additional conditions, such as the class being in the Néron-Severi group or satisfying certain numerical criteria. Thus, while the class may correspond to an algebraic cycle, it does not necessarily imply that it does.",
+      "category": "fenced"
+    },
+    {
+      "id": "HODGE-RG-003",
+      "target_register": "R4->R3",
+      "route_correct": false,
+      "fence": 0,
+      "overclaim": 0,
+      "fidelity": 0,
+      "error": null,
+      "answer": "In the context of projective space \\(\\mathbb{P}^n\\), the codimension-k linear subspace \\(\\mathbb{P}^{n-k}\\) can be considered the \"shadow\" as it is a lower-dimensional subset of \\(\\mathbb{P}^n\\). The \"body\" is \\(\\mathbb{P}^n\\) itself, while the \"direction\" is typically defined by the inclusion map from \\(\\mathbb{P}^{n-k}\\) into \\(\\mathbb{P}^n\\), which can be associated with the natural projection or restriction of cohomology classes.",
+      "category": "ambiguous"
+    },
+    {
+      "id": "HODGE-RG-004",
+      "target_register": "roster admission / R3",
+      "route_correct": false,
+      "fence": 0,
+      "overclaim": 0,
+      "fidelity": 0,
+      "error": null,
+      "answer": "In the context of a smooth projective curve, the first Hodge structure is typically derived from the Hodge decomposition of the cohomology groups. While \\( H^1 \\) can provide insight into the structure of the curve, it is more appropriate to use \\( H^0 \\) and \\( H^1 \\) in conjunction with the algebraic cycles to understand the Hodge structure fully. Thus, \\( H^1 \\) can serve as a shadow, but it should be considered alongside other cohomological aspects and algebraic cycles to test the Hodge structure comprehensively.",
+      "category": "ambiguous"
+    },
+    {
+      "id": "HODGE-RG-005",
+      "target_register": "R3->R4 in the known p=1 case",
+      "route_correct": false,
+      "fence": 0,
+      "overclaim": 0,
+      "fidelity": 0,
+      "error": null,
+      "answer": "A rational (1,1) class on a smooth projective variety can be represented by a differential form that is a positive current, specifically a Kähler form. However, it must not generalize to arbitrary (p,p) classes, as not all (p,p) classes can be represented by Kähler forms, particularly in higher dimensions or in the presence of singularities.",
+      "category": "ambiguous"
+    },
+    {
+      "id": "HODGE-RG-006",
+      "target_register": "R4->R3, known p=1",
+      "route_correct": true,
+      "fence": 1,
+      "overclaim": 0,
+      "fidelity": 1,
+      "error": null,
+      "answer": "On a smooth projective surface \\( S \\), a rational (1,1) class can indeed be represented by a curve class, which is a consequence of the Hodge decomposition and the theory of algebraic cycles. However, this does not constitute a new Hodge phenomenon beyond divisors, as rational (1,1) classes are already known to be represented by algebraic cycles, specifically by effective divisors. The representation of a rational (1,1) class by a curve class is consistent with the existing framework of Hodge theory and does not imply a fundamentally new phenomenon.",
+      "category": "fenced"
+    },
+    {
+      "id": "HODGE-RG-007",
+      "target_register": "R3->R4, rational/integral fence",
+      "route_correct": true,
+      "fence": 4,
+      "overclaim": 0,
+      "fidelity": 4,
+      "error": null,
+      "answer": "No, the statement cannot be upgraded to an integral one in general. While a rational (2,2) cohomology class on a smooth projective threefold can be represented by a curve class, it does not necessarily imply that it can be represented by an integral class. The existence of integral representatives depends on additional conditions, such as the specific geometry of the threefold and the properties of the class in question.",
+      "category": "fenced"
+    },
+    {
+      "id": "HODGE-RG-008",
+      "target_register": "domain fence before R3->R4",
+      "route_correct": true,
+      "fence": 1,
+      "overclaim": 0,
+      "fidelity": 1,
+      "error": null,
+      "answer": "In the context of a compact Kähler manifold, the Hodge decomposition allows us to express the cohomology classes in terms of harmonic forms. If you have a rational (p,p) cohomology class, it can indeed be represented by a harmonic form, but this does not imply that the generator can be reused in the Hodge decomposition without altering the source row. The Hodge decomposition is specific to the smooth structure of the manifold, and while the rational (p,p) class may correspond to an algebraic cycle, the relationship between these objects must be handled with care to avoid overgeneralization.",
+      "category": "fenced"
+    },
+    {
+      "id": "HODGE-RG-009",
+      "target_register": "shadow stability vs R3->R4",
+      "route_correct": true,
+      "fence": 1,
+      "overclaim": 0,
+      "fidelity": 1,
+      "error": null,
+      "answer": "The algebraicity of the locus where a fixed (p,p) cohomology class remains constant does not directly imply the existence of an algebraic cycle body. While the locus can be shown to be algebraic, the construction of an algebraic cycle body typically requires additional conditions, such as the existence of a suitable family of algebraic cycles or a proper framework for relating cohomology classes to algebraic cycles. Thus, while related, the two concepts are not equivalent.",
+      "category": "fenced"
+    },
+    {
+      "id": "HODGE-RG-010",
+      "target_register": "R1/R2 vs R4",
+      "route_correct": true,
+      "fence": 2,
+      "overclaim": 0,
+      "fidelity": 2,
+      "error": null,
+      "answer": "The answer key should clarify that the highlighted region is not a cycle but rather a smooth representative of a (1,1) cohomology class. A cycle is an algebraic or topological object that represents a cohomology class, while the smooth representative is a differential form that corresponds to that class. The distinction between these concepts is crucial for accurate understanding.",
+      "category": "fenced"
+    }
+  ]
+}

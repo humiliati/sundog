@@ -67,10 +67,21 @@ A route/fence-fidelity eval (`npm run hodge:register-eval`;
 fixed route/fence rubric: **10/10 discriminating, gold-route 10/10, trap-route 0/10,
 mean separation 4.0, eval-ready**, receipt at
 [`hodge/PHASE4C_REGISTER_FIDELITY_EVAL.md`](hodge/PHASE4C_REGISTER_FIDELITY_EVAL.md) -
-the cards are a valid route/fence eval set and the scorer is established. Still
-deterministic (gold-vs-trap), not a model eval; the model-in-the-loop run (feed prompts
-to a responder, score with the same rubric) is the staged next step. No UI / no public
-page licensed.
+the cards are a valid route/fence eval set and the scorer is established.
+
+The model-in-the-loop run then closed the K1 loop (`scripts/hodge-register-modeleval.mjs`;
+secret-safe keyring): OpenAI `gpt-4o-mini` answered each card's prompt, scored by the same
+rubric, in two modes. **Neutral (no register cue): 5 fenced / 3 overclaimed / 2 ambiguous
+- the cards catch real overclaims** (RG-007 rational->integral upgrade = the integral
+Hodge conjecture; RG-009 Hodge-locus/CDK -> "cycle found"; RG-006). **Primed (register
+cue): 7 fenced / 0 overclaimed / 3 ambiguous - priming removes every overclaim and lifts
+fencing 5->7.** Receipt
+[`hodge/PHASE4D_REGISTER_MODELEVAL.md`](hodge/PHASE4D_REGISTER_MODELEVAL.md). The lexical
+rubric cannot classify the constructive-body cards (RG-003/004/005, ambiguous); a
+`target_register` route check + semantic judge is the next refinement. Route/fence
+fidelity only (per H-K6), one model / one phrasing, exploratory - not a math
+certification, no UI / no public page. **H-K1 generator->audit->fidelity->model loop is
+complete.**
 
 *Claim.* Hodge can deliver a meaningful Sundog artifact before it delivers a
 technical probe: a generator of small problems that force a learner or model to
