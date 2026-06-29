@@ -83,6 +83,18 @@ fidelity only (per H-K6), one model / one phrasing, exploratory - not a math
 certification, no UI / no public page. **H-K1 generator->audit->fidelity->model loop is
 complete.**
 
+PHASE4E then (i) added the named **route check** (per-card, derived from `correct_answer`
+stance + `body` field; verdict space fenced/routed/overclaimed/hedged/off) that resolves
+the constructive-card blind spot, and (ii) **swept it across models x phrasings**
+(`--sweep`; receipt [`hodge/PHASE4E_REGISTER_SWEEP.md`](hodge/PHASE4E_REGISTER_SWEEP.md)).
+Live: openai gpt-4o-mini, groq llama-3.3-70b, mistral-small (anthropic key dead, skipped).
+**Unprompted route-correct is model-dependent: llama-70b 9/10 (0 overclaim) > gpt-4o-mini
+6/10 (3) > mistral-small 4/10 (3); RG-007 (integral Hodge) + RG-009 (Hodge-locus/CDK) are
+the consistently-hardest traps (both proprietary models fall, llama resists). Priming ->
+0 overclaims for all three** (mistral 4->10, gpt-4o-mini 6->9; groq dips 9->8 via
+over-hedging). Still exploratory, route/fence only, no public claim; specialist
+spot-check (PHASE4B) stays the promotion gate.
+
 *Claim.* Hodge can deliver a meaningful Sundog artifact before it delivers a
 technical probe: a generator of small problems that force a learner or model to
 distinguish the four registers in the reader note:

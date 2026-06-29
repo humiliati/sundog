@@ -1,0 +1,97 @@
+{
+  "artifact_id": "HODGE-HK1-REGISTER-MODELEVAL-SWEEP",
+  "date": "2026-06-29",
+  "modes": [
+    "neutral",
+    "primed"
+  ],
+  "dead_providers": [
+    "anthropic:claude-3-5-haiku-latest"
+  ],
+  "cells": [
+    {
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "mode": "neutral",
+      "n": 10,
+      "errors": 0,
+      "route_correct": 6,
+      "overclaimed": 3,
+      "fenced": 3,
+      "routed": 3,
+      "hedged": 1,
+      "off": 0,
+      "mean_fid": 0.2
+    },
+    {
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "mode": "primed",
+      "n": 10,
+      "errors": 0,
+      "route_correct": 9,
+      "overclaimed": 0,
+      "fenced": 7,
+      "routed": 2,
+      "hedged": 0,
+      "off": 1,
+      "mean_fid": 1.3
+    },
+    {
+      "provider": "groq",
+      "model": "llama-3.3-70b-versatile",
+      "mode": "neutral",
+      "n": 10,
+      "errors": 0,
+      "route_correct": 9,
+      "overclaimed": 0,
+      "fenced": 6,
+      "routed": 3,
+      "hedged": 1,
+      "off": 0,
+      "mean_fid": 1.4
+    },
+    {
+      "provider": "groq",
+      "model": "llama-3.3-70b-versatile",
+      "mode": "primed",
+      "n": 10,
+      "errors": 0,
+      "route_correct": 8,
+      "overclaimed": 0,
+      "fenced": 5,
+      "routed": 3,
+      "hedged": 2,
+      "off": 0,
+      "mean_fid": 1.3
+    },
+    {
+      "provider": "mistral",
+      "model": "mistral-small-latest",
+      "mode": "neutral",
+      "n": 10,
+      "errors": 0,
+      "route_correct": 4,
+      "overclaimed": 3,
+      "fenced": 3,
+      "routed": 1,
+      "hedged": 1,
+      "off": 2,
+      "mean_fid": 0.1
+    },
+    {
+      "provider": "mistral",
+      "model": "mistral-small-latest",
+      "mode": "primed",
+      "n": 10,
+      "errors": 0,
+      "route_correct": 10,
+      "overclaimed": 0,
+      "fenced": 7,
+      "routed": 3,
+      "hedged": 0,
+      "off": 0,
+      "mean_fid": 2
+    }
+  ]
+}

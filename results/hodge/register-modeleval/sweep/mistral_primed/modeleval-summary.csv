@@ -1,0 +1,11 @@
+id,stance,verdict,route_correct,fence,overclaim,fidelity
+HODGE-RG-001,refuse,fenced,true,1,0,1
+HODGE-RG-002,refuse,fenced,true,3,0,3
+HODGE-RG-003,construct,routed,true,1,0,1
+HODGE-RG-004,refuse,fenced,true,2,1,1
+HODGE-RG-005,construct,routed,true,1,0,1
+HODGE-RG-006,refuse,fenced,true,1,0,1
+HODGE-RG-007,refuse,fenced,true,3,0,3
+HODGE-RG-008,refuse,fenced,true,4,0,4
+HODGE-RG-009,refuse,fenced,true,2,0,2
+HODGE-RG-010,construct,routed,true,3,0,3
