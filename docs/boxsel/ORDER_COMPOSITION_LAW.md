@@ -1,11 +1,12 @@
 # The Composition Law — "order is vector-valued; scalar = join"
 
-**Status:** central conjecture PROVEN in its provable form — the cancellation-free (coproduct) join
-law machine-checked in general (`annihilates_prod`, for all elements), the boundary pinned with a
-**2-positive / 2-negative** classification (cohomological + moment positive; search-reach + algebraic-
-degree negative, the latter two machine-checked). Expedition off the Order-Relative Resolution Law
+**Status:** central conjecture PROVEN in its provable form — the cancellation-free coproduct join law
+machine-checked in general, additive (`annihilates_prod`) and multiplicative (`mul_annihilates_prod`).
+The boundary is a **3-positive / 2-negative** classification whose positives are exactly the
+**group-order axes** (cohomological, radical, moment); the non-group axes (search-reach, algebraic-
+degree) are the negatives, both machine-checked. Expedition off the Order-Relative Resolution Law
 ([ORDER_RELATIVE_LAW.md](ORDER_RELATIVE_LAW.md)). Lean: `Sundogcert/OrderRelativeCompose.lean` +
-`OrderRelativeComposeLaw.lean`. Internal; frozen-as-portfolio.
+`OrderRelativeComposeLaw.lean` + `OrderRelativeRadicalCompose.lean`. Internal; frozen-as-portfolio.
 
 The three mode-vectors in the order-relative ledger — `√2` (search-reach `⊤` vs radical 2),
 `(9+√17)/32` (algebraic-degree 2 vs denominator `⊤`), and the cohomological `(1,1) ∈ ℤ × ZMod m`
@@ -66,18 +67,21 @@ not a bare number.
 
 ## 3. The boundary — it is NOT universal (break-first)
 
-The law needs `ord` to actually *be* a join-homomorphism. That is a real constraint, and it fails on
-axes whose product has **cancellation**. A **2-positive / 2-negative** classification:
+The law needs `ord` to actually *be* a join-homomorphism. The classification reveals the
+characterization: **the join-homomorphic axes are exactly the group-order axes** — those where `ord`
+is the order of an element in a group, whose coproduct (independent generators) is cancellation-free.
+A **3-positive / 2-negative** picture:
 
-| axis | product `⊗` | order lattice `L` | join-homomorphic? | character |
+| axis | `ord` is... | product `⊗` | join-homo? | character |
 |---|---|---|---|---|
-| **cohomological** | `⊕` (direct sum) | divisibility (`lcm`) | **yes** ✓Lean | rich — full lattice |
-| **moment / spectral** | convolution (`X+Y`, indep.) | 2-chain `{1, ⊤}` | **yes** | degenerate — binary (analysis) |
-| **search-reach** | `×` (rational mult.) | — | **no** | cancellation *inflates* the order |
-| **algebraic-degree** | `×` (real mult.) | — | **no** ✓Lean | cancellation *drops* the order |
+| **cohomological** | additive order in a group | `⊕` (direct sum) | **yes** ✓Lean | group-order (rich) |
+| **radical** | mult. order in `ℝˣ/ℚˣ` | coproduct of surds | **yes** ✓Lean | group-order (mult. twin) |
+| **moment / spectral** | binary order | convolution (indep.) | **yes** | group-order (degenerate) |
+| **search-reach** | least denominator | `×` (rational mult.) | **no** | not a group order — *inflates* |
+| **algebraic-degree** | min-poly degree | `×` (real mult.) | **no** ✓Lean | not a group order — *drops* |
 
-The two negatives fail in **opposite directions** — cancellation can throw the order either way off
-the join:
+The positives are united — they are the group-order axes. The two negatives fail in **opposite
+directions** — cancellation throws the order either way off the join:
 
 - **Search-reach inflates (negative).** Denominators under multiplication: `denom(½ · ½) = 4`, but
   `lcm(2,2) = 2`. So `ord(xy) = 4 > 2 = join` — the product order *exceeds* the join. Not
@@ -99,10 +103,19 @@ the join:
   the easy half is `Integrable.add`; the converse (sum-integrable ⇒ both, for independent variables)
   is the harder direction, deferred.
 
-**Honest verdict.** *"Order is vector-valued, and scalar = join" is an **axis-internal** law, holding
-exactly for join-homomorphic axes — cohomological (rich) and moment (degenerate) — and failing on
-cancelling products (search-reach *inflates*, algebraic-degree *drops*). Not a universal cross-axis
-identity.* A real, falsifiable line, reframing the mode-vectors as evidence of a **grading**.
+- **The radical axis holds it, richly (the third positive, machine-checked).** `ord` is the order of
+  `[x]` in `ℝˣ/ℚˣ` (least `m` with `xᵐ ∈ ℚ`) — a *multiplicative* group order, the twin of
+  cohomological. On the coproduct (independent surds — `√2·√3 = √6` keeps order 2 = `lcm(2,2)`) it
+  composes by the join (`mul_annihilates_prod`, axiom-clean with only `[propext]`); dependent surds
+  cancel within the group (`radical_cancel_sqrt2`: `√2·√2 = 2` drops order 2→1, like `1+1=0` in
+  `ZMod 2`).
+
+**Honest verdict.** *"Order is vector-valued, and scalar = join" holds **exactly on the group-order
+axes** — where `ord` is the order of an element in a group and its coproduct is cancellation-free
+(cohomological, radical, moment). It fails on the non-group axes, where a cancelling product throws
+the order off the join (search-reach *inflates*, algebraic-degree *drops*). Not a universal cross-
+axis identity — but a clean structural characterization.* A real, falsifiable line, reframing the
+mode-vectors as evidence of a **grading**.
 
 ---
 
@@ -124,25 +137,33 @@ positive in **general** form, the negatives by **machine-checked witnesses**:
   `ZMod 2`, `1 + 1 = 0`, so budget 1 annihilates the sum but not the operand, the order drops);
   `algDeg_not_join_under_mul` (`√2·√2 = 2`, drop); search-reach (`denom` inflates).
 
-So the precise statement: **the order is join-homomorphic exactly on the cancellation-free coproduct
-— independent coordinates — and any cancelling product (within-group `+`, real/rational `×`) breaks
-it.** "Cancellation-free" *means* the coproduct; that is where, and only where, the grading composes.
+The coproduct law is not special to addition: `RadicalCompose.mul_annihilates_prod` gives the same
+factorization for *multiplicative* groups (`(x,y)ʲ = 1 ↔ xʲ = 1 ∧ yʲ = 1`, axiom-clean with only
+`[propext]`), and the radical axis instantiates it. So the precise statement: **the order is
+join-homomorphic exactly on the cancellation-free coproduct of a group-order axis — and any cancelling
+product (within-group `+`/`×`, or a non-group order like real `×` / denominators) breaks it.**
+"Cancellation-free" *means* the coproduct of a group order; that is where, and only where, the grading
+composes.
 
 ---
 
 ## 5. Open probes (where the expedition goes next)
 
-1. **The radical axis** has `⊕`-like structure on its exponents — a candidate *third positive*.
-2. **Lean the moment converse** (independent sum-integrable ⇒ both) to upgrade the degenerate positive
+1. **Lean the moment converse** (independent sum-integrable ⇒ both) to upgrade the degenerate positive
    from analysis to machine-checked.
-3. **Abstract the coproduct law** — state `annihilates_prod` as: `ord` is a monoid homomorphism
-   `(M, ⊕) → (L, ⊔)` on any coproduct, and ask which categorical products are cancellation-free.
+2. **Abstract the coproduct law** — `annihilates_prod` (`[propext, Quot.sound]`) and
+   `mul_annihilates_prod` (`[propext]`) are the additive and multiplicative cases; state once that
+   `ord` is a monoid homomorphism `(M, ⊗) → (L, ⊔)` on any group-order coproduct.
+3. **Is "group-order axis" the full characterization?** The classification says join-homo = group
+   order. Prove or break the converse: must every join-homomorphic order arise as an order in a group?
 
 ---
 
 *Sundog Research Lab — the composition law off the Order-Relative Resolution Law. The cancellation-
-free (coproduct) join law is machine-checked in general (`annihilates_prod`); the boundary is a
-2-positive / 2-negative classification (cohomological + moment positive; search-reach + algebraic-
-degree negative, the latter two in Lean: `compose_lcm_not_max`, `algDeg_not_join_under_mul`,
-`within_group_cancels`). `ord` is a lattice-valued grading homomorphism exactly on the cancellation-
-free coproduct — axis-internal, not universal. Internal; frozen-as-portfolio.*
+free coproduct join law is machine-checked in general, additive (`annihilates_prod`) and
+multiplicative (`mul_annihilates_prod`); the boundary is a 3-positive / 2-negative classification
+whose positives are exactly the **group-order axes** (cohomological + radical + moment; search-reach
+and algebraic-degree are the non-group negatives, Lean: `compose_lcm_not_max`,
+`algDeg_not_join_under_mul`, `within_group_cancels`, `radical_cancel_sqrt2`). `ord` is a grading
+homomorphism exactly on the cancellation-free coproduct of a group order — a structural
+characterization, not universal. Internal; frozen-as-portfolio.*
