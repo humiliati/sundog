@@ -54,15 +54,16 @@ channel or only at the target channel. (This is exactly what Percival's A3 probe
 
 ## Grounding ledger (what is actually banked)
 
-The thesis is **1/4 confirmed-bounded, 3/4 conjecture.** That ratio is the point: it is
-a real, risky, portfolio-spanning prediction, not a slogan.
+The thesis is **confirmed-bounded on act/aggregate, toy-confirmed on measure, and
+open on target.** That uneven ledger is the point: it is a real, risky,
+portfolio-spanning prediction, not a slogan.
 
 | channel | instance lane | status |
 | --- | --- | --- |
 | **act** | NS-2 safe-interruptibility | **CONFIRMED (bounded, in-vitro).** A return-trained uncapped optimizer *wants* to dodge the shutdown and learns to (`band_avoidance 0.87`); the capped agent that wants it equally *cannot* (`≤0.13` at every `κ`). Values screened off by bounded access. |
 | **aggregate** | NS-1-c arbiter-authority cap | **CONFIRMED (bounded).** The cap bounds the aggregator's causal authority (`Sov_opt ≤ κ`); a no-role capped controller matches the council (`Δrole ≈ 0`). Architecture screened off. |
 | **target** | Percival B1 (performative threshold) | **GATED, not run.** Honest prior deflates. [`SUNDOG_V_PERCIVAL.md`](SUNDOG_V_PERCIVAL.md). |
-| **measure** | Percival A3 (static anti-correlation toy) | **PREDICTION, not run.** Thesis predicts measure-alone is *safe* — look-and-ignore weakly dominates — so danger is target-channel, not measure-channel. A3 is the falsifier: if un-targeting beats look-and-ignore on a static instance, the channel individuation is wrong. |
+| **measure** | Percival A3 (static anti-correlation toy) | **TOY CONFIRMED.** `look_and_ignore` weakly dominates on the static no-threshold instance (`return=1`, causal proxy influence `0`), so measure-alone is safe in A3. Diagnostic: observational action-proxy MI is still `1` bit via the anti-correlated world, so the channel split must use causal/permutation influence, not raw observational MI. [`percival/PERCIVAL_A3_KILLSWITCH_RESULTS.md`](percival/PERCIVAL_A3_KILLSWITCH_RESULTS.md). |
 
 The keeper underneath the act/aggregate rows: [`NON_SOVEREIGNTY_PAPER_SPINE.md`](NON_SOVEREIGNTY_PAPER_SPINE.md),
 [`mesa/CREDIT_THE_CAP_NOT_THE_COUNCIL_POST.md`](mesa/CREDIT_THE_CAP_NOT_THE_COUNCIL_POST.md).
@@ -112,10 +113,10 @@ unreachable bounding channel; that any single channel's confirmation generalizes
 others without its own test; that this is more than a frame until ≥2 more channels are
 banked.
 
-**Honest prior:** the act and aggregate channels are genuinely banked; the target
-channel probably deflates (Percival); the measure channel is predicted safe (A3). The
-frame earns "hypothesis" rather than "slogan" only because it makes per-channel
-predictions that can each fail.
+**Honest prior:** the act and aggregate channels are genuinely banked; the measure
+channel passed the A3 toy; the target channel probably deflates unless B1's
+performative threshold clears its fence. The frame earns "hypothesis" rather than
+"slogan" only because it makes per-channel predictions that can each fail.
 
 ---
 

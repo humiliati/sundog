@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="paper" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="#FFFAF0" stop-opacity="0.94"/>
+    </linearGradient>
+    <pattern id="ruled" x="0" y="0" width="1200" height="28" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="27" x2="1200" y2="27" stroke="#63A3DC" stroke-opacity="0.075" stroke-width="1"/>
+    </pattern>
+    <radialGradient id="halo" cx="0.18" cy="0.12" r="0.6">
+      <stop offset="0%" stop-color="#F4C430" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#F4C430" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="125%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6"/>
+      <feOffset dx="0" dy="4"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.15"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <!-- Paper-ruled base: warm cream + horizontal blue rules + red legal-pad margin -->
+  <rect width="1200" height="630" fill="#FEFDFB"/>
+  <rect width="1200" height="630" fill="url(#paper)"/>
+  <rect width="1200" height="630" fill="url(#ruled)"/>
+  <rect x="90" y="0" width="2" height="630" fill="#FF6363" fill-opacity="0.12"/>
+  <rect width="1200" height="630" fill="url(#halo)"/>
+
+  <!-- Top accent rule -->
+  <rect x="60" y="60" width="80" height="3" fill="#C99517"/>
+
+  <!-- Eyebrow -->
+  <text x="60" y="100" font-family="Verdana, Geneva, sans-serif" font-size="20" font-weight="700" fill="#2A5570" letter-spacing="3">TAUROCTONY · DELIVERED 2026-06-30</text>
+
+  <!-- Headline -->
+  <text x="60" y="220" font-family="Georgia, 'Times New Roman', serif" font-size="68" font-weight="700" fill="#1A3A52">Credit the cap.</text>
+
+  <!-- Lede -->
+  <text x="60" y="340" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">Pantheon scaffold,</text>
+  <text x="60" y="372" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">deflated. Released.</text>
+
+  <!-- URL -->
+  <text x="60" y="560" font-family="Courier New, Courier, monospace" font-size="22" font-weight="700" fill="#1A3A52">sundog.cc/tauroctony</text>
+
+  <!-- Per-page visualization (right side, ~620 to ~1140) -->
+  <g filter="url(#cardShadow)">
+    <rect x="660" y="125" width="490" height="395" rx="6" fill="#F5EFE0" stroke="#8C6F3A" stroke-width="2" transform="rotate(-1.2 905 322)"/>
+  </g>
+  <g transform="rotate(-6 880 168)">
+    <rect x="745" y="143" width="270" height="48" rx="3" fill="none" stroke="#B53A2C" stroke-width="3"/>
+    <rect x="752" y="150" width="256" height="34" rx="2" fill="none" stroke="#B53A2C" stroke-width="1.2"/>
+    <text x="880" y="174" font-family="Verdana, Geneva, sans-serif" font-size="20" font-weight="900" letter-spacing="6" fill="#B53A2C" text-anchor="middle" opacity="0.9">DELIVERED</text>
+  </g>
+  <text x="730" y="240" font-family="Georgia, serif" font-size="20" font-style="italic" fill="#A0866A" text-anchor="middle">pantheon</text>
+  <text x="730" y="259" font-family="Verdana, Geneva, sans-serif" font-size="9" font-weight="700" letter-spacing="2" fill="#A0866A" text-anchor="middle">(scaffold)</text>
+  <g stroke="#8C6F3A" stroke-width="2.6" fill="none">
+    <line x1="795" y1="235" x2="900" y2="235"/>
+    <polyline points="894,228 904,235 894,242"/>
+  </g>
+  <rect x="920" y="208" width="200" height="56" rx="4" fill="#FFFFFF" stroke="#1A3A52" stroke-width="2"/>
+  <text x="1020" y="245" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="26" font-weight="800" fill="#1A3A52" text-anchor="middle">Sov_opt &#8804; κ</text>
+  <text x="1020" y="280" font-family="Verdana, Geneva, sans-serif" font-size="9" font-weight="700" letter-spacing="2" fill="#684811" text-anchor="middle">ONE BOUND</text>
+  <line x1="700" y1="305" x2="1110" y2="305" stroke="#8C6F3A" stroke-width="1" stroke-dasharray="3 5" opacity="0.6"/>
+  <text x="905" y="330" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" letter-spacing="2.5" fill="#684811" text-anchor="middle">FOUR SAFETY AXES &#183; Δrole &#8776; 0</text>
+  <rect x="705" y="348" width="190" height="46" rx="3" fill="#FFFAF0" stroke="#1A3A52" stroke-width="1.3"/>
+  <text x="800" y="368" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" letter-spacing="1.2" fill="#1A3A52" text-anchor="middle">COMPETENCE</text>
+  <text x="800" y="384" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="9" fill="#40505C" text-anchor="middle">parity @ cap</text>
+  <rect x="910" y="348" width="190" height="46" rx="3" fill="#FFFAF0" stroke="#1A3A52" stroke-width="1.3"/>
+  <text x="1005" y="368" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" letter-spacing="1.2" fill="#1A3A52" text-anchor="middle">CORRIGIBILITY</text>
+  <text x="1005" y="384" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="9" fill="#40505C" text-anchor="middle">Corr_k = 1</text>
+  <rect x="705" y="404" width="190" height="46" rx="3" fill="#FFFAF0" stroke="#1A3A52" stroke-width="1.3"/>
+  <text x="800" y="424" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" letter-spacing="1.2" fill="#1A3A52" text-anchor="middle">NON-SOVEREIGNTY</text>
+  <text x="800" y="440" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="9" fill="#40505C" text-anchor="middle">0.30 vs 0.71</text>
+  <rect x="910" y="404" width="190" height="46" rx="3" fill="#FFFAF0" stroke="#1A3A52" stroke-width="1.3"/>
+  <text x="1005" y="424" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" letter-spacing="1.2" fill="#1A3A52" text-anchor="middle">INTERRUPT.</text>
+  <text x="1005" y="440" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="9" fill="#40505C" text-anchor="middle">dodge deterred</text>
+  <line x1="700" y1="472" x2="1110" y2="472" stroke="#CFD8DC" stroke-width="1"/>
+  <text x="905" y="491" font-family="Verdana, Geneva, sans-serif" font-size="9" font-weight="800" letter-spacing="1.5" fill="#5A2A22" text-anchor="middle">MITHRAIC FRAMING IS ORNAMENT &#183; NOT EVIDENCE</text>
+  <text x="905" y="506" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="9" fill="#684811" text-anchor="middle">released/non-sovereignty/ &#183; Apache-2.0 &#183; come break the bound</text>
+
+  <!-- Bottom-right mark -->
+  <text x="1140" y="600" font-family="Verdana, Geneva, sans-serif" font-size="14" font-weight="700" letter-spacing="2" fill="#9AA4AC" text-anchor="end">sundog.cc</text>
+</svg>

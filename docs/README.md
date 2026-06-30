@@ -135,6 +135,23 @@ code, experiments, prior theorem materials, and application bridges.
   rate improvement. The synthesis law is a *schema*, not a universal scalar;
   the composition law is **axis-internal**, not a cross-axis identity. Not a
   worked example, not a P-vs-NP claim, not a learnability claim.
+- [Tauroctony brand surface](../tauroctony.html) **— DELIVERED 2026-06-30**:
+  the cosmogram ledger's deflation receipt as a Class A public page. The
+  pantheon scaffold collapsed, on purpose, into a single inequality
+  (`Sov_opt ≤ κ`); four safety axes (competence parity, corrigibility via
+  override, non-sovereignty `p95 0.30 vs 0.71`, safe-interruptibility
+  `band_avoidance ≤ 0.13` at every `κ ∈ {0.4 … 1.0}`); replicated under a
+  learned presider (NS-3); competent sandbagger elicited then geometrically
+  deterred (NS-4 / `CAP_DETERS_COMPETENT_SANDBAG`); three machine-checked
+  Lean lemmas (`optimum_mono`, `signature_noninterference` axiom-free,
+  `ruin_break_even`); released task family at `released/non-sovereignty/`,
+  Apache-2.0. Standing claim boundary: Mithraic framing is **ornament
+  throughout, not evidence**; operating-envelope evidence not proof; does
+  not transfer to foundation models; field-grounding **relocates** the
+  attack surface (not deletes). Companions: brand essay at
+  [`mesa/CREDIT_THE_CAP_NOT_THE_COUNCIL_POST.md`](mesa/CREDIT_THE_CAP_NOT_THE_COUNCIL_POST.md);
+  LW/AF technical companion (brand-stripped) at
+  [`mesa/CAP_NOT_COUNCIL_LW_POST.md`](mesa/CAP_NOT_COUNCIL_LW_POST.md).
 - [Sundog Tauroctony ledger](SUNDOG_V_TAUROCTONY.md): the portfolio's
   mythopoetic cosmogram — the tauroctony as one image holding the empirical
   ledgers (Sol/field, the bull/maximand, the two torchbearers, the bestiary as

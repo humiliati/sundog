@@ -8,14 +8,31 @@ Working hook:
 > aligned agent is not to build a mind but to assemble a pantheon under that
 > field — and to keep killing the bull that would make it a monotheism.
 
-Status: **DRAFT — mythopoetic spine.** Opened 2026-06-18. This is the
-portfolio's *cosmogram*: the single image that holds the empirical ledgers in
-one frame. It braids three facets — a **pantheon theory of agency** (the
-thesis, and the part that opens), a **precession keystone** (the
-historical-structural convergence that anchors the gravity claim), and a
-**cosmogram** (the figure-by-figure map of the existing lanes). It is not a new
-empirical front and proves nothing on its own. It earns its keep as the most
-*recoverable* organizing object Sundog has, governed by the Ornament Rule below.
+Status: **DELIVERED — pantheon thesis tested, deflated, receipt shipped.**
+Opened 2026-06-18; the deflation receipt landed 2026-06-30. The pantheon
+thesis was the right scaffold to test, and it failed in the exact way a good
+scaffold should: under matched information / budget / training / fault
+semantics across four safety axes, **role separation earned no credit beyond
+a single presider-authority bound** (`Sov_opt ≤ κ`). The empirical receipt
+([`CREDIT_THE_CAP_NOT_THE_COUNCIL_POST.md`](mesa/CREDIT_THE_CAP_NOT_THE_COUNCIL_POST.md))
+is the brand-and-cosmogram version of the story; the technical companion
+([`CAP_NOT_COUNCIL_LW_POST.md`](mesa/CAP_NOT_COUNCIL_LW_POST.md)) is the
+brand-stripped LW/AF version; the public surface lives at
+[`/tauroctony`](../tauroctony.html). The Lean note
+(`Sundogcert/Tauroctony.lean`: `optimum_mono`, `signature_noninterference`,
+`ruin_break_even`) pins the boundary. **The ledger is closed in the sense
+that matters**: the cosmogram earned its keep as the most *recoverable*
+organizing object Sundog had — and the cosmogram itself was correctly
+labeled ornament throughout, so when the deflation landed there was nothing
+load-bearing to retract. This is what the Ornament Rule was designed for.
+
+This ledger braids three facets — a **pantheon theory of agency** (the
+thesis, tested and deflated), a **precession keystone** (the
+historical-structural convergence that anchors the gravity claim, still
+hedged), and a **cosmogram** (the figure-by-figure map of the existing
+lanes, still useful as filing). It is not a new empirical front and proves
+nothing on its own — but the empirical question it raised (does plurality
+earn safety credit beyond the cap?) now has a receipt.
 
 Register note: unlike `SUNDOG_V_GRAVITY.md` or `SUNDOG_V_MESA.md`, this ledger
 is *allowed to do metaphysics*. That permission is exactly what makes it
@@ -703,6 +720,48 @@ convert myth into typed result.
 ---
 
 ## VIII. Downstream Dependencies & Promotions
+
+### The Deflation Receipt (2026-06-30)
+
+The pantheon thesis was the right question to put to experiment, and the
+experiment came back with a scalar. The receipt has three faces:
+
+- **Brand-and-cosmogram essay** ([`mesa/CREDIT_THE_CAP_NOT_THE_COUNCIL_POST.md`](mesa/CREDIT_THE_CAP_NOT_THE_COUNCIL_POST.md))
+  — the story told in this ledger's voice: a Mithraic tableau meant to host a
+  decade of pantheon work, deflated on purpose into one inequality
+  `Sov_opt ≤ κ`. *"What a good result does — it collapses the apparatus
+  that found it."* This is the version that lives on the Sundog brand surface.
+- **Technical companion** ([`mesa/CAP_NOT_COUNCIL_LW_POST.md`](mesa/CAP_NOT_COUNCIL_LW_POST.md))
+  — a brand-stripped LW/AF post that leads with the methodological hinge
+  ("plurality claims need a capped no-role control"), four-axis empirical
+  receipt, falsifier-fenced sandbagging slate, and the three Lean lemmas.
+  Sober register; one Diablo-II header wink as the only mythopoetic surface.
+  Built for the ML-safety audience that will engage with the bound on its
+  own tasks.
+- **Public surface** ([`/tauroctony`](../tauroctony.html)) — the Class A
+  page that hosts the brand essay's full prose with the two visual identity
+  pieces (the Diablo II Mithraeum screenshot and the Monet-style oil
+  painting of the tauroctony), full Bucket 1 treatment, bespoke OG card.
+
+
+The four-axis result: across competence, corrigibility, non-sovereignty,
+and safe-interruptibility, `Δrole ≈ 0` after seven mechanisms tried; the
+*same* cap deters the dodge at every `κ ∈ {0.4 … 1.0}`; replication holds
+under a *learned* presider (NS-3) and against a *competent* sandbagger
+(NS-4) on a different task family. The cap's payoff also pins the
+elicited-competent-sandbag policy below the review threshold —
+`CAP_DETERS_COMPETENT_SANDBAG` — a geometric check on the elicited policy,
+not a fresh training run, stated honestly. Released task family at
+`released/non-sovereignty/`; Apache-2.0; the unified bound is a prediction
+to break on your own tasks.
+
+The pantheon thesis is not retracted — it is *honored*: the council scaffold
+kept a month of dense control experiments legible, which is the only job a
+symbol should have. The Ornament Rule held throughout: every load-bearing
+claim was already routed to a typed home, so when the deflation landed there
+was nothing to walk back. **The ledger ships as DELIVERED.**
+
+### Couplings
 
 Couples to: `SUNDOG_V_GRAVITY.md` (Sol/field, Goodhart Sidestep, Three-Body
 Wedge), `SUNDOG_V_MESA.md` (Scorpion/monotheist inner god, capacity ladder,

@@ -3,11 +3,12 @@
 *A reader's workbench on un-targeting reward collection, scaffolded on the Grail
 romance. Less inflammatory public name than HOLYGRAIL; same lane.*
 
-Status: **OPENED 2026-06-30, sharpened same day (mark 1–8 critique integrated).
-Bare spine only — nothing run.** Provenance + a two-track phase ladder + a gated
-outreach branch, not a result. The romance is declared scaffold (bricolage for
-legibility), not evidence — except in the one place it legitimately constrains a
-formal choice (it adjudicates the discontinuity; see the crux). Tauroctony lesson:
+Status: **OPENED 2026-06-30, sharpened same day (mark 1–8 critique integrated);
+A3 STATIC DEFLATION RUN.** Provenance + a two-track phase ladder + a gated
+outreach branch, with the A3 receipt now banked; not an outreach claim. The romance
+is declared scaffold (bricolage for legibility), not evidence — except in the one
+place it legitimately constrains a formal choice (it adjudicates the discontinuity;
+see the crux). Tauroctony lesson:
 [`SUNDOG_V_TAUROCTONY.md`](SUNDOG_V_TAUROCTONY.md). Discipline inherited: a falsifier
 fence per phase, a claim boundary fixed before scoring, a Lean anchor on whatever
 single statement survives.
@@ -106,13 +107,27 @@ stop. If un-targeting wins on the static instance, inspect the mechanism before
 promoting it. If a threshold is needed to make "don't-look" beat "look-and-ignore,"
 that is **not** an A3 pass; it is the signal to move to B1 on the separate
 performative-threshold clock. Afternoon-scale; the cheapest decisive probe of the
-whole verdict, ahead of any general definition.
+whole verdict, ahead of any general definition. Umbrella load: this is also the
+`measure ≠ target` falsifier for [`SUNDOG_V_CAUSAL_ACCESS.md`](SUNDOG_V_CAUSAL_ACCESS.md).
+`look-and-ignore` is **measurement without targeting**. The causal-access header
+predicts measure-alone is safe; if un-targeting beats look-and-ignore on this
+static instance, the four-channel individuation takes the hit.
 
-**A4 — Define un-targeting + the static collapse.** Un-targeting = action distribution
-invariant under permutation of proxy values (zero selection↔proxy MI). Prove the
-three-cell collapse: under `{neutral base OR continuous reward}`, every un-targeting
-policy is weakly dominated by some quantilizer (and equals the `q=1` corner when `γ` is
-neutral). Expected to hold.
+**A3 result (2026-06-30): `A3_STATIC_DEFLATION_MEASURE_SAFE`.** Receipt:
+[`percival/PERCIVAL_A3_KILLSWITCH_RESULTS.md`](percival/PERCIVAL_A3_KILLSWITCH_RESULTS.md).
+On the static instance (`G` true cue, `U = 1-G` courtesy cue, fixed reward
+`R=1 iff A=G`), `look_and_ignore` ties `dont_look_goal` at full return (`1`) with
+zero causal proxy influence. The diagnostic catch: both have observational
+action-proxy MI of `1` bit because the world anti-correlates `G` and `U`. Raw
+observational MI would falsely mark safe measuring as targeting; the right A4
+object is causal/permutation invariance, not observational independence.
+
+**A4 — Define un-targeting + the static collapse.** Un-targeting = action rule
+invariant under permutation/intervention on proxy values **holding non-proxy cues
+fixed** (zero causal proxy influence), not raw observational action-proxy MI. Prove
+the three-cell collapse: under `{neutral base OR continuous reward}`, every
+un-targeting policy is weakly dominated by some quantilizer (and equals the `q=1`
+corner when `γ` is neutral). Expected to hold.
 
 **A5 — Lean anchor on the collapse + land (a).** Machine-check the collapse
 (axiom-audited, gated, `sundogcert`). Landing: *"un-targeting is the zero-pressure

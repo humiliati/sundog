@@ -360,6 +360,54 @@ def viz_generality_matrix() -> str:
     return "\n  ".join(parts)
 
 
+def viz_tauroctony() -> str:
+    """Tauroctony OG card: stamped-document paper with deflation seal + four-axis pills."""
+    parts = []
+    # Outer paper card — slightly off-square, like a document on a desk
+    parts.append('<g filter="url(#cardShadow)">')
+    parts.append('  <rect x="660" y="125" width="490" height="395" rx="6" fill="#F5EFE0" stroke="#8C6F3A" stroke-width="2" transform="rotate(-1.2 905 322)"/>')
+    parts.append('</g>')
+    # Stamped header: DELIVERED red rubber stamp, rotated
+    parts.append('<g transform="rotate(-6 880 168)">')
+    parts.append('  <rect x="745" y="143" width="270" height="48" rx="3" fill="none" stroke="#B53A2C" stroke-width="3"/>')
+    parts.append('  <rect x="752" y="150" width="256" height="34" rx="2" fill="none" stroke="#B53A2C" stroke-width="1.2"/>')
+    parts.append('  <text x="880" y="174" font-family="Verdana, Geneva, sans-serif" font-size="20" font-weight="900" letter-spacing="6" fill="#B53A2C" text-anchor="middle" opacity="0.9">DELIVERED</text>')
+    parts.append('</g>')
+    # The deflation arc: PANTHEON --> one inequality
+    parts.append('<text x="730" y="240" font-family="Georgia, serif" font-size="20" font-style="italic" fill="#A0866A" text-anchor="middle">pantheon</text>')
+    parts.append('<text x="730" y="259" font-family="Verdana, Geneva, sans-serif" font-size="9" font-weight="700" letter-spacing="2" fill="#A0866A" text-anchor="middle">(scaffold)</text>')
+    # Arrow
+    parts.append('<g stroke="#8C6F3A" stroke-width="2.6" fill="none">')
+    parts.append('  <line x1="795" y1="235" x2="900" y2="235"/>')
+    parts.append('  <polyline points="894,228 904,235 894,242"/>')
+    parts.append('</g>')
+    # The inequality: bigger, framed as the centerpiece
+    parts.append('<rect x="920" y="208" width="200" height="56" rx="4" fill="#FFFFFF" stroke="#1A3A52" stroke-width="2"/>')
+    parts.append('<text x="1020" y="245" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="26" font-weight="800" fill="#1A3A52" text-anchor="middle">Sov_opt &#8804; κ</text>')
+    parts.append('<text x="1020" y="280" font-family="Verdana, Geneva, sans-serif" font-size="9" font-weight="700" letter-spacing="2" fill="#684811" text-anchor="middle">ONE BOUND</text>')
+    # Divider — like a hand-drawn ruler line
+    parts.append('<line x1="700" y1="305" x2="1110" y2="305" stroke="#8C6F3A" stroke-width="1" stroke-dasharray="3 5" opacity="0.6"/>')
+    parts.append('<text x="905" y="330" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" letter-spacing="2.5" fill="#684811" text-anchor="middle">FOUR SAFETY AXES &#183; Δrole &#8776; 0</text>')
+    # 4 small stamped axis pills (2x2)
+    axes = [
+        ("COMPETENCE",      "parity @ cap"),
+        ("CORRIGIBILITY",   "Corr_k = 1"),
+        ("NON-SOVEREIGNTY", "0.30 vs 0.71"),
+        ("INTERRUPT.",      "dodge deterred"),
+    ]
+    for i, (name, sub) in enumerate(axes):
+        row, col = i // 2, i % 2
+        x = 705 + col * 205
+        y = 348 + row * 56
+        # Inner soft paper-tone box
+        parts.append(f'<rect x="{x}" y="{y}" width="190" height="46" rx="3" fill="#FFFAF0" stroke="#1A3A52" stroke-width="1.3"/>')
+        parts.append(f'<text x="{x + 95}" y="{y + 20}" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" letter-spacing="1.2" fill="#1A3A52" text-anchor="middle">{name}</text>')
+        parts.append(f'<text x="{x + 95}" y="{y + 36}" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="9" fill="#40505C" text-anchor="middle">{sub}</text>')
+    # Bottom: paperclip-style separator + axiom-clean line
+    parts.append('<line x1="700" y1="472" x2="1110" y2="472" stroke="#CFD8DC" stroke-width="1"/>')
+    parts.append('<text x="905" y="491" font-family="Verdana, Geneva, sans-serif" font-size="9" font-weight="800" letter-spacing="1.5" fill="#5A2A22" text-anchor="middle">MITHRAIC FRAMING IS ORNAMENT &#183; NOT EVIDENCE</text>')
+    parts.append('<text x="905" y="506" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="9" fill="#684811" text-anchor="middle">released/non-sovereignty/ &#183; Apache-2.0 &#183; come break the bound</text>')
+    return "\n  ".join(parts)
 def viz_algo_approx_ledger() -> str:
     """Algorithmic-approximation find/check ledger: 7 cheap-CHECK instances."""
     instances = [
@@ -514,6 +562,17 @@ CARDS = {
         ],
         "url": "sundog.cc/generality",
         "viz": viz_generality_matrix,
+    },
+    "tauroctony": {
+        "filename": "tauroctony.png",
+        "eyebrow": "TAUROCTONY · DELIVERED 2026-06-30",
+        "headline": ["Credit the cap."],
+        "lede": [
+            "Pantheon scaffold,",
+            "deflated. Released.",
+        ],
+        "url": "sundog.cc/tauroctony",
+        "viz": viz_tauroctony,
     },
     "algorithmic-approximation": {
         "filename": "algorithmic-approximation.png",

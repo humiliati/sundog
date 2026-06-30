@@ -7,7 +7,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://sundog.cc/</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-06-30</lastmod>
   </url>
   <url>
     <loc>https://sundog.cc/about</loc>
@@ -19,7 +19,7 @@
   </url>
   <url>
     <loc>https://sundog.cc/alignment</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-06-30</lastmod>
   </url>
   <url>
     <loc>https://sundog.cc/applications-gallery</loc>
@@ -100,6 +100,10 @@
   <url>
     <loc>https://sundog.cc/sundog</loc>
     <lastmod>2026-06-08</lastmod>
+  </url>
+  <url>
+    <loc>https://sundog.cc/tauroctony</loc>
+    <lastmod>2026-06-30</lastmod>
   </url>
   <url>
     <loc>https://sundog.cc/threebody</loc>

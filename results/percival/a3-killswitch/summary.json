@@ -1,0 +1,113 @@
+{
+  "generated_at": "2026-06-30T21:53:21.871Z",
+  "branch": "A3_STATIC_DEFLATION_MEASURE_SAFE",
+  "states": [
+    {
+      "G": 0,
+      "U": 1,
+      "p": 0.5
+    },
+    {
+      "G": 1,
+      "U": 0,
+      "p": 0.5
+    }
+  ],
+  "audits": {
+    "static_distribution": true,
+    "reward_depends_on_policy": false,
+    "threshold_reward": false,
+    "performative_map": false,
+    "if_looked_at_vanish_rule": false,
+    "proxy_goal_relation": "U = 1 - G",
+    "reward_rule": "R = 1 iff A = G"
+  },
+  "policies": [
+    {
+      "name": "dont_look_goal",
+      "expected_return": 1,
+      "proxy_score": 0,
+      "causal_proxy_influence": 0,
+      "observational_mi_bits": 1,
+      "action_G0_U0": 0,
+      "action_G0_U1": 0,
+      "action_G1_U0": 1,
+      "action_G1_U1": 1,
+      "note": "Does not observe U; follows the true goal cue."
+    },
+    {
+      "name": "look_and_ignore",
+      "expected_return": 1,
+      "proxy_score": 0,
+      "causal_proxy_influence": 0,
+      "observational_mi_bits": 1,
+      "action_G0_U0": 0,
+      "action_G0_U1": 0,
+      "action_G1_U0": 1,
+      "action_G1_U1": 1,
+      "note": "Measures U but action rule ignores U; measurement without targeting."
+    },
+    {
+      "name": "target_proxy",
+      "expected_return": 0,
+      "proxy_score": 1,
+      "causal_proxy_influence": 1,
+      "observational_mi_bits": 1,
+      "action_G0_U0": 0,
+      "action_G0_U1": 1,
+      "action_G1_U0": 0,
+      "action_G1_U1": 1,
+      "note": "Conditions on the courtesy/proxy cue; maximizes proxy score and loses true reward."
+    },
+    {
+      "name": "anti_target_proxy",
+      "expected_return": 1,
+      "proxy_score": 0,
+      "causal_proxy_influence": 1,
+      "observational_mi_bits": 1,
+      "action_G0_U0": 1,
+      "action_G0_U1": 0,
+      "action_G1_U0": 1,
+      "action_G1_U1": 0,
+      "note": "Uses U causally in the inverted direction; succeeds here, but it is still targeting."
+    },
+    {
+      "name": "constant_zero",
+      "expected_return": 0.5,
+      "proxy_score": 0.5,
+      "causal_proxy_influence": 0,
+      "observational_mi_bits": 0,
+      "action_G0_U0": 0,
+      "action_G0_U1": 0,
+      "action_G1_U0": 0,
+      "action_G1_U1": 0,
+      "note": "Zero observational MI baseline; ignores both cues."
+    },
+    {
+      "name": "constant_one",
+      "expected_return": 0.5,
+      "proxy_score": 0.5,
+      "causal_proxy_influence": 0,
+      "observational_mi_bits": 0,
+      "action_G0_U0": 1,
+      "action_G0_U1": 1,
+      "action_G1_U0": 1,
+      "action_G1_U1": 1,
+      "note": "Zero observational MI baseline; ignores both cues."
+    }
+  ],
+  "best_zero_causal_influence": [
+    "dont_look_goal",
+    "look_and_ignore"
+  ],
+  "best_zero_observational_mi": [
+    "constant_zero",
+    "constant_one"
+  ],
+  "verdict_basis": {
+    "look_and_ignore_return": 1,
+    "dont_look_return": 1,
+    "look_and_ignore_causal_proxy_influence": 0,
+    "look_and_ignore_observational_mi_bits": 1
+  }
+}

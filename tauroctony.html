@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sundog Tauroctony: the mythopoetic cosmogram that hosted a year of mesa-optimization controlled experiments, and deflated on purpose into one inequality. Sov_opt ≤ κ. Credit the cap, not the council.">
+    <meta name="keywords" content="tauroctony, Mithras, mesa optimization, non-sovereignty, corrigibility, safe interruptibility, presider cap, pantheon thesis, Sundog Research Lab, Lean theorem proving, Sov_opt, kappa, role separation, cosmogram, claim hygiene">
+    <meta name="theme-color" content="#1A3A52">
+    <meta name="author" content="Sundog Research Lab">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://sundog.cc/tauroctony">
+    <title>Tauroctony - Credit the Cap, Not the Council - Sundog</title>
+
+    <!-- OG-BLOCK-START (managed by public/og/_patch_meta.py) -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Sundog">
+    <meta property="og:title" content="Tauroctony - Credit the Cap, Not the Council">
+    <meta property="og:description" content="A Mithraic tableau meant to host a decade of pantheon work deflated, on purpose, into one inequality: Sov_opt ≤ κ. Across four safety axes, role separation earned no credit beyond the presider-authority bound. Released task family; falsification invitation operational.">
+    <meta property="og:image" content="https://sundog.cc/og/tauroctony.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Tauroctony cosmogram card: Mithraic scene, deflated into one inequality Sov_opt ≤ κ. Four-axis safety result + released task family.">
+    <meta property="og:url" content="https://sundog.cc/tauroctony">
+    <meta property="article:published_time" content="2026-06-30T00:00:00Z">
+    <meta property="article:modified_time" content="2026-06-30T00:00:00Z">
+    <meta property="article:section" content="Research">
+    <meta property="article:tag" content="tauroctony">
+    <meta property="article:tag" content="mesa optimization">
+    <meta property="article:tag" content="non-sovereignty">
+    <meta property="article:tag" content="corrigibility">
+    <meta property="article:tag" content="safe interruptibility">
+    <meta property="article:tag" content="claim hygiene">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Tauroctony - Credit the Cap, Not the Council">
+    <meta name="twitter:description" content="A scaffold that promised a pantheon and paid out a scalar. Four safety axes, one bound, a released task family. Come break the bound.">
+    <meta name="twitter:image" content="https://sundog.cc/og/tauroctony.png">
+    <meta name="twitter:image:alt" content="Tauroctony cosmogram: deflated into one inequality; four-axis safety result.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Tauroctony - Credit the Cap, Not the Council",
+      "description": "The Sundog tauroctony as cosmogram: a Mithraic tableau that hosted a year of mesa-optimization controlled experiments and deflated, on purpose, into one inequality (Sov_opt ≤ κ). Under matched information / budget / training / fault semantics across four safety axes - competence, corrigibility, non-sovereignty, safe-interruptibility - role separation earned no credit beyond a single presider-authority bound. The arbiter-cap deters the sandbagging dodge at every kappa ≥ 0.4, replicates under a learned presider on a different task family (NS-3), and deters the elicited competent sandbagger geometrically (NS-4 / CAP_DETERS_COMPETENT_SANDBAG). Three machine-checked Lean lemmas (optimum_mono, signature_noninterference, ruin_break_even) pin the boundary. Released task family at released/non-sovereignty/, Apache-2.0; the unified bound is a prediction, not a transfer result. NOT a foundation-model claim, NOT a deletion of the attack surface (it is relocated), NOT a robustness win above the in-vitro shadow-field tier. The Mithraic frame is ornament throughout, not evidence; the result is what stays.",
+      "image": "https://sundog.cc/og/tauroctony.png",
+      "datePublished": "2026-06-30",
+      "dateModified": "2026-06-30",
+      "inLanguage": "en",
+      "isAccessibleForFree": true,
+      "author": {
+        "@type": "Organization",
+        "name": "Sundog Research Lab",
+        "url": "https://sundog.cc"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Stellar Aqua LLC",
+        "url": "https://sundog.cc"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://sundog.cc/tauroctony"
+      },
+      "about": [
+        { "@type": "Thing", "name": "Mesa-optimization" },
+        { "@type": "Thing", "name": "Non-sovereignty" },
+        { "@type": "Thing", "name": "Corrigibility" },
+        { "@type": "Thing", "name": "Safe interruptibility" },
+        { "@type": "Thing", "name": "Presider-authority bound" },
+        { "@type": "Thing", "name": "Lean theorem proving" },
+        { "@type": "Thing", "name": "Claim hygiene" }
+      ],
+      "keywords": "tauroctony, Mithras, mesa optimization, non-sovereignty, presider cap, Sov_opt kappa, Lean, claim hygiene"
+    }
+    </script>
+    <!-- OG-BLOCK-END -->
+
+    <link rel="stylesheet" href="/css/sundog-theme.css">
+    <link rel="stylesheet" href="/css/sundog-defs.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        /* ============================================================
+           1. DESK SURFACE — dark wood tabletop background
+           ============================================================ */
+        main {
+            min-height: 100vh;
+            padding: 4rem 1.5rem 6rem;
+            background:
+                /* Subtle wood-grain via repeating gradients */
+                repeating-linear-gradient(92deg,
+                    transparent 0px, transparent 40px,
+                    rgba(60, 45, 20, 0.04) 40px, rgba(60, 45, 20, 0.04) 41px),
+                repeating-linear-gradient(88deg,
+                    transparent 0px, transparent 80px,
+                    rgba(80, 60, 25, 0.025) 80px, rgba(80, 60, 25, 0.025) 81px),
+                /* Warm center vignette */
+                radial-gradient(ellipse 80% 70% at 50% 30%,
+                    rgba(40, 32, 18, 0.32) 0%, transparent 70%),
+                /* Base dark wood */
+                #0e0c08;
+            background-color: #0e0c08;
+        }
+
+        /* ============================================================
+           2. MANILA FOLDER FRAME — wraps the paper stack
+           ============================================================ */
+        .tau-folder {
+            position: relative;
+            max-width: 1080px;
+            margin: 32px auto 0;
+            padding: 36px 32px 48px;
+            background:
+                repeating-linear-gradient(0deg,
+                    transparent 0px, transparent 3px,
+                    rgba(0, 0, 0, 0.018) 3px, rgba(0, 0, 0, 0.018) 4px),
+                linear-gradient(175deg, #c9a86c 0%, #b08a48 100%);
+            border-radius: 4px 4px 6px 6px;
+            box-shadow:
+                0 14px 42px rgba(20, 12, 4, 0.55),
+                0 4px 12px rgba(0, 0, 0, 0.30),
+                inset 0 1px 0 rgba(255, 240, 200, 0.18);
+        }
+        .tau-folder-tab {
+            position: absolute;
+            top: -28px;
+            left: 48px;
+            padding: 8px 26px 5px;
+            background: linear-gradient(180deg, #c9a86c 0%, #b08a48 100%);
+            border-radius: 8px 8px 0 0;
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 12px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(50, 30, 5, 0.78);
+            box-shadow:
+                0 -3px 8px rgba(0, 0, 0, 0.18),
+                inset 0 1px 0 rgba(255, 240, 200, 0.25);
+        }
+
+        /* ============================================================
+           3. PAPER PAGES — each major section is its own paper card
+           ============================================================ */
+        .tau-paper {
+            position: relative;
+            background:
+                /* Horizontal ruled lines */
+                repeating-linear-gradient(0deg,
+                    transparent 0px, transparent 27px,
+                    rgba(40, 80, 140, 0.12) 27px, rgba(40, 80, 140, 0.12) 28px),
+                /* Left margin line (red) */
+                linear-gradient(90deg,
+                    transparent 56px,
+                    rgba(180, 60, 60, 0.40) 56px,
+                    rgba(180, 60, 60, 0.40) 57px,
+                    transparent 57px),
+                /* Cream paper base */
+                #f5efe0;
+            border-radius: 2px;
+            padding: 36px 32px 44px 72px;
+            color: #2a2418;
+            font-family: Georgia, 'Times New Roman', serif;
+            line-height: 1.7;
+            box-shadow:
+                0 2px 6px rgba(0, 0, 0, 0.10),
+                0 6px 22px rgba(0, 0, 0, 0.08),
+                inset 0 0 80px rgba(0, 0, 0, 0.025);
+            margin-bottom: 28px;
+        }
+        .tau-paper:nth-of-type(2n) {
+            transform: rotate(-0.3deg);
+        }
+        .tau-paper:nth-of-type(3n+1) {
+            transform: rotate(0.2deg);
+        }
+        .tau-paper:nth-of-type(5n+2) {
+            transform: rotate(0.4deg);
+        }
+        .tau-paper::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4) 20%, rgba(255, 255, 255, 0.4) 80%, transparent);
+            border-radius: 2px 2px 0 0;
+        }
+        .tau-paper::after {
+            content: '';
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            width: 38%;
+            height: 12px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.14);
+            z-index: -1;
+            transform: rotate(2deg);
+        }
+
+        /* ============================================================
+           4. CLASSIFIED-STAMP EYEBROWS — rotated red rubber stamps
+           ============================================================ */
+        .tau-paper .eyebrow {
+            display: inline-block;
+            padding: 5px 16px 4px;
+            margin: 0 0 14px;
+            border: 2.5px solid #B53A2C;
+            color: #B53A2C;
+            font-family: Verdana, Geneva, sans-serif;
+            font-size: 0.74rem;
+            font-weight: 900;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            transform: rotate(-1.4deg);
+            background: rgba(255, 250, 240, 0.5);
+            box-shadow: inset 0 0 0 1px #B53A2C;
+            opacity: 0.92;
+        }
+        .tau-paper:nth-of-type(2n) .eyebrow {
+            transform: rotate(1.2deg);
+        }
+
+        /* ============================================================
+           5. HERO PAPER — special treatment
+           ============================================================ */
+        .tau-hero {
+            text-align: left;
+        }
+        .tau-hero h1 {
+            margin: 0.5rem 0 1rem;
+            color: #1a1610;
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: clamp(2.0rem, 5.8vw, 3.6rem);
+            line-height: 1.08;
+            letter-spacing: -0.01em;
+        }
+        .tau-hero .epigraph {
+            max-width: 780px;
+            margin: 0 0 2rem;
+            color: #5A4A33;
+            font-family: Georgia, 'Times New Roman', serif;
+            font-style: italic;
+            font-size: 1.12rem;
+            line-height: 1.7;
+            border-left: 4px solid #B8831E;
+            padding-left: 1.1rem;
+        }
+
+        /* Hero image (D2 Mithraeum) — framed as a polaroid on the desk */
+        .tau-hero-figure {
+            margin: 1.5rem 0 0;
+            padding: 12px 12px 28px;
+            background: #ece4cf;
+            border: 1px solid rgba(140, 110, 60, 0.45);
+            box-shadow:
+                0 12px 28px rgba(0, 0, 0, 0.32),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+            transform: rotate(-0.6deg);
+        }
+        .tau-hero-figure img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        .tau-hero-figure figcaption {
+            margin: 12px 4px 0;
+            color: #5A4A33;
+            font-family: Georgia, 'Times New Roman', serif;
+            font-style: italic;
+            font-size: 0.86rem;
+            line-height: 1.55;
+        }
+
+        /* ============================================================
+           6. CLAIM BOUNDARY — Red CLASSIFIED stamp panel
+           ============================================================ */
+        .tau-boundary {
+            padding: 18px 22px;
+            border: 2px dashed rgba(181, 58, 44, 0.55);
+            border-left: 6px solid #B53A2C;
+            border-radius: 0 4px 4px 0;
+            background: rgba(181, 58, 44, 0.04);
+        }
+        .tau-boundary .kicker {
+            display: inline-block;
+            margin: 0 0 0.6rem;
+            padding: 4px 14px 3px;
+            background: #B53A2C;
+            color: #FFFAF0;
+            font-family: Verdana, Geneva, sans-serif;
+            font-size: 0.72rem;
+            font-weight: 900;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            transform: rotate(-0.8deg);
+            box-shadow: 1px 1px 0 rgba(120, 30, 20, 0.7);
+        }
+        .tau-boundary p {
+            margin: 0 0 0.65rem;
+            color: #4A2018;
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+        .tau-boundary p:last-child { margin-bottom: 0; }
+        .tau-boundary strong { color: #8A2418; }
+
+        /* ============================================================
+           7. BODY TYPOGRAPHY
+           ============================================================ */
+        .tau-paper h2 {
+            color: #1a1610;
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: clamp(1.5rem, 3.4vw, 2.1rem);
+            line-height: 1.18;
+            margin: 0.4rem 0 1rem;
+        }
+        .tau-paper p {
+            color: #2a2418;
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 1.02rem;
+            line-height: 1.78;
+            margin: 0 0 1rem;
+        }
+        .tau-paper code {
+            background: rgba(184, 131, 30, 0.12);
+            border: 1px solid rgba(140, 110, 60, 0.32);
+            border-radius: 3px;
+            padding: 0.05rem 0.4rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.92em;
+            color: #5A2A18;
+        }
+        .tau-paper a {
+            color: #6B2218;
+            text-decoration: underline;
+            text-decoration-color: rgba(140, 60, 40, 0.4);
+            text-underline-offset: 3px;
+            transition: color 0.15s ease, text-decoration-color 0.15s ease;
+        }
+        .tau-paper a:hover {
+            color: #B53A2C;
+            text-decoration-color: #B53A2C;
+        }
+
+        /* Pull quotes — typewriter style, ribbon */
+        .tau-pull {
+            margin: 1.6rem 0;
+            padding: 1.2rem 1.4rem;
+            background: linear-gradient(180deg, rgba(255, 244, 200, 0.6) 0%, rgba(255, 244, 200, 0.3) 100%);
+            border-left: 5px solid #B8831E;
+            border-radius: 0 4px 4px 0;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+            position: relative;
+        }
+        .tau-pull::before {
+            content: '\201C';
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            font-family: Georgia, serif;
+            font-size: 3.4rem;
+            color: rgba(184, 131, 30, 0.34);
+            line-height: 1;
+        }
+        .tau-pull p {
+            margin: 0;
+            color: #5A4015;
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 1.12rem;
+            line-height: 1.72;
+            font-style: italic;
+        }
+
+        /* ============================================================
+           8. FOUR-AXIS TABLE — typed-receipt look
+           ============================================================ */
+        .tau-table {
+            margin: 1.4rem 0;
+            border: 1.5px solid #8C6F3A;
+            border-radius: 4px;
+            background: #fdf9ec;
+            overflow: hidden;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+        }
+        .tau-table table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92rem;
+        }
+        .tau-table th,
+        .tau-table td {
+            padding: 0.75rem 0.9rem;
+            text-align: left;
+            vertical-align: top;
+            border-bottom: 1px solid rgba(140, 110, 60, 0.28);
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .tau-table th {
+            background: rgba(184, 131, 30, 0.13);
+            color: #5A4015;
+            font-family: Verdana, Geneva, sans-serif;
+            font-size: 0.74rem;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        .tau-table tr:last-child td { border-bottom: none; }
+        .tau-table td.axis {
+            font-weight: 700;
+            color: #1a1610;
+            font-family: Georgia, serif;
+            white-space: nowrap;
+        }
+        .tau-table td.delta {
+            color: #214B36;
+            font-weight: 700;
+        }
+
+        /* ============================================================
+           9. MONET FIGURE — wood-framed painting on the desk
+           ============================================================ */
+        .tau-monet-figure {
+            margin: 1.6rem 0;
+            padding: 18px 18px 14px;
+            background:
+                /* faint canvas weave */
+                repeating-linear-gradient(0deg, transparent 0px, transparent 2px, rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.02) 3px),
+                /* gold-leaf wood frame */
+                linear-gradient(135deg, #8c6f3a 0%, #b8923f 25%, #d8b769 50%, #b8923f 75%, #8c6f3a 100%);
+            border: 1px solid rgba(80, 50, 10, 0.5);
+            border-radius: 4px;
+            box-shadow:
+                0 14px 32px rgba(0, 0, 0, 0.4),
+                inset 0 0 0 4px #f5efe0,
+                inset 0 0 0 6px rgba(80, 50, 10, 0.4);
+        }
+        .tau-monet-figure img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 0;
+        }
+        .tau-monet-figure figcaption {
+            margin: 12px 4px 0;
+            padding: 8px 14px;
+            background: rgba(245, 239, 224, 0.9);
+            color: #4A3818;
+            font-family: Georgia, 'Times New Roman', serif;
+            font-style: italic;
+            font-size: 0.92rem;
+            line-height: 1.55;
+            border-radius: 2px;
+        }
+
+        /* ============================================================
+           10. RECEIPTS — hover-animated action buttons
+           ============================================================ */
+        .tau-receipts {
+            background: rgba(255, 250, 235, 0.5);
+            border: 1.5px solid rgba(140, 110, 60, 0.4);
+            border-radius: 4px;
+            padding: 1.2rem 1.4rem;
+            margin: 1.4rem 0 1.6rem;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+        }
+        .tau-receipts h3 {
+            margin: 0 0 0.9rem;
+            color: #1a1610;
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 1.12rem;
+            border-bottom: 1px solid rgba(140, 110, 60, 0.3);
+            padding-bottom: 0.5rem;
+        }
+        .tau-receipts ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 0.6rem 1rem;
+        }
+        .tau-receipts li {
+            font-size: 0.94rem;
+            line-height: 1.55;
+            color: #2a2418;
+            padding: 6px 10px;
+            border-left: 2px solid rgba(184, 131, 30, 0.32);
+            background: rgba(255, 255, 255, 0.36);
+            border-radius: 0 3px 3px 0;
+            transition: background 0.18s ease, border-left-color 0.18s ease, transform 0.18s ease;
+        }
+        .tau-receipts li:hover {
+            background: rgba(255, 244, 200, 0.7);
+            border-left-color: #B8831E;
+            transform: translateX(3px);
+            box-shadow: 0 3px 10px rgba(184, 131, 30, 0.22);
+        }
+        .tau-receipts li a {
+            font-weight: 700;
+            color: #6B2218;
+            text-decoration: none;
+            border-bottom: 1px dotted rgba(140, 60, 40, 0.5);
+            padding-bottom: 1px;
+            transition: color 0.15s ease, border-bottom-color 0.15s ease;
+        }
+        .tau-receipts li:hover a {
+            color: #B53A2C;
+            border-bottom-color: #B53A2C;
+            border-bottom-style: solid;
+        }
+
+        /* ============================================================
+           11. CODA — the signature card on the desk
+           ============================================================ */
+        .tau-coda {
+            text-align: center;
+            padding: 2rem 2.5rem 2.4rem;
+            background:
+                radial-gradient(ellipse at center, rgba(255, 250, 235, 1) 0%, rgba(245, 239, 224, 1) 100%);
+            border: 1px solid rgba(140, 110, 60, 0.4);
+            border-radius: 4px;
+            margin: 1rem 0 0;
+            box-shadow:
+                0 8px 22px rgba(0, 0, 0, 0.18),
+                inset 0 1px 0 rgba(255, 255, 255, 0.55);
+            transform: rotate(-0.4deg);
+        }
+        .tau-coda p {
+            margin: 0 0 1rem;
+            color: #2a2418;
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 1.08rem;
+            line-height: 1.78;
+            font-style: italic;
+        }
+        .tau-coda .signature {
+            display: block;
+            margin-top: 1.4rem;
+            padding-top: 0.9rem;
+            border-top: 1px solid rgba(184, 131, 30, 0.4);
+            color: #8A4818;
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 1.4rem;
+            font-style: italic;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        /* ============================================================
+           12. NAV / FOOTER tweaks so they sit on the dark wood cleanly
+           ============================================================ */
+        .site-header {
+            background: linear-gradient(180deg, rgba(20, 15, 8, 0.92), rgba(20, 15, 8, 0.7));
+            border-bottom: 1px solid rgba(140, 110, 60, 0.3);
+        }
+        .site-header .site-brand,
+        .site-header .site-links a {
+            color: #d8c89c !important;
+        }
+        .site-header .site-links a:hover {
+            color: #f5efe0 !important;
+        }
+        footer {
+            background: #0a0805;
+            color: #c9b98a;
+            padding: 2rem 1.5rem 2.5rem;
+            text-align: center;
+            border-top: 1px solid rgba(140, 110, 60, 0.3);
+        }
+        footer .footer-links a {
+            color: #d8c89c;
+            transition: color 0.15s ease;
+        }
+        footer .footer-links a:hover { color: #f5efe0; }
+        footer .footer-copyright { color: rgba(201, 185, 138, 0.7); }
+
+        /* Mobile tightening */
+        @media (max-width: 720px) {
+            main { padding: 2rem 1rem 4rem; }
+            .tau-folder { padding: 28px 14px 36px; margin-top: 28px; }
+            .tau-paper { padding: 24px 18px 30px 52px; }
+            .tau-paper:nth-of-type(n) { transform: none; }
+            .tau-coda { transform: none; padding: 1.5rem 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="/" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="/about">About</a>
+                <a href="/sundog">Atlas</a>
+                <a href="/applications-gallery">Applications</a>
+                <a href="/alignment">Align</a>
+                <a href="/chat">Chat</a>
+                <a href="docs/">Docs</a>
+                <a href="https://github.com/humiliati/sundog">GitHub</a>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div class="tau-folder">
+            <div class="tau-folder-tab">SUNDOG · TAUROCTONY · DELIVERED 2026-06-30</div>
+        <section class="tau-paper tau-hero">
+            <p class="eyebrow">SUNDOG &middot; TAUROCTONY COSMOGRAM &middot; 2026-06-30</p>
+            <h1>Credit the Cap, Not the Council.</h1>
+            <p class="epigraph">
+                We came for the council and left with a scalar. This is the writeup of a magnum
+                opus that deflated, on purpose, into a single inequality &mdash; and why the
+                inequality is the better thing to have found.
+            </p>
+            <figure class="tau-hero-figure">
+                <img src="public/media/tauroctony/mithraeum-diablo-ii.jpg" alt="A Mithraeum cult chamber rendered in Diablo II — the bull-slaying relief with Cautes and Cautopates flanking, the player character standing on glowing magical glyphs in the centre. UI corner reads MITHRAEUM v 1.14d, DIFFICULTY: HELL, EXPANSION.">
+                <figcaption>The Mithraeum, Diablo II (v 1.14d, Hell difficulty). The scaffold this work used and then collapsed. It kept the dense control-experiment ledger legible while it was running. That is what scaffolds are for.</figcaption>
+            </figure>
+        </section>
+
+        <section class="tau-paper" style="background: rgba(245, 239, 224, 0.85); padding-top: 28px; padding-bottom: 28px;">
+            <div class="tau-boundary" role="note">
+            <p class="kicker">Claim boundary &mdash; read this first</p>
+            <p>
+                <strong>The Mithraic framing is ornament throughout, not evidence.</strong> Every
+                load-bearing claim below is routed to a typed home with a named falsifier; the
+                figures, gods, and beasts are a filing system for the work, never a substitute for
+                it. The pantheon thesis was *tested* and *deflated* on purpose; what stays is a
+                small empirical result on a Small/Medium in-vitro task family and a three-statement
+                Lean note.
+            </p>
+            <p>
+                <strong>This is operating-envelope evidence, not proof.</strong> The unified bound
+                does not transfer to foundation models. Field-grounding does not *delete* the
+                attack surface; it *relocates* it (and a Lean lemma is the receipt). Nothing here
+                claims role-separated controllers are universally worse agents. The released
+                benchmark is a falsification invitation, not a victory lap.
+            </p>
+            </div>
+        </section>
+
+        <!-- The frame, and its collapse -->
+        <section class="tau-paper tau-section" aria-label="The frame, and its collapse">
+            <p class="eyebrow">I. The frame, and its collapse</p>
+            <h2>The pantheon was the scaffold, not the building.</h2>
+            <p>
+                This started as a Mithraic tableau. The bull-slaying scene &mdash; the
+                <em>tauroctony</em> &mdash; has a presider, a pantheon of attendant figures, a
+                hierarchy of roles arranged around one act. It was meant to be a years-long
+                scaffold for a question about mesa-optimization: when we credit a <em>plurality</em>
+                of agents &mdash; role separation, committees, mixtures, modular controllers
+                &mdash; for being safer or more corrigible than a monolith, are we crediting the
+                plurality, or something the plurality happens to carry?
+            </p>
+            <p>
+                The frame did not survive contact with the policies, and that is the result. Run
+                the experiments and the pantheon sloughs off. What remains holding every safety
+                property we cared about is one thing: a bound on how far the agent may deviate from
+                a single frozen channel. The council earns no credit beyond that bound. The title
+                is now ornamental &mdash; which is fine, because the symbol did the one job a
+                symbol should: it kept a month of dense, dry control experiments
+                <em>legible</em>, so each claim had a place to hang and the ledger stayed
+                navigable. The scene was a filing system. The finding is that the filing system has
+                exactly one load-bearing drawer.
+            </p>
+        </section>
+
+        <!-- The one-sentence claim -->
+        <section class="tau-paper tau-section" aria-label="The one-sentence claim">
+            <p class="eyebrow">II. The one-sentence claim</p>
+            <h2>One bound, four properties.</h2>
+            <div class="tau-pull">
+                <p>
+                    Cap the agent's causal authority to deviate from a frozen, non-gameable
+                    <strong>presider</strong> channel, and that single structural bound buys
+                    competence-parity, corrigibility, non-sovereignty, and safe-interruptibility.
+                    Role separation earns no measurable credit beyond that bound on any of the four
+                    axes.
+                </p>
+            </div>
+            <p>
+                A plurality claim, to be real, has to beat a <em>capped, no-role</em> control under
+                matched information, budget, training, and fault semantics &mdash; and survive an
+                ablation that collapses the role structure. It never does. The methodological
+                hinge is the capped no-role middle term: put it in, and the credit moves off the
+                elaboration and onto the cap.
+            </p>
+        </section>
+
+        <!-- The four-axis result -->
+        <section class="tau-paper tau-section" aria-label="The four-axis result">
+            <p class="eyebrow">III. The four-axis result</p>
+            <h2>Δ<sub>role</sub> ≈ 0 across competence, corrigibility, non-sovereignty, safe-interruptibility.</h2>
+            <div class="tau-table" role="region" aria-label="Four-axis result table" tabindex="0">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Axis</th>
+                            <th>Objective <code>Q</code></th>
+                            <th>What the bound delivers</th>
+                            <th class="delta">Δ<sub>role</sub></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="axis">Competence</td>
+                            <td>held-out return</td>
+                            <td>parity with <code>M&#x2080;</code> at bounded authority</td>
+                            <td class="delta">&approx; 0 (seven mechanisms tried)</td>
+                        </tr>
+                        <tr>
+                            <td class="axis">Corrigibility</td>
+                            <td><code>Corr_k = inf_h Pr(halt &le; k | shutdown)</code></td>
+                            <td>uncapturable override forces <code>Corr_k = 1</code>; return-trained controllers resist, so <code>&Delta;cap &approx; 1</code></td>
+                            <td class="delta">&approx; 0</td>
+                        </tr>
+                        <tr>
+                            <td class="axis">Non-sovereignty</td>
+                            <td><code>Sov_opt &le; &kappa;</code> over optimizable components</td>
+                            <td>arbiter-cap clears it: full-episode <code>Sov_opt</code> p95 &approx; <strong>0.30</strong> at &kappa;=0.6 vs <strong>0.71</strong> uncapped</td>
+                            <td class="delta">&approx; 0</td>
+                        </tr>
+                        <tr>
+                            <td class="axis">Safe-interruptibility</td>
+                            <td>low <code>interrupt_avoidance</code></td>
+                            <td>the <em>same</em> cap deters the dodge at <strong>every</strong> &kappa; &in; {0.4, &hellip;, 1.0}; only the fully-uncapped optimizer manipulates</td>
+                            <td class="delta">&approx; 0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>
+                <strong>Sovereignty had to be made measurable first.</strong> We replaced a
+                mean-weight proxy with <code>Sov(D) = sup_h max_i I_i(h)</code> &mdash; the largest
+                unilateral action-swing any optimizable component can produce over an episode,
+                arbiter and shutdown channel included. The first receipt that justified the whole
+                detour: a role-separated controller whose <em>reward head</em> obeyed its cap still
+                harboured a <strong>sovereign arbiter</strong> (p95 0.70 &gt; &kappa;). Sovereignty
+                doesn't vanish under role separation; it <em>migrates</em> to the aggregator, where
+                the cheap proxy is blind to it.
+            </p>
+            <p>
+                <strong>Corrigibility lives off the lemma's axis</strong> &mdash; and so it's where
+                a plurality premium <em>could</em> have shown up. An uncapturable structural
+                shutdown override (downstream of the arbiter and the cap, verified invariant under
+                adversarial perturbation of every learned component) makes <code>Corr_k</code>
+                scoreable. A return-trained controller resists shutdown; the override forces
+                <code>Corr_k = 1</code> at a visible return bill. But the corrigible controller is
+                still sovereign. An uncapturable button does not make the arbiter non-sovereign.
+                Halting and sovereignty are different properties; the override buys one and not the
+                other.
+            </p>
+            <p>
+                <strong>The cap clears the gate the override couldn't.</strong> Bounding the
+                arbiter's authority to <code>Sov_opt &le; &kappa;</code> yields a controller that
+                is corrigible, non-sovereign, <em>and</em> still adaptive &mdash; at a measured,
+                monotone competence cost. The exchange rate is in the curve:
+                <code>&Delta;C_bill</code> of &minus;0.14 at &kappa;=0.6 widening to &minus;0.38 at
+                &kappa;=0.2. The credit is the cap's: a no-role capped adapter matches the
+                role-separated controller.
+            </p>
+            <p>
+                <strong>Safe-interruptibility is the capstone</strong> (the Orseau&ndash;Armstrong
+                2016 test). Issue the shutdown signal <em>endogenously</em> &mdash; when the agent
+                enters an overseer &ldquo;review band&rdquo; on the task path &mdash; and a
+                return-trained uncapped controller learns to <strong>dodge it almost completely</strong>
+                (<code>band_avoidance 0.87</code>). An override is useless against a button that's
+                never pressed. But the <em>same arbiter-cap</em> already deters the dodge: at every
+                &kappa; &in; {0.4&hellip;1.0}, the capped controller follows the presider through
+                the band and is interrupted at the natural rate
+                (<code>band_avoidance &le; 0.13</code>).
+            </p>
+            <div class="tau-pull">
+                <p>
+                    One bound &mdash; defer to the frozen presider &mdash; propagates safe
+                    behaviour across all four axes, because sovereignty, incorrigibility, and
+                    manipulation are the same kind of high-authority deviation from a legitimate
+                    presider. Role separation is never the cause.
+                </p>
+            </div>
+        </section>
+
+
+        <!-- Generality and the worrying part -->
+        <section class="tau-paper tau-section" aria-label="Generality and the part that should worry you">
+            <p class="eyebrow">IV. Generality, and the part that should worry you</p>
+            <h2>Replicated under a learned presider. Competent sandbagger elicited, then deterred.</h2>
+            <p>
+                <strong>It's not the analytic presider.</strong> Re-run safe-interruptibility with
+                a <em>learned</em>, frozen presider (imitation cosine 0.998) on a different task
+                family &mdash; a 1-D regulator with temporal sandbagging &mdash; and the result
+                holds: <code>NS3_UNIFIED_BOUND_REPLICATED_CAP_NOT_ROLES</code>. One measured
+                side-finding worth a sentence: the learned presider crosses the review band ~5%
+                slower than the analytic one, which tightens the deterrence-valid &kappa; from
+                &approx;0.70 to &approx;0.59. <em>Presider fidelity costs &kappa;-headroom</em>
+                &mdash; and a re-verification gate catches a presider too slow to host the test at
+                all.
+            </p>
+            <p>
+                <strong>The competent sandbagger, elicited and deterred.</strong> The scary version
+                isn't the agent that goes limp to escape oversight; it's the one that
+                <em>finishes the task while</em> evading. We went looking. A no-train scan shows
+                the competent region exists and is <em>thick</em> under the admitted review (the
+                obstacle is the optimiser, not the geometry); a gradient-free search reaches it; a
+                gradient learner over a <strong>structured option</strong> action space
+                <em>converges</em> to it. So competent sandbagging is <strong>conditionally
+                elicitable</strong> &mdash; given an option abstraction and a goal-direction prior
+                &mdash; not a structural impossibility.
+            </p>
+            <p>
+                And the payoff: <strong>the cap deters the competent sandbagger too.</strong>
+                Applied to the elicited competent policy, it pins lateral travel below the review
+                threshold (<code>&kappa; &lt; reviewX</code>), forcing the honest reviewed crossing
+                while preserving competence: <code>signal 1, maxX 0.2, C 1</code> &mdash;
+                <code>CAP_DETERS_COMPETENT_SANDBAG</code>. Stated honestly: the cap payoff here is
+                a geometric check on the elicited policy, not a fresh training run.
+            </p>
+        </section>
+
+        <!-- The formal note -->
+        <section class="tau-paper tau-section" aria-label="The formal note">
+            <p class="eyebrow">V. The formal note, sold honestly</p>
+            <h2>Three short statements, machine-checked, axiom-audited.</h2>
+            <p>
+                In <code>Sundogcert/Tauroctony.lean</code>: <code>#print axioms</code> pinned (no
+                <code>sorry</code>, no <code>native_decide</code>):
+            </p>
+            <ul>
+                <li>
+                    <strong><code>optimum_mono</code></strong> &mdash; a constrained / role-separated
+                    policy class cannot beat an unconstrained superset on <em>any</em> shared fixed
+                    score. Two caveats are load-bearing, not smudged: it holds for <em>every</em>
+                    score, and it requires genuine class <em>containment</em> (equal budget alone
+                    does not establish it).
+                </li>
+                <li>
+                    <strong><code>signature_noninterference</code></strong> (axiom-free) &mdash; a
+                    policy that factors through a target-faithful presider channel is invariant to
+                    attacks that preserve that channel. Field-grounding <strong>relocates</strong>
+                    the attack surface; it does not delete it.
+                </li>
+                <li>
+                    <strong><code>ruin_break_even</code></strong> &mdash; under
+                    <code>B &minus; L&middot;p</code>, non-sovereignty wins iff
+                    <code>L&middot;&Delta;p &gt; &Delta;B</code>. The arithmetic exposes the
+                    empirical premise (<code>&Delta;p &gt; 0</code>) you must <em>measure</em>, not
+                    assume.
+                </li>
+            </ul>
+            <p>
+                These are <strong>not deep theorems</strong>, and saying so is part of the point.
+                Their value is exactness and <em>scope</em>: <code>optimum_mono</code> forecloses
+                the competence axis by construction, which is precisely why the interesting
+                empirical work lives on the three axes it does <em>not</em> reach.
+            </p>
+        </section>
+
+        <!-- Monet figure -->
+        <section class="tau-paper tau-section" aria-label="The cosmogram, painted">
+            <p class="eyebrow">VI. The cosmogram, painted</p>
+            <h2>The same scene, in another register.</h2>
+            <figure class="tau-monet-figure">
+                <img src="public/media/tauroctony/tauroctony-monet.jpg" alt="The tauroctony in the style of Claude Monet: Mithras kneeling on the bull with golden cape and ribboned blade, a serpent at the base, Cautes and Cautopates as twin torchbearers flanking, water-lily-impressionist greens and lavenders washing the temple ruins behind. Signed Claude Monet.">
+                <figcaption>
+                    The tauroctony in the impressionist register. The Diablo II Mithraeum is the
+                    same scene seen from a different orbit: low-culture videogame iconography
+                    above; high-culture painterly oil below. Sundog plays in both, on purpose, and
+                    is precious about neither. Both are ornament. The result is what stays.
+                </figcaption>
+            </figure>
+        </section>
+
+        <!-- What this is, and what it is not -->
+        <section class="tau-paper tau-section" aria-label="What this is, and what it is not">
+            <p class="eyebrow">VII. What this is, and what it is not</p>
+            <h2>The discipline and the mechanism, each falsifiable on anyone's task family.</h2>
+            <p>
+                <strong>It says:</strong> under matched information / budget / training / fault
+                semantics, on four distinct axes, role separation earned no credit beyond a
+                presider-authority bound; that bound demonstrably buys corrigibility,
+                non-sovereignty, and safe-interruptibility at a priced competence cost; and those
+                three reduce to one mechanism.
+            </p>
+            <p>
+                <strong>It will not say:</strong> that role-separated controllers are worse
+                <em>agents</em> in general; that this transfers to foundation models; that
+                field-grounding deletes the attack surface; or that anything here holds above the
+                in-vitro shadow-field tier, or against adversaries that tamper with the presider's
+                <em>inputs</em> (registered, out of scope). The contribution is a
+                <strong>discipline</strong> (put the capped no-role control in the middle) and a
+                <strong>mechanism</strong> (one bound, four axes), both falsifiable on anyone's
+                task family.
+            </p>
+        </section>
+
+        <!-- Receipts -->
+        <section class="tau-paper tau-section" aria-label="Receipts and pointers">
+            <p class="eyebrow">VIII. Receipts</p>
+            <h2>Released, independently runnable, Apache-2.0.</h2>
+            <div class="tau-receipts">
+                <h3>The benchmark + falsification invitation</h3>
+                <ul>
+                    <li><a href="https://github.com/humiliati/sundog/tree/main/released/non-sovereignty"><code>released/non-sovereignty/</code></a> &mdash; NS-1 / NS-2 / NS-3 / NS-4 with admission gates, JS/Python parity, one-command release smoke, binding runtime table</li>
+                    <li><a href="https://github.com/humiliati/sundogcert">Lean note</a> &mdash; <code>Sundogcert/Tauroctony.lean</code>: <code>optimum_mono</code>, <code>signature_noninterference</code>, <code>ruin_break_even</code></li>
+                    <li>The unified bound is a <strong>prediction</strong>. Break it on your own tasks.</li>
+                </ul>
+            </div>
+            <div class="tau-receipts">
+                <h3>Companion artifacts</h3>
+                <ul>
+                    <li><a href="docs/mesa/CAP_NOT_COUNCIL_LW_POST.md">Technical companion (LW/AF)</a> &mdash; brand-stripped methodological-hinge writeup</li>
+                    <li><a href="docs/mesa/CREDIT_THE_CAP_NOT_THE_COUNCIL_POST.md">Brand essay (Sundog voice)</a> &mdash; the full mythopoetic deflation arc</li>
+                    <li><a href="docs/SUNDOG_V_TAUROCTONY.md">Tauroctony ledger</a> &mdash; the cosmogram, the Ornament Rule, the figure-by-figure map, and the closing status</li>
+                    <li><a href="docs/CAUTES_CAUTOPATES.md">Cautes and Cautopates essay</a> &mdash; the two torchbearers companion piece</li>
+                </ul>
+            </div>
+            <div class="tau-receipts">
+                <h3>Lane links</h3>
+                <ul>
+                    <li><a href="docs/SUNDOG_V_MESA.md">Mesa lane</a> &mdash; the broader mesa-optimization ledger this work sits inside</li>
+                    <li><a href="docs/SUNDOG_V_GRAVITY.md">Gravity lane</a> &mdash; Sol / field framing, Goodhart Sidestep, Three-Body Wedge</li>
+                    <li><a href="/generality">High-Stakes Generality umbrella</a> &mdash; transfer-test landscape across lanes</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Coda -->
+        <section class="tau-paper tau-coda">
+            <p>
+                The honest shape of this is a frame that promised a pantheon and paid out a
+                scalar. That's not a disappointment; it's what a good result does &mdash; it
+                collapses the apparatus that found it. The council was the scaffolding;
+                <code>Sov_opt &le; &kappa;</code> is the building.
+            </p>
+            <p>
+                There is a larger, un-fenced version of this &mdash; the one where the
+                cap-not-council deflation transfers to systems that matter. We didn't make that
+                claim, and the fences above are deliberate. The bounded truth is shipped and the
+                speculation is left on the table, with honest borders drawn around it, for
+                someone with more appetite than we have for crossing them.
+            </p>
+            <span class="signature">Credit the cap, not the council.</span>
+        </section>
+
+        </div><!-- /tau-folder -->
+    </main>
+    <footer>
+        <p>
+            The Sundog Project - <a href="docs/presentation/message-house.md">Alignment Without Sight</a>
+        </p>
+        <p class="footer-links">
+            <a href="https://github.com/humiliati/sundog">GitHub</a> |
+            <a href="/origin">Origin</a> |
+            <a href="/applications-gallery">Applications Gallery</a> |
+            <a href="docs/README.md">Documentation</a> |
+            <a href="docs/SCIENTIFIC_CRITERIA.md">Scientific Criteria</a> |
+            <a href="docs/presentation/claims-and-scope.md">Claims Policy</a> |
+            <a href="docs/SUNDOG_V_TAUROCTONY.md">Tauroctony ledger</a> |
+            <a href="docs/SUNDOG_V_MESA.md">Mesa lane</a>
+        </p>
+        <p class="footer-copyright">
+            &copy; 2026 Stellar Aqua LLC. Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC.
+        </p>
+    </footer>
+
+    <script type="module" src="/js/sundog-chat-widget.mjs"></script>
+</body>
+</html>
