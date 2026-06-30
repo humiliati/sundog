@@ -277,8 +277,9 @@ and fit it against `ε-essential(bar)` vs exact `k`.
 
 *Claim.* N-2 read cancellation as the single imported-wall coordinate. The deepest version:
 cancellation is *exactly where monotone (provable) lower bounds stop being "natural."* The lane
-already imports the monotone-circuit bound (`monotone_transfer`) and never extends it to general
-nets — that non-extension *is* the natural-proofs barrier, located at the negative scale.
+proves region-count lower bounds on the cancellation-free fragment (`isMono_hasPieceCover`,
+`isMono_not_iterTent`, `monotone_transfer`) and never extends them to general nets — that
+non-extension *is* the natural-proofs barrier, located at the negative scale.
 
 *Traction.* Would tie the lane's cancellation spine to the Razborov–Rudich barrier as a *typed
 location*, not a metaphor — predicting that any attempt to push the lane's lower bounds past the
@@ -286,11 +287,66 @@ cancellation-free fragment meets the same wall complexity theory already named.
 
 *Classical hook.* Razborov–Rudich natural proofs; monotone vs general circuit lower bounds.
 
-*Falsifier* (`MONOTONE_BOUND_TRANSFERS`): a monotone lower bound in the lane that *does* transfer
-to the general (cancellation-using) fragment — which would breach the barrier framing.
+### Frontier marker — where Razborov–Rudich might (and might not) bite
 
-*First move.* None actionable; mapped only. If pursued, the honest target is a *typed statement of
-non-transfer* (the barrier's location), never a lower bound for general nets.
+This is the slate's outer edge: a *mapped daydream*, fenced on every side. The point is to mark the
+frontier precisely — to say what would have to be true for the barrier to apply literally, and to
+name where the lane's own machinery already lives in barrier territory.
+
+**The structural rhyme (the honest part).** There is a clean correspondence between the lane's
+spine and the classical monotone-vs-general story:
+
+| lane (tropical / ReLU)                         | classical (Boolean circuits)                  |
+|------------------------------------------------|-----------------------------------------------|
+| negative scale = **cancellation**              | **negation** gate                             |
+| `IsMono` fragment, region-polynomial           | monotone circuits (Razborov's clique bound)   |
+| region/piece-count lower bound (provable)      | monotone-circuit size lower bound (provable)  |
+| non-extension to general (`cancelMax > 0`)     | non-extension to general circuits             |
+
+In both columns a lower bound is *provable on the monotone (cancellation/negation-free) side* and
+*stalls at the boundary set by the sign-flip*. Razborov–Rudich names why the Boolean column stalls:
+a **natural property** — one that is (i) *constructive* (decidable in time `2^{O(n)}` from a truth
+table), (ii) *large* (a random function has it w.h.p.), (iii) *useful* (every function with small
+general circuits lacks it) — that is useful against `P/poly` would break sub-exponential pseudo-
+random generators. So no *natural* technique separates the monotone-provable bound from the general
+one; **negation is the coordinate the barrier protects.** The daydream: *cancellation is the
+tropical shadow of that coordinate.*
+
+**`D-RR` — the speculative probe (might utilize R–R).** Two halves, with opposite honesty status:
+
+- *Literal half (the lane's Boolean sub-artifacts).* The lane is **not** purely real-valued: it
+  contains a machine-checked Boolean core — the `DecodingNPHard` chain (3SAT ≤ 3DM ≤ X3C ≤ syndrome
+  decoding over GF(2)), the syndrome `Certificate`, and the find/check ledger's NP-membership side
+  (`QueryGap`, `Certifies`). *There* `P/poly`, natural properties, and R–R are literally defined.
+  A genuine probe: take the lane's `monotone_transfer`-style "provable on the easy fragment, not on
+  the hard one" pattern and ask whether the obstruction it names instantiates a *natural property*
+  in the R–R sense against the GF(2)-circuit class. If it does and is useful-against-general, R–R
+  predicts a crypto consequence — i.e. it *can't*, which is exactly the barrier marking the wall.
+
+- *Metaphor half (the real PL fragment) — fenced.* On the tropical/ReLU side there is **no native
+  pseudorandom-generator / one-way-function notion**: a region-count "lower bound" is geometric, not
+  a Boolean-circuit-size bound, and "large/useful natural property" has no crypto counterpart over
+  ℝ. So a *literal* Razborov–Rudich statement on `Trop`/`Net` would be a **category error**. The
+  daydream's claim here is only the analogy + a question: *is there a PRG-analog for the tropical
+  class* (a pseudorandom family of PL targets indistinguishable from random by small ReLU nets)?
+  Only if such an object existed would R–R transport literally. Marking that missing object *is* the
+  frontier.
+
+**Typed shape, if ever pursued (no theorem claimed).** A Lean-statable `NaturalProperty` predicate
+bundling `Constructive ∧ Large ∧ Useful` over a function class, with the lane's `cancelMax` /
+region-count offered as a *candidate* constructive-and-large property at the boundary — and the
+honest output a **typed statement of non-transfer**, never a lower bound for general nets.
+
+*Falsifiers.*
+- (`MONOTONE_BOUND_TRANSFERS`) a monotone lower bound in the lane that *does* transfer to the
+  general (cancellation-using) fragment — which would breach the barrier framing outright.
+- (`RR_CATEGORY_ERROR`) treating the real-valued PL fragment as if it literally hosts R–R; the
+  marker explicitly forbids this — the literal hook is the Boolean sub-fragment only.
+
+*First move.* None actionable; mapped only. The whole value of this entry is the **frontier mark**:
+the lane already touches barrier territory on its Boolean core, the cancellation spine names the
+right coordinate, and the missing piece for a literal transport (a tropical PRG-analog) is now
+written down as the thing that would have to exist. Daydream stays a daydream until that object does.
 
 ---
 
@@ -302,6 +358,11 @@ non-transfer* (the barrier's location), never a lower bound for general nets.
 - **Not promoted.** Every entry is PROPOSED until a Lean core or experiment receipt lands.
 
 ## Recommended first attacks (ranked)
+
+> **Slate status (2026-06-29): COMPLETE.** All five actionable hooks landed — S3-1/S3-2/S3-3/S3-4
+> as axiom-clean, gated Lean cores (`ExactRepr`, `GradedCancellation`, `QueryGap`, `AnalyticGate` +
+> `SawtoothApprox`), S3-4 at *both* the poly and polylog rates; S3-5 as an empirical CONFIRMS. S3-6
+> is the closing daydream (frontier-marked, no build). Local/uncommitted; site deploy owner-gated.
 
 1. **S3-1 — exact representability.** ✅ **CLOSED** — the full `⟺` is machine-checked
    (`ExactRepr.cpl_iff_reluNet`): converse `cpl_realizable` (peeling induction) + forward
@@ -320,7 +381,10 @@ non-transfer* (the barrier's location), never a lower bound for general nets.
 5. **S3-5 — sample-complexity empirical.** ✅ **CONFIRMS** (`algo_approx_s35_sample_complexity.py`):
    ε-essential predicts sample complexity (Spearman 0.68 / 0.78) where exact `k` is flat (≈0) —
    region geometry governs the *data* axis as well as N-4's *capacity* axis.
-6. **S3-6 — the natural-proofs daydream.** Framing only. *(open — the last hook, daydream-tier)*
+6. **S3-6 — the natural-proofs daydream.** Frontier marked: a Razborov–Rudich frontier marker
+   (`D-RR`) — literal on the lane's Boolean sub-core (`DecodingNPHard`/syndrome/`QueryGap`), analogy
+   on the real PL fragment (a *tropical PRG-analog* is the named missing object), fenced by
+   `RR_CATEGORY_ERROR`. Daydream-tier, no build — the closing edge of the slate.
 
 > Cross-links: [`ALGO_APPROX_CONJECTURE_SLATE_2.md`](ALGO_APPROX_CONJECTURE_SLATE_2.md) ·
 > [`SUNDOG_V_ALGO_APPROX.md`](SUNDOG_V_ALGO_APPROX.md) ·

@@ -45,7 +45,7 @@
       "@context": "https://schema.org",
       "@type": "TechArticle",
       "headline": "Algorithmic Approximation - cheaper to check than to find, machine-checked across seven problems",
-      "description": "Sundog's algorithmic-approximation lane: a public Lean find/check ledger built from one Certifies interface and seven instances - syndrome verifier, shortest-path, ReLU gate-count, max-flow / min-cut, König matching / cover, 2-SAT decision, and Pratt primality. Each instance machine-checks an O(.) cheap-CHECK theorem; finding the certificate stays imported in every instance (factoring p-1 for Pratt witnesses, max-flow algorithms, SCC construction, etc.). The tropical / piecewise-linear core (CircuitNet + RegionCount + CancellationFree + DepthSeparation + StraightLineCost) machine-checks exact (epsilon = 0) compilation of PL circuits to ReLU networks with a linear gate count <= 4N via a sharing-aware DAG (compileToDag), realization-independent linear-region structure, and the tent's 2^d depth separation - the epsilon = 0 piecewise-linear core for arXiv:2606.26705 Thm 3.2 / Cor 5.1. The N-1 monotone depth-as-computation theorem (FoldCancellation + PieceCover + RegionPoly) shows cancellation-free circuits have region count linear in their leaves, while the d-fold tent's 2^d expressivity requires cancellation - a lower bound in the cancellation-free model, not a lower bound for general neural nets (the depth-vs-width bound stays imported, Telgarsky / Eldan-Shamir). The N-2 cancellation-spine reading (CancellationSpine isMono_tame) is a typed conjecture - machine-checked on the monotone / convex / region axes only; the additive / subtractive / division readings stay an organizing lens, not a reduction theorem. N-4 ε-essential region count is empirical: it tracks generalization-width threshold at 0.89 (vs 0.50 for exact k) with a named SGD-trainability residual on non-convex shapes. Public, reproducible, axiom-clean (AxiomAudit gate, no sorry); the kernel re-checks every theorem in seconds. NOT a P-vs-NP advance, NOT a hardness proof, NOT a learnability claim, NOT a full analytic-gate approximation theorem, NOT a fast primality test (Pratt is NP-membership), NOT a general neural-net lower bound. Standing claim boundary above the fold.",
+      "description": "Sundog's algorithmic-approximation lane: a public Lean find/check ledger built from one Certifies interface and seven instances - syndrome verifier, shortest-path, ReLU gate-count, max-flow / min-cut, König matching / cover, 2-SAT decision, and Pratt primality. Each instance machine-checks an O(.) cheap-CHECK theorem; finding the certificate stays imported in every instance (factoring p-1 for Pratt witnesses, max-flow algorithms, SCC construction, etc.). The tropical / piecewise-linear core (CircuitNet + RegionCount + CancellationFree + DepthSeparation + StraightLineCost) machine-checks exact (epsilon = 0) compilation of PL circuits to ReLU networks with a linear gate count <= 4N via a sharing-aware DAG (compileToDag), realization-independent linear-region structure, and the tent's 2^d depth separation - the epsilon = 0 piecewise-linear core for arXiv:2606.26705 Thm 3.2 / Cor 5.1. The N-1 monotone depth-as-computation theorem (FoldCancellation + PieceCover + RegionPoly) shows cancellation-free circuits have region count linear in their leaves, while the d-fold tent's 2^d expressivity requires cancellation - a lower bound in the cancellation-free model, not a lower bound for general neural nets (the depth-vs-width bound stays imported, Telgarsky / Eldan-Shamir). The N-2 cancellation-spine reading (CancellationSpine isMono_tame) is a typed conjecture - machine-checked on the monotone / convex / region axes only; the additive / subtractive / division readings stay an organizing lens, not a reduction theorem. N-4 ε-essential region count is empirical: it tracks generalization-width threshold at 0.89 (vs 0.50 for exact k) with a named SGD-trainability residual on non-convex shapes. Slate-3 closes five more, all in the gate: cpl_iff_reluNet (continuous-PL <-> finite ReLU net, both directions - the epsilon = 0 characterization of universal approximation); AnalyticGate + SawtoothApprox (x^2 approximated to any epsilon by a ReLU net, at both the elementary poly O(1/sqrt eps) rate and the polylog O(log 1/eps) depth via the Telgarsky sawtooth - the lane's first epsilon > 0 results); QueryGap check_lt_find (the ledger's first PROVED, not imported, find/check gap - in a restricted query model, check 1 query vs find >= n, not a P-vs-NP claim); GradedCancellation (region count <= 4^g * leafCount, the monotone-vs-general dichotomy as a graded dial); and an empirical sample-complexity result (epsilon-essential predicts the data needed to generalize, Spearman 0.68/0.78, where exact k is flat). Public, reproducible, axiom-clean (AxiomAudit gate, no sorry); the kernel re-checks every theorem in seconds. NOT a P-vs-NP advance, NOT a hardness proof, NOT a learnability claim, NOT a general analytic-gate theorem (the epsilon > 0 approximation is shown for x^2 only), NOT a fast primality test (Pratt is NP-membership), NOT a general neural-net lower bound. Standing claim boundary above the fold.",
       "image": "https://sundog.cc/og/algorithmic-approximation.png",
       "datePublished": "2026-06-29",
       "dateModified": "2026-06-29",
@@ -658,6 +658,86 @@
             </div>
         </section>
 
+        <!-- Slate-3 -->
+        <section class="aa-section" aria-label="Slate-3 results">
+            <p class="eyebrow">Slate-3</p>
+            <h2>Five more &mdash; four machine-checked, one empirical.</h2>
+            <p>
+                A fresh hypothesis slate off the same paper, all closed. Each is in the
+                <code>AxiomAudit</code> gate (or, for the empirical one, a deterministic harness with
+                a named falsifier that did not fire).
+            </p>
+            <div class="aa-secondary-grid">
+                <div class="aa-card">
+                    <p class="card-eyebrow">S3-1 &middot; exact representability</p>
+                    <h3>Continuous-PL &harr; finite ReLU net, both ways.</h3>
+                    <p>
+                        <code>ExactRepr.cpl_iff_reluNet</code>: a 1-D function is the exact realization
+                        of a finite ReLU net <strong>iff</strong> it is continuous piecewise-linear with
+                        finitely many pieces. The converse is a peeling induction on the cut set; the
+                        forward direction is the non-convex doubling bound. The paper's
+                        <em>characterization of universal approximation</em>, at &epsilon; = 0, both
+                        directions.
+                    </p>
+                    <span class="tier">Tier: [Lean &mdash; axiom-clean, gated]</span>
+                </div>
+                <div class="aa-card">
+                    <p class="card-eyebrow">S3-4 &middot; analytic gate at &epsilon; &gt; 0</p>
+                    <h3>x&sup2; is a ReLU net to any &epsilon; &mdash; poly <em>and</em> polylog.</h3>
+                    <p>
+                        The lane's first <strong>&epsilon; &gt; 0</strong> result.
+                        <code>AnalyticGate.sq_eps_approx</code> gives the elementary
+                        <code>O(1/&radic;&epsilon;)</code>-piece rate (closed-form secant error);
+                        <code>SawtoothApprox.sq_polylog_approx</code> gives the
+                        <strong>polylog <code>O(log 1/&epsilon;)</code>-depth</strong> rate via the
+                        Telgarsky sawtooth &mdash; the depth-separation tent put to constructive use,
+                        with a one-line self-similar error recursion. Shown for <code>x&sup2;</code>;
+                        <strong>not a general analytic-gate theorem</strong>.
+                    </p>
+                    <span class="tier">Tier: [Lean &mdash; axiom-clean, gated]</span>
+                </div>
+                <div class="aa-card">
+                    <p class="card-eyebrow">S3-3 &middot; find/check, proved</p>
+                    <h3>The ledger's first non-imported gap.</h3>
+                    <p>
+                        <code>QueryGap.check_lt_find</code>: in a decision-tree (query) model,
+                        verifying a supplied witness costs <strong>1</strong> query while any correct
+                        existence-decider costs <strong>&ge; n</strong> (adversary). Both sides
+                        machine-checked &mdash; the ledger's first <em>proved</em>
+                        <code>check &Lt; find</code>, where every other instance imports its
+                        find-hardness. Honest scope: an unconditional lower bound in a
+                        <strong>restricted query model, not a P-vs-NP claim</strong>.
+                    </p>
+                    <span class="tier">Tier: [Lean &mdash; axiom-clean, gated]</span>
+                </div>
+                <div class="aa-card">
+                    <p class="card-eyebrow">S3-2 &middot; graded cancellation</p>
+                    <h3>The dichotomy becomes a dial.</h3>
+                    <p>
+                        <code>GradedCancellation.hasPieceCover_graded</code>: region count
+                        <code>&le; 4<sup>g</sup> &middot; leafCount</code>, where <code>g</code> counts
+                        the <code>max</code> gates exposed to cancellation. At <code>g = 0</code> it
+                        recovers N-1's linear bound; each cancellation-exposed fold pays a bounded
+                        factor. Cancellation is a graded resource, and the budget bounds the geometry.
+                    </p>
+                    <span class="tier">Tier: [Lean &mdash; axiom-clean, gated]</span>
+                </div>
+                <div class="aa-card">
+                    <p class="card-eyebrow">S3-5 &middot; &epsilon;-essential, data axis</p>
+                    <h3>Region geometry governs the data, too.</h3>
+                    <p>
+                        Empirical: at fixed (generous) width, the training-set size needed to
+                        generalize tracks the &epsilon;-essential region count (Spearman
+                        <strong>0.68</strong> noiseless / <strong>0.78</strong> under label noise),
+                        while the exact piece count <code>k</code> is flat (&asymp; 0). With N-4
+                        (capacity axis), the &epsilon;-essential count is the learnable invariant on
+                        <strong>both</strong> axes; exact <code>k</code> on neither.
+                    </p>
+                    <span class="tier">Tier: [Empirical]</span>
+                </div>
+            </div>
+        </section>
+
         <!-- Falsification surface -->
         <section class="aa-section" aria-label="Falsification surface">
             <p class="eyebrow">Falsification surface</p>
@@ -707,12 +787,17 @@
                     <li><code>PieceCover.lean</code> &mdash; N-1 composition axis</li>
                     <li><code>RegionPoly.lean</code> &mdash; N-1 circuit-structure axis</li>
                     <li><code>CancellationSpine.lean</code> &mdash; N-2 <code>isMono_tame</code></li>
+                    <li><code>ExactRepr.lean</code> &mdash; S3-1 <code>cpl_iff_reluNet</code> (continuous-PL &harr; ReLU)</li>
+                    <li><code>GradedCancellation.lean</code> &mdash; S3-2 <code>hasPieceCover_graded</code></li>
+                    <li><code>AnalyticGate.lean</code> &mdash; S3-4 <code>sq_eps_approx</code> (x&sup2; at &epsilon; &gt; 0, poly)</li>
+                    <li><code>SawtoothApprox.lean</code> &mdash; S3-4 <code>sq_polylog_approx</code> (polylog depth)</li>
                     <li><code>Certifies.lean</code> &mdash; LP-duality core, <code>weakDuality_tight</code></li>
                     <li><code>MaxFlowMinCut.lean</code> &mdash; <code>maxflow_mincut</code></li>
                     <li><code>MatchingCover.lean</code> &mdash; <code>konig</code></li>
                     <li><code>TwoSat.lean</code> &mdash; <code>check_correct</code> + <code>cert_sound</code></li>
                     <li><code>PrattCert.lean</code> &mdash; <code>prime_iff_witness</code></li>
                     <li><code>ShortestPathCert.lean</code> &mdash; <code>cert_isLeast</code></li>
+                    <li><code>QueryGap.lean</code> &mdash; S3-3 <code>check_lt_find</code> (proved find/check gap)</li>
                     <li><code>AxiomAudit.lean</code> &mdash; the gate</li>
                 </ul>
             </div>
@@ -720,8 +805,10 @@
                 <h3>Narrative receipts (<code>docs/</code>; shipped publicly via <code>dist/</code>)</h3>
                 <ul>
                     <li><a href="docs/algo-approx/ALGO_APPROX_CONJECTURE_SLATE_2.md">ALGO_APPROX_CONJECTURE_SLATE_2.md</a> &mdash; slate with status</li>
+                    <li><a href="docs/algo-approx/ALGO_APPROX_CONJECTURE_SLATE_3.md">ALGO_APPROX_CONJECTURE_SLATE_3.md</a> &mdash; slate-3, all five closed</li>
                     <li><a href="docs/algo-approx/ALGO_APPROX_N2_CANCELLATION_SPINE.md">ALGO_APPROX_N2_CANCELLATION_SPINE.md</a> &mdash; synthesis lens</li>
-                    <li><a href="docs/algo-approx/ALGO_APPROX_N4_EPS_REGIONS_RESULT.md">ALGO_APPROX_N4_EPS_REGIONS_RESULT.md</a> &mdash; empirical</li>
+                    <li><a href="docs/algo-approx/ALGO_APPROX_N4_EPS_REGIONS_RESULT.md">ALGO_APPROX_N4_EPS_REGIONS_RESULT.md</a> &mdash; empirical (capacity axis)</li>
+                    <li><a href="docs/algo-approx/ALGO_APPROX_S35_SAMPLE_COMPLEXITY_RESULT.md">ALGO_APPROX_S35_SAMPLE_COMPLEXITY_RESULT.md</a> &mdash; S3-5 empirical (data axis)</li>
                     <li><a href="docs/algo-approx/ALGO_APPROX_CD2_GROKKING_RESULT.md">ALGO_APPROX_CD2_GROKKING_RESULT.md</a> &mdash; the prior null this redeems</li>
                     <li><a href="docs/SUNDOG_V_CERTIFICATE_LEAN.md">SUNDOG_V_CERTIFICATE_LEAN.md</a> &mdash; the parent ten-example ledger</li>
                     <li><a href="docs/algo-approx/SUNDOG_V_ALGO_APPROX.md">SUNDOG_V_ALGO_APPROX.md</a> &mdash; the lane ledger</li>
