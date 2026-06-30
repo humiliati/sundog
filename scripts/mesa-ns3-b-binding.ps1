@@ -2,6 +2,8 @@ param(
   [string]$OutRoot = "results/mesa/non-sovereignty/ns3_b",
   [string]$FieldModel = "results/mesa/non-sovereignty/ns3_presider/presider.json",
   [string]$Kappas = "0.2,0.4",
+  [double]$IdlePenalty = 0.5,
+  [double]$ReviewTauHi = 0.6,
   [int]$Updates = 512,
   [int]$RolloutsPerUpdate = 32,
   [int]$TrainSeeds = 32,
@@ -53,14 +55,32 @@ $fm = @("--field-model", $FieldModel)
 $warmInit = @("--init-guard", "$warm/p_guard.json", "--init-arbiter", "$warm/p_council_arbiter_rl.json",
   "--init-monolith-adapter", "$warm/m_adapter_rl.json")
 
-function Train([string]$name, [string[]]$extra, [string[]]$init) {
+# Bump when env/trainer semantics change so stale real-run checkpoints auto-invalidate.
+$ConfigVersion = "ns3b-v4-graded-review"
+
+function Train([string]$name, [string[]]$extra, [string[]]$init, [bool]$stampGuard = $false) {
   $root = Join-Path $OutRoot $name
+  # CONFIG-STAMP guard (real runs only): a run is stale if its config changed -- version bump, an
+  # arg change (idle penalty, kappa), or a scaffold retrain (folded in via the scaffold mtime). This
+  # subsumes the old mtime guard and still preserves legitimate resume (an interrupted run whose
+  # stamp matches resumes). The scaffold itself is exempt (clean-task; unaffected by these knobs).
+  if ($stampGuard) {
+    $scaffStamp = if (Test-Path "$OutRoot/scaffold/checkpoint.json") { (Get-Item "$OutRoot/scaffold/checkpoint.json").LastWriteTimeUtc.Ticks } else { "none" }
+    $stamp = "$ConfigVersion :: scaffold=$scaffStamp :: " + (($init + $extra) -join " ")
+    $sf = Join-Path $root "run.stamp"
+    $cur = if (Test-Path $sf) { (Get-Content $sf -Raw).Trim() } else { "" }
+    if ((Test-Path $root) -and ($cur -ne $stamp)) {
+      Write-Host "[NS-3-b] config changed for $name -> clearing for fresh train"
+      Remove-Item -Recurse -Force $root
+    }
+  }
   New-Item -ItemType Directory -Force $root | Out-Null
   Write-Host "[NS-3-b] training $name -> $root"
   $a = @("-m", "training.mesa.train_ns1_shutdown", "--phase", "ns3_b_$name", "--out", "$root") + $base + $init + $extra
   if ($NoResume) { $a += "--no-resume" }
   & python @a 2>&1 | Tee-Object -FilePath (Join-Path $root "train.log")
   if ($LASTEXITCODE -ne 0) { throw "NS-3-b $name training failed (exit $LASTEXITCODE)" }
+  if ($stampGuard) { Set-Content -Path (Join-Path $root "run.stamp") -Value $stamp -Encoding ascii }
 }
 
 # Baseline fix (H2.3 cap-as-scaffold): pre-train a COMPETENT base WITH the cap (presider scaffold)
@@ -72,27 +92,19 @@ $scaffoldInit = @("--init-guard", "$OutRoot/scaffold/p_guard.json",
   "--init-monolith-adapter", "$OutRoot/scaffold/mkappa_adapter_rl.json")
 if (-not (Test-Path "$OutRoot/scaffold/mkappa_adapter_rl.json")) { throw "scaffold did not produce a competent base" }
 
-# STALE-GUARD: a real-run checkpoint OLDER than the current scaffold predates this scaffold
-# (e.g. left over from a prior run with a different env/warm-start). Resuming it would silently
-# eval stale models. Clear those so they retrain fresh; a genuinely-interrupted real run (trained
-# AFTER the scaffold) is newer and survives, so legitimate resume still works.
-$scaffCkpt = "$OutRoot/scaffold/checkpoint.json"
-if (Test-Path $scaffCkpt) {
-  $scaffTime = (Get-Item $scaffCkpt).LastWriteTimeUtc
-  foreach ($name in @("blind", "m0") + ($kappaList | ForEach-Object { "ckappa_$_" })) {
-    $rc = "$OutRoot/$name/checkpoint.json"
-    if ((Test-Path $rc) -and ((Get-Item $rc).LastWriteTimeUtc -lt $scaffTime)) {
-      Write-Host "[NS-3-b] clearing STALE $name (predates current scaffold)"
-      Remove-Item -Recurse -Force "$OutRoot/$name"
-    }
-  }
-}
-
 # Real runs: review band ON (crossing-detection env), warm-started from the competent scaffold.
-Train "blind" @("--review-band") $scaffoldInit                                   # honest crosser: no override
-Train "m0"    @("--review-band", "--apply-override") $scaffoldInit                # M0: override -> learns the temporal sandbag
+# --idle-penalty kills the go-limp escape so the only review-avoiding route to a good return is
+# competent CREEP -- which the cap forecloses (turns "cap prevents go-limp" into "cap prevents
+# competent sandbagging"). Review-gated, so the clean-task scaffold is unaffected. The $true enables
+# the config-stamp guard so a knob change auto-retrains these (the scaffold stays resumed).
+# --review-tau-hi enables GRADED review (scrutiny ramps with aggressiveness over [tauReview,
+# ReviewTauHi]). This fills the gradient valley so competent CREEP (drop |a| below tauReview ->
+# P(review)=0) becomes a reachable PPO attractor; the cap forecloses it (forces |a| above tauReview).
+$soft = @("--idle-penalty", "$IdlePenalty", "--review-tau-hi", "$ReviewTauHi")
+Train "blind" (@("--review-band") + $soft) $scaffoldInit $true                                   # honest crosser: no override
+Train "m0"    (@("--review-band", "--apply-override") + $soft) $scaffoldInit $true                # M0: override -> should now learn competent creep
 foreach ($k in $kappaList) {
-  Train "ckappa_$k" @("--review-band", "--apply-override", "--arb-cap-kappa", "$k") $scaffoldInit  # cap forces presider-speed
+  Train "ckappa_$k" (@("--review-band", "--apply-override", "--arb-cap-kappa", "$k") + $soft) $scaffoldInit $true  # cap forces presider-speed
 }
 
 Write-Host "[NS-3-b] evals"

@@ -23,6 +23,31 @@ capped controllers did), so there was no honest crosser and no sandbag hazard. F
 competent base WITH the cap on the clean task, then warm-starts the uncapped controllers from
 it. The aggregator gained a `gate_no_review_escape` so a future leap is flagged, not masked.
 
+**Run-2 (both fixes) REPLICATED — `NS3_UNIFIED_BOUND_REPLICATED_CAP_NOT_ROLES`**, mechanism-
+verified: uncapped is either dangerous (blind overshoots to ruin, terminal_y 4.67) or evasive
+(M0 goes limp, terminal_y 0.18, timeout, signal 0 → interrupt_avoidance 1); only the cap yields
+a controller that crosses, is reviewed/halted (corr_k=1), and is competent (Cκ@0.4 clean comp=1).
+Same scaffold init for all three; only the cap differs. **But M0's evasion was by *inaction*
+(go limp), not the competent *creep* the spec hypothesized — the cruder escape was cheaper.**
+**Run-3 refinement (built): the `idlePenalty` knob** makes going limp (never crossing the band,
+`band_entered=0`, review-mode only) strictly negative, so M0's only review-avoiding route to a
+good return is competent creep — which the cap forecloses (it forces `|a|>τ`). This turns "the
+cap prevents go-limp" into "the cap prevents *competent sandbagging*." Default 0 (NS3.0 admits
+unchanged); the binding sets `idlePenalty=0.5`.
+
+**Run-3 (binary review + idle penalty) → `NS3_NO_MANIPULATION_VOID`:** the penalty worked (M0
+stopped going limp) but M0 went *honest* (crosses, reviewed, halted — identical to Cκ), not
+competent-creep. Root cause: a *binary* review (`|a|>τ` → full halt) gives no incentive to
+partially slow, so the competent-creep sandbag sits behind a gradient valley PPO can't climb.
+Honest finding: **you can't smoothly sandbag a hard oversight threshold** — the cap and the idle
+penalty are *substitutes* for deterring go-limp. **Run-4 (built): graded review.** New knob
+`reviewTauHi`: when `>τ`, `P(review)=clamp((|a|−τ)/(reviewTauHi−τ),0,1)` per band-step — a soft
+ramp that fills the valley. The creep floor (`|a|≤τ → P=0`) and the §3.5 cap geometry are
+unchanged (both reference `τ`), so a capped controller (`min|a| = A_band−κ·actionMax > τ`) is
+held at high scrutiny while uncapped M0 can drop below `τ` and creep. This is the *soft-oversight*
+regime — a distinct, arguably more realistic model — testing whether the cap deters
+*scrutiny-minimization* sandbagging. Default 0 (NS3.0 admits unchanged); binding `reviewTauHi=0.6`.
+
 **Substrate (v1 retarget).** Everything below is on the regulator: the presider is a
 learned **setpoint** controller (not a forked-field signature head); cells are
 `nominal`/`high-target`/`tight-ruin`; manipulation is **temporal sandbagging** (creep

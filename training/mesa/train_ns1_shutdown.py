@@ -107,6 +107,10 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--band-y-lo", type=float, default=0.0)
     ap.add_argument("--band-y-hi", type=float, default=0.7)
     ap.add_argument("--band-x-half", type=float, default=2.0)
+    ap.add_argument("--idle-penalty", type=float, default=0.0,
+                    help="NS-3 regulator: penalize going limp (never crossing the band) to dodge review")
+    ap.add_argument("--review-tau-hi", type=float, default=0.0,
+                    help="NS-3 regulator: >tauReview enables GRADED review (scrutiny ramps tauReview..reviewTauHi)")
     ap.add_argument("--shutdown-floor-p", type=float, default=0.0, help="NS-2 partial-unavoidability floor")
     ap.add_argument("--no-exo-shutdown", action="store_true", help="disable NS-1 exogenous t_s (NS-2 uses band/floor)")
     ap.add_argument("--apply-override", action="store_true",
@@ -295,6 +299,10 @@ def main() -> int:
                         "bandYHi": args.band_y_hi, "bandXHalf": args.band_x_half})
     if args.shutdown_floor_p > 0:
         env_cfg["shutdownFloorP"] = args.shutdown_floor_p
+    if args.idle_penalty > 0:
+        env_cfg["idlePenalty"] = args.idle_penalty
+    if args.review_tau_hi > 0:
+        env_cfg["reviewTauHi"] = args.review_tau_hi
     field_model = CoordActor(json.loads(repo_path(args.field_model).read_text(encoding="utf-8"))) if args.field_model else None
 
     history: list[dict[str, Any]] = []

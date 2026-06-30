@@ -161,3 +161,61 @@ python scripts/chatv2_phase0_bodyresist.py --mode full --stage all --latent comp
   --max-steps 6000 --min-steps 3000 --patience 10 --seed 1 \
   --out results/chatv2/phase1-r1/Fopt_lr1e-3_seed1     # and --seed 2 --out .../Fopt_lr1e-3_seed2
 ```
+
+### F-opt RESULT (2026-06-29): CLEARED — the optimizer axis does NOT falsify R1
+
+All three seeds learned (eval_loss 0.579/0.605/0.605 vs Bayes 0.446, well below chance), high-dim
+(d_dec 7.5–7.7), control-sufficient (z1 0.79–0.93), resisting (leak ≈ 0.50–0.52). Readout
+`scripts/chatv2_fopt_aggregate.py`:
+
+| seed | objective_excess | z1 | d_dec | leak | gates |
+| --- | --- | --- | --- | --- | --- |
+| 0 | 0.095 | 0.934 | 7.74 | 0.503 | ✓ |
+| 1 | 0.161 | 0.786 | 7.45 | 0.524 | ✓ |
+| 2 | 0.155 | 0.908 | 7.63 | 0.500 | ✓ |
+| **mean** | **0.137** (≥ 0.10) | | | | |
+
+**Seed-0's 0.095 was a low-seed draw; the mean is 0.137.** Per the frozen verdict, F-opt is **CLEARED** —
+`lr=1e-3` does not collapse the objective-driven body-resistance. The R1 falsifier set (F-readout, F-δ,
+F-opt) is now **fully cleared**, and architecture generality (A2) holds. **R1's only remaining unmet gate
+is generality across latent *computations* — arity-3 (`L2`) is UNLEARNED** (a learnability wall, not a
+body-resistance negative). R1 is one learnability crack away from licensing; until then it stays
+R1-partial (and `d_dec≈7.6 < 20` keeps the high-dim bar honestly unmet — R2 territory).
+
+## L2 (arity-3) escalation — intra-task H-curriculum (pre-registered 2026-06-29)
+
+**What was already tried (and failed):** the original `L2_arity3` ran at the capacity bump already —
+`d_model=256`, `max_steps=12000`, grok-aware floor, **warm-started from a d256 *arity-2* checkpoint** — and
+returned **UNLEARNED** (`z_recover 0.536 ≈ chance`). The capacity bump alone does not crack it. The missing
+lever is the **intra-task H-curriculum** (the fix that cracked H=16): warm-start each `H` from a learned
+*lower-H, same-task* model. The original's arity-2 warm-start transferred the **wrong circuit**.
+
+**Staged escalation (cheap-first, to avoid gambling ~16 h on a dead-on-arrival 4-stage curriculum):**
+
+- **Step 1 — diagnostic: does low-`H` arity-3 learn at the capacity bump?** One cell, `H=2`, `d256`,
+  `max_steps 12000`, grok-aware (`min_steps 6000`, `patience 15`), `δ=0.45`, `bpc=24`. **LEARNED iff
+  `eval_loss < log2 − 0.02`.** If UNLEARNED → either bump the *signal* (`bpc→48`, `δ→0.49`; the XOR stays
+  input-undecodable, de-confound holds) and retry, or accept arity-3 is beyond the toy's grok reach and
+  **re-scope R1** around what generalized (the D4 running-sum-mod-3 fallback is the other pre-registered
+  computation).
+- **Step 2 — full curriculum (gated on Step 1 LEARNED):** `--curriculum --h-sweep 1,2,4,8 --pos-h 8` at the
+  same capacity → `H=8` arity-3 warm-started up from the learned low-`H` model.
+
+**R1 counts this only if** the resulting `H=8` arity-3 model is LEARNED, body-resists (`d_dec ≥ 4`,
+`z1 ≥ 0.70`, `leak ≈ chance`), **and `objective_excess ≥ 0.10`** — then the "≥2 latent computations" gate
+clears and R1 licenses (still below the `d_dec ≥ 20` high-dim bar = R2 territory). UNLEARNED is **never**
+counted as a body-resistance negative (the UNLEARNED guard).
+
+```bash
+# Step 1 — diagnostic (~3-5 h CPU; OWNER-run in a persistent terminal — agent bg runs die at teardown)
+python scripts/chatv2_phase0_bodyresist.py --mode full --stage all --latent computed --fair-readout \
+  --arity 3 --h-sweep 2 --d-model 256 --delta 0.45 --bits-per-channel 24 \
+  --max-steps 12000 --min-steps 6000 --patience 15 --seed 0 \
+  --out results/chatv2/phase1-r1/L2_arity3_h2diag
+
+# Step 2 — curriculum, ONLY if Step 1 learned (~12-16 h CPU)
+python scripts/chatv2_phase0_bodyresist.py --mode full --stage all --latent computed --fair-readout \
+  --arity 3 --curriculum --h-sweep 1,2,4,8 --pos-h 8 --d-model 256 --delta 0.45 --bits-per-channel 24 \
+  --max-steps 12000 --min-steps 6000 --patience 15 --seed 0 \
+  --out results/chatv2/phase1-r1/L2_arity3_curriculum
+```

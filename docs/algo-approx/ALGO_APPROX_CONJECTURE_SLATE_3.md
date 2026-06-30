@@ -172,6 +172,46 @@ algorithm — no provable separation survives — so the gap stays genuinely imp
 
 ## S3-4 — An analytic-gate ε-rate (the paper's actual headline, in Lean). [FORMALIZABLE-HARD]
 
+> **Status (2026-06-29): FIRST STRIKE LANDED (ε > 0 milestone at the polynomial rate).**
+> `Sundogcert/AnalyticGate.lean` — the canonical analytic gate `x²` (the Yarotsky/Telgarsky
+> building block, *not* piecewise-linear) is approximated on `[0,1]` by an explicit finite ReLU net
+> with a **machine-checked L∞ bound**:
+> - `sqNet_approx (n) (hn : 0 < n) : ∀ x ∈ [0,1], |x² − realize1N (sqNet n) x| ≤ 1/(4n²)`.
+> - `sq_eps_approx (ε) (hε : 0 < ε) : ∃ g : Net 1, ∀ x ∈ [0,1], |x² − realize1N g x| ≤ ε` — the
+>   lane's **first ε > 0 result**: an analytic gate IS a finite ReLU net to any ε, proved.
+>
+> Architecture reuses S1: the chordal interpolant is the upper envelope of its secants
+> (`linesTrop` → `compile`), so "PL ⟹ ReLU" is free; the new content is the error bound, which is
+> *elementary* for `x²` because the secant error has a **closed form** `secant(x) − x² = (x−a)(b−x)`
+> — one `sq_nonneg` for the upper bound, `mul_nonneg` for the lower. Axiom-clean, in the
+> `AxiomAudit` gate, full build green (8534 jobs).
+>
+> **Status (2026-06-29): HARD STEP ALSO LANDED — the polylog rate is machine-checked.**
+> `Sundogcert/SawtoothApprox.lean` — `x²` on `[0,1]` via the Yarotsky/Telgarsky **sawtooth**, at
+> **logarithmic depth**. Reuses the lane's depth-separation tent `T(x) = 1 − |2x − 1|`. Define the
+> self-similar approximant `R 0 x = x`, `R (m+1) x = x − T x/2 + R m (T x)/4`. The entire error
+> analysis collapses to one **self-similar recursion** `e_{m+1}(x) = e_m(T x)/4` (from the tent
+> identity `(T x − 1)² = (2x − 1)²`, here trivial since `T x − 1 = −|2x − 1|`), giving by induction
+> - `sq_sub_R_le : |x² − R m x| ≤ 1/(4·4^m)` on `[0,1]` — **geometric** error decay in `m`;
+> - `Rcirc_depth : (Rcirc m).depth ≤ m·(2·tent.depth + 4)` — **linear** depth (built by `m`-fold
+>   `subst0` composition with the tent);
+> - `sqNet_approx` / `sqNet_depth` — same after `compile` (depth `O(m)` via `compile_depth_le`);
+> - `sq_polylog_approx (ε) : ∃ m g, (∀x∈[0,1], |x²−realize1N g x| ≤ ε) ∧ depth g ≤ 4·m·(…) ∧
+>   1/(4·4^m) ≤ ε` — **the polylog rate**: error `ε` at depth `O(m) = O(log 1/ε)`, exponentially
+>   fewer gates than the first strike's `O(1/√ε)` pieces.
+>
+> **`RATE_NOT_POLYLOG` is now CLEARED** — the paper's headline rate (Cor 5.1 spirit) is
+> machine-checked for `x²`. The sawtooth = the depth-separation tent (`DepthSeparation`,
+> exponential pieces from linear depth) put to *constructive* use. Axiom-clean, in the `AxiomAudit`
+> gate, full build green (8537 jobs). *(Local only; not committed — owner-gated.)*
+
+> **First strike (still standing, the elementary poly rate).**
+> `Sundogcert/AnalyticGate.lean` — `x²` on `[0,1]` by an explicit `n`-piece interpolant with a
+> machine-checked L∞ bound: `sqNet_approx : |x² − net| ≤ 1/(4n²)`; `sq_eps_approx : ∃ g, error ≤ ε`.
+> The lane's first ε > 0 result, at the `O(1/√ε)`-piece (polynomial) rate; the secant error has the
+> closed form `secant(x) − x² = (x−a)(b−x)` (one `sq_nonneg`). Subsumed in *rate* by the sawtooth
+> above, but kept as the clean elementary construction.
+
 *Claim.* The lane's Lean core is **exact (ε = 0)** and stops at the PL fragment; the paper's
 result is *polylog-1/ε* size for **analytic** gates. Machine-check **one** such rate: `√x` (or
 `1/x`) on `[a,b]` is approximable to `L∞` error `ε` by a ReLU net of size `O(polylog 1/ε)`, with a
@@ -197,6 +237,17 @@ chord gap, which the geometric spacing equalizes); compile via `CircuitNet`. Har
 ---
 
 ## S3-5 — The ε-essential count predicts *sample complexity*, not just width. [EMPIRICAL]
+
+> **Status (2026-06-29): CONFIRMS.**
+> [`ALGO_APPROX_S35_SAMPLE_COMPLEXITY_RESULT.md`](ALGO_APPROX_S35_SAMPLE_COMPLEXITY_RESULT.md) ·
+> `scripts/algo_approx_s35_sample_complexity.py`. At **fixed generous width** (capacity removed),
+> sweeping `n_train` and reading `sample_threshold(bar)`: the ε-essential region count tracks the
+> sample threshold (Spearman **0.675** noiseless / **0.784** under label noise; monotone 9/9),
+> while exact `k` does **not** (−0.149 / 0.028 — flat-to-uninformative). `EPS_NOT_SAMPLE_PREDICTOR`
+> did not fire. So region geometry governs the **data** axis as well as N-4's **capacity** axis;
+> exact `k` predicts neither. Honest notes: a flooring artifact (grid starting at `n=8`, already
+> sufficient) was caught and fixed (floor `n=4` + noisy regime); empirical, 1-D PL families,
+> trainability bounded-not-removed by the best-of-restarts oracle. *(Local only; not committed.)*
 
 *Claim.* N-4 showed the ε-essential region count tracks the generalization-**width** threshold
 (modulo trainability). Extend the axis: at **fixed** width, the ε-essential count should also
@@ -262,10 +313,14 @@ non-transfer* (the barrier's location), never a lower bound for general nets.
 3. **S3-2 — graded cancellation.** ✅ **LANDED** (`GradedCancellation.hasPieceCover_graded`):
    region count `≤ 4 ^ cancelMax e · leafCount e`, budget `0` ⇒ N-1 linear. Sharpened N-1/N-2 from
    a dichotomy to a quantitative dial, with the budget localized to cancellation-exposed folds.
-4. **S3-5 — sample-complexity empirical.** Cheapest to run; extends N-4 to a second axis.
-5. **S3-4 — the analytic ε-rate.** The paper's headline, but a genuinely new construction +
-   error analysis; do it when there's appetite for the harder build.
-6. **S3-6 — the natural-proofs daydream.** Framing only; revisit after S3-2/S3-3 land.
+4. **S3-4 — the analytic ε-rate.** ✅ **CLOSED, both rates.** First strike
+   (`AnalyticGate.sq_eps_approx`, poly `O(1/√ε)`) *and* the hard step
+   (`SawtoothApprox.sq_polylog_approx`, **polylog `O(log 1/ε)` depth** via the Telgarsky sawtooth).
+   `RATE_NOT_POLYLOG` cleared — the paper's headline rate is machine-checked for `x²`.
+5. **S3-5 — sample-complexity empirical.** ✅ **CONFIRMS** (`algo_approx_s35_sample_complexity.py`):
+   ε-essential predicts sample complexity (Spearman 0.68 / 0.78) where exact `k` is flat (≈0) —
+   region geometry governs the *data* axis as well as N-4's *capacity* axis.
+6. **S3-6 — the natural-proofs daydream.** Framing only. *(open — the last hook, daydream-tier)*
 
 > Cross-links: [`ALGO_APPROX_CONJECTURE_SLATE_2.md`](ALGO_APPROX_CONJECTURE_SLATE_2.md) ·
 > [`SUNDOG_V_ALGO_APPROX.md`](SUNDOG_V_ALGO_APPROX.md) ·
