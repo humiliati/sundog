@@ -112,9 +112,10 @@ code, experiments, prior theorem materials, and application bridges.
   `≤ 4N`, N-1 monotone depth-as-computation, find/check ledger) is now joined
   by **the Order-Relative Resolution Law** synthesis core in its own section
   (`Sundogcert/OrderRelative.lean` + `OrderRelativeMoment` /
-  `OrderRelativeAlgDegree`): a schema law `Resolves k t ↔ ord t ≤ k` proved once,
-  grounded on six instance families (determination, coordinate-locality,
-  search-reachability, radical-reach, spectral/moment, algebraic-degree), with
+  `OrderRelativeAlgDegree` / `OrderRelativeCohomology`): a schema law
+  `Resolves k t ↔ ord t ≤ k` proved once, grounded on seven instance families
+  (determination, coordinate-locality, search-reachability, radical-reach,
+  spectral/moment, algebraic-degree, topological/cohomological), with
   `order_is_schema_not_scalar` as the explicit honesty guard — sharpened by
   mode-vectors where one object carries divergent orders across axes (`√2`,
   and the optimum `(9+√17)/32`). Not a worked example; not a universal-scalar claim.

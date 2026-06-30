@@ -122,7 +122,7 @@ The schema is a Lean `structure` carrying a `Target` type, an order
 `resist ⟺ infinite-order` (`resists_iff_infinite`) are then theorems *of the
 schema* — proved once and inherited by every instance.
 
-**Six grounded axes plus the resist pole** instantiate the schema — each a
+**Seven grounded axes plus the resist pole** instantiate the schema — each a
 genuinely different filtration, none reducible to the others:
 
 - A **parity-determination instance** (`parityProblem n`): the "total parity on
@@ -152,6 +152,15 @@ genuinely different filtration, none reducible to the others:
   its search/denominator order is `⊤` (it is irrational). `boxOpt_mode_vector`
   machine-checks this divergence on the real optimum: degree-2-simple, but unreachable
   by naive search.
+- A **topological / cohomological instance** (`OrderRelativeCohomology`): `ord` = the
+  additive (torsion) order of a (co)homology class — **determine ⟺ torsion, resist ⟺
+  free**. A torsion class (`1 : ZMod m`) has order `m`; the **free** class (`1 : ℤ`) has
+  order `⊤`, an earned pole — `ℤ = H¹(S¹)` is the Aharonov–Bohm winding / `∮A` flux
+  period (companion `FaradayAB.loop_integral_eq_flux`), the loop blind to the global
+  flux. On a *mixed* class `(1,1) ∈ ℤ × ZMod m`, `mixed_mode_vector` shows the scalar
+  order collapses to `⊤` while the free/torsion projection-vector is `(⊤, m)` — an
+  intrinsic mode-vector (canonical, not chosen). Structural rather than deep: it pins
+  down that the scalar verdict is *lossy on mixed classes*.
 - A **resist pole** (`resistPole`): a target no finite budget resolves — order
   `= ⊤` — paired with `resists_iff_infinite` to instantiate the resist side of
   the dichotomy.
@@ -160,10 +169,13 @@ The closing theorem `order_is_schema_not_scalar` is the **honesty guard**: parit
 gives finite order `n`, coordinate-locality gives finite order `d`, and the resist
 pole gives `⊤` — none of them comparable as numbers across instances. The mode-vectors
 make the point sharpest: the *same* object carries divergent orders across axes (`√2`:
-search-reach `⊤` vs radical 2; `(9+√17)/32`: algebraic-degree 2 vs denominator `⊤`), so
-the order is provably **not** a single universal scalar. The finite/∞ split is
-*per-instance*. The law is a **schema, not a scalar**; orders compose across instances
-only through the schema, never through a shared comparable number.
+search-reach `⊤` vs radical 2; `(9+√17)/32`: algebraic-degree 2 vs denominator `⊤`) — and
+in the cohomological case the mode-vector is *intrinsic* to one axis (`(1,1) ∈ ℤ × ZMod m`:
+the scalar order collapses to `⊤` while the faithful order is the vector `(⊤, m)`). So the
+order is provably **not** a single universal scalar — the scalar is the lossy join of a
+latent vector. The finite/∞ split is *per-instance*. The law is a **schema, not a scalar**;
+orders compose across instances only through the schema, never through a shared comparable
+number.
 
 **Claim boundary.** Not tied to any named hard problem (P-vs-NP, Riemann, etc.);
 not tied to alignment or safety; not a universal scalar shared across instances
