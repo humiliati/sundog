@@ -105,20 +105,36 @@ code, experiments, prior theorem materials, and application bridges.
   (empirical with named SGD residual), and
   [`ALGO_APPROX_CD2_GROKKING_RESULT.md`](algo-approx/ALGO_APPROX_CD2_GROKKING_RESULT.md)
   (the prior null this redeems).
-- [Sundog Certificate (Lean) ledger](SUNDOG_V_CERTIFICATE_LEAN.md) **— now ten
-  worked examples + one synthesis law**: the previous worked-example ledger
-  (finite-field, real analysis ×2, geometric optics, gauge topology, Karp
-  3SAT→decoding, finite audit game, tropical/PL with linear gate count
-  `≤ 4N`, N-1 monotone depth-as-computation, find/check ledger) is now joined
-  by **the Order-Relative Resolution Law** synthesis core in its own section
-  (`Sundogcert/OrderRelative.lean` + `OrderRelativeMoment` /
-  `OrderRelativeAlgDegree` / `OrderRelativeCohomology`): a schema law
-  `Resolves k t ↔ ord t ≤ k` proved once, grounded on seven instance families
-  (determination, coordinate-locality, search-reachability, radical-reach,
-  spectral/moment, algebraic-degree, topological/cohomological), with
-  `order_is_schema_not_scalar` as the explicit honesty guard — sharpened by
-  mode-vectors where one object carries divergent orders across axes (`√2`,
-  and the optimum `(9+√17)/32`). Not a worked example; not a universal-scalar claim.
+- [Sundog Certificate (Lean) ledger](SUNDOG_V_CERTIFICATE_LEAN.md) **— now
+  fifteen worked examples + one synthesis law + one constructive
+  universal-approximation capstone**: the worked-example ledger (finite-field,
+  real analysis ×2, geometric optics, gauge topology, Karp 3SAT→decoding,
+  finite audit game, tropical/PL with linear gate count `≤ 4N`, N-1 monotone
+  depth-as-computation, find/check ledger, plus five slate-3 closures:
+  `cpl_iff_reluNet`, `AnalyticGate` + `SawtoothApprox`, `QueryGap`
+  `check_lt_find` (a proved find/check gap in a restricted query model —
+  **not** a P-vs-NP claim), `GradedCancellation`, and the empirical
+  ε-essential sample-complexity) sits alongside **the Order-Relative
+  Resolution Law** synthesis core (`Sundogcert/OrderRelative.lean` +
+  `OrderRelativeMoment` / `OrderRelativeAlgDegree` / `OrderRelativeCohomology`):
+  a schema law `Resolves k t ↔ ord t ≤ k` grounded on **seven instance
+  families** (determination, coordinate-locality, search-reachability,
+  radical-reach, spectral/moment, algebraic-degree, topological/cohomological),
+  with `order_is_schema_not_scalar` as the honesty guard and the
+  **composition law** (`compose_order_eq_lcm`, `compose_lcm_not_max`,
+  `converse_fails`) showing the scalar order is the lattice join (lcm) of a
+  latent component vector — **axis-internal**, on the group-order axes, with
+  both walls of the characterization proved (three positive axes, two
+  negative, plus a proved converse failure). **Above it all**, the
+  constructive universal-approximation capstone
+  (`UniversalApprox.continuous_relu_approximable`) — every continuous function
+  on `[0,1]` is uniformly ε-approximable by an *explicit* ReLU net, proved
+  end-to-end via the analytic-gate chain, axiom-clean, with **only
+  Stone-Weierstrass density imported**. The capstone is the **constructive
+  direction** of a classical fact; not a new approximation theorem, not a
+  rate improvement. The synthesis law is a *schema*, not a universal scalar;
+  the composition law is **axis-internal**, not a cross-axis identity. Not a
+  worked example, not a P-vs-NP claim, not a learnability claim.
 - [Sundog Tauroctony ledger](SUNDOG_V_TAUROCTONY.md): the portfolio's
   mythopoetic cosmogram — the tauroctony as one image holding the empirical
   ledgers (Sol/field, the bull/maximand, the two torchbearers, the bestiary as

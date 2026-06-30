@@ -202,6 +202,32 @@ latent vector. The finite/∞ split is *per-instance*. The law is a **schema, no
 orders compose across instances only through the schema, never through a shared comparable
 number.
 
+### The composition law (axis-internal)
+
+The vector-valued reading is sharpened by a separate result: on the axes whose order is a
+*group order*, the scalar order **composes as a lattice join**. The headline theorem
+`compose_order_eq_lcm` proves that the order of the product `(1, 1) ∈ ℤ/a × ℤ/b` is
+`lcm(a, b)` — *not* the max. The sharpness is itself proved: `compose_lcm_not_max` exhibits
+`a = 4, b = 6`, where the composite order is `12 = lcm(4, 6)`, while the join-by-max would
+give `6`. Order is therefore natively vector-valued: the scalar is the lattice join of a
+latent component-vector, *exactly* in the form the lcm provides on group orders.
+
+The characterization is **sharp** in both directions. The composition law holds on the
+**group-order axes** — three positives (parity, coordinate-locality, cohomology) under one
+machine-checked classification, with two negatives (the binary spectral / moment axis and
+the algebraic-degree axis) where the order is not group-structured and the join formulation
+fails. And the converse fails *too*: `converse_fails` exhibits a join-homomorphic order
+that is **not** a group order, ruling out the easy reading that "join-homomorphic" and
+"group-order" name the same thing. Both walls of the characterization are proved, not
+asserted.
+
+This composition is **axis-internal**: it is the lattice structure of one axis's group
+order, not a universal cross-axis identity. The schema-not-scalar guard above (orders are
+incomparable across instances) and the composition law here are consistent — the law says
+*within an axis whose order is a group order*, composition has clean lattice structure;
+across axes, the orders remain incomparable as numbers, and the scalar verdict on mixed
+objects remains lossy.
+
 **Claim boundary.** Not tied to any named hard problem (P-vs-NP, Riemann, etc.);
 not tied to alignment or safety; not a universal scalar shared across instances
 (the closing theorem proves the opposite); not a worked example in the find-vs-check
@@ -392,12 +418,18 @@ claim); `GradedCancellation` (region count `≤ 4^g · leafCount` recasting
 monotone-vs-general as a graded dial); and an empirical sample-complexity
 result (ε-essential predicts data needs at Spearman 0.68 / 0.78). **Alongside,
 one synthesis core** — the Order-Relative Resolution Law (`OrderRelative`) —
-proves a single schema once: `Resolves k t ↔ ord t ≤ k`, grounded on
-parity-determination and coordinate-locality instances and explicitly guarded
-by `order_is_schema_not_scalar` against any universal-scalar misread.
-**Above it all**, one capstone theorem: `UniversalApprox.continuous_relu_approximable`
-— every continuous function on `[0,1]` is uniformly ε-approximable by an
-explicit ReLU net, proved end-to-end via the analytic-gate chain
+proves a single schema once: `Resolves k t ↔ ord t ≤ k`, grounded on **seven
+instance families** (parity-determination, coordinate-locality, search-reach,
+radical-reach, spectral/moment, algebraic-degree, cohomological torsion-vs-free)
+and explicitly guarded by `order_is_schema_not_scalar` against any universal-
+scalar misread. The **composition law** (`compose_order_eq_lcm`,
+`compose_lcm_not_max`, `converse_fails`) further proves that order is natively
+vector-valued and composes as a lattice join on the group-order axes — an
+**axis-internal** lattice structure, not a universal cross-axis identity, with
+both walls of the characterization machine-checked. **Above it all**, one
+capstone theorem: `UniversalApprox.continuous_relu_approximable` — every
+continuous function on `[0,1]` is uniformly ε-approximable by an explicit
+ReLU net, proved end-to-end via the analytic-gate chain
 (`MultiplyGate.mult_polylog` → `MonomialEval.pow_poly_rate` →
 `PolyEval.poly_polylog` → the capstone), axiom-clean, with **only
 Stone-Weierstrass density imported** from mathlib. The capstone is the
@@ -406,14 +438,15 @@ construction made explicit and machine-checked — **not a new approximation
 theorem and not a rate improvement**. Hardness, model realization, physical
 optics, the physical gauge field, the NP-class / poly-time / Cook-Levin
 complexity wrapping, the depth-vs-**width** lower bound for general nets
-(Telgarsky / Eldan–Shamir), the find-side of every certifying instance
-(factoring for Pratt witnesses, max-flow algorithms, SCC construction, etc.),
-and Stone-Weierstrass density (the capstone's analytic floor) all remain named
+(Telgarsky / Eldan–Shamir), the find-side of every certifying instance, and
+Stone-Weierstrass density (the capstone's analytic floor) all remain named
 walls. Not a cryptographic one-wayness claim; not a claim about P versus NP
-(the `QueryGap` proved separator lives in a restricted query model);
-not a claim that Lean proves the sky realizes the halo or that nature realizes
-the Aharonov-Bohm effect; not a learnability claim; not a new analytic-gate
+(the `QueryGap` proved separator lives in a restricted query model); not a
+claim that Lean proves the sky realizes the halo or that nature realizes the
+Aharonov-Bohm effect; not a learnability claim; not a new analytic-gate
 approximation theorem and not a rate improvement; not a fast primality test
 (Pratt is NP-*membership*); not a lower bound for general neural nets; not a
 universal cross-instance scalar (the `order_is_schema_not_scalar` theorem
-proves the opposite).
+proves the opposite); not a universal cross-axis composition identity (the
+composition law is axis-internal, holding on the group-order axes with
+`converse_fails` as the proved boundary).
