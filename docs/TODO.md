@@ -68,9 +68,14 @@ Yang-Mills; Riemann resolved in-house (off the gating list).
   (`PHASE3_BRANCH_E3_LEARNED_RANKER_SPEC.md` Amendment B): bounded-aux
   two-stage screening (shards {0} =1/8 → {0,1} =1/4 → full {0..7}) with an
   asymmetric verdict (a bounded lift is CONCLUSIVE = lower bound on the full
-  ranker; a bounded non-positive is inconclusive, escalate). Execution still
-  gated on a freeze-marker sub-amendment (smokes + cached U_primary/validation
-  + exact staged commands); ~10 h stage-1, ~16 h cumulative stage-2.
+  ranker; a bounded non-positive is inconclusive, escalate). **Freeze-marker
+  smokes GREEN 2026-06-30 (Amendment C): py_compile / dry-run / leak-check 0-0 /
+  capped subset-merge end-to-end (single shard → 28 artifacts, ranker trained 5
+  seeds, 5 controls populated). Subset-merge confirmed; no U_primary/validation
+  cache (escalation re-pays ~4h; optional `--score-only` deferred). Stage-1
+  (1/8 aux) ADMITTED + staged for operator** — exact PowerShell in Amendment C,
+  ~10-16h background, run from a clean/pinned worktree; Stage-2/full gated on
+  Stage-1 being non-positive.
 
 ### `review-gated` — packet sent, awaiting reply
 

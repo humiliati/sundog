@@ -504,3 +504,59 @@ node scripts/arc-phase3-branch-e3-learned-ranker.mjs --merge `
 
 **No binding run, no verdict by this amendment.** Execution remains gated on the freeze-marker
 sub-amendment above and is staged for the operator.
+
+---
+
+## Amendment C — Stage-1 Freeze Marker (smokes GREEN; stage-1 execution admitted + staged, 2026-06-30 PT)
+
+Append-only. Discharges the Amendment-B freeze-marker requirements with bounded smokes. **Admits the
+Stage-1 (1/8 aux) binding run, staged for the operator.** No binding receipt, no verdict here.
+
+### Smokes (all green, 2026-06-30)
+- **`py_compile`** clean (`phase3_branch_e3_learned_ranker.py`).
+- **Dry-run** emits the artifact stub set.
+- **Leak-check** `arc:phase0:leak-check`: **0 fail / 0 warn** (27 ARC scripts; register discipline 36
+  training / 0 evaluation; no eval literals; no Kaggle scaffolding).
+- **Capped subset-merge end-to-end** (the Amendment-B-specific check): `--shard-aux --shard-index 0
+  --shard-count 8 --limit-aux 16` (→ 2 aux tasks, **9 instances, 2715 candidates / 1086 positive labels**)
+  then `--merge --limit-tasks 4` over the **single present shard**. Result: ran clean (exit 0), emitted
+  **all 28 artifacts**, branch `branch_e3_ranker_floor` (meaningless at this cap — 4 register tasks, 2-task
+  aux — NOT a result). The ranker **trained** 5 seeds × 40 epochs (`training_summary.csv`: 2715 rows / 1086
+  pos / best_loss ~0.07–0.17); all **five controls** populated (`selector_comparison.csv`) and the
+  `oracle_candidate_ceiling` ran (`candidate_ceiling.csv`).
+
+### What the smokes establish (the two Amendment-B tooling assumptions)
+1. **Subset-merge works.** `run_merge` globs `aux_candidates_shard_*.jsonl` and merges whatever shards are
+   present (code + smoke confirmed), so generating only shard {0} is a valid deterministic 1/8 aux pool and
+   the full pipeline (train + score full U_primary + adjudicate + 28 artifacts) runs on it. Stage-1 is sound.
+2. **No U_primary/validation caching.** `run_merge` regenerates the validation + U_primary candidates on
+   **every** `--merge` (the candidate-gen block before the barriers). Consequence for escalation: each stage
+   re-pays the fixed U_primary+validation generation (~the ~4 h floor). **Stage-1 (one merge) is unaffected.**
+   If Stage-1 is non-positive and we escalate, a small `--score-only`/cached-barrier flag would save ~4 h on
+   Stage-2 — **deferred** (added only if/when escalation is actually needed; not on the Stage-1 path).
+
+### Timing (measured)
+The smoke's 9 aux instances carried 2715 candidates (~300/inst, heavier than Amendment A's ~60/inst — per-task
+variable); per-instance wall ran ~50–100 s. Stage-1 = shard {0} of 8 over the full ~3.6 k-instance aux pool ≈
+~450 aux instances → **~6–12 h aux + ~4 h U_primary/validation ≈ ~10–16 h**, task-mix dependent. Exceeds the
+ten-minute rule → **staged as a background job for the operator**, not run by this agent.
+
+### Exact Stage-1 binding commands (run from a clean worktree pinned to the freeze-marker commit)
+```powershell
+# Stage 1 (1/8 aux): full shard 0 of 8 (NO --limit-aux), then merge over the present shard.
+node scripts/arc-phase3-branch-e3-learned-ranker.mjs --shard-aux --shard-index 0 --shard-count 8 `
+  --data-dir "$env:USERPROFILE\Datasets\ARC-AGI-2\data" `
+  --register docs/prereg/arc/P0_TASK_REGISTER_EXPANDED_FOR_FIBERS.csv --split-mode sha256_expansion `
+  --out results/arc/phase3-branch-e3-learned-ranker
+node scripts/arc-phase3-branch-e3-learned-ranker.mjs --merge `
+  --data-dir "$env:USERPROFILE\Datasets\ARC-AGI-2\data" `
+  --register docs/prereg/arc/P0_TASK_REGISTER_EXPANDED_FOR_FIBERS.csv --split-mode sha256_expansion `
+  --out results/arc/phase3-branch-e3-learned-ranker
+```
+The worktree currently carries uncommitted lane work; the operator should commit/pin first, or pass
+`--allow-dirty` and record `gitDirty` in the verdict (the v2 Amendment-B precedent). Read back
+`manifest.json`, `capability_summary.csv`, `selector_comparison.csv`, `candidate_ceiling.csv`,
+`branch_adjudication.md`. Adjudicate per Amendment B's asymmetric verdict: a Stage-1 **lift** is conclusive
+(stop); a Stage-1 **non-positive** is inconclusive → Stage-2 (add shard 1, re-merge {0,1}).
+
+**No binding run, no verdict by this amendment.** Stage-1 is admitted + staged; the operator launches it.

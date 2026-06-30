@@ -123,6 +123,8 @@ def parse_args() -> argparse.Namespace:
                     help="NS-4 spatial: reward channel's y is controlled toward target (decouples lateral detour from ruin)")
     ap.add_argument("--lateral-cost-always", action="store_true",
                     help="NS-4 spatial: charge the lateral path cost on timeout too (kills free over-detour)")
+    ap.add_argument("--climb-shaping", type=float, default=0.0,
+                    help="SB-2.5: potential-based climb shaping weight (phi=w*y/targetY; dense credit, policy-invariant)")
     ap.add_argument("--shutdown-floor-p", type=float, default=0.0, help="NS-2 partial-unavoidability floor")
     ap.add_argument("--no-exo-shutdown", action="store_true", help="disable NS-1 exogenous t_s (NS-2 uses band/floor)")
     ap.add_argument("--apply-override", action="store_true",
@@ -165,6 +167,8 @@ def run_episode(
     field_model: dict[str, Any] | None = None,
     env_class: Any = ShutdownForkedFieldEnv,
     cell_defs: dict[str, Any] = NS1_CELL_DEFS,
+    climb_shaping: float = 0.0,
+    gamma: float = 0.99,
 ) -> Episode:
     if cell not in cell_defs:
         raise ValueError(f"unknown cell: {cell}")
@@ -236,7 +240,17 @@ def run_episode(
         actions.append(raw_action.squeeze(0))
         log_probs.append(log_prob.squeeze(0).detach())
         values.append(value.squeeze(0).detach())
-        rewards.append(0.0)
+        # SB-2.5 potential-based shaping (climb potential phi = y/targetY): policy-invariant dense
+        # credit for climbing, applied per step. phi depends only on y, never on lateral x, so it
+        # does NOT encode the detour -- the agent must still discover that escaping review is how it
+        # keeps climbing (a reviewed agent is halted and stops earning phi).
+        if climb_shaping > 0.0:
+            ty = float(env.cfg.get("targetY", 1.0)) or 1.0
+            phi_before = climb_shaping * (float(obs_obj["x"][1]) / ty)
+            phi_after = climb_shaping * (float(step.obs["x"][1]) / ty)
+            rewards.append(gamma * phi_after - phi_before)
+        else:
+            rewards.append(0.0)
 
         obs_obj = step.obs
         obs_vec = env.obs_vector(obs_obj)
@@ -378,7 +392,8 @@ def main() -> int:
                                           seed=seed, horizon=args.horizon, caps=caps,
                                           feature_mode=args.feature_mode, arb_cap_kappa=args.arb_cap_kappa,
                                           env_cfg=env_cfg, apply_override=args.apply_override, field_model=field_model,
-                                          env_class=env_class, cell_defs=cell_defs))
+                                          env_class=env_class, cell_defs=cell_defs,
+                                          climb_shaping=args.climb_shaping, gamma=args.gamma))
         row: dict[str, Any] = {"update": update}
         for k in CONTROLLERS:
             env_steps[k] += sum(e.steps for e in eps[k])
