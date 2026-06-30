@@ -45,7 +45,7 @@
       "@context": "https://schema.org",
       "@type": "TechArticle",
       "headline": "Algorithmic Approximation - cheaper to check than to find, machine-checked across seven problems",
-      "description": "Sundog's algorithmic-approximation lane: a public Lean find/check ledger built from one Certifies interface and seven instances - syndrome verifier, shortest-path, ReLU gate-count, max-flow / min-cut, König matching / cover, 2-SAT decision, and Pratt primality. Each instance machine-checks an O(.) cheap-CHECK theorem; finding the certificate stays imported in every instance (factoring p-1 for Pratt witnesses, max-flow algorithms, SCC construction, etc.). The tropical / piecewise-linear core (CircuitNet + RegionCount + CancellationFree + DepthSeparation + StraightLineCost) machine-checks exact (epsilon = 0) compilation of PL circuits to ReLU networks with a linear gate count <= 4N via a sharing-aware DAG (compileToDag), realization-independent linear-region structure, and the tent's 2^d depth separation - the epsilon = 0 piecewise-linear core for arXiv:2606.26705 Thm 3.2 / Cor 5.1. The N-1 monotone depth-as-computation theorem (FoldCancellation + PieceCover + RegionPoly) shows cancellation-free circuits have region count linear in their leaves, while the d-fold tent's 2^d expressivity requires cancellation - a lower bound in the cancellation-free model, not a lower bound for general neural nets (the depth-vs-width bound stays imported, Telgarsky / Eldan-Shamir). The N-2 cancellation-spine reading (CancellationSpine isMono_tame) is a typed conjecture - machine-checked on the monotone / convex / region axes only; the additive / subtractive / division readings stay an organizing lens, not a reduction theorem. N-4 ε-essential region count is empirical: it tracks generalization-width threshold at 0.89 (vs 0.50 for exact k) with a named SGD-trainability residual on non-convex shapes. Slate-3 closes five more, all in the gate: cpl_iff_reluNet (continuous-PL <-> finite ReLU net, both directions - the epsilon = 0 characterization of universal approximation); AnalyticGate + SawtoothApprox (x^2 approximated to any epsilon by a ReLU net, at both the elementary poly O(1/sqrt eps) rate and the polylog O(log 1/eps) depth via the Telgarsky sawtooth - the lane's first epsilon > 0 results); QueryGap check_lt_find (the ledger's first PROVED, not imported, find/check gap - in a restricted query model, check 1 query vs find >= n, not a P-vs-NP claim); GradedCancellation (region count <= 4^g * leafCount, the monotone-vs-general dichotomy as a graded dial); and an empirical sample-complexity result (epsilon-essential predicts the data needed to generalize, Spearman 0.68/0.78, where exact k is flat). Public, reproducible, axiom-clean (AxiomAudit gate, no sorry); the kernel re-checks every theorem in seconds. NOT a P-vs-NP advance, NOT a hardness proof, NOT a learnability claim, NOT a general analytic-gate theorem (the epsilon > 0 approximation is shown for x^2 only), NOT a fast primality test (Pratt is NP-membership), NOT a general neural-net lower bound. Standing claim boundary above the fold.",
+      "description": "Sundog's algorithmic-approximation lane: a public Lean find/check ledger built from one Certifies interface and seven instances - syndrome verifier, shortest-path, ReLU gate-count, max-flow / min-cut, König matching / cover, 2-SAT decision, and Pratt primality. Each instance machine-checks an O(.) cheap-CHECK theorem; finding the certificate stays imported in every instance (factoring p-1 for Pratt witnesses, max-flow algorithms, SCC construction, etc.). The tropical / piecewise-linear core (CircuitNet + RegionCount + CancellationFree + DepthSeparation + StraightLineCost) machine-checks exact (epsilon = 0) compilation of PL circuits to ReLU networks with a linear gate count <= 4N via a sharing-aware DAG (compileToDag), realization-independent linear-region structure, and the tent's 2^d depth separation - the epsilon = 0 piecewise-linear core for arXiv:2606.26705 Thm 3.2 / Cor 5.1. The N-1 monotone depth-as-computation theorem (FoldCancellation + PieceCover + RegionPoly) shows cancellation-free circuits have region count linear in their leaves, while the d-fold tent's 2^d expressivity requires cancellation - a lower bound in the cancellation-free model, not a lower bound for general neural nets (the depth-vs-width bound stays imported, Telgarsky / Eldan-Shamir). The N-2 cancellation-spine reading (CancellationSpine isMono_tame) is a typed conjecture - machine-checked on the monotone / convex / region axes only; the additive / subtractive / division readings stay an organizing lens, not a reduction theorem. N-4 ε-essential region count is empirical: it tracks generalization-width threshold at 0.89 (vs 0.50 for exact k) with a named SGD-trainability residual on non-convex shapes. Slate-3 closes five more, all in the gate: cpl_iff_reluNet (continuous-PL <-> finite ReLU net, both directions - the epsilon = 0 characterization of universal approximation); AnalyticGate + SawtoothApprox (x^2 approximated to any epsilon by a ReLU net, at both the elementary poly O(1/sqrt eps) rate and the polylog O(log 1/eps) depth via the Telgarsky sawtooth - the lane's first epsilon > 0 results); QueryGap check_lt_find (the ledger's first PROVED, not imported, find/check gap - in a restricted query model, check 1 query vs find >= n, not a P-vs-NP claim); GradedCancellation (region count <= 4^g * leafCount, the monotone-vs-general dichotomy as a graded dial); and an empirical sample-complexity result (epsilon-essential predicts the data needed to generalize, Spearman 0.68/0.78, where exact k is flat). The general analytic gate is then built end to end: an epsilon-multiply gate by polarization (MultiplyGate.mult_polylog), monomials x^d by a clamped multiply-chain (MonomialEval.pow_poly_rate), arbitrary polynomials in the monomial basis (PolyEval.poly_polylog), and the capstone UniversalApprox.continuous_relu_approximable - every continuous function on [0,1] is uniformly epsilon-approximable by an explicit ReLU net, with the only imported analytic input the Stone-Weierstrass density theorem (mathlib), the whole result staying axiom-clean. Public, reproducible, axiom-clean (AxiomAudit gate, no sorry); the kernel re-checks every theorem in seconds. NOT a P-vs-NP advance, NOT a hardness proof, NOT a learnability claim; the universal-approximation capstone is the CONSTRUCTIVE direction of a classical fact (the Yarotsky-style ReLU construction made explicit and machine-checked, density cited from Weierstrass) - NOT a new approximation theorem, NOT a rate improvement; NOT a fast primality test (Pratt is NP-membership), NOT a general neural-net lower bound. Standing claim boundary above the fold.",
       "image": "https://sundog.cc/og/algorithmic-approximation.png",
       "datePublished": "2026-06-29",
       "dateModified": "2026-06-29",
@@ -403,7 +403,7 @@
     </header>
     <main>
         <section class="aa-hero">
-            <p class="eyebrow">High-Stakes Generality &middot; Algorithmic Approximation &middot; 2026-06-29</p>
+            <p class="eyebrow">High-Stakes Generality &middot; Algorithmic Approximation &middot; 2026-06-30</p>
             <h1>Cheaper to check than to find. Machine-checked across seven problems.</h1>
             <p class="lede">
                 A public Lean ledger machine-checks a single &ldquo;cheap CHECK&rdquo; statement across seven
@@ -425,6 +425,7 @@
                 <span class="pass">find/check ledger &middot; 7 instances</span>
                 <span class="pass">DAG linear gate count &middot; <code>&le; 4N</code></span>
                 <span class="pass">N-1 fully closed &middot; cancellation-free is region-polynomial</span>
+                <span class="pass">universal approximation &middot; constructive, axiom-clean</span>
                 <span class="review">N-2 synthesis &middot; typed-conjecture organizing read</span>
                 <span class="review">N-4 empirical &middot; 0.89 with named SGD residual</span>
                 <span class="pass">axiom-clean &middot; AxiomAudit-gated</span>
@@ -691,8 +692,8 @@
                         <code>SawtoothApprox.sq_polylog_approx</code> gives the
                         <strong>polylog <code>O(log 1/&epsilon;)</code>-depth</strong> rate via the
                         Telgarsky sawtooth &mdash; the depth-separation tent put to constructive use,
-                        with a one-line self-similar error recursion. Shown for <code>x&sup2;</code>;
-                        <strong>not a general analytic-gate theorem</strong>.
+                        with a one-line self-similar error recursion. Shown for <code>x&sup2;</code> &mdash;
+                        the seed gate that the general construction below iterates to universal approximation.
                     </p>
                     <span class="tier">Tier: [Lean &mdash; axiom-clean, gated]</span>
                 </div>
@@ -736,6 +737,76 @@
                     <span class="tier">Tier: [Empirical]</span>
                 </div>
             </div>
+        </section>
+
+        <!-- The general analytic gate -->
+        <section class="aa-section" aria-label="The general analytic gate — universal approximation">
+            <p class="eyebrow">The general analytic gate &mdash; the constructive ladder, completed</p>
+            <h2>From <code>x&sup2;</code> to <em>every continuous function</em>, machine-checked.</h2>
+            <p>
+                S3-4 approximated <code>x&sup2;</code>. Four further modules iterate that one gate all the
+                way to <strong>universal approximation</strong> &mdash; the constructive arc of
+                <a href="https://arxiv.org/abs/2606.26705">arXiv:2606.26705</a>'s Cor 5.1, each rung
+                axiom-clean and in the gate:
+            </p>
+            <div class="aa-secondary-grid">
+                <div class="aa-card">
+                    <p class="card-eyebrow">multiply &middot; the hinge</p>
+                    <h3>An &epsilon;-multiply gate at log depth.</h3>
+                    <p>
+                        <code>MultiplyGate.mult_polylog</code>: by polarization
+                        <code>x&middot;y = ((x+y)&sup2; &minus; x&sup2; &minus; y&sup2;)/2</code>, three rescaled
+                        copies of the <code>x&sup2;</code> net give an &epsilon;-approximate multiply gate of depth
+                        <code>O(log 1/&epsilon;)</code>. Multiplication is the hinge from one gate to all of them.
+                    </p>
+                    <span class="tier">Tier: [Lean &mdash; axiom-clean, gated]</span>
+                </div>
+                <div class="aa-card">
+                    <p class="card-eyebrow">monomial &middot; x<sup>d</sup></p>
+                    <h3>Powers by a clamped multiply-chain.</h3>
+                    <p>
+                        <code>MonomialEval.pow_poly_rate</code>: chaining <code>d&minus;1</code> multiply gates gives
+                        <code>x<sup>d</sup></code> to any &epsilon; at depth <code>O(d&middot;log 1/&epsilon;)</code>.
+                        Each step <strong>clamps</strong> the running value to <code>[0,1]</code> &mdash; a contraction,
+                        so error never grows and the gate's domain stays valid &mdash; and the <code>d</code> errors
+                        accumulate only <em>linearly</em>.
+                    </p>
+                    <span class="tier">Tier: [Lean &mdash; axiom-clean, gated]</span>
+                </div>
+                <div class="aa-card">
+                    <p class="card-eyebrow">polynomial &middot; &Sigma; a<sub>i</sub>x<sup>i</sup></p>
+                    <h3>Any polynomial, in the monomial basis.</h3>
+                    <p>
+                        <code>PolyEval.poly_polylog</code>: an arbitrary polynomial to &epsilon; at depth
+                        <code>O(deg&middot;log 1/&epsilon;)</code>. Horner-as-a-circuit is <em>blocked</em> (the running
+                        value leaves <code>[0,1]</code>); instead the value stays Horner but the <em>circuit</em> is the
+                        monomial sum <code>&Sigma; a<sub>i</sub>&middot;(x<sup>i</sup> net)</code> &mdash; only the
+                        <code>x<sup>i</sup></code> are nonlinear, the linear combination is exact.
+                    </p>
+                    <span class="tier">Tier: [Lean &mdash; axiom-clean, gated]</span>
+                </div>
+                <div class="aa-card">
+                    <p class="card-eyebrow">capstone &middot; universal approximation</p>
+                    <h3>Every continuous <code>f</code> on <code>[0,1]</code> is a ReLU net.</h3>
+                    <p>
+                        <code>UniversalApprox.continuous_relu_approximable</code>: every
+                        <code>f &isin; C([0,1])</code> is uniformly &epsilon;-approximated by an explicit ReLU net.
+                        The new machine-checked content is <code>polyEval_approx</code> (every polynomial &rarr; net,
+                        via a bridge from a mathlib <code>Polynomial</code> to the coefficient list); the single
+                        <strong>imported</strong> analytic input is <strong>Stone&ndash;Weierstrass</strong>
+                        (polynomials dense in <code>C([0,1])</code>). Notably the whole theorem stays
+                        <strong>axiom-clean</strong> &mdash; Weierstrass adds no <code>sorry</code> and no
+                        <code>native_decide</code>.
+                    </p>
+                    <span class="tier">Tier: [Lean &mdash; axiom-clean, gated]</span>
+                </div>
+            </div>
+            <p>
+                <strong>Honest scope:</strong> this is the <em>constructive</em> direction of a classical fact. It
+                makes the Yarotsky-style ReLU construction explicit and machine-checked, with density itself cited
+                from mathlib's Stone&ndash;Weierstrass. It is <strong>not</strong> a new approximation-theoretic
+                result, <strong>not</strong> a rate improvement, and says nothing about learnability or P-vs-NP.
+            </p>
         </section>
 
         <!-- Falsification surface -->
@@ -791,6 +862,10 @@
                     <li><code>GradedCancellation.lean</code> &mdash; S3-2 <code>hasPieceCover_graded</code></li>
                     <li><code>AnalyticGate.lean</code> &mdash; S3-4 <code>sq_eps_approx</code> (x&sup2; at &epsilon; &gt; 0, poly)</li>
                     <li><code>SawtoothApprox.lean</code> &mdash; S3-4 <code>sq_polylog_approx</code> (polylog depth)</li>
+                    <li><code>MultiplyGate.lean</code> &mdash; <code>mult_polylog</code> (&epsilon;-multiply, the hinge)</li>
+                    <li><code>MonomialEval.lean</code> &mdash; <code>pow_poly_rate</code> (x<sup>d</sup>, clamped chain)</li>
+                    <li><code>PolyEval.lean</code> &mdash; <code>poly_polylog</code> (any polynomial, monomial basis)</li>
+                    <li><code>UniversalApprox.lean</code> &mdash; <code>continuous_relu_approximable</code> (capstone, + Weierstrass)</li>
                     <li><code>Certifies.lean</code> &mdash; LP-duality core, <code>weakDuality_tight</code></li>
                     <li><code>MaxFlowMinCut.lean</code> &mdash; <code>maxflow_mincut</code></li>
                     <li><code>MatchingCover.lean</code> &mdash; <code>konig</code></li>
