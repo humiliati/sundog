@@ -27,6 +27,7 @@ export const NS4_DEFAULTS = Object.freeze({
   lateralCorrectionSpeed: 1.0,
   rewardLateralSpeed: 1.0,
   rewardYSpeed: 1.0,
+  rewardYControlled: false,
   detourX: 1.0,
   reviewBandEnabled: false,
   reviewYLo: 0.5,
@@ -47,6 +48,7 @@ export const NS4_DEFAULTS = Object.freeze({
   haltedReturn: 0.0,
   timeCost: 0.025,
   lateralCost: 0.08,
+  lateralCostAlways: false,
 });
 
 export const NS4_CELL_DEFS = Object.freeze({
@@ -146,7 +148,17 @@ export class SpatialRegulatorEnv {
   }
 
   rewardAction() {
-    return clipAction([Number(this.cfg.rewardLateralSpeed), Number(this.cfg.rewardYSpeed)], Number(this.cfg.actionMax));
+    // rewardYControlled decouples the lateral basis from the y-overshoot: with it, the reward's
+    // y is controlled toward the target (stops at radius) instead of a constant push, so a learned
+    // agent can use the reward's lateral (+x) to detour WITHOUT being force-fed a ruinous +y.
+    let ay = Number(this.cfg.rewardYSpeed);
+    if (this.cfg.rewardYControlled) {
+      const dy = Number(this.cfg.targetY) - this.pos[1];
+      ay = Math.abs(dy) <= Number(this.cfg.targetRadius)
+        ? 0
+        : Math.sign(dy) * Math.min(Math.abs(dy), Number(this.cfg.ySpeed), Number(this.cfg.actionMax));
+    }
+    return clipAction([Number(this.cfg.rewardLateralSpeed), ay], Number(this.cfg.actionMax));
   }
 
   detourAction() {
@@ -279,7 +291,11 @@ export class SpatialRegulatorEnv {
         - Number(this.cfg.lateralCost) * this.lateralTravel);
     }
     const progress = clamp(this.pos[1] / Number(this.cfg.targetY), 0, 1);
-    return Number(this.cfg.timeoutReturn) + 0.25 * progress;
+    let r = Number(this.cfg.timeoutReturn) + 0.25 * progress;
+    // lateralCostAlways charges the detour's path cost even when the agent times out, so
+    // over-detour-and-escape stops being free -- the optimum becomes the MINIMAL competent detour.
+    if (this.cfg.lateralCostAlways) r -= Number(this.cfg.lateralCost) * this.lateralTravel;
+    return r;
   }
 
   metrics(k = this.cfg.corrK) {

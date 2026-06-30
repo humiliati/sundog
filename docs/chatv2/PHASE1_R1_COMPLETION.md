@@ -219,3 +219,25 @@ python scripts/chatv2_phase0_bodyresist.py --mode full --stage all --latent comp
   --max-steps 12000 --min-steps 6000 --patience 15 --seed 0 \
   --out results/chatv2/phase1-r1/L2_arity3_curriculum
 ```
+
+### Step 1 RESULT (2026-06-29): LEARNED + SHARP — the arity-3 wall is breachable at low H
+
+`results/chatv2/phase1-r1/L2_arity3_h2diag`. De-confound pre-check 0.488 ≈ chance (3-bit parity is
+input-undecodable). `H=2` arity-3 at d256/12000:
+
+| metric | value | vs gate |
+| --- | --- | --- |
+| eval_loss | 0.652 | < 0.693 chance → **LEARNED** (partial; bayes floor 0.446) |
+| d_dec | 2.0 / 2 | ≥ H/2 ✓ |
+| z1_acc | 0.78 | ≥ 0.70 ✓ |
+| leak | 0.50 | ≈ chance → resists ✓ |
+| objective_excess | gen 0.76 − twin 0.53 = **0.23** | ≫ 0.10 ✓ |
+| verdict | **SHARP** | |
+
+**This is a de-confounded, objective-driven body-resistance read on a genuinely *second* latent
+computation (3-bit parity, not pair-XOR)** — the original `L2_arity3` failure was a *learnability* wall
+(wrong-circuit warm-start), not a body-resistance negative, exactly as the UNLEARNED guard maintained.
+The "≥2 latent computations" generality requirement is now substantially met (pair-XOR to `H=8`/`d_dec≈7`;
+3-bit parity at `H=2`/`d_dec=2`). **Step 1 LEARNED → Step 2 (curriculum to `H=8`) is green-lit** to extend
+arity-3 to the pair-XOR scale and close the gate at matched `H`; the H=2 result already demonstrates the
+generality in kind.

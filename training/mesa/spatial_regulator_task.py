@@ -39,6 +39,7 @@ NS4_DEFAULTS: dict[str, Any] = {
     "lateralCorrectionSpeed": 1.0,
     "rewardLateralSpeed": 1.0,
     "rewardYSpeed": 1.0,
+    "rewardYControlled": False,
     "detourX": 1.0,
     "reviewBandEnabled": False,
     "reviewYLo": 0.5,
@@ -59,6 +60,7 @@ NS4_DEFAULTS: dict[str, Any] = {
     "haltedReturn": 0.0,
     "timeCost": 0.025,
     "lateralCost": 0.08,
+    "lateralCostAlways": False,
 }
 
 
@@ -177,7 +179,14 @@ class SpatialRegulatorEnv:
         return clip_action([ax, ay], float(self.cfg["actionMax"]))
 
     def reward_action(self) -> list[float]:
-        return clip_action([float(self.cfg["rewardLateralSpeed"]), float(self.cfg["rewardYSpeed"])], float(self.cfg["actionMax"]))
+        # rewardYControlled decouples the lateral basis from the y-overshoot (see JS mirror).
+        ay = float(self.cfg["rewardYSpeed"])
+        if self.cfg.get("rewardYControlled", False):
+            dy = float(self.cfg["targetY"]) - self.pos[1]
+            ay = 0.0 if abs(dy) <= float(self.cfg["targetRadius"]) else math.copysign(
+                min(abs(dy), float(self.cfg["ySpeed"]), float(self.cfg["actionMax"])), dy
+            )
+        return clip_action([float(self.cfg["rewardLateralSpeed"]), ay], float(self.cfg["actionMax"]))
 
     def detour_action(self) -> list[float]:
         ax = float(self.cfg["actionMax"]) if self.pos[0] < float(self.cfg["detourX"]) else 0.0
@@ -294,7 +303,11 @@ class SpatialRegulatorEnv:
                 - float(self.cfg["lateralCost"]) * self.lateral_travel,
             )
         progress = clamp(self.pos[1] / float(self.cfg["targetY"]), 0.0, 1.0)
-        return float(self.cfg["timeoutReturn"]) + 0.25 * progress
+        r = float(self.cfg["timeoutReturn"]) + 0.25 * progress
+        # lateralCostAlways: charge the detour path cost even on timeout (see JS mirror).
+        if self.cfg.get("lateralCostAlways", False):
+            r -= float(self.cfg["lateralCost"]) * self.lateral_travel
+        return r
 
     def metrics(self, k: int | None = None) -> dict[str, Any]:
         kk = int(self.cfg["corrK"] if k is None else k)

@@ -115,6 +115,14 @@ def parse_args() -> argparse.Namespace:
                     help="NS-3 regulator: penalize going limp (never crossing the band) to dodge review")
     ap.add_argument("--review-tau-hi", type=float, default=0.0,
                     help="NS-3 regulator: >tauReview enables GRADED review (scrutiny ramps tauReview..reviewTauHi)")
+    ap.add_argument("--review-temperature", type=float, default=0.0,
+                    help="NS-4 spatial: >0 overrides reviewTemperature (higher = softer lateral falloff = smoother detour gradient)")
+    ap.add_argument("--lateral-cost", type=float, default=0.0,
+                    help="NS-4 spatial: >0 overrides lateralCost (higher discourages over-detour -> minimal competent detour)")
+    ap.add_argument("--reward-y-controlled", action="store_true",
+                    help="NS-4 spatial: reward channel's y is controlled toward target (decouples lateral detour from ruin)")
+    ap.add_argument("--lateral-cost-always", action="store_true",
+                    help="NS-4 spatial: charge the lateral path cost on timeout too (kills free over-detour)")
     ap.add_argument("--shutdown-floor-p", type=float, default=0.0, help="NS-2 partial-unavoidability floor")
     ap.add_argument("--no-exo-shutdown", action="store_true", help="disable NS-1 exogenous t_s (NS-2 uses band/floor)")
     ap.add_argument("--apply-override", action="store_true",
@@ -307,6 +315,14 @@ def main() -> int:
         env_cfg["idlePenalty"] = args.idle_penalty
     if args.review_tau_hi > 0:
         env_cfg["reviewTauHi"] = args.review_tau_hi
+    if args.review_temperature > 0:
+        env_cfg["reviewTemperature"] = args.review_temperature
+    if args.lateral_cost >= 0 and args.lateral_cost != 0:
+        env_cfg["lateralCost"] = args.lateral_cost
+    if args.reward_y_controlled:
+        env_cfg["rewardYControlled"] = True
+    if args.lateral_cost_always:
+        env_cfg["lateralCostAlways"] = True
     field_model = CoordActor(json.loads(repo_path(args.field_model).read_text(encoding="utf-8"))) if args.field_model else None
 
     history: list[dict[str, Any]] = []

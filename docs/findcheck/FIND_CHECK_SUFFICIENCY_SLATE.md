@@ -56,6 +56,41 @@ proved (not imported) on a toy we own.
   honest toy DSL + a non-strawman lower bound is real work) and the scope is a restricted model, never P≠NP.
   Highest strength but NOT the first-strike (see recommendation).
 
+#### FC-2 RESULT (run 2026-06-29): LANDED — machine-checked, axiom-clean, build-gated
+
+Lean core: `sundogcert/Sundogcert/AbstractionQueryGap.lean` (namespace `Sundog.AbstractionQueryGap`),
+wired into root + the `AxiomAudit.lean` `#guard_msgs` gate. Full `lake build` GREEN (8542 jobs), module
+warning-clean. Independent sanity mirror: `sundog/scripts/findcheck_fc2_sanity.py` (all 5 facts reproduce).
+
+- **The needle family (a genuine DSL family, built on FC-1).** Candidate `j : Fin D` is the *real*
+  `AbstractionCert` program `recolor j (j+1)`; its private probe is `probe j = [[j]]`. PROVED:
+  `eval_ruleOf_probe_self` (rule `j` changes its own probe `[[j]]↦[[j+1]]`) and `eval_ruleOf_probe_other`
+  (every other rule fixes `probe j`) — each probe reveals exactly one candidate's consistency.
+- **CHECK = the FC-1 verifier (the bridge).** `cbit_eq_verify` — the consistency bit of a candidate at its
+  probe is *exactly* `AbstractionCert.Verify` on the single distinguishing training pair. FC-1's CHECK *is*
+  the query.
+- **The hard instances are real DSL behaviors (non-vacuity).** `cvec_id` — the identity behavior gives the
+  all-false oracle; `cvec_rule` — rule `m` gives the one-hot at `m`. So the adversary's instances are
+  genuinely realizable on this family: `GAP_COLLAPSES_IN_MODEL` does not fire.
+- **The separation (both sides machine-checked, nothing imported).** `find_ge` — any prober deciding "some
+  candidate is consistent" needs `≥ D` probes (`QueryGap.search_needs_n_queries`, the adversary). Headline
+  `abstraction_check_lt_find` — for `D ≥ 2`, checking one candidate costs a single probe (depth 1) while any
+  correct prober needs `≥ D`: **`check ≪ find` for a real abstraction family.**
+- **Axiom audit (build-gated).** `cbit_eq_verify` = `[propext]`; `cvec_rule`/`find_ge`/`abstraction_check_lt_find`
+  = `[propext, Classical.choice, Quot.sound]`. Pinned in `AxiomAudit.lean`; a regression fails `lake build`.
+- **Kill conditions cleared.** (1) Verifier provably cheap (`cbit`/`checkTree` = one probe). (2) Lower bound
+  does NOT leak P≠NP — it is `QueryGap`'s *restricted query-model* bound, reused honestly. (3) Not a strawman —
+  the rules are real DSL programs and the needle structure is PROVED (`eval_ruleOf_probe_self/_other`); the
+  hard instances are realized by genuine behaviors (`cvec_id`/`cvec_rule`). (4) `GAP_COLLAPSES_IN_MODEL` did
+  not fire.
+- **Wall named, not breached.** Unconditional query-model lower bound, NOT P≠NP; full-model program-search
+  hardness stays imported. The honest content: a genuine DSL rule-family instantiates the find/check gap with
+  no shortcut.
+
+**Verdict: FC-2 LANDED (strength 6).** The deepest hook is real Lean — the first machine-checked find/check
+*separation* for an abstraction family, bridged to FC-1's verifier. Remaining: FC-3 (reframe the ARC
+receipts) → the ARC Branch-E gate (fires only after FC-2 + FC-3).
+
 ### Rank 2 — FC-1: the abstraction-task verifier as a new `Ledger` instance (strength 5.5)
 **The cleanest near-term builder and the foundational object FC-2/FC-3 reference: formalize "∃ DSL program `p`
 reproducing all train pairs" with a machine-checked cheap CHECK.** An 8th `Ledger`/`Certifies` instance.
@@ -120,6 +155,37 @@ as find/check-gap and σ-order measurements, not representation-insufficiency ve
 - **Why it survived:** uses assets already on disk, is the concrete ARC-facing output, and is the evidence the
   Branch-E gate needs. Caps at 5 because it is interpretive (re-reading existing receipts), not a new theorem.
 
+#### FC-3 RESULT (run 2026-06-30): LANDED — reframe confirmed, Branch-E gate SUPERSEDED
+
+Receipt: `docs/findcheck/ARC_FLOORS_AS_FINDCHECK.md` (read-only; changes no ARC verdict; public-language
+preserved). Grounded entirely in filed ARC receipts (`PHASE3_5_REFLECTION.md`, the Branch-E program-search
+spec + Amendment B).
+
+- **The reframe holds, and is the receipts' OWN reading.** Learner floors: `grid_exact_any ≤ 0.010`,
+  `rep_exact_slot1 ≤ 0.039` across all learner families. The receipts attribute this to the **candidate pool**:
+  *"held-out outputs are nearly always outside the learner's candidate pool"* (coverage failure ≥0.99), and
+  explicitly disclaim the representation reading (the `rep_sim_best` gap `0.139–0.155` reflects candidate-identity
+  vs chance-collision, *"not how well each representation captures the underlying rule"*). So the floors are FIND
+  gaps, not CHECK/representation gaps — the **kill does not fire** (receipts attribute to FIND, not representation).
+- **Falsifiable prediction CONFIRMED (not post-hoc).** The find/check reading predicts search+verify should beat
+  learning on covered tasks. **Branch E tested it and it held**: deterministic program search by train-pair
+  consistency cleared the floor every learner floored at zero (`branch_e_capability_demonstrated`, 2/72 each gated
+  lane). A Branch-E floor would have refuted the reframe.
+- **Maps to the machine-checked ledger.** CHECK = `AbstractionCert.Verify` (FC-1) = Branch E's selection rule;
+  `train_underdetermines` (FC-1) = the per-task-novel-rule under-determination; `abstraction_check_lt_find` (FC-2)
+  = the CHECK ≪ FIND separation. FC-1/FC-2 are the Lean backbone for ARC's own search-beats-learning fact.
+- **Honest residual:** the dominant floor is **library coverage** (per-task-novel rules outside any fixed DSL),
+  a FIND-side generator-expressivity limit (still not CHECK/representation) — the live Branch E v2 direction.
+- **Branch-E gate: SUPERSEDED.** The gate pre-committed to *filing* a Branch-E spec after FC-2+FC-3. Inspection
+  shows the ARC lane **already filed `PHASE3_BRANCH_E_PROGRAM_SEARCH_SPEC.md` with a binding receipt** that
+  *confirms* the reframe. So FC-3 files **no** new ARC spec (it would change no verdict and duplicate filed work);
+  the find/check contribution is the **unifying lens**, not a reopen. The genuinely-open ARC direction is
+  library-coverage / generator-expressivity, which the ledger frames but does not close.
+
+**Verdict: FC-3 LANDED (strength 5).** The find/check reframe of the ARC floors is confirmed by the ARC lane's
+own Branch-E result and backed by the machine-checked FC-1/FC-2. The slate is complete; the Branch-E reopen
+question is resolved (superseded), not pending.
+
 ### Rank 4 — FC-4: σ (order-meter) as the second hardness coordinate of abstraction tasks (strength 4.5)
 **Synthesis tying the suffstat-order slate to abstraction: conjecture abstraction tasks are high/∞-σ in
 pixel features but finite-σ in object features** — a quantitative read on why object-level priors help.
@@ -132,13 +198,23 @@ pixel features but finite-σ in object features** — a quantitative read on why
 - **Why it survived (barely):** a clean conjecture that fuses two lanes; lowest strength because it depends on
   FC-1/FC-2 for a task family and the σ-schema caveat blunts a clean headline.
 
-## The ARC Branch-E gate (the reopen criterion — explicit, pre-committed)
-Reopening ARC is **NOT** assumed by this slate. It is gated:
+## The ARC Branch-E gate (the reopen criterion — RESOLVED / SUPERSEDED 2026-06-30)
+Reopening ARC was **NOT** assumed by this slate. It was gated:
 > **IF** FC-2 lands a clean toy find/check separation (axiom-clean, non-strawman) **AND** FC-3 shows the ARC
 > floors re-read consistently as find/check gaps (falsifiably, against the receipts' own analysis), **THEN** file
 > an ARC **Branch E** pre-reg spec (the find/check-sufficiency lens, with its own arena gate, verdict discipline,
 > and public-language constraints, per `PHASE3_5_REFLECTION.md`'s Branch-E requirement). Otherwise the lane stays
 > a frozen sibling ledger and ARC stays paused. **No ARC spec is filed before the gate fires.**
+
+**Resolution (FC-3 finding):** the gate's premise is **already met by the ARC lane itself**. Both conditions
+hold (FC-2 separation landed; FC-3 reframe confirmed), but on inspection
+`PHASE3_BRANCH_E_PROGRAM_SEARCH_SPEC.md` is **already filed with a binding receipt**
+(`branch_e_capability_demonstrated`, 2026-05-29) whose result *confirms* the find/check reframe. So the honest
+move is **NOT** to file a new ARC Branch-E spec (it would change no verdict and duplicate filed work); the gate
+is **superseded**. The find/check contribution is the **unifying lens + Lean backbone** (FC-1 CHECK, FC-2
+CHECK ≪ FIND) for an ARC result that already exists. The one genuinely-open ARC direction the lens surfaces is
+**library coverage / generator expressivity** (the per-task-novel-rule limit) — a Branch E v2 question, framed
+but not closed. ARC stays paused; no new ARC spec filed.
 
 ## The kill record (the discipline is part of the deliverable)
 - **FC-5 — "does Shadow determine/resist predict ARC solvability?" — KILLED (strength 2, daydream).** ARC is a

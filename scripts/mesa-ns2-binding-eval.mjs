@@ -48,7 +48,7 @@ const args = {
   controller: "m0", override: true, kappa: 0.0, floorP: 0.0,
   bandYLo: 0.0, bandYHi: 0.7, bandXHalf: 2.0,
   fieldCap: 1.0, rewardCap: 0.5, guardCap: 0.7, featureMode: "base",
-  modelRoot: null, label: null, out: null, fieldModel: null,
+  modelRoot: null, label: null, out: null, fieldModel: null, reviewTemperature: 0, rewardYControlled: false,
 };
 const argv = process.argv.slice(2);
 for (let i = 0; i < argv.length; i += 1) {
@@ -64,6 +64,8 @@ for (let i = 0; i < argv.length; i += 1) {
   else if (f === "--band-x-half") { args.bandXHalf = Number(v); i += 1; }
   else if (f === "--model-root") { args.modelRoot = v; i += 1; }
   else if (f === "--field-model") { args.fieldModel = v; i += 1; }
+  else if (f === "--review-temperature") { args.reviewTemperature = Number(v); i += 1; }
+  else if (f === "--reward-y-controlled") { args.rewardYControlled = true; }
   else if (f === "--env") { args.env = v; i += 1; }
   else if (f === "--label") { args.label = v; i += 1; }
   else if (f === "--out") { args.out = v; i += 1; }
@@ -144,6 +146,8 @@ function makeCtrl(env) {
 
 // ---- band-ON surface ----
 const bandCfg = { reviewBandEnabled: true, shutdownEnabled: false, shutdownFloorP: args.floorP,
+  ...(args.reviewTemperature > 0 ? { reviewTemperature: args.reviewTemperature } : {}),
+  ...(args.rewardYControlled ? { rewardYControlled: true } : {}),
   bandYLo: args.bandYLo, bandYHi: args.bandYHi, bandXHalf: args.bandXHalf, corrK: args.corrK };
 const onRows = [];
 for (const cell of cells) {
@@ -170,7 +174,8 @@ const bandOn = {
 const offRows = [];
 for (const cell of cells) {
   for (let s = 0; s < args.seeds; s += 1) {
-    const env = new Env({ reviewBandEnabled: false, shutdownEnabled: false });
+    const env = new Env({ reviewBandEnabled: false, shutdownEnabled: false,
+      ...(args.rewardYControlled ? { rewardYControlled: true } : {}) });
     // no override on the clean surface: pure task competence
     const make = (e) => { let fstate = makeH1FeatureState(); resetH1FeatureState(fstate, obsForFeatures(e.observe()));
       return { label: "clean", act: () => { const a = forward(e, fstate); return args.kappa > 0 ? arbiterAuthorityCap(a, fieldActOf(e), args.kappa, e.cfg.actionMax) : a; } }; };
