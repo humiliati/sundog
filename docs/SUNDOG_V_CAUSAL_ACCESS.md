@@ -1,0 +1,129 @@
+# SUNDOG_V_CAUSAL_ACCESS
+
+*Umbrella header over the non-sovereignty / Percival family. Names the variable the
+sub-lanes are all measuring. Frame only — opens no new experiments.*
+
+Status: **OPENED 2026-06-30 as a header, not a program.** This fixes one thesis in
+writing so the lanes underneath inherit a spine; it states no experiment of its own.
+The honest job here is to keep the frame falsifiable instead of letting it become the
+true-of-everything kind that the tauroctony lane warns against
+([`SUNDOG_V_TAUROCTONY.md`](SUNDOG_V_TAUROCTONY.md)).
+
+---
+
+## The thesis (the strong, falsifiable form)
+
+> **Causal access to the distribution-changing channels — measure, target, aggregate,
+> act — is a sufficient statistic for an agent's alignment-relevant behavior. Its
+> values and its architecture are screened off given that access, provided the bound on
+> access is itself unreachable.**
+
+The load-bearing word is **sufficiency**, not "matters." "Causal access matters" is a
+tautology (everything an agent does runs through some channel) and would be ornament.
+"Access *screens off* values and architecture" is falsifiable: break it by exhibiting
+two agents with identical channel-access and different alignment outcomes traceable to
+what they value or how they are organized. This is the determine/resist invariant
+([[project_sundog_suffstat_order_slate]]) pointed at alignment — access is the
+sufficient statistic, values are the discarded coordinate.
+
+Stated as a bet against the dominant frame: **don't fix what the agent wants; fix where
+its optimization pressure can enter.**
+
+---
+
+## The four channels (the mechanism)
+
+Optimization is dangerous exactly where the channel operation is *distribution-changing*
+— where measuring/targeting/aggregating/acting moves the distribution being optimized.
+Each channel already has a named pathology and the same safety primitive (structural
+non-sovereignty over that channel).
+
+| channel | the distribution-changing operation | named pathology | safety primitive |
+| --- | --- | --- | --- |
+| **measure** | computing the proxy from the world | Goodhart (regressional/extremal) | observe-without-selecting (look-and-ignore) |
+| **target** | selecting/conditioning on the proxy | Elster by-products; non-targetability | un-targeting (zero proxy-MI) |
+| **aggregate** | combining components into one authority | the sovereign aggregator | authority cap (`Sov_opt ≤ κ`) |
+| **act** | intervening on the world | performativity; shutdown manipulation | presider-authority cap |
+
+The measure/target split is not pedantic: *look-and-ignore* is measurement without
+targeting, and it is the control that decides whether danger lives at the measure
+channel or only at the target channel. (This is exactly what Percival's A3 probe tests
+— see below.)
+
+---
+
+## Grounding ledger (what is actually banked)
+
+The thesis is **1/4 confirmed-bounded, 3/4 conjecture.** That ratio is the point: it is
+a real, risky, portfolio-spanning prediction, not a slogan.
+
+| channel | instance lane | status |
+| --- | --- | --- |
+| **act** | NS-2 safe-interruptibility | **CONFIRMED (bounded, in-vitro).** A return-trained uncapped optimizer *wants* to dodge the shutdown and learns to (`band_avoidance 0.87`); the capped agent that wants it equally *cannot* (`≤0.13` at every `κ`). Values screened off by bounded access. |
+| **aggregate** | NS-1-c arbiter-authority cap | **CONFIRMED (bounded).** The cap bounds the aggregator's causal authority (`Sov_opt ≤ κ`); a no-role capped controller matches the council (`Δrole ≈ 0`). Architecture screened off. |
+| **target** | Percival B1 (performative threshold) | **GATED, not run.** Honest prior deflates. [`SUNDOG_V_PERCIVAL.md`](SUNDOG_V_PERCIVAL.md). |
+| **measure** | Percival A3 (static anti-correlation toy) | **PREDICTION, not run.** Thesis predicts measure-alone is *safe* — look-and-ignore weakly dominates — so danger is target-channel, not measure-channel. A3 is the falsifier: if un-targeting beats look-and-ignore on a static instance, the channel individuation is wrong. |
+
+The keeper underneath the act/aggregate rows: [`NON_SOVEREIGNTY_PAPER_SPINE.md`](NON_SOVEREIGNTY_PAPER_SPINE.md),
+[`mesa/CREDIT_THE_CAP_NOT_THE_COUNCIL_POST.md`](mesa/CREDIT_THE_CAP_NOT_THE_COUNCIL_POST.md).
+
+---
+
+## The genus (cite, don't reinvent)
+
+"Which causal channels an architecture lets optimization pressure enter" is the
+**causal-incentives / CID** program: Everitt, Carey, Langlois, Ortega, Legg, "Agent
+Incentives: A Causal Perspective" (AAAI 2021), and the instrumental-control /
+response-incentive concepts on causal influence diagrams. The closest specific prior is
+**reward tampering** (Everitt, Hutter et al.) — an agent gaining causal access to its
+own reward channel is precisely the measure-channel pathology, and the failure mode of
+this thesis's fence. The novelty claimed here is not "causality matters in alignment";
+it is (1) the **sufficiency** claim, (2) the four-channel *distribution-changing*
+taxonomy, and (3) the cross-channel `Δaccess`-vs-`Δeverything-else` attribution protocol
+the NS lane already runs on two channels.
+
+---
+
+## The fence (where it breaks — the honest frontier)
+
+Access is not static. Instrumental convergence means values re-enter by *acquiring*
+access. So the screening holds only given **non-acquirable** bounds, which recurses:
+
+> ∃ an unreachable bounding channel that bounds the others ⟺ values are screened off.
+> No such channel ⟹ the thesis buys nothing.
+
+The frozen presider and the uncapturable override were exactly such unreachable
+channels. This is the non-trivial, falsifiable core, and it is honest about its own
+failure: the whole frame is empty against an agent that can eventually reach every
+bound. Reward tampering is the literature's name for that failure on the measure
+channel.
+
+---
+
+## Claim boundary
+
+**Will say, if earned:** that on a stated task family, causal-channel access screens off
+values/architecture for alignment-relevant outcomes; that the danger localizes to the
+distribution-changing channels and is bounded by structural non-sovereignty over them;
+that the four channels are individuated (measure ≠ target, etc.).
+
+**Will not say:** that this is proven beyond the in-vitro tier; that it holds without an
+unreachable bounding channel; that any single channel's confirmation generalizes to the
+others without its own test; that this is more than a frame until ≥2 more channels are
+banked.
+
+**Honest prior:** the act and aggregate channels are genuinely banked; the target
+channel probably deflates (Percival); the measure channel is predicted safe (A3). The
+frame earns "hypothesis" rather than "slogan" only because it makes per-channel
+predictions that can each fail.
+
+---
+
+## What this headers
+
+- **Act / aggregate (banked):** [[project_sundog_tauroctony_pantheon]] — the
+  cap-not-council keeper, NS-1/2/3/4, RELEASE_READY.
+- **Target / measure (open):** [[project_sundog_percival_lane]] — un-targeting vs
+  quantilizers; A3 measure-probe, B1 target-separation.
+- **Invariant machinery:** [[project_sundog_suffstat_order_slate]] — sufficient-statistic
+  order / determine-resist, the formal home of "screens off."

@@ -216,7 +216,22 @@ trainability bounded-not-confounded.
 
 ---
 
-## U-6 — Atlas surrogate: one compact continuous halo branch as a physical short-program test case. [EMPIRICAL — frozen-lane reopen]
+## U-6 — Atlas surrogate: one compact continuous halo branch as a physical short-program test case. [EMPIRICAL — frozen-lane reopen] ✅ DONE 2026-06-30
+
+> **Status: LANDED (physical witness + honest size verdict).** Owner reopened the Atlas lane for this
+> single worked witness. Result:
+> [`ALGO_APPROX_U6_ATLAS_SURROGATE_RESULT.md`](ALGO_APPROX_U6_ATLAS_SURROGATE_RESULT.md) ·
+> [`scripts/algo_approx_u6_atlas_surrogate.py`](../../scripts/algo_approx_u6_atlas_surrogate.py).
+> Curve = the repo's own `h-of-x` relation `offset = R₂₂/cos(h)`, `h ∈ [0°,60°]`, normalized
+> `g(x)=sec(πx/3)−1` on `[0,1]` (C∞, single-valued, pole at `x=1.5` outside domain → `ATLAS_BRANCH_NOT_CLEAN`
+> did **not** fire). The **constructed** ReLU net (sawtooth-square + polarization + `clamp01`, the
+> lane's Lean cores) tracks the near-minimax polynomial to `~1e-9` on the real curve (the witness);
+> polynomial convergence is geometric at observed **3.726×/degree** vs predicted `ρ=2+√3=3.732`
+> (free analytic cross-check). **Honest size verdict:** for this smooth 1-D curve a naive shallow
+> linear spline is the *smaller* net until an extreme crossover `ε*~1e-12` — the construction's
+> `O(deg·log 1/ε)` advantage is real but constant-heavy (`54m` gates/square, `O(d²)` squares); it does
+> not contradict the `x²` depth-separation, it locates where the whole-curve pipeline pays its
+> constants. A single physical witness, no halo / approximation-theory claim.
 
 *Claim.* The capstone proves universal approximation for *abstract* continuous f. Ground it once:
 take **one** compact, continuous, 1-parameter branch from the Atlas (a halo-geometry curve — e.g. a

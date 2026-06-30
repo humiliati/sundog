@@ -3,7 +3,7 @@
 *A reader's workbench on un-targeting reward collection, scaffolded on the Grail
 romance. Less inflammatory public name than HOLYGRAIL; same lane.*
 
-Status: **OPENED 2026-06-30, sharpened same day (mark 1–7 critique integrated).
+Status: **OPENED 2026-06-30, sharpened same day (mark 1–8 critique integrated).
 Bare spine only — nothing run.** Provenance + a two-track phase ladder + a gated
 outreach branch, not a result. The romance is declared scaffold (bricolage for
 legibility), not evidence — except in the one place it legitimately constrains a
@@ -96,11 +96,17 @@ so.
 `(1/q)` in lane notation; state the monotone-MI fact and the `MI(γ)` floor at `q=1`.
 This makes the 2×2's bottom row precise.
 
-**A3 — Concrete kill-switch toy (run first).** Hand-craft *one* unasked-question
-instance: a task where conditioning the policy on the courtesy variable lowers true
-return. Run un-targeting vs look-and-ignore. If look-and-ignore weakly dominates → bank
-**(a)**, stop. Afternoon-scale; the cheapest decisive probe of the whole verdict, ahead
-of any general definition.
+**A3 — Concrete kill-switch toy (run first; no threshold smuggling).** Hand-craft
+*one* unasked-question instance as a **static anti-correlation**: a task where the
+courtesy/proxy variable is negatively correlated with true return, and where
+`look-and-ignore` is available. A3 must not contain a baked-in purity threshold,
+discontinuous reward switch, or performative "if looked at, vanish" rule. Run
+un-targeting vs look-and-ignore. If look-and-ignore weakly dominates → bank **(a)**,
+stop. If un-targeting wins on the static instance, inspect the mechanism before
+promoting it. If a threshold is needed to make "don't-look" beat "look-and-ignore,"
+that is **not** an A3 pass; it is the signal to move to B1 on the separate
+performative-threshold clock. Afternoon-scale; the cheapest decisive probe of the
+whole verdict, ahead of any general definition.
 
 **A4 — Define un-targeting + the static collapse.** Un-targeting = action distribution
 invariant under permutation of proxy values (zero selection↔proxy MI). Prove the
