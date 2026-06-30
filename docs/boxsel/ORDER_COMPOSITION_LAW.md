@@ -101,7 +101,8 @@ directions** — cancellation throws the order either way off the join:
   On the 2-chain `{1, ⊤}` the divisibility join *is* the max, so the law holds — but trivially, because
   the order is binary (the same "structural, not deep" character as the moment axis itself). Lean:
   the easy half is `Integrable.add`; the converse (sum-integrable ⇒ both, for independent variables)
-  is the harder direction, deferred.
+  is now **machine-checked** too — `indepFun_integrable_add_iff` (`OrderRelativeMomentConv`), via the
+  product-measure law of independence + Fubini for integrability (see the residual note below).
 
 - **The radical axis holds it, richly (the third positive, machine-checked).** `ord` is the order of
   `[x]` in `ℝˣ/ℚˣ` (least `m` with `xᵐ ∈ ℚ`) — a *multiplicative* group order, the twin of
@@ -183,11 +184,17 @@ law is unified:
   `coproduct_nsmul_eq_zero`; the additive (`annihilates_prod`) and multiplicative
   (`mul_annihilates_prod`) coproduct laws are now literally one source, two faces.
 
-**The one residual (analysis, not yet Lean):** the moment axis's join-homomorphism *forward*
-(`ord(X+Y) ≤ join`) is `Integrable.add`, but the *reverse* (independent sum-integrable ⇒ both
-integrable) needs probabilistic independence and is not a clean mathlib lemma — it stays analysis.
-The abstract semilattice structure of the moment order *is* machine-checked (`converse_fails`); only
-the convolution realization of it is left to prose.
+**The last residual — now closed (machine-checked).** The moment axis's join-homomorphism *forward*
+(`ord(X+Y) ≤ join`) is `Integrable.add`; the *reverse* (independent sum-integrable ⇒ both integrable)
+genuinely needs probabilistic independence — it is *false* without it (`Y = −X`, `X+Y = 0`) — and was
+the lane's lone prose fence. It is now **machine-checked**: `indepFun_integrable_add_iff`
+(`OrderRelativeMomentConv`) proves `Integrable (X+Y) μ ↔ Integrable X μ ∧ Integrable Y μ` for
+independent `X, Y` on a probability space. The proof routes through the product-measure law of
+independence (`indepFun_iff_map_prod_eq_prod_map_map`) and Fubini for integrability
+(`integrable_prod_iff` / `integrable_prod_iff'`): the finite double integral forces a finite fibre for
+a.e. coordinate, a good fibre *exists* because the marginal laws are probability measures, and
+subtracting that fibre's constant leaves the marginal. Both the abstract semilattice structure
+(`converse_fails`) and its convolution realization are now in Lean — axiom-clean and build-gated.
 
 ---
 
@@ -198,6 +205,9 @@ multiplicative (`mul_annihilates_prod`, unified as `coproduct_pow_eq_one`). The 
 radical, moment; negatives = search-reach, algebraic-degree — both machine-checked). The converse
 FAILS — join-homo ⇏ group order — with idempotency the exact obstruction (`idempotent_eq_one` + the
 moment semilattice's nontrivial idempotent, `converse_fails`). `ord` is a grading homomorphism to a
-join-semilattice; group-orders are the non-idempotent subclass. Lean: `compose_lcm_not_max`,
+join-semilattice; group-orders are the non-idempotent subclass. The moment axis's convolution
+realization — the last analysis residual — is now machine-checked too (`indepFun_integrable_add_iff`,
+the independent sum is integrable iff both summands are). Lean: `compose_lcm_not_max`,
 `algDeg_not_join_under_mul`, `search_not_join_under_mul`, `within_group_cancels`, `radical_cancel_sqrt2`,
-`converse_fails`, `coproduct_pow_eq_one` (+`to_additive` twin). Internal; frozen-as-portfolio.*
+`converse_fails`, `coproduct_pow_eq_one` (+`to_additive` twin), `indepFun_integrable_add_iff`.
+Internal; frozen-as-portfolio.*
