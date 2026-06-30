@@ -77,7 +77,7 @@ A **3-positive / 2-negative** picture:
 | **cohomological** | additive order in a group | `⊕` (direct sum) | **yes** ✓Lean | group-order (rich) |
 | **radical** | mult. order in `ℝˣ/ℚˣ` | coproduct of surds | **yes** ✓Lean | group-order (mult. twin) |
 | **moment / spectral** | binary order | convolution (indep.) | **yes** | group-order (degenerate) |
-| **search-reach** | least denominator | `×` (rational mult.) | **no** | not a group order — *inflates* |
+| **search-reach** | least denominator | `×` (rational mult.) | **no** ✓Lean | not a group order — *inflates* |
 | **algebraic-degree** | min-poly degree | `×` (real mult.) | **no** ✓Lean | not a group order — *drops* |
 
 The positives are united — they are the group-order axes. The two negatives fail in **opposite
@@ -172,13 +172,22 @@ The coproduct law is itself one statement in any monoid (`Converse.coproduct_pow
 
 ---
 
-## 6. Open probes (where the expedition goes next)
+## 6. Leanification status / the one residual
 
-1. **Lean the moment converse** (independent sum-integrable ⇒ both) to upgrade the degenerate positive
-   from analysis to machine-checked.
-2. **`to_additive`-unify** the coproduct law so `annihilates_prod` and `mul_annihilates_prod` are
-   literally one source (`coproduct_pow_eq_one` is the shared monoid statement; the attribute would
-   generate both faces).
+Both negatives and all three positives of the boundary are now machine-checked, and the coproduct
+law is unified:
+
+- **Search-reach negative — DONE** (`SearchNeg.search_not_join_under_mul`): `½` reaches at budget 2
+  but `½·½ = ¼` does not (least denominator 4), so the product order inflates above the join.
+- **`to_additive`-unified — DONE**: `coproduct_pow_eq_one` carries `@[to_additive]`, generating
+  `coproduct_nsmul_eq_zero`; the additive (`annihilates_prod`) and multiplicative
+  (`mul_annihilates_prod`) coproduct laws are now literally one source, two faces.
+
+**The one residual (analysis, not yet Lean):** the moment axis's join-homomorphism *forward*
+(`ord(X+Y) ≤ join`) is `Integrable.add`, but the *reverse* (independent sum-integrable ⇒ both
+integrable) needs probabilistic independence and is not a clean mathlib lemma — it stays analysis.
+The abstract semilattice structure of the moment order *is* machine-checked (`converse_fails`); only
+the convolution realization of it is left to prose.
 
 ---
 
@@ -186,8 +195,9 @@ The coproduct law is itself one statement in any monoid (`Converse.coproduct_pow
 free coproduct join law is machine-checked in general, additive (`annihilates_prod`) and
 multiplicative (`mul_annihilates_prod`, unified as `coproduct_pow_eq_one`). The boundary is a
 3-positive / 2-negative classification (positives = the group-order + semilattice axes: cohomological,
-radical, moment; negatives = search-reach, algebraic-degree). The converse FAILS — join-homo ⇏ group
-order — with idempotency the exact obstruction (`idempotent_eq_one` + the moment semilattice's
-nontrivial idempotent, `converse_fails`). `ord` is a grading homomorphism to a join-semilattice;
-group-orders are the non-idempotent subclass. Lean: `compose_lcm_not_max`, `algDeg_not_join_under_mul`,
-`within_group_cancels`, `radical_cancel_sqrt2`, `converse_fails`. Internal; frozen-as-portfolio.*
+radical, moment; negatives = search-reach, algebraic-degree — both machine-checked). The converse
+FAILS — join-homo ⇏ group order — with idempotency the exact obstruction (`idempotent_eq_one` + the
+moment semilattice's nontrivial idempotent, `converse_fails`). `ord` is a grading homomorphism to a
+join-semilattice; group-orders are the non-idempotent subclass. Lean: `compose_lcm_not_max`,
+`algDeg_not_join_under_mul`, `search_not_join_under_mul`, `within_group_cancels`, `radical_cancel_sqrt2`,
+`converse_fails`, `coproduct_pow_eq_one` (+`to_additive` twin). Internal; frozen-as-portfolio.*
