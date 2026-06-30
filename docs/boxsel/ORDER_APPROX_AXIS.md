@@ -48,8 +48,31 @@ All four headlines are axiom-clean (`[propext, Classical.choice, Quot.sound]`) a
 
 ---
 
+## Continuation — graded order + a second resist (`OrderRelativeApproxGraded`)
+
+**Graded by piece count.** The exactness order is not just `{finite, ⊤}` — grade the determine side
+by the **number of affine pieces** (`ord f =` least `k` with `HasPieceCover f k`). Then it is a real
+ladder:
+
+- `id` — order **1** (one affine piece), `id_pieceProblem`;
+- `ReLU = max x 0` — order **2** (one breakpoint), `relu_pieceProblem` (earned both ways:
+  `relu_affineAway` gives the 2-piece cover, `relu_not_affine` rules out 1 piece);
+- `x²` — order **⊤** (no finite cover).
+
+`graded_exactness` packages `1 < 2 < ⊤`. So determine is graded (`1, 2, …`), with the same resist
+pole on top — not a flat binary.
+
+**A second resist witness — `eˣ` (transcendental).** `exp_no_pieceCover` / `exp_not_exactly_net`:
+`eˣ` joins `x²` on the resist pole, earned by **strict convexity** (`strictConvexOn_exp` — on any gap
+interval `eˣ` would be affine, but the midpoint sits strictly below the chord). It shows the resist is
+generic to *curvature*, not special to polynomials. (`√x`, `x³` are traps — domain / odd-symmetry
+fool the three-point test; strict convexity everywhere is what makes `eˣ` clean.)
+
+---
+
 *Sundog Research Lab — expedition E2. Approximation as an Order-Relative axis: the ε-approximation
 budget collapses (universality), the exactness budget (`ε = 0`) carries the determine/resist split —
-PL determines, `x²` resists (earned via no-piece-cover). Lean: `sq_no_pieceCover`,
-`sq_not_exactly_net`, `exact_determine_vs_resist`, `approx_axis_collapses`. Internal;
-frozen-as-portfolio.*
+PL determines (graded by piece count: `id` 1, `ReLU` 2), `x²` and `eˣ` resist (earned via
+no-piece-cover; `eˣ` by strict convexity). Lean: `sq_no_pieceCover`, `sq_not_exactly_net`,
+`exact_determine_vs_resist`, `approx_axis_collapses`, `graded_exactness`, `exp_no_pieceCover`,
+`exp_not_exactly_net`. Internal; frozen-as-portfolio.*
