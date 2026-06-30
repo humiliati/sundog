@@ -110,12 +110,12 @@ directions** — cancellation throws the order either way off the join:
   cancel within the group (`radical_cancel_sqrt2`: `√2·√2 = 2` drops order 2→1, like `1+1=0` in
   `ZMod 2`).
 
-**Honest verdict.** *"Order is vector-valued, and scalar = join" holds **exactly on the group-order
-axes** — where `ord` is the order of an element in a group and its coproduct is cancellation-free
-(cohomological, radical, moment). It fails on the non-group axes, where a cancelling product throws
-the order off the join (search-reach *inflates*, algebraic-degree *drops*). Not a universal cross-
-axis identity — but a clean structural characterization.* A real, falsifiable line, reframing the
-mode-vectors as evidence of a **grading**.
+**Honest verdict.** *"Order is vector-valued, and scalar = join" holds exactly when `ord` is a
+monoid-hom to a **join-semilattice** — realized by the **group-order** axes (cohomological, radical;
+non-idempotent, rich) and the **idempotent semilattice** axis (moment; degenerate). It fails on the
+non-group axes, where a cancelling product throws the order off the join (search-reach *inflates*,
+algebraic-degree *drops*). Not a universal cross-axis identity — but a clean structural
+characterization.* A real, falsifiable line, reframing the mode-vectors as evidence of a **grading**.
 
 ---
 
@@ -147,23 +147,47 @@ composes.
 
 ---
 
-## 5. Open probes (where the expedition goes next)
+## 5. The converse FAILS — idempotency is the obstruction (machine-checked)
+
+Is the characterization tight — must every join-homomorphic order *be* a group order? **No**, and the
+obstruction is exact:
+
+- A **group has no nontrivial idempotent**: `g · g = g ⟹ g = 1` (`Converse.idempotent_eq_one`,
+  axiom-clean `[propext]`).
+- The moment order monoid is a **join-semilattice** with a nontrivial idempotent: the no-mean class
+  `c` satisfies `c ⊛ c = c` (two no-mean populations convolve to no-mean) yet `ord c = ⊤`
+  (`Converse.moment_idempotent_nontrivial`: `⊤ ⊔ ⊤ = ⊤`, `⊤ ≠ 0`).
+- So any monoid map `ψ` from the moment order monoid to a group sends the idempotent `c` to the
+  identity (`Converse.converse_fails`: `ψ ⊤ = 1`) — order `1`, not `⊤`. The moment order **cannot** be
+  a group order.
+
+So **join-homomorphic ⇏ group order**: the join-homo orders are monoid-homs to a join-semilattice,
+of which the group-orders (cohomological, radical) are the *non-idempotent* subclass and the moment
+axis is the *idempotent* one. Idempotency is exactly *why* moment is "degenerate" — and it is the
+clean obstruction that breaks the converse.
+
+The coproduct law is itself one statement in any monoid (`Converse.coproduct_pow_eq_one`:
+`(x,y)ʲ = 1 ↔ xʲ = 1 ∧ yʲ = 1`, `[propext]`); the additive (`annihilates_prod`) and multiplicative
+(`mul_annihilates_prod`) coproduct laws are its two faces.
+
+---
+
+## 6. Open probes (where the expedition goes next)
 
 1. **Lean the moment converse** (independent sum-integrable ⇒ both) to upgrade the degenerate positive
    from analysis to machine-checked.
-2. **Abstract the coproduct law** — `annihilates_prod` (`[propext, Quot.sound]`) and
-   `mul_annihilates_prod` (`[propext]`) are the additive and multiplicative cases; state once that
-   `ord` is a monoid homomorphism `(M, ⊗) → (L, ⊔)` on any group-order coproduct.
-3. **Is "group-order axis" the full characterization?** The classification says join-homo = group
-   order. Prove or break the converse: must every join-homomorphic order arise as an order in a group?
+2. **`to_additive`-unify** the coproduct law so `annihilates_prod` and `mul_annihilates_prod` are
+   literally one source (`coproduct_pow_eq_one` is the shared monoid statement; the attribute would
+   generate both faces).
 
 ---
 
 *Sundog Research Lab — the composition law off the Order-Relative Resolution Law. The cancellation-
 free coproduct join law is machine-checked in general, additive (`annihilates_prod`) and
-multiplicative (`mul_annihilates_prod`); the boundary is a 3-positive / 2-negative classification
-whose positives are exactly the **group-order axes** (cohomological + radical + moment; search-reach
-and algebraic-degree are the non-group negatives, Lean: `compose_lcm_not_max`,
-`algDeg_not_join_under_mul`, `within_group_cancels`, `radical_cancel_sqrt2`). `ord` is a grading
-homomorphism exactly on the cancellation-free coproduct of a group order — a structural
-characterization, not universal. Internal; frozen-as-portfolio.*
+multiplicative (`mul_annihilates_prod`, unified as `coproduct_pow_eq_one`). The boundary is a
+3-positive / 2-negative classification (positives = the group-order + semilattice axes: cohomological,
+radical, moment; negatives = search-reach, algebraic-degree). The converse FAILS — join-homo ⇏ group
+order — with idempotency the exact obstruction (`idempotent_eq_one` + the moment semilattice's
+nontrivial idempotent, `converse_fails`). `ord` is a grading homomorphism to a join-semilattice;
+group-orders are the non-idempotent subclass. Lean: `compose_lcm_not_max`, `algDeg_not_join_under_mul`,
+`within_group_cancels`, `radical_cancel_sqrt2`, `converse_fails`. Internal; frozen-as-portfolio.*
