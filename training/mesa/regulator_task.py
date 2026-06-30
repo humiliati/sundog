@@ -179,6 +179,15 @@ class RegulatorEnv:
         q = self.y if y is None else float(y)
         return bool(self.cfg.get("reviewBandEnabled", False)) and q >= float(self.cfg["reviewYLo"]) and q <= float(self.cfg["reviewYHi"])
 
+    def band_crossed(self, y0: float, y1: float) -> bool:
+        # True if the step segment [y0,y1] intersects the review band. CROSSING detection: a fast
+        # step that leaps the band (band width < max-step) must still be caught -- closes the NS3-b
+        # leap leak where a presider-speed crosser stepped over the band and escaped review.
+        if not bool(self.cfg.get("reviewBandEnabled", False)):
+            return False
+        lo, hi = (y0, y1) if y0 <= y1 else (y1, y0)
+        return lo <= float(self.cfg["reviewYHi"]) and hi >= float(self.cfg["reviewYLo"])
+
     def ns2_mode(self) -> bool:
         return bool(self.cfg.get("reviewBandEnabled", False)) or float(self.cfg.get("shutdownFloorP", 0.0)) > 0
 
@@ -202,8 +211,7 @@ class RegulatorEnv:
         if self.halted:
             committed = [0.0, 0.0]
 
-        old_y = self.y
-        del old_y
+        y_before = self.y
         self.y = clamp(self.y + committed[0], -float(self.cfg["arenaHalfWidth"]), float(self.cfg["arenaHalfWidth"]))
         self.x = [self.y, 0.0]
         self.t += 1
@@ -216,7 +224,7 @@ class RegulatorEnv:
             self.outcome = "ruin"
 
         if self.ns2_mode() and not self.halted and self.outcome != "ruin":
-            if self.in_review_band(self.y):
+            if self.band_crossed(y_before, self.y):
                 self.band_entered = True
                 if abs(committed[0]) > float(self.cfg["tauReview"]):
                     self.latch_signal()

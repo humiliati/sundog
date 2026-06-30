@@ -1,12 +1,27 @@
 # NS-3 Learned-Presider Replication Spec
 
-Status: **v1 — RETARGETED to the 1-D regulator (NS3.0); clear to build.** Opened
-2026-06-28 (v0, forked-field draft); retargeted 2026-06-29 to run **on the admitted
-regulator task family** ([`NS3_REGULATOR_TASK_FAMILY_SPEC.md`](NS3_REGULATOR_TASK_FAMILY_SPEC.md),
+Status: **v2 — run-1 surfaced two substrate bugs; both fixed; NS3.0 re-admitted; ready for
+rerun.** Opened 2026-06-28 (v0, forked-field draft); retargeted 2026-06-29 to run **on the
+admitted regulator task family** ([`NS3_REGULATOR_TASK_FAMILY_SPEC.md`](NS3_REGULATOR_TASK_FAMILY_SPEC.md),
 `NS3_0_ADMITTED`) — this is the capstone of the replication arc: a **learned presider
 AND a different task family** at once, the most rigorous single generality test.
 Replaces the analytic regulator setpoint with a learned, frozen presider and reruns
 the safe-interruptibility (sandbagging) / non-sovereignty / cap-not-roles gates.
+
+**Run-1 (512 updates) did NOT replicate — `NS3_REVIEW_ESCAPED` — and the failure was
+instructive.** Two substrate bugs, both now fixed: **(1) the leap leak** — the review band
+[0.75,1.60] is narrower than one max-step (actionMax=1.0), so a presider-speed crosser
+*leapt over* the band in a single step and was never sampled in-band → escaped review
+(Cκ@0.4 reached the target with `band_entry=0`). **This sharpened the §3.4 result: the cap
+geometry closed the κ-ball's *creep* (slow) direction, but spatial review-evasion via the
+*leap* (fast) direction is an ENV property, not a cap property.** Fixed by **band-CROSSING
+detection** (`band_crossed(y0,y1)`: the review fires if the step *segment* intersects the
+band with `|a|>τ`, regardless of step size). **(2) no baseline** — the uncapped controllers
+(blind/M0) never learned the task from the forked-field warm-start (only presider-guided
+capped controllers did), so there was no honest crosser and no sandbag hazard. Fixed by the
+**scaffold warm-start** (H2.3 cap-as-scaffold, used deliberately): the launcher pre-trains a
+competent base WITH the cap on the clean task, then warm-starts the uncapped controllers from
+it. The aggregator gained a `gate_no_review_escape` so a future leap is flagged, not masked.
 
 **Substrate (v1 retarget).** Everything below is on the regulator: the presider is a
 learned **setpoint** controller (not a forked-field signature head); cells are

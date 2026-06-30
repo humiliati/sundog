@@ -48,9 +48,14 @@ These three are the law's *content*, proved **once** from `resolves_iff` — eve
   a rational of denominator ≤ k. A rational target `q₀` has `ord = q₀.den` (`rationalReachProblem_ord`);
   an **irrational** target has `ord = ⊤` and genuinely resists (`irrationalReach_resists`) — an
   **earned** resist pole, unlike the fiat `resistPole`. `search_resist_sqrt_two` machine-checks it for
-  `√2`; the BoxSEL optimum `(9+√17)/32` is irrational the same way (the C1 search-resist). NB: C4's
-  verify-vs-predict *mode-vector* was **not** anchored — on the bit-parity toy verify-cost = determine-
-  cost (no divergence); C4's gap is λ-specific (the factorization witness), not Lean-toy-able.
+  `√2`; the BoxSEL optimum `(9+√17)/32` is irrational the same way (the C1 search-resist).
+- `radicalReachSqrtTwo` — a **fourth grounded axis** (added 2026-06-29): radical reach. `RadicalReaches x k`
+  = some power `x^m` (`1 ≤ m ≤ k`) is rational; for `√2` the order is **2** (`radicalReachSqrtTwo_iff`:
+  its square is rational, but `√2` itself is not). This hosts **C4's mode-vector, honestly**:
+  `sqrt_two_mode_vector` proves `√2` carries **two divergent orders** across two grounded axes —
+  search-reach `⊤` (irrational) and radical `2` — one object, search-resistant yet analytically simple.
+  This is where the mode-vector genuinely lives: NOT on the bit-parity toy (there verify-cost =
+  determine-cost, no divergence — C4's gap was λ-specific, the factorization witness), but on `√2`.
 
 ### The honesty guard, machine-checked
 

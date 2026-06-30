@@ -42,30 +42,41 @@ Write-Host "[NS-3-b] preflight ok. presider=$FieldModel kappas=$($kappaList -joi
 if ($PreflightOnly) { exit 0 }
 
 # Regulator: --env regulator + NS3 cells + horizon 9. Cap centers on the LEARNED presider.
-$common = @("--env", "regulator", "--cells", $cells, "--review-band", "--no-exo-shutdown",
+# $base = everything EXCEPT --review-band (the scaffold runs the clean task; the real runs add it).
+$base = @("--env", "regulator", "--cells", $cells, "--no-exo-shutdown",
   "--train-seeds", "$TrainSeeds", "--train-seed-start", "20000", "--horizon", "9",
   "--updates", "$Updates", "--rollouts-per-update", "$RolloutsPerUpdate",
   "--epochs", "2", "--minibatch-size", "256", "--ppo-seed", "0", "--checkpoint-every", "$CheckpointEvery",
-  "--init-guard", "$warm/p_guard.json", "--init-arbiter", "$warm/p_council_arbiter_rl.json",
-  "--init-monolith-adapter", "$warm/m_adapter_rl.json",
   "--field-cap", "1", "--reward-cap", "0.5", "--guard-cap", "0.7", "--feature-mode", "base",
   "--field-model", $FieldModel)
 $fm = @("--field-model", $FieldModel)
+$warmInit = @("--init-guard", "$warm/p_guard.json", "--init-arbiter", "$warm/p_council_arbiter_rl.json",
+  "--init-monolith-adapter", "$warm/m_adapter_rl.json")
 
-function Train([string]$name, [string[]]$extra) {
+function Train([string]$name, [string[]]$extra, [string[]]$init) {
   $root = Join-Path $OutRoot $name
   New-Item -ItemType Directory -Force $root | Out-Null
   Write-Host "[NS-3-b] training $name -> $root"
-  $a = @("-m", "training.mesa.train_ns1_shutdown", "--phase", "ns3_b_$name", "--out", "$root") + $common + $extra
+  $a = @("-m", "training.mesa.train_ns1_shutdown", "--phase", "ns3_b_$name", "--out", "$root") + $base + $init + $extra
   if ($NoResume) { $a += "--no-resume" }
   & python @a 2>&1 | Tee-Object -FilePath (Join-Path $root "train.log")
   if ($LASTEXITCODE -ne 0) { throw "NS-3-b $name training failed (exit $LASTEXITCODE)" }
 }
 
-Train "blind" @()                       # honest crosser: no override
-Train "m0"    @("--apply-override")      # M0: override -> learns the temporal sandbag
+# Baseline fix (H2.3 cap-as-scaffold): pre-train a COMPETENT base WITH the cap (presider scaffold)
+# on the CLEAN task, so the uncapped baseline starts competent instead of floundering from the
+# forked warm-start. The competent monolith = scaffold mkappa_adapter; the council = ckappa_arbiter.
+Train "scaffold" @("--arb-cap-kappa", "0.4") $warmInit
+$scaffoldInit = @("--init-guard", "$OutRoot/scaffold/p_guard.json",
+  "--init-arbiter", "$OutRoot/scaffold/ckappa_arbiter_rl.json",
+  "--init-monolith-adapter", "$OutRoot/scaffold/mkappa_adapter_rl.json")
+if (-not (Test-Path "$OutRoot/scaffold/mkappa_adapter_rl.json")) { throw "scaffold did not produce a competent base" }
+
+# Real runs: review band ON (crossing-detection env), warm-started from the competent scaffold.
+Train "blind" @("--review-band") $scaffoldInit                                   # honest crosser: no override
+Train "m0"    @("--review-band", "--apply-override") $scaffoldInit                # M0: override -> learns the temporal sandbag
 foreach ($k in $kappaList) {
-  Train "ckappa_$k" @("--apply-override", "--arb-cap-kappa", "$k")  # cap forces presider-speed
+  Train "ckappa_$k" @("--review-band", "--apply-override", "--arb-cap-kappa", "$k") $scaffoldInit  # cap forces presider-speed
 }
 
 Write-Host "[NS-3-b] evals"

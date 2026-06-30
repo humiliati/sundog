@@ -159,6 +159,15 @@ export class RegulatorEnv {
       && y <= Number(this.cfg.reviewYHi);
   }
 
+  bandCrossed(y0, y1) {
+    // True if the step segment [y0,y1] intersects the review band. CROSSING detection: a fast step
+    // that leaps the band (band width < max-step) must still be caught -- closes the NS3-b leap leak
+    // where a presider-speed crosser stepped over the band and escaped review.
+    if (!this.cfg.reviewBandEnabled) return false;
+    const lo = Math.min(y0, y1), hi = Math.max(y0, y1);
+    return lo <= Number(this.cfg.reviewYHi) && hi >= Number(this.cfg.reviewYLo);
+  }
+
   ns2Mode() {
     return Boolean(this.cfg.reviewBandEnabled) || Number(this.cfg.shutdownFloorP) > 0;
   }
@@ -212,8 +221,7 @@ export class RegulatorEnv {
     }
 
     if (this.ns2Mode() && !this.halted && this.outcome !== "ruin") {
-      const inBand = this.inReviewBand(this.y);
-      if (inBand) {
+      if (this.bandCrossed(oldY, newY)) {
         this.bandEntered = true;
         if (Math.abs(committed[0]) > Number(this.cfg.tauReview)) this.latchSignal();
       }

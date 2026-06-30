@@ -115,6 +115,21 @@ leafCount e)` by induction, reusing the `RegionPoly` cut/scale/max gates and han
 
 ## S3-3 — A non-imported find/check gap (the ledger's first proven separation). [FORMALIZABLE]
 
+> **Status (2026-06-29): LANDED.** `Sundogcert/QueryGap.lean` — a self-contained decision-tree
+> (query) model `DTree` (`eval`/`depth`/`queriedOn`) over `x : Fin n → Bool`, unstructured search:
+> - **CHECK** `checkTree i` reads `x i` and reports it: `checkTree_eval` (correct), `checkTree_depth
+>   = 1` (one query). Both `[propext]`-only — axiom-lighter than the standard triple.
+> - **FIND** `search_needs_n_queries`: any tree with `(∀ x, eval t x = true ↔ ∃ i, x i = true)`
+>   has `depth ≥ n`. Proof = the **adversary** lemma `queried_all_of_decides` (on the all-false
+>   input the tree must query *every* position — else flip an unqueried one without changing the
+>   path: `eval_eq_of_agree`) + `card_queriedOn_le_depth`.
+> - **The gap** `check_lt_find`: for `n ≥ 2`, `(checkTree i).depth < t.depth` for any correct
+>   finder `t`. **Both sides machine-checked; nothing imported** — the ledger's first proved
+>   `check ≪ find`. Axiom-clean, in the `AxiomAudit` gate, full build green (8532 jobs).
+>   `GAP_COLLAPSES_IN_MODEL` did not fire. Honest scope: an *unconditional lower bound in a
+>   restricted (query) model*, **not** a P-vs-NP claim — which is exactly what lets it be proved
+>   rather than imported. *(Local only; not committed — owner-gated.)*
+
 *Claim.* Every one of the 7 `Certifies` instances imports its find-hardness. Add **one instance
 where the gap is proved in Lean**: in a query / decision-tree model, *checking* a supplied witness
 costs `O(1)` while *finding* it provably costs `Ω(n)` queries (an adversary argument). This is the
@@ -224,8 +239,9 @@ non-transfer* (the barrier's location), never a lower bound for general nets.
    (`ExactRepr.cpl_iff_reluNet`): converse `cpl_realizable` (peeling induction) + forward
    `net_hasPieceCover` (via the non-convex doubling bound `hasPieceCover_relu`). Continuous-PL ⟺
    exact finite ReLU net, at ε = 0. Only the optional minimal-width sharpening remains.
-2. **S3-3 — the non-imported gap.** Highest value: the ledger's only honesty caveat is "find
-   imported"; one proven `check ≪ find` (even in a query model) cracks it.
+2. **S3-3 — the non-imported gap.** ✅ **LANDED** (`QueryGap.check_lt_find`): in the decision-tree
+   model, CHECK = 1 query, FIND ≥ n (adversary), both machine-checked — the ledger's first proved
+   `check ≪ find`, cracking its only standing "find imported" caveat (for this query-model toy).
 3. **S3-2 — graded cancellation.** Sharpens N-1/N-2 from a dichotomy to a quantitative dial.
 4. **S3-5 — sample-complexity empirical.** Cheapest to run; extends N-4 to a second axis.
 5. **S3-4 — the analytic ε-rate.** The paper's headline, but a genuinely new construction +
