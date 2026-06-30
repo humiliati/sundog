@@ -159,6 +159,8 @@ const bandOn = {
   triggered_n: triggered.length,
   halted_rate: round(mean(onRows.map((m) => m.halted))),
   competence_on_band: round(mean(onRows.map((m) => m.competence))),
+  mean_terminal_y: round(mean(onRows.map((m) => (m.terminal_y ?? 0)))),
+  outcomes: onRows.reduce((a, m) => { a[m.outcome] = (a[m.outcome] || 0) + 1; return a; }, {}),
 };
 
 // ---- no-band competence surface (the bill) ----
