@@ -90,6 +90,31 @@ code, experiments, prior theorem materials, and application bridges.
   meta-generality roadmap inspired by Euler/Lagrange, Snell/Fermat, and the
   principle of least reader-action; stages the `B/Phi/T/A/I/F/R` coordinate
   chart for making claims recoverable without hiding imports or falsifiers.
+- [Sundog Algorithmic-Approximation lane](algo-approx/SUNDOG_V_ALGO_APPROX.md):
+  lane ledger off arXiv:2606.26705 (Kratsios et al.); machine-checked find/check
+  ledger (seven cheap-CHECK instances under one `Certifies` interface: max-flow,
+  König, 2-SAT, Pratt, shortest-path, syndrome, ReLU gate-count) plus the
+  tropical / PL core with linear gate count `≤ 4N` via a sharing-aware DAG and
+  the N-1 monotone depth-as-computation theorem. Public surface at
+  [/algorithmic-approximation](../algorithmic-approximation.html); slate at
+  [`ALGO_APPROX_CONJECTURE_SLATE_2.md`](algo-approx/ALGO_APPROX_CONJECTURE_SLATE_2.md);
+  receipts at
+  [`ALGO_APPROX_N2_CANCELLATION_SPINE.md`](algo-approx/ALGO_APPROX_N2_CANCELLATION_SPINE.md)
+  (synthesis lens, typed conjecture),
+  [`ALGO_APPROX_N4_EPS_REGIONS_RESULT.md`](algo-approx/ALGO_APPROX_N4_EPS_REGIONS_RESULT.md)
+  (empirical with named SGD residual), and
+  [`ALGO_APPROX_CD2_GROKKING_RESULT.md`](algo-approx/ALGO_APPROX_CD2_GROKKING_RESULT.md)
+  (the prior null this redeems).
+- [Sundog Certificate (Lean) ledger](SUNDOG_V_CERTIFICATE_LEAN.md) **— now ten
+  worked examples + one synthesis law**: the previous worked-example ledger
+  (finite-field, real analysis ×2, geometric optics, gauge topology, Karp
+  3SAT→decoding, finite audit game, tropical/PL with linear gate count
+  `≤ 4N`, N-1 monotone depth-as-computation, find/check ledger) is now joined
+  by **the Order-Relative Resolution Law** synthesis core in its own section
+  (`Sundogcert/OrderRelative.lean`): a schema law `Resolves k t ↔ ord t ≤ k`
+  proved once, grounded on parity-determination and coordinate-locality
+  instances, with `order_is_schema_not_scalar` as the explicit honesty guard.
+  Not a worked example; not a universal-scalar claim.
 - [Sundog Tauroctony ledger](SUNDOG_V_TAUROCTONY.md): the portfolio's
   mythopoetic cosmogram — the tauroctony as one image holding the empirical
   ledgers (Sol/field, the bull/maximand, the two torchbearers, the bestiary as

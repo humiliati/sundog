@@ -37,6 +37,20 @@ These three are the law's *content*, proved **once** from `resolves_iff` — eve
   already certified.
 - `resistPole` — the σ=∞ / `λ` / full-history end (`ord = ⊤`); `resistPole_resists` shows no finite
   budget resolves it, instantiating `resists_iff_infinite`.
+- `localityProblem n d` — a **second grounded axis** (added 2026-06-29): coordinate-locality. The target
+  `prefixParity n d` depends only on coordinates `< d`; `prefixSufficient_iff` proves the first `k`
+  coordinates suffice iff `d ≤ k`, so its `ord = d` (the prefix width — a *different* filtration from
+  parity's subset-parity). `localityProblem_ord_ne_top` shows it is determine-only (always finite,
+  never `⊤`) — echoing the σ-slate's H2 (locality cannot host the resist pole). `two_axes_and_pole`
+  exhibits three orders on one object: locality `d`, parity `n`, pole `⊤`.
+- `rationalReachProblem` / `irrationalReachProblem` — a **third grounded axis** (added 2026-06-29):
+  search reachability (C1). The order is the **denominator budget**: `DenomReaches x k` = reachable by
+  a rational of denominator ≤ k. A rational target `q₀` has `ord = q₀.den` (`rationalReachProblem_ord`);
+  an **irrational** target has `ord = ⊤` and genuinely resists (`irrationalReach_resists`) — an
+  **earned** resist pole, unlike the fiat `resistPole`. `search_resist_sqrt_two` machine-checks it for
+  `√2`; the BoxSEL optimum `(9+√17)/32` is irrational the same way (the C1 search-resist). NB: C4's
+  verify-vs-predict *mode-vector* was **not** anchored — on the bit-parity toy verify-cost = determine-
+  cost (no divergence); C4's gap is λ-specific (the factorization witness), not Lean-toy-able.
 
 ### The honesty guard, machine-checked
 

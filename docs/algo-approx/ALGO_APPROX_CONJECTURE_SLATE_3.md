@@ -44,16 +44,25 @@
 
 ## S3-1 — Exact representability: continuous-PL ⟺ finite-width ReLU. [FORMALIZABLE]
 
-> **Status (2026-06-29): the convex case of the converse is LANDED.**
-> `Sundogcert/ExactRepr.lean` — `convexCPL_realizable`: `ConvexOn ℝ Set.univ f → HasPieceCover f n →
-> ∃ g : Net 1, realize1N g = f`. A convex continuous-PL function is the *exact* realization of a
-> finite ReLU net, built canonically as the upper envelope of its piece-lines
-> (`convex_eq_sup_lines`) realized by a tropical `max`-circuit (`linesTrop`) and compiled through
-> `compile`/`realize1_compile`. Axiom-clean, in the `AxiomAudit` gate, full build green (8531 jobs).
-> The general (non-convex) converse — `f` as a difference of two convex envelopes (DC
-> decomposition) — and the forward direction (ReLU ⟹ CPL, via a general non-convex `max`/`relu`
-> piece bound) remain the staged extensions; `CPL_NOT_REPRESENTABLE` did not fire on the convex
-> case. *(Local only; not committed — owner-gated.)*
+> **Status (2026-06-29): CLOSED — the full `⟺` is machine-checked.** `Sundogcert/ExactRepr.lean`:
+> - `cpl_iff_reluNet (f)`: `(∃ k, HasPieceCover f k) ↔ (∃ g : Net 1, realize1N g = f)` — **the
+>   characterization at ε = 0, both directions.** Since `HasPieceCover` *is* the exact continuous-PL
+>   predicate, this reads: a 1-D function is exactly a finite ReLU net **iff** it is continuous
+>   piecewise-linear with finitely many pieces.
+> - Converse (CPL ⟹ ReLU): `cpl_realizable` — peeling induction on the cut set
+>   (`Finset.strongInduction`): at the largest breakpoint `b`, subtract one ReLU correction
+>   `Δ·relu(· − b)` (`Δ` = slope jump, from `f`'s values, no `Classical.choose`); the remainder is
+>   affine away from `S.erase b`, recurse. `convexCPL_realizable` is the convex special case via the
+>   upper-envelope construction (`convex_eq_sup_lines` → `linesTrop` → `compile`).
+> - Forward (ReLU ⟹ CPL): `net_hasPieceCover` — induction on the net; the only real content is
+>   `hasPieceCover_relu`, the general non-convex **doubling** bound `HasPieceCover f k →
+>   HasPieceCover (max f 0) (2k)` (the cut set is `f`'s breakpoints plus one zero-crossing per piece
+>   — the crossing-enumeration scaffold deferred in N-1, now discharged).
+>
+> All four theorems axiom-clean, in the `AxiomAudit` gate, full build green (8531 jobs);
+> `CPL_NOT_REPRESENTABLE` did not fire in either direction. Only the *minimal-width* sharpening
+> (width = breakpoint count) is left, and it is a quantitative refinement, not a gap in the `⟺`.
+> *(Local only; not committed — owner-gated.)*
 
 *Claim.* A 1-D function is **exactly** representable by a finite ReLU network **iff** it is
 continuous piecewise-linear with finitely many pieces — and the minimal width is the breakpoint
@@ -211,10 +220,10 @@ non-transfer* (the barrier's location), never a lower bound for general nets.
 
 ## Recommended first attacks (ranked)
 
-1. **S3-1 — exact representability.** ✅ **convex case LANDED** (`ExactRepr.convexCPL_realizable`);
-   next increment is the general non-convex converse (DC decomposition) and/or the forward
-   direction (ReLU ⟹ CPL). Cleanest: most of the machinery was in `RegionPoly`; closes the paper's
-   title at ε = 0 (convex) and tightens N-1.
+1. **S3-1 — exact representability.** ✅ **CLOSED** — the full `⟺` is machine-checked
+   (`ExactRepr.cpl_iff_reluNet`): converse `cpl_realizable` (peeling induction) + forward
+   `net_hasPieceCover` (via the non-convex doubling bound `hasPieceCover_relu`). Continuous-PL ⟺
+   exact finite ReLU net, at ε = 0. Only the optional minimal-width sharpening remains.
 2. **S3-3 — the non-imported gap.** Highest value: the ledger's only honesty caveat is "find
    imported"; one proven `check ≪ find` (even in a query model) cracks it.
 3. **S3-2 — graded cancellation.** Sharpens N-1/N-2 from a dichotomy to a quantitative dial.
