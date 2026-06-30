@@ -47,6 +47,39 @@ N_DETECTORS = 8
 TARGET_DETECTOR_INDEX = 0
 
 
+def _rotation_matrix(axis: np.ndarray, theta: float) -> np.ndarray:
+    """Rodrigues rotation matrix for rotating vectors by `theta` rad about `axis`."""
+    axis = np.asarray(axis, dtype=float)
+    n = np.linalg.norm(axis)
+    if n < 1e-12:
+        return np.eye(3)
+    axis = axis / n
+    c, s = np.cos(theta), np.sin(theta)
+    k = np.array(
+        [
+            [0.0, -axis[2], axis[1]],
+            [axis[2], 0.0, -axis[0]],
+            [-axis[1], axis[0], 0.0],
+        ]
+    )
+    return np.eye(3) + s * k + (1.0 - c) * (k @ k)
+
+
+def tilt_normal(n: np.ndarray, rad: float, ref: tuple[float, float, float] = (0.0, 0.0, 1.0)) -> np.ndarray:
+    """Tilt unit normal `n` by exactly `rad` radians, in the plane spanned by n and `ref`.
+
+    The tilt axis is n x ref (perpendicular to n), so the angular displacement of
+    the normal equals `rad` regardless of the geometry - unlike a fixed world-axis
+    rotation, whose effective tilt collapses when the normal aligns with the axis.
+    """
+    n = np.asarray(n, dtype=float)
+    axis = np.cross(n, np.asarray(ref, dtype=float))
+    if np.linalg.norm(axis) < 1e-9:
+        # n parallel to ref; fall back to a different reference.
+        axis = np.cross(n, np.array([1.0, 0.0, 0.0]))
+    return _rotation_matrix(axis, rad) @ n
+
+
 @dataclass
 class Observation:
     """Agent-visible observation. Strictly excludes target position."""
@@ -111,6 +144,11 @@ class SundogEnvV2:
         self.sigma = sigma
         self.frame_skip = frame_skip
         self.rng = np.random.default_rng(seed)
+        # Mirror-normal calibration bias (model-mismatch lever). 0 rad = identity;
+        # set via set_normal_bias(). Applied in _compute_intensities only, so the
+        # default env and the analytic FK sanity check are bit-identical.
+        self._normal_bias_rad: float = 0.0
+        self._normal_bias_ref: tuple[float, float, float] = (0.0, 0.0, 1.0)
 
         self._detector_names = [f"detector_{i}" for i in range(N_DETECTORS)]
         # Cache detector world positions (they are world-fixed sites).
@@ -180,6 +218,11 @@ class SundogEnvV2:
         normal_tip = self.data.site("mirror_normal_tip").xpos.copy()
         diff = normal_tip - mirror_pos
         normal = diff / max(np.linalg.norm(diff), 1e-12)
+        if abs(self._normal_bias_rad) > 1e-12:
+            # Warped / miscalibrated mirror: tilt the true reflecting normal by a
+            # fixed angle the analytic oracle does not model. The pole-tip mirror
+            # POSITION is unchanged; only the reflecting surface normal is biased.
+            normal = tilt_normal(normal, self._normal_bias_rad, self._normal_bias_ref)
         return optics.compute_detector_intensities(
             laser_pos=laser_pos,
             mirror_pos=mirror_pos,
@@ -191,6 +234,24 @@ class SundogEnvV2:
     # ------------------------------------------------------------------
     # Oracle (for DOA-direct baseline only)
     # ------------------------------------------------------------------
+
+    def set_normal_bias(
+        self,
+        deg: float,
+        ref: tuple[float, float, float] = (0.0, 0.0, 1.0),
+    ) -> None:
+        """Install a fixed mirror-normal calibration bias (model mismatch).
+
+        Tilts the TRUE reflecting normal by exactly `deg` degrees (in the plane
+        spanned by the normal and `ref`) before the reflection is computed,
+        modelling a warped / miscalibrated mirror. The analytic oracle
+        (optics.optimal_joint_angles) assumes zero bias, so this makes its
+        open-loop solve only locally optimal; closed-loop photometric feedback
+        can still climb to the (shifted) true peak. deg == 0 restores the
+        identity (bit-identical to the unbiased env).
+        """
+        self._normal_bias_rad = np.deg2rad(float(deg))
+        self._normal_bias_ref = tuple(float(v) for v in ref)
 
     def get_oracle(self) -> Oracle:
         """Ground-truth info for evaluation and the target-aware baseline."""

@@ -80,6 +80,12 @@ class Stressor:
     photometric_scan_duration_s: float = 4.0
     distractor_boost: float = 1.0
     distractor_index: int = 4   # opposite the target on the ring
+    # Model-mismatch lever (H3): fixed unmodelled tilt of the mirror's reflecting
+    # normal by mirror_bias_deg degrees (in the plane spanned by the normal and
+    # mirror_bias_ref). Invisible to the analytic oracle, which assumes an ideal
+    # mirror.
+    mirror_bias_deg: float = 0.0
+    mirror_bias_ref: tuple[float, float, float] = (0.0, 0.0, 1.0)
 
 
 # ---------------------------------------------------------------------------
@@ -96,6 +102,11 @@ def apply_laser_height(env: SundogEnvV2, stressor: Stressor) -> None:
     site_id = env.model.site("laser_source").id
     env.model.site_pos[site_id, 2] = float(stressor.laser_height)
     mujoco.mj_forward(env.model, env.data)
+
+
+def apply_mirror_bias(env: SundogEnvV2, stressor: Stressor) -> None:
+    """Install the H3 mirror-normal calibration bias on the env (no-op at 0 deg)."""
+    env.set_normal_bias(stressor.mirror_bias_deg, stressor.mirror_bias_ref)
 
 
 def apply_joint_limit_to_action(action: np.ndarray, stressor: Stressor) -> np.ndarray:
@@ -183,6 +194,7 @@ def run_episode_with_stressor(
     laser_xy = laser_xy_for_seed(seed)
     obs_clean = env.reset(laser_xy=laser_xy)
     apply_laser_height(env, stressor)
+    apply_mirror_bias(env, stressor)
 
     initial_qpos = initial_qpos_for_seed(seed)
     env.data.qpos[:] = initial_qpos
@@ -223,6 +235,7 @@ STRESSOR_SPECS = {
     "laser_height":     ("laser_height",                 [1.5, 2.0, 2.5, 3.0, 3.5]),
     "joint_limit":      ("joint_limit",                  [0.8, 1.0, 1.2, 1.5]),
     "distractor_boost": ("distractor_boost",             [1.0, 1.5, 2.0, 3.0, 5.0]),
+    "mirror_bias":      ("mirror_bias_deg",              [0.0, 2.0, 5.0, 10.0, 15.0, 20.0]),
 }
 
 
