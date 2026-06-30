@@ -57,10 +57,15 @@ ladder:
 - `id` — order **1** (one affine piece), `id_pieceProblem`;
 - `ReLU = max x 0` — order **2** (one breakpoint), `relu_pieceProblem` (earned both ways:
   `relu_affineAway` gives the 2-piece cover, `relu_not_affine` rules out 1 piece);
-- `x²` — order **⊤** (no finite cover).
+- `step2 = ReLU x + ReLU (x-1)` — order **3** (two breakpoints), `step2_pieceProblem`
+  (`OrderRelativeApproxLadder`); the lower bound `step2_not_pieceCover_two` is a two-interval
+  pigeonhole (the disjoint windows around `0` and `1` each need a cut);
+- `x²`, `eˣ` — order **⊤** (no finite cover).
 
-`graded_exactness` packages `1 < 2 < ⊤`. So determine is graded (`1, 2, …`), with the same resist
-pole on top — not a flat binary.
+`graded_exactness` packages `1 < 2 < ⊤`; `ladder3` packages the explicit climb `1 < 2 < 3`. So the
+determine side is a genuine ladder, with the resist pole on top — not a flat binary. (The general
+`k`-breakpoint family `Σ ReLU(x-i)` at order `k+1` is the natural extrapolation: same shape, a
+`k`-fold pigeonhole.)
 
 **A second resist witness — `eˣ` (transcendental).** `exp_no_pieceCover` / `exp_not_exactly_net`:
 `eˣ` joins `x²` on the resist pole, earned by **strict convexity** (`strictConvexOn_exp` — on any gap
@@ -72,7 +77,8 @@ fool the three-point test; strict convexity everywhere is what makes `eˣ` clean
 
 *Sundog Research Lab — expedition E2. Approximation as an Order-Relative axis: the ε-approximation
 budget collapses (universality), the exactness budget (`ε = 0`) carries the determine/resist split —
-PL determines (graded by piece count: `id` 1, `ReLU` 2), `x²` and `eˣ` resist (earned via
-no-piece-cover; `eˣ` by strict convexity). Lean: `sq_no_pieceCover`, `sq_not_exactly_net`,
-`exact_determine_vs_resist`, `approx_axis_collapses`, `graded_exactness`, `exp_no_pieceCover`,
-`exp_not_exactly_net`. Internal; frozen-as-portfolio.*
+PL determines (graded by piece count, an explicit climbing ladder: `id` 1, `ReLU` 2, `step2` 3),
+`x²` and `eˣ` resist (earned via no-piece-cover; `eˣ` by strict convexity). Lean: `sq_no_pieceCover`,
+`sq_not_exactly_net`, `exact_determine_vs_resist`, `approx_axis_collapses`, `graded_exactness`,
+`exp_no_pieceCover`, `exp_not_exactly_net`, `step2_not_pieceCover_two`, `ladder3`. Internal;
+frozen-as-portfolio.*
