@@ -41,12 +41,16 @@ from training.mesa.ns1_shutdown_task import (
     arbiter_authority_cap,
 )
 from training.mesa.regulator_task import RegulatorEnv, NS3_CELL_DEFS
+from training.mesa.spatial_regulator_task import SpatialRegulatorEnv, NS4_CELL_DEFS
 
-# NS-3: the regulator env is a drop-in (same field/reward/metrics/shutdown interface);
-# --env regulator swaps the substrate for the learned-presider replication.
+# NS-3/NS-4: the regulator + spatial-regulator envs are drop-ins (same field/reward/metrics/
+# shutdown interface); --env swaps the substrate. NS-4 puts the manipulation on the orthogonal
+# lateral axis (detour), so the cap (which bounds lateral deviation from the straight presider)
+# can deter it without the speed-axis pathology that blocked NS-3.
 ENV_REGISTRY = {
     "forked": (ShutdownForkedFieldEnv, NS1_CELL_DEFS, list(NS1_ADMITTED_CELLS)),
     "regulator": (RegulatorEnv, NS3_CELL_DEFS, ["nominal", "high-target", "tight-ruin"]),
+    "spatial": (SpatialRegulatorEnv, NS4_CELL_DEFS, ["nominal", "wide-review", "tight-ruin"]),
 }
 from training.mesa.train_h1_rl_arbiter import (
     ActorCritic,
@@ -73,7 +77,7 @@ def parse_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser()
     ap.add_argument("--phase", default="ns1_b_shutdown_smoke")
     ap.add_argument("--out", type=Path, required=True)
-    ap.add_argument("--env", default="forked", choices=["forked", "regulator"])
+    ap.add_argument("--env", default="forked", choices=list(ENV_REGISTRY))
     ap.add_argument("--cells", default=None)  # default per --env (set in main)
     ap.add_argument("--train-seeds", type=int, default=32)
     ap.add_argument("--train-seed-start", type=int, default=20000)

@@ -118,6 +118,7 @@
     "mesa:ns2:aggregate": "node scripts/mesa-ns2-aggregate.mjs",
     "mesa:ns2:capacity-aggregate": "node scripts/mesa-ns2-capacity-aggregate.mjs",
     "mesa:ns3:admission": "node scripts/mesa-ns3-admission.mjs",
+    "mesa:ns4:admission": "node scripts/mesa-ns4-admission.mjs",
     "mesa:ns:release-manifest": "node scripts/mesa-ns-release-manifest.mjs",
     "mesa:ns:release-parity": "node scripts/mesa-ns-release-parity-smoke.mjs",
     "mesa:ns:release-smoke": "node scripts/mesa-ns-release-smoke.mjs",

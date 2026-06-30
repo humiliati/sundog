@@ -73,6 +73,37 @@ reproducing all train pairs" with a machine-checked cheap CHECK.** An 8th `Ledge
   reuses a proven pattern. Caps at 5.5 — it is a genuine new instance but incremental over the existing ledger;
   the find/check *content* lives in FC-2.
 
+#### FC-1 RESULT (run 2026-06-29): LANDED — machine-checked, axiom-clean, build-gated
+
+Lean core: `sundogcert/Sundogcert/AbstractionCert.lean` (namespace `Sundog.AbstractionCert`), wired into
+root `Sundogcert.lean` + the build-enforced `AxiomAudit.lean` `#guard_msgs` gate. Full `lake build` GREEN
+(8539 jobs). Independent sanity mirror: `sundog/scripts/findcheck_fc1_sanity.py` (all 3 facts reproduce).
+
+- **What is PROVED (about the TOY, nothing about ARC).** A tiny total grid DSL `Prog`
+  (`id`/`recolor`/`flipH`/`flipV`/`comp`) with a structural `eval` (no unbounded fixpoint), tasks =
+  input→output grid pairs, and the CHECK `Verify p task = task.all (eval p · = ·)`:
+  - `verify_iff` — the CHECK is exactly "consistent with every training pair," decidable.
+  - `verify_planted` — the CHECK ACCEPTS the program that generated a task (completeness).
+  - `train_underdetermines` (**headline**) — a task + two DISTINCT programs (`id`, `recolor 1 2`) both
+    passing `Verify` yet disagreeing on a held-out grid: the training evidence does NOT pin the program.
+    The find/check analog of `ParityNoSufficientStat.partial_not_sufficient` — cheap CHECK ≠ pinned answer.
+  - `cost_le` — CHECK cost `|task|·(evalCost p + 1) + 1`, routed through `Certifies.Ledger`: the find/check
+    ledger's program-synthesis instance (the 8th instance — syndrome/shortest-path/ReLU/max-flow/König/
+    2-SAT/Pratt/**abstraction**).
+- **Axiom audit (build-gated).** `verify_iff`/`verify_planted` = `[propext, Quot.sound]`;
+  `train_underdetermines`/`cost_le` = *no axioms at all* (pure `decide`/`rfl`). Pinned in `AxiomAudit.lean`;
+  a regression fails `lake build`.
+- **Kill conditions cleared.** (1) Check is O(|task|·evalCost) forward (`cost_le`). (2) `eval` is structural,
+  not an unbounded fixpoint. (3) NOT a trivial restatement of `HasStraightLineCost`: the DSL-eval structure
+  is load-bearing (`eval_comp` composition; `train_underdetermines` is a real theorem about the toy, not the
+  cost interface).
+- **Walls named, not breached.** FIND (program search over the DSL) is imported; the GENERALIZATION wall
+  (consistency-on-train ≠ correctness-on-test) is *witnessed* by `train_underdetermines`, named as why ARC is
+  hard — no claim about cracking ARC. This is the FC-2 seed (the underdetermination a search must contend with).
+
+**Verdict: FC-1 LANDED (strength 5.5).** The bridge object is real Lean. First-strike done; next is FC-2 (the
+unconditional toy find/check separation) then FC-3 (the ARC reframe); the Branch-E gate fires only after both.
+
 ### Rank 3 — FC-3: reframe the ARC task-hardness receipts as find/check / order-meter measurements (strength 5)
 **The ARC-facing payoff (no reopen): re-read the three filed ARC task-hardness receipts + the Branch-A–D floors
 as find/check-gap and σ-order measurements, not representation-insufficiency verdicts.**

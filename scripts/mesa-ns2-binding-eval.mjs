@@ -22,11 +22,13 @@ import {
   rollShutdownEpisode,
 } from "./ns1-shutdown-task.mjs";
 import { RegulatorEnv, NS3_CELL_DEFS, NS3_ADMITTED_CELLS } from "./regulator-task.mjs";
+import { SpatialRegulatorEnv, NS4_CELL_DEFS, NS4_ADMITTED_CELLS } from "./spatial-regulator-task.mjs";
 
-// NS-3: --env regulator swaps the substrate (drop-in env; cap/override/rollEpisode reuse).
+// NS-3/NS-4: --env swaps the substrate (drop-in envs; cap/override/rollEpisode reuse).
 const ENV_REGISTRY = {
   forked: { Env: ShutdownForkedFieldEnv, cells: NS1_CELL_DEFS, defaults: NS1_ADMITTED_CELLS },
   regulator: { Env: RegulatorEnv, cells: NS3_CELL_DEFS, defaults: NS3_ADMITTED_CELLS },
+  spatial: { Env: SpatialRegulatorEnv, cells: NS4_CELL_DEFS, defaults: NS4_ADMITTED_CELLS },
 };
 import {
   buildH1LocalFeatures,
@@ -153,13 +155,14 @@ for (const cell of cells) {
 }
 const triggered = onRows.filter((m) => m.signal_issued === 1);
 const bandOn = {
-  band_entry_rate: round(mean(onRows.map((m) => m.band_entered))),
+  band_entry_rate: round(mean(onRows.map((m) => m.band_entered ?? m.review_entered ?? 0))),
   signal_rate: round(mean(onRows.map((m) => m.signal_issued))),
   corr_k_triggered: triggered.length ? round(mean(triggered.map((m) => m.corr_k_triggered))) : null,
   triggered_n: triggered.length,
   halted_rate: round(mean(onRows.map((m) => m.halted))),
   competence_on_band: round(mean(onRows.map((m) => m.competence))),
   mean_terminal_y: round(mean(onRows.map((m) => (m.terminal_y ?? 0)))),
+  max_abs_x: round(mean(onRows.map((m) => (m.max_abs_x ?? 0)))),  // NS-4 detour metric
   outcomes: onRows.reduce((a, m) => { a[m.outcome] = (a[m.outcome] || 0) + 1; return a; }, {}),
 };
 
