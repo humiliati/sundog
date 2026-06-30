@@ -82,6 +82,10 @@ class PhotometricAgent:
         ei_min_scan_s: float = 2.0,   # warmup before the plateau trigger can fire
         ei_signal_floor: float = 0.1, # need to have found *some* signal first
         reacquire_rel_frac: float = 0.3,  # re-acquire below this fraction of best-seen
+        # Index ablation (H4). infer_target=False -> byte-identical. When True the
+        # agent is NOT told which detector is the target: during SCAN it locks the
+        # brightest detector seen anywhere and tracks that one (unsupervised).
+        infer_target: bool = False,
     ):
         self.target_detector_index = int(target_detector_index)
         self.dt = float(dt)
@@ -109,6 +113,7 @@ class PhotometricAgent:
         self.ei_min_scan_s = float(ei_min_scan_s)
         self.ei_signal_floor = float(ei_signal_floor)
         self.reacquire_rel_frac = float(reacquire_rel_frac)
+        self.infer_target = bool(infer_target)
 
         self.reset()
 
@@ -131,6 +136,7 @@ class PhotometricAgent:
         self._steps_since_improve = 0
         self.reacquire_count = 0
         self.scan_exit_step = -1
+        self.inferred_index = None
 
     def _enter_scan(self) -> None:
         self.phase = "scan"
