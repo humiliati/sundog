@@ -122,27 +122,48 @@ The schema is a Lean `structure` carrying a `Target` type, an order
 `resist ⟺ infinite-order` (`resists_iff_infinite`) are then theorems *of the
 schema* — proved once and inherited by every instance.
 
-**Two grounded axes plus the resist pole** instantiate the schema:
+**Six grounded axes plus the resist pole** instantiate the schema — each a
+genuinely different filtration, none reducible to the others:
 
 - A **parity-determination instance** (`parityProblem n`): the "total parity on
   `n` coordinates" problem, whose `ord = n` is proved equal to the machine-checked
   `ParityNoSufficientStat.suffStatOrder n` (`parityProblem_ord`).
-- A **coordinate-locality instance** (`localityProblem n d hd`): a genuinely
-  different filtration — `ord = d`, the prefix-width, with `prefixSufficient_iff`
-  proving the first `k` coordinates suffice for the `d`-prefix parity iff
-  `d ≤ k`. Coordinate-locality is determine-only — `localityProblem_ord_ne_top`
-  shows its order is always finite, so this axis cannot host the resist pole.
+- A **coordinate-locality instance** (`localityProblem n d hd`): a different
+  filtration — `ord = d`, the prefix-width, with `prefixSufficient_iff` proving the
+  first `k` coordinates suffice for the `d`-prefix parity iff `d ≤ k`. Determine-only
+  — `localityProblem_ord_ne_top` shows its order is always finite.
+- A **search-reachability instance** (`rationalReachProblem` /
+  `irrationalReachProblem`): `ord` = the least rational denominator that reaches the
+  target. Rationals have finite order; an irrational like `√2` is reached by no
+  finite-denominator rational — an **earned** resist pole `⊤`
+  (`search_resist_sqrt_two`), not a fiat one.
+- A **radical-reach instance**: `ord` = the least power that carries the target into
+  `ℚ`; `√2` has radical order 2 (`radicalReachSqrtTwo_iff`). Paired with the previous
+  axis, `sqrt_two_mode_vector` shows `√2` carries **two divergent orders** —
+  search-reach `⊤` yet radical order 2 — across two grounded axes on one object.
+- A **spectral / moment instance** (`OrderRelativeMoment`): the determine/resist law's
+  own measure-theoretic home. `ord = 1` if the target population has a finite mean
+  (determine), `⊤` if it does not — the standard **Cauchy** population, an earned `⊤`
+  via `cauchy_no_mean`. Here the order is **binary** (1 vs `⊤`): a finite-mean-vs-no-
+  mean dichotomy, marking a boundary of how graded the law can be.
+- An **algebraic-degree instance** (`OrderRelativeAlgDegree`): `ord` = the degree of
+  the minimal rational polynomial with the target as a root. The lane's actual optimum
+  `(9+√17)/32` is a root of `16X²−9X+1`, so its algebraic-degree order is **2** — yet
+  its search/denominator order is `⊤` (it is irrational). `boxOpt_mode_vector`
+  machine-checks this divergence on the real optimum: degree-2-simple, but unreachable
+  by naive search.
 - A **resist pole** (`resistPole`): a target no finite budget resolves — order
   `= ⊤` — paired with `resists_iff_infinite` to instantiate the resist side of
   the dichotomy.
 
-The closing theorem `order_is_schema_not_scalar` is the **honesty guard**: the
-parity instance gives finite order `n`, the coordinate-locality instance gives
-finite order `d`, and the resist pole gives `⊤` — three orders on a single
-(`Unit`) object, none of them comparable as numbers across instances. The
-finite/∞ split is *per-instance*, not a single universal order. The law is
-a **schema, not a scalar**; orders compose across instances only through the
-schema, never through a shared comparable number.
+The closing theorem `order_is_schema_not_scalar` is the **honesty guard**: parity
+gives finite order `n`, coordinate-locality gives finite order `d`, and the resist
+pole gives `⊤` — none of them comparable as numbers across instances. The mode-vectors
+make the point sharpest: the *same* object carries divergent orders across axes (`√2`:
+search-reach `⊤` vs radical 2; `(9+√17)/32`: algebraic-degree 2 vs denominator `⊤`), so
+the order is provably **not** a single universal scalar. The finite/∞ split is
+*per-instance*. The law is a **schema, not a scalar**; orders compose across instances
+only through the schema, never through a shared comparable number.
 
 **Claim boundary.** Not tied to any named hard problem (P-vs-NP, Riemann, etc.);
 not tied to alignment or safety; not a universal scalar shared across instances
