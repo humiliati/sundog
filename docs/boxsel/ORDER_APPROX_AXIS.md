@@ -63,9 +63,30 @@ ladder:
 - `x²`, `eˣ` — order **⊤** (no finite cover).
 
 `graded_exactness` packages `1 < 2 < ⊤`; `ladder3` packages the explicit climb `1 < 2 < 3`. So the
-determine side is a genuine ladder, with the resist pole on top — not a flat binary. (The general
-`k`-breakpoint family `Σ ReLU(x-i)` at order `k+1` is the natural extrapolation: same shape, a
-`k`-fold pigeonhole.)
+determine side is a genuine ladder, with the resist pole on top — not a flat binary.
+
+## The ladder is unbounded — the general `k`-breakpoint family (`OrderRelativeApproxLadderK`)
+
+The rungs `id`, `ReLU`, `step2` are the `k = 0, 1, 2` cases of one explicit family:
+
+> `sumRelu k = Σ_{i<k} ReLU(x - (i+1))` — `k` breakpoints at `1, …, k`, `k+1` affine pieces
+> (slopes `0, 1, …, k`), **exactness-order exactly `k+1`** (`sumRelu_order_eq`, `ladderK`).
+
+Both bounds are general in `k`:
+
+- **Upper** (`sumRelu_hasPieceCover`): the cut set `{1, …, k}` works. Proved by `AffineAway`
+  additivity (`affineAway_add`: a sum of two functions is affine off the union of their cut sets)
+  folded over the `Finset` sum — each `ReLU(x-(i+1))` is affine off `{i+1}`.
+- **Lower** (`sumRelu_not_pieceCover`): a genuine **`k`-fold pigeonhole**. `sumRelu k` *bends* at
+  every breakpoint `j` (`sumRelu_bend`: the second difference at `j`, spacing `½`, equals `½ ≠ 0` —
+  a one-term sum, since only the `j`-th ReLU is crossed there). The `k` windows `(j-½, j+½)` are
+  disjoint, so each forces its own cut; an `InjOn` count over `{1, …, k}` gives `≥ k` cuts, i.e.
+  `≥ k+1` pieces.
+
+So for every `k ≥ 1` there is an explicit PL function of exactness-order exactly `k+1`: the determine
+side is an **unbounded** ladder `1 < 2 < 3 < ⋯`, with the resist pole `⊤` (`x²`, `eˣ`) sitting above
+the entire chain. The finite/`⊤` law isn't a binary dressed up as a grade — it is a real `ℕ ∪ {⊤}`
+order, every finite level inhabited.
 
 **A second resist witness — `eˣ` (transcendental).** `exp_no_pieceCover` / `exp_not_exactly_net`:
 `eˣ` joins `x²` on the resist pole, earned by **strict convexity** (`strictConvexOn_exp` — on any gap
@@ -77,8 +98,10 @@ fool the three-point test; strict convexity everywhere is what makes `eˣ` clean
 
 *Sundog Research Lab — expedition E2. Approximation as an Order-Relative axis: the ε-approximation
 budget collapses (universality), the exactness budget (`ε = 0`) carries the determine/resist split —
-PL determines (graded by piece count, an explicit climbing ladder: `id` 1, `ReLU` 2, `step2` 3),
-`x²` and `eˣ` resist (earned via no-piece-cover; `eˣ` by strict convexity). Lean: `sq_no_pieceCover`,
-`sq_not_exactly_net`, `exact_determine_vs_resist`, `approx_axis_collapses`, `graded_exactness`,
-`exp_no_pieceCover`, `exp_not_exactly_net`, `step2_not_pieceCover_two`, `ladder3`. Internal;
+PL determines (graded by piece count, an explicit **unbounded** ladder: `id` 1, `ReLU` 2, `step2` 3,
+and the general `sumRelu k` at order `k+1`), `x²` and `eˣ` resist (earned via no-piece-cover; `eˣ` by
+strict convexity). Lean: `sq_no_pieceCover`, `sq_not_exactly_net`, `exact_determine_vs_resist`,
+`approx_axis_collapses`, `graded_exactness`, `exp_no_pieceCover`, `exp_not_exactly_net`,
+`step2_not_pieceCover_two`, `ladder3`; general-`k`: `affineAway_add`, `sumRelu_bend`,
+`sumRelu_not_pieceCover`, `sumRelu_hasPieceCover_iff`, `sumRelu_order_eq`, `ladderK`. Internal;
 frozen-as-portfolio.*
