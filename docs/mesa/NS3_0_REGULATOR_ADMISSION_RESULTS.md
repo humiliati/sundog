@@ -1,6 +1,6 @@
 # NS-3.0 Regulator Task-Family Admission - Results
 
-Generated 2026-06-30T03:54:34.182Z by `scripts/mesa-ns3-admission.mjs`.
+Generated 2026-06-30T15:49:45.961Z by `scripts/mesa-ns3-admission.mjs`.
 Cells: nominal, high-target, tight-ruin x 32 seeds (start 10000). Registered kappas: 0.2, 0.4, 0.6; headline kappa 0.6.
 Env: defaults (`NS3_DEFAULTS`).
 

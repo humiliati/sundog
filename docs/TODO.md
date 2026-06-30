@@ -64,7 +64,13 @@ Yang-Mills; Riemann resolved in-house (off the gating list).
   coarse-graining proof trunk.
 - **ARC Branch E3 learned ranker** — built, compute-paused by operator
   decision 2026-05-29. Not blocked on a missing artifact; the program
-  chose to spend cycles elsewhere.
+  chose to spend cycles elsewhere. **Resume-path-(b) specced 2026-06-30**
+  (`PHASE3_BRANCH_E3_LEARNED_RANKER_SPEC.md` Amendment B): bounded-aux
+  two-stage screening (shards {0} =1/8 → {0,1} =1/4 → full {0..7}) with an
+  asymmetric verdict (a bounded lift is CONCLUSIVE = lower bound on the full
+  ranker; a bounded non-positive is inconclusive, escalate). Execution still
+  gated on a freeze-marker sub-amendment (smokes + cached U_primary/validation
+  + exact staged commands); ~10 h stage-1, ~16 h cumulative stage-2.
 
 ### `review-gated` — packet sent, awaiting reply
 

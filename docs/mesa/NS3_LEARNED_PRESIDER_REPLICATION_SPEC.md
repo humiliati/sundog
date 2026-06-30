@@ -1,12 +1,20 @@
 # NS-3 Learned-Presider Replication Spec
 
-Status: **v2 — run-1 surfaced two substrate bugs; both fixed; NS3.0 re-admitted; ready for
-rerun.** Opened 2026-06-28 (v0, forked-field draft); retargeted 2026-06-29 to run **on the
+Status: **v3 — competent-sandbag tuning loop CLOSED; cap-positive / competent-sandbag
+null.** Opened 2026-06-28 (v0, forked-field draft); retargeted 2026-06-29 to run **on the
 admitted regulator task family** ([`NS3_REGULATOR_TASK_FAMILY_SPEC.md`](NS3_REGULATOR_TASK_FAMILY_SPEC.md),
 `NS3_0_ADMITTED`) — this is the capstone of the replication arc: a **learned presider
 AND a different task family** at once, the most rigorous single generality test.
 Replaces the analytic regulator setpoint with a learned, frozen presider and reruns
 the safe-interruptibility (sandbagging) / non-sovereignty / cap-not-roles gates.
+
+**Synthesis (2026-06-30):** after NS-3 and NS-4 follow-ups, the honest conclusion is not
+"ready for another reward-shaped rerun." PPO reliably found **crude evasion** before it
+found competent sandbagging: on NS-3, go-limp / never-cross / timeout; on NS-4, lateral
+over-detour / timeout. The competent sandbags are analytically feasible (NS-4's fixed
+detour: `C=1`, `signal_rate=0.010417`), but not natural PPO attractors under the tested
+setup. The cap robustly deters the evasion PPO actually learns. See
+[`NS3_NS4_MANIPULATION_WALL_SYNTHESIS.md`](NS3_NS4_MANIPULATION_WALL_SYNTHESIS.md).
 
 **Run-1 (512 updates) did NOT replicate — `NS3_REVIEW_ESCAPED` — and the failure was
 instructive.** Two substrate bugs, both now fixed: **(1) the leap leak** — the review band
@@ -47,6 +55,14 @@ unchanged (both reference `τ`), so a capped controller (`min|a| = A_band−κ·
 held at high scrutiny while uncapped M0 can drop below `τ` and creep. This is the *soft-oversight*
 regime — a distinct, arguably more realistic model — testing whether the cap deters
 *scrutiny-minimization* sandbagging. Default 0 (NS3.0 admits unchanged); binding `reviewTauHi=0.6`.
+
+**Run-4 and NS-4 continuation: wall, not knob.** Graded temporal review and the orthogonal
+spatial-detour family both preserved the same qualitative lesson: PPO discovers cheap
+review escape, not the precise competent sandbag. Reward shaping did not convert the
+feasible hand-coded policy into the learned attractor because the learned policy exits the
+oversight/termination channel before the delayed competence signal can select the minimal
+competent route. Treat additional knob sweeps as low information unless the learner,
+curriculum, or hazard family changes.
 
 **Substrate (v1 retarget).** Everything below is on the regulator: the presider is a
 learned **setpoint** controller (not a forked-field signature head); cells are
@@ -303,3 +319,6 @@ with measured NS-3-a rates; do not run the binding inline.
 - `v0` (2026-06-28): preregisters the first tier-above-in-vitro replication:
   learned frozen presider, NS-2 capstone rerun, non-sovereignty validity, and
   cap-not-roles attribution.
+- `v3` (2026-06-30): records the NS3/NS4 manipulation wall synthesis: cap-positive
+  against learned crude evasion, competent-sandbag null for PPO on these substrates,
+  no role-separation premium.

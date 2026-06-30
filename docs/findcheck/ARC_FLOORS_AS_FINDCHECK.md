@@ -62,17 +62,31 @@ The ARC arc instantiates the find/check ledger, now with a Lean backbone:
   generalization / under-determination wall).
 - **CHECK ≪ FIND** — `AbstractionQueryGap.abstraction_check_lt_find` (FC-2) is the machine-checked separation:
   verifying one candidate is one probe, while finding one is search-hard; Branch E's "search beats learning, but
-  only modestly" is this gap with the library-coverage limit on top.
+  only modestly" is this gap, with the residual located below.
 
-## The honest residual (the deepest point)
-Branch E cleared the floor only **modestly** (~2.6–3.4%). The dominant remaining floor is **library coverage**,
-not search difficulty and not representation: ARC tasks are *designed* so the per-task rule is "novel per task,
-not a member of any frozen pre-listed DSL" (§"Why A Fourth … Would Likely Converge"); the Phase-0
-`oracle_copy_floor` already shows the natural seed DSLs exhausted (`0/115`). So the FIND gap here is dominated by
-the **expressivity of the candidate generator** (is the rule in the pool at all), with the FC-2 search-hardness
-as a second-order term. This is still a FIND-side characterization — the CHECK / representation reading stays
-disclaimed by the receipts — but it locates the live difficulty precisely: **grow a generator that covers more
-per-task-novel rules**, the exact direction a Branch E v2 (richer primitives) would test.
+## The honest residual (CORRECTED 2026-06-30 — it is SELECTION, not coverage)
+An earlier draft of this note guessed the dominant residual was **library coverage** (grow the generator and the
+rate rises). **Branch E v2 tested exactly that and refuted it.** Admitting the deferred intricate mask families +
+morphology cross-product + depth-3 composition (`PHASE3_BRANCH_E_V2_PROGRAM_SEARCH_SPEC.md`, Amendment B,
+`branch_e_v2_capability_replicated`) solved **0 new held-out tasks** and *slightly hurt* validation (2→1 per
+lane). Its own diagnosis: a larger train-consistent candidate set **crowds the correct program out of the top-2**
+("top-2 crowding"). So the wall is **selection under under-determination**, not coverage: the cheap CHECK
+(train-pair consistency) is satisfiable by *many* programs that disagree off-train (FC-1
+`train_underdetermines`), and **growing the library only enlarges that ambiguous set** — strictly worsening the
+crowding. This is the find/check ledger's own prediction; the coverage reading is dead.
+
+**Toy confirmation** (`scripts/findcheck_underdetermination_crowding.py`): recolor programs over `C` colors; a
+program is train-consistent iff it matches the truth on the colors *seen* in train (unseen colors are free). As
+coverage falls, the train-consistent count explodes (`Cᶠʳᵉᵉ`: 1→6→36→216→1296→7776 at C=6) and a deterministic
+top-2 selector's held-out hit-rate collapses (1.00→0.46→0.14→0.03→0.00) **while the oracle ceiling stays 1.000**
+— the truth is always in the pool. Selection, not coverage, exactly as v2 found. (The under-determination itself
+is machine-checked in FC-1 `train_underdetermines`.)
+
+**The live frontier is therefore a stronger-than-verifier SELECTOR.** Branch E3
+(`PHASE3_BRANCH_E3_LEARNED_RANKER_SPEC.md`) targets precisely this — a learned ranker over the *frozen* v2
+candidate set to beat top-2 crowding (with an `oracle_candidate_ceiling` control). Its tooling is **built** but
+the binding run is **PAUSED / compute-blocked (~48 h candidate generation; operator decision; `docs/TODO.md`)**.
+That is the genuinely-open ARC direction, owner-gated on compute — not a coverage question.
 
 ## Status of the ARC Branch-E gate (updated — partly superseded)
 The slate pre-committed: *file an ARC Branch-E spec only after FC-2 lands a separation AND FC-3 reframes the
@@ -81,8 +95,10 @@ floors falsifiably.* On inspection the premise is **already met by the ARC lane 
 2026-05-29), and its result *confirms* the find/check reframe. So FC-3 does **not** file a new ARC spec (that
 would change no verdict and duplicate filed work). Instead the find/check contribution is the **unifying lens**:
 the machine-checked FC-1 (CHECK) + FC-2 (CHECK ≪ FIND) supply the theoretical backbone for the *already-observed*
-ARC fact that search+verify beats learning. The remaining genuinely-open ARC direction is the **library-coverage
-/ generator-expressivity** limit (a Branch E v2 question), which the find/check ledger frames but does not close.
+ARC fact that search+verify beats learning. The remaining genuinely-open ARC direction is **selection under
+under-determination** — a stronger-than-verifier ranker over the train-consistent set (Branch E3, built but
+compute-blocked/paused), NOT library coverage (Branch E v2 refuted that). The find/check ledger frames it
+(CHECK admits many; the gap to correctness is the selector's job) but does not close it.
 
 ## Falsifiability, kill record, walls
 - **Falsifiable, not post-hoc:** the reframe made a prediction (search+verify > learning on covered tasks) that

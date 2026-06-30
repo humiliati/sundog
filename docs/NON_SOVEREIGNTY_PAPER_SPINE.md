@@ -10,9 +10,13 @@ Status: **position + formal note + four-axis empirical result.** The original dr
 NS-1/NS-2 ladder now *closes* it — the premium is real on three non-return axes, but it
 belongs to the **authority bound**, not the plurality. The Mithraic framing is stripped
 entirely (intellectual bricolage, not a claim). Venue ladder: **TMLR or a
-controlled-study/negative-results workshop first**, not journal-journal. Remaining long
-pole before submission is a *released*, independently-runnable task family and a tier
-above the in-vitro shadow-field.
+controlled-study/negative-results workshop first**, not journal-journal. The generality /
+tier-above question is now *closed as a bounded finding* — the bound replicates on a
+learned presider and a second task family (cap-positive), and the feared competent
+sandbagger is analytically feasible but not a natural PPO attractor (competent-sandbag
+null), with the boundary localized to converting *discovery* into *competence* (NS-3/NS-4).
+The remaining long pole before submission is the *released*, independently-runnable task
+family.
 
 ---
 
@@ -127,6 +131,35 @@ The empirical spine, in order:
   controllers a partial-unavoidability signal floor is the alternative bound (at a steep
   over-interruption bill). [`mesa/NS2_0_ADMISSION_RESULTS.md`,
   `mesa/NS2_B_UNIFIED_BOUND_RESULTS.md`].
+- **Generality (learned presider + a second task family).** The safe-interruptibility /
+  cap-not-roles result is not an artifact of the analytic presider or the shadow-field
+  substrate. NS-3-b re-runs it with a *learned*, frozen presider (imitation cosine 0.998)
+  on a different task family — a 1-D regulator with temporal sandbagging — and the same
+  result holds: the cap deters the manipulation the learner discovers, and a no-role capped
+  controller matches (`NS3_UNIFIED_BOUND_REPLICATED_CAP_NOT_ROLES`). One measured
+  side-finding worth a line: a learned presider crosses the review band ~5% slower than the
+  analytic one, tightening the deterrence-valid κ from ≈0.70 to ≈0.59 (registered
+  `{0.2,0.4}`) — *presider-fidelity costs κ-headroom*, and a re-verification gate catches a
+  presider too slow to host the test. [`mesa/NS3_LEARNED_PRESIDER_REPLICATION_SPEC.md`,
+  `mesa/NS3_B_BINDING_RESULTS.md`].
+- **The competent-sandbag boundary (NS-3/NS-4, a bounded null).** We then pushed for the
+  *feared* hazard — an agent that finishes the task *while* evading oversight — by making
+  evasion harder (NS-3 temporal creep under a graded review) and more natural (NS-4 a 2-D
+  regulator where evasion is lateral, orthogonal to the `+y` objective). Both admit a
+  *competent hand-coded* sandbag (NS-4's detour reaches the target at `signal_rate
+  0.010417` while the capped detour stays fully reviewed), but across ~4 NS-3 + ~8 NS-4 PPO
+  runs the *learned* hazard stayed cruder: go-limp / timeout on NS-3, over-detour / timeout
+  on NS-4 — escape oversight, fail the task. The boundary is sharp, and worth stating as
+  two regimes rather than one: softening the review *unlocked discovery* (the uncapped
+  learner actively pursues evasion, lateral `maxX 0.44→2.65`), but the *competence* knobs
+  (horizon, lateral cost, reward-channel decoupling) were byte-identical no-ops — the
+  learner halts on review *before* the delayed competence rewards can select the minimal
+  competent route. **Discovery is reachable; converting discovery into *competent*
+  sandbagging was structurally unreachable by reward shaping here.** The cap robustly
+  deterred the evasion actually learned in every run (`Cκ` pinned honest,
+  `interrupt_avoidance 0.00`, competent). A boundary result — cap-positive,
+  competent-sandbag null, role null — not a claim that competent sandbagging is impossible:
+  [`mesa/NS3_NS4_MANIPULATION_WALL_SYNTHESIS.md`].
 
 The capstone sentence: **one bound — defer to the frozen presider — propagates safe
 behavior across all four axes, because sovereignty, incorrigibility, and manipulation are
@@ -224,11 +257,20 @@ in-vitro shadow-field tier or for adversaries that tamper with the presider's *i
    and smoke runtime table now exist; `npm run mesa:ns:release-smoke` passed in
    3.129 s. Remaining blocker: license decision and refreshed binding runtime table
    before external release.
-2. **A tier above in-vitro** — every result is Small/Medium with frozen analytic presider
-   heads on a shadow field. First replication rung now drafted:
-   [`mesa/NS3_LEARNED_PRESIDER_REPLICATION_SPEC.md`](mesa/NS3_LEARNED_PRESIDER_REPLICATION_SPEC.md),
-   which replaces the analytic presider with a frozen learned presider and reruns the
-   NS-2 capstone/non-sovereignty gates.
+2. **A tier above in-vitro / generality record — now closed as a bounded finding.** The
+   generality half is *positively confirmed*: the unified bound replicates on a learned
+   presider and a second task family (NS-3-b). The hazard half is a bounded null — the cap
+   deters learned crude evasion across temporal and lateral families, while competent
+   sandbagging is analytically feasible but not naturally learned by PPO — with the boundary
+   localized to *converting discovery into competence* (the learner exits the
+   review/termination channel before the competence signal fires; five reward knobs, four
+   of them byte-identical no-ops). The open question is therefore sharp and is *not* "tune
+   harder": **what change to the learner, curriculum, or hazard family would make competent
+   sandbagging the learned attractor?** Submission can bank the synthesis as-is for the
+   controlled-study claim; the conversion question is registered as the next probe (a
+   hypothesis slate, not another reward sweep):
+   [`mesa/NS3_NS4_MANIPULATION_WALL_SYNTHESIS.md`](mesa/NS3_NS4_MANIPULATION_WALL_SYNTHESIS.md),
+   [`mesa/NS3_NS4_COMPETENT_SANDBAG_HYPOTHESIS_SLATE.md`](mesa/NS3_NS4_COMPETENT_SANDBAG_HYPOTHESIS_SLATE.md).
 3. **`Δp > 0` stated as worst-case-over-uncertain-objective** — the three non-return axes
    are the operational `Δp`; tightening the link to the `ruin_break_even` premise (the
    bound lowers ruin probability *because* it caps the manipulation/sovereignty channels)

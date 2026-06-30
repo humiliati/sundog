@@ -408,3 +408,99 @@ recorded in `docs/TODO.md` (ARC Branch E3, `compute-blocked`, paused) with the
 two resume paths: (a) stage + run the full sharded slate, or (b) first amend the
 spec to bound the aux pool / aux budget for a ~3-4× faster turnaround. No binding
 run, no verdict, no public-language claim beyond the pre-receipt statement.
+
+---
+
+## Amendment B — Bounded-Aux Two-Stage Screening (PROPOSED; execution gated, 2026-06-30 PT)
+
+Append-only. This admits **resume-path-(b)**: a faster screening of E3 by bounding the *auxiliary
+training pool only*. It **admits no binding run** — a later freeze-marker sub-amendment must add the
+smokes + exact commands below before execution. It changes **no** existing E3 gate, control, feature,
+model, seed, or budget, and **no** prior verdict. Motivation: the ~48 h cost is almost entirely aux
+candidate generation (~892 tasks / ~3.6 k instances at ~47.5 s); U_primary (336) + validation are a
+small fixed floor. The only *faithful* speed knob is the aux pool size — the v2 generator,
+U_validation, and the **full** U_primary scoring + gate stay byte-identical.
+
+### The deterministic bound (reuses the existing shard mechanism — no generator change)
+The Amendment-A runner already shards the **sorted** aux pool: `--shard-aux --shard-index i
+--shard-count N`. Task ids are ARC sha256 hashes, so the sort order is uniform and a contiguous
+shard is a uniform subsample. The bound is therefore declared as *which shards of `N=8` are
+generated*:
+
+```text
+shard_count        = 8                     # frozen; the sorted-hash-id pool cut into 8 uniform chunks
+stage_1 (1/8 aux)  = shards {0}
+stage_2 (1/4 aux)  = shards {0, 1}         # reuses shard 0 from stage 1
+full    (resume-a) = shards {0..7}         # reuses shards 0,1 from stages 1-2
+```
+
+No shard set is chosen after reading any `U_primary` label; `shard_count=8` and the stage ladder are
+fixed by this amendment. The `--merge` step canonically sorts the present aux records, so a
+subset-of-shards merge is a well-defined deterministic 1/8 or 1/4 aux pool.
+
+### Frozen (everything except the aux pool size)
+v2 generator (byte-faithful `enumerate_admitted`), `arc-p3-branch-e3-ranker-feature-v1` (591-dim),
+the `591→192→96→1` weighted-BCE model + all hyperparameters, the 5-seed slate, U_validation, the
+**full** U_primary candidate generation + scoring, all three no-target barriers, and the five controls
+(`v2_deterministic_selector`, `learned_ranker`, `metadata_only_ranker`, `label_shuffle_ranker`,
+`oracle_candidate_ceiling`). The §"Branches" table (`material_lift` / `selector_lift_below_material` /
+`replicated` / `regression` / `partial` / `floor`) is **unchanged**; only its *interpretation* gets the
+screening rider below.
+
+### The asymmetric screening verdict (why a bounded run is sound, not just weaker)
+Subsampling the aux pool can only **reduce** the ranker's training data, so it can only **hurt** the
+learned ranker — never help it. Therefore, at each stage, adjudicate the normal branch on the **full**
+U_primary and apply:
+
+- **CONCLUSIVE (stop):** branch ∈ {`branch_e3_ranker_material_lift`, `branch_e3_ranker_selector_lift_below_material`}.
+  A data-starved ranker that still lifts is a **lower bound** on the full ranker (the full aux run can
+  only do ≥ as well), so the capability is established without spending more compute.
+- **SCREEN ONLY (escalate):** branch ∈ {`branch_e3_ranker_replicated`, `branch_e3_ranker_regression`,
+  `branch_e3_ranker_partial`, `branch_e3_ranker_floor`}. This is **inconclusive at the bounded
+  aux_fraction** — it may be data-starvation, not genuine selection-hardness. Escalate 1/8 → 1/4 →
+  full, **reusing** already-generated shards. **No `floor`/`regression` claim is binding until the FULL
+  aux run (shards {0..7}) yields a non-positive.**
+
+### Data-starvation guard (mandatory diagnostics per stage)
+Each stage must report: positive-label count (vs the Amendment-A full-pool estimate ≈ 1086 positives /
+12 aux tasks ⇒ ~80 k full), the `learning_curves.csv`, the seed-selection table, and the validation
+distinct-task solves. If a stage's branch is non-positive **and** its positive-label count is far below
+the full-pool estimate, escalation is **mandatory** (not optional) — a starved screen cannot ground a
+floor.
+
+### Freeze-marker requirements before any binding run (per §"Ten-Minute Rule")
+A later sub-amendment must record: (1) `py_compile` (done in Amendment A); (2) leak-check
+(`arc:phase0:leak-check`); (3) a smoke proving `--merge` over a **single** aux shard is byte-faithful
+(the `v2_deterministic_selector` control must still reproduce the v1/v2 gated solves — the
+Amendment-A byte-faithfulness check, restricted to one shard); (4) confirmation that U_primary +
+validation candidate generation is **cached/computed once** and *not* regenerated per escalation stage
+(if the runner regenerates it each `--merge`, add a `--score-only`/cached-barrier path so escalation
+pays only the new aux shard); (5) measured shard-0 wall time → per-stage estimates; (6) the exact
+staged commands. Expected per-stage wall (subject to (5)): stage-1 ≈ shard-0 aux (~6 h) + the fixed
+U_primary/validation floor (~4 h) ≈ **~10 h**; stage-2 adds shard-1 (~6 h) ≈ **~16 h cumulative**; full
+adds shards 2–7. All staged for the operator (each exceeds the ten-minute rule).
+
+### Staged commands (illustrative — bind exact forms in the freeze-marker sub-amendment)
+```powershell
+# Stage 1 (1/8 aux): generate shard 0 of 8, then merge over the present shard(s).
+node scripts/arc-phase3-branch-e3-learned-ranker.mjs --shard-aux --shard-index 0 --shard-count 8 `
+  --data-dir "$env:USERPROFILE\Datasets\ARC-AGI-2\data" `
+  --register docs/prereg/arc/P0_TASK_REGISTER_EXPANDED_FOR_FIBERS.csv --split-mode sha256_expansion `
+  --out results/arc/phase3-branch-e3-learned-ranker
+node scripts/arc-phase3-branch-e3-learned-ranker.mjs --merge `
+  --out results/arc/phase3-branch-e3-learned-ranker            # adjudicates on FULL U_primary
+# If Stage 1 is CONCLUSIVE (lift) -> stop. If SCREEN-only -> Stage 2: add shard 1, re-merge {0,1}.
+# If Stage 2 SCREEN-only -> full: add shards 2..7, re-merge {0..7} (= resume-path-a).
+```
+
+### Public language (additions)
+- bounded **lift**: "A learned ranker over a 1/8 (resp. 1/4) deterministic subsample of the auxiliary
+  pool materially lifted held-out public-training selection — a **lower bound** on the full-pool ranker.
+  Capability result only; not a Blackwell-sufficiency proof, ARC solve, public-eval, or Kaggle claim."
+- bounded **non-positive**: "A 1/8 (resp. 1/4) aux screening run did **not** lift; this is
+  **inconclusive** pending the full aux run — NOT an E3 floor." A binding floor requires shards {0..7}.
+- Forbidden (unchanged) + : claiming a bounded non-positive is an E3 floor; choosing shards after
+  reading U_primary labels; retuning anything but the declared shard ladder.
+
+**No binding run, no verdict by this amendment.** Execution remains gated on the freeze-marker
+sub-amendment above and is staged for the operator.

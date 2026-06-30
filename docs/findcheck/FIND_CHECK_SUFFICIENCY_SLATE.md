@@ -174,13 +174,19 @@ spec + Amendment B).
 - **Maps to the machine-checked ledger.** CHECK = `AbstractionCert.Verify` (FC-1) = Branch E's selection rule;
   `train_underdetermines` (FC-1) = the per-task-novel-rule under-determination; `abstraction_check_lt_find` (FC-2)
   = the CHECK ≪ FIND separation. FC-1/FC-2 are the Lean backbone for ARC's own search-beats-learning fact.
-- **Honest residual:** the dominant floor is **library coverage** (per-task-novel rules outside any fixed DSL),
-  a FIND-side generator-expressivity limit (still not CHECK/representation) — the live Branch E v2 direction.
+- **Honest residual (CORRECTED 2026-06-30):** an earlier draft guessed **library coverage**; **Branch E v2
+  refuted it** (`branch_e_v2_capability_replicated` — grew the library, 0 new solves, *hurt* validation via
+  top-2 crowding). The real residual is **selection under under-determination** (FC-1 `train_underdetermines`):
+  the cheap CHECK admits many train-consistent-but-wrong programs, and growing the library only enlarges that
+  ambiguous set. Toy confirmation `scripts/findcheck_underdetermination_crowding.py` (hit-rate collapses as the
+  train-consistent count explodes; oracle ceiling stays 1.0 = selection, not coverage). Live frontier = a
+  stronger-than-verifier ranker (Branch E3, built but compute-blocked/paused ~48h).
 - **Branch-E gate: SUPERSEDED.** The gate pre-committed to *filing* a Branch-E spec after FC-2+FC-3. Inspection
   shows the ARC lane **already filed `PHASE3_BRANCH_E_PROGRAM_SEARCH_SPEC.md` with a binding receipt** that
   *confirms* the reframe. So FC-3 files **no** new ARC spec (it would change no verdict and duplicate filed work);
   the find/check contribution is the **unifying lens**, not a reopen. The genuinely-open ARC direction is
-  library-coverage / generator-expressivity, which the ledger frames but does not close.
+  **selection under under-determination** (Branch E3 learned ranker, built but compute-blocked/paused) — NOT
+  library coverage (Branch E v2 refuted that). The ledger frames it but does not close it.
 
 **Verdict: FC-3 LANDED (strength 5).** The find/check reframe of the ARC floors is confirmed by the ARC lane's
 own Branch-E result and backed by the machine-checked FC-1/FC-2. The slate is complete; the Branch-E reopen
@@ -213,8 +219,10 @@ hold (FC-2 separation landed; FC-3 reframe confirmed), but on inspection
 move is **NOT** to file a new ARC Branch-E spec (it would change no verdict and duplicate filed work); the gate
 is **superseded**. The find/check contribution is the **unifying lens + Lean backbone** (FC-1 CHECK, FC-2
 CHECK ≪ FIND) for an ARC result that already exists. The one genuinely-open ARC direction the lens surfaces is
-**library coverage / generator expressivity** (the per-task-novel-rule limit) — a Branch E v2 question, framed
-but not closed. ARC stays paused; no new ARC spec filed.
+**selection under under-determination** — a stronger-than-verifier ranker over the train-consistent set
+(Branch E3, tooling built but the binding run compute-blocked/paused ~48h, operator decision, `docs/TODO.md`).
+Branch E v2 already **refuted** the library-coverage reading (grew the library → 0 new solves, top-2 crowding).
+ARC stays paused; no new ARC spec filed. The find/check ledger frames the open direction but does not close it.
 
 ## The kill record (the discipline is part of the deliverable)
 - **FC-5 — "does Shadow determine/resist predict ARC solvability?" — KILLED (strength 2, daydream).** ARC is a

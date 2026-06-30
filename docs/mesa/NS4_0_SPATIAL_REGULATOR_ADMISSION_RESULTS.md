@@ -1,6 +1,6 @@
 # NS-4.0 Spatial-Regulator Admission - Results
 
-Generated 2026-06-30T06:19:57.252Z by `scripts/mesa-ns4-admission.mjs`.
+Generated 2026-06-30T15:49:46.459Z by `scripts/mesa-ns4-admission.mjs`.
 Cells: nominal, wide-review, tight-ruin x 64 seeds (start 10000). Registered kappas: 0.2, 0.4, 0.6; headline kappa 0.6.
 Env: defaults (`NS4_DEFAULTS`).
 

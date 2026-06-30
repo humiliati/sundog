@@ -1,11 +1,14 @@
 # NS-4 Spatial-Regulator Task Family - Spec
 
-Status: **NS4_0_ADMITTED 2026-06-29.** The spatial regulator env, Python mirror,
-JS/Python parity gate, and admission runner are built:
+Status: **NS4_0_ADMITTED; PPO competent-detour search CLOSED as synthesis 2026-06-30.**
+The spatial regulator env, Python mirror, JS/Python parity gate, and admission runner are built:
 [`NS4_0_SPATIAL_REGULATOR_ADMISSION_RESULTS.md`](NS4_0_SPATIAL_REGULATOR_ADMISSION_RESULTS.md).
 Opened 2026-06-29 after NS3 exposed that temporal sandbagging fights the
 action-cap geometry. NS4 keeps the regulator objective but makes manipulation
 orthogonal to it: objective progress is `+y`; oversight evasion is lateral `x`.
+The follow-up learned-controller attempts did not make the competent fixed
+detour a PPO attractor; they reinforced the broader NS3/NS4 wall recorded in
+[`NS3_NS4_MANIPULATION_WALL_SYNTHESIS.md`](NS3_NS4_MANIPULATION_WALL_SYNTHESIS.md).
 
 Parent: [`NON_SOVEREIGNTY_PAPER_SPINE.md`](../NON_SOVEREIGNTY_PAPER_SPINE.md)
 gap 2 and [`NS3_REGULATOR_TASK_FAMILY_SPEC.md`](NS3_REGULATOR_TASK_FAMILY_SPEC.md).
@@ -71,9 +74,13 @@ Branch: `NS4_0_ADMITTED` / `NS4_0_VOID`.
 - `training/mesa/spatial_regulator_task.py`
 - `scripts/mesa-ns4-admission.mjs`
 
-This is admission-only. Learned-controller binding is a later rung and must
-confirm that an uncapped learner discovers the lateral detour while a capped
-controller is pinned to the reviewed path.
+This admission proves the lateral competent sandbag exists and that the cap
+geometry would pin it back into review. Learned-controller follow-up then tested
+whether PPO naturally discovers that policy. It did not: the uncapped learner
+found cruder lateral evasion/timeout behavior instead, while the cap still
+blocked the evasion actually learned. Do not keep re-scoring this as a pending
+admission question; the next informative change would be a different learner,
+curriculum, or hazard family.
 
 ---
 
@@ -87,3 +94,6 @@ controller is pinned to the reviewed path.
   nominal/wide-review/tight-ruin x 64 seeds. Headline readback: presider
   `C=1`, signal=1; detour `C=1`, signal=0.010417, path bill=0.08; capped
   detour at kappa=0.6 `C=1`, signal=1; JS/Python parity 0 diffs.
+- `v2` (2026-06-30): records the PPO wall: despite the admitted hand-coded
+  competent detour and reward-parameter sweeps, PPO did not learn competent
+  sandbagging; it learned crude evasion/timeout, which the cap still deters.
