@@ -70,6 +70,18 @@ class PhotometricAgent:
         reacquire_threshold: float = 0.05,
         reacquire_hold_steps: int = 30,
         joint_limit: float = 1.45,
+        # Belief-aware adaptive scheduling (H5). adaptive=False -> byte-identical
+        # to the fixed schedule. When True: SCAN->SEEK fires on an
+        # expected-improvement plateau (best-so-far stalls), and re-acquire uses
+        # a relative drop below the achieved ceiling instead of an absolute floor.
+        adaptive: bool = False,
+        # Defaults tuned on the nominal speed/accuracy frontier (H5): ~40% faster
+        # time-to-threshold for ~3% terminal cost. See docs/H5 writeup.
+        ei_window: int = 40,          # steps of no meaningful improvement -> stop SCAN
+        ei_epsilon: float = 0.005,    # what counts as a "meaningful" improvement
+        ei_min_scan_s: float = 2.0,   # warmup before the plateau trigger can fire
+        ei_signal_floor: float = 0.1, # need to have found *some* signal first
+        reacquire_rel_frac: float = 0.3,  # re-acquire below this fraction of best-seen
     ):
         self.target_detector_index = int(target_detector_index)
         self.dt = float(dt)
@@ -91,6 +103,13 @@ class PhotometricAgent:
         self.reacquire_hold_steps = int(reacquire_hold_steps)
         self.joint_limit = float(joint_limit)
 
+        self.adaptive = bool(adaptive)
+        self.ei_window = int(ei_window)
+        self.ei_epsilon = float(ei_epsilon)
+        self.ei_min_scan_s = float(ei_min_scan_s)
+        self.ei_signal_floor = float(ei_signal_floor)
+        self.reacquire_rel_frac = float(reacquire_rel_frac)
+
         self.reset()
 
     def reset(self, carrier_init: tuple[float, float] = (0.0, 0.0)) -> None:
@@ -107,6 +126,12 @@ class PhotometricAgent:
         self._dc_initialized = False
         self._below_threshold_count = 0
 
+        # Adaptive bookkeeping / instrumentation (harmless when adaptive=False).
+        self._best_meaningful = -1.0
+        self._steps_since_improve = 0
+        self.reacquire_count = 0
+        self.scan_exit_step = -1
+
     def _enter_scan(self) -> None:
         self.phase = "scan"
         self._best_joints = np.zeros(2, dtype=float)
@@ -115,6 +140,8 @@ class PhotometricAgent:
         self._gradient_estimate[:] = 0.0
         self._dc_initialized = False
         self._below_threshold_count = 0
+        self._best_meaningful = -1.0
+        self._steps_since_improve = 0
         self._scan_t0 = self.t  # remember when scan started
 
     def act(self, obs: Observation) -> np.ndarray:
@@ -129,8 +156,21 @@ class PhotometricAgent:
                 self._best_intensity = i_now
                 self._best_joints = obs.joint_angles.copy()
 
+            # Adaptive plateau tracking: steps since the last *meaningful* gain.
+            if i_now > self._best_meaningful + self.ei_epsilon:
+                self._best_meaningful = i_now
+                self._steps_since_improve = 0
+            else:
+                self._steps_since_improve += 1
+
             scan_t = self.t - getattr(self, "_scan_t0", 0.0)
-            if scan_t < self.scan_duration_s:
+            plateau = (
+                self.adaptive
+                and scan_t >= self.ei_min_scan_s
+                and self._best_intensity > self.ei_signal_floor
+                and self._steps_since_improve >= self.ei_window
+            )
+            if scan_t < self.scan_duration_s and not plateau:
                 sx = np.sin(self.scan_omega_x * self.t)
                 sy = np.sin(self.scan_omega_y * self.t)
                 action = np.array([self.scan_amplitude * sx,
@@ -139,6 +179,7 @@ class PhotometricAgent:
                 return np.clip(action, -self.joint_limit, self.joint_limit)
 
             # End of scan: jump to best seen.
+            self.scan_exit_step = int(round(self.t / self.dt))
             self.phase = "seek"
             self._seek_remaining = self.seek_steps
             # Seed track-phase state with the best snapshot.
@@ -160,9 +201,22 @@ class PhotometricAgent:
         # TRACK (extremum-seeking control)
         # ------------------------------------------------------------------
         # Re-acquire if intensity has been below threshold for sustained steps.
-        if i_now < self.reacquire_threshold:
+        # Fixed: absolute floor. Adaptive: relative drop below the achieved
+        # ceiling (best-seen), so a legitimately sub-unity peak under mismatch is
+        # not mistaken for a lost lock.
+        if self.adaptive:
+            if i_now > self._best_intensity:
+                self._best_intensity = i_now
+            reacquire_level = max(
+                self.reacquire_threshold,
+                self.reacquire_rel_frac * self._best_intensity,
+            )
+        else:
+            reacquire_level = self.reacquire_threshold
+        if i_now < reacquire_level:
             self._below_threshold_count += 1
             if self._below_threshold_count >= self.reacquire_hold_steps:
+                self.reacquire_count += 1
                 self._enter_scan()
                 # Fall through to scan path with current self.t.
                 sx = np.sin(self.scan_omega_x * self.t)

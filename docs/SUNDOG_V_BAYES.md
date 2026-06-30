@@ -388,7 +388,30 @@ Applied queue after the Balance lock:
     does not degrade core-task particle Bayes; only the degenerate model-less
     `s3` flips. The Phase 1-5b response-control edge does not transfer to the
     core task under non-degenerate wrong structure - the synthetic edge is
-    substrate-specific. Experimental arc closed; no Phase 6c.
+    substrate-specific. Experimental arc closed at Phase 6b; Phase 6c reopened
+    a separate robustness axis (model mismatch via mirror calibration, below).
+13. **Standalone Phase 6c model-mismatch crossover (mirror calibration).** A
+    follow-on operating-envelope sweep on the same MuJoCo apparatus, prompted
+    by an external cold-read review of the public repos. Lever: an injected
+    mirror-calibration bias - a model error invisible to the target-aware
+    analytic oracle but measured through by the closed-loop photometric
+    controller. 0 deg -> 60 deg in 10 deg steps, 30 matched seeds/level, five
+    conditions. Result: the oracle wins near nominal as expected (terminal
+    accuracy 0.94 at 0 deg, 0.99 at 10 deg; ttt ~11 vs ~188), then collapses
+    as mismatch grows; the closed-loop photometric controller degrades
+    gracefully (terminal accuracy 0.95 -> 0.79 -> 0.63 at 0/30/40 deg vs the
+    oracle's 0.94 -> 0.51 -> 0.15, Mann-Whitney `p < 1e-6` at 30 deg). A
+    same-model Bayesian baseline collapses harder still (0.26 at 30 deg),
+    consistent with its documented "stress = misspecification" design. Past
+    ~50 deg both fail when the true peak crosses the joint limit. Receipts:
+    `results/mismatch_robustness/manifest.json` (status `flip_confirmed`),
+    `boundary-map.csv`, `level-summary.csv`, `trial-outcomes.csv` (900
+    episodes + per-seed bias-aware ceiling). **Status:** operating-envelope
+    evidence, not proof closure - the photometric controller never re-reaches
+    the 0.9 convergence threshold under mismatch and stays slow, so the win
+    is *graceful degradation on terminal accuracy* only, not "solves" or
+    "beats" the task. The oracle remains an upper bound *in the nominal
+    geometry*, not universally.
 
 ## Controller-Family Architecture
 

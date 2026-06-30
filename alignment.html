@@ -1040,6 +1040,7 @@
                         <a href="docs/SUNDOG_V_BAYES.md#phase-5b---mismatch-severity-sweep">Phase 5b boundary</a>
                         <a href="docs/SUNDOG_V_BAYES.md#phase-6---photometric-port">Phase 6 core task</a>
                         <a href="docs/SUNDOG_V_BAYES.md#phase-6b---core-photometric-structure-mismatch-hard-stop">Phase 6b structure</a>
+                        <a href="docs/SUNDOG_V_BAYES.md#phase-6c---model-mismatch-crossover">Phase 6c mismatch crossover</a>
                     </div>
                 </div>
             </article>
@@ -1066,9 +1067,9 @@
                             <tbody>
                                 <tr id="photometric-ledger-row">
                                     <td><strong>Photometric mirror alignment</strong></td>
-                                    <td>No target-position access; terminal target intensity is comparable to target-aware analytic and noisy-oracle baselines in the controlled MuJoCo result.</td>
+                                    <td>No target-position access; terminal target intensity is comparable to target-aware analytic and noisy-oracle baselines in the controlled MuJoCo result &mdash; and, under an injected mirror-calibration mismatch, retains terminal accuracy as the oracle collapses (operating-envelope crossover, 30 seeds/level).</td>
                                     <td>The serious same-observation Bayesian comparator is not the primary public baseline yet. The existing target-aware baseline wins hard on acquisition speed: median threshold time about 11.5 steps versus about 188 for photometric feedback.</td>
-                                    <td>Core result, not a Bayes win. It proves the apparatus shape and motivates the fair Bayesian comparison.</td>
+                                    <td>Core result, not a Bayes win. It proves the apparatus shape and motivates the fair Bayesian comparison. The mismatch crossover is operating-envelope evidence, not proof: the oracle still wins near nominal, and under mismatch the photometric controller only <em>degrades gracefully</em> on terminal accuracy rather than solving the task.</td>
                                 </tr>
                                 <tr id="bayes-comparator-ledger-row">
                                     <td><strong>Standalone Bayes-vs-Sundog benchmark</strong></td>
