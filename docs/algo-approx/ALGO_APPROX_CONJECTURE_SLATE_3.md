@@ -90,6 +90,23 @@ case is `convex_eq_sup_lines` composed with `compile`).
 
 ## S3-2 — Cancellation is a *graded* resource; region growth is graded with it. [FORMALIZABLE]
 
+> **Status (2026-06-29): LANDED.** `Sundogcert/GradedCancellation.lean` —
+> `hasPieceCover_graded (e : Trop 1) : HasPieceCover (realize1 e) (4 ^ cancelMax e * leafCount e)`.
+> The dichotomy becomes a **dial**. Plus `cancelMax_eq_zero_of_isMono` (budget `0` ⇒ recovers N-1's
+> linear `leafCount` bound). Both axiom-clean, in the `AxiomAudit` gate, full build green (8533 jobs).
+> `GRADE_DOESNT_BOUND` did not fire.
+>
+> **Refinement of the budget (a finding):** the operative budget is **`cancelMax e`** = the number
+> of `max` gates whose subtree contains a negative scale — *not* the raw negative-scale count.
+> Cancellation only blows up regions *through a fold*: a `max` of convex pieces stays convex and
+> does not double (`hasPieceCover_max`); only a `max` of a non-monotone (hence non-convex) argument
+> can. A circuit with negative scales but no folding `max` is still affine-piece-cheap, and
+> `cancelMax` correctly reads `0` there. So the honest cancellation budget localizes to the
+> cancellation-*exposed folds*. Base `4` (not `2`) because the non-convex `max` bound routes through
+> the ReLU doubling `max(f,g) = g + relu(f−g)` (`hasPieceCover_relu`), a constant-factor loose; a
+> direct symmetric `2·(n+m)` `max` bound would give base `2`. The grading is unchanged.
+> *(Local only; not committed — owner-gated.)*
+
 *Claim.* Define a **cancellation budget** `g(e)` = the number of negative-scale gates in a `Trop`
 circuit. Then the region count is bounded by an **interpolation** `≤ 2^{g} · poly(leafCount)`:
 at `g = 0` it is `isMono_hasPieceCover` (polynomial), and each unit of cancellation at most
@@ -242,7 +259,9 @@ non-transfer* (the barrier's location), never a lower bound for general nets.
 2. **S3-3 — the non-imported gap.** ✅ **LANDED** (`QueryGap.check_lt_find`): in the decision-tree
    model, CHECK = 1 query, FIND ≥ n (adversary), both machine-checked — the ledger's first proved
    `check ≪ find`, cracking its only standing "find imported" caveat (for this query-model toy).
-3. **S3-2 — graded cancellation.** Sharpens N-1/N-2 from a dichotomy to a quantitative dial.
+3. **S3-2 — graded cancellation.** ✅ **LANDED** (`GradedCancellation.hasPieceCover_graded`):
+   region count `≤ 4 ^ cancelMax e · leafCount e`, budget `0` ⇒ N-1 linear. Sharpened N-1/N-2 from
+   a dichotomy to a quantitative dial, with the budget localized to cancellation-exposed folds.
 4. **S3-5 — sample-complexity empirical.** Cheapest to run; extends N-4 to a second axis.
 5. **S3-4 — the analytic ε-rate.** The paper's headline, but a genuinely new construction +
    error analysis; do it when there's appetite for the harder build.

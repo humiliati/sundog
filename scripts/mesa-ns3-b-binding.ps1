@@ -72,6 +72,22 @@ $scaffoldInit = @("--init-guard", "$OutRoot/scaffold/p_guard.json",
   "--init-monolith-adapter", "$OutRoot/scaffold/mkappa_adapter_rl.json")
 if (-not (Test-Path "$OutRoot/scaffold/mkappa_adapter_rl.json")) { throw "scaffold did not produce a competent base" }
 
+# STALE-GUARD: a real-run checkpoint OLDER than the current scaffold predates this scaffold
+# (e.g. left over from a prior run with a different env/warm-start). Resuming it would silently
+# eval stale models. Clear those so they retrain fresh; a genuinely-interrupted real run (trained
+# AFTER the scaffold) is newer and survives, so legitimate resume still works.
+$scaffCkpt = "$OutRoot/scaffold/checkpoint.json"
+if (Test-Path $scaffCkpt) {
+  $scaffTime = (Get-Item $scaffCkpt).LastWriteTimeUtc
+  foreach ($name in @("blind", "m0") + ($kappaList | ForEach-Object { "ckappa_$_" })) {
+    $rc = "$OutRoot/$name/checkpoint.json"
+    if ((Test-Path $rc) -and ((Get-Item $rc).LastWriteTimeUtc -lt $scaffTime)) {
+      Write-Host "[NS-3-b] clearing STALE $name (predates current scaffold)"
+      Remove-Item -Recurse -Force "$OutRoot/$name"
+    }
+  }
+}
+
 # Real runs: review band ON (crossing-detection env), warm-started from the competent scaffold.
 Train "blind" @("--review-band") $scaffoldInit                                   # honest crosser: no override
 Train "m0"    @("--review-band", "--apply-override") $scaffoldInit                # M0: override -> learns the temporal sandbag
