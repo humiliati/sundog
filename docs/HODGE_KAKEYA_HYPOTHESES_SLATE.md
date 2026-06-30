@@ -262,6 +262,20 @@ is chosen.
 
 ## H-K5 - The Hodge/Kakeya shadow-collision table. [SYNTHESIS]
 
+*Status - FALSIFIER CLEAR 2026-06-29 (machine-checked).* Built the table as a synthesis
+note ([`HK5_SHADOW_COLLISION_TABLE.md`](HK5_SHADOW_COLLISION_TABLE.md)) anchored by a builder
+(`npm run synthesis:collision-table`; `scripts/hodge-kakeya-collision-table.mjs`) that
+populates one operational schema from BOTH lanes' committed receipts.
+**`COLLISION_TABLE_ONLY_RHYME` clear**: both rows fill `{shadow, body, numeric control-backed
+lossiness, restoring structure}` from receipts and sit on the determine/resist axis - Kakeya
+restores *size* (Dvir floor; finite resist, collision count `q(q^2-q+1)`), Hodge restores
+*existence* (Lefschetz/CDK in special cases; infinite resist, decoder overclaim rate `0.2`).
+Honest **typed mismatch** flagged: Kakeya lossiness is a finite *count*, Hodge a decoder
+*rate* - same frame and decoder-non-invertibility idea, different units (a calibrated analogy,
+not an identity). H-K4's lesson "control the artifact before reporting a collision number" is
+the table's methodological row. Next probe it spawns: run H-K1's card->judge apparatus on
+Kakeya as a cross-lane transfer confirmation.
+
 *Claim.* Hodge and Kakeya share a useful table shape:
 
 | Lane | Shadow | Body | Collision question |

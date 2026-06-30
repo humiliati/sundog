@@ -1,0 +1,82 @@
+{
+  "artifactId": "HK5-SHADOW-COLLISION-TABLE",
+  "generatedAt": "2026-06-30T01:34:16.093Z",
+  "status": "internal synthesis anchor (report-only)",
+  "hook": "H-K5 cross-lane shadow-collision table",
+  "shared_operational_field": "both lanes populate {shadow, body, numeric lossiness measure, control, restoring structure} from committed receipts; both sit on the determine/resist axis (lossy shadow + named structure that restores the body)",
+  "typed_mismatch": {
+    "present": true,
+    "detail": "Kakeya lossiness = finite body-count per signature; Hodge lossiness = decoder overclaim rate (existence-undecidability). Same frame and same decoder-non-invertibility measurement, different units (count vs rate).",
+    "measure_types": [
+      "finite count of bodies per shadow signature",
+      "decoder overclaim rate (shadow does not determine cycle existence)"
+    ]
+  },
+  "falsifier": {
+    "name": "COLLISION_TABLE_ONLY_RHYME",
+    "fired": false,
+    "reason": "Both rows populate the same operational schema from committed receipts (numeric, control-backed lossiness + restoring structure), so the table guides probes, not just rhymes. Caveat: the lossiness measure is typed differently per lane (count vs rate)."
+  },
+  "rows": [
+    {
+      "lane": "Kakeya",
+      "shadow": "direction-coverage signature (which directions contain a full line)",
+      "body": "point/tube set in F_q^2",
+      "lossiness_measure": {
+        "type": "finite count of bodies per shadow signature",
+        "law": "q(q^2 - q + 1)",
+        "values": {
+          "5": 105,
+          "7": 301,
+          "11": 1221
+        },
+        "value_present": true
+      },
+      "control": {
+        "name": "random same-size body baseline (H-K4)",
+        "present": true,
+        "caveat": "count is a finite-grid density artifact unless measured as excess over a size-matched control"
+      },
+      "restoring_structure": "Dvir polynomial method - complete shadow forces size >= q(q+1)/2 (dvirFloor q5=15, q7=28, q11=66)",
+      "determine_resist": "finite resist: size determined (Dvir floor), exact body not",
+      "receipts": [
+        "docs/kakeya/PHASE3B_SHADOW_COLLISION_AUDIT.md",
+        "docs/kakeya/PHASE3C_SHADOW_COLLISION_Q11.md",
+        "docs/kakeya/PHASE4_ADAPTIVE_FIBERING_PANEL.md"
+      ],
+      "falsifier_clear": true,
+      "operational_fields_populated": true
+    },
+    {
+      "lane": "Hodge",
+      "shadow": "rational (p,p) cohomology class",
+      "body": "algebraic cycle",
+      "lossiness_measure": {
+        "type": "decoder overclaim rate (shadow does not determine cycle existence)",
+        "neutral_overclaim": 6,
+        "neutral_cards": 30,
+        "unprompted_overclaim_rate": 0.2,
+        "judge_consensus_route_neutral": [
+          "groq=3/10",
+          "mistral=3/10",
+          "openai=0/10"
+        ],
+        "value_present": true
+      },
+      "control": {
+        "name": "two independent semantic judges + lexical-vs-judge agreement (H-K1 PHASE4F)",
+        "present": true,
+        "caveat": "lexical route check over-credits: judge-consensus vs lexical agreement 0.6; inter-judge 0.8"
+      },
+      "restoring_structure": "Lefschetz (1,1) / hard Lefschetz / Cattani-Deligne-Kaplan in special cases; general case open (the Hodge conjecture)",
+      "determine_resist": "infinite resist in general: existence undecidable by the shadow (sigma = infinity)",
+      "receipts": [
+        "docs/hodge/PHASE4D_REGISTER_MODELEVAL.md",
+        "docs/hodge/PHASE4E_REGISTER_SWEEP.md",
+        "docs/hodge/PHASE4F_REGISTER_SEMANTIC_JUDGE.md"
+      ],
+      "falsifier_clear": true,
+      "operational_fields_populated": true
+    }
+  ]
+}
