@@ -157,14 +157,21 @@ class PhotometricAgent:
         # SCAN
         # ------------------------------------------------------------------
         if self.phase == "scan":
-            # Track best position over the entire scan window.
-            if i_now > self._best_intensity:
-                self._best_intensity = i_now
+            # Fixed: track the target detector. Infer mode: track the brightest
+            # detector ANYWHERE, and remember which one it was (unsupervised target).
+            if self.infer_target:
+                i_track = float(np.max(obs.detector_intensities))
+            else:
+                i_track = i_now
+            if i_track > self._best_intensity:
+                self._best_intensity = i_track
                 self._best_joints = obs.joint_angles.copy()
+                if self.infer_target:
+                    self.inferred_index = int(np.argmax(obs.detector_intensities))
 
             # Adaptive plateau tracking: steps since the last *meaningful* gain.
-            if i_now > self._best_meaningful + self.ei_epsilon:
-                self._best_meaningful = i_now
+            if i_track > self._best_meaningful + self.ei_epsilon:
+                self._best_meaningful = i_track
                 self._steps_since_improve = 0
             else:
                 self._steps_since_improve += 1
@@ -192,6 +199,9 @@ class PhotometricAgent:
             self.carrier = self._best_joints.copy()
             self._intensity_dc = self._best_intensity
             self._dc_initialized = True
+            # Commit the inferred target: from here on, track that detector.
+            if self.infer_target and self.inferred_index is not None:
+                self.target_detector_index = self.inferred_index
 
         # ------------------------------------------------------------------
         # SEEK (dwell at best, let joints settle)
