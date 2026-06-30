@@ -11,9 +11,11 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
-const CARDS_IN = path.join("docs", "hodge", "register-problem-cards.jsonl");
-const SWEEP_DIR = path.join("results", "hodge", "register-modeleval", "sweep");
-const OUT_DIR = path.join("results", "hodge", "register-judge");
+const DEFAULT_CARDS = path.join("docs", "hodge", "register-problem-cards.jsonl");
+const DEFAULT_SWEEP = path.join("results", "hodge", "register-modeleval", "sweep");
+const DEFAULT_OUT = path.join("results", "hodge", "register-judge");
+// lane register vocabulary injected into the judge prompt (overridable with --context).
+const HODGE_REGISTER = "a differential form vs a harmonic representative vs a rational (p,p) class vs an algebraic cycle";
 
 // --- keyring + call (mirrors scripts/hodge-register-modeleval.mjs) ----------------------
 const PROVIDERS = {
@@ -52,17 +54,20 @@ async function callModel(provider, model, key, system, user, maxTok = 120) {
 }
 
 // --- judge -------------------------------------------------------------------------------
-const JUDGE_SYSTEM = "You grade an algebraic-geometry answer for REGISTER/FENCE fidelity "
-  + "only - whether it takes the correct stance about what is known (a differential form vs "
-  + "a harmonic representative vs a rational (p,p) class vs an algebraic cycle), NOT its "
-  + "overall depth. You are given the question, the authoritative correct answer, the "
-  + "tempting wrong answer (the trap), and a candidate answer. Reply with ONLY a JSON object "
-  + "(no prose, no code fence): {\"verdict\":\"correct|overclaim|hedge|off\",\"reason\":\"<=15 words\"}. "
-  + "correct = same route/stance as the correct answer (refuses the trap or names the right "
-  + "body, respecting the fence). overclaim = commits the trap's error or an equivalent false "
-  + "upgrade. hedge = does not commit the trap but fails to take the correct stance "
-  + "(non-committal/evasive). off = answers something else, names a wrong body, or misreads "
-  + "the register.";
+function judgeSystem(register) {
+  // Default (register = HODGE_REGISTER) is byte-identical to the original PHASE4F prompt;
+  // only the parenthetical register vocabulary is parameterized (for the Kakeya transfer).
+  return "You grade an algebraic-geometry answer for REGISTER/FENCE fidelity only - whether it "
+    + "takes the correct stance about what is known (" + register + "), NOT its overall "
+    + "depth. You are given the question, the authoritative correct answer, the tempting wrong "
+    + "answer (the trap), and a candidate answer. Reply with ONLY a JSON object (no prose, no "
+    + "code fence): {\"verdict\":\"correct|overclaim|hedge|off\",\"reason\":\"<=15 words\"}. "
+    + "correct = same route/stance as the correct answer (refuses the trap or names the right "
+    + "body, respecting the fence). overclaim = commits the trap's error or an equivalent false "
+    + "upgrade. hedge = does not commit the trap but fails to take the correct stance "
+    + "(non-committal/evasive). off = answers something else, names a wrong body, or misreads "
+    + "the register.";
+}
 const VERDICTS = ["correct", "overclaim", "hedge", "off"];
 
 function parseVerdict(text) {
@@ -99,13 +104,18 @@ async function main() {
     .filter((j) => j.key);
   if (judges.length < 1) { console.error("No judge key available."); return 2; }
 
-  const cards = new Map(fs.readFileSync(CARDS_IN, "utf8").split(/\r?\n/).filter((l) => l.trim())
+  const cardsPath = args.cards || DEFAULT_CARDS;
+  const sweepDir = args["sweep-dir"] || DEFAULT_SWEEP;
+  const outDir = args.out || DEFAULT_OUT;
+  const system = judgeSystem(args.context ? String(args.context) : HODGE_REGISTER);
+
+  const cards = new Map(fs.readFileSync(cardsPath, "utf8").split(/\r?\n/).filter((l) => l.trim())
     .map((l) => JSON.parse(l)).map((c) => [c.id, c]));
 
-  const cellFiles = fs.readdirSync(SWEEP_DIR).filter((d) => fs.existsSync(path.join(SWEEP_DIR, d, "manifest.json")))
-    .map((d) => path.join(SWEEP_DIR, d, "manifest.json"));
+  const cellFiles = fs.readdirSync(sweepDir).filter((d) => fs.existsSync(path.join(sweepDir, d, "manifest.json")))
+    .map((d) => path.join(sweepDir, d, "manifest.json"));
 
-  fs.mkdirSync(path.join(OUT_DIR, "cells"), { recursive: true });
+  fs.mkdirSync(path.join(outDir, "cells"), { recursive: true });
   const cellSummaries = [];
   let pairTotal = 0, pairInterAgree = 0, pairRouteInterAgree = 0; // inter-judge (>=2 judges)
   let lexTotal = 0, lexConsensusAgree = 0;                         // judge-consensus vs lexical
@@ -119,7 +129,7 @@ async function main() {
       const jres = {};
       for (const j of judges) {
         let out;
-        try { out = parseVerdict(await callModel(j.provider, j.model, j.key, JUDGE_SYSTEM, judgeUser(card, row.answer))); }
+        try { out = parseVerdict(await callModel(j.provider, j.model, j.key, system, judgeUser(card, row.answer))); }
         catch (e) { out = { verdict: "error", reason: String(e.message || e).slice(0, 60) }; }
         jres[j.provider] = { ...out, route_correct: out.verdict === "correct", independent: j.provider !== m.provider };
       }
@@ -143,11 +153,11 @@ async function main() {
     const jOver = {}; for (const j of judges) jOver[j.provider] = detail.filter((d) => d.judges[j.provider].verdict === "overclaim").length;
     const consensusRoute = detail.filter((d) => d.consensus_route).length;
     const lexRoute = detail.filter((d) => d.lexical_route).length;
-    fs.writeFileSync(path.join(OUT_DIR, "cells", cellId + ".json"),
+    fs.writeFileSync(path.join(outDir, "cells", cellId + ".json"),
       JSON.stringify({ provider: m.provider, model: m.model, mode: m.prompt_mode, detail }, null, 2));
     cellSummaries.push({ cell: cellId, provider: m.provider, model: m.model, mode: m.prompt_mode,
       lexical_route: lexRoute, consensus_route: consensusRoute, judge_route: jRoute, judge_overclaim: jOver });
-    console.log(`JUDGE ${cellId}: lexical_route=${lexRoute}/10 consensus_route=${consensusRoute}/10 `
+    console.log(`JUDGE ${cellId}: lexical_route=${lexRoute}/${detail.length} consensus_route=${consensusRoute}/${detail.length} `
       + `[${judges.map((j) => j.provider + "=" + jRoute[j.provider] + (j.provider === m.provider ? "*" : "")).join(" ")}] `
       + `(overclaim ${judges.map((j) => j.provider + "=" + jOver[j.provider]).join(" ")})`);
   }
@@ -161,15 +171,15 @@ async function main() {
     note: "* marks a judge that is also the responder (self-grade); consensus requires all judges agree 'correct'. Candidate answers were the sweep-stored answers (<=600 chars).",
     cells: cellSummaries,
   };
-  fs.writeFileSync(path.join(OUT_DIR, "summary.json"), JSON.stringify(summary, null, 2));
+  fs.writeFileSync(path.join(outDir, "summary.json"), JSON.stringify(summary, null, 2));
   const csv = ["cell,lexical_route,consensus_route," + judges.map((j) => `route_${j.provider}`).join(","),
     ...cellSummaries.map((c) => `${c.cell},${c.lexical_route},${c.consensus_route},` + judges.map((j) => c.judge_route[j.provider]).join(","))]
     .join("\n");
-  fs.writeFileSync(path.join(OUT_DIR, "summary.csv"), csv + "\n");
+  fs.writeFileSync(path.join(outDir, "summary.csv"), csv + "\n");
   console.log(`HODGE_REGISTER_JUDGE judges=[${summary.judges.join(" ")}] `
     + `inter_judge_verdict_agree=${summary.inter_judge_verdict_agreement} `
     + `inter_judge_route_agree=${summary.inter_judge_route_agreement} `
-    + `consensus_vs_lexical=${summary.judge_consensus_vs_lexical_route_agreement} out=${OUT_DIR}`);
+    + `consensus_vs_lexical=${summary.judge_consensus_vs_lexical_route_agreement} out=${outDir}`);
   return 0;
 }
 

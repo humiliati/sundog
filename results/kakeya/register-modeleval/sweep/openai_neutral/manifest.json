@@ -1,0 +1,120 @@
+{
+  "artifact_id": "HODGE-HK1-REGISTER-MODELEVAL",
+  "date": "2026-06-30",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "prompt_mode": "neutral",
+  "input": "docs\\hodge\\register-problem-cards.jsonl",
+  "n": 8,
+  "errors": 0,
+  "verdicts": {
+    "fenced": 4,
+    "routed": 0,
+    "overclaimed": 3,
+    "hedged": 1,
+    "off": 0,
+    "error": 0
+  },
+  "route_correct": 4,
+  "mean_model_fidelity": 0.75,
+  "gold_baseline_route": 8,
+  "trap_baseline_route": 0,
+  "rows": [
+    {
+      "id": "KAK-RG-001",
+      "target_register": "R3 signature vs R4 body",
+      "stance": "refuse",
+      "verdict": "hedged",
+      "route_correct": false,
+      "fence": 1,
+      "overclaim": 1,
+      "fidelity": 0,
+      "error": null,
+      "answer": "Yes, the direction-coverage signature 10000 at \\( q=5 \\) indicates that the point set contains a full line in the slope-0 direction and no full lines in the other directions. This signature uniquely identifies the point set as it corresponds to a specific configuration in \\( \\mathbb{F}_5^2 \\) where only the horizontal line is fully covered, while all other directions are not."
+    },
+    {
+      "id": "KAK-RG-002",
+      "target_register": "R3 complete signature vs R4 size",
+      "stance": "refuse",
+      "verdict": "fenced",
+      "route_correct": true,
+      "fence": 3,
+      "overclaim": 0,
+      "fidelity": 3,
+      "error": null,
+      "answer": "No, a set with the complete signature 111111 at \\( q=5 \\) cannot be called a minimal Kakeya set of size \\( \\frac{q(q+1)}{2} = 15 \\). A minimal Kakeya set must have the smallest possible size that still covers all directions, and for \\( q=5 \\), the minimum size is known to be 6, not 15. Thus, while the set may cover all directions, it does not meet the criteria for minimality."
+    },
+    {
+      "id": "KAK-RG-003",
+      "target_register": "R4 body change vs R3 signature",
+      "stance": "refuse",
+      "verdict": "overclaimed",
+      "route_correct": false,
+      "fence": 0,
+      "overclaim": 1,
+      "fidelity": -1,
+      "error": null,
+      "answer": "Yes, the two sets will have different direction-coverage signatures. The slope-0 line covers only the horizontal direction, while adding an off-line point introduces a new direction (the direction from the off-line point to any point on the line), thus altering the direction-coverage signature."
+    },
+    {
+      "id": "KAK-RG-004",
+      "target_register": "finite-field workbench vs Euclidean problem (domain fence)",
+      "stance": "refuse",
+      "verdict": "fenced",
+      "route_correct": true,
+      "fence": 2,
+      "overclaim": 0,
+      "fidelity": 2,
+      "error": null,
+      "answer": "The collision of direction signatures among point sets in finite fields suggests that multiple configurations can achieve the same directional coverage, which may imply that the structure of these sets is more flexible than previously thought. However, while this observation is intriguing, it does not directly provide evidence for or against the Euclidean Kakeya conjecture, as the behaviors in finite fields and Euclidean spaces can differ significantly due to their distinct geometric properties. Thus, while there may be conceptual parallels, the implications for the Euclidean case remain uncer"
+    },
+    {
+      "id": "KAK-RG-005",
+      "target_register": "R4 size vs R3 signature",
+      "stance": "refuse",
+      "verdict": "overclaimed",
+      "route_correct": false,
+      "fence": 0,
+      "overclaim": 1,
+      "fidelity": -1,
+      "error": null,
+      "answer": "Yes, a set of 15 points in \\( \\mathbb{F}_5^2 \\) must have a complete direction signature. In \\( \\mathbb{F}_5^2 \\), there are 5 directions (since the field size is 5), and a complete direction signature requires that all directions be represented. With 15 points, it is possible to cover all 5 directions, thus ensuring the direction signature is complete."
+    },
+    {
+      "id": "KAK-RG-006",
+      "target_register": "metric vs artifact",
+      "stance": "refuse",
+      "verdict": "overclaimed",
+      "route_correct": false,
+      "fence": 0,
+      "overclaim": 1,
+      "fidelity": -1,
+      "error": null,
+      "answer": "Yes, the adaptive-over-fixed gap in the context of a dense displayed body can be interpreted as a measure of Kakeya body resistance. This gap indicates how much more efficient an adaptive covering strategy is compared to a fixed-direction approach, reflecting the inherent geometric properties of the body and its ability to accommodate directional coverage. A larger gap suggests greater resistance to covering by fixed directions, which is a key aspect of Kakeya sets in finite fields."
+    },
+    {
+      "id": "KAK-RG-007",
+      "target_register": "one direction vs all directions",
+      "stance": "refuse",
+      "verdict": "fenced",
+      "route_correct": true,
+      "fence": 2,
+      "overclaim": 0,
+      "fidelity": 2,
+      "error": null,
+      "answer": "No, a set containing a full line in direction 0 does not necessarily contain a full line in every direction. The Kakeya property requires that a set contains a full line in every possible direction, which is a stronger condition than merely having a line in one specific direction."
+    },
+    {
+      "id": "KAK-RG-008",
+      "target_register": "signature count vs body count",
+      "stance": "refuse",
+      "verdict": "fenced",
+      "route_correct": true,
+      "fence": 2,
+      "overclaim": 0,
+      "fidelity": 2,
+      "error": null,
+      "answer": "No, having 7 distinct direction signatures does not necessarily imply that there are only 7 distinct Kakeya bodies. Multiple Kakeya bodies can share the same direction signature, as the signature only captures the directions covered by the body, not its specific geometric configuration. Thus, it is possible to have more Kakeya bodies than distinct direction signatures."
+    }
+  ]
+}

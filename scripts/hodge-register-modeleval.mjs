@@ -129,8 +129,8 @@ function tallyVerdicts(rows) {
   return t;
 }
 
-async function runOne({ provider, model, key, mode, cards, outDir, write = true }) {
-  const system = sysFor(mode);
+async function runOne({ provider, model, key, mode, cards, outDir, write = true, neutralSystem = SYSTEM_NEUTRAL }) {
+  const system = mode === "neutral" ? neutralSystem : SYSTEM_PRIMED;
   const rows = [];
   for (const c of cards) {
     let answer = "", err = null;
@@ -183,6 +183,7 @@ async function main() {
   const args = parseArgs(process.argv.slice(2));
   const cards = fs.readFileSync(args.in || DEFAULT_IN, "utf8").split(/\r?\n/)
     .filter((l) => l.trim()).map((l) => JSON.parse(l));
+  const neutralSystem = args.system ? String(args.system) : SYSTEM_NEUTRAL;
 
   if (args.sweep) {
     const modes = (args.modes ? String(args.modes).split(",") : ["neutral", "primed"]).map((s) => s.trim());
@@ -197,7 +198,7 @@ async function main() {
       if (!(await preflight(provider, model, key))) { dead.push(`${provider}:${model}`); continue; }
       for (const mode of modes) {
         const outDir = path.join(base, `${provider}_${mode}`);
-        const s = await runOne({ provider, model, key, mode, cards, outDir });
+        const s = await runOne({ provider, model, key, mode, cards, outDir, neutralSystem });
         cells.push({ provider, model, mode, n: s.n, errors: s.errors,
           route_correct: s.route_correct, overclaimed: s.verdicts.overclaimed,
           fenced: s.verdicts.fenced, routed: s.verdicts.routed,
@@ -227,7 +228,7 @@ async function main() {
   const model = args.model || PROVIDERS[provider].model;
   const mode = args.neutral ? "neutral" : "primed";
   const outDir = args.out || DEFAULT_OUT;
-  const s = await runOne({ provider, model, key, mode, cards, outDir });
+  const s = await runOne({ provider, model, key, mode, cards, outDir, neutralSystem });
   for (const r of s.rows.filter((r) => !r.route_correct && !r.error)) {
     console.log(`${r.verdict.toUpperCase()} ${r.id}: fence=${r.fence} overclaim=${r.overclaim} :: ${r.answer.slice(0, 110).replace(/\s+/g, " ")}`);
   }

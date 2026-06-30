@@ -1,0 +1,120 @@
+{
+  "artifact_id": "HODGE-HK1-REGISTER-MODELEVAL",
+  "date": "2026-06-30",
+  "provider": "groq",
+  "model": "llama-3.3-70b-versatile",
+  "prompt_mode": "neutral",
+  "input": "docs\\hodge\\register-problem-cards.jsonl",
+  "n": 8,
+  "errors": 0,
+  "verdicts": {
+    "fenced": 6,
+    "routed": 0,
+    "overclaimed": 1,
+    "hedged": 1,
+    "off": 0,
+    "error": 0
+  },
+  "route_correct": 6,
+  "mean_model_fidelity": 1.625,
+  "gold_baseline_route": 8,
+  "trap_baseline_route": 0,
+  "rows": [
+    {
+      "id": "KAK-RG-001",
+      "target_register": "R3 signature vs R4 body",
+      "stance": "refuse",
+      "verdict": "fenced",
+      "route_correct": true,
+      "fence": 3,
+      "overclaim": 0,
+      "fidelity": 3,
+      "error": null,
+      "answer": "No, the direction-coverage signature 10000 at q=5 does not uniquely identify the point set. Multiple point sets can have the same signature, as it only provides information about the directions covered by lines, not the specific arrangement of points. However, it does imply that the set contains a full line in the slope-0 direction and no full lines in other directions."
+    },
+    {
+      "id": "KAK-RG-002",
+      "target_register": "R3 complete signature vs R4 size",
+      "stance": "refuse",
+      "verdict": "fenced",
+      "route_correct": true,
+      "fence": 2,
+      "overclaim": 0,
+      "fidelity": 2,
+      "error": null,
+      "answer": "No, it cannot be called a minimal Kakeya set. A Kakeya set in F_q^2 is a set that contains a line in every direction, and the known lower bound for the size of a Kakeya set is q(q+1)/2, but this set has a complete signature, implying it has more lines than necessary. The set size matches the lower bound, but having a full line in every direction exceeds the requirement of having at least one line in each direction."
+    },
+    {
+      "id": "KAK-RG-003",
+      "target_register": "R4 body change vs R3 signature",
+      "stance": "refuse",
+      "verdict": "overclaimed",
+      "route_correct": false,
+      "fence": 0,
+      "overclaim": 1,
+      "fidelity": -1,
+      "error": null,
+      "answer": "Yes, the two sets have different direction-coverage signatures. The slope-0 line covers only one direction, while the line plus one off-line point covers at least two directions, since the off-line point introduces a new direction. This difference in direction coverage is due to the additional point not being collinear with the original line."
+    },
+    {
+      "id": "KAK-RG-004",
+      "target_register": "finite-field workbench vs Euclidean problem (domain fence)",
+      "stance": "refuse",
+      "verdict": "fenced",
+      "route_correct": true,
+      "fence": 2,
+      "overclaim": 0,
+      "fidelity": 2,
+      "error": null,
+      "answer": "The collision count in finite fields does not directly impact the Euclidean Kakeya conjecture, as the latter deals with continuous spaces and the former with discrete structures. However, insights from finite-field Kakeya problems can inform and inspire approaches to the Euclidean problem. The existence of many point sets sharing direction signatures in finite fields suggests that similar phenomena might occur in continuous settings, potentially guiding the development of new techniques. This connection can stimulate research, but a direct implication on the Euclidean Kakeya conjecture remains"
+    },
+    {
+      "id": "KAK-RG-005",
+      "target_register": "R4 size vs R3 signature",
+      "stance": "refuse",
+      "verdict": "fenced",
+      "route_correct": true,
+      "fence": 3,
+      "overclaim": 0,
+      "fidelity": 3,
+      "error": null,
+      "answer": "No, the set's direction signature does not have to be complete. A set of 15 points in F_5^2 can have an incomplete direction signature, as the Dvir bound only guarantees a lower bound on the size of the set, not the completeness of its direction signature. In fact, there are examples of sets with 15 points in F_5^2 that do not have a complete direction signature."
+    },
+    {
+      "id": "KAK-RG-006",
+      "target_register": "metric vs artifact",
+      "stance": "refuse",
+      "verdict": "hedged",
+      "route_correct": false,
+      "fence": 0,
+      "overclaim": 0,
+      "fidelity": 0,
+      "error": null,
+      "answer": "The adaptive-over-fixed gap indeed relates to Kakeya body resistance, as it quantifies the improvement in coverage achieved by adapting to the body's geometry. A larger gap indicates a higher resistance to fixed-direction covers, suggesting the body's shape is more effectively exploited by adaptive covers. This gap can be seen as a measure of the body's \"Kakeya-ness\", with higher values indicating a greater need for adaptive coverage strategies."
+    },
+    {
+      "id": "KAK-RG-007",
+      "target_register": "one direction vs all directions",
+      "stance": "refuse",
+      "verdict": "fenced",
+      "route_correct": true,
+      "fence": 2,
+      "overclaim": 0,
+      "fidelity": 2,
+      "error": null,
+      "answer": "No, containing a full line in one direction does not imply the Kakeya property. A set can have a full line in direction 0 without covering all other directions. In fact, a set can contain a full line in one direction and still be sparse in other directions. This is a key distinction in studying Kakeya sets in finite fields."
+    },
+    {
+      "id": "KAK-RG-008",
+      "target_register": "signature count vs body count",
+      "stance": "refuse",
+      "verdict": "fenced",
+      "route_correct": true,
+      "fence": 2,
+      "overclaim": 0,
+      "fidelity": 2,
+      "error": null,
+      "answer": "No, the presence of 7 distinct direction signatures at q=5 does not imply that there are only 7 distinct Kakeya bodies. It means that these 7 direction signatures are achieved by the enumerated bodies, but other Kakeya bodies may exist with the same or different direction signatures. The number of distinct Kakeya bodies can be larger than the number of distinct direction signatures."
+    }
+  ]
+}

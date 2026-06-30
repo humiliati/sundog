@@ -1,0 +1,4 @@
+cell,lexical_route,consensus_route,route_openai,route_groq
+groq_neutral,6,5,5,6
+mistral_neutral,3,2,3,2
+openai_neutral,4,2,2,3

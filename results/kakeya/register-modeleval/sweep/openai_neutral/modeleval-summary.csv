@@ -1,0 +1,9 @@
+id,stance,verdict,route_correct,fence,overclaim,fidelity
+KAK-RG-001,refuse,hedged,false,1,1,0
+KAK-RG-002,refuse,fenced,true,3,0,3
+KAK-RG-003,refuse,overclaimed,false,0,1,-1
+KAK-RG-004,refuse,fenced,true,2,0,2
+KAK-RG-005,refuse,overclaimed,false,0,1,-1
+KAK-RG-006,refuse,overclaimed,false,0,1,-1
+KAK-RG-007,refuse,fenced,true,2,0,2
+KAK-RG-008,refuse,fenced,true,2,0,2

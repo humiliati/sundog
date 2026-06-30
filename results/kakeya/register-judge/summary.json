@@ -1,0 +1,62 @@
+{
+  "artifact_id": "HODGE-HK1-REGISTER-JUDGE",
+  "date": "2026-06-30",
+  "judges": [
+    "openai:gpt-4o-mini",
+    "groq:llama-3.3-70b-versatile"
+  ],
+  "inter_judge_verdict_agreement": 0.833,
+  "inter_judge_route_agreement": 0.875,
+  "judge_consensus_vs_lexical_route_agreement": 0.75,
+  "note": "* marks a judge that is also the responder (self-grade); consensus requires all judges agree 'correct'. Candidate answers were the sweep-stored answers (<=600 chars).",
+  "cells": [
+    {
+      "cell": "groq_neutral",
+      "provider": "groq",
+      "model": "llama-3.3-70b-versatile",
+      "mode": "neutral",
+      "lexical_route": 6,
+      "consensus_route": 5,
+      "judge_route": {
+        "openai": 5,
+        "groq": 6
+      },
+      "judge_overclaim": {
+        "openai": 2,
+        "groq": 2
+      }
+    },
+    {
+      "cell": "mistral_neutral",
+      "provider": "mistral",
+      "model": "mistral-small-latest",
+      "mode": "neutral",
+      "lexical_route": 3,
+      "consensus_route": 2,
+      "judge_route": {
+        "openai": 3,
+        "groq": 2
+      },
+      "judge_overclaim": {
+        "openai": 4,
+        "groq": 4
+      }
+    },
+    {
+      "cell": "openai_neutral",
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "mode": "neutral",
+      "lexical_route": 4,
+      "consensus_route": 2,
+      "judge_route": {
+        "openai": 2,
+        "groq": 3
+      },
+      "judge_overclaim": {
+        "openai": 4,
+        "groq": 4
+      }
+    }
+  ]
+}

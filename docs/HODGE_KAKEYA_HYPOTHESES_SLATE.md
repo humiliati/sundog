@@ -273,8 +273,17 @@ restores *size* (Dvir floor; finite resist, collision count `q(q^2-q+1)`), Hodge
 Honest **typed mismatch** flagged: Kakeya lossiness is a finite *count*, Hodge a decoder
 *rate* - same frame and decoder-non-invertibility idea, different units (a calibrated analogy,
 not an identity). H-K4's lesson "control the artifact before reporting a collision number" is
-the table's methodological row. Next probe it spawns: run H-K1's card->judge apparatus on
-Kakeya as a cross-lane transfer confirmation.
+the table's methodological row.
+
+*Cross-lane transfer - CONFIRMED 2026-06-29* (receipt
+[`kakeya/PHASE5_REGISTER_TRANSFER.md`](kakeya/PHASE5_REGISTER_TRANSFER.md)): ran the SAME
+H-K1 card->model->two-judge scripts on 8 Kakeya register cards (only `--in/--out/--system/
+--context` differ). The instrument transferred (inter-judge agreement 0.833 vs Hodge 0.80)
+and the same shadow-non-invertibility overclaim appeared - hardest traps KAK-RG-003 (body
+change leaking into the shadow) and KAK-RG-006 (the H-K4 density artifact), both 6/6
+overclaim, with the same model ordering (groq llama-70b resists best). **The shared
+operational field is confirmed by transfer, not just schema** - Hodge and Kakeya are two
+calibration points of one apparatus.
 
 *Claim.* Hodge and Kakeya share a useful table shape:
 

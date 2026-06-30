@@ -45,6 +45,7 @@ results/arc/phase4-body-resistance-context-expanded/
 *.jsonl
 !chat/prompts/*.jsonl
 !docs/hodge/*.jsonl
+!docs/kakeya/*.jsonl
 screenshots/
 tests/arc-baselines/out/
 

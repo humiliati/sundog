@@ -1,0 +1,175 @@
+{
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "mode": "neutral",
+  "detail": [
+    {
+      "id": "KAK-RG-001",
+      "lexical_verdict": "hedged",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "overclaim",
+          "reason": "Claims unique identification from the signature, contradicting the correct answer.",
+          "route_correct": false,
+          "independent": false
+        },
+        "groq": {
+          "verdict": "overclaim",
+          "reason": "commits trap's error",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "KAK-RG-002",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to address the correct stance on size bounds.",
+          "route_correct": false,
+          "independent": false
+        },
+        "groq": {
+          "verdict": "off",
+          "reason": "names wrong size",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": true
+    },
+    {
+      "id": "KAK-RG-003",
+      "lexical_verdict": "overclaimed",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "overclaim",
+          "reason": "Claims a new direction is introduced, misinterpreting coverage.",
+          "route_correct": false,
+          "independent": false
+        },
+        "groq": {
+          "verdict": "overclaim",
+          "reason": "falls for trap",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "KAK-RG-004",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to take a definitive stance on the Euclidean conjecture.",
+          "route_correct": false,
+          "independent": false
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects domain fence",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": true
+    },
+    {
+      "id": "KAK-RG-005",
+      "lexical_verdict": "overclaimed",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "overclaim",
+          "reason": "Claims 15 points guarantee complete direction coverage, which is incorrect.",
+          "route_correct": false,
+          "independent": false
+        },
+        "groq": {
+          "verdict": "overclaim",
+          "reason": "commits trap's error",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "KAK-RG-006",
+      "lexical_verdict": "overclaimed",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "overclaim",
+          "reason": "Claims the gap measures Kakeya resistance, contradicting the correct answer.",
+          "route_correct": false,
+          "independent": false
+        },
+        "groq": {
+          "verdict": "overclaim",
+          "reason": "commits trap's error",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "KAK-RG-007",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "correct",
+          "reason": "Correctly distinguishes between one direction and all directions.",
+          "route_correct": true,
+          "independent": false
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects direction fence",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": true,
+      "consensus_split": false
+    },
+    {
+      "id": "KAK-RG-008",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "correct",
+          "reason": "Correctly distinguishes between signatures and bodies.",
+          "route_correct": true,
+          "independent": false
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects signature vs body distinction",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": true,
+      "consensus_split": false
+    }
+  ]
+}

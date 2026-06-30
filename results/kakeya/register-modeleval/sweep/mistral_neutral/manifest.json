@@ -1,0 +1,120 @@
+{
+  "artifact_id": "HODGE-HK1-REGISTER-MODELEVAL",
+  "date": "2026-06-30",
+  "provider": "mistral",
+  "model": "mistral-small-latest",
+  "prompt_mode": "neutral",
+  "input": "docs\\hodge\\register-problem-cards.jsonl",
+  "n": 8,
+  "errors": 0,
+  "verdicts": {
+    "fenced": 3,
+    "routed": 0,
+    "overclaimed": 1,
+    "hedged": 4,
+    "off": 0,
+    "error": 0
+  },
+  "route_correct": 3,
+  "mean_model_fidelity": 0.375,
+  "gold_baseline_route": 8,
+  "trap_baseline_route": 0,
+  "rows": [
+    {
+      "id": "KAK-RG-001",
+      "target_register": "R3 signature vs R4 body",
+      "stance": "refuse",
+      "verdict": "hedged",
+      "route_correct": false,
+      "fence": 1,
+      "overclaim": 1,
+      "fidelity": 0,
+      "error": null,
+      "answer": "Yes, the signature uniquely identifies the point set as the union of all lines with slope 0 (i.e., horizontal lines) in \\(\\mathbb{F}_5^2\\). This is because only the slope-0 direction is fully covered, and no other directions have full lines, implying the set consists precisely of all points on these horizontal lines."
+    },
+    {
+      "id": "KAK-RG-002",
+      "target_register": "R3 complete signature vs R4 size",
+      "stance": "refuse",
+      "verdict": "fenced",
+      "route_correct": true,
+      "fence": 1,
+      "overclaim": 0,
+      "fidelity": 1,
+      "error": null,
+      "answer": "No. A minimal Kakeya set in \\( \\mathbb{F}_5^2 \\) must have size exactly \\( q = 5 \\), as it must contain at least one point on every line through the origin. The size \\( q(q+1)/2 = 15 \\) corresponds to a *maximal* (or *complete*) Kakeya set, which contains a full line in every direction. Thus, the caption would be incorrect for a minimal Kakeya set."
+    },
+    {
+      "id": "KAK-RG-003",
+      "target_register": "R4 body change vs R3 signature",
+      "stance": "refuse",
+      "verdict": "overclaimed",
+      "route_correct": false,
+      "fence": 0,
+      "overclaim": 1,
+      "fidelity": -1,
+      "error": null,
+      "answer": "Yes, the two sets have different direction-coverage signatures. The slope-0 line covers only the direction (1,0), while the line plus one off-line point covers at least two distinct directions (the original (1,0) and the direction to the off-line point), thus altering the signature."
+    },
+    {
+      "id": "KAK-RG-004",
+      "target_register": "finite-field workbench vs Euclidean problem (domain fence)",
+      "stance": "refuse",
+      "verdict": "hedged",
+      "route_correct": false,
+      "fence": 1,
+      "overclaim": 1,
+      "fidelity": 0,
+      "error": null,
+      "answer": "Yes, the collision count in finite fields bears on the Euclidean Kakeya conjecture. The finite-field model captures key combinatorial aspects of direction sets, and high collision counts suggest that distinct point sets can share the same direction signature, mirroring potential obstructions in Euclidean space. This aligns with the idea that the Kakeya conjecture's difficulty may stem from such combinatorial complexities."
+    },
+    {
+      "id": "KAK-RG-005",
+      "target_register": "R4 size vs R3 signature",
+      "stance": "refuse",
+      "verdict": "hedged",
+      "route_correct": false,
+      "fence": 0,
+      "overclaim": 0,
+      "fidelity": 0,
+      "error": null,
+      "answer": "In the finite field plane \\( \\mathbb{F}_5^2 \\), a set of 15 points (the Dvir floor size for \\( q = 5 \\)) does **not** necessarily have a complete direction signature. While the Dvir construction guarantees a complete direction set for the minimal size \\( q(q+1)/2 = 15 \\) in \\( \\mathbb{F}_q^2 \\), not all 15-point sets achieve this—only those constructed via the Dvir polynomial method or equivalent. Thus, a generic 15-point set may miss some directions."
+    },
+    {
+      "id": "KAK-RG-006",
+      "target_register": "metric vs artifact",
+      "stance": "refuse",
+      "verdict": "hedged",
+      "route_correct": false,
+      "fence": 1,
+      "overclaim": 1,
+      "fidelity": 0,
+      "error": null,
+      "answer": "Yes, the adaptive-over-fixed gap in fiber coverings can serve as a measure of *Kakeya resistance* in finite fields, analogous to how the Kakeya conjecture quantifies the minimal size of a Kakeya set. A larger gap indicates stronger resistance to efficient directional coverage, reflecting deeper geometric or arithmetic obstructions in the body's structure. This aligns with finite-field Kakeya problems where directional adaptivity reduces residual sets more effectively than fixed grids."
+    },
+    {
+      "id": "KAK-RG-007",
+      "target_register": "one direction vs all directions",
+      "stance": "refuse",
+      "verdict": "fenced",
+      "route_correct": true,
+      "fence": 2,
+      "overclaim": 0,
+      "fidelity": 2,
+      "error": null,
+      "answer": "No, containing a full line in direction 0 does not imply the Kakeya property (containing a full line in every direction). The Kakeya property requires that for every direction in the finite field, there exists a line in that direction entirely contained in the set. A set with a line in direction 0 may fail to have lines in other directions, as the structure of the set must be carefully constructed to cover all directions simultaneously."
+    },
+    {
+      "id": "KAK-RG-008",
+      "target_register": "signature count vs body count",
+      "stance": "refuse",
+      "verdict": "fenced",
+      "route_correct": true,
+      "fence": 1,
+      "overclaim": 0,
+      "fidelity": 1,
+      "error": null,
+      "answer": "No. The 7 distinct direction signatures indicate that there are at least 7 distinct Kakeya bodies, but there could be more. The audit only ensures that these 7 bodies have unique direction signatures, not that all Kakeya bodies have been enumerated."
+    }
+  ]
+}

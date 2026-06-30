@@ -71,11 +71,14 @@ existence, and place the lane on the determine/resist axis.
 
 ## Generative payoff (next probes the table spawns)
 
-1. **Cross-lane confirmation:** apply H-K1's card -> model -> judge apparatus to Kakeya
-   (shadow = direction signature; tempting overclaim = "this signature forces a unique or
-   extremal body"; correct = "many bodies cast it; only size is forced, via the Dvir floor").
-   If the same apparatus yields comparable overclaim behaviour, the shared operational field is
-   confirmed by transfer, not just by schema.
+1. **Cross-lane confirmation - DONE 2026-06-29, CONFIRMED**
+   ([`kakeya/PHASE5_REGISTER_TRANSFER.md`](kakeya/PHASE5_REGISTER_TRANSFER.md)): the *same*
+   card -> model -> two-judge scripts ran on 8 Kakeya register cards (shadow = direction
+   signature; trap = "this signature forces a unique/extremal/minimal body"). The instrument
+   transferred - inter-judge agreement `0.833` (Hodge `0.80`) - and the same shadow-non-
+   invertibility overclaim appeared (hardest traps KAK-RG-003 and KAK-RG-006, both 6/6
+   overclaim), with the same model ordering (groq llama-70b resists best). The shared
+   operational field is confirmed by transfer, not just by schema.
 2. **New-lane recipe:** for any future Sundog lane, populate the same five slots; a lane that
    cannot is not ready for a shadow->body workbench.
 3. **H-K6:** the boundary cards from both rosters become adversarial evaluator prompts.
