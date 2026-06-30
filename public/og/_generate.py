@@ -372,32 +372,38 @@ def viz_algo_approx_ledger() -> str:
         ("ReLU gate-count",         "tropical / PL"),
     ]
     parts = []
-    # Outer card frame
+    # Capstone header (above the find/check ledger card)
     parts.append('<g filter="url(#cardShadow)">')
-    parts.append('  <rect x="660" y="135" width="490" height="380" rx="12" fill="#FFFFFF" stroke="#B8831E" stroke-width="2"/>')
+    parts.append('  <rect x="660" y="130" width="490" height="44" rx="10" fill="#E8F4EC" stroke="#2E7D5A" stroke-width="2"/>')
+    parts.append('</g>')
+    parts.append('<text x="905" y="151" font-family="Verdana, Geneva, sans-serif" font-size="11" font-weight="800" letter-spacing="2" fill="#214B36" text-anchor="middle">CAPSTONE &#183; UNIVERSAL APPROXIMATION (CONSTRUCTIVE)</text>')
+    parts.append('<text x="905" y="167" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" font-weight="700" fill="#214B36" text-anchor="middle">continuous f on [0,1] -> explicit ReLU net (eps-uniform)</text>')
+    # Outer card frame (find/check ledger card, secondary)
+    parts.append('<g filter="url(#cardShadow)">')
+    parts.append('  <rect x="660" y="185" width="490" height="335" rx="12" fill="#FFFFFF" stroke="#B8831E" stroke-width="2"/>')
     parts.append('</g>')
     # Header strip
-    parts.append('<rect x="660" y="135" width="490" height="42" rx="12" fill="#FDF6E3" stroke="#B8831E" stroke-width="1.6"/>')
-    parts.append('<text x="905" y="162" font-family="Verdana, Geneva, sans-serif" font-size="13" font-weight="800" letter-spacing="2" fill="#684811" text-anchor="middle">FIND / CHECK LEDGER &#183; 7 INSTANCES</text>')
-    # Column headers
-    parts.append('<text x="685" y="200" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" letter-spacing="1.5" fill="#6A7680">INSTANCE</text>')
-    parts.append('<text x="940" y="200" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" letter-spacing="1.5" fill="#6A7680">KIND</text>')
-    parts.append('<text x="1115" y="200" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" letter-spacing="1.5" fill="#2E7D5A" text-anchor="end">CHECK</text>')
-    parts.append('<line x1="675" y1="208" x2="1135" y2="208" stroke="#CFD8DC" stroke-width="1"/>')
-    # 7 instance rows
+    parts.append('<rect x="660" y="185" width="490" height="36" rx="12" fill="#FDF6E3" stroke="#B8831E" stroke-width="1.6"/>')
+    parts.append('<text x="905" y="209" font-family="Verdana, Geneva, sans-serif" font-size="12" font-weight="800" letter-spacing="2" fill="#684811" text-anchor="middle">FIND / CHECK LEDGER &#183; 7 INSTANCES</text>')
+    # Column headers (shifted down for capstone header above)
+    parts.append('<text x="685" y="240" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" letter-spacing="1.5" fill="#6A7680">INSTANCE</text>')
+    parts.append('<text x="940" y="240" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" letter-spacing="1.5" fill="#6A7680">KIND</text>')
+    parts.append('<text x="1115" y="240" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" letter-spacing="1.5" fill="#2E7D5A" text-anchor="end">CHECK</text>')
+    parts.append('<line x1="675" y1="248" x2="1135" y2="248" stroke="#CFD8DC" stroke-width="1"/>')
+    # 7 instance rows (28px spacing)
     for i, (name, kind) in enumerate(instances):
-        y = 230 + i * 32
+        y = 270 + i * 28
         parts.append(f'<text x="685" y="{y}" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12" font-weight="700" fill="#1A3A52">{name}</text>')
         parts.append(f'<text x="940" y="{y}" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#5A6772">{kind}</text>')
         # Green check pill
         parts.append(f'<rect x="1075" y="{y-13}" width="55" height="18" rx="9" fill="#E8F4EC" stroke="#2E7D5A" stroke-width="1"/>')
         parts.append(f'<text x="1102" y="{y-1}" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" fill="#2E7D5A" text-anchor="middle">cheap</text>')
     # Footer with axiom-clean badge
-    parts.append('<line x1="675" y1="458" x2="1135" y2="458" stroke="#CFD8DC" stroke-width="1"/>')
-    parts.append('<text x="905" y="478" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" letter-spacing="1.5" fill="#5A2A22" text-anchor="middle">FIND-SIDE IMPORTED IN EVERY INSTANCE</text>')
-    parts.append('<g transform="translate(770,488)" filter="url(#cardShadow)">')
-    parts.append('  <rect x="0" y="0" width="270" height="22" rx="11" fill="#FFFFFF" stroke="#1A3A52" stroke-width="1.4"/>')
-    parts.append('  <text x="135" y="15" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" letter-spacing="1.4" fill="#1A3A52" text-anchor="middle">AXIOM-CLEAN &#183; AxiomAudit-GATED</text>')
+    parts.append('<line x1="675" y1="475" x2="1135" y2="475" stroke="#CFD8DC" stroke-width="1"/>')
+    parts.append('<text x="905" y="490" font-family="Verdana, Geneva, sans-serif" font-size="9" font-weight="800" letter-spacing="1.5" fill="#5A2A22" text-anchor="middle">FIND-SIDE IMPORTED IN EVERY INSTANCE</text>')
+    parts.append('<g transform="translate(770,498)" filter="url(#cardShadow)">')
+    parts.append('  <rect x="0" y="0" width="270" height="18" rx="9" fill="#FFFFFF" stroke="#1A3A52" stroke-width="1.4"/>')
+    parts.append('  <text x="135" y="13" font-family="Verdana, Geneva, sans-serif" font-size="9" font-weight="800" letter-spacing="1.4" fill="#1A3A52" text-anchor="middle">AXIOM-CLEAN &#183; AxiomAudit-GATED</text>')
     parts.append('</g>')
     return "\n  ".join(parts)
 
@@ -512,11 +518,11 @@ CARDS = {
     "algorithmic-approximation": {
         "filename": "algorithmic-approximation.png",
         "eyebrow": "SUNDOG · ALGORITHMIC APPROXIMATION",
-        "headline": ["Cheaper to", "check than", "to find."],
+        "headline": ["Universal", "approximation,", "made constructive."],
         "lede": [
-            "Seven cheap-CHECK",
-            "instances. Find-side",
-            "imported. Axiom-clean.",
+            "Continuous f on [0,1]",
+            "to explicit ReLU net.",
+            "Axiom-clean. Density imported.",
         ],
         "url": "sundog.cc/algorithmic-approximation",
         "viz": viz_algo_approx_ledger,

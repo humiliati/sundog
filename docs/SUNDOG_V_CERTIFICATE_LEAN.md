@@ -1,37 +1,57 @@
 # Sundog Lean Certificate - Fifteen Machine-Checked Cores + One Synthesis Law + One Constructive Universal-Approximation Capstone
 
 > **Deductive complement to the public Sundog lanes.** The public Lean repo now
-> carries ten worked examples of the same discipline: machine-check the
-> deductive core, then name the imported wall. The first is the
-> [P-vs-NP certificate-syndrome lane](SUNDOG_V_P_V_NP.md); the second is a
-> real-analysis shadow-decay example; the third is the halo minimum-deviation
-> geometry behind the 22-degree halo; the fourth is the Aharonov-Bohm
-> gauge-invariance (a gradient's closed-loop circulation is zero); the fifth is
-> the general characteristic-function law behind the shadow decay (real analysis
-> again); the sixth is a machine-checked Karp reduction
-> `3SAT <= 3DM <= X3C <= decoding` that anchors the certificate's
-> decoding-hardness import to 3SAT (reduction correctness only); the seventh
-> is a finite audit game — a proved-cheap full-access audit paired with
-> ∀-verifier blindness of the pooled-mean channel; the eighth is the **tropical
-> / piecewise-linear core** (`CircuitNet` + `RegionCount` + `CancellationFree`
-> + `DepthSeparation` + `StraightLineCost`) — exact (ε = 0) compilation of
-> piecewise-linear circuits to ReLU networks with a **linear gate-count `≤ 4N`
-> via a sharing-aware DAG** (`compileToDag`), realization-independent linear-region
-> structure, monotone vs. cancellation distinguishing, and the tent's `2^d`
-> depth separation — the ε = 0 piecewise-linear core for arXiv:2606.26705 Thm
-> 3.2 / Cor 5.1, in the AxiomAudit gate; the ninth is the **N-1 monotone
-> depth-as-computation theorem** (`FoldCancellation` + `PieceCover` +
-> `RegionPoly`) — *monotone depth is region-polynomial; cancellation depth is
-> region-exponential* — a lower bound **in the cancellation-free model**, not a
-> lower bound for general neural nets (Telgarsky's depth-vs-width stays imported);
-> and the tenth is the **find/check ledger** (`Certifies` plus seven instances:
-> syndrome verifier, shortest-path, ReLU gate-count, max-flow/min-cut, König
-> matching/cover, 2-SAT decision, Pratt primality) — one `Certifies` interface
-> with cheap-CHECK theorems across optimization, decision, and number theory,
-> the lane's whole frame: **cheaper to check than to find**, with finding
-> imported. Ten examples across nine kinds of math; **not** a learnability claim,
-> **not** a full analytic-gate approximation theorem, **not** a hardness or P-vs-NP
-> claim, **not** a fast primality test (Pratt is NP-*membership*), and **not** a
+> carries **fifteen worked examples + one synthesis law + one constructive
+> universal-approximation capstone** of the same discipline: machine-check the
+> deductive core, then name the imported wall.
+>
+> The **original ten** span: the
+> [P-vs-NP certificate-syndrome lane](SUNDOG_V_P_V_NP.md), a real-analysis
+> shadow-decay example, the halo minimum-deviation geometry, the Aharonov-Bohm
+> gauge-invariance, the general characteristic-function law, a machine-checked
+> Karp reduction `3SAT <= 3DM <= X3C <= decoding`, a finite audit game with
+> ∀-verifier blindness of the pooled-mean channel, the **tropical / piecewise-
+> linear core** with a linear gate-count `≤ 4N` via a sharing-aware DAG
+> (`compileToDag`) — the ε = 0 PL core for arXiv:2606.26705 Thm 3.2 / Cor 5.1
+> — the **N-1 monotone depth-as-computation** theorem (cancellation-free
+> circuits are region-polynomial; the tent's `2^d` requires cancellation), and
+> the **find/check ledger** (`Certifies` plus seven cheap-CHECK instances:
+> syndrome, shortest-path, ReLU gate-count, max-flow/min-cut, König,
+> 2-SAT, Pratt primality).
+>
+> The **slate-3 five** extend the discipline into the ε > 0 analytic side and
+> the first proved find/check separator: `cpl_iff_reluNet` (continuous-PL ↔
+> finite ReLU net, **both directions** of the ε = 0 equivalence);
+> `AnalyticGate` + `SawtoothApprox` (the lane's first ε > 0 rates — `x²`
+> approximated at both the elementary-poly `O(1/√ε)` and the polylog
+> `O(log 1/ε)` depth via the Telgarsky sawtooth); `QueryGap` `check_lt_find`
+> (the ledger's first **proved**, not imported, find/check gap — in a
+> *restricted query model*, **not** a P-vs-NP claim); `GradedCancellation`
+> (region count `≤ 4^g · leafCount`, recasting the monotone-vs-general
+> dichotomy as a graded dial); and an empirical sample-complexity result
+> (ε-essential predicts the data needed to generalize, Spearman 0.68 / 0.78).
+>
+> The **synthesis law** stays separate: the
+> [Order-Relative Resolution Law](#the-order-relative-resolution-law-synthesis-core)
+> (`Resolves k t ↔ ord t ≤ k`), grounded on parity-determination and
+> coordinate-locality instances and guarded by `order_is_schema_not_scalar`.
+>
+> The **capstone** is the constructive direction of universal approximation,
+> proved end-to-end via the analytic-gate chain
+> (`MultiplyGate.mult_polylog` → `MonomialEval.pow_poly_rate` →
+> `PolyEval.poly_polylog` → `UniversalApprox.continuous_relu_approximable`):
+> **every continuous function on `[0,1]` is uniformly ε-approximable by an
+> explicit ReLU net**, axiom-clean, with **only Stone-Weierstrass density
+> imported** (from mathlib). This is the Yarotsky-style ReLU construction
+> made explicit and machine-checked — **not a new approximation theorem, not
+> a rate improvement**, just the constructive direction of a classical fact,
+> with the analytic floor named.
+>
+> Fifteen examples across (now ten) kinds of math, plus one synthesis law and
+> one constructive capstone; **not** a learnability claim, **not** a new
+> approximation theorem, **not** a rate improvement, **not** a hardness or
+> P-vs-NP claim (the proved `QueryGap` lives in a restricted query model),
+> **not** a fast primality test (Pratt is NP-*membership*), and **not** a
 > lower bound for general neural nets.
 
 **Public and reproducible:**
@@ -190,6 +210,47 @@ wall in the same shape as the other ten cores. Axiom-clean
 (`[propext, Classical.choice, Quot.sound]`), full `lake build` green in the
 `AxiomAudit` gate.
 
+## The Constructive Universal-Approximation Capstone
+
+Above the worked examples, and separate from the schema law, the lane carries
+**one capstone theorem**: the constructive direction of universal
+approximation, proved end-to-end, axiom-clean, with **only the Stone-Weierstrass
+density theorem imported** (from mathlib).
+
+> **`UniversalApprox.continuous_relu_approximable`:** for every continuous
+> function `f` on `[0,1]` and every `ε > 0`, there is an **explicit ReLU net**
+> `N_ε` with `‖f − N_ε‖_∞ ≤ ε`.
+
+The capstone is not a single proof; it is a **chain of axiom-clean gates**
+that together build the explicit net. Each link is its own theorem, gated
+through `AxiomAudit`:
+
+1. **`MultiplyGate.mult_polylog`** — an ε-multiply gate by polarization: a
+   ReLU sub-network computing `x · y` to within ε, at polylog depth.
+2. **`MonomialEval.pow_poly_rate`** — monomial `x^d` via a clamped
+   multiply-chain, with an explicit polynomial rate in the desired ε.
+3. **`PolyEval.poly_polylog`** — arbitrary polynomials evaluated in the
+   monomial basis through the previous two gates.
+4. **`UniversalApprox.continuous_relu_approximable`** — the capstone: any
+   continuous `f` is uniformly ε-close to such a polynomial (Stone-Weierstrass,
+   imported), which is itself uniformly ε-close to an explicit ReLU net
+   (preceding three gates), so the composition gives the universal-approximation
+   net.
+
+**What this is — and what it is not.** This is the **constructive direction**
+of a classical fact in the Yarotsky family. The result is *not* new analysis:
+universal approximation is a classical theorem. What is new is the
+**axiom-clean, machine-checked, end-to-end pipeline** — Yarotsky-style
+constructions made explicit in Lean 4 with explicit rates (`O(1/√ε)` elementary
+and `O(log 1/ε)` polylog via `SawtoothApprox`), with the only imported analytic
+input being Stone-Weierstrass density. **Not a new approximation theorem; not
+a rate improvement; not a learnability claim** (universal approximation is
+about *existence* of an approximating net, not about *training* one); **not a
+lower bound for general neural nets** (the natural-proofs boundary is still
+respected by N-1 + `GradedCancellation`). Axiom-clean
+(`[propext, Classical.choice, Quot.sound]`), full `lake build` green, the
+kernel re-checks every theorem in seconds.
+
 ## P-vs-NP certificate core
 
 The first Lean surface is still the deductive core of the P-vs-NP
@@ -317,37 +378,42 @@ universal-scalar reading via `order_is_schema_not_scalar`.
 
 ## Status
 
-**PUBLIC, REPRODUCIBLE, TEN-EXAMPLE LEAN METHOD CORE + ONE SYNTHESIS LAW.** The P-vs-NP
-certificate soundness + lossiness are machine-checked; the shadow-decay (the
-concrete Gaussian decay and its general characteristic-function law), halo
-minimum-deviation, and Aharonov-Bohm gauge-invariance examples extend the method
-to three more mathematical shapes; a machine-checked Karp reduction
-`3SAT <= 3DM <= X3C <= decoding` anchors the certificate's decoding-hardness
-import to 3SAT; a finite audit game proves a cheap full-access audit blind to
-every decidable channel verifier; the tropical / piecewise-linear core machine-
-checks an exact (ε = 0) circuit-to-ReLU compilation with a **linear gate count
-`≤ 4N` via the sharing-aware DAG** (`compileToDag`), realization-independent
-linear-region structure, the cancellation-free fragment characterization, and
-the tent's `2^d` depth separation — the ε = 0 piecewise-linear core for
-arXiv:2606.26705 Thm 3.2 / Cor 5.1, in the AxiomAudit gate; the N-1 monotone
-depth-as-computation theorem proves a cancellation-free circuit has region
-count linear in its leaves and cannot realize the `d`-fold tent for `d ≥ 1`;
-and the find/check ledger machine-checks seven cheap-CHECK instances under one
-`Certifies` interface — ten worked examples across nine kinds of math. **Alongside,
+**PUBLIC, REPRODUCIBLE, FIFTEEN-EXAMPLE LEAN METHOD CORE + ONE SYNTHESIS LAW
++ ONE CONSTRUCTIVE UNIVERSAL-APPROXIMATION CAPSTONE.** The original ten worked
+examples (finite-field, real analysis ×2, halo, Aharonov-Bohm, Karp reduction,
+audit game, tropical/PL with linear gate count `≤ 4N` via `compileToDag`, N-1
+monotone depth-as-computation, find/check ledger with 7 instances) now sit
+alongside **five slate-3 closures**: `cpl_iff_reluNet` (both directions of the
+ε = 0 continuous-PL ↔ ReLU equivalence); `AnalyticGate` + `SawtoothApprox` (the
+lane's first ε > 0 rates — `O(1/√ε)` elementary and `O(log 1/ε)` polylog via
+Telgarsky sawtooth); `QueryGap` `check_lt_find` (the ledger's first **proved**
+find/check gap in a restricted query model — explicitly **not** a P-vs-NP
+claim); `GradedCancellation` (region count `≤ 4^g · leafCount` recasting
+monotone-vs-general as a graded dial); and an empirical sample-complexity
+result (ε-essential predicts data needs at Spearman 0.68 / 0.78). **Alongside,
 one synthesis core** — the Order-Relative Resolution Law (`OrderRelative`) —
-proves a single schema once: a budget-bounded process resolves a target iff the
-target's order is within budget, with `determine ⟺ finite order`,
-`resist ⟺ infinite order`, grounded on the parity instance and explicitly
-guarded by `order_is_schema_not_scalar` against any universal-scalar misread.
-Hardness, model realization, physical optics, the physical gauge field, the
-NP-class / poly-time / Cook-Levin complexity wrapping, the **analytic**
-reciprocal / radical gates (which remain approximate / imported), the
-depth-vs-**width** lower bound for general nets (Telgarsky / Eldan–Shamir), and
-the find-side of every certifying instance (factoring for Pratt witnesses,
-max-flow algorithms, SCC construction, etc.) all remain named walls. Not a
-cryptographic one-wayness claim; not a claim about P versus NP; not a claim
-that Lean proves the sky realizes the halo or that nature realizes the
-Aharonov-Bohm effect; not a learnability claim; not a full analytic-gate
-approximation theorem; not a fast primality test (Pratt is NP-*membership*);
-not a lower bound for general neural nets; not a universal cross-instance scalar
-(the `order_is_schema_not_scalar` theorem proves the opposite).
+proves a single schema once: `Resolves k t ↔ ord t ≤ k`, grounded on
+parity-determination and coordinate-locality instances and explicitly guarded
+by `order_is_schema_not_scalar` against any universal-scalar misread.
+**Above it all**, one capstone theorem: `UniversalApprox.continuous_relu_approximable`
+— every continuous function on `[0,1]` is uniformly ε-approximable by an
+explicit ReLU net, proved end-to-end via the analytic-gate chain
+(`MultiplyGate.mult_polylog` → `MonomialEval.pow_poly_rate` →
+`PolyEval.poly_polylog` → the capstone), axiom-clean, with **only
+Stone-Weierstrass density imported** from mathlib. The capstone is the
+**constructive direction** of a classical fact — the Yarotsky-style ReLU
+construction made explicit and machine-checked — **not a new approximation
+theorem and not a rate improvement**. Hardness, model realization, physical
+optics, the physical gauge field, the NP-class / poly-time / Cook-Levin
+complexity wrapping, the depth-vs-**width** lower bound for general nets
+(Telgarsky / Eldan–Shamir), the find-side of every certifying instance
+(factoring for Pratt witnesses, max-flow algorithms, SCC construction, etc.),
+and Stone-Weierstrass density (the capstone's analytic floor) all remain named
+walls. Not a cryptographic one-wayness claim; not a claim about P versus NP
+(the `QueryGap` proved separator lives in a restricted query model);
+not a claim that Lean proves the sky realizes the halo or that nature realizes
+the Aharonov-Bohm effect; not a learnability claim; not a new analytic-gate
+approximation theorem and not a rate improvement; not a fast primality test
+(Pratt is NP-*membership*); not a lower bound for general neural nets; not a
+universal cross-instance scalar (the `order_is_schema_not_scalar` theorem
+proves the opposite).

@@ -404,28 +404,33 @@
     <main>
         <section class="aa-hero">
             <p class="eyebrow">High-Stakes Generality &middot; Algorithmic Approximation &middot; 2026-06-30</p>
-            <h1>Cheaper to check than to find. Machine-checked across seven problems.</h1>
+            <h1>Universal approximation, made constructive.</h1>
             <p class="lede">
-                A public Lean ledger machine-checks a single &ldquo;cheap CHECK&rdquo; statement across seven
-                instances &mdash; <strong>max-flow / min-cut</strong>, <strong>K&ouml;nig matching / cover</strong>,
-                <strong>2-SAT decision</strong>, <strong>Pratt primality</strong>,
-                <strong>shortest-path</strong>, <strong>syndrome verifier</strong>, and
-                <strong>ReLU gate-count</strong> &mdash; under one <code>Certifies</code> interface.
-                The find-side of every instance stays imported. Alongside, the tropical / piecewise-linear
-                core compiles cancellation-free circuits <em>exactly</em> (&epsilon;&nbsp;=&nbsp;0) to ReLU networks at
-                <strong>linear gate count <code>&le;&nbsp;4N</code> via a sharing-aware DAG</strong>
-                (<code>compileToDag</code>) &mdash; the &epsilon;&nbsp;=&nbsp;0 piecewise-linear core for
-                <a href="https://arxiv.org/abs/2606.26705">arXiv:2606.26705</a> Thm 3.2 / Cor 5.1. The N-1
-                monotone-depth-as-computation theorem closes the lower bound <em>in the cancellation-free
-                model</em>: the tent's <code>2<sup>d</sup></code> expressivity <em>requires</em> cancellation,
-                while monotone depth is region-polynomial. Public, reproducible, axiom-clean (no
-                <code>sorry</code>, no <code>native_decide</code>, no trusted compiler step).
+                <strong>Every continuous function on <code>[0,1]</code> is uniformly &epsilon;-approximable by an
+                <em>explicit</em> ReLU net</strong> &mdash; proved end-to-end in Lean 4, axiom-clean, with
+                <strong>only Stone-Weierstrass density imported</strong>. The capstone
+                (<code>UniversalApprox.continuous_relu_approximable</code>) is the constructive direction of a
+                classical fact in the Yarotsky family, built through an analytic-gate chain
+                (<code>MultiplyGate.mult_polylog</code> &rarr; <code>MonomialEval.pow_poly_rate</code> &rarr;
+                <code>PolyEval.poly_polylog</code> &rarr; the capstone) and the lane's first &epsilon; &gt; 0 rates
+                (<code>O(1/&radic;&epsilon;)</code> elementary, <code>O(log 1/&epsilon;)</code> polylog via the
+                Telgarsky sawtooth). Underneath, the same lane carries fifteen worked examples: the find/check
+                ledger (one <code>Certifies</code> interface, seven cheap-CHECK instances), the tropical/PL core
+                with <strong>linear gate count <code>&le; 4N</code></strong> via <code>compileToDag</code>
+                &mdash; the &epsilon; = 0 PL core for <a href="https://arxiv.org/abs/2606.26705">arXiv:2606.26705</a>
+                Thm 3.2 / Cor 5.1 &mdash; the N-1 monotone depth-as-computation theorem, and five slate-3
+                closures (continuous-PL &harr; ReLU equivalence, analytic-gate rates, the ledger's first
+                <em>proved</em> find/check separator <code>QueryGap.check_lt_find</code> in a restricted query
+                model, the <code>GradedCancellation</code> dial, and an empirical sample-complexity result).
+                Public, reproducible, axiom-clean (no <code>sorry</code>, no <code>native_decide</code>, no trusted
+                compiler step).
             </p>
             <div class="status-ribbon" aria-label="Algorithmic-approximation lane verdict status">
+                <span class="pass">capstone &middot; constructive universal approximation</span>
                 <span class="pass">find/check ledger &middot; 7 instances</span>
                 <span class="pass">DAG linear gate count &middot; <code>&le; 4N</code></span>
-                <span class="pass">N-1 fully closed &middot; cancellation-free is region-polynomial</span>
-                <span class="pass">universal approximation &middot; constructive, axiom-clean</span>
+                <span class="pass">N-1 closed &middot; cancellation-free is region-polynomial</span>
+                <span class="pass">QueryGap &middot; first proved find/check separator (query model)</span>
                 <span class="review">N-2 synthesis &middot; typed-conjecture organizing read</span>
                 <span class="review">N-4 empirical &middot; 0.89 with named SGD residual</span>
                 <span class="pass">axiom-clean &middot; AxiomAudit-gated</span>
@@ -435,12 +440,24 @@
         <div class="aa-boundary" role="note">
             <p class="kicker">Claim boundary &mdash; read this first</p>
             <p>
-                This page is <strong>method context</strong> for a Lean ledger about
+                <strong>The capstone is the constructive direction of a classical fact.</strong>
+                <code>UniversalApprox.continuous_relu_approximable</code> machine-checks a Yarotsky-style
+                ReLU construction in Lean &mdash; with explicit rates and the analytic floor
+                (Stone-Weierstrass density) <em>imported</em> from mathlib. It is
+                <strong>not a new approximation theorem</strong> and <strong>not a rate improvement</strong>:
+                universal approximation is a classical result; what is new is the axiom-clean, end-to-end,
+                machine-checked pipeline.
+            </p>
+            <p>
+                This page is also <strong>method context</strong> for a Lean ledger about
                 <em>checking</em>. It is <strong>not</strong> a P-vs-NP advance and
                 <strong>not</strong> a complexity-theoretic separation. The lane borrows the
                 find-vs-check <em>asymmetry as vocabulary</em>. <strong>Hardness is imported</strong>
-                in every instance &mdash; decoding hardness, depth-vs-width lower bounds, factoring,
-                Cook-Levin &mdash; Lean certifies the deductive CHECK side only.
+                in every find/check instance &mdash; decoding hardness, depth-vs-width lower bounds,
+                factoring, Cook-Levin &mdash; Lean certifies the deductive CHECK side only. The
+                <code>QueryGap</code> <em>proved</em> separator lives in a <strong>restricted query
+                model</strong> against an adversarial oracle &mdash; <strong>not</strong> against
+                polynomial-time computation in general; <strong>not</strong> a P-vs-NP claim.
             </p>
             <p>
                 Pratt is <strong>NP-membership</strong> (a short certificate exists that a checker
@@ -454,7 +471,7 @@
                 <strong>empirical</strong> finding: region geometry predicts the generalization
                 threshold <em>modulo SGD trainability</em> &mdash; no theorem, no guarantee.
                 &ldquo;Lean-verified&rdquo; applies to the deductive cores, <strong>never</strong>
-                to the imported hardness or to the whole story.
+                to the imported hardness or analytic density or to the whole story.
             </p>
         </div>
 
@@ -732,6 +749,7 @@
                         <strong>0.68</strong> noiseless / <strong>0.78</strong> under label noise),
                         while the exact piece count <code>k</code> is flat (&asymp; 0). With N-4
                         (capacity axis), the &epsilon;-essential count is the learnable invariant on
+                        <strong>both</strong> axes; exact <code>k</code> on neither.
                         <strong>both</strong> axes; exact <code>k</code> on neither.
                     </p>
                     <span class="tier">Tier: [Empirical]</span>

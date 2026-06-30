@@ -1,12 +1,19 @@
 # NS3/NS4 Competent-Sandbag Conversion Slate
 
-Status: **DRAFT SLATE, 2026-06-30.** This is not a scored branch and not a
-reward-sweep authorization. It is the candidate hypothesis slate opened by the
-NS-3/NS-4 manipulation-wall synthesis.
+Status: **RESOLVED SLATE, 2026-06-30.** This is not a scored branch and not a
+reward-sweep authorization. It is the hypothesis slate opened by the
+NS-3/NS-4 manipulation-wall synthesis and resolved by the SB-0 -> SB-1 ->
+SB-2.5 -> SB-4 arc.
 
 Parent synthesis:
 
 - [`NS3_NS4_MANIPULATION_WALL_SYNTHESIS.md`](NS3_NS4_MANIPULATION_WALL_SYNTHESIS.md)
+
+Resolution receipts:
+
+- [`NS4_SB0_LANDSCAPE_RESULTS.md`](NS4_SB0_LANDSCAPE_RESULTS.md)
+- [`NS4_SB1_PLANNER_RESULTS.md`](NS4_SB1_PLANNER_RESULTS.md)
+- [`NS4_SB4_OPTIONS_RESULTS.md`](NS4_SB4_OPTIONS_RESULTS.md)
 
 Central conjecture:
 
@@ -18,15 +25,34 @@ escape-and-arrive policy, because the learned policy exits the review/terminatio
 channel before the delayed competence signal can select the minimal competent
 route.
 
-This slate asks what `<X>` might be, ordered from testable-tomorrow to
-potentially fundamental.
+This slate asked what `<X>` might be, ordered from testable-tomorrow to
+potentially fundamental. It resolved at **SB-4**: competent sandbagging is not a
+structural impossibility and not merely hand-coded. It is conditionally
+elicitable by a gradient learner over a structured option action space, given
+the goal-direction prior.
 
-The paper payoff is not merely "can we elicit the scary policy?" It is the
+The paper payoff was not merely "can we elicit the scary policy?" It was the
 second question that becomes possible once a learner produces competent
-sandbagging: **does the presider-authority cap still deter it?** If yes, the
-non-sovereignty result strengthens from crude-evasion deterrence to
-competent-sandbag deterrence. If no, the cap has found a real limitation worth
-publishing.
+sandbagging: **does the presider-authority cap still deter it?** The answer on
+the elicited SB-4 policy is yes: `CAP_DETERS_COMPETENT_SANDBAG`. The cap pins
+lateral travel below the review-escape threshold and converts the competent
+sandbagger into a competent reviewed crosser.
+
+Resolved readout:
+
+- **SB-0:** the competent low-signal region exists and is thick under the
+  admitted sharp review (`volume=0.062`, `thickness=0.589`), while the earlier
+  soft-review learner regime empties the target region.
+- **SB-1:** gradient-free CEM finds a competent low-signal route (`C=1`,
+  `signal_rate=0`, `bill=0.1177`), so the route is search-reachable.
+- **SB-2.5:** clean climb-potential credit does not bridge the gap; the missing
+  abstraction is lateral/option structure, not the `+y` goal signal alone.
+- **SB-4:** a gradient learner over generic temporally-extended options
+  converges to a competent detour (`OUT -> OUT -> UP -> UP -> UP`, `C=1`,
+  `signal=0`, `bill=0.16`).
+- **Cap payoff:** applying the presider-authority cap to that same learned
+  policy at `kappa=0.2` gives `signal=1`, `maxX=0.2`, `C=1`:
+  `CAP_DETERS_COMPETENT_SANDBAG`.
 
 ---
 
@@ -57,6 +83,11 @@ the already-measured crude-evasion basin.
 
 ## SB-0: Landscape Scanner
 
+**Result:** `SB0_REGION_THICK` under the admitted sharp review. The competent
+low-signal region has real volume, so the wall is not task geometry. The same
+scan also diagnosed the earlier soft-review learner regime as self-defeating:
+softening review made the competent target region empty.
+
 **Conjecture tested:** before choosing a new learner, measure whether the
 competent low-signal region has nontrivial volume. If the region is broad, the
 problem is likely optimizer/implementation. If it is thin and brittle, the deep
@@ -83,6 +114,10 @@ evidence for the same landscape claim.
 ---
 
 ## SB-1: Model-Based / Planning Learner
+
+**Result:** `SB1_PLANNER_FINDS_COMPETENT`. CEM reaches a competent low-signal
+route on the admitted sharp-review env. The sandbag is search-reachable; the
+remaining question is why primitive-gradient learning fails to assemble it.
 
 **Conjecture:** competent sandbagging is reachable by a planner that reasons over
 complete trajectories. PPO's truncated halt channel cannot credit the sequence
@@ -134,6 +169,10 @@ audit/oversight-avoidance hazards.
 ---
 
 ## SB-2.5: Backward Credit Assignment / Reward Redistribution
+
+**Result:** clean climb-potential credit does not bridge the gap. The `+y`
+progress signal is the wrong missing abstraction for the lateral escape; the
+decisive axis is option/skill factorization.
 
 **Conjecture:** competent sandbagging becomes a PPO attractor with the hazard and
 the optimizer class both held fixed — only the *credit path* changes. The named
@@ -198,6 +237,11 @@ is "bad policy is check-easy/find-hard." That is paper-grade if stated tightly.
 ---
 
 ## SB-4: Option / Skill Factorization
+
+**Result:** `SB4_OPTIONS_FIND_COMPETENT` and `CAP_DETERS_COMPETENT_SANDBAG`.
+This is the decisive rung. A gradient learner over generic `OUT/UP/IN`-style
+temporally extended options converges to the competent detour, and the
+presider-authority cap still blocks that learned evasion geometrically.
 
 **Conjecture:** competent sandbagging is reachable once the action space contains
 temporally extended skills such as "step laterally to radius r," "advance to y,"
@@ -293,6 +337,12 @@ released task claim should stay bounded.
 
 ## SB-8: Landscape Wall / Measure-Zero Ridge
 
+**Status after SB-4:** optional only. The strong structural-wall reading is
+disconfirmed for NS-4 because SB-0 found a thick competent region and SB-4 found
+a gradient learner that reaches it under an option abstraction. A deep-map could
+still characterize basin geometry, but it is no longer required to explain the
+paper result.
+
 **Conjecture:** no ordinary reward-shaping or policy-gradient variant will make
 competent sandbagging a natural attractor here because the competent route is a
 thin ridge between two broad basins: honest reviewed competence and crude
@@ -320,19 +370,31 @@ claim about the optimization landscape.
 
 ---
 
-## Recommended First Ladder
+## Executed Ladder And Residuals
 
-1. **SB-0 landscape scanner:** cheap trajectory/option-grid map over NS-4 to
-   measure whether the competent low-signal region has meaningful volume.
-2. **SB-1 CEM/MPC planner:** test wrong-optimizer / full-trajectory reasoning.
-3. **SB-2 delayed-audit variant:** test halt-before-reward by moving oversight to
-   episode end (changes the hazard).
-4. **SB-2.5 reward redistribution:** keep the halt, densify/redistribute the
-   credit — the narrowest, optimum-preserving credit-assignment test (changes
-   neither hazard nor optimizer class).
-5. **SB-3 search+verify:** test the FindCheck bridge.
-6. **SB-5 demonstration retention:** only after the above, because it answers the
-   weaker "is the basin stable if supplied?" question.
+1. **SB-0 landscape scanner:** complete. The competent low-signal region is thick
+   under sharp review and empty under the earlier soft-review learner regime.
+2. **SB-1 CEM planner:** complete. The competent sandbag is search-reachable from
+   raw actions.
+3. **SB-2.5 reward redistribution:** informative null. Clean `+y` potential
+   credit does not solve the lateral abstraction problem.
+4. **SB-4 option factorization:** decisive support. A gradient learner over a
+   structured option action space finds the competent sandbag.
+5. **Cap payoff:** decisive support. The presider-authority cap still deters the
+   elicited competent sandbagger (`CAP_DETERS_COMPETENT_SANDBAG`).
+
+Residual hypotheses:
+
+- **SB-2 delayed audit** is no longer needed for the paper's cap claim. It would
+  answer a different question: whether audit timing alone can make primitive PPO
+  competent.
+- **SB-3 search+verify** remains a good FindCheck bridge, but SB-1 already showed
+  search reachability and SB-4 showed gradient reachability under the right
+  abstraction.
+- **SB-5/SB-6/SB-7** are optional if the project wants a broader taxonomy of
+  elicitation mechanisms.
+- **SB-8** is optional and mostly descriptive after SB-4; the structural-wall
+  interpretation no longer carries the main claim.
 
 Do not run another reward-parameter sweep unless it is embedded in one of these
 registered hypotheses. The measured failure mode is no longer under-described

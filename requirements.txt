@@ -1,0 +1,20 @@
+# Sundog experiment runtime dependencies (Python stack only).
+#
+# Reproduction path (see README):
+#   python -m sundog.experiments.run_baseline_comparison
+#   python -m sundog.experiments.analysis
+#
+# Python 3.10+ (tested under CPython 3.10). The public website has its own
+# JS toolchain declared in package.json; this file covers only the Python
+# experiment / optics / controller stack, whose deps were previously implicit
+# (inferred from imports rather than declared).
+
+# --- Core: required to run the MuJoCo alignment experiment ---
+mujoco        # physics simulation substrate (env_v2.py)
+numpy         # arrays throughout
+scipy         # optics.optimal_joint_angles -> scipy.optimize.minimize;
+              # experiments/analysis.py -> scipy.stats (bootstrap / significance)
+
+# --- Optional: analysis plotting only (experiments/analysis.py) ---
+matplotlib    # convergence / terminal-intensity plots; analysis degrades
+              # gracefully without it

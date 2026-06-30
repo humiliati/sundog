@@ -39,8 +39,11 @@ _DEFAULT_MODEL_PATH = os.path.join(
 # Number of detectors in the floor ring; must match the XML.
 N_DETECTORS = 8
 
-# Index of the detector that the alignment task targets. Photometric agent
-# does not have to know this; we only use it for evaluation.
+# Index of the detector that the alignment task targets. The photometric
+# agent IS told this index (which detector to peak - like an operator aligning
+# a laser knows which power meter to maximize; see agents/photometric.py), but
+# never its spatial position. The indirect-inference claim is about position,
+# not index identity. Only the evaluation / oracle path uses the position.
 TARGET_DETECTOR_INDEX = 0
 
 

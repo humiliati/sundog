@@ -32,61 +32,66 @@
   <text x="60" y="100" font-family="Verdana, Geneva, sans-serif" font-size="20" font-weight="700" fill="#2A5570" letter-spacing="3">SUNDOG · ALGORITHMIC APPROXIMATION</text>
 
   <!-- Headline -->
-  <text x="60" y="180" font-family="Georgia, 'Times New Roman', serif" font-size="48" font-weight="700" fill="#1A3A52">Cheaper to</text>
-  <text x="60" y="230" font-family="Georgia, 'Times New Roman', serif" font-size="48" font-weight="700" fill="#1A3A52">check than</text>
-  <text x="60" y="281" font-family="Georgia, 'Times New Roman', serif" font-size="48" font-weight="700" fill="#1A3A52">to find.</text>
+  <text x="60" y="180" font-family="Georgia, 'Times New Roman', serif" font-size="48" font-weight="700" fill="#1A3A52">Universal</text>
+  <text x="60" y="230" font-family="Georgia, 'Times New Roman', serif" font-size="48" font-weight="700" fill="#1A3A52">approximation,</text>
+  <text x="60" y="281" font-family="Georgia, 'Times New Roman', serif" font-size="48" font-weight="700" fill="#1A3A52">made constructive.</text>
 
   <!-- Lede -->
-  <text x="60" y="380" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">Seven cheap-CHECK</text>
-  <text x="60" y="412" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">instances. Find-side</text>
-  <text x="60" y="444" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">imported. Axiom-clean.</text>
+  <text x="60" y="380" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">Continuous f on [0,1]</text>
+  <text x="60" y="412" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">to explicit ReLU net.</text>
+  <text x="60" y="444" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">Axiom-clean. Density imported.</text>
 
   <!-- URL -->
   <text x="60" y="560" font-family="Courier New, Courier, monospace" font-size="22" font-weight="700" fill="#1A3A52">sundog.cc/algorithmic-approximation</text>
 
   <!-- Per-page visualization (right side, ~620 to ~1140) -->
   <g filter="url(#cardShadow)">
-    <rect x="660" y="135" width="490" height="380" rx="12" fill="#FFFFFF" stroke="#B8831E" stroke-width="2"/>
+    <rect x="660" y="130" width="490" height="44" rx="10" fill="#E8F4EC" stroke="#2E7D5A" stroke-width="2"/>
   </g>
-  <rect x="660" y="135" width="490" height="42" rx="12" fill="#FDF6E3" stroke="#B8831E" stroke-width="1.6"/>
-  <text x="905" y="162" font-family="Verdana, Geneva, sans-serif" font-size="13" font-weight="800" letter-spacing="2" fill="#684811" text-anchor="middle">FIND / CHECK LEDGER &#183; 7 INSTANCES</text>
-  <text x="685" y="200" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" letter-spacing="1.5" fill="#6A7680">INSTANCE</text>
-  <text x="940" y="200" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" letter-spacing="1.5" fill="#6A7680">KIND</text>
-  <text x="1115" y="200" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" letter-spacing="1.5" fill="#2E7D5A" text-anchor="end">CHECK</text>
-  <line x1="675" y1="208" x2="1135" y2="208" stroke="#CFD8DC" stroke-width="1"/>
-  <text x="685" y="230" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12" font-weight="700" fill="#1A3A52">max-flow / min-cut</text>
-  <text x="940" y="230" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#5A6772">combinatorial</text>
-  <rect x="1075" y="217" width="55" height="18" rx="9" fill="#E8F4EC" stroke="#2E7D5A" stroke-width="1"/>
-  <text x="1102" y="229" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" fill="#2E7D5A" text-anchor="middle">cheap</text>
-  <text x="685" y="262" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12" font-weight="700" fill="#1A3A52">Konig matching / cover</text>
-  <text x="940" y="262" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#5A6772">combinatorial</text>
-  <rect x="1075" y="249" width="55" height="18" rx="9" fill="#E8F4EC" stroke="#2E7D5A" stroke-width="1"/>
-  <text x="1102" y="261" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" fill="#2E7D5A" text-anchor="middle">cheap</text>
-  <text x="685" y="294" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12" font-weight="700" fill="#1A3A52">2-SAT decision</text>
-  <text x="940" y="294" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#5A6772">decision</text>
-  <rect x="1075" y="281" width="55" height="18" rx="9" fill="#E8F4EC" stroke="#2E7D5A" stroke-width="1"/>
-  <text x="1102" y="293" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" fill="#2E7D5A" text-anchor="middle">cheap</text>
-  <text x="685" y="326" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12" font-weight="700" fill="#1A3A52">Pratt primality</text>
-  <text x="940" y="326" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#5A6772">number theory</text>
+  <text x="905" y="151" font-family="Verdana, Geneva, sans-serif" font-size="11" font-weight="800" letter-spacing="2" fill="#214B36" text-anchor="middle">CAPSTONE &#183; UNIVERSAL APPROXIMATION (CONSTRUCTIVE)</text>
+  <text x="905" y="167" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" font-weight="700" fill="#214B36" text-anchor="middle">continuous f on [0,1] -> explicit ReLU net (eps-uniform)</text>
+  <g filter="url(#cardShadow)">
+    <rect x="660" y="185" width="490" height="335" rx="12" fill="#FFFFFF" stroke="#B8831E" stroke-width="2"/>
+  </g>
+  <rect x="660" y="185" width="490" height="36" rx="12" fill="#FDF6E3" stroke="#B8831E" stroke-width="1.6"/>
+  <text x="905" y="209" font-family="Verdana, Geneva, sans-serif" font-size="12" font-weight="800" letter-spacing="2" fill="#684811" text-anchor="middle">FIND / CHECK LEDGER &#183; 7 INSTANCES</text>
+  <text x="685" y="240" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" letter-spacing="1.5" fill="#6A7680">INSTANCE</text>
+  <text x="940" y="240" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" letter-spacing="1.5" fill="#6A7680">KIND</text>
+  <text x="1115" y="240" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" letter-spacing="1.5" fill="#2E7D5A" text-anchor="end">CHECK</text>
+  <line x1="675" y1="248" x2="1135" y2="248" stroke="#CFD8DC" stroke-width="1"/>
+  <text x="685" y="270" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12" font-weight="700" fill="#1A3A52">max-flow / min-cut</text>
+  <text x="940" y="270" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#5A6772">combinatorial</text>
+  <rect x="1075" y="257" width="55" height="18" rx="9" fill="#E8F4EC" stroke="#2E7D5A" stroke-width="1"/>
+  <text x="1102" y="269" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" fill="#2E7D5A" text-anchor="middle">cheap</text>
+  <text x="685" y="298" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12" font-weight="700" fill="#1A3A52">Konig matching / cover</text>
+  <text x="940" y="298" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#5A6772">combinatorial</text>
+  <rect x="1075" y="285" width="55" height="18" rx="9" fill="#E8F4EC" stroke="#2E7D5A" stroke-width="1"/>
+  <text x="1102" y="297" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" fill="#2E7D5A" text-anchor="middle">cheap</text>
+  <text x="685" y="326" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12" font-weight="700" fill="#1A3A52">2-SAT decision</text>
+  <text x="940" y="326" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#5A6772">decision</text>
   <rect x="1075" y="313" width="55" height="18" rx="9" fill="#E8F4EC" stroke="#2E7D5A" stroke-width="1"/>
   <text x="1102" y="325" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" fill="#2E7D5A" text-anchor="middle">cheap</text>
-  <text x="685" y="358" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12" font-weight="700" fill="#1A3A52">shortest-path</text>
-  <text x="940" y="358" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#5A6772">combinatorial</text>
-  <rect x="1075" y="345" width="55" height="18" rx="9" fill="#E8F4EC" stroke="#2E7D5A" stroke-width="1"/>
-  <text x="1102" y="357" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" fill="#2E7D5A" text-anchor="middle">cheap</text>
-  <text x="685" y="390" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12" font-weight="700" fill="#1A3A52">syndrome verifier</text>
-  <text x="940" y="390" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#5A6772">finite-field</text>
-  <rect x="1075" y="377" width="55" height="18" rx="9" fill="#E8F4EC" stroke="#2E7D5A" stroke-width="1"/>
-  <text x="1102" y="389" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" fill="#2E7D5A" text-anchor="middle">cheap</text>
-  <text x="685" y="422" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12" font-weight="700" fill="#1A3A52">ReLU gate-count</text>
-  <text x="940" y="422" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#5A6772">tropical / PL</text>
-  <rect x="1075" y="409" width="55" height="18" rx="9" fill="#E8F4EC" stroke="#2E7D5A" stroke-width="1"/>
-  <text x="1102" y="421" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" fill="#2E7D5A" text-anchor="middle">cheap</text>
-  <line x1="675" y1="458" x2="1135" y2="458" stroke="#CFD8DC" stroke-width="1"/>
-  <text x="905" y="478" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" letter-spacing="1.5" fill="#5A2A22" text-anchor="middle">FIND-SIDE IMPORTED IN EVERY INSTANCE</text>
-  <g transform="translate(770,488)" filter="url(#cardShadow)">
-    <rect x="0" y="0" width="270" height="22" rx="11" fill="#FFFFFF" stroke="#1A3A52" stroke-width="1.4"/>
-    <text x="135" y="15" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" letter-spacing="1.4" fill="#1A3A52" text-anchor="middle">AXIOM-CLEAN &#183; AxiomAudit-GATED</text>
+  <text x="685" y="354" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12" font-weight="700" fill="#1A3A52">Pratt primality</text>
+  <text x="940" y="354" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#5A6772">number theory</text>
+  <rect x="1075" y="341" width="55" height="18" rx="9" fill="#E8F4EC" stroke="#2E7D5A" stroke-width="1"/>
+  <text x="1102" y="353" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" fill="#2E7D5A" text-anchor="middle">cheap</text>
+  <text x="685" y="382" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12" font-weight="700" fill="#1A3A52">shortest-path</text>
+  <text x="940" y="382" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#5A6772">combinatorial</text>
+  <rect x="1075" y="369" width="55" height="18" rx="9" fill="#E8F4EC" stroke="#2E7D5A" stroke-width="1"/>
+  <text x="1102" y="381" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" fill="#2E7D5A" text-anchor="middle">cheap</text>
+  <text x="685" y="410" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12" font-weight="700" fill="#1A3A52">syndrome verifier</text>
+  <text x="940" y="410" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#5A6772">finite-field</text>
+  <rect x="1075" y="397" width="55" height="18" rx="9" fill="#E8F4EC" stroke="#2E7D5A" stroke-width="1"/>
+  <text x="1102" y="409" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" fill="#2E7D5A" text-anchor="middle">cheap</text>
+  <text x="685" y="438" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12" font-weight="700" fill="#1A3A52">ReLU gate-count</text>
+  <text x="940" y="438" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#5A6772">tropical / PL</text>
+  <rect x="1075" y="425" width="55" height="18" rx="9" fill="#E8F4EC" stroke="#2E7D5A" stroke-width="1"/>
+  <text x="1102" y="437" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" fill="#2E7D5A" text-anchor="middle">cheap</text>
+  <line x1="675" y1="475" x2="1135" y2="475" stroke="#CFD8DC" stroke-width="1"/>
+  <text x="905" y="490" font-family="Verdana, Geneva, sans-serif" font-size="9" font-weight="800" letter-spacing="1.5" fill="#5A2A22" text-anchor="middle">FIND-SIDE IMPORTED IN EVERY INSTANCE</text>
+  <g transform="translate(770,498)" filter="url(#cardShadow)">
+    <rect x="0" y="0" width="270" height="18" rx="9" fill="#FFFFFF" stroke="#1A3A52" stroke-width="1.4"/>
+    <text x="135" y="13" font-family="Verdana, Geneva, sans-serif" font-size="9" font-weight="800" letter-spacing="1.4" fill="#1A3A52" text-anchor="middle">AXIOM-CLEAN &#183; AxiomAudit-GATED</text>
   </g>
 
   <!-- Bottom-right mark -->

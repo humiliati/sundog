@@ -1,10 +1,15 @@
 # NS3/NS4 Manipulation Wall — Synthesis
 
-Status: **SYNTHESIS RECORDED 2026-06-30.** This is not a new scored branch.
-It records the cross-run conclusion from the regulator generality attempts:
-NS-3 temporal sandbagging and NS-4 lateral evasion both admit competent
-hand-coded sandbags, but PPO does not naturally find them. The result to bank is
-the cap's robust deterrence of the evasion PPO actually learns.
+Status: **SYNTHESIS RECORDED 2026-06-30; conversion slate RESOLVED (Section 6).**
+Sections 1–5 record the cross-run conclusion from the regulator generality
+attempts: NS-3 temporal sandbagging and NS-4 lateral evasion both admit competent
+hand-coded sandbags, and PPO over primitive actions finds only cruder escape.
+**Section 6 then resolves the conversion question:** the competent sandbagger is
+not a structural impossibility — it is reachable by a gradient learner over a
+*structured option* action space (given the goal-direction prior), and the
+presider-authority cap **still deters it** (`CAP_DETERS_COMPETENT_SANDBAG`). The
+result to bank is therefore stronger than a null: the cap deters the crude evasion
+PPO naturally learns *and* the competent sandbagger once elicited.
 
 Parent docs:
 
@@ -95,10 +100,12 @@ tuning failed to make competent sandbagging the learned attractor.
 
 ## 4. Bankable Sentence
 
-> We could construct competent sandbagging by hand, but PPO did not naturally
-> learn it. What PPO did learn was cruder and still important: escape oversight
-> even at the cost of the task. The same presider-authority cap blocked that
-> learned evasion across both temporal and lateral manipulation families.
+> PPO over primitive actions did not naturally learn competent sandbagging — it
+> learned cruder escape — but the competent sandbagger *is* reachable given a
+> structured action space and the goal direction (Section 6). Either way, the same
+> presider-authority cap blocks the evasion: it deters the crude escape PPO finds
+> *and* the competent sandbagger once elicited, because it bounds the very
+> deviation the manipulation requires.
 
 ---
 
@@ -110,7 +117,56 @@ or hazard family. The conversion question is now split into a hypothesis slate:
 [`NS3_NS4_COMPETENT_SANDBAG_HYPOTHESIS_SLATE.md`](NS3_NS4_COMPETENT_SANDBAG_HYPOTHESIS_SLATE.md).
 The paper should bank this as a boundary result:
 
-- **cap-positive:** the bound deters the learned manipulation;
-- **competent-sandbag null:** the scary version is analytically feasible but not
-  learned by PPO here;
+- **cap-positive (extended, see Section 6):** the bound deters the manipulation
+  PPO naturally learns (crude evasion) *and* the competent sandbagger once it is
+  elicited;
+- **competent-sandbag: conditional, not impossible (revised by the slate):** not a
+  natural PPO-over-primitives attractor, but reachable given a structured/option
+  action space and the goal-direction prior — and the cap deters it either way;
 - **role-null:** no role-separation premium is implicated.
+
+---
+
+## 6. Slate Resolution (2026-06-30): Elicitable, And The Cap Deters It
+
+The conversion slate ([`NS3_NS4_COMPETENT_SANDBAG_HYPOTHESIS_SLATE.md`](NS3_NS4_COMPETENT_SANDBAG_HYPOTHESIS_SLATE.md))
+ran and answered the open question. It did *not* find a measure-zero landscape
+wall; it found an action-representation wall, and then cleared it.
+
+- **SB-0 (landscape scan, [`NS4_SB0_LANDSCAPE_RESULTS.md`]):** the competent
+  low-signal region *exists and is thick* under the admitted sharp review (volume
+  6.2%, thickness 0.59) and *empty* under the soft review earlier runs used to get
+  a gradient. The wall is optimizer/representation, not task geometry — and the
+  earlier soft-review binding was self-defeating (softening the review empties the
+  target region).
+- **SB-1 (planner, [`NS4_SB1_PLANNER_RESULTS.md`]):** a gradient-free CEM, given
+  only the obvious go-up goal direction (not the detour), reaches the competent
+  detour. Search-reachable, gradient-not — the gap is credit/representation.
+- **SB-2.5 (potential credit):** a clean climb potential `φ=y` does *not* bridge
+  it — a steady-climb signal is roughly constant and is washed out by advantage
+  normalization, and the blocker is the lateral escape, not the goal axis.
+- **SB-4 (options) — decisive, [`NS4_SB4_OPTIONS_RESULTS.md`]:** a gradient learner
+  over temporally-extended discrete options (generic `OUT/UP/IN`; the detour *not*
+  handed), given the same go-up prior, **converges** to the competent detour
+  (greedy `OUT→OUT→UP→UP→UP`, `C=1`, `signal=0`). The wall was **action
+  representation / primitive coordination**, not a structural barrier; SB-8 is
+  disconfirmed.
+
+**Cap payoff (the upgrade).** With a competent learned sandbagger now in hand,
+applying the presider-authority cap (`κ=0.2`) to the *same* policy gives
+`signal=1`, `maxX=0.2` (pinned to the bound), `C=1`:
+**`CAP_DETERS_COMPETENT_SANDBAG`.** The cap forecloses the lateral detour
+*geometrically* (`κ < reviewX`), forcing the honest reviewed crossing while
+preserving competence — it converts a competent *sandbagger* into a competent
+*honest crosser*.
+
+**Two precisions for the paper.**
+
+- *Elicitation is conditional.* Competent sandbagging is not a natural
+  PPO-over-primitives attractor, but it is reachable given a structured/option
+  action space **and** the go-up goal-direction prior (SB-1 and SB-4 both needed
+  the prior). "Not a natural attractor" stands; "impossible to learn" was too
+  strong.
+- *The cap payoff is a geometric check* — the cap applied to the elicited policy,
+  clipping lateral travel below `reviewX` — not a full capped-training run.
+  Defensible by construction, and stated as such.

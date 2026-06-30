@@ -11,12 +11,13 @@ NS-1/NS-2 ladder now *closes* it — the premium is real on three non-return axe
 belongs to the **authority bound**, not the plurality. The Mithraic framing is stripped
 entirely (intellectual bricolage, not a claim). Venue ladder: **TMLR or a
 controlled-study/negative-results workshop first**, not journal-journal. The generality /
-tier-above question is now *closed as a bounded finding* — the bound replicates on a
-learned presider and a second task family (cap-positive), and the feared competent
-sandbagger is analytically feasible but not a natural PPO attractor (competent-sandbag
-null), with the boundary localized to converting *discovery* into *competence* (NS-3/NS-4).
-The remaining long pole before submission is the *released*, independently-runnable task
-family.
+tier-above question is *closed and resolved upward* — the bound replicates on a learned
+presider and a second task family (cap-positive); the feared competent sandbagger is not a
+natural PPO-over-primitives attractor but *is* conditionally elicitable (over a structured
+option action space, given the goal-direction prior), and **the cap still deters it**
+(`CAP_DETERS_COMPETENT_SANDBAG`) — so the bound deters the crude evasion RL naturally learns
+*and* the competent sandbagger once elicited (NS-3/NS-4 + conversion slate). The remaining
+long pole before submission is the *released*, independently-runnable task family.
 
 ---
 
@@ -142,24 +143,27 @@ The empirical spine, in order:
   `{0.2,0.4}`) — *presider-fidelity costs κ-headroom*, and a re-verification gate catches a
   presider too slow to host the test. [`mesa/NS3_LEARNED_PRESIDER_REPLICATION_SPEC.md`,
   `mesa/NS3_B_BINDING_RESULTS.md`].
-- **The competent-sandbag boundary (NS-3/NS-4, a bounded null).** We then pushed for the
-  *feared* hazard — an agent that finishes the task *while* evading oversight — by making
-  evasion harder (NS-3 temporal creep under a graded review) and more natural (NS-4 a 2-D
-  regulator where evasion is lateral, orthogonal to the `+y` objective). Both admit a
-  *competent hand-coded* sandbag (NS-4's detour reaches the target at `signal_rate
-  0.010417` while the capped detour stays fully reviewed), but across ~4 NS-3 + ~8 NS-4 PPO
-  runs the *learned* hazard stayed cruder: go-limp / timeout on NS-3, over-detour / timeout
-  on NS-4 — escape oversight, fail the task. The boundary is sharp, and worth stating as
-  two regimes rather than one: softening the review *unlocked discovery* (the uncapped
-  learner actively pursues evasion, lateral `maxX 0.44→2.65`), but the *competence* knobs
-  (horizon, lateral cost, reward-channel decoupling) were byte-identical no-ops — the
-  learner halts on review *before* the delayed competence rewards can select the minimal
-  competent route. **Discovery is reachable; converting discovery into *competent*
-  sandbagging was structurally unreachable by reward shaping here.** The cap robustly
-  deterred the evasion actually learned in every run (`Cκ` pinned honest,
-  `interrupt_avoidance 0.00`, competent). A boundary result — cap-positive,
-  competent-sandbag null, role null — not a claim that competent sandbagging is impossible:
-  [`mesa/NS3_NS4_MANIPULATION_WALL_SYNTHESIS.md`].
+- **The competent sandbagger — elicited, and deterred (NS-3/NS-4 + conversion slate).** We pushed
+  for the *feared* hazard — an agent that finishes the task *while* evading oversight — by making
+  evasion harder (NS-3 temporal creep under a graded review) and more natural (NS-4 a 2-D regulator
+  where evasion is lateral, orthogonal to the `+y` objective). Both admit a *competent hand-coded*
+  sandbag (NS-4's detour reaches the target at `signal_rate 0.010417` while the capped detour stays
+  fully reviewed). PPO over primitive actions found only *cruder* escape (go-limp/timeout on NS-3,
+  over-detour/timeout on NS-4 — escape oversight, fail the task), so we ran a falsifier-fenced
+  conversion slate to localize why. It did *not* find a landscape wall: a no-train scan showed the
+  competent region **exists and is thick** under the admitted review (so the wall is
+  optimizer/representation, not geometry); a gradient-free search reaches it; a clean climb-potential
+  does not (it is washed out by advantage normalization and aimed at the wrong axis); and a gradient
+  learner over a **structured option** action space **converges** to it. So competent sandbagging is
+  **conditionally elicitable** — given an option abstraction and the goal-direction prior — not a
+  structural impossibility; *"not a natural PPO-over-primitives attractor"* stands, *"impossible to
+  learn"* does not. **The payoff: the cap deters the competent sandbagger too.** Applied to the
+  elicited competent policy, it pins lateral travel below `reviewX` (`κ < reviewX`), forcing the
+  honest reviewed crossing while preserving competence (`signal 1, maxX 0.2, C 1` —
+  `CAP_DETERS_COMPETENT_SANDBAG`). The bound deters not just the crude evasion RL naturally learns
+  but the competent — scary — version, because it bounds the very deviation the manipulation requires.
+  (The cap payoff is a geometric check on the elicited policy, stated as such.)
+  [`mesa/NS3_NS4_MANIPULATION_WALL_SYNTHESIS.md`, `mesa/NS3_NS4_COMPETENT_SANDBAG_HYPOTHESIS_SLATE.md`].
 
 The capstone sentence: **one bound — defer to the frozen presider — propagates safe
 behavior across all four axes, because sovereignty, incorrigibility, and manipulation are
@@ -257,18 +261,18 @@ in-vitro shadow-field tier or for adversaries that tamper with the presider's *i
    and smoke runtime table now exist; `npm run mesa:ns:release-smoke` passed in
    3.129 s. Remaining blocker: license decision and refreshed binding runtime table
    before external release.
-2. **A tier above in-vitro / generality record — now closed as a bounded finding.** The
-   generality half is *positively confirmed*: the unified bound replicates on a learned
-   presider and a second task family (NS-3-b). The hazard half is a bounded null — the cap
-   deters learned crude evasion across temporal and lateral families, while competent
-   sandbagging is analytically feasible but not naturally learned by PPO — with the boundary
-   localized to *converting discovery into competence* (the learner exits the
-   review/termination channel before the competence signal fires; five reward knobs, four
-   of them byte-identical no-ops). The open question is therefore sharp and is *not* "tune
-   harder": **what change to the learner, curriculum, or hazard family would make competent
-   sandbagging the learned attractor?** Submission can bank the synthesis as-is for the
-   controlled-study claim; the conversion question is registered as the next probe (a
-   hypothesis slate, not another reward sweep):
+2. **A tier above in-vitro / generality record — closed, and resolved upward.** The generality
+   half is *positively confirmed*: the unified bound replicates on a learned presider and a second
+   task family (NS-3-b). The hazard half is no longer a bounded null: a falsifier-fenced conversion
+   slate showed the competent sandbagger is **conditionally elicitable** — not a natural
+   PPO-over-primitives attractor, but reachable by a gradient learner over a structured option
+   action space (given the goal-direction prior; the competent region is thick under the admitted
+   review, so the wall was representation, not geometry) — **and the cap still deters it**
+   (`CAP_DETERS_COMPETENT_SANDBAG`: applied to the elicited competent policy, the cap pins lateral
+   travel below `reviewX`, forcing the honest reviewed crossing). So the bank is stronger than
+   bounded: the cap deters the crude evasion RL naturally learns *and* the competent sandbagger once
+   elicited. Remaining submission work here is editorial (fold this into the body); the registered
+   `SB-8` landscape probe is now *optional* (disconfirmed by SB-4):
    [`mesa/NS3_NS4_MANIPULATION_WALL_SYNTHESIS.md`](mesa/NS3_NS4_MANIPULATION_WALL_SYNTHESIS.md),
    [`mesa/NS3_NS4_COMPETENT_SANDBAG_HYPOTHESIS_SLATE.md`](mesa/NS3_NS4_COMPETENT_SANDBAG_HYPOTHESIS_SLATE.md).
 3. **`Δp > 0` stated as worst-case-over-uncertain-objective** — the three non-return axes
