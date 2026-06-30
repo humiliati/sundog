@@ -76,6 +76,11 @@ Pooled JSON artifacts live under `results/mesa/non-sovereignty/`.
 
 ## Runtime Notes
 
+All runtimes below were measured on the project machine (Intel Core i7-7820HK
+@ 2.9 GHz, 8 threads, CPU-only; PyTorch CPU). Times scale with that budget.
+
+### Smoke (CI-tier)
+
 The broadened (NS-1/2/3/4) local release smoke measured (2026-06-30):
 
 | Step | Runtime |
@@ -90,5 +95,27 @@ The broadened (NS-1/2/3/4) local release smoke measured (2026-06-30):
 | total | 6.659 s |
 
 The release smoke records fresh step runtimes in
-`results/mesa/non-sovereignty/release_smoke/summary.json`. Binding wall-clock
-estimates should be refreshed from the launcher logs before external release.
+`results/mesa/non-sovereignty/release_smoke/summary.json`.
+
+### Binding (operator-run, resumable)
+
+Wall-clock from the recorded `train-report.json` timing of the last local PPO
+bindings (2026-06-30). Each launcher runs its child trainings sequentially, so
+the launcher total is the sum; the per-run column is the median single training.
+PPO is the dominant cost.
+
+| Launcher | PPO updates | runs | per-run (median) | launcher total |
+| --- | ---: | ---: | ---: | ---: |
+| `mesa-ns1-b-binding.ps1` | 256 | 3 seeds | ~6.9 min | ~21 min |
+| `mesa-ns1c-binding.ps1` | 256 | 9 (3 seed x 3 kappa) | ~6.8 min | ~61 min |
+| `mesa-ns2-0-admission.ps1` | 512 | 3 | ~17 min | ~47 min |
+| `mesa-ns2-b-binding.ps1` | 512 | 7 | ~9.9 min | ~68 min |
+| `mesa-ns3-b-binding.ps1` | 512 | 5 | ~3.1 min | ~25 min |
+
+The NS-3 learned presider trains in ~23 s before its binding
+(`train_ns3_presider`, 250 epochs / 24k samples). The NS-4 conversion slate is
+not PPO and runs in seconds: SB-0 ~0.4 s, SB-1 ~0.9 s, SB-4 ~4.5 s.
+
+Total operator wall-clock to reproduce every PPO binding end-to-end is ~3.7 h on
+this machine; runs are resumable from checkpoints, so they can be done in
+batches.

@@ -1,7 +1,7 @@
 {
   "schema": "sundog.non_sovereignty.release_manifest.v1",
   "status": "LICENSED_APACHE_2_0",
-  "generated_at": "2026-06-30T18:20:52.293Z",
+  "generated_at": "2026-06-30T18:28:10.430Z",
   "files": [
     {
       "path": "released/non-sovereignty/README.md",
@@ -10,8 +10,8 @@
     },
     {
       "path": "released/non-sovereignty/REPRODUCE.md",
-      "bytes": 3028,
-      "sha256": "58cc3b3e740e35c22ee95289132a2920734985b06dc23dac984ef51b91d0151b"
+      "bytes": 4217,
+      "sha256": "03e6c56475391e3d63336184be00701a5b9d48d2ec961e14b1cc58fb7826722f"
     },
     {
       "path": "released/non-sovereignty/TASK_SPEC.md",
@@ -40,8 +40,8 @@
     },
     {
       "path": "docs/mesa/NON_SOVEREIGNTY_RELEASED_TASK_FAMILY_SPEC.md",
-      "bytes": 8323,
-      "sha256": "7e4ee3241db1b47185626a6a7fe3096c66c001cfed1258ad2626cd56a2b732cd"
+      "bytes": 8412,
+      "sha256": "b2d45c5d0bb9626193b8519cc9b1a1da027d5f1104aafd6e9680df2fe9e5c158"
     },
     {
       "path": "docs/mesa/NS1_CORRIGIBILITY_SHUTDOWN_CHANNEL_SPEC.md",

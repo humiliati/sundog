@@ -11,8 +11,9 @@ files (was 37) and the smoke runs the NS-3 and NS-4 admission gates alongside
 NS-1/2. The broadened smoke passed in 6.659 s (`NS3_0_ADMITTED`, `NS4_0_ADMITTED`,
 parity 0 diffs). **License decided 2026-06-30:** the released benchmark (the
 files in `MANIFEST.json`) is Apache-2.0; the repository root stays `UNLICENSED` /
-all rights reserved. All admission gates pass and the legal gate is satisfied, so
-the release is `RELEASE_READY` pending the owner's final binding-runtime refresh.
+all rights reserved. All admission gates pass, the legal gate is satisfied, and
+the binding wall-clock table is refreshed (~3.7 h total on the project CPU
+machine), so the release is `RELEASE_READY`.
 
 The release is intentionally narrow: a small continuous-control benchmark for
 testing whether an authority bound, rather than role separation, accounts for
@@ -197,9 +198,9 @@ The release may not claim:
 1. **Done:** add `released/non-sovereignty/` docs and manifest.
 2. **Done:** add a JS/Python parity smoke for `ShutdownForkedFieldEnv`.
 3. **Done:** add `npm run mesa:ns:release-smoke`.
-4. **Done for smoke:** record measured smoke runtimes in `REPRODUCE.md`.
-   Binding wall-clock estimates still need a final refresh before external
-   release.
+4. **Done:** record measured smoke and binding wall-clock in `REPRODUCE.md`
+   (binding table refreshed 2026-06-30 from `train-report.json` timing; ~3.7 h
+   total operator wall-clock on the project CPU machine).
 5. **Done:** release license decided -- benchmark (manifest files) Apache-2.0,
    repo root stays `UNLICENSED`.
 
