@@ -1,12 +1,18 @@
 # Non-Sovereignty Released Task Family Spec
 
-Status: **SCAFFOLD BUILT / release smoke green / LEGAL_BLOCKED on license.**
-Opened 2026-06-28 from
+Status: **BROADENED to NS-1/2/3/4 / release smoke green / LICENSE DECIDED /
+RELEASE_READY.** Opened 2026-06-28 from
 [`../NON_SOVEREIGNTY_PAPER_SPINE.md`](../NON_SOVEREIGNTY_PAPER_SPINE.md)
-gap 1. The release scaffold now exists in `released/non-sovereignty/`, with a
-manifest, JS/Python parity smoke, and one-command release smoke. The first local
-smoke passed on 2026-06-29 in 3.129 s. The remaining blocker before external
-citation is the explicit license decision.
+gap 1. The release scaffold exists in `released/non-sovereignty/`, with a
+manifest, JS/Python parity smoke, and one-command release smoke. **Broadened
+2026-06-30** to cover the NS-3 regulator and NS-4 spatial-regulator task families
+(the paper's generality and competent-sandbag results): the manifest now pins 61
+files (was 37) and the smoke runs the NS-3 and NS-4 admission gates alongside
+NS-1/2. The broadened smoke passed in 6.659 s (`NS3_0_ADMITTED`, `NS4_0_ADMITTED`,
+parity 0 diffs). **License decided 2026-06-30:** the released benchmark (the
+files in `MANIFEST.json`) is Apache-2.0; the repository root stays `UNLICENSED` /
+all rights reserved. All admission gates pass and the legal gate is satisfied, so
+the release is `RELEASE_READY` pending the owner's final binding-runtime refresh.
 
 The release is intentionally narrow: a small continuous-control benchmark for
 testing whether an authority bound, rather than role separation, accounts for
@@ -109,7 +115,9 @@ Release status is `RELEASE_READY` only if all gates pass.
    - terminal metrics for fixed controls.
    Tolerance: exact for discrete fields, `<= 1e-9` for floats after rounding.
 3. **Fixed-control admission.** The public admission commands reproduce the
-   fixed-control gates for H2/NS1/NS2.
+   fixed-control gates for H2/NS1/NS2, plus the NS-3 regulator (`NS3_0_ADMITTED`)
+   and NS-4 spatial-regulator (`NS4_0_ADMITTED`) admissions. The release smoke
+   runs all of them (`npm run mesa:ns:release-smoke`).
 4. **Cap-validity smoke.** `Sov_opt <= kappa` for the action-ball cap and
    `Corr_k | triggered = 1` for the structural override on the public seed slate.
 5. **Table regeneration.** Aggregators regenerate the four-axis result tables
@@ -118,12 +126,13 @@ Release status is `RELEASE_READY` only if all gates pass.
    - `smoke` (<10 min);
    - `probe` (<1 h expected, operator-run);
    - `binding` (multi-hour, operator-run, resumable).
-7. **License decision.** The released directory has an explicit license statement.
-   The repo root is currently `UNLICENSED`; a public benchmark release needs an
-   intentional license choice before external citation.
+7. **License decision. DECIDED 2026-06-30.** The released benchmark — the files
+   enumerated in `MANIFEST.json` — is licensed under Apache-2.0 (`LICENSE`,
+   `LICENSE.md`, `CITATION.cff`), copyright Stellar Aqua LLC. The grant is
+   explicitly scoped to the manifest files; the repository root stays `UNLICENSED`
+   / all rights reserved. `LICENSE.md` and `README.md` state the scope boundary.
 
-Failure of gates 1-5 is `RELEASE_BLOCKED`. Gate 7 is `LEGAL_BLOCKED`, not a
-scientific failure.
+Failure of gates 1-5 is `RELEASE_BLOCKED`. Gate 7 is now satisfied.
 
 ---
 
@@ -191,7 +200,8 @@ The release may not claim:
 4. **Done for smoke:** record measured smoke runtimes in `REPRODUCE.md`.
    Binding wall-clock estimates still need a final refresh before external
    release.
-5. **Open:** pick the release license.
+5. **Done:** release license decided -- benchmark (manifest files) Apache-2.0,
+   repo root stays `UNLICENSED`.
 
 ---
 
@@ -202,3 +212,7 @@ The release may not claim:
 - `v1` (2026-06-29): adds `released/non-sovereignty/`, manifest generation,
   JS/Python parity smoke, one-command release smoke, and first green local smoke
   receipt (3.129 s). Remaining blocker: license.
+- `v2` (2026-06-30): broadens the release to NS-1/2/3/4 (manifest pins 61 files;
+  smoke adds the NS-3 and NS-4 admission gates; broadened green at 6.659 s) and
+  resolves the license -- benchmark Apache-2.0 (manifest-scoped), repo root
+  `UNLICENSED`. Status `RELEASE_READY`; only the binding-runtime refresh is left.

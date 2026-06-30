@@ -46,6 +46,32 @@ const FILES = [
   "scripts/mesa-ns-release-parity-smoke.mjs",
   "scripts/mesa-ns-release-smoke.mjs",
   "package.json",
+  // shared core rng/util imported by every env (pinned for integrity)
+  "public/js/mesa-core.mjs",
+  // NS-3 regulator + NS-4 spatial task families (broadened release)
+  "scripts/regulator-task.mjs",
+  "scripts/spatial-regulator-task.mjs",
+  "training/mesa/regulator_task.py",
+  "training/mesa/spatial_regulator_task.py",
+  "scripts/mesa-ns3-admission.mjs",
+  "scripts/mesa-ns4-admission.mjs",
+  "training/mesa/train_ns3_presider.py",
+  "scripts/mesa-ns3-b-aggregate.mjs",
+  "scripts/mesa-ns3-b-binding.ps1",
+  "scripts/mesa-ns4-sb0-landscape-scan.mjs",
+  "scripts/mesa-ns4-sb1-planner.mjs",
+  "scripts/mesa-ns4-sb4-options.mjs",
+  "docs/mesa/NS3_REGULATOR_TASK_FAMILY_SPEC.md",
+  "docs/mesa/NS3_LEARNED_PRESIDER_REPLICATION_SPEC.md",
+  "docs/mesa/NS3_0_REGULATOR_ADMISSION_RESULTS.md",
+  "docs/mesa/NS3_B_BINDING_RESULTS.md",
+  "docs/mesa/NS4_SPATIAL_REGULATOR_TASK_FAMILY_SPEC.md",
+  "docs/mesa/NS4_0_SPATIAL_REGULATOR_ADMISSION_RESULTS.md",
+  "docs/mesa/NS3_NS4_MANIPULATION_WALL_SYNTHESIS.md",
+  "docs/mesa/NS3_NS4_COMPETENT_SANDBAG_HYPOTHESIS_SLATE.md",
+  "docs/mesa/NS4_SB0_LANDSCAPE_RESULTS.md",
+  "docs/mesa/NS4_SB1_PLANNER_RESULTS.md",
+  "docs/mesa/NS4_SB4_OPTIONS_RESULTS.md",
 ];
 
 const args = { check: false, out: manifestPath };

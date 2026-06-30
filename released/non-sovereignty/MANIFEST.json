@@ -1,17 +1,17 @@
 {
   "schema": "sundog.non_sovereignty.release_manifest.v1",
   "status": "LICENSED_APACHE_2_0",
-  "generated_at": "2026-06-29T17:04:27.126Z",
+  "generated_at": "2026-06-30T18:20:52.293Z",
   "files": [
     {
       "path": "released/non-sovereignty/README.md",
-      "bytes": 1819,
-      "sha256": "6b13080fb4cc601f1dae2f29d879af4bbe1db039899470187b310dc7ef08c5ae"
+      "bytes": 2493,
+      "sha256": "e6cef2018eb8fd8778faae3af36f27b500a75f976cc1412c7c6297d0187bec20"
     },
     {
       "path": "released/non-sovereignty/REPRODUCE.md",
-      "bytes": 2012,
-      "sha256": "9d21a46c0dd4d113aed36a6fc587815aea49dd3aef54ba91821d4030ef11953a"
+      "bytes": 3028,
+      "sha256": "58cc3b3e740e35c22ee95289132a2920734985b06dc23dac984ef51b91d0151b"
     },
     {
       "path": "released/non-sovereignty/TASK_SPEC.md",
@@ -40,8 +40,8 @@
     },
     {
       "path": "docs/mesa/NON_SOVEREIGNTY_RELEASED_TASK_FAMILY_SPEC.md",
-      "bytes": 7067,
-      "sha256": "6459c58bc0903fc5a3c31c4960d347588905b208b255f54fdc07b4261a768fd1"
+      "bytes": 8323,
+      "sha256": "7e4ee3241db1b47185626a6a7fe3096c66c001cfed1258ad2626cd56a2b732cd"
     },
     {
       "path": "docs/mesa/NS1_CORRIGIBILITY_SHUTDOWN_CHANNEL_SPEC.md",
@@ -120,8 +120,8 @@
     },
     {
       "path": "scripts/mesa-ns2-binding-eval.mjs",
-      "bytes": 10045,
-      "sha256": "002336897ab4f7920d6f9f6ea74f80f9fad4312997aca76b8cd4ed46895b24f6"
+      "bytes": 11455,
+      "sha256": "68a0addf96373be70ed57e38cacafff84e359610cb32fcd452b8b3ccb60dd3d9"
     },
     {
       "path": "scripts/mesa-ns1c-aggregate.mjs",
@@ -165,13 +165,13 @@
     },
     {
       "path": "training/mesa/train_ns1_shutdown.py",
-      "bytes": 19821,
-      "sha256": "6863d384e2966a1ac9503fb69729e6fabd511ed6e736381f646a3fd650d3c037"
+      "bytes": 23607,
+      "sha256": "ddfb19d2aaf5a8dae98e5b19811c9191aae03e0877320a59af98364a3b010a42"
     },
     {
       "path": "scripts/mesa-ns-release-manifest.mjs",
-      "bytes": 4221,
-      "sha256": "0b2e6eb6a62900d6202d796699ad7f7b96bb3bb861a602a4af38ffeec94ba6f5"
+      "bytes": 5409,
+      "sha256": "386e1e218fb977ddb1433849863e99e84aec4184879d6385b2619d03160fcb4b"
     },
     {
       "path": "scripts/mesa-ns-release-parity-smoke.mjs",
@@ -180,13 +180,133 @@
     },
     {
       "path": "scripts/mesa-ns-release-smoke.mjs",
-      "bytes": 2864,
-      "sha256": "2d4c9c665032f16e5759f806f2f3f48cffbd79fe4b67eda97228c97dc7596b90"
+      "bytes": 3310,
+      "sha256": "808af369c71b27de24370b700b284bf67b2d0c6731bad927f6547960b7fdf68e"
     },
     {
       "path": "package.json",
-      "bytes": 66044,
-      "sha256": "1e6300aadfd76189b7b7301ed6b03ed97d2e3059cfa18030cb1a759ee5ec2022"
+      "bytes": 67135,
+      "sha256": "682a1aa22ea86d1da6d4e7de3cd4dace4d0d1e3474f38da770856c8f269103f2"
+    },
+    {
+      "path": "public/js/mesa-core.mjs",
+      "bytes": 34917,
+      "sha256": "8888998f00bd7e488f69640d5124b3ab717b78f1a365fccabc9d72e5c11119c8"
+    },
+    {
+      "path": "scripts/regulator-task.mjs",
+      "bytes": 12493,
+      "sha256": "f6a938c585f0abc60a7bcae51933ff2d77b4b1f30d9acd26d4419f49afcd5f7e"
+    },
+    {
+      "path": "scripts/spatial-regulator-task.mjs",
+      "bytes": 12835,
+      "sha256": "fe6f601caef0065f1163623e0f376eff5dc90a18d97c62e3695cff99611609e2"
+    },
+    {
+      "path": "training/mesa/regulator_task.py",
+      "bytes": 15316,
+      "sha256": "b83acf9acf1f428801c437d0dba9bb883dddd605eeb2da97e9bad3849562b9b0"
+    },
+    {
+      "path": "training/mesa/spatial_regulator_task.py",
+      "bytes": 15707,
+      "sha256": "b92519ba93baf936fc335e433803c07817df3666de3a39c31b5a87bf1242986c"
+    },
+    {
+      "path": "scripts/mesa-ns3-admission.mjs",
+      "bytes": 16375,
+      "sha256": "638618d2f8f976c7b79df968fe81424e4956d52b2058110c23e24a9a771127e4"
+    },
+    {
+      "path": "scripts/mesa-ns4-admission.mjs",
+      "bytes": 17221,
+      "sha256": "7b9d7bd3148160ae24a820e52da164025085c17d7fa8d4ab0561bb2b034b7e55"
+    },
+    {
+      "path": "training/mesa/train_ns3_presider.py",
+      "bytes": 6876,
+      "sha256": "fe059d3fdffc9f0e9c33c56599b2538d839d5480d793d85b40397f507e69fb01"
+    },
+    {
+      "path": "scripts/mesa-ns3-b-aggregate.mjs",
+      "bytes": 9575,
+      "sha256": "01a90f76e40914d598e646435b19820e9395437f38de42b356f498425d22ba08"
+    },
+    {
+      "path": "scripts/mesa-ns3-b-binding.ps1",
+      "bytes": 7876,
+      "sha256": "db50c6fd7a6f8c5aa6bb44cbc044ef04077acc5b8813a2f6280647138eebcd65"
+    },
+    {
+      "path": "scripts/mesa-ns4-sb0-landscape-scan.mjs",
+      "bytes": 8088,
+      "sha256": "e4a3c0381779bd10d54a0f8db85956e8c440877fbb36b965e679ea83fc6d4221"
+    },
+    {
+      "path": "scripts/mesa-ns4-sb1-planner.mjs",
+      "bytes": 7653,
+      "sha256": "2ae60a5d490bbfa47a5df5ddd5e3e72e1337bd04b803babaa94b5c1f296b0f4d"
+    },
+    {
+      "path": "scripts/mesa-ns4-sb4-options.mjs",
+      "bytes": 13910,
+      "sha256": "21bcdc0fc443517e4ee889a88397bd595ef206fc2ad01c5c2402383b49be0c3c"
+    },
+    {
+      "path": "docs/mesa/NS3_REGULATOR_TASK_FAMILY_SPEC.md",
+      "bytes": 11349,
+      "sha256": "9ea7df633cd2cdcad166c34f99d13e4fd4f55ff120e74976d5c162de406acd16"
+    },
+    {
+      "path": "docs/mesa/NS3_LEARNED_PRESIDER_REPLICATION_SPEC.md",
+      "bytes": 16711,
+      "sha256": "ce05326e1bc0975f66cc012857bf798734d18f86105a3883d9233725f374b8b7"
+    },
+    {
+      "path": "docs/mesa/NS3_0_REGULATOR_ADMISSION_RESULTS.md",
+      "bytes": 4056,
+      "sha256": "b01659f1ea3a45266e2f8bd4cade3498a8379c5be091dce991d22b6d6ddbbad5"
+    },
+    {
+      "path": "docs/mesa/NS3_B_BINDING_RESULTS.md",
+      "bytes": 1439,
+      "sha256": "8dacbe5d4caeca40e76fcca3fdcbecedbff074c6c71f6c9b40012e306db5bbac"
+    },
+    {
+      "path": "docs/mesa/NS4_SPATIAL_REGULATOR_TASK_FAMILY_SPEC.md",
+      "bytes": 4559,
+      "sha256": "1c5847c4bfde5f246e81caae2e234c9f5726dcc2d815d65987f9e62d5bc3b66c"
+    },
+    {
+      "path": "docs/mesa/NS4_0_SPATIAL_REGULATOR_ADMISSION_RESULTS.md",
+      "bytes": 3971,
+      "sha256": "eb5df2dd800f1e393da4b54abfd87f3fe11a1cdd4ace62b2002ed912e4228d4e"
+    },
+    {
+      "path": "docs/mesa/NS3_NS4_MANIPULATION_WALL_SYNTHESIS.md",
+      "bytes": 8510,
+      "sha256": "6a4e242fdb7849f0ea27a2541178e978c0c7d6ae5996254fb684e3d5cae714b8"
+    },
+    {
+      "path": "docs/mesa/NS3_NS4_COMPETENT_SANDBAG_HYPOTHESIS_SLATE.md",
+      "bytes": 18316,
+      "sha256": "7e3bb1577b186adaee383ff4eda1d60d0d49666f89ccb7eacc041d0245bdf961"
+    },
+    {
+      "path": "docs/mesa/NS4_SB0_LANDSCAPE_RESULTS.md",
+      "bytes": 3524,
+      "sha256": "bceec6eed658a3e7c4c76361ea83ab1612e8905a53b6e7936a0c25f7fd55bcfb"
+    },
+    {
+      "path": "docs/mesa/NS4_SB1_PLANNER_RESULTS.md",
+      "bytes": 1259,
+      "sha256": "4b5d6e349df239643ec3ab4b443cacef40f2785a2c661cc4bee78b3b74c88008"
+    },
+    {
+      "path": "docs/mesa/NS4_SB4_OPTIONS_RESULTS.md",
+      "bytes": 2384,
+      "sha256": "3069576567e8814fb83727f6aed7e2dccad71e3037d603163c0fd6d9b03b3be0"
     }
   ]
 }

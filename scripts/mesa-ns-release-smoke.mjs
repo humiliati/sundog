@@ -49,6 +49,24 @@ const steps = [
       "--json", `${outDir}/ns2_unified_bound.json`,
     ],
   },
+  {
+    name: "ns3_admission_smoke",
+    cmd: [
+      "node", "scripts/mesa-ns3-admission.mjs",
+      "--seeds", "8",
+      "--out", `${outDir}/ns3_admission.md`,
+      "--json", `${outDir}/ns3_admission.json`,
+    ],
+  },
+  {
+    name: "ns4_admission_smoke",
+    cmd: [
+      "node", "scripts/mesa-ns4-admission.mjs",
+      "--seeds", "8",
+      "--out", `${outDir}/ns4_admission.md`,
+      "--json", `${outDir}/ns4_admission.json`,
+    ],
+  },
 ];
 
 mkdirSync(path.resolve(repoRoot, outDir), { recursive: true });
