@@ -55,7 +55,7 @@ channel or only at the target channel. (This is exactly what Percival's A3 probe
 ## Grounding ledger (what is actually banked)
 
 The thesis is **confirmed-bounded on act/aggregate, toy-confirmed on measure, and
-conditionally mapped on target.** That uneven ledger is the point: it is a real, risky,
+partial-but-banked on target.** That uneven ledger is the point: it is a real, risky,
 portfolio-spanning prediction, not a slogan.
 
 | channel | instance lane | status |
@@ -114,9 +114,10 @@ others without its own test; that this is more than a frame until ≥2 more chan
 banked.
 
 **Honest prior:** the act and aggregate channels are genuinely banked; the measure
-channel passed the A3 toy; the target channel has a conditional separation and a Lean
-anchor, but still depends on B2 provenance. The frame earns "hypothesis" rather than
-"slogan" only because it makes per-channel predictions that can each fail.
+channel passed the A3 toy; the target channel banked a partial separation and Lean
+anchors, while B2 deflated the clean unconditional prize on trusted bases. The frame
+earns "hypothesis" rather than "slogan" only because it makes per-channel predictions
+that can each fail.
 
 ---
 
@@ -125,6 +126,7 @@ anchor, but still depends on B2 provenance. The frame earns "hypothesis" rather 
 - **Act / aggregate (banked):** [[project_sundog_tauroctony_pantheon]] — the
   cap-not-council keeper, NS-1/2/3/4, RELEASE_READY.
 - **Target / measure:** [[project_sundog_percival_lane]] — un-targeting vs
-  quantilizers; A3 measure-probe, B1 conditional target-separation, B2 provenance open.
+  quantilizers; A3 measure-probe, B1 conditional target-separation, B2 clean-corner
+  deflation, reopen slate on cleanliness.
 - **Invariant machinery:** [[project_sundog_suffstat_order_slate]] — sufficient-statistic
   order / determine-resist, the formal home of "screens off."

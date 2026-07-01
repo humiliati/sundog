@@ -120,7 +120,7 @@ text.**
 | hook | promise | risk | testable-now? | status |
 | --- | --- | --- | --- | --- |
 | H1 world/entity-state | high | medium | no (needs capable LM + annotation) | PROPOSED — the R2-v3 reopening |
-| **H2 stack-top / Dyck** | **high** | **low** | **yes (CPU, GPT-2 + code)** | PROPOSED — **hardening first** |
+| **H2 stack-top / Dyck** | **high** | **low** | **yes (CPU, GPT-2 + code)** | **CONFIRMED (existence) 2026-07-01** — see result below |
 | H3 cumulative/toggled | medium | medium | partial (bigger model) | PROPOSED |
 | H4 binding under attractors | medium | medium | partial | PROPOSED |
 | H5 σ-bridge characterization | medium (synthesis) | low | yes (analysis/Lean) | PROPOSED — the spine |
@@ -133,6 +133,40 @@ sequence model computes. So a genuine **R2-v3** = a state-tracking label family 
 entity-state) on a capable model, and *there* the H200/larger-model route would buy something.
 The intersection is not empty; the earlier admissions were fishing in surface-cued labels
 instead of the model's own integration targets.
+
+## H2 hardening result — CONFIRMED (existence), 2026-07-01
+
+`scripts/chatv2_h2_stacktop_probe.py`, GPT-2-small (CPU), real Python code, ~12.4k valid
+query positions (depth ≥ 1), class-balanced (chance 0.333). Decisive baseline = the **pure
+order-blind sufficient statistic** (bracket counts), not the bag-of-tokens (whose GPT-2
+subwords leak local order and confounded the first pass).
+
+| positions | counts (order-blind) | GPT-2 residual (L11) | control: counts→depth |
+| --- | --- | --- | --- |
+| ALL (mostly single-type stacks) | **0.965** | 0.926 | 0.947 |
+| count-ambiguous (≥2 types unclosed) | **0.770** | **0.931** | 1.000 |
+
+**The crossover is the finding.** Where the stack is single-type, counts *determine* the top
+and beat the residual (0.965 > 0.926) — stack-top is *count-decodable*, not in the intersection.
+But at count-ambiguous positions (`([` vs `[(` — identical counts, order-determined top) the
+order-blind statistic collapses to 0.770 while **GPT-2's residual holds at 0.931 (+0.161)**, with
+the depth control fully live (counts→depth 1.000). The residual is robust to the ambiguity that
+cripples the order-blind statistic — the fingerprint of a genuinely **order-dependent state the
+model computes.**
+
+**What this establishes / doesn't.** Establishes: the intersection is **non-empty on a general
+small pretrained LM over real text** — an order-dependent label (bracket stack-top) that a
+proper order-blind statistic cannot read is linearly present in GPT-2's residual. This validates
+the slate's **state-tracking answer** and the σ-bridge (H5): the undecodable-∧-computed label is
+exactly a *high-σ state the model already computes*. Does **not** establish the `d_dec ≥ 20`
+R2 gate — stack-top is a 3-class (low-dim) quantity; H2 is an **existence proof**, not a full
+R2 bank. Caveats: GPT-2-small is a weak tracker (its all-position residual even loses to counts);
+single quantity, one corpus (Python), light string/comment lexer.
+
+**Onward (owner's call).** The intersection being reachable, the high-dimensional route is H1
+(world/entity-state — order genuinely matters, *not* count-determined like a stack) on a capable
+model; a code-trained / larger model would also widen the H2 margin. This is the first **positive**
+in the R2 arc: it says the earlier F3s were a *substrate/label-family* limitation, not a wall.
 
 ## Fences
 
