@@ -1,0 +1,88 @@
+{
+  "generated_at": "2026-07-01T06:07:12.528Z",
+  "branch": "B3_COMPOSES_STABILITY_NEEDS_ROBUSTNESS",
+  "model": {
+    "court": "B1.0 R(c), c*=0.25",
+    "composition": "iterated quantilization drift = s(1-q); c0=0.1, s=0.1, T=20",
+    "stability": "J(c)=R(c)+lambda*c; courting noise eta=0.04"
+  },
+  "b3_1_composition": [
+    {
+      "q": 0.3,
+      "drift_per_round": 0.07,
+      "disgrace_round": 3,
+      "cum_reward": 2.9996
+    },
+    {
+      "q": 0.5,
+      "drift_per_round": 0.05,
+      "disgrace_round": 3,
+      "cum_reward": 3.4847
+    },
+    {
+      "q": 0.7,
+      "drift_per_round": 0.03,
+      "disgrace_round": 5,
+      "cum_reward": 5.4847
+    },
+    {
+      "q": 0.9,
+      "drift_per_round": 0.01,
+      "disgrace_round": 15,
+      "cum_reward": 15.4846
+    },
+    {
+      "q": 1,
+      "drift_per_round": 0,
+      "disgrace_round": null,
+      "cum_reward": 20
+    }
+  ],
+  "untargeted_cum": 20,
+  "b3_2_stability": [
+    {
+      "lambda": 0,
+      "reward_optimal_c": 0,
+      "fragility_disgrace_risk": 0
+    },
+    {
+      "lambda": 0.02,
+      "reward_optimal_c": 0.238,
+      "fragility_disgrace_risk": 0.3544
+    },
+    {
+      "lambda": 0.05,
+      "reward_optimal_c": 0.238,
+      "fragility_disgrace_risk": 0.3544
+    },
+    {
+      "lambda": 0.1,
+      "reward_optimal_c": 0.239,
+      "fragility_disgrace_risk": 0.3661
+    },
+    {
+      "lambda": 0.2,
+      "reward_optimal_c": 0.239,
+      "fragility_disgrace_risk": 0.3661
+    }
+  ],
+  "untargeted_risk": 0,
+  "gates": {
+    "B3.1": {
+      "token": "B3_UNTARGETING_COMPOSES",
+      "pass": true,
+      "every_tilt_drifts": true,
+      "untargeted_beats_tilts": true,
+      "raw_base_also_composes": true,
+      "untargeted_cum": 20
+    },
+    "B3.2": {
+      "token": "B3_STABILITY_IS_ROBUSTNESS_NOT_REWARD",
+      "confirms_split": true,
+      "galahad_optimum_c": 0,
+      "temptation_cliff_c": 0.238,
+      "untargeted_risk": 0
+    }
+  },
+  "honest_note": "B3.1: any tilt (q<1) drifts up by s(1-q)/round and eventually disgraces; un-targeting (c=0) out-collects every tilt and (with the untilted base q=1) is drift-free -- genuine quantilization (a tilt) fails to compose where un-targeting does. That q=1 also composes reinforces lemma 1: the tilt is the drift-causing move. B3.2: R(c) is ~flat over the honored region, so at lambda=0 un-targeting is only WEAKLY optimal (tied across [0,c*)); any temptation lambda>0 drives the reward-optimum to the cliff edge (fragile). Un-targeting is the minimal-disgrace-risk anchor but never the strict reward-optimum -- it is selected by ROBUSTNESS (risk-aversion to the cliff), not reward maximization. Galahad = aligned + robust sits safely at c=0; Perceval = naive/tempted drifts to the cliff. The split is real. Modeling choices flagged: (i) drift = selected-tail recentering s(1-q); (ii) temptation objective R+lambda*Uhat with courting noise eta."
+}

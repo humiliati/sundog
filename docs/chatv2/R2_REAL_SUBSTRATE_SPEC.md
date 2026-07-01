@@ -177,3 +177,13 @@ linearly-present features).** Resolving it is the substance of R2 v2:
 R2 stays **NOT STARTED-effectively** on the gate (this MVP filed F3, not a body-resistance
 read). No R2 promotion, no public claim, no R3 / world-model language — the NSE page's
 "resistant substrate" line stays "to be run."
+
+**Follow-up:** R2 v2 scoping is opened in
+[`R2_V2_RELATIONAL_SUBSTRATE_SPEC.md`](R2_V2_RELATIONAL_SUBSTRATE_SPEC.md), and the
+agreement/controller admission run is filed in
+[`R2_V2_ADMISSION_RECEIPT.md`](R2_V2_ADMISSION_RECEIPT.md) as **`F3-R2-v2/input`**. The
+count-parity and agreement attempts now characterize the R2 tension from opposite sides:
+input-undecodable but not GPT-2-computed, versus GPT-2-computed but input-decodable. No
+new body-resistance verdict harness is frozen. The larger-model route is scoped, not
+commissioned, in
+[`R2_LARGER_MODEL_ROUTE_CAMPAIGN.md`](R2_LARGER_MODEL_ROUTE_CAMPAIGN.md).

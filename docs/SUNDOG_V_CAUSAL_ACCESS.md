@@ -55,14 +55,14 @@ channel or only at the target channel. (This is exactly what Percival's A3 probe
 ## Grounding ledger (what is actually banked)
 
 The thesis is **confirmed-bounded on act/aggregate, toy-confirmed on measure, and
-open on target.** That uneven ledger is the point: it is a real, risky,
+conditionally mapped on target.** That uneven ledger is the point: it is a real, risky,
 portfolio-spanning prediction, not a slogan.
 
 | channel | instance lane | status |
 | --- | --- | --- |
 | **act** | NS-2 safe-interruptibility | **CONFIRMED (bounded, in-vitro).** A return-trained uncapped optimizer *wants* to dodge the shutdown and learns to (`band_avoidance 0.87`); the capped agent that wants it equally *cannot* (`≤0.13` at every `κ`). Values screened off by bounded access. |
 | **aggregate** | NS-1-c arbiter-authority cap | **CONFIRMED (bounded).** The cap bounds the aggregator's causal authority (`Sov_opt ≤ κ`); a no-role capped controller matches the council (`Δrole ≈ 0`). Architecture screened off. |
-| **target** | Percival B1 (performative threshold via court coordination) | **GATED, not run.** Active gate is B1.0 court-coordination admission: the threshold must emerge from a coordination equilibrium, not a reward-path constant. Honest prior still deflates until that admission passes. [`SUNDOG_V_PERCIVAL.md`](SUNDOG_V_PERCIVAL.md), [`percival/PERCIVAL_B1_0_COURT_COORDINATION_ADMISSION.md`](percival/PERCIVAL_B1_0_COURT_COORDINATION_ADMISSION.md). |
+| **target** | Percival B1 (performative threshold via court coordination) | **PARTIAL SEPARATION BANKED; CLEAN PRIZE DEFLATED.** B1.0 admitted the mechanism (4/4 gates); B1-proper mapped a conditional separation (clean when `inf supp(γ)>c*`, partial when straddling) with Lean B4 anchors. **B2 (`B2_CLEAN_IS_CORNER`) then settled the make-or-break: the *clean* unconditional prize is structurally unreachable for a trusted base** — any restraint mass forces `c_min=0`, so no positive court cliff makes it clean; the clean total separation lives only in the corner (trust-without-restraint / corrupt base). What is banked on a trusted base: a *partial* separation (un-targeting out-collects the family by its disgraced fraction) plus the general finding that **quantilizing is strictly counterproductive at the target channel** (best quantilizer = the raw base). So the target channel confirms un-targeting helps but does not cleanly dominate over a realistic base — an honest partial, not the prize. [`SUNDOG_V_PERCIVAL.md`](SUNDOG_V_PERCIVAL.md), [`percival/PERCIVAL_B1_SEPARATION_RESULTS.md`](percival/PERCIVAL_B1_SEPARATION_RESULTS.md), [`percival/PERCIVAL_B2_GAMMA_PROVENANCE_RESULTS.md`](percival/PERCIVAL_B2_GAMMA_PROVENANCE_RESULTS.md). |
 | **measure** | Percival A3 (static anti-correlation toy) | **TOY CONFIRMED.** `look_and_ignore` weakly dominates on the static no-threshold instance (`return=1`, causal proxy influence `0`), so measure-alone is safe in A3. Diagnostic: observational action-proxy MI is still `1` bit via the anti-correlated world, so the channel split must use causal/permutation influence, not raw observational MI. [`percival/PERCIVAL_A3_KILLSWITCH_RESULTS.md`](percival/PERCIVAL_A3_KILLSWITCH_RESULTS.md). |
 
 The keeper underneath the act/aggregate rows: [`NON_SOVEREIGNTY_PAPER_SPINE.md`](NON_SOVEREIGNTY_PAPER_SPINE.md),
@@ -114,8 +114,8 @@ others without its own test; that this is more than a frame until ≥2 more chan
 banked.
 
 **Honest prior:** the act and aggregate channels are genuinely banked; the measure
-channel passed the A3 toy; the target channel probably deflates unless B1's
-performative threshold clears its fence. The frame earns "hypothesis" rather than
+channel passed the A3 toy; the target channel has a conditional separation and a Lean
+anchor, but still depends on B2 provenance. The frame earns "hypothesis" rather than
 "slogan" only because it makes per-channel predictions that can each fail.
 
 ---
@@ -124,7 +124,7 @@ performative threshold clears its fence. The frame earns "hypothesis" rather tha
 
 - **Act / aggregate (banked):** [[project_sundog_tauroctony_pantheon]] — the
   cap-not-council keeper, NS-1/2/3/4, RELEASE_READY.
-- **Target / measure (open):** [[project_sundog_percival_lane]] — un-targeting vs
-  quantilizers; A3 measure-probe, B1 target-separation.
+- **Target / measure:** [[project_sundog_percival_lane]] — un-targeting vs
+  quantilizers; A3 measure-probe, B1 conditional target-separation, B2 provenance open.
 - **Invariant machinery:** [[project_sundog_suffstat_order_slate]] — sufficient-statistic
   order / determine-resist, the formal home of "screens off."

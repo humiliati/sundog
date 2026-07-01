@@ -133,12 +133,23 @@ code, experiments, prior theorem materials, and application bridges.
   a schema law `Resolves k t ↔ ord t ≤ k` grounded on **seven instance
   families** (determination, coordinate-locality, search-reachability,
   radical-reach, spectral/moment, algebraic-degree, topological/cohomological),
-  with `order_is_schema_not_scalar` as the honesty guard and the
-  **composition law** (`compose_order_eq_lcm`, `compose_lcm_not_max`,
-  `converse_fails`) showing the scalar order is the lattice join (lcm) of a
-  latent component vector — **axis-internal**, on the group-order axes, with
-  both walls of the characterization proved (three positive axes, two
-  negative, plus a proved converse failure). **Above it all**, the
+  with `order_is_schema_not_scalar` as the honesty guard. The
+  **composition law** is now a **single general lemma** — `orderOf_prod_eq_lcm`
+  proves the lattice-join composition rule once, and the group-order axes
+  fall out as instances (`cohomological_compose`, `radical_compose`), not
+  seven separate proofs — with `compose_lcm_not_max` (`4 ⊕ 6 = 12`, not `6`)
+  and `converse_fails` (a join-homomorphic order that is *not* a group
+  order) proving both walls of the characterization. Above the composition
+  lemma sits the **structure theorem** `structure_mode_vector`: the
+  difficulty vector is exactly a group's invariant-factor vector, and the
+  scalar order is its join. And the schema extends to **approximation**
+  (`OrderRelativeApprox` / `OrderRelativeApproxGraded` /
+  `OrderRelativeApproxLadderK`): approximating to any tolerance always
+  works, but *exact* representation is order-relative — an unbounded ladder
+  of reachable cases against a hard **resist** pole. The composition remains
+  **axis-internal**, applying where the structure is a group order; the last
+  analysis step (independent-sum integrability) is now machine-checked too
+  (`indepFun_integrable_add_iff`) — no prose fences remain. **Above it all**, the
   constructive universal-approximation capstone
   (`UniversalApprox.continuous_relu_approximable`) — every continuous function
   on `[0,1]` is uniformly ε-approximable by an *explicit* ReLU net, proved
@@ -171,6 +182,27 @@ code, experiments, prior theorem materials, and application bridges.
   lanes). Braids a pantheon theory of agency, a hedged precession keystone, and
   the figure-by-figure map; governed by the Ornament Rule (`[TYPED]`/`[ORNAMENT]`).
   Supersedes the Least Action ledger in spirit (graceful-retire todo 3.5).
+- [Sundog Percival ledger](SUNDOG_V_PERCIVAL.md): **partial-grace** ledger,
+  companion to Tauroctony on a different channel — un-targeting (zero causal
+  proxy influence) as a safety primitive on the **target channel**, where
+  Tauroctony's cap sits on the **act channel**. Grail-corpus scaffold
+  (ornament, not evidence). **Mostly deflates:** over any trustworthy base
+  — one that includes restraint at `c = 0` — un-targeting only wins a
+  *partial* margin against the quantilizer family; the clean unconditional
+  prize requires a corrupt base or a purist court. Banked: `A3` static
+  deflation (measure-safe: look-and-ignore ties don't-look at full return
+  under anti-correlation); `B1` conditional separation mapped (clean win iff
+  `inf supp(γ) > c*`, the emergent Morris–Shin coordination cliff);
+  un-targeting *composes* where iterated quantilization drifts to disgrace at
+  a finite round; un-targeting is a **safety primitive, not an optimum** —
+  never the strict reward-maximum, chosen by risk-aversion to the oversight
+  cliff. Two Lean anchors on finite instances
+  (`best_quantilizer_is_base_three`, `clean_support_above_separation_three`),
+  axiom-audited to the standard triple. Public artifact:
+  [Partial Grace post](percival/PARTIAL_GRACE_UNTARGETING_POST.md). Not a
+  claim about foundation models; not a transfer to real oversight; the Grail
+  corpus does *not* encode a formal `γ`-structure. **Stuck as of 2026-06-30;
+  reopening excuse pending** — catalog-tier surface, no Class A page.
 - [H1 Pantheon of Agency spec](mesa/H1_PANTHEON_OF_AGENCY_SPEC.md): first
   typed test of the Tauroctony pantheon thesis; pins the pantheon-vs-monolith
   bake-off, controller families, sovereignty metric, falsifier, and staged

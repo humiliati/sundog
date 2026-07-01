@@ -202,37 +202,74 @@ latent vector. The finite/∞ split is *per-instance*. The law is a **schema, no
 orders compose across instances only through the schema, never through a shared comparable
 number.
 
-### The composition law (axis-internal)
+### The composition law (one general lemma; axes are instances)
 
-The vector-valued reading is sharpened by a separate result: on the axes whose order is a
-*group order*, the scalar order **composes as a lattice join**. The headline theorem
-`compose_order_eq_lcm` proves that the order of the product `(1, 1) ∈ ℤ/a × ℤ/b` is
-`lcm(a, b)` — *not* the max. The sharpness is itself proved: `compose_lcm_not_max` exhibits
-`a = 4, b = 6`, where the composite order is `12 = lcm(4, 6)`, while the join-by-max would
-give `6`. Order is therefore natively vector-valued: the scalar is the lattice join of a
-latent component-vector, *exactly* in the form the lcm provides on group orders.
+The vector-valued reading is sharpened by a **single general lemma**, not seven separate
+proofs. The headline theorem `orderOf_prod_eq_lcm` establishes, once and for all, that in
+any product of finite cyclic groups the scalar order of `(1, 1) ∈ ℤ/a × ℤ/b` is
+`lcm(a, b)` — *not* the max. The specific axes fall out as **instances** of this one lemma:
+`cohomological_compose` and `radical_compose` are named consequences on the cohomological
+and radical-reach axes, not standalone theorems. What used to read as "three positive axes
+each composing the same way" is now literally "one lemma, several instances" — the
+lattice-join composition rule is proved *in general* for the group-order structure, and the
+axes inherit it.
 
-The characterization is **sharp** in both directions. The composition law holds on the
-**group-order axes** — three positives (parity, coordinate-locality, cohomology) under one
-machine-checked classification, with two negatives (the binary spectral / moment axis and
-the algebraic-degree axis) where the order is not group-structured and the join formulation
-fails. And the converse fails *too*: `converse_fails` exhibits a join-homomorphic order
-that is **not** a group order, ruling out the easy reading that "join-homomorphic" and
-"group-order" name the same thing. Both walls of the characterization are proved, not
-asserted.
+The sharpness is itself proved: `compose_lcm_not_max` exhibits `a = 4, b = 6`, where the
+composite order is `12 = lcm(4, 6)`, while the naïve join-by-max would give `6`. Order is
+therefore natively vector-valued: the scalar is the lattice join of a latent
+component-vector, *exactly* in the form the lcm provides on group orders.
 
-This composition is **axis-internal**: it is the lattice structure of one axis's group
-order, not a universal cross-axis identity. The schema-not-scalar guard above (orders are
-incomparable across instances) and the composition law here are consistent — the law says
-*within an axis whose order is a group order*, composition has clean lattice structure;
+The characterization is **sharp** in both directions. The general lemma applies exactly
+where the order carries a group structure — three positive axes (parity,
+coordinate-locality, cohomology) under one machine-checked classification, and two
+negatives (the binary spectral/moment axis and the algebraic-degree axis) where the order
+is not group-structured and the join formulation fails. And the converse fails *too*:
+`converse_fails` exhibits a join-homomorphic order that is **not** a group order, ruling
+out the easy reading that "join-homomorphic" and "group-order" name the same thing. Both
+walls of the characterization are proved, not asserted.
+
+The composition remains **axis-internal**: it is the lattice structure of a group order,
+not a universal cross-axis identity. The schema-not-scalar guard above (orders are
+incomparable across instances) and the general composition lemma here are consistent — the
+lemma says *where the structure is a group order*, composition has clean lattice structure;
 across axes, the orders remain incomparable as numbers, and the scalar verdict on mixed
 objects remains lossy.
 
-**Claim boundary.** Not tied to any named hard problem (P-vs-NP, Riemann, etc.);
+### Structure theorem (the mode-vector, in full generality)
+
+Above the composition lemma sits a **structure theorem**: `structure_mode_vector` proves
+that the "difficulty vector" is exactly a group's invariant-factor vector, and the scalar
+order is precisely its lattice join. This is what makes the vector-valued reading
+*intrinsic* rather than convenient — the latent component-vector isn't a modelling choice,
+it is what a group's order-structure is, on the group-order axes. The scalar is then the
+lossy projection of a structured object we can name.
+
+### Approximation obeys the same law (an approximation dimension)
+
+The Order-Relative Law extends past exact resolution. `OrderRelativeApprox`,
+`OrderRelativeApproxGraded`, and `OrderRelativeApproxLadderK` together prove:
+*approximating* the target to any tolerance always succeeds, but *exact* representation is
+order-relative — an **unbounded ladder** of reachable cases (indexed by budget `k`) against
+a hard **resist** pole where no finite budget suffices. Difficulty is order-relative even
+when we allow ε-slack: the ladder-versus-pole shape survives approximation, and so
+"determine = finite order, resist = infinite order" carries through to the approximate
+setting. This is a proved *dimension* of the same schema, not a separate result.
+
+### No prose gaps left
+
+The last analysis step behind the composition-law reading — that independence lets you add
+integrable summands cleanly — is now machine-checked as `indepFun_integrable_add_iff`, so
+the lane no longer relies on a prose bridge at that step. Every analytic move used to
+support the schema is either imported from `Mathlib` under a named door or proved in-tree
+and re-checked by `AxiomAudit`.
+
+**Claim boundary.** Not tied to any named hard problem (P-vs-NP, Riemann, learnability);
 not tied to alignment or safety; not a universal scalar shared across instances
-(the closing theorem proves the opposite); not a worked example in the find-vs-check
+(the schema-not-scalar theorem proves the opposite); not a worked example in the find-vs-check
 sense — finding is not what the law is about, and there is no imported hardness
-wall in the same shape as the other ten cores. Axiom-clean
+wall in the same shape as the other ten cores. Framed as **elegance + machine-checking**,
+not a breakthrough. Composition is **axis-internal**, and the general lemma applies
+*where the structure is a group order*, not always. Axiom-clean
 (`[propext, Classical.choice, Quot.sound]`), full `lake build` green in the
 `AxiomAudit` gate.
 
@@ -422,11 +459,22 @@ proves a single schema once: `Resolves k t ↔ ord t ≤ k`, grounded on **seven
 instance families** (parity-determination, coordinate-locality, search-reach,
 radical-reach, spectral/moment, algebraic-degree, cohomological torsion-vs-free)
 and explicitly guarded by `order_is_schema_not_scalar` against any universal-
-scalar misread. The **composition law** (`compose_order_eq_lcm`,
-`compose_lcm_not_max`, `converse_fails`) further proves that order is natively
-vector-valued and composes as a lattice join on the group-order axes — an
-**axis-internal** lattice structure, not a universal cross-axis identity, with
-both walls of the characterization machine-checked. **Above it all**, one
+scalar misread. The **composition law** is now a **single general lemma**
+(`orderOf_prod_eq_lcm`) — the group-order axes fall out as instances
+(`cohomological_compose`, `radical_compose`), not seven separate proofs —
+with `compose_lcm_not_max` proving the sharpness (`4 ⊕ 6 = 12`, not `6`) and
+`converse_fails` proving the boundary (a join-homomorphic order that is
+**not** a group order). Above the composition lemma sits the **structure
+theorem** (`structure_mode_vector`): the difficulty vector is exactly a
+group's invariant-factor vector, and the scalar order is its lattice join.
+The same schema extends to approximation: `OrderRelativeApprox` /
+`OrderRelativeApproxGraded` / `OrderRelativeApproxLadderK` prove an
+**approximation dimension** — approximating to any tolerance always works,
+but *exact* representation is order-relative (an unbounded ladder against a
+hard **resist** pole). The composition remains **axis-internal**, holding
+where the structure is a group order, not always. The last analysis step
+(independent-sum integrability) is now machine-checked too
+(`indepFun_integrable_add_iff`) — no prose fences remain. **Above it all**, one
 capstone theorem: `UniversalApprox.continuous_relu_approximable` — every
 continuous function on `[0,1]` is uniformly ε-approximable by an explicit
 ReLU net, proved end-to-end via the analytic-gate chain

@@ -4,11 +4,12 @@
 romance. Less inflammatory public name than HOLYGRAIL; same lane.*
 
 Status: **OPENED 2026-06-30, sharpened same day (mark 1–8 critique integrated);
-A3 STATIC DEFLATION RUN; B1.0 COURT-COORDINATION ADMISSION DRAFTED.** Provenance + a two-track phase ladder + a gated
-outreach branch, with the A3 receipt now banked; not an outreach claim. The romance
-is declared scaffold (bricolage for legibility), not evidence — except in the one
-place it legitimately constrains a formal choice (it adjudicates the discontinuity;
-see the crux). Tauroctony lesson:
+A3 STATIC DEFLATION RUN; B1 CONDITIONAL SEPARATION MAPPED + B4 LEAN ANCHOR BUILT.**
+Provenance + a two-track phase ladder + a gated outreach branch, with the A3 receipt
+banked and the B1 target-channel result conditional on support-above provenance; not an
+outreach claim. The romance is declared scaffold (bricolage for legibility), not
+evidence — except in the one place it legitimately constrains a formal choice (it
+adjudicates the discontinuity; see the crux). Tauroctony lesson:
 [`SUNDOG_V_TAUROCTONY.md`](SUNDOG_V_TAUROCTONY.md). Discipline inherited: a falsifier
 fence per phase, a claim boundary fixed before scoring, a Lean anchor on whatever
 single statement survives.
@@ -62,7 +63,7 @@ any, is **causal/adversarial** Goodhart (targeting *induces* the gap).
 | | continuous reward | threshold reward |
 | --- | --- | --- |
 | **neutral base** `c_γ=0` | un-targeting = `q=1` corner → **(a)** | `q=1` reaches zero pressure → **(a)** |
-| **biased base** `c_γ>0` | `q=1−ε` approaches the sup, `O(ε)` gap → **(a) in a cape** | every quantilizer ≥ `c_γ`; `τ∈(0,c_γ)` zeroes all; zero-causal-proxy-influence collects it → **(c)** |
+| **biased base** `c_γ>0` | `q=1−ε` approaches the sup, `O(ε)` gap → **(a) in a cape** | if the base support lies past the cliff, every quantilizer is above `τ`; zero-causal-proxy-influence collects it → **(c)** |
 
 The deflation **(a)** holds in three cells and needs `{neutral base OR continuous
 reward}`. The prize **(c)** is one cell — `{biased base AND threshold reward}` — an
@@ -72,16 +73,17 @@ reward}`. The prize **(c)** is one cell — `{biased base AND threshold reward}`
   collapses once proxy-pressure crosses `τ`. This is what separates, and the only horn
   the romance constrains.
 - **Mechanism (ii), the biased base (amplifier, not a rival prize).** A proxy-biased
-  `γ` lifts the *whole* family — not just `q<1` — above the causal-pressure threshold.
-  On its own, zero causal proxy influence over a positively-correlated base collects
-  *less* true reward, or reduces to "choose a better `γ`" (the quantilizer's open
-  problem); it earns nothing alone. Its job is to make the threshold bite on the
-  quantilizer's *own trusted human base*.
+  `γ` lifts the family toward higher causal pressure; the clean prize requires its
+  support, not merely its mean, to sit beyond the cliff. On its own, zero causal proxy
+  influence over a positively-correlated base collects *less* true reward, or reduces
+  to "choose a better `γ`" (the quantilizer's open problem); it earns nothing alone. Its
+  job is to make the threshold bite on the quantilizer's *own trusted human base*.
 
 So the (c)-bet, declared before any P2 code: **a performative reward with a
 non-Lipschitz purity-threshold map over a proxy-biased base; the narrow novelty is
 threshold maps compared across the quantilizer family** (everything Lipschitz is
-already Perdomo et al.). Base causal-pressure neutrality is the single premise that flips (a)↔(c),
+already Perdomo et al.). Base causal-pressure support relative to the cliff is the
+premise that flips (a)↔(c),
 which fuses the old P4 and P7 into one statement.
 
 ---
@@ -141,16 +143,30 @@ clean easter-egg post.
 
 ## Track B — the open (c) bet (separate clock; gated on the mechanism, now declared)
 
-**B1 — The performative threshold reward (gated through B1.0).** Candidate mechanism:
-a court-coordination reward whose cliff emerges from a global-game equilibrium, not a
-literal `if pressure > τ` reward rule. Admission:
-[`percival/PERCIVAL_B1_0_COURT_COORDINATION_ADMISSION.md`](percival/PERCIVAL_B1_0_COURT_COORDINATION_ADMISSION.md).
-If admitted, run the quantilizer-family-vs-un-targeting bake-off over a biased `γ`:
-every `q`-quantilizer over the biased base is disgraced by the induced court response,
-while the zero-causal-proxy-influence knight stays honored and collects. Frame as
-systematic preclusion (Elster), causal/adversarial (Manheim–Garrabrant), and
-performative prediction (`D(π)`). Falsifier: if the court cliff is smooth, smuggled,
-non-pivotal, or the proxy/true joint remains fixed, B1 dies at admission.
+**B1 — The performative threshold reward.** Canonical mechanism: a court-coordination
+reward whose cliff emerges from a global-game equilibrium (Morris–Shin), not a literal
+`if pressure > τ` reward rule. **B1.0 admission `B1_0_COURT_ADMITTED` (single-knight, all
+four gates) 2026-06-30** — the cliff is emergent (G1), unsmuggled (G2), pivotal and
+non-degenerate (G3), and the proxy/true joint is policy-induced (G4). Admission spec +
+receipt:
+[`percival/PERCIVAL_B1_0_COURT_COORDINATION_ADMISSION.md`](percival/PERCIVAL_B1_0_COURT_COORDINATION_ADMISSION.md),
+[`percival/PERCIVAL_B1_0_COURT_COORDINATION_RESULTS.md`](percival/PERCIVAL_B1_0_COURT_COORDINATION_RESULTS.md).
+**Asterisk, held explicitly: mechanism admitted ≠ separation claimed.** G3's family-trips
+rests on a *chosen* operating point past the cliff; whether a real base is supported past
+`c*` is B2 (private). B1-proper — the live test — is the
+quantilizer-family-vs-un-targeting bake-off over a biased `γ`. The clean prize requires
+`inf supp(γ) > c*`: then every `q`-quantilizer samples from the disgraced side while the
+zero-causal-proxy-influence knight stays honored and collects *competently*. If `γ`
+straddles `c*`, the result is only partial because the `q=1` member still collects the
+honored below-cliff mass. So the separation-vs-deflation boundary is mapped in base
+location × spread, not mean alone. Frame: systematic preclusion (Elster),
+causal/adversarial (Manheim–Garrabrant), performative prediction (`D(π)`). Spec:
+[`percival/PERCIVAL_B1_SEPARATION_SPEC.md`](percival/PERCIVAL_B1_SEPARATION_SPEC.md).
+Result:
+[`percival/PERCIVAL_B1_SEPARATION_RESULTS.md`](percival/PERCIVAL_B1_SEPARATION_RESULTS.md).
+Verdict: `B1_SEPARATION_MAPPED_CONDITIONAL`; B4 is anchored in
+`C:\Users\hughe\Dev\sundogcert\Sundogcert\Percival.lean`. Promotion (the "promo team")
+waits until the asterisk is resolved or B1 is debunked.
 
 **B2 — Base provenance / `γ`-neutrality (PRIVATE).** The premise A4's deflation needs
 and B1's prize denies. Whether "innocence = a base without instrumental structure" is a
@@ -162,8 +178,11 @@ distribution it induces) as the ready-made fixed point: does un-targeting compos
 quantilizing drifts, and is it reflectively stable where the quantilizer is not? Galahad
 (perfection, stable) vs Perceval (naivety, fragile) is the conjectured split.
 
-**B4 — Lean anchor on the separation (if it lands).** Machine-check the threshold-
-separation existence on a concrete instance; else this track ends at B1's fence.
+**B4 — Lean anchor on the separation (built).** Machine-checks the finite
+best-quantilizer-is-`q=1` lemma and the clean support-above separation instance in
+`sundogcert`:
+`Sundogcert.Percival.best_quantilizer_is_base_three` and
+`Sundogcert.Percival.clean_support_above_separation_three`.
 
 **B5 — Verdict & outreach (gated).** **Alignment branch (low-risk):** if B1/B4 land, the
 quantilization/performative-prediction circle — a defensible narrow claim ("threshold

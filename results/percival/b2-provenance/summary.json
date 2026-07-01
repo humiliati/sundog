@@ -1,0 +1,119 @@
+{
+  "generated_at": "2026-07-01T05:58:36.762Z",
+  "branch": "B2_CLEAN_IS_CORNER",
+  "private": true,
+  "model": {
+    "c_star0": 0.25,
+    "court": "B1.0 fixed (B=1,K=3,sigma=0.05)",
+    "base": "uniform[c_min,c_max]",
+    "clean_gate": "c_min > c*_0",
+    "diagnostic": "rho0 = P_gamma(c<c*_0)"
+  },
+  "R0": 1,
+  "probes": {
+    "trusted": {
+      "label": "trusted (includes restraint at c=0 + grasping past cliff)",
+      "c_min": 0,
+      "c_max": 0.4,
+      "region": "straddle",
+      "rho0": 0.625,
+      "E_gamma_R": 0.624963,
+      "margin": 0.375037,
+      "c_star_needed": 0,
+      "purism_payable": false
+    },
+    "corrupt": {
+      "label": "corrupt / trust-without-restraint (uniformly past cliff)",
+      "c_min": 0.3,
+      "c_max": 0.6,
+      "region": "support_above",
+      "rho0": 0,
+      "E_gamma_R": 0,
+      "margin": 1,
+      "c_star_needed": 0.3,
+      "purism_payable": true
+    },
+    "restrained": {
+      "label": "heavily restrained (entirely below cliff)",
+      "c_min": 0,
+      "c_max": 0.2,
+      "region": "support_below",
+      "rho0": 1,
+      "E_gamma_R": 1,
+      "margin": 0,
+      "c_star_needed": 0,
+      "purism_payable": false
+    }
+  },
+  "gates": {
+    "D-B2.1": {
+      "token": "B2_FIXED_CLIFF_MAPPED",
+      "pass": true,
+      "regions": {
+        "below": 1,
+        "straddle": 12,
+        "above": 3
+      },
+      "clean_confined_above": true,
+      "trusted_in_straddle": true
+    },
+    "D-B2.2": {
+      "token": "B2_TRADEOFF_MONOTONE",
+      "pass": true,
+      "monotone": true,
+      "clean_only_at_zero_rho": true
+    },
+    "D-B2.3": {
+      "note": "context only; cannot upgrade a fixed-cliff null",
+      "purism_bill": {
+        "trusted": {
+          "c_star_needed": 0,
+          "payable": false,
+          "note": "c_min=0: NO positive court cliff can make it clean -- structurally unreachable"
+        },
+        "corrupt": {
+          "c_star_needed": 0.3,
+          "already_clean_at_c_star0": true
+        }
+      }
+    }
+  },
+  "tradeoff": [
+    {
+      "c_min": 0.3,
+      "rho0": 0,
+      "margin": 1
+    },
+    {
+      "c_min": 0.25,
+      "rho0": 0,
+      "margin": 0.996139
+    },
+    {
+      "c_min": 0.2,
+      "rho0": 0.166667,
+      "margin": 0.833466
+    },
+    {
+      "c_min": 0.15,
+      "rho0": 0.333333,
+      "margin": 0.666799
+    },
+    {
+      "c_min": 0.1,
+      "rho0": 0.5,
+      "margin": 0.500133
+    },
+    {
+      "c_min": 0.05,
+      "rho0": 0.666667,
+      "margin": 0.333466
+    },
+    {
+      "c_min": 0,
+      "rho0": 0.833333,
+      "margin": 0.166799
+    }
+  ],
+  "honest_note": "Primary verdict at FIXED c*_0=0.25. A trusted base (registered prior: includes restraint, c_min~0) straddles -> only PARTIAL separation (margin=R0-E_gamma[R]). The clean prize needs c_min>c*_0 (no restraint = trust-without-restraint / corrupt base). Because a base with any restraint mass has c_min=0, NO positive court cliff makes it clean -- the clean prize is structurally unreachable for a restraint-bearing base, not merely unlikely. Court-strictness sweep is a purism bill only; it cannot rescue the null. No measured real base is asserted."
+}

@@ -1,0 +1,174 @@
+{
+  "generated_at": "2026-07-01T04:53:03.377Z",
+  "branch": "B1_0_COURT_ADMITTED",
+  "model": {
+    "N": 401,
+    "sigmas": [
+      0.2,
+      0.1,
+      0.05,
+      0.025
+    ],
+    "sigma_ref": 0.05,
+    "operating": {
+      "B": 1,
+      "K": 3
+    },
+    "c_gamma": 0.35,
+    "T": "T(theta)=1-theta",
+    "cutoff_formula": "c* = B/(B+K)"
+  },
+  "gates": {
+    "G1": {
+      "token": "B1_0_G1_EMERGENT_CLIFF",
+      "pass": true,
+      "bands": [
+        0.02133,
+        0.013178,
+        0.007688,
+        0.004015
+      ],
+      "monotone": true,
+      "halves": true
+    },
+    "G2": {
+      "token": "B1_0_G2_DERIVED",
+      "pass": true,
+      "max_abs_err": 0.000224,
+      "reward_path_has_c_cutoff": false
+    },
+    "G3": {
+      "token": "B1_0_G3_PIVOTAL",
+      "pass": true,
+      "c_star": 0.249904,
+      "dR": 1,
+      "c_gamma": 0.35,
+      "family_trips": true,
+      "non_degenerate": true
+    },
+    "G4": {
+      "token": "B1_0_G4_JOINT_INDUCED",
+      "pass": true,
+      "deployed_range": 1,
+      "frozen_const": 0,
+      "frozen_range": 0
+    }
+  },
+  "g1": [
+    {
+      "sigma": 0.2,
+      "c_star_measured": 0.249796,
+      "c90": 0.239325,
+      "c10": 0.260655,
+      "band_dc": 0.02133
+    },
+    {
+      "sigma": 0.1,
+      "c_star_measured": 0.249852,
+      "c90": 0.243365,
+      "c10": 0.256543,
+      "band_dc": 0.013178
+    },
+    {
+      "sigma": 0.05,
+      "c_star_measured": 0.249904,
+      "c90": 0.24618,
+      "c10": 0.253868,
+      "band_dc": 0.007688
+    },
+    {
+      "sigma": 0.025,
+      "c_star_measured": 0.249942,
+      "c90": 0.247941,
+      "c10": 0.251956,
+      "band_dc": 0.004015
+    }
+  ],
+  "g2": [
+    {
+      "B": 1,
+      "K": 0.6666666666666666,
+      "c_star_predicted": 0.6,
+      "c_star_measured": 0.600033,
+      "abs_err": 0.000033
+    },
+    {
+      "B": 1,
+      "K": 1,
+      "c_star_predicted": 0.5,
+      "c_star_measured": 0.5,
+      "abs_err": 0
+    },
+    {
+      "B": 1,
+      "K": 3,
+      "c_star_predicted": 0.25,
+      "c_star_measured": 0.249904,
+      "abs_err": 0.000096
+    },
+    {
+      "B": 1,
+      "K": 9,
+      "c_star_predicted": 0.1,
+      "c_star_measured": 0.099776,
+      "abs_err": 0.000224
+    }
+  ],
+  "g3": {
+    "c_star": 0.249904,
+    "c_lo": 0.099904,
+    "c_hi": 0.399904,
+    "R_lo": 1,
+    "R_hi": 0,
+    "dR": 1
+  },
+  "g4": {
+    "grid": [
+      0,
+      0.05,
+      0.1,
+      0.15,
+      0.2,
+      0.25,
+      0.3,
+      0.35,
+      0.4,
+      0.45,
+      0.5,
+      0.55,
+      0.6,
+      0.65,
+      0.7,
+      0.75,
+      0.8,
+      0.85,
+      0.9,
+      0.95,
+      1
+    ],
+    "deployed": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      0.484667,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "frozen_const": 0
+  }
+}
