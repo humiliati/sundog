@@ -5,6 +5,15 @@
 ([BOXSEL_CONJECTURE_SLATE.md](BOXSEL_CONJECTURE_SLATE.md)) one statement, with the axes as instances.
 Lean module in the public repo `Dev/sundogcert`; frozen-as-portfolio.
 
+**Lane complete (2026-06-30).** The law now carries its full apparatus, all machine-checked with no
+prose gaps: seven grounded axes (this doc); the **composition law** abstracted to one general lemma
+`orderOf_prod_eq_lcm` with the cohomological and radical axes as literal instances, the
+3-positive/2-negative boundary, the broken converse, and the **structure-theorem mode-vector**
+([ORDER_COMPOSITION_LAW.md](ORDER_COMPOSITION_LAW.md)); and the **approximation dimension** — ε-approx
+collapses, exactness is order-relative, an unbounded piece-count ladder against two resist poles
+([ORDER_APPROX_AXIS.md](ORDER_APPROX_AXIS.md)). The moment axis's convolution reverse — the lane's
+last analysis fence — is now in Lean too. Public render: [PROMO_WEBDEV_HANDOFF_COMPOSITION.md](PROMO_WEBDEV_HANDOFF_COMPOSITION.md).
+
 ## The name and the one statement
 
 **Order-Relative Resolution Law.** A bounded process with budget `k` **resolves** a target iff the
