@@ -241,3 +241,37 @@ The "≥2 latent computations" generality requirement is now substantially met (
 3-bit parity at `H=2`/`d_dec=2`). **Step 1 LEARNED → Step 2 (curriculum to `H=8`) is green-lit** to extend
 arity-3 to the pair-XOR scale and close the gate at matched `H`; the H=2 result already demonstrates the
 generality in kind.
+
+### Step 2 RESULT (2026-06-29): arity-3 body-resistance holds through H≈4, grok-walls at H=8
+
+`results/chatv2/phase1-r1/L2_arity3_curriculum` (pre-check ≈ chance at every H). The curriculum climbed the
+arity-3 circuit and its learnability degraded with `H`:
+
+| H | eval_loss (chance 0.693) | learned | verdict | objective_excess |
+| --- | --- | --- | --- | --- |
+| 1 | 0.555 | ✓ | MARGINAL (no non-decision latent at H=1) | — |
+| 2 | 0.577 | ✓ | **SHARP** | 0.71 − 0.51 = **0.20** |
+| 4 | 0.657 | ✓ | MARGINAL | 0.66 − 0.50 = **0.16** (≥ floor; body_carry 0.66 < 0.70 misses the binary bar) |
+| 8 | 0.685 ≈ chance | ✗ | **UNLEARNED** | — |
+
+**Outcome (per the frozen 3-way):** the *scale-matched* `H=8` arity-3 close **did not land** — even the
+intra-task curriculum could not carry 8 independent 3-parity latents at d256 (eval_loss climbs to chance
+by H=8). This is an **UNLEARNED training ceiling, not a body-resistance negative** (the guard held; the
+`d_dec=7.8` there is noise-rank). Unlike pair-XOR's H=16, arity-3 is intrinsically harder and tops out
+around `H≈4`.
+
+**But the "≥2 latent computations" generality requirement IS met** — arity-3 (a genuinely different
+input-undecodable computation) shows **de-confounded SHARP body-resistance at H=2** (excess 0.20, twice
+confirmed with the diagnostic's 0.23) and a positive-but-binary-marginal contrast at H=4 (excess 0.16 ≥
+floor). The effect is not pair-XOR-specific.
+
+### R1 status (2026-06-29): all promotion-gate items now met — R1 licensable, with scope
+
+Against `PROMOTE_GATE.md` §2 (R1): seed-stability ✓ · continuous decomposed contrast ✓ · **≥2 latent
+computations ✓** (pair-XOR + 3-bit parity) · ≥2 architectures ✓ (A1/A2) · high-dim bar honestly unmet ✓
+(`d_dec≈7.6 < 20`, R2 territory) · falsifiers F-readout/F-δ/F-opt **all cleared** ✓. **Every R1 gate item
+is met.** R1 licenses at its honest scope — *"computed-latent transformers exhibit a robust,
+de-confounded, objective-driven body-resistance"* — **scope: parity-family latents, toy from-scratch
+transformers, `d_dec < 20`; the effect reaches `H=8`/`d_dec≈7` for pair-XOR and `H≈2–4` for 3-bit parity
+(a learnability ceiling, not a resistance limit).** No R2/R3 language; the real-LLM claim and the `d_dec≥20`
+high-dim bar remain unstarted. Owner ratifies the PROMOTE_GATE R1 flip.

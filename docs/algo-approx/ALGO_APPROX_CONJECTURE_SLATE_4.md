@@ -153,7 +153,27 @@ now in the **same** certified ledger as the find/check checkers.
 
 ---
 
-## U-4 — Definable approximant floor: ReLU/semialgebraic as the o-minimal H-A5 bridge. [DAYDREAM — frozen-lane reopen]
+## U-4 — Definable approximant floor: ReLU/semialgebraic as the o-minimal H-A5 bridge. [~~DAYDREAM~~ → FORMALIZABLE] ✅ DONE 2026-06-30
+
+> **Status: RECLASSIFIED + LANDED (core).** The DAYDREAM tier was a **mis-tiering**. It is true that
+> mathlib v4.30.0 has **no o-minimal / semialgebraic substrate** (verified: no o-minimal structures,
+> no semialgebraic sets, no cell decomposition — only FO-logic `ModelTheory.Definability`, which
+> gives none of the tameness consequences). **But U-4 never needed that substrate.** The one
+> o-minimal consequence H-A5 cares about — a **uniform finite piece-count modulus** for the ReLU
+> family — is the self-contained PL/semilinear fragment, and the lane already had 90% of it
+> (`ExactRepr.net_hasPieceCover : ∀ g, ∃ k, HasPieceCover (realize1N g) k`, plus the per-gate
+> `+`/`scale`/`relu` piece lemmas the `PieceCover` docstring flagged as "remaining wiring" — all
+> already present). Result: `Sundogcert/DefinableRate.lean` (33rd module) exposes the **explicit
+> modulus** `netPieceBound : Net 1 → ℕ` (var/const→1, add→+, scale→id, relu→2·) and proves
+> `net_pieceBound_cover : ∀ g, HasPieceCover (realize1N g) (netPieceBound g)` — the `∃ k` promoted to
+> a **computed, checkable rate**, plus `sqNet_definable_rate` (the analytic gate carries it to a
+> family rate: `n` pieces ⟹ L∞ ≤ `1/(4n²)`). Axiom-clean, gated, **full build 8558 GREEN**.
+> `DEFINABILITY_ADDS_NOTHING` is **defeated** — the checkable rate exists. **Honest scope:** this is
+> the **PL finiteness-modulus**, NOT a formalization of o-minimality (still absent, a separate
+> project); and the modulus is **representation-dependent** (linear for additive circuits, `2^d` for
+> folding ones — the same tree-vs-DAG honesty as U-3's `SHARED_SIZE_NOT_CAPTURED`, machine-witnessed
+> by `rfl`). The tight convex-envelope `n`-piece cover is a named follow-on. **No o-minimal-substrate
+> reopen was required; H-A5 stays frozen — this delivers its one checkable shadow.**
 
 *Claim.* Every ReLU net realizes a **semialgebraic** (indeed piecewise-linear) function, so the whole
 approximant family lives inside an **o-minimal** structure. Slate-1's **H-A5** raised definability as

@@ -41,7 +41,7 @@ non-sovereignty over that channel).
 | channel | the distribution-changing operation | named pathology | safety primitive |
 | --- | --- | --- | --- |
 | **measure** | computing the proxy from the world | Goodhart (regressional/extremal) | observe-without-selecting (look-and-ignore) |
-| **target** | selecting/conditioning on the proxy | Elster by-products; non-targetability | un-targeting (zero proxy-MI) |
+| **target** | selecting/conditioning on the proxy | Elster by-products; non-targetability | un-targeting (zero *causal* proxy influence, not observational MI — see A3) |
 | **aggregate** | combining components into one authority | the sovereign aggregator | authority cap (`Sov_opt ≤ κ`) |
 | **act** | intervening on the world | performativity; shutdown manipulation | presider-authority cap |
 
