@@ -99,6 +99,24 @@ failure: the whole frame is empty against an agent that can eventually reach eve
 bound. Reward tampering is the literature's name for that failure on the measure
 channel.
 
+**S5 refinement (2026-07-01, from the S1 cleanliness law).** Unreachability is only half
+the condition. The full duality:
+
+> **Clean screening = the agent cannot reach the bound ∧ the bound can reach the
+> channel's fully-safe point.** The asymmetry of reach: unreachability going up,
+> reachability going down.
+
+An unreachable bound that *cannot project to the safe point* buys only partial screening.
+This is exactly the uneven ledger's mechanism: act and aggregate primitives clip an
+**outgoing** arrow that terminates at the overseer's actuator (zero is dialable — `κ=0`,
+`Sov_opt=0`), while the target primitive is a condition on an **incoming** arrow realized
+inside the policy's function, where no exogenous projection exists (in-channel enforcement
+collapses to a measure retreat priced at the proxy's reliability edge). Three tiers:
+no-primitive (measure), clean / in-channel reachable (act, aggregate), partial /
+retreat-priced (target). Full statement, mapping table, mechanism, and live falsifiers —
+including the open `Sov_opt`-classification check that would void it:
+[`percival/PERCIVAL_S1_CLEANLINESS_LAW.md`](percival/PERCIVAL_S1_CLEANLINESS_LAW.md).
+
 ---
 
 ## Claim boundary
@@ -130,3 +148,7 @@ that can each fail.
   deflation, reopen slate on cleanliness.
 - **Invariant machinery:** [[project_sundog_suffstat_order_slate]] — sufficient-statistic
   order / determine-resist, the formal home of "screens off."
+- **Cleanliness law (the fence's second half):**
+  [`percival/PERCIVAL_S1_CLEANLINESS_LAW.md`](percival/PERCIVAL_S1_CLEANLINESS_LAW.md) —
+  the reachability duality and the three cleanliness tiers, synthesized from the reopen
+  slate's S1/S2.
