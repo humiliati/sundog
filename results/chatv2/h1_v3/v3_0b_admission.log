@@ -1,0 +1,71 @@
+H1_V3_0B_SLICE_ADMISSION  chess arm  [NON-PROMOTIONAL, CPU]
+
+(chess) shard columns: ['Event', 'Site', 'White', 'Black', 'Result', 'WhiteTitle', 'BlackTitle', 'WhiteElo', 'BlackElo', 'WhiteRatingDiff']... using 'movetext'; 121332 games
+(chess) 2600 games with >=28 plies loaded
+(marker scan) ply 24: 2582 instances, 300 axes meet slice floor 120; co-ambiguity median 12 p75 14
+(marker scan) ply 32: 2354 instances, 342 axes meet slice floor 120; co-ambiguity median 18 p75 19
+(marker scan) ply 40: 2113 instances, 366 axes meet slice floor 120; co-ambiguity median 22 p75 24
+(chosen) marker ply 40: 366 floor axes, 2113 instances
+(balance) 29 axes balanced on their slices
+(liveness) 'e2e4-present' LR-counts on slice instances: 1.000 (must be >= 0.95)
+(witness) 5/29 axes covered, 11 pairs, 41s of 600s budget
+(coverage) instance-level witness coverage on 200-sample: 0/200 = 0.00
+
+      axis n_slice   bal  LRcnt  tfidf  MLPw1  MLPw2  MLPw3   meta    max  wit  admit?
+    occ.a7     130  0.50  0.590  0.410  0.564  0.436  0.615  0.333  0.615    0  no
+    occ.f2     218  0.50  0.667  0.652  0.455  0.500  0.515  0.530  0.667    0  no
+      b.h7     161  0.51  0.673  0.449  0.531  0.592  0.490  0.469  0.673    0  no
+    occ.c2     495  0.48  0.631  0.517  0.443  0.577  0.510  0.450  0.631    0  no
+      w.g2     318  0.53  0.656  0.635  0.458  0.656  0.594  0.531  0.656    0  no
+    occ.h7     161  0.54  0.633  0.429  0.469  0.531  0.429  0.490  0.633    0  no
+    occ.f7     268  0.46  0.679  0.617  0.605  0.617  0.667  0.543  0.679    0  no
+    occ.c7     493  0.46  0.649  0.628  0.554  0.561  0.554  0.520  0.649    0  no
+    occ.g2     318  0.54  0.667  0.573  0.510  0.635  0.562  0.521  0.667    0  no
+      w.f1    1606  0.55  0.887  0.762  0.769  0.675  0.660  0.567  0.887    0  no
+      w.h2     159  0.55  0.750  0.479  0.479  0.542  0.438  0.625  0.750    0  no
+    occ.f1    1606  0.55  0.898  0.769  0.762  0.692  0.688  0.571  0.898    0  no
+      w.f2     218  0.45  0.682  0.682  0.621  0.591  0.561  0.621  0.682    0  no
+      w.c2     495  0.44  0.671  0.691  0.557  0.604  0.570  0.523  0.691    0  no
+      b.a7     130  0.44  0.564  0.462  0.590  0.436  0.462  0.436  0.590    1  YES
+      b.g7     447  0.56  0.674  0.637  0.622  0.578  0.615  0.556  0.674    0  no
+    occ.d2    1154  0.43  0.720  0.625  0.599  0.573  0.608  0.539  0.720    0  no
+    occ.g7     447  0.57  0.659  0.622  0.600  0.630  0.615  0.563  0.659    0  no
+      b.c7     493  0.43  0.669  0.622  0.608  0.554  0.595  0.547  0.669    0  no
+    occ.b7     541  0.43  0.712  0.601  0.552  0.571  0.577  0.558  0.712    0  no
+    occ.d7    1249  0.42  0.771  0.589  0.640  0.605  0.595  0.539  0.771    1  no
+      b.d8     789  0.58  0.713  0.700  0.629  0.477  0.684  0.532  0.713    0  no
+    occ.d8     789  0.58  0.713  0.688  0.612  0.608  0.679  0.532  0.713    0  no
+      w.d2    1154  0.42  0.729  0.625  0.608  0.608  0.588  0.553  0.729    3  no
+      b.f7     268  0.41  0.691  0.593  0.617  0.593  0.617  0.593  0.691    3  no
+      b.b7     541  0.41  0.706  0.583  0.583  0.589  0.577  0.577  0.706    0  no
+      b.d7    1249  0.41  0.779  0.595  0.600  0.579  0.576  0.549  0.779    3  no
+    occ.e2    1154  0.41  0.715  0.582  0.579  0.614  0.565  0.501  0.715    0  no
+    occ.h2     159  0.60  0.750  0.542  0.542  0.542  0.500  0.625  0.750    0  no
+
+  (leak controls, first 10 axes, informational)
+      occ.a7 [  san] probe-max 0.692
+      occ.a7 [sanit] probe-max 0.718
+      occ.f2 [  san] probe-max 0.621
+      occ.f2 [sanit] probe-max 0.621
+        b.h7 [  san] probe-max 0.653
+        b.h7 [sanit] probe-max 0.612
+      occ.c2 [  san] probe-max 0.577
+      occ.c2 [sanit] probe-max 0.584
+        w.g2 [  san] probe-max 0.688
+        w.g2 [sanit] probe-max 0.677
+      occ.h7 [  san] probe-max 0.653
+      occ.h7 [sanit] probe-max 0.612
+      occ.f7 [  san] probe-max 0.765
+      occ.f7 [sanit] probe-max 0.704
+      occ.c7 [  san] probe-max 0.676
+      occ.c7 [sanit] probe-max 0.655
+      occ.g2 [  san] probe-max 0.656
+      occ.g2 [sanit] probe-max 0.667
+        w.f1 [  san] probe-max 0.835
+        w.f1 [sanit] probe-max 0.846
+
+  ADMITTED sliced axes: 1 / 24 needed
+  kill causes: {'probe': 28}
+
+VERDICT: F3-V3b/input - the surface suite still reads 28 axes ON their ambiguity slices: natural move statistics pin state even on formally-undetermined fibers. STRONG negative (ambiguous fibers are not uniform enough), not a bookkeeping failure.
+  (Non-promotional data admission. No model run, no GPU, no R2 claim.)

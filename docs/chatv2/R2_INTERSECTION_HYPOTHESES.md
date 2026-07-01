@@ -119,7 +119,7 @@ text.**
 
 | hook | promise | risk | testable-now? | status |
 | --- | --- | --- | --- | --- |
-| H1 world/entity-state | high | medium | partial (V3-0 CPU data gate) | **V3-0 RUN 2026-07-01 — F3 both corpora** (code `F3-V3/copy` literal-dominated 0.07 computed; chess `F3-V3/input` all 39 axes bag-readable 0.94+ even in UCI) — witness pairs exist, distribution is bag-dominated; surviving route = **V3-0b ambiguity-slice redesign, SPEC'D (`H1_V3_0B_AMBIGUITY_SLICE_SPEC.md`, feasibility: ply-40 co-ambiguity median 22), not yet run**. `H1_V3_0_DATA_ADMISSION_RECEIPT.md` |
+| H1 world/entity-state | high | medium | partial (V3-0 CPU data gate) | **V3-0 RUN 2026-07-01 — F3 both corpora** (code `F3-V3/copy` literal-dominated 0.07 computed; chess `F3-V3/input` all 39 axes bag-readable 0.94+ even in UCI) — witness pairs exist, distribution is bag-dominated. **V3-0b ambiguity-slice redesign RUN 2026-07-01 → `F3-V3b/input` (the STRONG negative): slice collapsed readability 0.95→~0.65 but 28/29 axes still probe-readable above 0.60 — ambiguous fibers are not uniform. Absolute undecodability now failed at SIX families; the lane's positives (H2, R1) were all RELATIVE crossovers. `H1_V3_0B_SLICE_ADMISSION_RECEIPT.md`** |
 | **H2 stack-top / Dyck** | **high** | **low** | **yes (CPU, GPT-2 + code)** | **CONFIRMED (existence) 2026-07-01** — see result below |
 | H3 cumulative/toggled | medium | medium | partial (bigger model) | PROPOSED |
 | H4 binding under attractors | medium | medium | partial | PROPOSED |

@@ -6,8 +6,14 @@
 > the R2 intersection. H2 showed the intersection exists at low
 > dimension; H5 upgraded the data gate. H1 asks whether the high-dimensional
 > state-bank version is wide enough to clear `d_dec >= 20`.
+>
+> **Post V3-0 status:** the initial whole-distribution data admission filed
+> `F3-V3/copy` for code and `F3-V3/input` for chess in
+> `H1_V3_0_DATA_ADMISSION_RECEIPT.md`. The active amendment is
+> `H1_V3_0B_AMBIGUITY_SLICE_SPEC.md`: chess becomes the primary ambiguity-slice
+> arm; code is not revived unless an expanded corpus clears its hard floor.
 
-## 0. Fork calls
+## 0. Original V3-0 fork calls
 
 1. **Primary corpus:** code variable-state.
 2. **Parallel secondary:** chess PGN board-state, cheap admission only.
@@ -19,6 +25,9 @@
 
 The H200 is for scale and the scaling fork, not for discovering whether H1 has
 a valid data bank.
+
+After V3-0, `H1_V3_0B_AMBIGUITY_SLICE_SPEC.md` amends this ordering: chess is
+the primary V3-0b arm, and code is optional behind a hard corpus-expansion floor.
 
 ## 1. Delivery gate, with the H5 upgrade
 
@@ -209,6 +218,7 @@ mechanical annotation path.
 | rung | where | task | gate |
 | --- | --- | --- | --- |
 | **V3-0 data admission** | CPU now | mine corpus, build bank, run balance plus H5-upgraded surface suite | `>=24` surviving axes, else `F3-V3/input` |
+| **V3-0b ambiguity-slice admission** | CPU now | define axes on count-ambiguous slices; bounded witness search; slice-conditioned probes | `>=24` surviving axes, else `F3-V3b/*` |
 | **V3-0.5 calibration** | CPU, cheap | H2-style hard-slice probe on GPT-2-small | non-gate expectation anchor |
 | **V3-1 1B admission** | CPU-lite / local 1080 / GPU | Qwen2.5-1.5B or OLMo-2-1B, random-init floor, decision selection | carry above floor at `d_dec >= 20`, else `F2-V3/carry` |
 | **V3-2 full fingerprint** | GPU | complete R2 battery plus external review packet | only rung that can move `PROMOTE_GATE.md` R2 |
@@ -330,14 +340,14 @@ Only V3-2 plus external review can alter the R2 row in `PROMOTE_GATE.md`.
 
 ## 11. Immediate build order
 
-1. Build V3-0 for code variable-state.
-2. Add chess PGN through the same data-gate interface.
-3. File `H1_V3_0_DATA_ADMISSION_RECEIPT.md`.
-4. If and only if V3-0 admits at least one bank, run V3-0.5 GPT-2 calibration.
+1. V3-0 is complete: see `H1_V3_0_DATA_ADMISSION_RECEIPT.md`.
+2. Run V3-0b per `H1_V3_0B_AMBIGUITY_SLICE_SPEC.md`, chess first.
+3. File `H1_V3_0B_SLICE_ADMISSION_RECEIPT.md`.
+4. If and only if V3-0b admits at least one bank, run V3-0.5 GPT-2 calibration
+   on the admitted slices.
 5. Stage V3-1 command lines with local CPU/1080 first, H200 second.
 
 This is not the same trap repeated. The failed R2 families were functions of
 surface counts or local triggers. H1 asks for high-dimensional **state**, and
 H5 now requires evidence that the state is not determined by the registered
 surface statistic at all.
-

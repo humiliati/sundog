@@ -84,6 +84,8 @@ distribution)**.
    the natural-distribution intersection is thin *everywhere we have looked*.
 3. Narrative entity-state stays parked per §5.
 
-Cross-refs: `H1_V3_STATEBANK_SCOPE.md` (the prereg this runs), `R2_INTERSECTION_HYPOTHESES.md`
-(H1 row; H2/H5 results), `R2_LM_DATA_AUDIT_RECEIPT.md` (the relation-extraction stop),
-`PROMOTE_GATE.md` (unchanged).
+Cross-refs: `H1_V3_STATEBANK_SCOPE.md` (the prereg this runs),
+`H1_V3_0B_AMBIGUITY_SLICE_SPEC.md` (the scoped ambiguity-slice follow-up),
+`R2_INTERSECTION_HYPOTHESES.md` (H1 row; H2/H5 results),
+`R2_LM_DATA_AUDIT_RECEIPT.md` (the relation-extraction stop), `PROMOTE_GATE.md`
+(unchanged).

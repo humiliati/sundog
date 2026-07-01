@@ -1,3 +1,28 @@
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 Stellar Aqua LLC
+
+This individual file is licensed under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with the
+License. You may obtain a copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+License for the specific language governing permissions and limitations
+under the License.
+
+SCOPE. This Apache-2.0 grant covers ONLY this file
+(docs/percival/PERCIVAL_PROMO_HANDOFF.md). It does NOT extend to any other
+Percival scripts, docs, Lean modules, results, or research artifacts, all
+of which remain governed by the root LICENSE at the repository root (all
+rights reserved unless individually declared otherwise). See also the
+narrower Apache-2.0 grant on the non-sovereignty benchmark at
+released/non-sovereignty/LICENSE.md, which is scoped by its own MANIFEST.json.
+-->
+
 # Percival → Promo/Webdev Handoff — Surfaces to Update or Expand
 
 *Drafted 2026-07-01 for the promo/webdev team. Self-contained: assumes no session
@@ -151,7 +176,6 @@ disposition, same as the cap-not-council post. Not a promo blast.**
   all-rights-reserved by default. Public Percival surfaces need an owner licensing
   decision (extend the manifest, a separate grant, or page-only publication).
 - **Deploy conventions:** only `dist/` is published (Cloudflare Pages, `npm run
-  deploy`, owner-gated). Run `npm run sundog:check` after touching any public page.
 - **Owner re-voice** pending on the literary post before any deposit.
 
 ---

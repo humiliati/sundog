@@ -152,3 +152,7 @@ that can each fail.
   [`percival/PERCIVAL_S1_CLEANLINESS_LAW.md`](percival/PERCIVAL_S1_CLEANLINESS_LAW.md) —
   the reachability duality and the three cleanliness tiers, synthesized from the reopen
   slate's S1/S2.
+- **Order-relative lane (the two laws' formal home, opened 2026-07-01):**
+  [`SUNDOG_V_ORDERRELATIVE.md`](SUNDOG_V_ORDERRELATIVE.md) — the keyed-composition law
+  and the cleanliness-σ bridge, pointed at the banked `OrderRelative*` machinery and the
+  σ schema; slate OR-1..OR-6, nothing run.
