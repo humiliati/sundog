@@ -267,3 +267,21 @@ predict-σ); σ is a *family* of order-invariants, one per filtration, unified i
 one universal candidate — Kolmogorov / description-length (a 7th axis) — was then tested directly and
 *fails to preserve the dichotomy* (it makes parity determine), so the schema is the *provable* ceiling,
 not merely the observed one: "resist" is bound-relative (H1 FRONTIER block).**
+
+## Addendum (2026-07-01): an 8th filtration — the SURFACE-WINDOW axis (machine-checked)
+
+The chat-v2 R2 arc (`docs/chatv2/R2_INTERSECTION_HYPOTHESES.md`, H5 the σ-bridge) grounded the
+schema on a new filtration: **w-gram count statistics** — the "surface probes" of LLM
+input-decodability audits. σ_surface(f) = least window w such that the label f factors through
+the w-gram count vector (∞ if none). Lean anchor `sundogcert/Sundogcert/SurfaceBag.lean`
+(gated, `[propext, Quot.sound]` — no `Classical.choice`): over bracket strings the bag (w = 1)
+**determines nesting depth** (`bagSufficient_depth`, via the stack invariant) and **cannot
+determine the stack-top** (`not_bagSufficient_stackTop`, witness `([` vs `[(` — same bag,
+different top), packaged as `bag_determines_depth_not_stackTop`. Notes that keep the schema
+honest: (a) this resist is **information-theoretic** — the witness defeats *any* readout of the
+bag, unlike the probe suite's *linear* ceilings (count-parity is the separating case: a
+*nonlinear function of the bag*, so σ_surface = 1 yet linear-probe-invisible); (b) only w = 1 is
+machine-checked — σ_surface(stack-top) = ∞ is conjectured, w ≥ 2 unformalized; (c) per the H1
+law, σ_surface is *another* per-filtration order, not the universal scalar. Empirical partner:
+the H2 stack-top probe (GPT-2 residual holds 0.931 where counts collapse 0.770 at
+count-ambiguous positions) — the determine/resist crossover measured on a real substrate.

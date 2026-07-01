@@ -70,4 +70,6 @@ provides — that is a research problem, not a compute problem.
 
 Cross-refs: `R2_LARGER_MODEL_ROUTE_CAMPAIGN.md` (this phase's spec),
 `R2_V2_ADMISSION_RECEIPT.md` (agreement F3-input), `R2_REAL_SUBSTRATE_SPEC.md` (MVP F3),
-`PROMOTE_GATE.md` (unchanged — R2 not started).
+`PROMOTE_GATE.md` (unchanged — R2 not started). The later H1 state-bank fork
+(`H1_V3_STATEBANK_SCOPE.md`) is a new data-family route, not a continuation of this
+relation-extraction stop branch.

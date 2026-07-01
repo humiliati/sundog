@@ -1,0 +1,617 @@
+{
+  "generated_at": "2026-07-01T22:18:05.032Z",
+  "branch": "S2_TARGET_CAP_COLLAPSES_TO_MASK",
+  "model": {
+    "joint": "V,U cond. indep. given G; P(V=G)=beta, P(U=G)=rho",
+    "court": "B1.0 R(c), c*=0.25",
+    "objective": "Total = Competence * R(c)",
+    "tax": "max(beta,rho)-beta (reliability edge, not synergy -- caveat recorded)"
+  },
+  "gates": {
+    "S2.1": {
+      "token": "S2_COLLAPSE_VERIFIED",
+      "pass": true
+    },
+    "S2.2": {
+      "token": "S2_NO_EXOGENOUS_TARGET_CAP",
+      "pass": true
+    },
+    "S2.3": {
+      "token": "S2_NAMED_VARIABLE_CAP_LEAKY_BUT_CEILINGED",
+      "note": "correlation-leak = P(V=U), advantage-leak = 0 (courtier == honest V-user; data processing caps reconstruction)"
+    },
+    "S2.4": {
+      "token": "S2_FRONTIER_MAPPED",
+      "pass": true,
+      "w_star": 0.24,
+      "control_w_star": 0
+    }
+  },
+  "grid": [
+    {
+      "beta": 0.55,
+      "rho": 0.7,
+      "kind": "primary",
+      "tax": 0.15,
+      "best_unconstrained": 0.7,
+      "v_only": 0.55,
+      "best_projected": 0.55,
+      "gap": 0.15,
+      "r_leak": 0.52,
+      "honest_r_leak": 0.52,
+      "advantage_leak": 0,
+      "proj_rows": [
+        {
+          "policy": "proxy_user",
+          "projection": "mask0",
+          "competence": 0.5,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "proxy_user",
+          "projection": "mask1",
+          "competence": 0.5,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "proxy_user",
+          "projection": "avg",
+          "competence": 0.5,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "xor",
+          "projection": "mask0",
+          "competence": 0.45,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "xor",
+          "projection": "mask1",
+          "competence": 0.55,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "xor",
+          "projection": "avg",
+          "competence": 0.5,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "mix_0.5",
+          "projection": "mask0",
+          "competence": 0.525,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "mix_0.5",
+          "projection": "mask1",
+          "competence": 0.525,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "mix_0.5",
+          "projection": "avg",
+          "competence": 0.525,
+          "c": 0,
+          "le_beta": true
+        }
+      ]
+    },
+    {
+      "beta": 0.6,
+      "rho": 0.75,
+      "kind": "primary",
+      "tax": 0.15,
+      "best_unconstrained": 0.75,
+      "v_only": 0.6,
+      "best_projected": 0.6,
+      "gap": 0.15,
+      "r_leak": 0.55,
+      "honest_r_leak": 0.55,
+      "advantage_leak": 0,
+      "proj_rows": [
+        {
+          "policy": "proxy_user",
+          "projection": "mask0",
+          "competence": 0.5,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "proxy_user",
+          "projection": "mask1",
+          "competence": 0.5,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "proxy_user",
+          "projection": "avg",
+          "competence": 0.5,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "xor",
+          "projection": "mask0",
+          "competence": 0.4,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "xor",
+          "projection": "mask1",
+          "competence": 0.6,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "xor",
+          "projection": "avg",
+          "competence": 0.5,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "mix_0.5",
+          "projection": "mask0",
+          "competence": 0.55,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "mix_0.5",
+          "projection": "mask1",
+          "competence": 0.55,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "mix_0.5",
+          "projection": "avg",
+          "competence": 0.55,
+          "c": 0,
+          "le_beta": true
+        }
+      ]
+    },
+    {
+      "beta": 0.6,
+      "rho": 0.9,
+      "kind": "primary",
+      "tax": 0.3,
+      "best_unconstrained": 0.9,
+      "v_only": 0.6,
+      "best_projected": 0.6,
+      "gap": 0.3,
+      "r_leak": 0.58,
+      "honest_r_leak": 0.58,
+      "advantage_leak": 0,
+      "proj_rows": [
+        {
+          "policy": "proxy_user",
+          "projection": "mask0",
+          "competence": 0.5,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "proxy_user",
+          "projection": "mask1",
+          "competence": 0.5,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "proxy_user",
+          "projection": "avg",
+          "competence": 0.5,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "xor",
+          "projection": "mask0",
+          "competence": 0.4,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "xor",
+          "projection": "mask1",
+          "competence": 0.6,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "xor",
+          "projection": "avg",
+          "competence": 0.5,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "mix_0.5",
+          "projection": "mask0",
+          "competence": 0.55,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "mix_0.5",
+          "projection": "mask1",
+          "competence": 0.55,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "mix_0.5",
+          "projection": "avg",
+          "competence": 0.55,
+          "c": 0,
+          "le_beta": true
+        }
+      ]
+    },
+    {
+      "beta": 0.75,
+      "rho": 0.9,
+      "kind": "primary",
+      "tax": 0.15,
+      "best_unconstrained": 0.9,
+      "v_only": 0.75,
+      "best_projected": 0.75,
+      "gap": 0.15,
+      "r_leak": 0.7,
+      "honest_r_leak": 0.7,
+      "advantage_leak": 0,
+      "proj_rows": [
+        {
+          "policy": "proxy_user",
+          "projection": "mask0",
+          "competence": 0.5,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "proxy_user",
+          "projection": "mask1",
+          "competence": 0.5,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "proxy_user",
+          "projection": "avg",
+          "competence": 0.5,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "xor",
+          "projection": "mask0",
+          "competence": 0.25,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "xor",
+          "projection": "mask1",
+          "competence": 0.75,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "xor",
+          "projection": "avg",
+          "competence": 0.5,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "mix_0.5",
+          "projection": "mask0",
+          "competence": 0.625,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "mix_0.5",
+          "projection": "mask1",
+          "competence": 0.625,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "mix_0.5",
+          "projection": "avg",
+          "competence": 0.625,
+          "c": 0,
+          "le_beta": true
+        }
+      ]
+    },
+    {
+      "beta": 0.75,
+      "rho": 0.6,
+      "kind": "control",
+      "tax": 0,
+      "best_unconstrained": 0.75,
+      "v_only": 0.75,
+      "best_projected": 0.75,
+      "gap": 0,
+      "r_leak": 0.55,
+      "honest_r_leak": 0.55,
+      "advantage_leak": 0,
+      "proj_rows": [
+        {
+          "policy": "proxy_user",
+          "projection": "mask0",
+          "competence": 0.5,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "proxy_user",
+          "projection": "mask1",
+          "competence": 0.5,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "proxy_user",
+          "projection": "avg",
+          "competence": 0.5,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "xor",
+          "projection": "mask0",
+          "competence": 0.25,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "xor",
+          "projection": "mask1",
+          "competence": 0.75,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "xor",
+          "projection": "avg",
+          "competence": 0.5,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "mix_0.5",
+          "projection": "mask0",
+          "competence": 0.625,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "mix_0.5",
+          "projection": "mask1",
+          "competence": 0.625,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "mix_0.5",
+          "projection": "avg",
+          "competence": 0.625,
+          "c": 0,
+          "le_beta": true
+        }
+      ]
+    },
+    {
+      "beta": 0.7,
+      "rho": 0.7,
+      "kind": "control",
+      "tax": 0,
+      "best_unconstrained": 0.7,
+      "v_only": 0.7,
+      "best_projected": 0.7,
+      "gap": 0,
+      "r_leak": 0.58,
+      "honest_r_leak": 0.58,
+      "advantage_leak": 0,
+      "proj_rows": [
+        {
+          "policy": "proxy_user",
+          "projection": "mask0",
+          "competence": 0.5,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "proxy_user",
+          "projection": "mask1",
+          "competence": 0.5,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "proxy_user",
+          "projection": "avg",
+          "competence": 0.5,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "xor",
+          "projection": "mask0",
+          "competence": 0.3,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "xor",
+          "projection": "mask1",
+          "competence": 0.7,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "xor",
+          "projection": "avg",
+          "competence": 0.5,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "mix_0.5",
+          "projection": "mask0",
+          "competence": 0.6,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "mix_0.5",
+          "projection": "mask1",
+          "competence": 0.6,
+          "c": 0,
+          "le_beta": true
+        },
+        {
+          "policy": "mix_0.5",
+          "projection": "avg",
+          "competence": 0.6,
+          "c": 0,
+          "le_beta": true
+        }
+      ]
+    }
+  ],
+  "frontier_primary": {
+    "beta": 0.6,
+    "rho": 0.9,
+    "w_star": 0.24,
+    "total_star": 0.671762,
+    "mask_total": 0.6,
+    "total_at_wstar_plus_03": 0,
+    "rows": [
+      {
+        "w": 0,
+        "competence": 0.6,
+        "R": 1,
+        "total": 0.6
+      },
+      {
+        "w": 0.1,
+        "competence": 0.63,
+        "R": 1,
+        "total": 0.63
+      },
+      {
+        "w": 0.2,
+        "competence": 0.66,
+        "R": 1,
+        "total": 0.66
+      },
+      {
+        "w": 0.24,
+        "competence": 0.672,
+        "R": 0.999645,
+        "total": 0.671762
+      },
+      {
+        "w": 0.25,
+        "competence": 0.675,
+        "R": 0.484667,
+        "total": 0.32715
+      },
+      {
+        "w": 0.3,
+        "competence": 0.69,
+        "R": 0,
+        "total": 0
+      },
+      {
+        "w": 0.5,
+        "competence": 0.75,
+        "R": 0,
+        "total": 0
+      },
+      {
+        "w": 1,
+        "competence": 0.9,
+        "R": 0,
+        "total": 0
+      }
+    ]
+  },
+  "frontier_control": {
+    "beta": 0.75,
+    "rho": 0.6,
+    "w_star": 0,
+    "total_star": 0.75,
+    "mask_total": 0.75,
+    "total_at_wstar_plus_03": 0.7455,
+    "rows": [
+      {
+        "w": 0,
+        "competence": 0.75,
+        "R": 1,
+        "total": 0.75
+      },
+      {
+        "w": 0.1,
+        "competence": 0.735,
+        "R": 1,
+        "total": 0.735
+      },
+      {
+        "w": 0.2,
+        "competence": 0.72,
+        "R": 1,
+        "total": 0.72
+      },
+      {
+        "w": 0.24,
+        "competence": 0.714,
+        "R": 0.999645,
+        "total": 0.713747
+      },
+      {
+        "w": 0.25,
+        "competence": 0.7125,
+        "R": 0.484667,
+        "total": 0.345325
+      },
+      {
+        "w": 0.3,
+        "competence": 0.705,
+        "R": 0,
+        "total": 0
+      },
+      {
+        "w": 0.5,
+        "competence": 0.675,
+        "R": 0,
+        "total": 0
+      },
+      {
+        "w": 1,
+        "competence": 0.6,
+        "R": 0,
+        "total": 0
+      }
+    ]
+  },
+  "honest_note": "Collapse verified: every do(U)-invariance projection lands at competence <= beta; only the canonical V-only policy attains beta; the rho-beta gap is unreachable at c=0 (data processing). RECONSTRUCTION LEAK, resolved honestly: the Bayes reconstruction courtier (Uhat=V) is BEHAVIORALLY IDENTICAL to the honest V-user -- named-variable c(U)=0 admits behavior correlated with the proxy up to P(V=U) (correlation-leak, large), but the courting ADVANTAGE of reconstruction over honesty is ZERO: the same data-processing bound that forces the collapse also ceilings the leak. You cannot reconstruct more courting-power than your unmasked channels carry. So the named-variable audit under-describes (cannot tell honest from reconstructive) but does not under-protect in this model (harm defined causally = both safe; the incentive gradient toward U is genuinely absent at c=0). Frontier: optimum courts to just under the cliff (w*~0.245, B3.2 coherence confirmed); un-targeting/masking is safe-not-optimal on primary cells and OPTIMAL on zero-tax controls (cliff-edge temptation exists only when the proxy carries a reliability edge). Feeds S1: enforcement, evasion, and reconstruction at the target channel are all governed by ONE information bound."
+}

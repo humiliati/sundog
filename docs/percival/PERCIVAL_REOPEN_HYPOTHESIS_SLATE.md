@@ -84,7 +84,12 @@ reopen the unconditional prize.
 **Prior:** confirms (proxy-dependence is functional, not an output), but this is the
 highest-information entry because its failure is a positive result: target becomes
 fixably clean.
-**Cost:** medium (construct + test candidate projections). **Shoppable:** yes either way.
+**Discovery deliverable:** the genuinely open quantity is the reconstruction leak: if a
+policy can infer the proxy content through unmasked channels while keeping named-variable
+`c(U)=0`, then target audits over named variables certify the wrong thing. The true safe
+point is content-level, not variable-level.
+**Cost:** medium (construct + test candidate projections + leak/frontier sweep).
+**Shoppable:** yes either way.
 
 ### S3 — Multi-agent pivotality *(fan-out, the deferred B1-proper scope)*
 **Claim:** the target safe point becomes **even less reachable** under many agents — when

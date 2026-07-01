@@ -119,11 +119,11 @@ text.**
 
 | hook | promise | risk | testable-now? | status |
 | --- | --- | --- | --- | --- |
-| H1 world/entity-state | high | medium | no (needs capable LM + annotation) | PROPOSED — the R2-v3 reopening |
+| H1 world/entity-state | high | medium | partial (V3-0 CPU data gate) | **SCOPED 2026-07-01** — see `H1_V3_STATEBANK_SCOPE.md` |
 | **H2 stack-top / Dyck** | **high** | **low** | **yes (CPU, GPT-2 + code)** | **CONFIRMED (existence) 2026-07-01** — see result below |
 | H3 cumulative/toggled | medium | medium | partial (bigger model) | PROPOSED |
 | H4 binding under attractors | medium | medium | partial | PROPOSED |
-| H5 σ-bridge characterization | medium (synthesis) | low | yes (analysis/Lean) | PROPOSED — the spine |
+| H5 σ-bridge characterization | medium (synthesis) | low | yes (analysis/Lean) | **LANDED (machine-checked) 2026-07-01** — see result below |
 
 ## The payoff (why this isn't just theory)
 
@@ -164,9 +164,56 @@ R2 bank. Caveats: GPT-2-small is a weak tracker (its all-position residual even 
 single quantity, one corpus (Python), light string/comment lexer.
 
 **Onward (owner's call).** The intersection being reachable, the high-dimensional route is H1
-(world/entity-state — order genuinely matters, *not* count-determined like a stack) on a capable
+(state-bank tracking — order genuinely matters, *not* count-determined like a stack) on a capable
 model; a code-trained / larger model would also widen the H2 margin. This is the first **positive**
 in the R2 arc: it says the earlier F3s were a *substrate/label-family* limitation, not a wall.
+The delivery scope is now pinned in `H1_V3_STATEBANK_SCOPE.md`.
+
+## H5 formalization result — the σ-bridge LANDED (machine-checked), 2026-07-01
+
+**Lean anchor:** `sundogcert/Sundogcert/SurfaceBag.lean` (Lean 4.30.0 + mathlib, full build
+8567 GREEN, gated in `AxiomAudit.lean`). Axiom-clean and leaner than the portfolio standard:
+`[propext, Quot.sound]` only — **no `Classical.choice`** (the witness theorem needs just
+`[Quot.sound]`).
+
+**The formal statement (w = 1, the bag).** Over bracket strings with a validity machine:
+`BagSufficient f` ⟺ equal count-vectors (bags) of valid prefixes force equal labels — the
+`IsSufficient` idiom of `ParityNoSufficientStat` with statistic = the bag. Proved:
+
+- `bagSufficient_depth` — depth **factors through the bag** (`depth + #closers = #openers`,
+  the stack invariant `evalFrom_length`): the DETERMINED pole, H2's control row.
+- `not_bagSufficient_stackTop` — the stack-top does **not**: `([` and `[(` have the same bag,
+  different tops. The RESIST pole, H2's count-ambiguous witness.
+- `bag_determines_depth_not_stackTop` — the crossover as one statement.
+
+**The sharpening the formalization forced (this is the predictive content).** The Lean resist
+property is **information-theoretic**: the witness pair defeats *any* deterministic readout of
+the bag — linear, MLP, anything. The empirical suite only ever measured *linear* readability.
+That two-axis distinction separates every family this arc touched, in advance of measurement:
+
+| family | factors through bag? | linearly? | prediction | measured |
+| --- | --- | --- | --- | --- |
+| depth | yes | yes | decodable | 1.000 ✓ |
+| count-parity | **yes (nonlinear)** | no | linear-probe-undecodable only | R1: had to *train* the model ✓ |
+| agreement / relation triggers | ≈ yes (local counts) | ≈ yes | decodable | 0.70–0.99 ✓ |
+| stack-top (count-ambiguous) | **no** | no | undecodable at any capacity | counts collapse 0.770, residual 0.931 ✓ |
+
+So the H5 kill-test ("post-hoc, not predictive") is **passed** — and it exposes that
+count-parity's "input-undecodability" in R1 was *probe-capacity-relative* (parity is a
+nonlinear function *of the bag*), while state-tracking's is *absolute* (not a function of the
+bag at all). State-tracking is the strictly stronger R2 label family, which is *why* H2 is the
+first positive.
+
+**σ_surface (the bridge to the order schema).** Define σ_surface(f) = least window w such
+that f factors through w-gram counts (∞ if none). Then depth has σ_surface = 1; count-parity
+has σ_surface = 1 (nonlinearly); the stack-top is **proved σ_surface > 1** (the module), and
+conjectured = ∞ (graded w ≥ 2 not formalized — the open hook). This is an **8th filtration**
+for `SUFFICIENT_STAT_ORDER_SLATE.md`'s schema — the *surface-window* axis — consistent with
+its schema-not-scalar law (H1 there): another per-filtration order, not a universal scalar.
+
+**Fences.** Nothing about GPT-2 is proved — "the model computes it" stays empirical (the H2
+receipt); the Lean pair is the exact-tie core of the empirical hard slice (real code's counts
+still correlate with the top, hence 0.770 ≠ chance); w ≥ 2 grading unformalized.
 
 ## Fences
 

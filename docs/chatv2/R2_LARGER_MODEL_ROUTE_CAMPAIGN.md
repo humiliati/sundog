@@ -5,6 +5,11 @@
 > remaining plausible R2 route after the two GPT-2-small admissions split the
 > problem cleanly: count-parity was input-undecodable but not GPT-2-computed;
 > agreement was GPT-2-computed but input-decodable.
+>
+> **Post-LM-0 status:** the relation-extraction version of this route filed
+> `F3-R2-LM/input` in `R2_LM_DATA_AUDIT_RECEIPT.md` (FewRel 0/64 axes survived
+> the strong surface gate). The live larger-model fork is now the H1 state-bank
+> route scoped in `H1_V3_STATEBANK_SCOPE.md`.
 
 ## 0. Campaign question
 
@@ -348,4 +353,3 @@ strong: R1 is met, and GPT-2-small admissions explain why R2 is hard.
   human-annotated document-level relation extraction.
 - [WinoGrande dataset card](https://huggingface.co/datasets/allenai/winogrande)
   - 44k Winograd-style commonsense problems, useful as a secondary sanity task.
-
