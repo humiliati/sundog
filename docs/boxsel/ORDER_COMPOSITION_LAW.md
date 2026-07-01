@@ -67,7 +67,10 @@ not a bare number.
 `@[to_additive]`. `Nat.lcm` is the join in the divisibility lattice on `ℕ`, so this *is* the join-homo
 statement. The axes are now instances of it: the cohomological axis (`L =` divisibility, `⊗ = ⊕`,
 `ord = lcm`) drops out as `cohomological_compose` (the abstract lemma + `ZMod.addOrderOf_one`, no
-bespoke computation); the radical axis is the multiplicative face (order in `ℝˣ/ℚˣ`). The proof is
+bespoke computation); the radical axis is the multiplicative face, now a **full instance too** —
+`OrderRelativeRadicalQuotient` builds the quotient group `ℝˣ ⧸ ℚˣ`, proves `radicalReaches_iff`
+(the bespoke `RadicalReaches x k` *is* the order of `[x]` in `ℝˣ/ℚˣ`, promoting the docstring claim),
+and `radical_compose` is then one line from the same abstract lemma. The proof is
 the *order-level* consequence of the pointwise coproduct law `coproduct_pow_eq_one` — the annihilator
 ideal of the pair is the intersection `(orderOf x) ∩ (orderOf y) = (lcm)`. **The abstraction's domain
 is exactly the boundary below:** an axis is an instance iff its `ord` is `orderOf` in a monoid, which
@@ -220,6 +223,7 @@ realization — the last analysis residual — is now machine-checked too (`inde
 the independent sum is integrable iff both summands are). Lean: `compose_lcm_not_max`,
 `algDeg_not_join_under_mul`, `search_not_join_under_mul`, `within_group_cancels`, `radical_cancel_sqrt2`,
 `converse_fails`, `coproduct_pow_eq_one` (+`to_additive` twin), `indepFun_integrable_add_iff`,
-`orderOf_prod_eq_lcm` (+`addOrderOf_prod_eq_lcm`, `cohomological_compose`). The general statement is
+`orderOf_prod_eq_lcm` (+`addOrderOf_prod_eq_lcm`, `cohomological_compose`), `radicalReaches_iff` +
+`radical_compose` (the `ℝˣ/ℚˣ` quotient model — radical is a full instance too). The general statement is
 now machine-checked for the group-order family: one lemma, axes as instances. Internal;
 frozen-as-portfolio.*
