@@ -1,0 +1,15 @@
+{
+  "generated_at": "2026-07-01T22:36:38.231Z",
+  "branch": "S4_COUNTERPRODUCTIVITY_GENERAL_CONFIRMED",
+  "pass": true,
+  "families": {
+    "unweighted_lists": 5000,
+    "weighted_bases": 3000,
+    "court_continuous": 500,
+    "clean_separation": 2000
+  },
+  "violations": [],
+  "violation_count": 0,
+  "claim": "for any nonincreasing reward along the courting order and any base, the upper-tail q-quantilizer average never exceeds the full-base average (best quantilizer = untilted base); tail-average is monotone in tail size; all-zero support-above tails lose strictly to any positive untargeted reward",
+  "note": "computed receipt for the general theorem; the machine-checked general form lives in sundogcert Sundogcert/PercivalGeneral.lean"
+}

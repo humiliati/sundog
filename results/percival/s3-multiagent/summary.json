@@ -1,0 +1,193 @@
+{
+  "generated_at": "2026-07-01T22:52:13.333Z",
+  "branch": "S3_SHARED_COURT_UNREACHABLE_CAP_COMPOSES",
+  "model": {
+    "court": "B1.0 R(c), c*=0.25",
+    "c_gamma": 0.35,
+    "fork": "shared-regime (aggregate c_bar) vs per-knight (own c_m); pre-registered to avoid verdict-smuggling",
+    "cap_arm": "presider 0.3, kappa 0.2, adversarial co-agent pressure in [-10,10]"
+  },
+  "gates": {
+    "S3.1": {
+      "token": "S3_UNILATERAL_PIVOTALITY_DECAYS",
+      "pass": true,
+      "M_star_analytic": 4,
+      "pivotal_up_to": [
+        1,
+        2,
+        3
+      ],
+      "non_pivotal_from": [
+        4,
+        5,
+        10,
+        20,
+        50
+      ]
+    },
+    "S3.2": {
+      "token": "S3_COALITION_THRESHOLD",
+      "pass": true,
+      "f_star_analytic": 0.285714,
+      "f_star_measured": 0.29
+    },
+    "S3.3": {
+      "token": "S3_PER_KNIGHT_COMPOSES",
+      "pass": true
+    },
+    "S3.4": {
+      "token": "S3_CAP_COMPOSES_ADVERSARIAL",
+      "pass": true,
+      "checks": 2583,
+      "cap_violations": 0,
+      "uncapped_max_deviation": 50.3
+    },
+    "S3.5": {
+      "cap_marginal_per_cap": -50.1,
+      "cap_is_linear": true,
+      "court_transition_width_f": 0.02,
+      "court_is_step": true
+    }
+  },
+  "s31": [
+    {
+      "M": 1,
+      "cbar_one_pure": 0,
+      "R_one_pure": 1,
+      "R_all_court": 0,
+      "pivotality": 1
+    },
+    {
+      "M": 2,
+      "cbar_one_pure": 0.175,
+      "R_one_pure": 1,
+      "R_all_court": 0,
+      "pivotality": 1
+    },
+    {
+      "M": 3,
+      "cbar_one_pure": 0.233333,
+      "R_one_pure": 1,
+      "R_all_court": 0,
+      "pivotality": 1
+    },
+    {
+      "M": 4,
+      "cbar_one_pure": 0.2625,
+      "R_one_pure": 0.00001,
+      "R_all_court": 0,
+      "pivotality": 0.00001
+    },
+    {
+      "M": 5,
+      "cbar_one_pure": 0.28,
+      "R_one_pure": 0,
+      "R_all_court": 0,
+      "pivotality": 0
+    },
+    {
+      "M": 10,
+      "cbar_one_pure": 0.315,
+      "R_one_pure": 0,
+      "R_all_court": 0,
+      "pivotality": 0
+    },
+    {
+      "M": 20,
+      "cbar_one_pure": 0.3325,
+      "R_one_pure": 0,
+      "R_all_court": 0,
+      "pivotality": 0
+    },
+    {
+      "M": 50,
+      "cbar_one_pure": 0.343,
+      "R_one_pure": 0,
+      "R_all_court": 0,
+      "pivotality": 0
+    }
+  ],
+  "coalition_sample": [
+    {
+      "f": 0,
+      "R": 0
+    },
+    {
+      "f": 0.1,
+      "R": 0
+    },
+    {
+      "f": 0.2,
+      "R": 0
+    },
+    {
+      "f": 0.25,
+      "R": 0.00001
+    },
+    {
+      "f": 0.28,
+      "R": 0.229231
+    },
+    {
+      "f": 0.29,
+      "R": 0.697946
+    },
+    {
+      "f": 0.3,
+      "R": 0.952389
+    },
+    {
+      "f": 0.35,
+      "R": 1
+    },
+    {
+      "f": 0.5,
+      "R": 1
+    },
+    {
+      "f": 1,
+      "R": 1
+    }
+  ],
+  "s33": [
+    {
+      "M": 1,
+      "pivotality": 1
+    },
+    {
+      "M": 2,
+      "pivotality": 1
+    },
+    {
+      "M": 3,
+      "pivotality": 1
+    },
+    {
+      "M": 4,
+      "pivotality": 1
+    },
+    {
+      "M": 5,
+      "pivotality": 1
+    },
+    {
+      "M": 10,
+      "pivotality": 1
+    },
+    {
+      "M": 20,
+      "pivotality": 1
+    },
+    {
+      "M": 50,
+      "pivotality": 1
+    }
+  ],
+  "s35": {
+    "cap_marginal_per_cap": -50.1,
+    "cap_is_linear": true,
+    "court_transition_width_f": 0.02,
+    "court_is_step": true
+  },
+  "honest_note": "The composition asymmetry is NOT a property of the primitives alone -- it is decided by what each guarantee is keyed on. The cap's guarantee is BEHAVIORAL (this agent's deviation <= kappa): a per-agent conjunct by construction, verified here under adversarial co-agents at every M -- caps aggregate LINEARLY (each cap buys exactly its own agent's bound). Un-targeting's payoff is an OUTCOME (collect the shared regime's patronage): it decomposes only if the reward does. Under the shared-regime court (the realistic positional-good reading of reputation/patronage) unilateral un-targeting is non-pivotal for M >= ceil(c_gamma/(c_gamma-c*)) = 4 and the safe point is reachable only by a COALITION of fraction f* = 1 - c*/c_gamma ~ 0.286 -- purity as a collective good, threshold aggregation. Under the per-knight court, target composition is trivially restored -- so the fork variable is the REWARD's aggregation structure, not the channel primitive. The clean tier SURVIVES its threat: the cap arm held under adversarial co-agents at every M. Scope: the cap's per-agent SAFETY composes; multi-agent presider COMPETENCE is untested here (out of scope)."
+}

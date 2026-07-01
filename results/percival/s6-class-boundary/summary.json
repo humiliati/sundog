@@ -1,0 +1,1286 @@
+{
+  "generated_at": "2026-07-01T23:06:45.893Z",
+  "branch": "S6_POINTWISE_BOUNDARY_TAX_SHAPE_REFINES",
+  "model": {
+    "base": "uniform [0,0.4] (mean 0.2 < c*=0.25)",
+    "f": "f_s(c)=1+s(c-0.2)",
+    "g": "const | logistic(0.02) | cliff at c*",
+    "pressure": "p(q)=E[tail_q c] = 0.4-0.2q; crosses c* at q=0.75"
+  },
+  "gates": {
+    "P1": {
+      "pass": true,
+      "claim": "s<=0: q*=1 for ALL g (counterproductivity; S4 extends multiplicatively)"
+    },
+    "P2": {
+      "pass": true,
+      "claim": "s>0, no tax: max tilt best (Goodhart-free control)"
+    },
+    "P3": {
+      "pass": true,
+      "claim": "s>0, cliff: optimum at cliff edge, STRICTLY beats q=1 -- counterproductivity fails on this half"
+    },
+    "P4": {
+      "pass": false,
+      "claim": "s>0, smooth tax: interior optimum"
+    },
+    "P5": {
+      "pass": true,
+      "claim": "un-targeting dominated iff s>0"
+    }
+  },
+  "cells": [
+    {
+      "s": -1,
+      "g": "const",
+      "vmax": 1,
+      "maximizers": [
+        1
+      ],
+      "q1_attains_max": true,
+      "qmin_attains_max": false,
+      "V_at_q1": 1,
+      "untargeted": 1.2,
+      "untargeted_dominated": false
+    },
+    {
+      "s": -1,
+      "g": "smooth",
+      "vmax": 0.924142,
+      "maximizers": [
+        1
+      ],
+      "q1_attains_max": true,
+      "qmin_attains_max": false,
+      "V_at_q1": 0.924142,
+      "untargeted": 1.199996,
+      "untargeted_dominated": false
+    },
+    {
+      "s": -1,
+      "g": "cliff",
+      "vmax": 1,
+      "maximizers": [
+        1
+      ],
+      "q1_attains_max": true,
+      "qmin_attains_max": false,
+      "V_at_q1": 1,
+      "untargeted": 1.2,
+      "untargeted_dominated": false
+    },
+    {
+      "s": -0.5,
+      "g": "const",
+      "vmax": 1,
+      "maximizers": [
+        1
+      ],
+      "q1_attains_max": true,
+      "qmin_attains_max": false,
+      "V_at_q1": 1,
+      "untargeted": 1.1,
+      "untargeted_dominated": false
+    },
+    {
+      "s": -0.5,
+      "g": "smooth",
+      "vmax": 0.924142,
+      "maximizers": [
+        1
+      ],
+      "q1_attains_max": true,
+      "qmin_attains_max": false,
+      "V_at_q1": 0.924142,
+      "untargeted": 1.099996,
+      "untargeted_dominated": false
+    },
+    {
+      "s": -0.5,
+      "g": "cliff",
+      "vmax": 1,
+      "maximizers": [
+        1
+      ],
+      "q1_attains_max": true,
+      "qmin_attains_max": false,
+      "V_at_q1": 1,
+      "untargeted": 1.1,
+      "untargeted_dominated": false
+    },
+    {
+      "s": 0,
+      "g": "const",
+      "vmax": 1,
+      "maximizers": [
+        0.05,
+        0.1,
+        0.2,
+        0.3,
+        0.4,
+        0.5,
+        0.6,
+        0.7,
+        0.75,
+        0.8,
+        0.9,
+        1
+      ],
+      "q1_attains_max": true,
+      "qmin_attains_max": true,
+      "V_at_q1": 1,
+      "untargeted": 1,
+      "untargeted_dominated": false
+    },
+    {
+      "s": 0,
+      "g": "smooth",
+      "vmax": 0.924142,
+      "maximizers": [
+        1
+      ],
+      "q1_attains_max": true,
+      "qmin_attains_max": false,
+      "V_at_q1": 0.924142,
+      "untargeted": 0.999996,
+      "untargeted_dominated": false
+    },
+    {
+      "s": 0,
+      "g": "cliff",
+      "vmax": 1,
+      "maximizers": [
+        0.8,
+        0.9,
+        1
+      ],
+      "q1_attains_max": true,
+      "qmin_attains_max": false,
+      "V_at_q1": 1,
+      "untargeted": 1,
+      "untargeted_dominated": false
+    },
+    {
+      "s": 0.5,
+      "g": "const",
+      "vmax": 1.095,
+      "maximizers": [
+        0.05
+      ],
+      "q1_attains_max": false,
+      "qmin_attains_max": true,
+      "V_at_q1": 1,
+      "untargeted": 0.9,
+      "untargeted_dominated": true
+    },
+    {
+      "s": 0.5,
+      "g": "smooth",
+      "vmax": 0.924142,
+      "maximizers": [
+        1
+      ],
+      "q1_attains_max": true,
+      "qmin_attains_max": false,
+      "V_at_q1": 0.924142,
+      "untargeted": 0.899997,
+      "untargeted_dominated": true
+    },
+    {
+      "s": 0.5,
+      "g": "cliff",
+      "vmax": 1.02,
+      "maximizers": [
+        0.8
+      ],
+      "q1_attains_max": false,
+      "qmin_attains_max": false,
+      "V_at_q1": 1,
+      "untargeted": 0.9,
+      "untargeted_dominated": true
+    },
+    {
+      "s": 1,
+      "g": "const",
+      "vmax": 1.19,
+      "maximizers": [
+        0.05
+      ],
+      "q1_attains_max": false,
+      "qmin_attains_max": true,
+      "V_at_q1": 1,
+      "untargeted": 0.8,
+      "untargeted_dominated": true
+    },
+    {
+      "s": 1,
+      "g": "smooth",
+      "vmax": 0.924142,
+      "maximizers": [
+        1
+      ],
+      "q1_attains_max": true,
+      "qmin_attains_max": false,
+      "V_at_q1": 0.924142,
+      "untargeted": 0.799997,
+      "untargeted_dominated": true
+    },
+    {
+      "s": 1,
+      "g": "cliff",
+      "vmax": 1.04,
+      "maximizers": [
+        0.8
+      ],
+      "q1_attains_max": false,
+      "qmin_attains_max": false,
+      "V_at_q1": 1,
+      "untargeted": 0.8,
+      "untargeted_dominated": true
+    }
+  ],
+  "profiles": [
+    {
+      "s": -1,
+      "g": "const",
+      "profile": [
+        {
+          "q": 0.05,
+          "pressure": 0.39,
+          "V": 0.81
+        },
+        {
+          "q": 0.1,
+          "pressure": 0.38,
+          "V": 0.82
+        },
+        {
+          "q": 0.2,
+          "pressure": 0.36,
+          "V": 0.84
+        },
+        {
+          "q": 0.3,
+          "pressure": 0.34,
+          "V": 0.86
+        },
+        {
+          "q": 0.4,
+          "pressure": 0.32,
+          "V": 0.88
+        },
+        {
+          "q": 0.5,
+          "pressure": 0.3,
+          "V": 0.9
+        },
+        {
+          "q": 0.6,
+          "pressure": 0.28,
+          "V": 0.92
+        },
+        {
+          "q": 0.7,
+          "pressure": 0.26,
+          "V": 0.94
+        },
+        {
+          "q": 0.75,
+          "pressure": 0.25,
+          "V": 0.95
+        },
+        {
+          "q": 0.8,
+          "pressure": 0.24,
+          "V": 0.96
+        },
+        {
+          "q": 0.9,
+          "pressure": 0.22,
+          "V": 0.98
+        },
+        {
+          "q": 1,
+          "pressure": 0.2,
+          "V": 1
+        }
+      ]
+    },
+    {
+      "s": -1,
+      "g": "smooth",
+      "profile": [
+        {
+          "q": 0.05,
+          "pressure": 0.39,
+          "V": 0.000738
+        },
+        {
+          "q": 0.1,
+          "pressure": 0.38,
+          "V": 0.001231
+        },
+        {
+          "q": 0.2,
+          "pressure": 0.36,
+          "V": 0.003419
+        },
+        {
+          "q": 0.3,
+          "pressure": 0.34,
+          "V": 0.009449
+        },
+        {
+          "q": 0.4,
+          "pressure": 0.32,
+          "V": 0.025795
+        },
+        {
+          "q": 0.5,
+          "pressure": 0.3,
+          "V": 0.068272
+        },
+        {
+          "q": 0.6,
+          "pressure": 0.28,
+          "V": 0.167831
+        },
+        {
+          "q": 0.7,
+          "pressure": 0.26,
+          "V": 0.354888
+        },
+        {
+          "q": 0.75,
+          "pressure": 0.25,
+          "V": 0.475
+        },
+        {
+          "q": 0.8,
+          "pressure": 0.24,
+          "V": 0.597561
+        },
+        {
+          "q": 0.9,
+          "pressure": 0.22,
+          "V": 0.801223
+        },
+        {
+          "q": 1,
+          "pressure": 0.2,
+          "V": 0.924142
+        }
+      ]
+    },
+    {
+      "s": -1,
+      "g": "cliff",
+      "profile": [
+        {
+          "q": 0.05,
+          "pressure": 0.39,
+          "V": 0
+        },
+        {
+          "q": 0.1,
+          "pressure": 0.38,
+          "V": 0
+        },
+        {
+          "q": 0.2,
+          "pressure": 0.36,
+          "V": 0
+        },
+        {
+          "q": 0.3,
+          "pressure": 0.34,
+          "V": 0
+        },
+        {
+          "q": 0.4,
+          "pressure": 0.32,
+          "V": 0
+        },
+        {
+          "q": 0.5,
+          "pressure": 0.3,
+          "V": 0
+        },
+        {
+          "q": 0.6,
+          "pressure": 0.28,
+          "V": 0
+        },
+        {
+          "q": 0.7,
+          "pressure": 0.26,
+          "V": 0
+        },
+        {
+          "q": 0.75,
+          "pressure": 0.25,
+          "V": 0
+        },
+        {
+          "q": 0.8,
+          "pressure": 0.24,
+          "V": 0.96
+        },
+        {
+          "q": 0.9,
+          "pressure": 0.22,
+          "V": 0.98
+        },
+        {
+          "q": 1,
+          "pressure": 0.2,
+          "V": 1
+        }
+      ]
+    },
+    {
+      "s": -0.5,
+      "g": "const",
+      "profile": [
+        {
+          "q": 0.05,
+          "pressure": 0.39,
+          "V": 0.905
+        },
+        {
+          "q": 0.1,
+          "pressure": 0.38,
+          "V": 0.91
+        },
+        {
+          "q": 0.2,
+          "pressure": 0.36,
+          "V": 0.92
+        },
+        {
+          "q": 0.3,
+          "pressure": 0.34,
+          "V": 0.93
+        },
+        {
+          "q": 0.4,
+          "pressure": 0.32,
+          "V": 0.94
+        },
+        {
+          "q": 0.5,
+          "pressure": 0.3,
+          "V": 0.95
+        },
+        {
+          "q": 0.6,
+          "pressure": 0.28,
+          "V": 0.96
+        },
+        {
+          "q": 0.7,
+          "pressure": 0.26,
+          "V": 0.97
+        },
+        {
+          "q": 0.75,
+          "pressure": 0.25,
+          "V": 0.975
+        },
+        {
+          "q": 0.8,
+          "pressure": 0.24,
+          "V": 0.98
+        },
+        {
+          "q": 0.9,
+          "pressure": 0.22,
+          "V": 0.99
+        },
+        {
+          "q": 1,
+          "pressure": 0.2,
+          "V": 1
+        }
+      ]
+    },
+    {
+      "s": -0.5,
+      "g": "smooth",
+      "profile": [
+        {
+          "q": 0.05,
+          "pressure": 0.39,
+          "V": 0.000825
+        },
+        {
+          "q": 0.1,
+          "pressure": 0.38,
+          "V": 0.001366
+        },
+        {
+          "q": 0.2,
+          "pressure": 0.36,
+          "V": 0.003745
+        },
+        {
+          "q": 0.3,
+          "pressure": 0.34,
+          "V": 0.010218
+        },
+        {
+          "q": 0.4,
+          "pressure": 0.32,
+          "V": 0.027553
+        },
+        {
+          "q": 0.5,
+          "pressure": 0.3,
+          "V": 0.072065
+        },
+        {
+          "q": 0.6,
+          "pressure": 0.28,
+          "V": 0.175129
+        },
+        {
+          "q": 0.7,
+          "pressure": 0.26,
+          "V": 0.366214
+        },
+        {
+          "q": 0.75,
+          "pressure": 0.25,
+          "V": 0.4875
+        },
+        {
+          "q": 0.8,
+          "pressure": 0.24,
+          "V": 0.61001
+        },
+        {
+          "q": 0.9,
+          "pressure": 0.22,
+          "V": 0.809399
+        },
+        {
+          "q": 1,
+          "pressure": 0.2,
+          "V": 0.924142
+        }
+      ]
+    },
+    {
+      "s": -0.5,
+      "g": "cliff",
+      "profile": [
+        {
+          "q": 0.05,
+          "pressure": 0.39,
+          "V": 0
+        },
+        {
+          "q": 0.1,
+          "pressure": 0.38,
+          "V": 0
+        },
+        {
+          "q": 0.2,
+          "pressure": 0.36,
+          "V": 0
+        },
+        {
+          "q": 0.3,
+          "pressure": 0.34,
+          "V": 0
+        },
+        {
+          "q": 0.4,
+          "pressure": 0.32,
+          "V": 0
+        },
+        {
+          "q": 0.5,
+          "pressure": 0.3,
+          "V": 0
+        },
+        {
+          "q": 0.6,
+          "pressure": 0.28,
+          "V": 0
+        },
+        {
+          "q": 0.7,
+          "pressure": 0.26,
+          "V": 0
+        },
+        {
+          "q": 0.75,
+          "pressure": 0.25,
+          "V": 0
+        },
+        {
+          "q": 0.8,
+          "pressure": 0.24,
+          "V": 0.98
+        },
+        {
+          "q": 0.9,
+          "pressure": 0.22,
+          "V": 0.99
+        },
+        {
+          "q": 1,
+          "pressure": 0.2,
+          "V": 1
+        }
+      ]
+    },
+    {
+      "s": 0,
+      "g": "const",
+      "profile": [
+        {
+          "q": 0.05,
+          "pressure": 0.39,
+          "V": 1
+        },
+        {
+          "q": 0.1,
+          "pressure": 0.38,
+          "V": 1
+        },
+        {
+          "q": 0.2,
+          "pressure": 0.36,
+          "V": 1
+        },
+        {
+          "q": 0.3,
+          "pressure": 0.34,
+          "V": 1
+        },
+        {
+          "q": 0.4,
+          "pressure": 0.32,
+          "V": 1
+        },
+        {
+          "q": 0.5,
+          "pressure": 0.3,
+          "V": 1
+        },
+        {
+          "q": 0.6,
+          "pressure": 0.28,
+          "V": 1
+        },
+        {
+          "q": 0.7,
+          "pressure": 0.26,
+          "V": 1
+        },
+        {
+          "q": 0.75,
+          "pressure": 0.25,
+          "V": 1
+        },
+        {
+          "q": 0.8,
+          "pressure": 0.24,
+          "V": 1
+        },
+        {
+          "q": 0.9,
+          "pressure": 0.22,
+          "V": 1
+        },
+        {
+          "q": 1,
+          "pressure": 0.2,
+          "V": 1
+        }
+      ]
+    },
+    {
+      "s": 0,
+      "g": "smooth",
+      "profile": [
+        {
+          "q": 0.05,
+          "pressure": 0.39,
+          "V": 0.000911
+        },
+        {
+          "q": 0.1,
+          "pressure": 0.38,
+          "V": 0.001501
+        },
+        {
+          "q": 0.2,
+          "pressure": 0.36,
+          "V": 0.00407
+        },
+        {
+          "q": 0.3,
+          "pressure": 0.34,
+          "V": 0.010987
+        },
+        {
+          "q": 0.4,
+          "pressure": 0.32,
+          "V": 0.029312
+        },
+        {
+          "q": 0.5,
+          "pressure": 0.3,
+          "V": 0.075858
+        },
+        {
+          "q": 0.6,
+          "pressure": 0.28,
+          "V": 0.182426
+        },
+        {
+          "q": 0.7,
+          "pressure": 0.26,
+          "V": 0.377541
+        },
+        {
+          "q": 0.75,
+          "pressure": 0.25,
+          "V": 0.5
+        },
+        {
+          "q": 0.8,
+          "pressure": 0.24,
+          "V": 0.622459
+        },
+        {
+          "q": 0.9,
+          "pressure": 0.22,
+          "V": 0.817574
+        },
+        {
+          "q": 1,
+          "pressure": 0.2,
+          "V": 0.924142
+        }
+      ]
+    },
+    {
+      "s": 0,
+      "g": "cliff",
+      "profile": [
+        {
+          "q": 0.05,
+          "pressure": 0.39,
+          "V": 0
+        },
+        {
+          "q": 0.1,
+          "pressure": 0.38,
+          "V": 0
+        },
+        {
+          "q": 0.2,
+          "pressure": 0.36,
+          "V": 0
+        },
+        {
+          "q": 0.3,
+          "pressure": 0.34,
+          "V": 0
+        },
+        {
+          "q": 0.4,
+          "pressure": 0.32,
+          "V": 0
+        },
+        {
+          "q": 0.5,
+          "pressure": 0.3,
+          "V": 0
+        },
+        {
+          "q": 0.6,
+          "pressure": 0.28,
+          "V": 0
+        },
+        {
+          "q": 0.7,
+          "pressure": 0.26,
+          "V": 0
+        },
+        {
+          "q": 0.75,
+          "pressure": 0.25,
+          "V": 0
+        },
+        {
+          "q": 0.8,
+          "pressure": 0.24,
+          "V": 1
+        },
+        {
+          "q": 0.9,
+          "pressure": 0.22,
+          "V": 1
+        },
+        {
+          "q": 1,
+          "pressure": 0.2,
+          "V": 1
+        }
+      ]
+    },
+    {
+      "s": 0.5,
+      "g": "const",
+      "profile": [
+        {
+          "q": 0.05,
+          "pressure": 0.39,
+          "V": 1.095
+        },
+        {
+          "q": 0.1,
+          "pressure": 0.38,
+          "V": 1.09
+        },
+        {
+          "q": 0.2,
+          "pressure": 0.36,
+          "V": 1.08
+        },
+        {
+          "q": 0.3,
+          "pressure": 0.34,
+          "V": 1.07
+        },
+        {
+          "q": 0.4,
+          "pressure": 0.32,
+          "V": 1.06
+        },
+        {
+          "q": 0.5,
+          "pressure": 0.3,
+          "V": 1.05
+        },
+        {
+          "q": 0.6,
+          "pressure": 0.28,
+          "V": 1.04
+        },
+        {
+          "q": 0.7,
+          "pressure": 0.26,
+          "V": 1.03
+        },
+        {
+          "q": 0.75,
+          "pressure": 0.25,
+          "V": 1.025
+        },
+        {
+          "q": 0.8,
+          "pressure": 0.24,
+          "V": 1.02
+        },
+        {
+          "q": 0.9,
+          "pressure": 0.22,
+          "V": 1.01
+        },
+        {
+          "q": 1,
+          "pressure": 0.2,
+          "V": 1
+        }
+      ]
+    },
+    {
+      "s": 0.5,
+      "g": "smooth",
+      "profile": [
+        {
+          "q": 0.05,
+          "pressure": 0.39,
+          "V": 0.000998
+        },
+        {
+          "q": 0.1,
+          "pressure": 0.38,
+          "V": 0.001636
+        },
+        {
+          "q": 0.2,
+          "pressure": 0.36,
+          "V": 0.004396
+        },
+        {
+          "q": 0.3,
+          "pressure": 0.34,
+          "V": 0.011756
+        },
+        {
+          "q": 0.4,
+          "pressure": 0.32,
+          "V": 0.031071
+        },
+        {
+          "q": 0.5,
+          "pressure": 0.3,
+          "V": 0.079651
+        },
+        {
+          "q": 0.6,
+          "pressure": 0.28,
+          "V": 0.189723
+        },
+        {
+          "q": 0.7,
+          "pressure": 0.26,
+          "V": 0.388867
+        },
+        {
+          "q": 0.75,
+          "pressure": 0.25,
+          "V": 0.5125
+        },
+        {
+          "q": 0.8,
+          "pressure": 0.24,
+          "V": 0.634909
+        },
+        {
+          "q": 0.9,
+          "pressure": 0.22,
+          "V": 0.82575
+        },
+        {
+          "q": 1,
+          "pressure": 0.2,
+          "V": 0.924142
+        }
+      ]
+    },
+    {
+      "s": 0.5,
+      "g": "cliff",
+      "profile": [
+        {
+          "q": 0.05,
+          "pressure": 0.39,
+          "V": 0
+        },
+        {
+          "q": 0.1,
+          "pressure": 0.38,
+          "V": 0
+        },
+        {
+          "q": 0.2,
+          "pressure": 0.36,
+          "V": 0
+        },
+        {
+          "q": 0.3,
+          "pressure": 0.34,
+          "V": 0
+        },
+        {
+          "q": 0.4,
+          "pressure": 0.32,
+          "V": 0
+        },
+        {
+          "q": 0.5,
+          "pressure": 0.3,
+          "V": 0
+        },
+        {
+          "q": 0.6,
+          "pressure": 0.28,
+          "V": 0
+        },
+        {
+          "q": 0.7,
+          "pressure": 0.26,
+          "V": 0
+        },
+        {
+          "q": 0.75,
+          "pressure": 0.25,
+          "V": 0
+        },
+        {
+          "q": 0.8,
+          "pressure": 0.24,
+          "V": 1.02
+        },
+        {
+          "q": 0.9,
+          "pressure": 0.22,
+          "V": 1.01
+        },
+        {
+          "q": 1,
+          "pressure": 0.2,
+          "V": 1
+        }
+      ]
+    },
+    {
+      "s": 1,
+      "g": "const",
+      "profile": [
+        {
+          "q": 0.05,
+          "pressure": 0.39,
+          "V": 1.19
+        },
+        {
+          "q": 0.1,
+          "pressure": 0.38,
+          "V": 1.18
+        },
+        {
+          "q": 0.2,
+          "pressure": 0.36,
+          "V": 1.16
+        },
+        {
+          "q": 0.3,
+          "pressure": 0.34,
+          "V": 1.14
+        },
+        {
+          "q": 0.4,
+          "pressure": 0.32,
+          "V": 1.12
+        },
+        {
+          "q": 0.5,
+          "pressure": 0.3,
+          "V": 1.1
+        },
+        {
+          "q": 0.6,
+          "pressure": 0.28,
+          "V": 1.08
+        },
+        {
+          "q": 0.7,
+          "pressure": 0.26,
+          "V": 1.06
+        },
+        {
+          "q": 0.75,
+          "pressure": 0.25,
+          "V": 1.05
+        },
+        {
+          "q": 0.8,
+          "pressure": 0.24,
+          "V": 1.04
+        },
+        {
+          "q": 0.9,
+          "pressure": 0.22,
+          "V": 1.02
+        },
+        {
+          "q": 1,
+          "pressure": 0.2,
+          "V": 1
+        }
+      ]
+    },
+    {
+      "s": 1,
+      "g": "smooth",
+      "profile": [
+        {
+          "q": 0.05,
+          "pressure": 0.39,
+          "V": 0.001084
+        },
+        {
+          "q": 0.1,
+          "pressure": 0.38,
+          "V": 0.001771
+        },
+        {
+          "q": 0.2,
+          "pressure": 0.36,
+          "V": 0.004721
+        },
+        {
+          "q": 0.3,
+          "pressure": 0.34,
+          "V": 0.012525
+        },
+        {
+          "q": 0.4,
+          "pressure": 0.32,
+          "V": 0.03283
+        },
+        {
+          "q": 0.5,
+          "pressure": 0.3,
+          "V": 0.083444
+        },
+        {
+          "q": 0.6,
+          "pressure": 0.28,
+          "V": 0.19702
+        },
+        {
+          "q": 0.7,
+          "pressure": 0.26,
+          "V": 0.400193
+        },
+        {
+          "q": 0.75,
+          "pressure": 0.25,
+          "V": 0.525
+        },
+        {
+          "q": 0.8,
+          "pressure": 0.24,
+          "V": 0.647358
+        },
+        {
+          "q": 0.9,
+          "pressure": 0.22,
+          "V": 0.833926
+        },
+        {
+          "q": 1,
+          "pressure": 0.2,
+          "V": 0.924142
+        }
+      ]
+    },
+    {
+      "s": 1,
+      "g": "cliff",
+      "profile": [
+        {
+          "q": 0.05,
+          "pressure": 0.39,
+          "V": 0
+        },
+        {
+          "q": 0.1,
+          "pressure": 0.38,
+          "V": 0
+        },
+        {
+          "q": 0.2,
+          "pressure": 0.36,
+          "V": 0
+        },
+        {
+          "q": 0.3,
+          "pressure": 0.34,
+          "V": 0
+        },
+        {
+          "q": 0.4,
+          "pressure": 0.32,
+          "V": 0
+        },
+        {
+          "q": 0.5,
+          "pressure": 0.3,
+          "V": 0
+        },
+        {
+          "q": 0.6,
+          "pressure": 0.28,
+          "V": 0
+        },
+        {
+          "q": 0.7,
+          "pressure": 0.26,
+          "V": 0
+        },
+        {
+          "q": 0.75,
+          "pressure": 0.25,
+          "V": 0
+        },
+        {
+          "q": 0.8,
+          "pressure": 0.24,
+          "V": 1.04
+        },
+        {
+          "q": 0.9,
+          "pressure": 0.22,
+          "V": 1.02
+        },
+        {
+          "q": 1,
+          "pressure": 0.2,
+          "V": 1
+        }
+      ]
+    }
+  ],
+  "post_hoc_width_sweep": [
+    {
+      "w": 0.001,
+      "maximizers": [
+        0.8
+      ],
+      "regime": "intermediate optimum (near-threshold backoff / interior continuum)"
+    },
+    {
+      "w": 0.005,
+      "maximizers": [
+        0.9
+      ],
+      "regime": "intermediate optimum (near-threshold backoff / interior continuum)"
+    },
+    {
+      "w": 0.02,
+      "maximizers": [
+        1
+      ],
+      "regime": "protective (q*=1)"
+    },
+    {
+      "w": 0.1,
+      "maximizers": [
+        1
+      ],
+      "regime": "protective (q*=1)"
+    },
+    {
+      "w": 0.5,
+      "maximizers": [
+        0.9
+      ],
+      "regime": "intermediate optimum (near-threshold backoff / interior continuum)"
+    },
+    {
+      "w": 2,
+      "maximizers": [
+        0.05
+      ],
+      "regime": "gain-dominant (max tilt)"
+    },
+    {
+      "w": 10,
+      "maximizers": [
+        0.05
+      ],
+      "regime": "gain-dominant (max tilt)"
+    }
+  ],
+  "honest_note": "Registered predictions: P1/P2/P3/P5 CONFIRMED, P4 MISSED (kept on the record). The class boundary of counterproductivity IS the pointwise proxy-truth sign: for a pointwise-bad-or-neutral proxy (s<=0), quantilizing is counterproductive under every monotone tax including none (the S4 condition, extended multiplicatively). But the s>0 half splits by TAX SHAPE, not as P4 predicted: the cliff's edge-temptation comes from its FLAT, ZERO-MARGINAL region below threshold (tilting under the cliff is free), while a smooth tax charges every tilt at the margin -- and when that marginal tax dominates the pointwise gain, q*=1 is RESTORED even for a pointwise-good proxy. Post-hoc width sweep (labeled, not pre-registered): w->0 recovers near-threshold optima (the edge temptation, with a backoff margin scaling in w), an intermediate-w band is PROTECTIVE (q*=1 restored -- (1-g(base))/w > marginal gain), a narrow band around w~0.5 gives the genuinely INTERIOR optimum P4 predicted (it exists, but as a knife-edge, not generically), and large w is gain-dominant (max tilt). Policy-shaped consequence, resonant with NS-3's graded review: THRESHOLD oversight creates the cliff-edge temptation; GRADED oversight with sufficient marginal steepness removes it -- the optimal agent under a graded tax does not tilt at all. Un-targeting is strictly dominated exactly on the s>0 half: the target channel's danger is conditional on Goodhart (pointwise misalignment), which the court satisfied by construction."
+}

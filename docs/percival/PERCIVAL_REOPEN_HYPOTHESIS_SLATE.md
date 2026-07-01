@@ -104,6 +104,17 @@ target channel is *even more* partial in the multi-agent regime — a clean coro
 S1/S2 preserve the reachability diagnosis.
 **Cost:** medium (extend the court to N pivotal knights). **Shoppable:** yes (composition
 asymmetry is a strong, quotable claim).
+**RESULT (2026-07-01): `S3_SHARED_COURT_UNREACHABLE_CAP_COMPOSES` — the threat did not
+fire.** Pre-registered model fork (anti-smuggling): under the shared-regime court,
+unilateral un-targeting is non-pivotal for `M ≥ ⌈c_γ/(c_γ−c*)⌉ = 4` and the safe point is
+reachable only by a coalition `f* = 1 − c*/c_γ ≈ 0.286` (measured 0.29, transition width
+0.02); under the per-knight court, composition is trivially restored — **the fork variable
+is the reward's aggregation structure, not the channel primitive.** Control arm: the cap's
+per-agent bound held under adversarial co-agents at every `M` (0/2583 violations); caps
+aggregate *linearly*, court purity by *threshold*. Rider for S1: composition of a
+guarantee is decided by what it is keyed on — behavior-keyed (caps) composes by
+construction; outcome-keyed (collection) composes only as far as the reward decomposes.
+[`PERCIVAL_S3_MULTIAGENT_RESULTS.md`](PERCIVAL_S3_MULTIAGENT_RESULTS.md).
 
 ### S4 — Generalize the anchor + the standalone counterproductivity result *(drill, rigor)*
 **Claim:** "on a target-channel reward, quantilizing is counterproductive — the best
@@ -117,6 +128,16 @@ to general.
 **Cost:** low-medium (mostly Lean). **Shoppable:** **highest** — this is the clean, general,
 *non-literary* alignment claim promo can shop today; S4 makes it rigorous and citable,
 decoupled from the Grail frame.
+**RESULT (2026-07-01): DONE.** Computed receipt `S4_COUNTERPRODUCTIVITY_GENERAL_CONFIRMED`
+(10,500 instances across unweighted lists / weighted bases / the actual court `R(c)` /
+clean-separation cells; 0 violations —
+[`PERCIVAL_S4_COUNTERPRODUCTIVITY_RESULTS.md`](PERCIVAL_S4_COUNTERPRODUCTIVITY_RESULTS.md)).
+Machine-checked general form in `sundogcert` `Sundogcert/PercivalGeneral.lean`:
+`upper_tail_mul_le_base_mul` (n-point, any tail), `best_quantilizer_is_base_general`
+(average form), `clean_support_above_separation_general` — all axiom-clean on
+`[propext, Classical.choice, Quot.sound]`, wired into `AxiomAudit.lean`, full audit green
+(8563 jobs). Scope: unweighted lists = uniform base; weighted/continuous covered by the
+computed receipt only.
 
 ### S5 — The cleanliness gradient as an umbrella law *(fan-out, synthesis)*
 **Claim:** the four channels partition into exactly three cleanliness tiers —
@@ -140,6 +161,20 @@ tilt strictly helps.
 **Prior:** open (the court's cliff may be doing more work than monotonicity alone).
 **Cost:** medium. **Shoppable:** yes if it lands (widens the counterproductivity claim to a
 class).
+**RESULT (2026-07-01): `S6_POINTWISE_BOUNDARY_TAX_SHAPE_REFINES`.** Registered P1/P2/P3/P5
+CONFIRMED, **P4 MISSED (kept on record)** and the miss is the finding. The class boundary
+is the **pointwise proxy–truth sign**, exactly S4's nonincreasing-reward condition:
+pointwise-misaligned proxy ⟹ counterproductive under *every* monotone tax including none;
+pointwise-good proxy ⟹ the falsifier fires as predicted (tilt strictly helps), splitting
+by **tax shape** — the cliff's edge-temptation comes from its *flat zero-marginal region*
+(free tilt below threshold), while a graded tax charges every tilt and, when steep,
+**restores `q*=1` even for a good proxy** (post-hoc width sweep: near-threshold →
+protective → interior knife-edge → gain-dominant). Quotable: *quantilizing is
+counterproductive iff the proxy is pointwise misaligned OR oversight is graded-and-steep;
+the cliff-edge temptation is a threshold-oversight artifact — graded oversight removes it*
+(NS-3's graded-review knob, rediscovered from the theory side). Un-targeting dominated
+iff proxy pointwise-good ⟹ the target channel's danger is conditional on Goodhart, not
+performativity. [`PERCIVAL_S6_CLASS_BOUNDARY_RESULTS.md`](PERCIVAL_S6_CLASS_BOUNDARY_RESULTS.md).
 
 ---
 
