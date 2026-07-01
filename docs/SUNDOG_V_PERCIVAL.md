@@ -4,7 +4,7 @@
 romance. Less inflammatory public name than HOLYGRAIL; same lane.*
 
 Status: **OPENED 2026-06-30, sharpened same day (mark 1–8 critique integrated);
-A3 STATIC DEFLATION RUN.** Provenance + a two-track phase ladder + a gated
+A3 STATIC DEFLATION RUN; B1.0 COURT-COORDINATION ADMISSION DRAFTED.** Provenance + a two-track phase ladder + a gated
 outreach branch, with the A3 receipt now banked; not an outreach claim. The romance
 is declared scaffold (bricolage for legibility), not evidence — except in the one
 place it legitimately constrains a formal choice (it adjudicates the discontinuity;
@@ -22,9 +22,10 @@ single statement survives.
    true-cost bound `(1/q)·E_γ[cost]`. Three assumptions travel with the bound and are
    this lane's leverage: `γ` is given and trusted; the (proxy, true) cost joint is
    **fixed under `γ`**; single-shot. Soft spots: base-dependence, non-composition,
-   reflective instability. **Structural fact this lane turns on:** the family's proxy-MI
-   is monotone — minimized at `q=1` (where it equals `MI(γ)`) and rising as `q→0`. So
-   if `γ` is proxy-biased, the *entire* family sits above a pressure floor `MI(γ)>0`.
+   reflective instability. **Structural fact this lane turns on:** the family's causal
+   proxy pressure is monotone — minimized at `q=1` (where it equals the base pressure
+   `c_γ`) and rising as `q→0`. So if `γ` is proxy-biased, the *entire* family sits
+   above a pressure floor `c_γ>0`.
 2. **Jon Elster, *Sour Grapes* (1983), "states that are essentially by-products."**
    States obtainable only as the by-product of acts done for other ends, which the very
    attempt to obtain precludes (his example: admiration — you cannot be admired for an
@@ -54,14 +55,14 @@ any, is **causal/adversarial** Goodhart (targeting *induces* the gap).
 
 ## The crux: a 2×2, not a binary
 
-> **Where do the rewards collectable by a zero-proxy-MI ("un-targeting") policy sit
+> **Where do the rewards collectable by a zero-causal-proxy-influence ("un-targeting") policy sit
 > relative to the quantilizer-collectable class?** The verdict is decided by two
 > orthogonal premises, not one.
 
 | | continuous reward | threshold reward |
 | --- | --- | --- |
-| **neutral base** `MI(γ)=0` | un-targeting = `q=1` corner → **(a)** | `q=1` reaches zero pressure → **(a)** |
-| **biased base** `MI(γ)>0` | `q=1−ε` approaches the sup, `O(ε)` gap → **(a) in a cape** | every quantilizer ≥ `MI(γ)`; `τ∈(0,MI(γ))` zeroes all; zero-MI collects it → **(c)** |
+| **neutral base** `c_γ=0` | un-targeting = `q=1` corner → **(a)** | `q=1` reaches zero pressure → **(a)** |
+| **biased base** `c_γ>0` | `q=1−ε` approaches the sup, `O(ε)` gap → **(a) in a cape** | every quantilizer ≥ `c_γ`; `τ∈(0,c_γ)` zeroes all; zero-causal-proxy-influence collects it → **(c)** |
 
 The deflation **(a)** holds in three cells and needs `{neutral base OR continuous
 reward}`. The prize **(c)** is one cell — `{biased base AND threshold reward}` — an
@@ -71,15 +72,16 @@ reward}`. The prize **(c)** is one cell — `{biased base AND threshold reward}`
   collapses once proxy-pressure crosses `τ`. This is what separates, and the only horn
   the romance constrains.
 - **Mechanism (ii), the biased base (amplifier, not a rival prize).** A proxy-biased
-  `γ` lifts the *whole* family — not just `q<1` — above the threshold. On its own,
-  zero-MI over a positively-correlated base collects *less* true reward, or reduces to
-  "choose a better `γ`" (the quantilizer's open problem); it earns nothing alone. Its
-  job is to make the threshold bite on the quantilizer's *own trusted human base*.
+  `γ` lifts the *whole* family — not just `q<1` — above the causal-pressure threshold.
+  On its own, zero causal proxy influence over a positively-correlated base collects
+  *less* true reward, or reduces to "choose a better `γ`" (the quantilizer's open
+  problem); it earns nothing alone. Its job is to make the threshold bite on the
+  quantilizer's *own trusted human base*.
 
 So the (c)-bet, declared before any P2 code: **a performative reward with a
 non-Lipschitz purity-threshold map over a proxy-biased base; the narrow novelty is
 threshold maps compared across the quantilizer family** (everything Lipschitz is
-already Perdomo et al.). Base-neutrality is the single premise that flips (a)↔(c),
+already Perdomo et al.). Base causal-pressure neutrality is the single premise that flips (a)↔(c),
 which fuses the old P4 and P7 into one statement.
 
 ---
@@ -94,7 +96,7 @@ Falsifier: if every figure is a point on the `q`-axis, the dictionary is ornamen
 so.
 
 **A2 — Quantilizer baseline + the pressure floor.** Re-derive `q`-quantilizer and
-`(1/q)` in lane notation; state the monotone-MI fact and the `MI(γ)` floor at `q=1`.
+`(1/q)` in lane notation; state the monotone causal-pressure fact and the `c_γ` floor at `q=1`.
 This makes the 2×2's bottom row precise.
 
 **A3 — Concrete kill-switch toy (run first; no threshold smuggling).** Hand-craft
@@ -139,17 +141,20 @@ clean easter-egg post.
 
 ## Track B — the open (c) bet (separate clock; gated on the mechanism, now declared)
 
-**B1 — The performative threshold reward.** Construct mechanism (i): a performative
-reward with a non-Lipschitz `D(θ)` whose Grail-mass vanishes once proxy-pressure exceeds
-`τ`, over a biased `γ` with `MI(γ)>τ`. Show every quantilizer collects zero while
-zero-MI collects it. Frame as systematic preclusion (Elster), causal/adversarial
-(Manheim–Garrabrant). Falsifier: if every such map is pathological (degenerate, or
-demands the reward read `θ` symbolically rather than behaviorally), it's curiosity not
-mechanism — fence it.
+**B1 — The performative threshold reward (gated through B1.0).** Candidate mechanism:
+a court-coordination reward whose cliff emerges from a global-game equilibrium, not a
+literal `if pressure > τ` reward rule. Admission:
+[`percival/PERCIVAL_B1_0_COURT_COORDINATION_ADMISSION.md`](percival/PERCIVAL_B1_0_COURT_COORDINATION_ADMISSION.md).
+If admitted, run the quantilizer-family-vs-un-targeting bake-off over a biased `γ`:
+every `q`-quantilizer over the biased base is disgraced by the induced court response,
+while the zero-causal-proxy-influence knight stays honored and collects. Frame as
+systematic preclusion (Elster), causal/adversarial (Manheim–Garrabrant), and
+performative prediction (`D(π)`). Falsifier: if the court cliff is smooth, smuggled,
+non-pivotal, or the proxy/true joint remains fixed, B1 dies at admission.
 
 **B2 — Base provenance / `γ`-neutrality (PRIVATE).** The premise A4's deflation needs
 and B1's prize denies. Whether "innocence = a base without instrumental structure" is a
-real `γ`-admissibility condition or just `MI(γ)=0` restated. Kept internal — not an
+real `γ`-admissibility condition or just `c_γ=0` restated. Kept internal — not an
 external claim (see outreach).
 
 **B3 — Composition & reflective stability.** Performative *stability* (optimal on the

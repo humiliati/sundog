@@ -82,7 +82,20 @@ code, experiments, prior theorem materials, and application bridges.
   pressure, including the completed Phase 12 open-weight sweep.
 - [Sundog Chat v2 ledger](SUNDOG_V_CHAT_V2.md): next-generation chat-library
   roadmap; staging surface set, audit-chain claim integration, and the
-  Phase 13+ refresh plan.
+  Phase 13+ refresh plan. **Research-lane status: R1 MET 2026-06-29** per the
+  disciplined [promote-gate](chatv2/PROMOTE_GATE.md) and the
+  [R1 completion battery](chatv2/PHASE1_R1_COMPLETION.md) — a de-confounded,
+  seed-robust, objective-driven body-resistance on *toy from-scratch
+  transformers* with *parity-family latents* at `d_dec < 20`
+  (`d_dec ≈ 7.6`, high-dim bar UNMET and honestly reported). Two architectures
+  (A1 `d=192`, A2 `d=128`) and two latent computations (pair-XOR SHARP to
+  `H=8`, 3-parity SHARP at `H≤4`) both cleared; F-readout / F-δ / F-opt
+  falsifiers all passed. **R2 (real pretrained LLM + external mech-interp
+  review) is NOT STARTED; R3 (theory of AI) is FAR.** The gate's §3
+  do-not-claim ledger binds: no "world model," no "generative training is
+  special," no "regime-2 confirmed for AI," no "explains
+  generalization/scaling." A framework that *fits* a toy is not a theory that
+  *predicts*.
 - [Bayesian comparator ledger](SUNDOG_V_BAYES.md): cross-cutting Bayesian
   floor/comparator design — same-observation floor profiles, route-fidelity
   comparators, and the audit-chain integration across workbenches.

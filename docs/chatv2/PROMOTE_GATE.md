@@ -32,7 +32,7 @@ A framework that *fits* a toy result predicts nothing. The gate's job is to keep
 | rung | claim form | current status |
 | --- | --- | --- |
 | **R0 — Receipt** | "On *this* synthetic toy with *this* fingerprint we measured *these* numbers." | **DONE** (`PHASE1_SEEDSTAB_RECEIPT.md`) |
-| **R1 — Toy-substrate claim** | "Computed-latent transformers exhibit a robust, de-confounded, objective-driven body-resistance." | **PARTIAL** (see §2) |
+| **R1 — Toy-substrate claim** | "Computed-latent transformers exhibit a robust, de-confounded, objective-driven body-resistance." | **MET 2026-06-29** — all §2 gates cleared (`PHASE1_R1_COMPLETION.md`). Scope: parity-family latents, toy from-scratch transformers, `d_dec<20`; pair-XOR to H=8/`d_dec≈7`, 3-parity to H≈2–4. |
 | **R2 — Real-substrate claim** | "*Real pretrained* LLM residual streams exhibit this on a *non-synthetic* task." | **NOT STARTED** |
 | **R3 — Theory of AI** | "This *explains* [generalization / capability / representation / why scaling works]." | **FAR. Not on the near horizon.** |
 
@@ -47,12 +47,16 @@ entire content of this document.
   (not a binary at-the-bar gate) — **met** (`objective_excess 0.205±0.022`);
 - **generality across the toy family** — the effect survives ≥2 *latent
   computations* (not just pair-XOR) and ≥2 *architectures* (depth/width/heads),
-  pre-registered — **NOT met**;
+  pre-registered — **met 2026-06-29**: architectures A1 (d192) + A2 (d128) both SHARP;
+  latent computations pair-XOR (SHARP to H=8) + 3-bit parity (SHARP at H=2, excess 0.20;
+  it grok-walls **UNLEARNED** at H=8, a *learnability* ceiling, not a resistance negative
+  — so shown at lower `H`, honestly scoped);
 - the high-dimensional bar is honestly reported as **unmet** (`d_dec≈7.6 < 20`) —
   met, and R1 does **not** claim the high-dim regime.
 - Falsifiers to rule out: the result is an artifact of (a) the fair-readout choice,
-  (b) δ=0.45 making the task near-trivial, (c) one optimizer/schedule. Each gets a
-  pre-registered ablation before R1 is spoken as a *claim* rather than a receipt.
+  (b) δ=0.45 making the task near-trivial, (c) one optimizer/schedule — **all cleared
+  2026-06-29** (F-readout PASS 0.205/0.245; F-δ=0.30 excess 0.181; F-opt lr=1e-3
+  3-seed mean excess 0.137 ≥ 0.10).
 
 **R2 — Real-substrate claim.** Promote from R1 only when *all*:
 - the fingerprint is ported to a **real pretrained LLM** on a **real task** with

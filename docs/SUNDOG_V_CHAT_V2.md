@@ -1,5 +1,28 @@
 # Sundog Chat v2 — Product Charter
 
+> **Research-lane status: R1 MET 2026-06-29.** The chat-v2 research lane's
+> Phase-1 promote-gate ([`chatv2/PROMOTE_GATE.md`](chatv2/PROMOTE_GATE.md))
+> had all R1 §2 items cleared per
+> [`PHASE1_R1_COMPLETION.md`](chatv2/PHASE1_R1_COMPLETION.md): two
+> architectures (A1 `d=192` + A2 `d=128`) both SHARP on the fingerprint,
+> two latent computations (pair-XOR SHARP to `H=8`; 3-bit parity SHARP at
+> `H≤4`, grok-walls UNLEARNED at `H=8` — a *learnability* ceiling, honestly
+> scoped, not a resistance negative), and the F-readout / F-δ / F-opt
+> falsifiers all cleared (`objective_excess` 0.205 / 0.245 / 0.181 / 0.137
+> respectively; all above the `≥ 0.10` continuous floor).
+>
+> **Scope (binding — the gate's Standing Rule).** R1 licenses only:
+> *"computed-latent transformers exhibit a robust, de-confounded,
+> objective-driven body-resistance"* on **parity-family latents**, in
+> **toy from-scratch transformers**, at `d_dec < 20` (the high-dim bar is
+> **honestly reported UNMET** at `d_dec ≈ 7.6`). **R2 (real pretrained LLM
+> + external mech-interp review) is NOT STARTED. R3 (theory of AI) is
+> FAR.** The gate's §3 do-not-claim ledger applies verbatim: no "world
+> model," no "generative training is special," no "regime-2 confirmed for
+> AI," no "explains generalization / scaling / emergence," no
+> "body/shadow is the right theory of representation." A framework that
+> *fits* a toy is not a theory that *predicts*.
+>
 > **Hypothetical framing.** This document treats Ask Sundog as the v1.0
 > deliverable of a small non-profit. There is no such non-profit yet. The
 > framing exists because a rag-tag group of hobbyist contributors is the
