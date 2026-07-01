@@ -47,6 +47,14 @@ They are compatible (`a ∣ b → a ≤ b`) but not equal (`lcm(4,6)=12 > max(4,
 is simply where `lcm` absorbs `⊤` — which is *why* a mixed class collapses to a resist pole under the
 scalar order. The mode-vector is the un-collapsed vector; the scalar is its join projection.
 
+This is now machine-checked in full generality (`OrderRelativeStructure`): the n-ary law
+`orderOf_pi_eq_lcm` (`orderOf` of a tuple `= Finset.lcm` of the coordinate orders — not in mathlib)
+gives the **structure theorem** `structure_order` — for a finite abelian group `⊕ ZMod dᵢ`, the scalar
+order of the diagonal is `lcm` of the invariant factors — and `structure_mode_vector`: scalar `= lcm d`
+(the join) while the per-axis orders are the vector `d`. A `dᵢ = 0` coordinate is `ZMod 0 = ℤ` (a free
+summand) and `lcm` absorbs its `0`, so torsion and free coordinates obey one formula — the earlier
+binary `mixed_mode_vector` is the two-coordinate case.
+
 ---
 
 ## 2. The general statement (machine-checked for the group-order family)
