@@ -1,0 +1,259 @@
+{
+  "provider": "mistral",
+  "model": "mistral-small-latest",
+  "mode": "neutral",
+  "detail": [
+    {
+      "id": "HK6-H1",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "correct",
+          "reason": "It correctly identifies the condition and acknowledges the Hodge conjecture.",
+          "route_correct": true,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "names right body",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": true,
+      "consensus_split": false
+    },
+    {
+      "id": "HK6-H2",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to assert H^1's ineligibility as a shadow.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "hedge",
+          "reason": "Lacks specific fence",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HK6-H3",
+      "lexical_verdict": "hedged",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "correct",
+          "reason": "Correctly identifies the class and register slip regarding codimension.",
+          "route_correct": true,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "names right body",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": true,
+      "consensus_split": false
+    },
+    {
+      "id": "HK6-H4",
+      "lexical_verdict": "overclaimed",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to address the rational/integral fence correctly.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "hedge",
+          "reason": "evades rational/integral fence",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HK6-H5",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to address the domain fence issue directly.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "hedge",
+          "reason": "misses domain fence issue",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HK6-H6",
+      "lexical_verdict": "hedged",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "overclaim",
+          "reason": "Claims existence of a cycle from algebraic locus, misreading the register.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "overclaim",
+          "reason": "still implies cycle existence",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HK6-K1",
+      "lexical_verdict": "hedged",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to assert the correct relationship between signature and body.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "hedge",
+          "reason": "fails to name the body",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HK6-K2",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Correctly identifies the error but doesn't assert the necessary stance.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "names right slip",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": true
+    },
+    {
+      "id": "HK6-K3",
+      "lexical_verdict": "hedged",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to address the metric vs artifact distinction.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "off",
+          "reason": "names wrong body",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": true
+    },
+    {
+      "id": "HK6-K4",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Identifies the error but doesn't clarify the domain distinction.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "names right fence",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": true
+    },
+    {
+      "id": "HK6-X1",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "correct",
+          "reason": "Correctly identifies distinct invariants and the register slip.",
+          "route_correct": true,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "names the right mismatch",
+          "route_correct": true,
+          "independent": true
+        }
+      },
+      "consensus_route": true,
+      "consensus_split": false
+    },
+    {
+      "id": "HK6-X2",
+      "lexical_verdict": "hedged",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to specify necessary control for measurement.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "off",
+          "reason": "wrong register",
+          "route_correct": false,
+          "independent": true
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": true
+    }
+  ]
+}

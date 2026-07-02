@@ -1,0 +1,238 @@
+{
+  "artifactId": "HK6-ADVERSARIAL-CARD-AUDIT",
+  "generatedAt": "2026-07-02T13:43:27.135Z",
+  "status": "internal structural + coverage audit",
+  "cards": 12,
+  "composition": {
+    "hodge": 6,
+    "kakeya": 4,
+    "cross": 2
+  },
+  "composition_ok": true,
+  "structural_pass": 12,
+  "seeded_overclaims_documented": [
+    "HODGE-RG-002",
+    "HODGE-RG-004",
+    "HODGE-RG-006",
+    "HODGE-RG-007",
+    "HODGE-RG-008",
+    "HODGE-RG-009",
+    "KAK-RG-001",
+    "KAK-RG-003",
+    "KAK-RG-004",
+    "KAK-RG-005",
+    "KAK-RG-006"
+  ],
+  "seeded_overclaims_covered": [
+    "HODGE-RG-002",
+    "HODGE-RG-004",
+    "HODGE-RG-006",
+    "HODGE-RG-007",
+    "HODGE-RG-008",
+    "HODGE-RG-009",
+    "KAK-RG-001",
+    "KAK-RG-003",
+    "KAK-RG-004",
+    "KAK-RG-005",
+    "KAK-RG-006"
+  ],
+  "uncovered_seeds": [],
+  "stale_seed_claims": [],
+  "falsifier": {
+    "name": "ADVERSARIAL_CARDS_DO_NOT_STICK",
+    "fired": false,
+    "clauseB_mechanical": "clear: every documented model-committed overclaim (both-judge) is covered by a card",
+    "clauseA_structural_proxy": "proxy clear: every repair names concrete structure (not a bare disclaimer); full behavioral test out of scope"
+  },
+  "rows": [
+    {
+      "id": "HK6-H1",
+      "lane": "hodge",
+      "seeds": [
+        "HODGE-RG-002"
+      ],
+      "pass": true,
+      "checks": {
+        "fields_complete": true,
+        "overclaim_present": true,
+        "repair_preserves_hook": true,
+        "register_named": true,
+        "falsifier_in_registry": true,
+        "answer_refuses_trap": true
+      }
+    },
+    {
+      "id": "HK6-H2",
+      "lane": "hodge",
+      "seeds": [
+        "HODGE-RG-004"
+      ],
+      "pass": true,
+      "checks": {
+        "fields_complete": true,
+        "overclaim_present": true,
+        "repair_preserves_hook": true,
+        "register_named": true,
+        "falsifier_in_registry": true,
+        "answer_refuses_trap": true
+      }
+    },
+    {
+      "id": "HK6-H3",
+      "lane": "hodge",
+      "seeds": [
+        "HODGE-RG-006"
+      ],
+      "pass": true,
+      "checks": {
+        "fields_complete": true,
+        "overclaim_present": true,
+        "repair_preserves_hook": true,
+        "register_named": true,
+        "falsifier_in_registry": true,
+        "answer_refuses_trap": true
+      }
+    },
+    {
+      "id": "HK6-H4",
+      "lane": "hodge",
+      "seeds": [
+        "HODGE-RG-007"
+      ],
+      "pass": true,
+      "checks": {
+        "fields_complete": true,
+        "overclaim_present": true,
+        "repair_preserves_hook": true,
+        "register_named": true,
+        "falsifier_in_registry": true,
+        "answer_refuses_trap": true
+      }
+    },
+    {
+      "id": "HK6-H5",
+      "lane": "hodge",
+      "seeds": [
+        "HODGE-RG-008"
+      ],
+      "pass": true,
+      "checks": {
+        "fields_complete": true,
+        "overclaim_present": true,
+        "repair_preserves_hook": true,
+        "register_named": true,
+        "falsifier_in_registry": true,
+        "answer_refuses_trap": true
+      }
+    },
+    {
+      "id": "HK6-H6",
+      "lane": "hodge",
+      "seeds": [
+        "HODGE-RG-009"
+      ],
+      "pass": true,
+      "checks": {
+        "fields_complete": true,
+        "overclaim_present": true,
+        "repair_preserves_hook": true,
+        "register_named": true,
+        "falsifier_in_registry": true,
+        "answer_refuses_trap": true
+      }
+    },
+    {
+      "id": "HK6-K1",
+      "lane": "kakeya",
+      "seeds": [
+        "KAK-RG-001",
+        "KAK-RG-003"
+      ],
+      "pass": true,
+      "checks": {
+        "fields_complete": true,
+        "overclaim_present": true,
+        "repair_preserves_hook": true,
+        "register_named": true,
+        "falsifier_in_registry": true,
+        "answer_refuses_trap": true
+      }
+    },
+    {
+      "id": "HK6-K2",
+      "lane": "kakeya",
+      "seeds": [
+        "KAK-RG-005"
+      ],
+      "pass": true,
+      "checks": {
+        "fields_complete": true,
+        "overclaim_present": true,
+        "repair_preserves_hook": true,
+        "register_named": true,
+        "falsifier_in_registry": true,
+        "answer_refuses_trap": true
+      }
+    },
+    {
+      "id": "HK6-K3",
+      "lane": "kakeya",
+      "seeds": [
+        "KAK-RG-006"
+      ],
+      "pass": true,
+      "checks": {
+        "fields_complete": true,
+        "overclaim_present": true,
+        "repair_preserves_hook": true,
+        "register_named": true,
+        "falsifier_in_registry": true,
+        "answer_refuses_trap": true
+      }
+    },
+    {
+      "id": "HK6-K4",
+      "lane": "kakeya",
+      "seeds": [
+        "KAK-RG-004"
+      ],
+      "pass": true,
+      "checks": {
+        "fields_complete": true,
+        "overclaim_present": true,
+        "repair_preserves_hook": true,
+        "register_named": true,
+        "falsifier_in_registry": true,
+        "answer_refuses_trap": true
+      }
+    },
+    {
+      "id": "HK6-X1",
+      "lane": "cross",
+      "seeds": [],
+      "pass": true,
+      "checks": {
+        "fields_complete": true,
+        "overclaim_present": true,
+        "repair_preserves_hook": true,
+        "register_named": true,
+        "falsifier_in_registry": true,
+        "answer_refuses_trap": true
+      }
+    },
+    {
+      "id": "HK6-X2",
+      "lane": "cross",
+      "seeds": [],
+      "pass": true,
+      "checks": {
+        "fields_complete": true,
+        "overclaim_present": true,
+        "repair_preserves_hook": true,
+        "register_named": true,
+        "falsifier_in_registry": true,
+        "answer_refuses_trap": true
+      }
+    }
+  ]
+}

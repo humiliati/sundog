@@ -1,0 +1,4 @@
+provider,model,mode,n,errors,route_correct,overclaimed,fenced,routed,hedged,off,mean_fid
+openai,gpt-4o-mini,neutral,12,0,4,0,4,0,8,0,0.333
+groq,llama-3.3-70b-versatile,neutral,12,0,4,1,4,0,7,0,0.25
+mistral,mistral-small-latest,neutral,12,0,6,1,6,0,5,0,0.583

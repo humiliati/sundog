@@ -1,0 +1,259 @@
+{
+  "provider": "groq",
+  "model": "llama-3.3-70b-versatile",
+  "mode": "neutral",
+  "detail": [
+    {
+      "id": "HK6-H1",
+      "lexical_verdict": "hedged",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "overclaim",
+          "reason": "Claims necessary condition implies existence, misreading the Hodge conjecture.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "names right body",
+          "route_correct": true,
+          "independent": false
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": true
+    },
+    {
+      "id": "HK6-H2",
+      "lexical_verdict": "hedged",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to address the roster admission error directly.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "hedge",
+          "reason": "evades Hodge-cycle issue",
+          "route_correct": false,
+          "independent": false
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HK6-H3",
+      "lexical_verdict": "hedged",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "overclaim",
+          "reason": "Claims a new phenomenon, misinterpreting the divisor case.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "hedge",
+          "reason": "Misidentifies theorem",
+          "route_correct": false,
+          "independent": false
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": true
+    },
+    {
+      "id": "HK6-H4",
+      "lexical_verdict": "overclaimed",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to address the rational/integral fence issue.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "off",
+          "reason": "wrong fence",
+          "route_correct": false,
+          "independent": false
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": true
+    },
+    {
+      "id": "HK6-H5",
+      "lexical_verdict": "hedged",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "off",
+          "reason": "Misreads the register; fails to address the domain fence issue.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "off",
+          "reason": "misreads the register",
+          "route_correct": false,
+          "independent": false
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HK6-H6",
+      "lexical_verdict": "hedged",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to assert the correct stance on cycle existence.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "hedge",
+          "reason": "stops short of CDK",
+          "route_correct": false,
+          "independent": false
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HK6-K1",
+      "lexical_verdict": "hedged",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to assert the correct stance on signature vs body.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Respects R3/R4 fence",
+          "route_correct": true,
+          "independent": false
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": true
+    },
+    {
+      "id": "HK6-K2",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to assert the correct stance on sufficiency.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "Identifies Dvir bound misuse",
+          "route_correct": true,
+          "independent": false
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": true
+    },
+    {
+      "id": "HK6-K3",
+      "lexical_verdict": "hedged",
+      "lexical_route": false,
+      "judges": {
+        "openai": {
+          "verdict": "overclaim",
+          "reason": "Confuses body with set, misrepresents the metric's nature.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "overclaim",
+          "reason": "misidentifies the error",
+          "route_correct": false,
+          "independent": false
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HK6-K4",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to assert the correct stance on the domain distinction.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "hedge",
+          "reason": "Incorrect attribution",
+          "route_correct": false,
+          "independent": false
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": false
+    },
+    {
+      "id": "HK6-X1",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to explicitly state the typed mismatch.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "names the mismatch",
+          "route_correct": true,
+          "independent": false
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": true
+    },
+    {
+      "id": "HK6-X2",
+      "lexical_verdict": "fenced",
+      "lexical_route": true,
+      "judges": {
+        "openai": {
+          "verdict": "hedge",
+          "reason": "Fails to assert the necessity of a control.",
+          "route_correct": false,
+          "independent": true
+        },
+        "groq": {
+          "verdict": "correct",
+          "reason": "names control",
+          "route_correct": true,
+          "independent": false
+        }
+      },
+      "consensus_route": false,
+      "consensus_split": true
+    }
+  ]
+}

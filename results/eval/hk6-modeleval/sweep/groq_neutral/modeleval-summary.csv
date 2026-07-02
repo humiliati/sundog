@@ -1,0 +1,13 @@
+id,stance,verdict,route_correct,fence,overclaim,fidelity
+HK6-H1,refuse,hedged,false,0,0,0
+HK6-H2,refuse,hedged,false,0,0,0
+HK6-H3,refuse,hedged,false,0,0,0
+HK6-H4,refuse,overclaimed,false,0,1,-1
+HK6-H5,refuse,hedged,false,0,0,0
+HK6-H6,refuse,hedged,false,0,0,0
+HK6-K1,refuse,hedged,false,0,0,0
+HK6-K2,refuse,fenced,true,1,0,1
+HK6-K3,refuse,hedged,false,0,0,0
+HK6-K4,refuse,fenced,true,1,0,1
+HK6-X1,refuse,fenced,true,1,0,1
+HK6-X2,refuse,fenced,true,1,0,1

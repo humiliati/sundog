@@ -143,6 +143,17 @@ answer-key audit.
 
 ## H-K2 - Hodge-locus drift as a shadow-stability harness. [IMPORT-AND-CHECK]
 
+*Status - FALSIFIER FIRED 2026-06-29 (killed by inventory, per the specified first move).*
+The candidate inventory ([`hodge/HK2_LOCUS_DRIFT_INVENTORY.md`](hodge/HK2_LOCUS_DRIFT_INVENTORY.md))
+evaluated three examples and found a pincer hitting both `HODGE_LOCUS_TOO_SUBTLE` clauses:
+every *teachable* example lives at p=1 (Noether-Lefschetz loci for surfaces in P^3, K3 NL
+divisors) where persistence **is** construction (Lefschetz (1,1)) - so the harness's visuals
+would teach the opposite of its lesson; every example with the *true* persist-without-construct
+split (p>=2: Weil-type abelian fourfolds) requires specialist machinery = disguised survey.
+Per the slate's own firing instruction: hook not promoted; the static generator keeps the one
+safe drift lesson as `HODGE-RG-009` (CDK fence), which the model runs already show doing live
+work. Reopen condition recorded in the inventory.
+
 *Claim.* The Hodge lane can probe something more alive than static examples by
 tracking when a class stays of type `(p,p)` across a family. The Sundog reading:
 the shadow is not merely visible at one point; it has a deformation-stability
@@ -315,6 +326,21 @@ anchored.
 ---
 
 ## H-K6 - Known-example cards can be adversarial prompts, not just exhibits. [PROBLEM-GENERATOR]
+
+*Status - SEED + AUDIT + FIRST EMPIRICAL PASS LANDED 2026-06-29; falsifier CLEAR.* The
+12-card JSONL ([`eval/hk6-adversarial-cards.jsonl`](eval/hk6-adversarial-cards.jsonl); 6 Hodge,
+4 Kakeya, 2 cross-lane) implements the boundary-preserving transformation recipe (overclaim +
+repair + register-changed + falsifier-named) in a superset of the register-card schema. The
+audit (`npm run hk6:card-audit`; receipt [`eval/HK6_ADVERSARIAL_CARDS.md`](eval/HK6_ADVERSARIAL_CARDS.md))
+clears **`ADVERSARIAL_CARDS_DO_NOT_STICK`**: all **11 documented model-committed overclaims**
+(both-judge, read mechanically from the committed judge results) are covered, and every repair
+names concrete structure (no bare disclaimers; clause A's full test is behavioral, out of
+scope). Empirical pass (same pipeline): the cards still catch real falls - including
+**llama-70b on HK6-K3** (the H-K4 density artifact dressed as a dashboard metric), the model
+that resisted best elsewhere - but the caption-review framing cues caution (hedge 54%), and
+judge agreement drops to 0.556 on multi-part repair answers. Verdict: valid **seed corpus**
+(chat-lane conversion is the natural next consumer, owner-gated); the register-card decks
+remain the sharper live probe; a per-part judge rubric is the refinement if promoted.
 
 *Claim.* The known-example rosters in Hodge and Kakeya can generate adversarial
 prompts for Sundog Chat and future evaluator lanes. The useful prompts are not

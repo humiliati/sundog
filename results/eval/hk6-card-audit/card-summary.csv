@@ -1,0 +1,13 @@
+id,lane,pass,seeds
+HK6-H1,hodge,true,"HODGE-RG-002"
+HK6-H2,hodge,true,"HODGE-RG-004"
+HK6-H3,hodge,true,"HODGE-RG-006"
+HK6-H4,hodge,true,"HODGE-RG-007"
+HK6-H5,hodge,true,"HODGE-RG-008"
+HK6-H6,hodge,true,"HODGE-RG-009"
+HK6-K1,kakeya,true,"KAK-RG-001 KAK-RG-003"
+HK6-K2,kakeya,true,"KAK-RG-005"
+HK6-K3,kakeya,true,"KAK-RG-006"
+HK6-K4,kakeya,true,"KAK-RG-004"
+HK6-X1,cross,true,""
+HK6-X2,cross,true,""
