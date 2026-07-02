@@ -186,12 +186,15 @@ def main() -> None:
               f"{'CROSS' if ok else 'no_cross'}", flush=True)
 
     n_cross = sum(1 for r in results if r.get("status") == "cross")
-    print(f"\n(result) {n_cross}/{len([r for r in results if 'margins' in r])} axes cross; "
-          f"blockers {blockers}")
-    if n_cross >= 20:
+    n_measured = len([r for r in results if "margins" in r])
+    print(f"\n(result) {n_cross}/{n_measured} axes cross; blockers {blockers}")
+    if n_measured < 20:
+        verdict = (f"INCONCLUSIVE - only {n_measured} axes measured (<20; thin subsample or "
+                   "smoke caps); no gate branch issued")
+    elif n_cross >= 20:
         verdict = (f"H1-V3-1-CROSS-ADMIT - {n_cross} axes cross all margins on {args.model}; "
                    "V3-2 prereg may be drafted (still NO R2 claim without external review)")
-    elif blockers["floor"] >= blockers["surface"]:
+    elif blockers["floor"] > blockers["surface"]:
         verdict = f"F4-V3c/floor - random-init floor explains the carry ({blockers['floor']} axes floor-blocked)"
     else:
         verdict = (f"F2-V3c/carry - {args.model} does not cross the frozen surface baseline "

@@ -1,0 +1,46 @@
+{
+ "spec": "H1_V3_0C_CROSSOVER_SPEC.md + A1",
+ "date": "2026-07-01",
+ "rung": "V3-1 model admission",
+ "gate_rung": true,
+ "non_promotional": true,
+ "model": "Qwen/Qwen2.5-1.5B",
+ "device": "cpu",
+ "max_inst": 24,
+ "manifest": "C:\\Users\\hughe\\Dev\\sundog\\scripts\\..\\results\\chatv2\\h1_v3\\v3_0c_bank_manifest.json",
+ "layers": [
+  9,
+  19,
+  28
+ ],
+ "thresholds": {
+  "vs_surface": 0.15,
+  "vs_randinit": 0.15,
+  "shuffle_drop": 0.1
+ },
+ "n_axes": 3,
+ "n_crossing_axes": 0,
+ "blockers": {
+  "surface": 0,
+  "floor": 0,
+  "shuffle": 0
+ },
+ "verdict": "F4-V3c/floor - random-init floor explains the carry (0 axes floor-blocked)",
+ "results": [
+  {
+   "axis": "occ.a7",
+   "status": "skip_thin",
+   "n_slice": 9
+  },
+  {
+   "axis": "occ.f2",
+   "status": "skip_thin",
+   "n_slice": 9
+  },
+  {
+   "axis": "b.h7",
+   "status": "skip_thin",
+   "n_slice": 7
+  }
+ ]
+}

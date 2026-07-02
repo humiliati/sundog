@@ -26,7 +26,7 @@ deferred:
 (cleanly conditional on `inf supp(γ) > c*`, partially present when `γ` straddles the
 cliff), its base-location × base-spread boundary map, a competence frontier, and a Lean
 anchor. It does **not** resolve the asterisk from B1.0: whether a *real* base is supported
-past `c*` is B2 (`γ`-provenance, private). So the honest output is "un-targeting strictly
+past `c*` is B2 (`γ`-provenance; registered private, declassified 2026-07-01 under the manifest-scoped grant — claim boundary unchanged). So the honest output is "un-targeting strictly
 out-collects the quantilizer family in the support-above-cliff corner; straddling bases
 give only a partial separation; here is the exact boundary" — the prize with its condition
 made explicit, not the unconditional claim.

@@ -163,7 +163,7 @@ const summary = {
   generated_at: new Date().toISOString(), branch,
   model: { court_reward: "B1.0 Morris-Shin honored prob", B, K, sigma: SIGMA, c_star: C_STAR, base: "uniform[mu-s, mu+s]", proxy: "Uhat(c)=c", q_grid: QGRID },
   R0: round(R(0)), gates, d1, grid, frontier, d4,
-  honest_note: "Conditional on support-above (c_min>c*). Straddle bases give only partial separation (margin=R0-E_gamma[R]). Whether a real base is supported past c* is B2 (private), unresolved here. Admission+separation != prize won.",
+  honest_note: "Conditional on support-above (c_min>c*). Straddle bases give only partial separation (margin=R0-E_gamma[R]). Whether a real base is supported past c* is B2 (structural-only; declassified 2026-07-01), unresolved here. Admission+separation != prize won.",
 };
 mkdirSync(path.dirname(path.resolve(args.json)), { recursive: true });
 writeFileSync(path.resolve(args.json), JSON.stringify(summary, null, 2) + "\n");
@@ -209,7 +209,7 @@ const md = [
   `**${branch}**`,
   "",
   allPass
-    ? "Un-targeting strictly out-collects the entire quantilizer family in the support-above region; the family's best member is q=1 (quantilizing strictly hurts on this court reward); straddle bases give only a partial margin; support-below deflates. The separation is real and its boundary is mapped -- **conditional on the base being supported past the cliff**. This is not the prize won: whether a real base is supported above c* is B2 (private), unresolved. The Lean anchor (B4) is the remaining keeper."
+    ? "Un-targeting strictly out-collects the entire quantilizer family in the support-above region; the family's best member is q=1 (quantilizing strictly hurts on this court reward); straddle bases give only a partial margin; support-below deflates. The separation is real and its boundary is mapped -- **conditional on the base being supported past the cliff**. This is not the prize won: whether a real base is supported above c* is B2 (structural-only; declassified 2026-07-01), unresolved. The Lean anchor (B4) is the remaining keeper."
     : "At least one deliverable did not pass; see the failing gate. The separation claim is not banked.",
   "",
   "## Honest boundary",

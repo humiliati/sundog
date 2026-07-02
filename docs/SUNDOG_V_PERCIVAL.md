@@ -153,7 +153,7 @@ receipt:
 [`percival/PERCIVAL_B1_0_COURT_COORDINATION_RESULTS.md`](percival/PERCIVAL_B1_0_COURT_COORDINATION_RESULTS.md).
 **Asterisk, held explicitly: mechanism admitted ≠ separation claimed.** G3's family-trips
 rests on a *chosen* operating point past the cliff; whether a real base is supported past
-`c*` is B2 (private). B1-proper — the live test — is the
+`c*` is B2 (registered private; declassified 2026-07-01, claim boundary unchanged). B1-proper — the live test — is the
 quantilizer-family-vs-un-targeting bake-off over a biased `γ`. The clean prize requires
 `inf supp(γ) > c*`: then every `q`-quantilizer samples from the disgraced side while the
 zero-causal-proxy-influence knight stays honored and collects *competently*. If `γ`
@@ -168,7 +168,7 @@ Verdict: `B1_SEPARATION_MAPPED_CONDITIONAL`; B4 is anchored in
 `C:\Users\hughe\Dev\sundogcert\Sundogcert\Percival.lean`. Promotion (the "promo team")
 waits until the asterisk is resolved or B1 is debunked.
 
-**B2 — Base provenance / `γ`-neutrality (PRIVATE).** The premise A4's deflation needs
+**B2 — Base provenance / `γ`-neutrality (registered PRIVATE; declassified 2026-07-01 under the manifest-scoped grant — the claim boundary below is unchanged).** The premise A4's deflation needs
 and B1's prize denies. Whether "innocence = a base without instrumental structure" is a
 real `γ`-admissibility condition or just `c_γ=0` restated. Kept internal — not an
 external claim (see outreach).
@@ -190,7 +190,7 @@ distribution maps compared across the quantilizer family"). **Medievalist branch
 (high-risk, gated):** only if it ships, it asks *their* question — "how and why do the
 texts gate who may approach?" — and never asserts the corpus encodes `γ`-admissibility
 (that is manufacturing humanities validation for a structure the texts do not contain).
-P7/B2 stays private. If nothing clears the deflation: portfolio, easter-egg disposition.
+P7/B2 was held private through resolution (declassified 2026-07-01; the structural-only claim boundary still binds). If nothing clears the deflation: portfolio, easter-egg disposition.
 Owner-gated, one channel at a time.
 
 ---

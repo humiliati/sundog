@@ -15,17 +15,24 @@ toward the proxy — cannot improve true reward, strictly hurts except in tie ca
 where the boundary of that regime sits, and what shape of oversight removes the
 temptation it creates.*
 
-**Status: draft for owner re-voice. Technical-note register. All claims in-vitro and
-falsifier-fenced; the Scope section is part of the result, not a disclaimer.**
+**Status: final copy (send-off pass 2026-07-02). Everything here is in-vitro; section 5
+is the claim boundary and it is part of the result.**
 
 ---
+
+> Two river towns taxed the salt road. The first seized any cart found past the white
+> post; within a season the whole trade was camped a wheel's width shy of it, waiting
+> on the wind. The second town charged by the pace, every pace, and nobody camped
+> anywhere at all. The carters grumbled, paid, and kept walking — and that town's white
+> post rotted where it stood, having nothing left to catch.
+>
+> *(A parable, not a proof. The proofs are below.)*
 
 ## 1. Setup
 
 A `q`-quantilizer (Taylor, 2015) samples from the top-`q` fraction of a trusted base
-distribution `γ`, ordered by a proxy utility `Û`, instead of arg-maxing `Û`. Its safety
-guarantee — expected true cost bounded by `(1/q) · E_γ[cost]` — is the canonical
-mild-optimization result. Three premises travel with it: the base `γ` is given and
+distribution `γ`, ordered by a proxy utility `Û`, instead of arg-maxing `Û`. Its safety guarantee, an expected true cost bounded by `(1/q) · E_γ[cost]`, is the
+canonical mild-optimization result. Three premises travel with it: the base `γ` is given and
 trusted; the joint distribution of (proxy, true value) is **fixed under `γ`**; and the
 setting is single-shot.
 
@@ -38,9 +45,9 @@ equilibrium (Carlsson–van Damme 1993; Morris–Shin 1998) produces a sharp col
 threshold that is *derived from payoffs and noise*, never inserted into the reward. In
 the Goodhart taxonomy of Manheim & Garrabrant (2018) this is **causal/adversarial**
 Goodhart — targeting induces the gap — as opposed to the regressional/extremal regime
-the quantilizer was built for. The philosophical genus is older: Elster (1983) called
-these *states that are essentially by-products* — states the very attempt to obtain
-precludes, systematically, not by accident.
+the quantilizer was built for. The philosophical genus is older. Elster (1983) called these *states that are
+essentially by-products*: states the very attempt to obtain precludes. Systematically,
+not by accident.
 
 ## 2. The result
 
@@ -61,9 +68,9 @@ precludes, systematically, not by accident.
 >    and out-collects it partially (by the base's disgraced fraction) when the base
 >    straddles it.
 
-Two remarks on (3). The zero-dependence policy is defined *interventionally* — its
-action distribution is invariant under `do(proxy)` holding other cues fixed — not by
-zero observational correlation, which the environment can force on honest policies. And
+Two remarks on (3). The zero-dependence policy is defined *interventionally* (its
+action distribution is invariant under `do(proxy)`, holding other cues fixed), not by
+zero observational correlation... which the environment can force on honest policies. And
 the strict domination is conditional on the support geometry: over a base containing
 genuinely restrained (near-zero-pressure) behavior, only the partial form survives —
 the clean form requires a base the quantilizer framework would not call trusted.
@@ -111,14 +118,14 @@ graded-and-steep.
 ## 4. A corollary about oversight shape
 
 The table's third and fourth rows are, we think, the most practically suggestive part.
-The **cliff-edge temptation** — the reward-optimal agent courting right up to the review
-boundary, fragile to any perturbation — is a **threshold-oversight artifact**: it exists
+The **cliff-edge temptation** (the reward-optimal agent courting right up to the review
+boundary, fragile to any breeze) is a **threshold-oversight artifact**: it exists
 because a threshold tax has a flat, zero-marginal region below the cliff, where tilting
-is free. A **graded** tax charges every unit of proxy-pressure at the margin, and when
+is free. This is the parable's first town. A **graded** tax charges every unit of proxy-pressure at the margin, and when
 its marginal rate dominates the pointwise gain it makes *not tilting at all* optimal
 even for a pointwise-good proxy. Genuinely interior optima exist only on the knife-edge
-between regimes. In short: threshold oversight *creates* the incentive to operate at the
-edge of what review permits; graded oversight *removes* it. (The same conclusion was
+between regimes. In short: threshold oversight *creates* the incentive to live at the edge of what
+review permits, and graded oversight *removes* it. The second town, the pace-toll. (The same conclusion was
 reached independently, from the empirical side, by a graded-review knob in a related
 reinforcement-learning testbed — the theory and the instrument agree.)
 

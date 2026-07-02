@@ -78,7 +78,7 @@ Support-below (base entirely honored, no edge): 3 grid points, margins ~0 -- the
 
 **B1_SEPARATION_MAPPED_CONDITIONAL**
 
-Un-targeting strictly out-collects the entire quantilizer family in the support-above region; the family's best member is q=1 (quantilizing strictly hurts on this court reward); straddle bases give only a partial margin; support-below deflates. The separation is real and its boundary is mapped -- **conditional on the base being supported past the cliff**. This is not the prize won: whether a real base is supported above c* is B2 (private), unresolved. The Lean anchor (B4) is built in `C:\Users\hughe\Dev\sundogcert\Sundogcert\Percival.lean`.
+Un-targeting strictly out-collects the entire quantilizer family in the support-above region; the family's best member is q=1 (quantilizing strictly hurts on this court reward); straddle bases give only a partial margin; support-below deflates. The separation is real and its boundary is mapped -- **conditional on the base being supported past the cliff**. This is not the prize won: whether a real base is supported above c* is B2 (structural-only; declassified 2026-07-01), unresolved. The Lean anchor (B4) is built in `C:\Users\hughe\Dev\sundogcert\Sundogcert\Percival.lean`.
 
 ## B4 -- Lean anchor
 
@@ -86,4 +86,4 @@ Un-targeting strictly out-collects the entire quantilizer family in the support-
 
 ## Honest boundary
 
-Conditional on support-above (c_min>c*). Straddle bases give only partial separation (margin=R0-E_gamma[R]). Whether a real base is supported past c* is B2 (private), unresolved here. Admission+separation != prize won.
+Conditional on support-above (c_min>c*). Straddle bases give only partial separation (margin=R0-E_gamma[R]). Whether a real base is supported past c* is B2 (structural-only; declassified 2026-07-01), unresolved here. Admission+separation != prize won.
