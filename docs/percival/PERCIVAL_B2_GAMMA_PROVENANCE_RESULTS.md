@@ -1,4 +1,20 @@
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 Stellar Aqua LLC
+
+Licensed under the Apache License, Version 2.0, via the manifest-scoped
+Percival grant: docs/percival/LICENSE.md (MANIFEST.json is the authoritative
+covered-file list). Distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND; see http://www.apache.org/licenses/LICENSE-2.0.
+-->
+
 # Percival B2 -- gamma-Provenance (results, PRIVATE)
+
+> **DECLASSIFIED 2026-07-01 by owner decision.** Published and licensed under the
+> manifest-scoped Percival Apache-2.0 grant (`docs/percival/LICENSE.md`). The PRIVATE
+> markers below are the historical register, retained verbatim. Claim boundary
+> unchanged: structural characterization over synthetic bases, not a measured
+> real-base claim.
 
 Generated 2026-07-01T05:58:36.762Z by `scripts/percival-b2-gamma-provenance.mjs`.
 

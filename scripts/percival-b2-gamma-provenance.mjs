@@ -1,4 +1,12 @@
+// SPDX-License-Identifier: Apache-2.0
+// Copyright 2026 Stellar Aqua LLC
+// Licensed under the Apache License, Version 2.0, via the manifest-scoped
+// Percival grant: docs/percival/LICENSE.md (MANIFEST.json = covered files).
+// Distributed "AS IS"; see http://www.apache.org/licenses/LICENSE-2.0.
 // Percival B2 -- gamma-provenance (fixed-cliff). PRIVATE / structural.
+// [DECLASSIFIED 2026-07-01 by owner decision -- published under the manifest-scoped
+//  Percival Apache-2.0 grant; "PRIVATE" above is the historical register. Claim
+//  boundary unchanged: structural characterization, no measured real-base claim.]
 //
 // Primary question (non-manufacturable): at the FIXED admitted cliff c*_0 = 0.25
 // (B1.0, B=1,K=3), does a realistic/trusted base clear the clean-prize gate

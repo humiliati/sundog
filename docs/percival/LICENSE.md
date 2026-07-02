@@ -11,9 +11,11 @@ Copyright 2026 Stellar Aqua LLC.
 [`MANIFEST.json`](MANIFEST.json). Everything else in the repository remains
 `UNLICENSED` / all rights reserved under the root [`LICENSE`](../../LICENSE);
 viewing the public repository or website does not grant rights to anything
-outside this manifest. A small number of lane artifacts are deliberately
-excluded (private, or work in flight at grant time); the manifest is the
-authoritative covered-file list and may be extended in later revisions.
+outside this manifest. Work in flight at grant time is excluded until it
+lands; the manifest is the authoritative covered-file list and may be
+extended in later revisions. (The B2 γ-provenance artifacts, initially
+excluded as private, were declassified by owner decision 2026-07-01 and are
+included.)
 
 The machine-checked Lean anchors referenced by these artifacts live in the
 separate [`sundogcert`](https://github.com/humiliati/sundogcert) repository,

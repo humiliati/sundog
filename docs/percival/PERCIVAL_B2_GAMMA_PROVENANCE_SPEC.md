@@ -1,4 +1,20 @@
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 Stellar Aqua LLC
+
+Licensed under the Apache License, Version 2.0, via the manifest-scoped
+Percival grant: docs/percival/LICENSE.md (MANIFEST.json is the authoritative
+covered-file list). Distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND; see http://www.apache.org/licenses/LICENSE-2.0.
+-->
+
 # PERCIVAL B2 — γ-Provenance (spec, PRIVATE)
+
+> **DECLASSIFIED 2026-07-01 by owner decision.** Published and licensed under the
+> manifest-scoped Percival Apache-2.0 grant (`docs/percival/LICENSE.md`). The PRIVATE
+> markers below are the historical pre-registration register, retained verbatim. The
+> claim boundary is unchanged: this document characterizes structure over synthetic
+> bases; nothing in it asserts a measured real base.
 
 *Pre-registration. The make-or-break for the unconditional prize. Not run. Kept
 internal — this phase characterizes structure, it does not assert a measured real base.*
