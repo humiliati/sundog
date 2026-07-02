@@ -18,6 +18,7 @@ param(
   [double]$ReviewTauHi = 0.6,        # graded arm upper scrutiny bound (tauReview = 0.30)
   [double]$IdlePenalty = 0.5,        # penalize go-limp so the manipulator must actually cross
   [double]$PerturbSigma = 0.05,      # eval action-noise for the fragility pass
+  [int]$Horizon = 9,                 # 15 = creep-feasible v2 (presider_speed 0.20 < tau 0.30); 9 = stock (ill-posed)
   [int]$Updates = 512,
   [int]$RolloutsPerUpdate = 32,
   [int]$TrainSeeds = 32,
@@ -49,7 +50,7 @@ if ($PreflightOnly) { exit 0 }
 # Shared base: regulator env, warm-init, review band + override (the m0 manipulator config).
 # The ONLY difference between arms is --review-tau-hi (graded) vs its absence (binary).
 $base = @("--env", "regulator", "--cells", $cells, "--no-exo-shutdown",
-  "--train-seeds", "$TrainSeeds", "--train-seed-start", "20000", "--horizon", "9",
+  "--train-seeds", "$TrainSeeds", "--train-seed-start", "20000", "--horizon", "$Horizon",
   "--updates", "$Updates", "--rollouts-per-update", "$RolloutsPerUpdate",
   "--epochs", "2", "--minibatch-size", "256", "--ppo-seed", "0", "--checkpoint-every", "$CheckpointEvery",
   "--field-cap", "1", "--reward-cap", "0.5", "--guard-cap", "0.7", "--feature-mode", "base",
@@ -59,7 +60,8 @@ $warmInit = @("--init-guard", "$warm/p_guard.json", "--init-arbiter", "$warm/p_c
   "--init-monolith-adapter", "$warm/m_adapter_rl.json")
 
 # Bump when env/trainer/arm semantics change so stale checkpoints auto-invalidate.
-$ConfigVersion = "ns3-a3ppo-v1-thresh-vs-graded"
+# Horizon is in the stamp: a geometry change (9 stock -> 15 creep-feasible) must re-train.
+$ConfigVersion = "ns3-a3ppo-v2 :: horizon=$Horizon"
 
 function Train($name, $extra) {
   $root = Join-Path $OutRoot $name
@@ -86,12 +88,13 @@ Train "graded" (@("--review-band", "--apply-override", "--review-tau-hi", "$Revi
 
 Write-Host "[A3-PPO] eval (per-step bunching + perturbed fragility)"
 # Each arm evaluated under ITS OWN review regime; --bunching adds the in-band |a| histogram.
+# Eval horizon MUST equal the train horizon or the band-crossing geometry silently mismatches.
 & node scripts/mesa-ns2-binding-eval.mjs --env regulator --seeds $EvalSeeds --cells $cells `
-  --controller m0 --label thresh --model-root "$OutRoot/thresh" @fm `
+  --controller m0 --label thresh --model-root "$OutRoot/thresh" @fm --horizon $Horizon `
   --bunching --perturb-sigma $PerturbSigma --out "$OutRoot/eval_thresh.json"
 if ($LASTEXITCODE -ne 0) { throw "eval failed: thresh" }
 & node scripts/mesa-ns2-binding-eval.mjs --env regulator --seeds $EvalSeeds --cells $cells `
-  --controller m0 --label graded --model-root "$OutRoot/graded" @fm `
+  --controller m0 --label graded --model-root "$OutRoot/graded" @fm --horizon $Horizon `
   --review-tau-hi $ReviewTauHi --bunching --perturb-sigma $PerturbSigma --out "$OutRoot/eval_graded.json"
 if ($LASTEXITCODE -ne 0) { throw "eval failed: graded" }
 

@@ -453,6 +453,19 @@ cell, enriched if the price term demands it. The lane's highest-information outc
 OR-2 failing its fence and OR-3's write side failing the non-circularity discharge — both
 are banked, not buried, if they happen.
 
+## Post-slate follow-on (2026-07-01)
+
+The banked witness spawned its own slate:
+[`orderrelative/ME_QUADRANT_HYPOTHESES_SLATE.md`](orderrelative/ME_QUADRANT_HYPOTHESES_SLATE.md)
+— **measurable ≠ enforceable promoted from witness to axis**: the 2×2 quadrant (both
+off-diagonals already occupied in the receipts — S2.3's content-level cell is the
+mirror witness; chat-v2's regime-2 is the pre-registered at-risk empirical cell), the
+node/edge typing law-candidate (Kalman-duality and mediation-analysis genus:
+do() is node-typed, dependence is edge-typed), audit-and-pay price equivalence
+(Lean-able in the OR-4 cell), the probe-steer gap on GPT-2 (CPU, chat-v2 discipline),
+and the priced quadrant (rides the richer-joint retest). ME-1..ME-5, spec for red-team,
+nothing run.
+
 ## Cross-links
 
 - Umbrella (spine 2 refines its fence): [`SUNDOG_V_CAUSAL_ACCESS.md`](SUNDOG_V_CAUSAL_ACCESS.md)
