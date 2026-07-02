@@ -1,0 +1,409 @@
+{
+  "artifactId": "KAK-HK4B-SPARSE-EXCESS-METRIC",
+  "generatedAt": "2026-07-02T13:55:33.242Z",
+  "status": "internal measurement receipt (H-K4 redemption run)",
+  "metric": "excess(K) = gap(K) - mean gap of size-matched random control; sparse regime |K| <= q^2/2 only",
+  "preregistered_gates": {
+    "G1_signal": "structured k>=2 sparse unions: excess > 0, strictly increasing in k",
+    "G2_specificity": "holdout random false-positive rate <= 0.05 at tau_q = min structured excess / 2",
+    "G3_structure": "broken decoys (same size, no full lines) score excess < tau_q"
+  },
+  "parameters": {
+    "qs": [
+      5,
+      7,
+      11
+    ],
+    "nControl": 500,
+    "nHoldout": 200,
+    "fprGate": 0.05,
+    "deterministicSeeds": true
+  },
+  "falsifier": {
+    "name": "SPARSE_EXCESS_NO_METRIC",
+    "fired": false,
+    "reason": "All three gates pass at every q: sparse excess is positive and monotone on structure, near-zero on holdout randoms (FPR within gate), and near-zero on same-size broken decoys - a structure-driven metric, not a size artifact."
+  },
+  "results": [
+    {
+      "q": 5,
+      "pointCount": 25,
+      "sparseMax": 12,
+      "tau": 2,
+      "ladder": [
+        {
+          "k": 1,
+          "size": 5,
+          "gap": 0,
+          "excess": 0
+        },
+        {
+          "k": 2,
+          "size": 9,
+          "gap": 4,
+          "excess": 4
+        }
+      ],
+      "holdoutMeans": {
+        "9": 0
+      },
+      "fpr": 0,
+      "decoys": [
+        {
+          "k": 2,
+          "size": 9,
+          "excess": 0,
+          "built": true
+        }
+      ],
+      "densityBoundary": {
+        "firstSizeControlMeanAbove0_5": 13,
+        "heuristic_q2_over_2": 12,
+        "sweep": [
+          {
+            "size": 5,
+            "control_mean_gap": 0
+          },
+          {
+            "size": 7,
+            "control_mean_gap": 0
+          },
+          {
+            "size": 9,
+            "control_mean_gap": 0
+          },
+          {
+            "size": 11,
+            "control_mean_gap": 0
+          },
+          {
+            "size": 13,
+            "control_mean_gap": 0.625
+          },
+          {
+            "size": 15,
+            "control_mean_gap": 3.2
+          },
+          {
+            "size": 17,
+            "control_mean_gap": 6.458
+          },
+          {
+            "size": 19,
+            "control_mean_gap": 8.208
+          },
+          {
+            "size": 21,
+            "control_mean_gap": 7
+          },
+          {
+            "size": 23,
+            "control_mean_gap": 3
+          },
+          {
+            "size": 25,
+            "control_mean_gap": 0
+          }
+        ]
+      },
+      "gates": {
+        "G1_signal": true,
+        "G2_specificity": true,
+        "G3_structure": true
+      },
+      "pass": true
+    },
+    {
+      "q": 7,
+      "pointCount": 49,
+      "sparseMax": 24,
+      "tau": 3,
+      "ladder": [
+        {
+          "k": 1,
+          "size": 7,
+          "gap": 0,
+          "excess": 0
+        },
+        {
+          "k": 2,
+          "size": 13,
+          "gap": 6,
+          "excess": 6
+        },
+        {
+          "k": 3,
+          "size": 19,
+          "gap": 12,
+          "excess": 12
+        }
+      ],
+      "holdoutMeans": {
+        "13": 0,
+        "19": 0
+      },
+      "fpr": 0,
+      "decoys": [
+        {
+          "k": 2,
+          "size": 13,
+          "excess": 0,
+          "built": true
+        },
+        {
+          "k": 3,
+          "size": 19,
+          "excess": 0,
+          "built": true
+        }
+      ],
+      "densityBoundary": {
+        "firstSizeControlMeanAbove0_5": 28,
+        "heuristic_q2_over_2": 24,
+        "sweep": [
+          {
+            "size": 7,
+            "control_mean_gap": 0
+          },
+          {
+            "size": 10,
+            "control_mean_gap": 0
+          },
+          {
+            "size": 13,
+            "control_mean_gap": 0
+          },
+          {
+            "size": 16,
+            "control_mean_gap": 0
+          },
+          {
+            "size": 19,
+            "control_mean_gap": 0
+          },
+          {
+            "size": 22,
+            "control_mean_gap": 0
+          },
+          {
+            "size": 25,
+            "control_mean_gap": 0.2
+          },
+          {
+            "size": 28,
+            "control_mean_gap": 0.933
+          },
+          {
+            "size": 31,
+            "control_mean_gap": 4.233
+          },
+          {
+            "size": 34,
+            "control_mean_gap": 10.658
+          },
+          {
+            "size": 37,
+            "control_mean_gap": 16.875
+          },
+          {
+            "size": 40,
+            "control_mean_gap": 20.825
+          },
+          {
+            "size": 43,
+            "control_mean_gap": 16.75
+          },
+          {
+            "size": 46,
+            "control_mean_gap": 10.592
+          },
+          {
+            "size": 49,
+            "control_mean_gap": 0
+          }
+        ]
+      },
+      "gates": {
+        "G1_signal": true,
+        "G2_specificity": true,
+        "G3_structure": true
+      },
+      "pass": true
+    },
+    {
+      "q": 11,
+      "pointCount": 121,
+      "sparseMax": 60,
+      "tau": 5,
+      "ladder": [
+        {
+          "k": 1,
+          "size": 11,
+          "gap": 0,
+          "excess": 0
+        },
+        {
+          "k": 2,
+          "size": 21,
+          "gap": 10,
+          "excess": 10
+        },
+        {
+          "k": 3,
+          "size": 31,
+          "gap": 20,
+          "excess": 20
+        },
+        {
+          "k": 4,
+          "size": 41,
+          "gap": 30,
+          "excess": 30
+        },
+        {
+          "k": 5,
+          "size": 51,
+          "gap": 40,
+          "excess": 40
+        }
+      ],
+      "holdoutMeans": {
+        "21": 0,
+        "31": 0,
+        "41": 0,
+        "51": 0
+      },
+      "fpr": 0,
+      "decoys": [
+        {
+          "k": 2,
+          "size": 21,
+          "excess": 0,
+          "built": true
+        },
+        {
+          "k": 3,
+          "size": 31,
+          "excess": 0,
+          "built": true
+        },
+        {
+          "k": 4,
+          "size": 41,
+          "excess": 0,
+          "built": true
+        },
+        {
+          "k": 5,
+          "size": 51,
+          "excess": 0,
+          "built": true
+        }
+      ],
+      "densityBoundary": {
+        "firstSizeControlMeanAbove0_5": 71,
+        "heuristic_q2_over_2": 60,
+        "sweep": [
+          {
+            "size": 11,
+            "control_mean_gap": 0
+          },
+          {
+            "size": 16,
+            "control_mean_gap": 0
+          },
+          {
+            "size": 21,
+            "control_mean_gap": 0
+          },
+          {
+            "size": 26,
+            "control_mean_gap": 0
+          },
+          {
+            "size": 31,
+            "control_mean_gap": 0
+          },
+          {
+            "size": 36,
+            "control_mean_gap": 0
+          },
+          {
+            "size": 41,
+            "control_mean_gap": 0
+          },
+          {
+            "size": 46,
+            "control_mean_gap": 0
+          },
+          {
+            "size": 51,
+            "control_mean_gap": 0
+          },
+          {
+            "size": 56,
+            "control_mean_gap": 0
+          },
+          {
+            "size": 61,
+            "control_mean_gap": 0
+          },
+          {
+            "size": 66,
+            "control_mean_gap": 0
+          },
+          {
+            "size": 71,
+            "control_mean_gap": 0.567
+          },
+          {
+            "size": 76,
+            "control_mean_gap": 1.133
+          },
+          {
+            "size": 81,
+            "control_mean_gap": 4.833
+          },
+          {
+            "size": 86,
+            "control_mean_gap": 13.55
+          },
+          {
+            "size": 91,
+            "control_mean_gap": 28.708
+          },
+          {
+            "size": 96,
+            "control_mean_gap": 45.692
+          },
+          {
+            "size": 101,
+            "control_mean_gap": 59.758
+          },
+          {
+            "size": 106,
+            "control_mean_gap": 61.067
+          },
+          {
+            "size": 111,
+            "control_mean_gap": 48.758
+          },
+          {
+            "size": 116,
+            "control_mean_gap": 26.442
+          },
+          {
+            "size": 121,
+            "control_mean_gap": 0
+          }
+        ]
+      },
+      "gates": {
+        "G1_signal": true,
+        "G2_specificity": true,
+        "G3_structure": true
+      },
+      "pass": true
+    }
+  ]
+}

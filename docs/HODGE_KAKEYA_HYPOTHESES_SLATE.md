@@ -244,6 +244,18 @@ structure-driven signal survives **only in the sparse regime** (q=7 k2/k3: struc
 control 0), and only as **excess over a size-matched control** - the refined metric, not the
 raw gap. As specified the body-resistance bridge remains prose, not a clean workbench metric.
 
+*Redemption run - `SPARSE_EXCESS_NO_METRIC` CLEAR 2026-06-29* (receipt
+[`kakeya/PHASE4B_SPARSE_EXCESS_METRIC.md`](kakeya/PHASE4B_SPARSE_EXCESS_METRIC.md);
+`npm run kakeya:sparse-excess`). The null's own refinement - `excess = gap - size-matched
+random control mean`, sparse regime `|K| <= q^2/2` only - was pre-registered with three kill
+gates and passes ALL at `q in {5,7,11}`: **G1** structured excess positive/strictly increasing
+(and exact: **`excess = (k-1)(q-1)`**, a closed form like H-K3's law); **G2** holdout randoms
+FPR = 0 (control generalizes, not overfit); **G3** broken decoys (same size, lines each missing
+a point) score exactly 0 - structure, not size. Empirical density boundary sits above the
+`q^2/2` heuristic (13/28/71 vs 12/24/60), so the sparse fence is conservative. Verdict: the RAW
+gap stays dead (PHASE4 stands); the CONTROLLED excess is a displayable, falsifier-fenced
+workbench metric - exactly the fence card HK6-K3 teaches.
+
 *Claim.* The Kakeya body-resistance bridge becomes testable in toy form by
 measuring ambiguity at points that lie on many candidate lines. A fixed direction
 shadow is clean; an adaptive choice of direction can compress differently. The
