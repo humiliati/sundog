@@ -43,7 +43,34 @@ zero new substrate: `Tame s := (frontier s).Finite`, and mathlib's frontier calc
 *Falsifier that did not fire* (`TAME_NEEDS_SUBSTRATE`): the dimension-one axiom could not be stated
 or used without an o-minimal framework. It could — finite-frontier is enough.
 
-## R2 — The dimension-one consequences on the tame base. [FORMALIZABLE — SCOPED 2026-07-02]
+## R2 — The dimension-one consequences on the tame base. ✅ SLATE COMPLETE 2026-07-02
+
+> **Status: ALL THREE TARGETS LANDED, same day as scoped.** Two new modules —
+> `Sundogcert/OMinimalRate.lean` (35th: R2-M + R2-Q) and `Sundogcert/OMinimalNormalForm.lean`
+> (36th: R2-N) — axiom-clean, gated (4 entries), full build green, public-safety clean.
+>
+> - **R2-M ✅** `net_mono_or_anti_between_cuts` — the Monotonicity Theorem, PL instance, with the
+>   cut budget carried (`S.card + 1 ≤ netPieceBound g`).
+> - **R2-Q ✅** `affineAway_levelSet_ncard : (frontier {f = c}).ncard ≤ 2·|S| + 1` (exact S-form,
+>   as pre-registered) + `net_levelSet_ncard/net_superlevel_ncard ≤ 2·netPieceBound − 1` (the U-4
+>   bridge: the definability modulus bounds the o-minimality modulus) + the boolean propagation
+>   (`frontier_compl_ncard` exact, `frontier_union_ncard_le` additive) grading the whole `NetDef`
+>   algebra. **`RATE_NOT_TIGHTER` did NOT fire** — the initial-segments-are-a-⊆-chain argument
+>   closed (`Finset.eq_of_subset_of_card_le`), killing R1's `2^|S|` powerset slack.
+> - **R2-N ✅** `tame_iff_normalForm` — Tame **is** "finite union of points and open intervals",
+>   both directions. *Design deviation (improvement, honestly noted):* the pre-registered plan was
+>   a sorted-list gap cover; the landed proof is a **max'-peeling induction** on
+>   `(frontier s).ncard` (peel the top frontier point `a` and its left neighbor `a'`; the windows
+>   `Ioo a' a` / `Ioi a` are frontier-free so `preconnected_split` resolves them; recurse below
+>   `a'` with strictly smaller frontier via `frontier_inter_subset` + `ncard_diff_singleton`).
+>   Same argument, zero list machinery — **`NORMAL_FORM_NEEDS_COMPONENTS` was routed around, not
+>   fired.** ⇐ runs through `frontier(open interval) ⊆ {sInf, sSup}` (junk-value-safe) and rung
+>   1's boolean algebra. Honest scope: the decomposition is produced, not canonical/minimal.
+>
+> With R2 complete the dimension-one theory is **done**: axiom (R1), rate (R2-Q), monotonicity
+> instance (R2-M), normal form (R2-N). The ladder now points at R3 (projection).
+
+### The original scope (as pre-registered, for the record)
 
 > **Recon receipts (mathlib v4.30.0, verified by grep).** Present: `Set.OrdConnected.isPreconnected`
 > + `isPreconnected_iff_ordConnected` (intervals-are-preconnected is free), `Finset.sort`,

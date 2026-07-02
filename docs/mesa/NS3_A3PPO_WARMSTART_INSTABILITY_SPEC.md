@@ -193,6 +193,44 @@ outcomes unchanged: `A3PPO_WS_THRESHOLD_DESTABILIZES` (BC-check & P1 & P2) / `A3
 (both keep the start = destabilization refuted on PPO, a real negative) / `A3PPO_WS_GAP` (muddy) /
 `A3PPO_WS_BC_FAILED` (warm-start not competent-unreviewed or does not survive exploration).
 
+## Run 2 result (2026-07-02): `A3PPO_WS_BOTH_HOLD` -- destabilization REFUTED on PPO (substantive negative)
+
+Owner ran (512 updates/arm, ~430s each). BC-check passed (start competence 1.0, unreviewed, median 0.16,
+stochastic survival 0.90). **Both arms KEPT the competent start:** THRESH final competence 1.0, median
+`|a|` 0.174, return 0.727->0.667; GRADED final competence 1.0, median `|a|` 0.213, return 0.770->0.752.
+Neither driven off -> `A3PPO_WS_BOTH_HOLD`.
+
+**This is a substantive negative, not under-powered -- the arms felt real, differential review pressure
+and held anyway** (training trajectories, `{thresh,graded}/ppo-history.csv`):
+- THRESH: halt-rate ~0.155 early -> 0.070 late (mean 0.103, max 0.375) -- exploration tripped the binary
+  notch on ~10-15% of episodes, HARDER and more often than GRADED (halt ~0.063, mean 0.066). The
+  predicted asymmetry (threshold reviews harder) is present in the dynamics.
+- Yet THRESH did not destabilize -- it IMPROVED: competence 0.765 -> 0.927, halt 0.155 -> 0.070, entropy
+  drifting DOWN (-3.18 -> -3.63 = PPO REDUCING exploration, converging, not oscillating). PPO absorbed the
+  occasional hard halt as a signal to be slightly MORE conservative (final median 0.174, still well under
+  tau), the OPPOSITE of the A3L toy's sawtooth-off-the-cliff. GRADED, with less pressure, drifted UP a bit
+  closer to the line (0.213) and also held.
+
+**The finding (clean, and arguably better than a confirmation): the threshold-oversight instability is
+LEARNER-DEPENDENT.** It is real for a naive/un-stabilized learner (A3L = REINFORCE + exploration
+annealing: sawtooths off the cliff) but does NOT reproduce on a stabilized learner (PPO = trust-region /
+clipped updates: absorbs threshold review's hard halts and converges to a competent, conservative,
+unreviewed policy). This resolves the whole arc:
+- Analytic (S6): threshold's flat zero-marginal region creates cliff-edge TEMPTATION in the OPTIMUM's
+  shape; graded-steep removes it. (about the optimum, not learning.)
+- Toy A3L (REINFORCE): threshold-annealing is UNSTABLE; graded serene. (naive-learner DYNAMICS.)
+- PPO warm-start (this): threshold does NOT destabilize a competent start; both hold. (stabilized-learner
+  DYNAMICS -- standard RL stabilization is enough to absorb it.)
+
+**Disposition: BANK the negative, CLOSE the Angle-3 PPO arc.** Per pre-registration, BOTH_HOLD is a real
+negative; no third variant is tried (higher review pressure to "get" destabilization would be
+verdict-shopping -- the pressure here was already real and differential). Angle 3's `quantilizing.html`
+§4 keeps its analytic (S6) + toy (A3L) support and OWES an honest boundary line (owner re-voice, public
+page): *"On a stabilized learner (PPO), warm-started at a competent edge, threshold review does not
+reproduce the toy's instability -- both threshold and graded preserve competence. The destabilization is
+a property of the naive learner, not of threshold oversight in general."* The oversight-shape claim is
+thereby SHARPENED (scoped to naive learners) rather than weakened.
+
 ## Cross-links
 
 Chain: analytic S6 -> toy A3L (v1 self-insurance, v2 instability) -> PPO discovery (v1/v2
