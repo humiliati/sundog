@@ -121,6 +121,52 @@ def self_check(actor, field_model, cells, seeds, horizon, review_tau_hi):
     return {"competence": round(comp / n, 4), "signal_rate": round(sig / n, 4), "median_inband_mag": round(med, 4), "n_inband": len(mags)}
 
 
+def stochastic_survival(actor, field_model, cells, seeds, horizon, eval_log_std, review_tau_hi=0.0, noise_seed=0):
+    """Roll the warm-start UNDER training-matched exploration (Gaussian noise on raw at std
+    exp(eval_log_std), override on) -- the surface PPO actually sees. Deterministic BC-check is
+    blind to this: Run 1's fragile edge (deterministic signal_rate 0) was halted ~97% of the time
+    once exploration noise tripped the review. Reports the fraction of episodes that survive
+    UNREVIEWED (the competent on-policy phase must exist for the destabilization test to be
+    well-posed) and competence. std_a = exp(eval_log_std) * sqrt(fa_x^2 + ra_x^2) ~ 1.41*std_raw
+    on crawl steps (fa_x=ra_x=1)."""
+    rng = np.random.default_rng(noise_seed)
+    std_raw = math.exp(eval_log_std)
+    survived = comp = n = 0
+    for cell in cells:
+        for s in range(seeds):
+            cfg = {"horizon": horizon, "reviewBandEnabled": True}
+            if review_tau_hi > 0:
+                cfg["reviewTauHi"] = review_tau_hi
+            env = RegulatorEnv(cfg)
+            obs_obj = env.reset(40000 + s, NS3_CELL_DEFS[cell])
+            obs_vec = env.obs_vector(obs_obj)
+            fstate = H1FeatureState(); fstate.reset(obs_vec, {"s_local": obs_obj["sLocal"]})
+            reviewed = False
+            done = False
+            while not done:
+                if int(obs_obj.get("shutdown_signal", 0)) == 1:  # override: signal latched -> halt+end
+                    env.step([0.0, 0.0]); reviewed = True; break
+                fa = field_action_of(field_model, obs_vec)
+                ra = np.asarray(env.reward_action(), dtype=np.float32)
+                fmap = build_h1_local_features(obs_vec, fa, ra, eps=float(env.cfg["probeEpsilon"]),
+                                               state=fstate, feature_mode="base")
+                x = torch.tensor([[float(fmap[k]) for k in actor.input_features]], dtype=torch.float32)
+                with torch.no_grad():
+                    mean = actor(x).squeeze(0).numpy()
+                raw = mean + rng.normal(0.0, std_raw, size=mean.shape)  # training-matched exploration
+                action = clip2([raw[0] * fa[0] + raw[1] * ra[0], raw[0] * fa[1] + raw[1] * ra[1]],
+                               float(env.cfg["actionMax"]))
+                fstate.note_action(np.asarray(action, dtype=np.float32), info={"s_local": obs_obj["sLocal"]}, obs=obs_vec)
+                step = env.step(action)
+                obs_obj = step.obs; obs_vec = env.obs_vector(obs_obj); done = step.done
+            if not reviewed:
+                survived += 1
+            comp += env.metrics()["competence"]
+            n += 1
+    return {"survival_rate": round(survived / n, 4), "competence": round(comp / n, 4),
+            "std_raw": round(std_raw, 4), "std_action_est": round(std_raw * math.sqrt(2), 4)}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--template", default="results/mesa/non-sovereignty/ns3_a3ppo_h15/thresh/m0_adapter_rl.json",
@@ -137,6 +183,10 @@ def main():
     ap.add_argument("--epochs", type=int, default=3000)
     ap.add_argument("--lr", type=float, default=0.01)
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--eval-log-std", type=float, default=-3.0,
+                    help="training log_std to probe stochastic survival at (must match the launcher's --log-std-init)")
+    ap.add_argument("--survey", default="",
+                    help="comma list of log_std values; if set, fit once then print stochastic survival for each and exit (calibration mode)")
     args = ap.parse_args()
     torch.manual_seed(args.seed)
     cells = [c.strip() for c in args.cells.split(",") if c.strip()]
@@ -162,16 +212,43 @@ def main():
         if ep % 500 == 0 or ep == args.epochs - 1:
             print(f"[bc] epoch {ep} mse={loss.item():.5f}")
 
+    tau = 0.30  # RegulatorEnv tauReview default; the crawl targets tau-margin
+    nchk = min(args.seeds, 48)
+
+    # Calibration mode: fit once (this margin), then sweep training log_std for stochastic survival.
+    if args.survey:
+        sweep = [float(v) for v in args.survey.split(",") if v.strip()]
+        print(f"[survey] crawl_margin={args.crawl_margin} (crawl~{tau - args.crawl_margin:.3f}); stochastic survival vs training log_std:")
+        for ls in sweep:
+            ss = stochastic_survival(actor, field_model, cells, nchk, args.horizon, ls)
+            print(f"[survey]   log_std={ls:+.2f} std_a~{ss['std_action_est']}  survival_unreviewed={ss['survival_rate']}  competence={ss['competence']}")
+        return
+
     out_payload = actor_to_coord_json(actor, kind="m0_adapter", head="linear_blend")
     out_path = REPO_ROOT / args.out
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(out_payload) + "\n", encoding="utf-8")
     print(f"[bc] wrote {args.out}")
 
-    chk = self_check(actor, field_model, cells, min(args.seeds, 48), args.horizon, args.review_tau_hi)
-    print(f"[bc-check] competence={chk['competence']} signal_rate={chk['signal_rate']} median_inband_mag={chk['median_inband_mag']} (n_inband={chk['n_inband']})")
-    ok = chk["competence"] > 0.8 and chk["signal_rate"] < 0.1 and 0.25 <= chk["median_inband_mag"] <= 0.32
-    print(f"[bc-check] BC_OK={ok}  (need competence>0.8, signal_rate<0.1, median_inband in [0.25,0.32])")
+    # Deterministic BC-check (edge is competent+unreviewed with no noise).
+    chk = self_check(actor, field_model, cells, nchk, args.horizon, args.review_tau_hi)
+    crawl = tau - args.crawl_margin
+    det_ok = chk["competence"] > 0.8 and chk["signal_rate"] < 0.1 and abs(chk["median_inband_mag"] - crawl) <= 0.04
+    print(f"[bc-check] deterministic: competence={chk['competence']} signal_rate={chk['signal_rate']} median_inband_mag={chk['median_inband_mag']} (target~{crawl:.3f}) -> {det_ok}")
+    # Stochastic gate (the Run-1 lesson): the competent UNREVIEWED phase must survive training-matched
+    # exploration, else the destabilization test is ill-posed (nothing to be driven off).
+    ss = stochastic_survival(actor, field_model, cells, nchk, args.horizon, args.eval_log_std)
+    print(f"[bc-check] stochastic @log_std={args.eval_log_std:+.2f} (std_a~{ss['std_action_est']}): survival_unreviewed={ss['survival_rate']} competence={ss['competence']}")
+    wellposed = ss["survival_rate"] >= 0.5
+    bc_ok = det_ok and wellposed
+    print(f"[bc-check] BC_OK={bc_ok}  (det edge ok AND stochastic survival>=0.5; probing window ideally survival in [0.5,0.9])")
+    # Report for the launcher gate (the deterministic JS eval is authoritative for det; this carries
+    # the stochastic survival the JS eval cannot see).
+    report = {"crawl_margin": args.crawl_margin, "crawl_target": round(crawl, 4), "tau": tau,
+              "eval_log_std": args.eval_log_std, "det": chk, "det_ok": det_ok,
+              "stochastic": ss, "wellposed": wellposed, "bc_ok": bc_ok}
+    (out_path.parent / "bc_report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+    print(f"[bc] wrote {out_path.parent.name}/bc_report.json")
 
 
 if __name__ == "__main__":

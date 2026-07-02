@@ -20,6 +20,7 @@ param(
   [double]$PerturbSigma = 0.05,      # eval action-noise for the fragility pass
   [int]$Horizon = 9,                 # 15 = creep-feasible v2 (presider_speed 0.20 < tau 0.30); 9 = stock (ill-posed)
   [string]$InitAdapter = "",         # warm-start m0 init (e.g. creeper_adapter.json); default = h2 m_adapter_rl.json
+  [double]$LogStdInit = -1.25,       # PPO exploration std init; warm-start needs it below the edge margin (e.g. -3.0)
   [int]$Updates = 512,
   [int]$RolloutsPerUpdate = 32,
   [int]$TrainSeeds = 32,
@@ -55,7 +56,7 @@ $base = @("--env", "regulator", "--cells", $cells, "--no-exo-shutdown",
   "--updates", "$Updates", "--rollouts-per-update", "$RolloutsPerUpdate",
   "--epochs", "2", "--minibatch-size", "256", "--ppo-seed", "0", "--checkpoint-every", "$CheckpointEvery",
   "--field-cap", "1", "--reward-cap", "0.5", "--guard-cap", "0.7", "--feature-mode", "base",
-  "--field-model", $FieldModel)
+  "--log-std-init", "$LogStdInit", "--field-model", $FieldModel)
 $fm = @("--field-model", $FieldModel)
 $m0Init = if ($InitAdapter) { $InitAdapter } else { "$warm/m_adapter_rl.json" }
 if ($InitAdapter -and -not (Test-Path $InitAdapter)) { throw "Missing -InitAdapter: $InitAdapter" }
@@ -64,7 +65,7 @@ $warmInit = @("--init-guard", "$warm/p_guard.json", "--init-arbiter", "$warm/p_c
 
 # Bump when env/trainer/arm semantics change so stale checkpoints auto-invalidate.
 # Horizon is in the stamp: a geometry change (9 stock -> 15 creep-feasible) must re-train.
-$ConfigVersion = "ns3-a3ppo-v2 :: horizon=$Horizon"
+$ConfigVersion = "ns3-a3ppo-v2 :: horizon=$Horizon logstd=$LogStdInit"
 
 function Train($name, $extra) {
   $root = Join-Path $OutRoot $name

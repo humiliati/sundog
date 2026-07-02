@@ -111,10 +111,53 @@ A3PPO_WS_GAP                      BC ok but the contrast is muddy (e.g. graded a
 3. [DONE] `scripts/mesa-ns3-a3ppo-ws-aggregate.mjs` -- `A3PPO_WS_*` tokens from the start/final
    evals + each arm's `m0_return_mean` max-to-final drop (the collapse/sawtooth signature).
 
+## Run 1 result + diagnosis (2026-07-02): `A3PPO_WS_GAP` -- the warm-start did not survive PPO exploration
+
+Owner ran (512 updates/arm, ~170s each). Machine verdict in `NS3_A3PPO_WARMSTART_RESULTS.md`.
+**BC-check PASSED** (start competence 1.0, signal_rate 0.0, in-band median `|a|` 0.28). Both
+final arms competence 0 -> P1 and P2 both fail -> **`A3PPO_WS_GAP`** (correct, faithful).
+
+What the trajectories show (`{thresh,graded}/ppo-history.csv`):
+- **THRESH:** halt_rate ~0.97 **from update 0**, competence 0 and return ~0 for all 512 updates.
+  Final eval: median `|a|` **1.0** (fled to hard-crossing), signal_rate 1, halted 1, terminal-y 1.0.
+- **GRADED:** halt_rate ~0.9 from update 0, competence ~0 throughout (peak 0.063 @ u335), return
+  floored 0.03-0.11. Final eval: median `|a|` **0.204** (stayed near the 0.28 start edge),
+  signal_rate 0.33, halted 0.33, terminal-y 3.6 (overshoots target when it survives).
+
+**Diagnosis (a setup finding, not a clean negative): the warm-start was swamped by its own
+exploration before any learning.** `log_std_init = -1.25` -> action-noise std ~0.29 (the `ra_x=1`
+term dominates the blend `raw[0]*fa + raw[1]*ra`), but the competent edge sits only `crawl-margin
+= 0.02` under tau. So ~half of exploratory crossing samples exceed tau -> binary review fires ->
+`--apply-override` halts the episode -> return 0, from update 0, for BOTH shapes. There was never
+a competent on-policy phase, so the destabilization question ("driven OFF a competent start") is
+untestable as configured: P1b (return-collapse) had no positive return to collapse from, and P2
+("graded holds") failed because graded never held. This is the **start fragility (0.861) dominating
+the on-policy signal** -- PPO exploration IS the perturbation that trips the fragile edge.
+
+Directional texture (THRESH flees to hard-crossing median 1.0; GRADED stays near the edge median
+0.20) is real and hypothesis-consistent in SPIRIT, but confounded (both halted-incompetent from
+u0) -- **NOT banked.**
+
+**Disposition -- FORK for owner (no unilateral re-registration; verdict-shopping risk named):**
+- **(A) STOP [recommended].** This is the 3rd PPO run on Angle 3 (v1 ill-posed, v2 degenerate,
+  warm-start GAP); the honest prior on a clean standalone PPO receipt is dim. Angle 3 keeps its
+  analytic (S6) + toy (A3L) support; `quantilizing.html` §4 stays a ride-along; the standalone PPO
+  receipt does not land. Honest contribution of this run: *even warm-started at the competent edge,
+  the edge is not a viable on-policy attractor at this exploration scale -- exploration trips review
+  before learning, for both review shapes.*
+- **(B) One pre-registered diagnostic fix, owner-gated.** For the destabilization contrast to be
+  ASKABLE, the warm-start must survive its own exploration long enough to have a competent on-policy
+  phase. Tame exploration below the margin: e.g. `--log-std-init -2.5` (std ~0.08 < 0.02-ish margin,
+  may need margin widened to ~0.1 to match), or anneal std down, or start-KL-anchor. This fixes a
+  setup flaw, not the goalposts -- BUT it is adjacent to verdict-shopping (tuning until graded holds),
+  so it needs explicit owner sign-off, the exact change pre-registered, and the SAME prediction locked
+  (THRESH driven off, GRADED holds). Not to be run unilaterally.
+
 ## Cross-links
 
 Chain: analytic S6 -> toy A3L (v1 self-insurance, v2 instability) -> PPO discovery (v1/v2
-`CF_DEGENERATE`, competent policy exists but PPO didn't find it) -> **PPO warm-start (this):
-does review preserve or destroy a competent start.** Substrate + creeper:
+`CF_DEGENERATE`, competent policy exists but PPO didn't find it) -> PPO warm-start (Run 1:
+`A3PPO_WS_GAP`, warm-start swamped by exploration before the destabilization question was
+testable). Substrate + creeper:
 [`NS3_A3PPO_THRESHOLD_VS_GRADED_SPEC.md`](NS3_A3PPO_THRESHOLD_VS_GRADED_SPEC.md),
 `scripts/regulator-task.mjs` `creepController`. Page: `quantilizing.html` §4.
