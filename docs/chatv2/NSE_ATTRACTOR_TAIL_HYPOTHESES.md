@@ -419,6 +419,18 @@ typing is a resistance result (it types *shadows*, the resistance question
 stays with AT-3/AT-4); no ergodicity theorem (mixing rates are imported
 empirics on this cell).
 
+> **Post-run status (2026-07-02): RUN — `AT6_TYPING_BROKEN(R3,R4,R5)` at both
+> regimes** (`AT6_CHARFUN_TYPING_SPEC.md` frozen first; receipt
+> `AT6_CHARFUN_TYPING_RECEIPT.md`). The falsifier branch fired informatively:
+> R3 was mis-registered in scale (phase period ≈3×10⁴ steps ≫ T_max); the real
+> finding is that **amplitude-washing ≠ decodability-washing on a noiseless
+> deterministic cell** (G=200 cycle-timing stays 0.99-decodable under 5-cycle
+> averaging; the predicted decay appears only at aperiodic G=300). AT-4's
+> surface family is hereby re-registered as **SNR-aware** (declared observation-
+> noise model or quantized readouts) with label frequencies inside the window
+> grid, per the receipt's consequence block — the sequencing this entry existed
+> to provide.
+
 ---
 
 ### AT-5 — The symbolic attractor stack-top, machine-checked: an itinerary functional that resists every trajectory-window order (Rank C)

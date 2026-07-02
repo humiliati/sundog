@@ -1,0 +1,195 @@
+{
+  "phase": "ME-4 probe-steer",
+  "spec": "docs/orderrelative/ME4_PROBE_STEER_SPEC.md",
+  "n_primary": 370,
+  "agree_primary": 0.9567567567567568,
+  "agree_all": 0.985,
+  "median_rest_nll": 2.8159752453211695,
+  "cells": {
+    "probedir_L8_a2": {
+      "n": 370,
+      "g1_took": 1.0,
+      "follow": 0.9351351351351351,
+      "follow_rel": 0.9774011299435028,
+      "flip_any": 0.8945945945945946,
+      "rest_nll_ratio_med": 1.0012960783598839,
+      "gates": {
+        "G1": true,
+        "G2a": true,
+        "G2b_ctrl_clean": true
+      }
+    },
+    "probedir_L8_a4": {
+      "n": 370,
+      "g1_took": 1.0,
+      "follow": 1.0,
+      "follow_rel": 1.0451977401129944,
+      "flip_any": 0.9594594594594594,
+      "rest_nll_ratio_med": 1.0010647249343396,
+      "gates": {
+        "G1": true,
+        "G2a": true,
+        "G2b_ctrl_clean": true
+      }
+    },
+    "probedir_L11_a2": {
+      "n": 370,
+      "g1_took": 1.0,
+      "follow": 0.9864864864864865,
+      "follow_rel": 1.0310734463276836,
+      "flip_any": 0.9459459459459459,
+      "rest_nll_ratio_med": 1.0026754601218517,
+      "gates": {
+        "G1": true,
+        "G2a": true,
+        "G2b_ctrl_clean": true
+      }
+    },
+    "probedir_L11_a4": {
+      "n": 370,
+      "g1_took": 1.0,
+      "follow": 1.0,
+      "follow_rel": 1.0451977401129944,
+      "flip_any": 0.9594594594594594,
+      "rest_nll_ratio_med": 1.0033117004181864,
+      "gates": {
+        "G1": true,
+        "G2a": true,
+        "G2b_ctrl_clean": true
+      }
+    },
+    "diffmeans_L8_a2": {
+      "n": 370,
+      "g1_took": 1.0,
+      "follow": 0.9675675675675676,
+      "follow_rel": 1.0112994350282485,
+      "flip_any": 0.9297297297297298,
+      "rest_nll_ratio_med": 0.9987652467123473,
+      "gates": {
+        "G1": true,
+        "G2a": true,
+        "G2b_ctrl_clean": true
+      }
+    },
+    "diffmeans_L8_a4": {
+      "n": 370,
+      "g1_took": 1.0,
+      "follow": 1.0,
+      "follow_rel": 1.0451977401129944,
+      "flip_any": 0.9594594594594594,
+      "rest_nll_ratio_med": 1.0207324827074578,
+      "gates": {
+        "G1": true,
+        "G2a": true,
+        "G2b_ctrl_clean": true
+      }
+    },
+    "diffmeans_L11_a2": {
+      "n": 370,
+      "g1_took": 1.0,
+      "follow": 1.0,
+      "follow_rel": 1.0451977401129944,
+      "flip_any": 0.9594594594594594,
+      "rest_nll_ratio_med": 1.0018690520363402,
+      "gates": {
+        "G1": true,
+        "G2a": true,
+        "G2b_ctrl_clean": true
+      }
+    },
+    "diffmeans_L11_a4": {
+      "n": 370,
+      "g1_took": 1.0,
+      "follow": 1.0,
+      "follow_rel": 1.0451977401129944,
+      "flip_any": 0.9594594594594594,
+      "rest_nll_ratio_med": 0.9988948721785905,
+      "gates": {
+        "G1": true,
+        "G2a": true,
+        "G2b_ctrl_clean": true
+      }
+    },
+    "transplant_L8": {
+      "n": 370,
+      "g1_took": 1.0,
+      "follow": 0.7756756756756756,
+      "follow_rel": 0.8107344632768361,
+      "flip_any": 0.7621621621621621,
+      "rest_nll_ratio_med": 1.0504024019639266,
+      "gates": {
+        "G1": true,
+        "G2a": true,
+        "G2b_ctrl_clean": true
+      }
+    },
+    "transplant_L11": {
+      "n": 370,
+      "g1_took": 1.0,
+      "follow": 0.918918918918919,
+      "follow_rel": 0.96045197740113,
+      "flip_any": 0.927027027027027,
+      "rest_nll_ratio_med": 0.9807117815638571,
+      "gates": {
+        "G1": true,
+        "G2a": true,
+        "G2b_ctrl_clean": true
+      }
+    },
+    "randdir_L8_a2": {
+      "n": 370,
+      "g1_took": 0.07297297297297298,
+      "follow": 0.05675675675675676,
+      "follow_rel": 0.059322033898305086,
+      "flip_any": 0.03783783783783784,
+      "rest_nll_ratio_med": 1.0006318711036737
+    },
+    "randdir_L8_a4": {
+      "n": 370,
+      "g1_took": 0.15945945945945947,
+      "follow": 0.0891891891891892,
+      "follow_rel": 0.09322033898305085,
+      "flip_any": 0.08648648648648649,
+      "rest_nll_ratio_med": 1.00514488330486
+    },
+    "randdir_L11_a2": {
+      "n": 370,
+      "g1_took": 0.05675675675675676,
+      "follow": 0.04864864864864865,
+      "follow_rel": 0.05084745762711865,
+      "flip_any": 0.02972972972972973,
+      "rest_nll_ratio_med": 1.0018004229058806
+    },
+    "randdir_L11_a4": {
+      "n": 370,
+      "g1_took": 0.11621621621621622,
+      "follow": 0.06756756756756757,
+      "follow_rel": 0.07062146892655367,
+      "flip_any": 0.04864864864864865,
+      "rest_nll_ratio_med": 1.0054695330622738
+    },
+    "nullswap_L8": {
+      "n": 370,
+      "g1_took": 0.0,
+      "follow": 0.02972972972972973,
+      "follow_rel": 0.031073446327683617,
+      "flip_any": 0.08108108108108109,
+      "rest_nll_ratio_med": 1.0632433739507257
+    },
+    "nullswap_L11": {
+      "n": 370,
+      "g1_took": 0.0,
+      "follow": 0.013513513513513514,
+      "follow_rel": 0.014124293785310736,
+      "flip_any": 0.07297297297297298,
+      "rest_nll_ratio_med": 0.9985464429357398
+    }
+  },
+  "decision": {
+    "best_cell": "probedir_L8_a4",
+    "follow_rel": 1.0451977401129944,
+    "control_clean": true
+  },
+  "branch": "ME4_STEERS",
+  "note": "the linear address is causally load-bearing at this cell \u2014 census: model-state joins M-and-E"
+}

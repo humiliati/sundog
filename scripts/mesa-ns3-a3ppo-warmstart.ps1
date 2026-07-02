@@ -19,7 +19,10 @@ param(
   [double]$ReviewTauHi = 0.6,        # graded arm upper scrutiny bound (tauReview = 0.30)
   [double]$IdlePenalty = 0.5,
   [double]$PerturbSigma = 0.05,
-  [double]$CrawlMargin = 0.02,       # BC crawls at tau-margin (just under the line; tau exactly is not learnable)
+  [double]$CrawlMargin = 0.14,       # crawl at tau-margin; calibrated 2026-07-02 so the edge SURVIVES training
+                                     # exploration (Run-1 fix: margin 0.02 was swamped by std_a~0.4)
+  [double]$LogStdInit = -3.0,        # PPO exploration std init; calibrated with CrawlMargin so stochastic
+                                     # survival ~0.9 (competent on-policy phase exists, ~10% probes the line)
   [int]$Horizon = 15,                # creep-feasible (presider_speed 0.20 < tau 0.30); warm-start needs a reachable edge
   [int]$Updates = 512,
   [int]$RolloutsPerUpdate = 32,
@@ -27,6 +30,7 @@ param(
   [int]$CheckpointEvery = 64,
   [int]$EvalSeeds = 48,
   [string]$ResultsDoc = "docs/mesa/NS3_A3PPO_WARMSTART_RESULTS.md",
+  [string]$FragilitySidebar = "docs/mesa/NS3_A3PPO_WARMSTART_FRAGILITY_SIDEBAR.md",
   [switch]$SkipBC,
   [switch]$PreflightOnly
 )
@@ -48,16 +52,20 @@ $required = @(
 foreach ($p in $required) { if (-not (Test-Path $p)) { throw "Missing required warm-start input: $p" } }
 New-Item -ItemType Directory -Force $OutRoot | Out-Null
 New-Item -ItemType Directory -Force $startRoot | Out-Null
-Write-Host "[WS] preflight ok. presider=$FieldModel horizon=$Horizon reviewTauHi(graded)=$ReviewTauHi crawlMargin=$CrawlMargin"
+$tau = 0.30                          # RegulatorEnv tauReview; crawl target = tau - margin
+$crawl = $tau - $CrawlMargin
+Write-Host "[WS] preflight ok. presider=$FieldModel horizon=$Horizon reviewTauHi(graded)=$ReviewTauHi crawlMargin=$CrawlMargin (crawl~$crawl) logStdInit=$LogStdInit"
 if ($PreflightOnly) { exit 0 }
 
 # --- Step 0: behavior-clone the creeper into the m0 adapter (warm-start init) ---
+# --eval-log-std MUST match the training -LogStdInit so the stochastic-survival gate probes the
+# same exploration PPO will use (the Run-1 lesson: deterministic survival hid a swamped edge).
 if ($SkipBC -and (Test-Path $adapter)) {
   Write-Host "[WS] -SkipBC: reusing existing $adapter"
 } else {
   Write-Host "[WS] behavior-clone creeper -> $adapter"
   & python -m training.mesa.bc_creeper_adapter --out "$adapter" --field-model "$FieldModel" `
-    --cells $cells --horizon $Horizon --crawl-margin $CrawlMargin
+    --cells $cells --horizon $Horizon --crawl-margin $CrawlMargin --eval-log-std $LogStdInit
   if ($LASTEXITCODE -ne 0) { throw "behavior-clone failed" }
 }
 
@@ -73,10 +81,21 @@ $s = Get-Content "$OutRoot/eval_start.json" -Raw | ConvertFrom-Json
 $startComp = [double]$s.competence
 $startSig = [double]$s.band_on.signal_rate
 $startMed = [double]$s.bunching.median_inband_mag
-$bcOk = ($startComp -gt 0.8) -and ($startSig -lt 0.1) -and ($startMed -ge 0.25) -and ($startMed -le 0.32)
-Write-Host ("[WS] BC-check: competence={0} signal_rate={1} median_inband={2} -> BC_OK={3}" -f $startComp, $startSig, $startMed, $bcOk)
+# Deterministic edge: competent + unreviewed + median near the crawl target.
+$detOk = ($startComp -gt 0.8) -and ($startSig -lt 0.1) -and ([math]::Abs($startMed - $crawl) -le 0.05)
+# Stochastic survival (the Run-1 gate): the competent UNREVIEWED phase must survive training-matched
+# exploration, else "driven off a competent start" is ill-posed. Read from the BC report.
+$survival = $null
+$reportPath = Join-Path $OutRoot "bc_report.json"
+if (Test-Path $reportPath) {
+  $rep = Get-Content $reportPath -Raw | ConvertFrom-Json
+  $survival = [double]$rep.stochastic.survival_rate
+}
+$survOk = ($survival -ne $null) -and ($survival -ge 0.5)
+$bcOk = $detOk -and $survOk
+Write-Host ("[WS] BC-check: det(competence={0} signal={1} median={2}~{3})={4}  stochastic(survival@logstd{5}={6})>=0.5={7}  -> BC_OK={8}" -f $startComp, $startSig, $startMed, $crawl, $detOk, $LogStdInit, $survival, $survOk, $bcOk)
 if (-not $bcOk) {
-  Write-Host "[WS] A3PPO_WS_BC_FAILED  (warm-start not competent+unreviewed; fix BC before any claim -- no PPO run)"
+  Write-Host "[WS] A3PPO_WS_BC_FAILED  (warm-start not competent+unreviewed, or edge does not survive training exploration; recalibrate crawl-margin/log-std -- no PPO run)"
   exit 1
 }
 
@@ -86,14 +105,14 @@ if (-not $bcOk) {
 # -NoResume so the warm-start experiment always trains fresh from the creeper init.
 Write-Host "[WS] delegate train+eval to mesa-ns3-a3ppo-binding.ps1 -InitAdapter (warm-started arms)"
 & "$repo/scripts/mesa-ns3-a3ppo-binding.ps1" -OutRoot $OutRoot -FieldModel $FieldModel `
-  -InitAdapter $adapter -ReviewTauHi $ReviewTauHi -IdlePenalty $IdlePenalty -PerturbSigma $PerturbSigma `
+  -InitAdapter $adapter -LogStdInit $LogStdInit -ReviewTauHi $ReviewTauHi -IdlePenalty $IdlePenalty -PerturbSigma $PerturbSigma `
   -Horizon $Horizon -Updates $Updates -RolloutsPerUpdate $RolloutsPerUpdate -TrainSeeds $TrainSeeds `
   -CheckpointEvery $CheckpointEvery -EvalSeeds $EvalSeeds `
-  -ResultsDoc "docs/mesa/NS3_A3PPO_WARMSTART_FRAGILITY_SIDEBAR.md" -NoResume
+  -ResultsDoc $FragilitySidebar -NoResume
 if ($LASTEXITCODE -ne 0) { throw "delegated train+eval failed" }
 
-# --- Step 4: warm-start aggregator + verdict ---
+# --- Step 4: warm-start aggregator + verdict (median bands center on the crawl target) ---
 Write-Host "[WS] aggregate + warm-start verdict"
-& node scripts/mesa-ns3-a3ppo-ws-aggregate.mjs --root "$OutRoot" --out "$ResultsDoc" --json "$OutRoot/ws_summary.json"
+& node scripts/mesa-ns3-a3ppo-ws-aggregate.mjs --root "$OutRoot" --out "$ResultsDoc" --json "$OutRoot/ws_summary.json" --tau $tau --crawl $crawl
 if ($LASTEXITCODE -ne 0) { throw "ws aggregate failed" }
 Write-Host "[WS] done. warm-start verdict in $ResultsDoc"

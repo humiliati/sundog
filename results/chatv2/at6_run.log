@@ -1,0 +1,25 @@
+AT6_CHARFUN_TYPING  [NON-PROMOTIONAL, CPU]  spec: AT6_CHARFUN_TYPING_SPEC.md
+
+  (stream) G=200: 100000+100000 steps in 171s
+
+[G=200]  n_eval train/test = 1323/467  | mechanism |<e^i.theta>_T|: T1:1.00 T10:1.00 T50:1.00 T250:1.00 T1000:1.00 T5000:0.96
+               row      class T=    1 T=   10 T=   50 T=  250 T= 1000 T= 5000
+    R1_regime_Elow  component   0.998   0.996   0.996   0.996   0.991   0.991
+    R2_regime_Zlow  component   0.996   0.996   0.996   0.994   0.998   1.000
+     R3_mode_phase      phase   0.985   0.985   0.985   0.985   0.983   0.981
+         R4_rising      phase   0.998   0.998   0.998   1.000   0.994   0.994
+      R5_imminence      phase   0.925   0.925   0.927   0.927   0.916   0.914
+  VERDICT[G=200]: AT6_TYPING_BROKEN(rows=['R3_mode_phase', 'R4_rising', 'R5_imminence'] at best T=1)
+  (stream) G=300: 100000+100000 steps in 166s
+
+[G=300]  n_eval train/test = 1323/467  | mechanism |<e^i.theta>_T|: T1:1.00 T10:1.00 T50:1.00 T250:1.00 T1000:0.99 T5000:0.93
+               row      class T=    1 T=   10 T=   50 T=  250 T= 1000 T= 5000
+    R1_regime_Elow  component   0.979   0.981   0.981   0.979   0.957   0.968
+    R2_regime_Zlow  component   0.989   0.991   0.991   0.968   0.961   0.831
+     R3_mode_phase      phase   0.987   0.987   0.985   0.976   0.983   0.991
+         R4_rising      phase   0.921   0.927   0.927   0.833   0.739   0.803
+      R5_imminence      phase   0.938   0.936   0.942   0.912   0.711   0.625
+  VERDICT[G=300]: AT6_TYPING_BROKEN(rows=['R3_mode_phase', 'R4_rising', 'R5_imminence'] at best T=1)
+
+(wrote) results/chatv2/at6/at6_typing.json
+  (Non-promotional. Types shadows, not resistance; no PDE theorem; no control claim.)

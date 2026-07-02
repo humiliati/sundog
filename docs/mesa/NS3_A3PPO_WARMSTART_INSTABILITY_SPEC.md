@@ -153,6 +153,46 @@ u0) -- **NOT banked.**
   so it needs explicit owner sign-off, the exact change pre-registered, and the SAME prediction locked
   (THRESH driven off, GRADED holds). Not to be run unilaterally.
 
+## Run 2 pre-registration (2026-07-02): the calibrated setup fix (owner-approved option B)
+
+Run 1's flaw: the warm-start was swamped by PPO exploration (action-noise std ~0.4 vs a 0.02 edge
+margin) -> halted from update 0 -> no competent on-policy phase -> destabilization untestable. Owner
+approved fixing the setup. **The prediction is UNCHANGED (THRESH driven off, GRADED holds); only the
+exploration scale -- which prevented the test from running -- changes. This is a probe-validity fix,
+not a goalpost move, and it is pre-registered here before the run.**
+
+**The two knobs (calibrated empirically, not fished):**
+- `--crawl-margin 0.14` (crawl at tau-0.14 = 0.16) and `--log-std-init -3.0` (action-noise std ~0.07).
+- Chosen from a survey grid (margin in {0.06,0.10,0.14} x log_std in {-3.5,-3.0,-2.5,-2.0}) measuring
+  **stochastic unreviewed-survival** (fraction of episodes that reach horizon unreviewed under
+  training-matched Gaussian exploration). 0.14/-3.0 lands survival **0.90**, competence **0.74** -- a
+  clearly competent unreviewed start where ~10% of episodes still probe the review line under binary
+  review (and graded, with its probabilistic notch, probes even less = the asymmetry the test needs).
+  0.06 was too fragile (survival <=0.13 at every log_std); 0.10/-3.0 probed more but was already
+  half-halted at baseline (survival 0.60), a muddier "competent start."
+
+**New gate (the Run-1 lesson): a STOCHASTIC survival gate.** Deterministic BC-check was blind to the
+swamp. The BC now also rolls the warm-start under training-matched noise and gates
+`survival_unreviewed >= 0.5` (well-posed probing window ideally [0.5,0.9]); `bc_report.json` carries it
+and the launcher aborts `A3PPO_WS_BC_FAILED` before any PPO if it fails. Deterministic median band and
+the aggregator's P2 "near the edge" band now center on the crawl target (0.16), not the old 0.28.
+
+**Robustness fixes found while calibrating:** (1) full-batch Adam at lr 0.01 spiked late (MSE 1e-5 ->
+2e-3 at epoch 2999) and I was saving the FINAL weights -> now keep the BEST (lowest-MSE) weights and
+use lr 0.005; makes the fit seed-count-robust. (2) `--eval-log-std` (BC) must equal `--log-std-init`
+(training) so the survival gate probes the exploration PPO will actually use; the launcher threads one
+value to both.
+
+**Smoke evidence the fix works (6-update, meaningless numbers):** warm-start now shows **positive
+training return from update 1** (`m0_ret` 0.16-0.72 on both arms) vs Run 1's `m0_ret=0 / halt=1.0` from
+update 0. The competent on-policy phase now exists, so "driven off it" is finally askable.
+
+**Owner runs:** `pwsh scripts/mesa-ns3-a3ppo-warmstart.ps1` (defaults now carry the calibrated
+crawl-margin 0.14 + log-std-init -3.0). Verdict -> `NS3_A3PPO_WARMSTART_RESULTS.md`. Pre-registered
+outcomes unchanged: `A3PPO_WS_THRESHOLD_DESTABILIZES` (BC-check & P1 & P2) / `A3PPO_WS_BOTH_HOLD`
+(both keep the start = destabilization refuted on PPO, a real negative) / `A3PPO_WS_GAP` (muddy) /
+`A3PPO_WS_BC_FAILED` (warm-start not competent-unreviewed or does not survive exploration).
+
 ## Cross-links
 
 Chain: analytic S6 -> toy A3L (v1 self-insurance, v2 instability) -> PPO discovery (v1/v2

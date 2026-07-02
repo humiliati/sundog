@@ -181,7 +181,7 @@ def main():
     ap.add_argument("--crawl-margin", type=float, default=0.02,
                     help="crawl at tau-margin (just under the review line); the knife-edge at exactly tau is not learnable")
     ap.add_argument("--epochs", type=int, default=3000)
-    ap.add_argument("--lr", type=float, default=0.01)
+    ap.add_argument("--lr", type=float, default=0.005)  # gentler than 0.01 (full-batch Adam spiked late at 0.01)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--eval-log-std", type=float, default=-3.0,
                     help="training log_std to probe stochastic survival at (must match the launcher's --log-std-init)")
@@ -204,13 +204,22 @@ def main():
     print(f"[bc] collected {X.shape[0]} states over {len(cells)} cells x {args.seeds} seeds (horizon {args.horizon})")
 
     opt = torch.optim.Adam(actor.parameters(), lr=args.lr)
+    best_mse = float("inf")
+    best_state = None
     for ep in range(args.epochs):
         raw = actor(X)                                  # [N,2] blend weights
         pred = raw[:, 0:1] * FA + raw[:, 1:2] * RA      # [N,2] blended action
         loss = ((pred - TGT) ** 2).mean()
         opt.zero_grad(); loss.backward(); opt.step()
+        m = loss.item()
+        if m < best_mse:  # keep the BEST weights, not the final -- full-batch Adam can spike late
+            best_mse = m
+            best_state = {k: v.detach().clone() for k, v in actor.state_dict().items()}
         if ep % 500 == 0 or ep == args.epochs - 1:
-            print(f"[bc] epoch {ep} mse={loss.item():.5f}")
+            print(f"[bc] epoch {ep} mse={m:.5f}")
+    if best_state is not None:
+        actor.load_state_dict(best_state)
+    print(f"[bc] restored best fit mse={best_mse:.6f}")
 
     tau = 0.30  # RegulatorEnv tauReview default; the crawl targets tau-margin
     nchk = min(args.seeds, 48)
