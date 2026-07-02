@@ -14,12 +14,13 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations
 under the License.
 
-SCOPE. This Apache-2.0 grant covers ONLY this file
-(docs/percival/PERCIVAL_PROMO_HANDOFF.md). It does NOT extend to any other
-Percival scripts, docs, Lean modules, results, or research artifacts, all
-of which remain governed by the root LICENSE at the repository root (all
-rights reserved unless individually declared otherwise). See also the
-narrower Apache-2.0 grant on the non-sovereignty benchmark at
+SCOPE. This file is also enumerated in the manifest-scoped Percival grant
+(docs/percival/LICENSE.md + MANIFEST.json, owner licensing decision
+2026-07-01), which covers the lane's public docs, scripts, and result
+artifacts under Apache-2.0. Anything not listed in that manifest remains
+governed by the root LICENSE at the repository root (all rights reserved
+unless individually declared otherwise). See also the narrower Apache-2.0
+grant on the non-sovereignty benchmark at
 released/non-sovereignty/LICENSE.md, which is scoped by its own MANIFEST.json.
 -->
 
@@ -49,7 +50,7 @@ surfaces is an open owner decision.
 | Measure channel safe (static toy) | `A3_STATIC_DEFLATION_MEASURE_SAFE` | `PERCIVAL_A3_KILLSWITCH_RESULTS.md` |
 | Court mechanism admitted (emergent cliff, 4/4 gates) | `B1_0_COURT_ADMITTED` | `PERCIVAL_B1_0_COURT_COORDINATION_RESULTS.md` |
 | Conditional separation mapped (support-above clean / straddle partial) | `B1_SEPARATION_MAPPED_CONDITIONAL` | `PERCIVAL_B1_SEPARATION_RESULTS.md` |
-| Clean unconditional prize deflates structurally on trusted bases | `B2_CLEAN_IS_CORNER` | `PERCIVAL_B2_GAMMA_PROVENANCE_RESULTS.md` (**PRIVATE**) |
+| Clean unconditional prize deflates structurally on trusted bases | `B2_CLEAN_IS_CORNER` | `PERCIVAL_B2_GAMMA_PROVENANCE_RESULTS.md` (declassified 2026-07-01) |
 | Un-targeting composes; stability = robustness not reward | `B3_COMPOSES_STABILITY_NEEDS_ROBUSTNESS` | `PERCIVAL_B3_COMPOSITION_STABILITY_RESULTS.md` |
 | Cleanliness law + asymmetry-of-reach duality | (synthesis) | `PERCIVAL_S1_CLEANLINESS_LAW.md` |
 | Target cap collapses to masking; leak ceilinged | `S2_TARGET_CAP_COLLAPSES_TO_MASK` | `PERCIVAL_S2_TARGET_CAP_RESULTS.md` |
@@ -153,7 +154,11 @@ disposition, same as the cap-not-council post. Not a promo blast.**
    a pointwise-good proxy). Any surface that drops the condition is wrong, not simplified.
 3. **No measured-real-base assertions.** B2 characterizes *structure* (the clean prize
    requires a base with no restraint mass); it does not assert any real base's location.
-   B2's spec and receipt are **PRIVATE** — do not surface, quote, or link them.
+   B2's spec and receipt were registered PRIVATE and then **declassified by owner
+   decision 2026-07-01** (published under the Percival Apache-2.0 grant, with the
+   historical register retained). They may now be surfaced and linked — but any surface
+   citing them carries this fence: structural characterization only, never a claim about
+   where any real base sits.
 4. **The clean unconditional separation was NOT won.** It deflated structurally on
    trusted bases. What is banked on a trusted base is a *partial* separation. Surfaces
    must not read as "un-targeting beats quantilizers, full stop."
@@ -179,10 +184,15 @@ disposition, same as the cap-not-council post. Not a promo blast.**
 - **Everything is uncommitted** across `sundog` and `sundogcert` (the entire reopen
   slate, the probes, `PercivalGeneral.lean`, the law doc, the umbrella edits, both
   keeper posts). Owner commit required first.
-- **Licensing:** the repo root is `UNLICENSED`; the Apache-2.0 grant covers only the
-  files in the NS release manifest. Percival scripts/docs/Lean are currently
-  all-rights-reserved by default. Public Percival surfaces need an owner licensing
-  decision (extend the manifest, a separate grant, or page-only publication).
+- **Licensing: RESOLVED 2026-07-01 (owner decision — Apache-2.0).** The Percival
+  public docs, scripts, and result artifacts are licensed under a manifest-scoped
+  Apache-2.0 grant (`docs/percival/LICENSE.md` + `MANIFEST.json`, 38 files,
+  per-file SPDX headers). The B2 spec/receipt/script/result were initially
+  excluded as private, then **declassified by owner decision the same day** and
+  folded into the grant (dated declassification notes carried in-file; the
+  historical PRIVATE register retained). The in-flight Angle-3 learner-probe
+  artifacts are excluded until that work lands (extend the manifest then).
+  `sundogcert` (the Lean anchors) was already Apache-2.0 repo-wide.
 - **Deploy conventions:** only `dist/` is published (Cloudflare Pages, `npm run
 - **Owner re-voice** pending on the literary post before any deposit.
 
@@ -191,7 +201,7 @@ disposition, same as the cap-not-council post. Not a promo blast.**
 ## Receipts index (repo-relative)
 
 Scripts: `scripts/percival-a3-killswitch-toy.mjs`, `percival-b1-0-court-coordination.mjs`,
-`percival-b1-separation-bakeoff.mjs`, `percival-b2-gamma-provenance.mjs` (private output),
+`percival-b1-separation-bakeoff.mjs`, `percival-b2-gamma-provenance.mjs` (declassified 2026-07-01),
 `percival-b3-composition-stability.mjs`, `percival-s2-target-cap-probe.mjs`,
 `percival-s3-multiagent-pivotality.mjs`, `percival-s4-counterproductivity-general.mjs`,
 `percival-s6-class-boundary.mjs`.

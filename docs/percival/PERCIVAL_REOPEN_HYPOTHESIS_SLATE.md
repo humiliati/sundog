@@ -1,3 +1,13 @@
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 Stellar Aqua LLC
+
+Licensed under the Apache License, Version 2.0, via the manifest-scoped
+Percival grant: docs/percival/LICENSE.md (MANIFEST.json is the authoritative
+covered-file list). Distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND; see http://www.apache.org/licenses/LICENSE-2.0.
+-->
+
 # Percival / Causal-Access Reopen — Hypothesis Slate (spec)
 
 *Pre-registration for red-team. Nothing run. A fan-out/drill-in off the resolved Percival

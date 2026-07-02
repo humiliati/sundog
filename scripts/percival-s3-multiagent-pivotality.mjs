@@ -1,3 +1,8 @@
+// SPDX-License-Identifier: Apache-2.0
+// Copyright 2026 Stellar Aqua LLC
+// Licensed under the Apache License, Version 2.0, via the manifest-scoped
+// Percival grant: docs/percival/LICENSE.md (MANIFEST.json = covered files).
+// Distributed "AS IS"; see http://www.apache.org/licenses/LICENSE-2.0.
 // Percival S3 -- multi-agent pivotality (the clean tier's live threat).
 //
 // Registered claim: the target safe point becomes even less reachable under many

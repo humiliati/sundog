@@ -96,3 +96,49 @@ Genus for the eventual surface (registered now): bunching at kinks/notches (Saez
 Kleven & Waseem on notches), constraint-boundary behavior in safe RL. S6:
 [`PERCIVAL_S6_CLASS_BOUNDARY_RESULTS.md`](PERCIVAL_S6_CLASS_BOUNDARY_RESULTS.md).
 Handoff Angle 3: [`PERCIVAL_PROMO_HANDOFF.md`](PERCIVAL_PROMO_HANDOFF.md).
+
+---
+
+## v1 RESULT + v2 pre-registration (appended 2026-07-02, AFTER the v1 run, BEFORE the v2 run)
+
+**v1 verdict: `A3L_OPTIMA_LEARNER_GAP` — G1 missed, and the miss is substantive, not a
+criterion bug.** G2/G3/G4 passed (the shape ordering transferred: notch closest to the
+boundary with strictly the highest taxed-arm fragility 0.098 > 0.0065 > 0; sigmoid
+interior at its computed optimum; fine abstains; control climbs). What failed was G1's
+registered fragility magnitude (>0.2): **learners self-insure** — REINFORCE converges
+backed off the notch by ~2 exploration-sigma (median mu 0.157 at sigma 0.04), where
+realized fragility is ~0.10. Exploration makes the cliff cost visible during training
+and the learner internalizes a safety margin the analytic optimum does not have.
+Additionally the rider went non-monotone because at sigma = 0.02 the training dynamics
+are **sawtooth-unstable** (slow climb, violent cliff kickback; median mu collapses to
+0.04) — threshold review destabilizes training near the boundary, a pathology the
+graded arms do not show. Per the registered stopping rule, the standalone surface does
+NOT proceed on v1.
+
+**v2 question (the RLHF-relevant one, unmeasured in v1):** real training *anneals*
+exploration. Annealing should **erode the self-insurance**: as sigma decays, the
+learner's margin (~2 sigma) shrinks and it creeps toward the edge, ending fragile —
+recovering the analytic edge-rider exactly in the deploy-relevant near-greedy limit.
+Graded oversight should show no such erosion.
+
+**v2 pre-registered predictions (sigma annealed linearly 0.08 → 0.01 over training,
+same seeds/harness):**
+
+- **V1 (erosion):** annealed-NOTCH ends with median `mu ≥ 0.20` (margin shrunk toward
+  the edge) and end-state fragility strictly greater than v1's fixed-sigma-0.04 notch
+  fragility (0.098), with fragility RISING over the last third of training.
+- **V2 (graded calm):** annealed-SIGMOID still converges to its interior optimum
+  (`|mu − 0.108| ≤ 0.05`) with end fragility < 0.05 — no erosion, nothing to erode.
+- **V3 (instability alternative, recorded honestly):** if late-training small-sigma
+  kicks destabilize the annealed notch instead (sawtooth returns), that outcome is
+  itself the finding — annealing near a notch is unstable — and is reported as
+  `A3L_ANNEAL_UNSTABLE`, not massaged into V1.
+
+```
+A3L_ANNEALING_ERODES_SELF_INSURANCE   iff V1 ∧ V2   (the standalone-worthy receipt)
+A3L_ANNEAL_UNSTABLE                   if V3 fires (notch training destabilizes)
+A3L_SELF_INSURANCE_ROBUST             if annealed notch stays backed off and calm
+```
+
+Any of the three is reportable; only the first re-opens the standalone surface, and the
+escalation to the owner-run NS-3 PPO binding is gated on it.

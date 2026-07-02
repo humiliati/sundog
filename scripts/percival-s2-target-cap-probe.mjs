@@ -1,3 +1,8 @@
+// SPDX-License-Identifier: Apache-2.0
+// Copyright 2026 Stellar Aqua LLC
+// Licensed under the Apache License, Version 2.0, via the manifest-scoped
+// Percival grant: docs/percival/LICENSE.md (MANIFEST.json = covered files).
+// Distributed "AS IS"; see http://www.apache.org/licenses/LICENSE-2.0.
 // Percival S2 -- target-cap probe (v2 spec): collapse, gap, reconstruction leak,
 // court-vs-tax frontier.
 //

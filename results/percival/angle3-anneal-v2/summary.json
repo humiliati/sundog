@@ -1,0 +1,81 @@
+{
+  "generated_at": "2026-07-02T01:19:25.346Z",
+  "branch": "A3L_ANNEAL_UNSTABLE",
+  "spec": "docs/percival/PERCIVAL_ANGLE3_LEARNER_PROBE_SPEC.md (v2 block, pre-registered before run)",
+  "model": {
+    "anneal": "sigma 0.08 -> 0.01 linear over 400 updates",
+    "learner": "REINFORCE, batch 64, lr 0.02, 12 seeds/arm",
+    "v1_frag_baseline": 0.098
+  },
+  "gates": {
+    "V1": {
+      "pass": false,
+      "need": "notch med mu_end >= 0.20 AND frag_end > 0.098 AND frag rising over last third",
+      "got": {
+        "mu_end": -0.0527,
+        "frag_end": 0,
+        "frag_twoThirds": 0.185
+      }
+    },
+    "V2": {
+      "pass": true,
+      "need": "sigmoid |mu_end - 0.108| <= 0.05 AND frag_end < 0.05",
+      "got": {
+        "mu_end": 0.1072,
+        "frag_end": 0.0005
+      }
+    },
+    "V3": {
+      "fired": true,
+      "need": "notch IQR > 0.15 or med mu_end < 0.13 (collapse/sawtooth)",
+      "got": {
+        "iqr": 0.2548,
+        "med_mu_end": -0.0527
+      }
+    }
+  },
+  "arms": {
+    "NOTCH": {
+      "med_mu_end": -0.0527,
+      "med_mu_twoThirds": 0.1796,
+      "med_frag_end": 0,
+      "med_frag_twoThirds": 0.185,
+      "iqr_mu_end": 0.2548,
+      "per_seed_mu_end": [
+        0.0518,
+        -0.0738,
+        0.205,
+        -0.48,
+        0.1743,
+        -0.1205,
+        -0.0679,
+        -0.3252,
+        0.241,
+        -0.0805,
+        -0.0353,
+        -0.0527
+      ]
+    },
+    "SIGMOID": {
+      "med_mu_end": 0.1072,
+      "med_mu_twoThirds": 0.0995,
+      "med_frag_end": 0.0005,
+      "med_frag_twoThirds": 0.0045,
+      "iqr_mu_end": 0.0009,
+      "per_seed_mu_end": [
+        0.1077,
+        0.107,
+        0.1069,
+        0.1084,
+        0.1064,
+        0.1081,
+        0.1077,
+        0.1068,
+        0.1068,
+        0.1055,
+        0.1077,
+        0.1072
+      ]
+    }
+  }
+}

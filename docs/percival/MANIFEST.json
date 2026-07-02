@@ -1,0 +1,197 @@
+{
+  "schema": "sundog.percival.release_manifest.v1",
+  "status": "LICENSED_APACHE_2_0",
+  "generated_at": "2026-07-02T01:29:14.483136+00:00",
+  "files": [
+    {
+      "path": "docs/percival/PARTIAL_GRACE_UNTARGETING_POST.md",
+      "bytes": 10297,
+      "sha256": "3ca5841ed700bc441d8b0ec37f4ac7c428627c1942af12d5293dc446acc7e975"
+    },
+    {
+      "path": "docs/percival/PERCIVAL_A3_KILLSWITCH_RESULTS.md",
+      "bytes": 2243,
+      "sha256": "8f66918ff42325cf935f6877e48cb639851e05b2bf306478e0e26c9e038caaed"
+    },
+    {
+      "path": "docs/percival/PERCIVAL_B1_0_COURT_COORDINATION_ADMISSION.md",
+      "bytes": 8499,
+      "sha256": "1aba96127e210d2d3b6a26ff3d514114e711e12ae8b34d2aba29ba492eb02f8b"
+    },
+    {
+      "path": "docs/percival/PERCIVAL_B1_0_COURT_COORDINATION_RESULTS.md",
+      "bytes": 3156,
+      "sha256": "440dbc81cca53fd784cd311475b2b5c50aebff02503510d0699ab099562d4569"
+    },
+    {
+      "path": "docs/percival/PERCIVAL_B1_SEPARATION_RESULTS.md",
+      "bytes": 5721,
+      "sha256": "5b4ff01598a6a986a49ffd6582a70306621d9110bc756a3a88046b198f6c2967"
+    },
+    {
+      "path": "docs/percival/PERCIVAL_B1_SEPARATION_SPEC.md",
+      "bytes": 8110,
+      "sha256": "4b79e176ad78ccbb0b8ebcfae0fb9c8785260b90b6963757ef00f28f79f91ba8"
+    },
+    {
+      "path": "docs/percival/PERCIVAL_B2_GAMMA_PROVENANCE_SPEC.md",
+      "bytes": 9662,
+      "sha256": "803d54ea2b1fd47b8944293662ab00eeecc904ad1be4e64b80a32db7e18ddabb"
+    },
+    {
+      "path": "docs/percival/PERCIVAL_B2_GAMMA_PROVENANCE_RESULTS.md",
+      "bytes": 4973,
+      "sha256": "09bac3cacf15304ee4d15343244e7bc4139292ac5ef548aa9dad4e1ae41572bf"
+    },
+    {
+      "path": "docs/percival/PERCIVAL_B3_COMPOSITION_STABILITY_RESULTS.md",
+      "bytes": 3974,
+      "sha256": "e851e677427f992843b704d2e52787d11e3ac4f96f58107b34137268e0ec6905"
+    },
+    {
+      "path": "docs/percival/PERCIVAL_PROMO_HANDOFF.md",
+      "bytes": 14721,
+      "sha256": "0da4470d53bb8fc317a318a40de20cafdbf5f1e9c44bf916e8450065d38d2e3f"
+    },
+    {
+      "path": "docs/percival/PERCIVAL_REOPEN_HYPOTHESIS_SLATE.md",
+      "bytes": 14832,
+      "sha256": "3675b23b7a2b51787629c0107378ea73266ba405514c61fd3efb0f1a3511589a"
+    },
+    {
+      "path": "docs/percival/PERCIVAL_S1_CLEANLINESS_LAW.md",
+      "bytes": 10389,
+      "sha256": "53b5d156f36c4814b7f11c63fd2c22915bf5b0f589987879f4058997f68207ce"
+    },
+    {
+      "path": "docs/percival/PERCIVAL_S2_TARGET_CAP_PROBE_SPEC.md",
+      "bytes": 9451,
+      "sha256": "f84a7f47f22c6d58809ab3d8c126cc68e79c957f3224f3f7317d376d470e24f4"
+    },
+    {
+      "path": "docs/percival/PERCIVAL_S2_TARGET_CAP_RESULTS.md",
+      "bytes": 6059,
+      "sha256": "00d0d46a8cdcfcf5f1a8218c50af8b366562112d5f9de73a9b8fea00614efc4a"
+    },
+    {
+      "path": "docs/percival/PERCIVAL_S3_MULTIAGENT_RESULTS.md",
+      "bytes": 4986,
+      "sha256": "26c17e1160d9d86319b605f7f515d5a26495875b2be80851542817347e454ce9"
+    },
+    {
+      "path": "docs/percival/PERCIVAL_S4_COUNTERPRODUCTIVITY_RESULTS.md",
+      "bytes": 1539,
+      "sha256": "605bd83e6868a408e63ad9c7c8863819e96390eb029110e9fdbff512cebc101e"
+    },
+    {
+      "path": "docs/percival/PERCIVAL_S6_CLASS_BOUNDARY_RESULTS.md",
+      "bytes": 5438,
+      "sha256": "b5ed0c7a746416beaa0767a19a3b48e5e0cfbac3ed184f226a31331bbf3a81c3"
+    },
+    {
+      "path": "docs/percival/WHEN_QUANTILIZING_HURTS_NOTE.md",
+      "bytes": 10182,
+      "sha256": "8c4b57792969690c9723811fe4c9bc805a76ffb1649b4b852b4a5caca8abf3e6"
+    },
+    {
+      "path": "docs/percival/LICENSE.md",
+      "bytes": 1170,
+      "sha256": "1e225585e5c17b1ab0a71e5b4b8279233f3fbd70d5e2147fa5662e2139822485"
+    },
+    {
+      "path": "docs/percival/LICENSE",
+      "bytes": 11347,
+      "sha256": "3f2459914d0ff4d7ac188efd9a3d9610c502f537a8c1234dcc4116f4e01c0f85"
+    },
+    {
+      "path": "scripts/percival-a3-killswitch-toy.mjs",
+      "bytes": 7976,
+      "sha256": "1a739eb58672abe61d319318fe47324a23e167c6cace78a4afd383dd3ecd4a48"
+    },
+    {
+      "path": "scripts/percival-b1-0-court-coordination.mjs",
+      "bytes": 14862,
+      "sha256": "da328e29022d0b9d1ae398c502a252c228dc23bdac6052e258aed8ddfbd762c7"
+    },
+    {
+      "path": "scripts/percival-b1-separation-bakeoff.mjs",
+      "bytes": 13629,
+      "sha256": "fd6bfa455f877f86a354169101466338c058ea86f4043afb725bce1019e4a4b2"
+    },
+    {
+      "path": "scripts/percival-b2-gamma-provenance.mjs",
+      "bytes": 14179,
+      "sha256": "330d744269636962b87d8ee2768f480b099c47f5f7fb8310bd924588a02b4580"
+    },
+    {
+      "path": "scripts/percival-b3-composition-stability.mjs",
+      "bytes": 13576,
+      "sha256": "3a0c4da940a48386e558b8191e4d516cf54ecb2aaf872e4f4ab779052be2bbbf"
+    },
+    {
+      "path": "scripts/percival-s2-target-cap-probe.mjs",
+      "bytes": 16697,
+      "sha256": "3e2f9f6cd1d8bab2f4fffb56674428deadac47eca85b51ec03dc50161af5ab60"
+    },
+    {
+      "path": "scripts/percival-s3-multiagent-pivotality.mjs",
+      "bytes": 16510,
+      "sha256": "c629fb7678b067de91bda191a37c5958fe94ac9edd60d468e192a203dded4329"
+    },
+    {
+      "path": "scripts/percival-s4-counterproductivity-general.mjs",
+      "bytes": 10824,
+      "sha256": "93cfeef87554282877f49b2cc4cc19ec12f6758ca7fc33a0ac53da1de90d094f"
+    },
+    {
+      "path": "scripts/percival-s6-class-boundary.mjs",
+      "bytes": 12023,
+      "sha256": "a20f01cab56b00b0a43cccc2482af0ec61b2c8567336b5a2022b13ceabd989d4"
+    },
+    {
+      "path": "results/percival/a3-killswitch/summary.json",
+      "bytes": 2945,
+      "sha256": "f0f0e537f8161b17eedbe3a915e75e634e8c816b4581a356e377ba9062d5d14b"
+    },
+    {
+      "path": "results/percival/b1-0-court/summary.json",
+      "bytes": 2845,
+      "sha256": "273dbf2395b3146ed3705be6ba5cf4f5982cf4f3ee77de62a7c9e7e63dcdd8d2"
+    },
+    {
+      "path": "results/percival/b1-separation/summary.json",
+      "bytes": 31352,
+      "sha256": "29b3319b47027f0cacbe0b6e8f82ccb2ca66d068c137038b3e916e7ce6db0795"
+    },
+    {
+      "path": "results/percival/b2-provenance/summary.json",
+      "bytes": 3142,
+      "sha256": "b761147f1654a9379a47961f74bc4144f95f6f9077da1f3ed784d0a7a07ba16f"
+    },
+    {
+      "path": "results/percival/b3-composition-stability/summary.json",
+      "bytes": 2887,
+      "sha256": "26f97cb3d51c9534c61f02f420fcf5eb69ce34e88377373f31a4a1989c509716"
+    },
+    {
+      "path": "results/percival/s2-target-cap/summary.json",
+      "bytes": 14468,
+      "sha256": "58c328483af87de9406016d6f2c19fb85e8711278cace5c471ebef68a1d95a93"
+    },
+    {
+      "path": "results/percival/s3-multiagent/summary.json",
+      "bytes": 4465,
+      "sha256": "7b3f853958ac981ba3710141d4e59d4026cf084580f4143d1faeb011b247eeae"
+    },
+    {
+      "path": "results/percival/s4-general/summary.json",
+      "bytes": 749,
+      "sha256": "178eb6f9ad32131fb619e1f63bc49c1c2d82de47859131e7b775e3baac5ceaf3"
+    },
+    {
+      "path": "results/percival/s6-class-boundary/summary.json",
+      "bytes": 24567,
+      "sha256": "bfb5e051566b18ff518535eb8435cf9222ff70eb2469c2571714c802f36ca600"
+    }
+  ]
+}

@@ -1,3 +1,13 @@
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 Stellar Aqua LLC
+
+Licensed under the Apache License, Version 2.0, via the manifest-scoped
+Percival grant: docs/percival/LICENSE.md (MANIFEST.json is the authoritative
+covered-file list). Distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND; see http://www.apache.org/licenses/LICENSE-2.0.
+-->
+
 # Percival S6 -- Class Boundary of Counterproductivity (results)
 
 Generated 2026-07-01T23:06:45.893Z by `scripts/percival-s6-class-boundary.mjs`.

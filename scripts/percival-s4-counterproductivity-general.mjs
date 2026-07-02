@@ -1,3 +1,8 @@
+// SPDX-License-Identifier: Apache-2.0
+// Copyright 2026 Stellar Aqua LLC
+// Licensed under the Apache License, Version 2.0, via the manifest-scoped
+// Percival grant: docs/percival/LICENSE.md (MANIFEST.json = covered files).
+// Distributed "AS IS"; see http://www.apache.org/licenses/LICENSE-2.0.
 // Percival S4 -- counterproductivity generalization (computed receipt).
 //
 // Claim under test: for ANY nonincreasing court reward along the courting order and
