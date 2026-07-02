@@ -97,6 +97,16 @@ real-substrate row in the table.
 - Row-level scopes carried: the structural M∧¬E ∞ inherits S2's family + CI joint; the
   ¬M∧E danger column is model-relative; the ¬M∧¬E row is a premise and says so.
 
+## 4b. Addendum (2026-07-02): the structural M∧¬E row upgraded by ME-2
+
+The row's σ_write = ∞ scope was "S2's tested projection family"; ME-2
+(`PercivalNodeEdge.lean`, `node_write_enforces_iff`) makes it **family-total in the
+cell**: every node-write (input + output surgery) enforcing the edge condition is a
+per-`v` channel retreat (mask or void) and pays the collapse. The residual scope is the
+model and the node-typing premise. The typing pattern (§3) is thereby promoted from
+retrodiction to **theorem inside the cell** — owned-node conditions writable
+(`owned_node_writable`, axiom-free), the edge unwritable except by retreat.
+
 ## 5. Feeds
 
 - **ME-2:** the typing pattern is now retrodictively confirmed across four condition

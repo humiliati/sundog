@@ -112,7 +112,12 @@ row would void the discharge. No such re-annotation is known.
   (mask / scramble / permutation-average + the tilt family) under the binary-symmetric CI
   joint; arity-independence comes from the equivalence-theorem *form*, not a sweep over
   coalitions. Beyond that family the ∞ is conjectured, and S2's own richer-joint retest
-  caveat carries over.
+  caveat carries over. **UPGRADE (ME-2, 2026-07-02): family-totality is now
+  machine-checked in the cell** — `PercivalNodeEdge.lean`'s `node_write_enforces_iff`
+  quantifies over ALL node-writes (input + output surgeries, policy-blind): every
+  universal enforcer is a per-`v` retreat (mask or void) and pays ≤ β. The residual
+  scope is the model (the binary-symmetric CI cell) and the node-typing premise — no
+  longer the family.
 - The Θ(M) rung is the S3 shared-regime model; the per-knight court is arity-1
   (S3.3 — the fork variable is the reward's aggregation structure).
 - σ_read values are in-model (the computed toys expose `c`; real-world read orders are
@@ -124,7 +129,10 @@ row would void the discharge. No such re-annotation is known.
 
 - A W-statistic outside S2's family enforcing `c = 0` at finite arity with competence
   > β → the target row flips, the bridge's witness dies (this is S2's falsifier,
-  inherited — a positive result if found: target becomes fixably-clean).
+  inherited — a positive result if found: target becomes fixably-clean). **Narrowed by
+  ME-2 (2026-07-02):** within the cell this now requires leaving the node-write class
+  entirely (function rewriting — fenced as non-exogenous) or a richer joint; no
+  node-typed write can do it.
 - A natural ownership re-annotation flipping any row (§4).
 - A demonstration that the enforce-order grading is decoration — e.g., the Θ(M) rung
   shown to be an artifact of the shared-regime model with no second instance. (A second

@@ -89,7 +89,7 @@ Write-Host "[WS] delegate train+eval to mesa-ns3-a3ppo-binding.ps1 -InitAdapter 
   -InitAdapter $adapter -ReviewTauHi $ReviewTauHi -IdlePenalty $IdlePenalty -PerturbSigma $PerturbSigma `
   -Horizon $Horizon -Updates $Updates -RolloutsPerUpdate $RolloutsPerUpdate -TrainSeeds $TrainSeeds `
   -CheckpointEvery $CheckpointEvery -EvalSeeds $EvalSeeds `
-  -ResultsDoc "docs/mesa/NS3_A3PPO_RESULTS.md" -NoResume
+  -ResultsDoc "docs/mesa/NS3_A3PPO_WARMSTART_FRAGILITY_SIDEBAR.md" -NoResume
 if ($LASTEXITCODE -ne 0) { throw "delegated train+eval failed" }
 
 # --- Step 4: warm-start aggregator + verdict ---

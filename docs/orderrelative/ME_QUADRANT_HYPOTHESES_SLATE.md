@@ -111,6 +111,26 @@ projection family and derive the collapse (S2's content), not assume it; the ent
 as decoration if the theorem is the definition.
 **Cost:** low-medium (one Lean module in the OR-4 cell's idiom). **Shoppable:** yes —
 "you can own every node and still not own the edge" is crisp and non-literary.
+**RESULT (2026-07-02): LANDED (machine-checked) — every enforcer is a channel retreat,
+and there is no third way.** `sundogcert` `Sundogcert/PercivalNodeEdge.lean` — gated,
+axiom-clean, full audit 8575 GREEN. **The emptiness fence discharged by construction:**
+the module separates premise from theorem in its header — "do() is node-typed" is the
+imported Pearl-native premise (with the mediation-analysis genus named); the theorems
+are not the definition. **`node_write_enforces_iff` (the characterization, the entry's
+content):** a node-write (input surgery ι + output surgery ω, both policy-blind)
+enforces do(U)-invariance for ALL policies **iff** at every `v` the u-slot of ω is dead
+and either ι masks the input (measure retreat) or ω voids the action (act retreat) —
+the forward direction constructs adversarial policies separating rewired inputs, so it
+does not unfold from the definition. `owned_node_writable` (the duality direction:
+any decidable satisfiable action-node predicate enforced at arity one — axiom-FREE),
+`node_write_enforce_price` (every enforcer pays the collapse ≤ β), packaged as
+`node_edge_typing_law`: **owning every node does not buy the edge.** **Falsifier
+disposition:** "a readable owned-node condition that is unwritable" — refuted in-cell;
+"an edge-surgery not factoring through node-writes" — excluded by exogeneity (the fence
+held: mechanism rewriting doesn't count), and remains the named escape hatch alongside
+richer joints. **Scope upgrade banked to OR-3/ME-1:** σ_write(target) = ∞ is now
+**family-total** in the cell — the residual scope is the model and the node-typing
+premise, no longer S2's tested projection family.
 
 ### ME-3 — audit-and-pay: incentive enforcement prices at the edge *(drill; Lean-able; cheapest sharp result)*
 **Claim:** with an **exact read** of `c` in hand, a transfer scheme (pay `t` on `c = 0`)
@@ -166,6 +186,18 @@ way ("probing is not steering" or "this linear rep steers" both travel).
 model-state cell** — the census deferred chat-v2's regime-2 on the verb fence, and both
 of ME-4's outcomes have pre-registered census placements (`RESISTS` → M∧¬E, `STEERS` →
 M∧E).
+**SPEC PINNED (2026-07-02):**
+[`ME4_PROBE_STEER_SPEC.md`](ME4_PROBE_STEER_SPEC.md) — full pre-registration: the
+counterfactual is the **one-pop swap** (the alternative unclosed type — the empirical
+`do()` of `SurfaceBagGraded`'s witness pair); three intervention families
+(probe-direction, difference-in-means, donor transplant — the decisive one) at a fixed
+grid; the **write-validity gate G1** (the probe must read τ′ off the patched residual
+before the write is scored — "the read must take the write"); behavioral floor G0,
+on-manifold G2, and the five-branch table with numeric bands (`follow_rel ≥ 0.75`
+STEERS / `≤ 0.40` RESISTS / middle = named PARTIAL). The sharpest signature is called
+in advance: transplant passes G1 while behavior ignores it — *the read address accepts
+the write; the computation doesn't consult it.* Owner-cadence, CPU 1–2 h, resumable,
+probe script frozen. NOT RUN.
 
 ### ME-5 — the priced quadrant *(theory; rides the richer-joint retest)*
 **Claim:** replace finite/∞ with **price functionals**: read-price (observer effect —
