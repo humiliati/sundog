@@ -1,0 +1,61 @@
+{
+ "spec": "AT1_PALINSTROPHY_BOUNDARY_LAYER_SPEC.md",
+ "date": "2026-07-02",
+ "npz": "results/proof/at1-smoke-exp/at1-samples.npz",
+ "eps": 0.21707607456966002,
+ "liveness_E_low_a_mm": 0.0,
+ "unbanded": {
+  "a_mm": 0.0,
+  "damp": 0.4066666666666667,
+  "r2": 0.4641292111121925
+ },
+ "sibling_mean": {
+  "a_mm": 0.0,
+  "damp": 0.36333333333333334,
+  "powered": true,
+  "r2": 0.7814857808640602
+ },
+ "bands": [
+  {
+   "band": 0.0,
+   "n_kept": 300,
+   "damp": 0.4066666666666667,
+   "powered": false,
+   "a_mm": 0.0,
+   "r2": 0.4641292111121925
+  },
+  {
+   "band": 0.02,
+   "n_kept": 294,
+   "damp": 0.4013605442176871,
+   "powered": false,
+   "a_mm": 0.0,
+   "r2": 0.4854091360374
+  },
+  {
+   "band": 0.05,
+   "n_kept": 285,
+   "damp": 0.3824561403508772,
+   "powered": true,
+   "a_mm": 0.0,
+   "r2": 0.5890379073407734
+  },
+  {
+   "band": 0.1,
+   "n_kept": 270,
+   "damp": 0.37777777777777777,
+   "powered": true,
+   "a_mm": 0.0,
+   "r2": 0.6214039021631922
+  },
+  {
+   "band": 0.2,
+   "n_kept": 240,
+   "damp": 0.375,
+   "powered": true,
+   "a_mm": 0.0,
+   "r2": 0.5692634862516736
+  }
+ ],
+ "verdict": "AT1_UNDERPOWERED"
+}

@@ -128,14 +128,41 @@ the per-gap split only, and report that ⇒ is where dimension one earns its nam
 `strictMonoOn_of_deriv_pos` did not surface in the recon grep; name-risk, deferred); anything about
 projection (R3) or the abstract structure (R4).
 
-## R3 — Projection / quantifier elimination. [FORMALIZABLE-HARD → the real wall]
+## R3 — Projection / quantifier elimination.
 
-Closure under projection from ℝ² is where the structures earn the name:
+### R3-semilinear ✅ LANDED 2026-07-02 (same day as R1/R2)
 
-- **Semilinear case** (ReLU): Fourier–Motzkin elimination — genuinely formalizable, bounded effort;
-  would make `NetDef` a real (projection-closed) structure in dimensions 1–2.
-- **Semialgebraic case**: Tarski–Seidenberg QE — the big one. Formalized in **Coq**
-  (Cohen–Mahboubi); porting to Lean is a months-scale project and the natural mathlib contribution.
+Two modules — `Sundogcert/Semilinear.lean` (37th) + `Sundogcert/FourierMotzkin.lean` (38th) —
+axiom-clean, 4 gate entries, full build green, public-safety clean. **The semilinear class is now
+a genuine machine-checked structure in dimensions 1–2**: booleans + projection + dim-1 tameness.
+
+- **The class**: the standard presentation — finite unions of cells, a cell a finite conjunction
+  of strict linear atoms (`a·x + b·y + c > 0`) and equalities (`… = 0`).
+- **Boolean closure, constructive** (`slUnion₂`/`slInter₂`/`slCompl₂` + correctness): complement
+  of `>` is `< ∪ =`, of `=` is `> ∪ <`; de Morgan folds through the cell list. All computable
+  list programs with semantic correctness proofs.
+- **The projection axiom** (`projSL_correct`, `proj_semilinear_tame`): Fourier–Motzkin per cell —
+  an equality atom with a `y`-coefficient pins `y` and substitution multiplies through by
+  `b² > 0` (sign-free); otherwise strict atoms split into lower/upper bounds by the sign of the
+  `y`-coefficient and `∃ y` ⟺ the `y`-free part ∧ **division-free pairwise comparisons**
+  (`pair_lt_iff`, cross-multiplied). The ⟸ witness is explicit: strictly between the largest
+  lower and smallest upper bound (`exists_witness`, four boundedness cases — density of ℝ).
+  **`FM_WITNESS_GAP` did not fire.**
+- **The landing**: every 1-D semilinear set is `Tame` (`slHolds₁_tame` — strict atoms are open
+  convex sets, equalities are points/∅/univ, rung 1's boolean algebra closes). So: *the projection
+  of every 2-D semilinear set is a finite union of points and open intervals.*
+- **Design note**: `eqPin?` is defined by direct structural recursion with hand-proved specs
+  (avoiding `findSome?` API risk); everything real-valued is `noncomputable` only through
+  classical sign tests — the boolean layer is fully computable.
+
+*Honest fence:* dimensions 2 → 1 only (n-dimensional elimination = the same per-variable step
+iterated — named, not claimed); presentation-level (the ReLU-`Net 2`-superlevels-are-semilinear
+bridge needs a 2-D piece decomposition — the named follow-on).
+
+### R3-semialgebraic — Tarski–Seidenberg QE. [THE WALL — unchanged]
+
+Formalized in **Coq** (Cohen–Mahboubi); porting to Lean is a months-scale project and the natural
+mathlib contribution. Not started.
 
 ## R4 — The abstract theory. [EXPEDITION — mathlib-scale]
 

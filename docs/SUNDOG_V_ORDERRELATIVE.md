@@ -463,8 +463,19 @@ mirror witness; chat-v2's regime-2 is the pre-registered at-risk empirical cell)
 node/edge typing law-candidate (Kalman-duality and mediation-analysis genus:
 do() is node-typed, dependence is edge-typed), audit-and-pay price equivalence
 (Lean-able in the OR-4 cell), the probe-steer gap on GPT-2 (CPU, chat-v2 discipline),
-and the priced quadrant (rides the richer-joint retest). ME-1..ME-5, spec for red-team,
-nothing run.
+and the priced quadrant (rides the richer-joint retest). **COMPLETE 2026-07-02, 5/5 —
+see the slate's entries for receipts.**
+
+And the ME slate spawned its own sequel (2026-07-02):
+[`orderrelative/SA_STEER_ARITY_SLATE.md`](orderrelative/SA_STEER_ARITY_SLATE.md) —
+**the Steer-Arity Ladder**: activation-patch arity as the model-side σ_write, graded
+like the enforce-order ladder — register (arity 1, ME-4's banked rung) / distributed
+(arity Θ(k), the induction-source row as admission test) / parametric (∀-quantified
+rule conditions, unreachable by activation writes at any arity — ME-2's fenced escape
+hatch wearing a training loop, with the fine-tune leg as its literal demonstration and
+`SA3_KNOB` as the named counter-outcome). SA-1..SA-5 with the read-localization →
+write-arity law (SA-4) as the verdict entry; Lean spine (SA-5) in the
+`PercivalNodeEdge` idiom. Spec for red-team, nothing run.
 
 ## Cross-links
 

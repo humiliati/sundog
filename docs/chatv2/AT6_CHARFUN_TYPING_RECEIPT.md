@@ -73,9 +73,9 @@ balance was in fact empirical (it landed 0.50/0.54, so no harm — recorded for 
 AT-6 filed: `AT6_TYPING_BROKEN` at both regimes — the entry's own falsifier branch, doing
 its stated job (feeding AT-4's re-registration).
 
-**Lean shim LANDED (2026-07-02): `sundogcert/Sundogcert/AveragingDecodability.lean`** —
-both halves pinned, axiom-clean (`[propext, Classical.choice, Quot.sound]`), gated in
-`AxiomAudit`, full build 8577 GREEN:
+**Lean status: `AT6_LEAN_CLEAR`. Shim LANDED (2026-07-02):
+`sundogcert/Sundogcert/AveragingDecodability.lean`** — both halves pinned, axiom-clean
+(`[propext, Classical.choice, Quot.sound]`), gated in `AxiomAudit`, full build 8577 GREEN:
 
 - **Amplitude half** (`averaging_types_shadows`): the in-tree AC-resist / lattice-survive
   separation packaged as the AT-6 typing statement (cites `absCont_resists` +

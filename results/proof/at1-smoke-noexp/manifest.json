@@ -1,0 +1,173 @@
+{
+  "startedAt": "2026-07-02T14:34:42.599751+00:00",
+  "script": "scripts/pde_c1_kolmogorov_cell.py",
+  "spec": "docs/proof/PDE_C1_CELLSET_KOLMOGOROV.md",
+  "protocol": "docs/proof/PDE_C1_FIBER_PROTOCOL.md",
+  "config": {
+    "preset": "lock_disc_g200",
+    "grid_size": 32,
+    "n_modes": 16,
+    "k_signature": 3,
+    "forcing_wavenumber": 2,
+    "grashof": 200.0,
+    "forcing_amplitude": 1.0,
+    "viscosity": 0.07071067811865475,
+    "dt": 0.01,
+    "burnin_steps": 2000,
+    "sample_count": 300,
+    "sample_interval_steps": 50,
+    "lookahead_steps": 500,
+    "n_min": 30,
+    "delta_action": 0.1,
+    "s_pos": 0.5,
+    "delta_proxy_min": 0.01,
+    "e_max_burnin_fraction": 1.0,
+    "random_seed": 20260528,
+    "integrator": "pseudo_spectral_vorticity_semi_implicit_euler",
+    "signature_dimension": 18,
+    "action_tiebreak": "no_op",
+    "adjudicator": "bin",
+    "k_neighbors": 30,
+    "delta_incompat": 0.01,
+    "twin_k_neighbors": 50,
+    "twin_delta_high_fraction": 0.05,
+    "twin_high_norm_floor": 1e-06,
+    "twin_min_witness_fraction": 0.01,
+    "twin_min_unique_pairs": 100,
+    "objective": "portable-quantile",
+    "objective_quantile": 0.7,
+    "calibration_sample_count": 300,
+    "calibration_gap_steps": 5000,
+    "objective_observable": "discriminator_slate"
+  },
+  "environment": {
+    "python": "3.14.4 (tags/v3.14.4:23116f9, Apr  7 2026, 14:10:54) [MSC v.1944 64 bit (AMD64)]",
+    "numpy": "2.4.4",
+    "platform": "win32",
+    "cwd": "C:\\Users\\hughe\\Dev\\sundog"
+  },
+  "result": {
+    "verdict": "SMOKE_ONLY",
+    "verdict_label": "manual_overrides_non_verdict",
+    "interpretable": false,
+    "tracking_spearman_a_mm_vs_inv_r2": NaN,
+    "powered_objective_count": 4,
+    "anchor_e_low_ok": true,
+    "slate_rows": [
+      {
+        "objective": "E_low",
+        "e_max": 0.9869788204363271,
+        "damp_fraction": 0.26666666666666666,
+        "powered": true,
+        "a_mm": 0.0,
+        "knn_verdict": "INCONCLUSIVE_CONVERGENCE",
+        "r2_objective_given_phiK": 0.6958064320461446,
+        "r2_permuted_control": -0.363789736460572,
+        "estimator_ok": true
+      },
+      {
+        "objective": "Z_low",
+        "e_max": 1.8831492898690723,
+        "damp_fraction": 0.35333333333333333,
+        "powered": true,
+        "a_mm": 0.0,
+        "knn_verdict": "INCONCLUSIVE_CONVERGENCE",
+        "r2_objective_given_phiK": 0.6222052316973022,
+        "r2_permuted_control": -0.6042789344370552,
+        "estimator_ok": true
+      },
+      {
+        "objective": "E_high",
+        "e_max": 0.06872698986500048,
+        "damp_fraction": 0.46,
+        "powered": false,
+        "a_mm": 0.0,
+        "knn_verdict": "INCONCLUSIVE_CONVERGENCE",
+        "r2_objective_given_phiK": -0.59274503603155,
+        "r2_permuted_control": -0.1774075435858784,
+        "estimator_ok": true
+      },
+      {
+        "objective": "Z_high",
+        "e_max": 0.4951235969141044,
+        "damp_fraction": 0.39,
+        "powered": true,
+        "a_mm": 0.0,
+        "knn_verdict": "INCONCLUSIVE_CONVERGENCE",
+        "r2_objective_given_phiK": -1.079944658919306,
+        "r2_permuted_control": -0.3890540965001059,
+        "estimator_ok": true
+      },
+      {
+        "objective": "palinstrophy",
+        "e_max": 9.424404430114517,
+        "damp_fraction": 0.4066666666666667,
+        "powered": false,
+        "a_mm": 0.0,
+        "knn_verdict": "INCONCLUSIVE_CONVERGENCE",
+        "r2_objective_given_phiK": 0.4641292111121925,
+        "r2_permuted_control": -0.12105209316865606,
+        "estimator_ok": true
+      },
+      {
+        "objective": "top_shell",
+        "e_max": 1.3106721860305372e-07,
+        "damp_fraction": 0.27,
+        "powered": true,
+        "a_mm": 0.0,
+        "knn_verdict": "INCONCLUSIVE_CONVERGENCE",
+        "r2_objective_given_phiK": 0.02322746973952572,
+        "r2_permuted_control": -0.16667586540069568,
+        "estimator_ok": true
+      }
+    ],
+    "adjudicator": "discriminator-slate",
+    "objective": "portable-quantile",
+    "objective_observable": "discriminator_slate",
+    "objective_quantile": 0.7,
+    "calibration_sample_count": 300,
+    "low_modes": [
+      {
+        "kx": 0,
+        "ky": 1
+      },
+      {
+        "kx": 1,
+        "ky": 0
+      },
+      {
+        "kx": 1,
+        "ky": 1
+      },
+      {
+        "kx": -1,
+        "ky": 1
+      },
+      {
+        "kx": 0,
+        "ky": 2
+      },
+      {
+        "kx": 2,
+        "ky": 0
+      },
+      {
+        "kx": 1,
+        "ky": 2
+      },
+      {
+        "kx": 2,
+        "ky": 1
+      },
+      {
+        "kx": -2,
+        "ky": 1
+      }
+    ],
+    "high_mode_count": 211,
+    "top_shell_mode_count": 54,
+    "elapsed_seconds": 36.94519520000176,
+    "total_steps": 37900,
+    "steps_per_second": 1025.8437847305343
+  }
+}

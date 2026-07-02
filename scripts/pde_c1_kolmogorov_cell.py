@@ -144,6 +144,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--write-samples", action="store_true", help="Write per-sample rows even for large runs.")
     parser.add_argument("--self-test", action="store_true", help="Run a tiny deterministic self-test and exit.")
     parser.add_argument(
+        "--at1-export",
+        type=Path,
+        default=None,
+        help="AT-1 additive per-sample export (schema v1 npz; discriminator_slate presets "
+        "only). Side artifact only — the scoring path and manifests are unchanged. "
+        "Scope: AT1_HARNESS_SIGNOFF.md; spec: AT1_PALINSTROPHY_BOUNDARY_LAYER_SPEC.md.",
+    )
+    parser.add_argument(
         "--allow-unregistered-overrides",
         action="store_true",
         help="Allow manual smoke-only overrides. Such runs are never verdict-bearing.",
@@ -850,7 +858,7 @@ def score_discriminator_slate(
     }
 
 
-def run_cell(cfg: RunConfig) -> dict:
+def run_cell(cfg: RunConfig, at1_export: Path | None = None) -> dict:
     stepper = KolmogorovStepper(cfg)
     omega_hat = stepper.initial_state()
     interval = cfg.sample_interval_steps
@@ -949,6 +957,11 @@ def run_cell(cfg: RunConfig) -> dict:
         slate_result = score_discriminator_slate(
             energy_by_step_slate, calib_starts, adj_starts, look, sample_signatures, cfg
         )
+        if at1_export is not None:
+            export_at1_samples(
+                at1_export, energy_by_step_slate, calib_starts, adj_starts, look,
+                sample_signatures, cfg,
+            )
         slate_result.update(
             {
                 "adjudicator": "discriminator-slate",
@@ -1049,6 +1062,67 @@ def run_cell(cfg: RunConfig) -> dict:
         }
     )
     return result
+
+
+def export_at1_samples(
+    path: Path,
+    energy_slate: np.ndarray,
+    calib_starts: list,
+    adj_starts: list,
+    look: int,
+    sample_signatures: np.ndarray,
+    cfg: RunConfig,
+) -> None:
+    """AT-1 additive per-sample export (schema v1). Scope: AT1_HARNESS_SIGNOFF.md;
+    spec: AT1_PALINSTROPHY_BOUNDARY_LAYER_SPEC.md. Read-only duplication of the
+    discriminator arithmetic — the scoring path is untouched; this writes a side
+    artifact only. Sibling (registered): lookahead-MEAN palinstrophy, same horizon,
+    same calibration protocol (max -> mean only)."""
+    names = DISCRIMINATOR_SLATE_NAMES
+
+    def _lam_max(starts: list, col: int) -> np.ndarray:
+        return np.array(
+            [float(np.max(energy_slate[s : s + look + 1, col])) for s in starts],
+            dtype=np.float64,
+        )
+
+    def _lam_mean(starts: list, col: int) -> np.ndarray:
+        return np.array(
+            [float(np.mean(energy_slate[s : s + look + 1, col])) for s in starts],
+            dtype=np.float64,
+        )
+
+    m_adj = np.stack([_lam_max(adj_starts, c) for c in range(len(names))], axis=1)
+    src = calib_starts if calib_starts else adj_starts
+    e_max = np.array(
+        [float(np.quantile(_lam_max(src, c), cfg.objective_quantile)) for c in range(len(names))],
+        dtype=np.float64,
+    )
+    pal = names.index("palinstrophy")
+    m_mean_pal = _lam_mean(adj_starts, pal)
+    e_max_mean_pal = float(np.quantile(_lam_mean(src, pal), cfg.objective_quantile))
+    out = Path(path)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    np.savez(
+        out,
+        schema_version=1,
+        preset=cfg.preset,
+        objective_names=np.array(names),
+        quantile=cfg.objective_quantile,
+        look=look,
+        adj_starts=np.array(adj_starts, dtype=np.int64),
+        calib_starts=np.array(calib_starts, dtype=np.int64),
+        phi_k=sample_signatures,
+        m_adj=m_adj,
+        e_max=e_max,
+        margin=m_adj - e_max[None, :],
+        actions=(m_adj > e_max[None, :]).astype(np.int8),
+        m_mean_pal=m_mean_pal,
+        e_max_mean_pal=e_max_mean_pal,
+        margin_mean_pal=m_mean_pal - e_max_mean_pal,
+        actions_mean_pal=(m_mean_pal > e_max_mean_pal).astype(np.int8),
+    )
+    print(f"[pde-c1] at1-export wrote {out}", flush=True)
 
 
 def label_samples(energy_by_step: np.ndarray, cfg: RunConfig, e_max: float) -> np.ndarray:
@@ -2646,7 +2720,7 @@ def main() -> None:
     cfg = build_config(args)
     if args.allow_unregistered_overrides and cfg.preset in ("lock", "fallback"):
         print("[pde-c1] overrides present; this receipt is not verdict-bearing despite lock/fallback preset", flush=True)
-    result = run_cell(cfg)
+    result = run_cell(cfg, at1_export=args.at1_export)
     if args.allow_unregistered_overrides:
         result["verdict"] = "SMOKE_ONLY"
         result["verdict_label"] = "manual_overrides_non_verdict"

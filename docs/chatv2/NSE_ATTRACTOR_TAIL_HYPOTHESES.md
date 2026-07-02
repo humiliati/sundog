@@ -2,11 +2,13 @@
 
 > 2026-07-02. Drafted by the sibling agent commissioned in
 > [`SIBLING_HANDOFF_ATTRACTOR_TAIL_SLATE.md`](SIBLING_HANDOFF_ATTRACTOR_TAIL_SLATE.md).
-> **Status: SLATE ONLY. Nothing here has run. Nothing is committed, deployed, or
-> public. No-publish (docs/chatv2/ is in `DOCS_NO_PUBLISH`).** Every entry is a
-> pre-registration *candidate*: before any verdict-bearing run, the entry must be
-> lifted into its own frozen spec (exact commands, frozen thresholds) per house
-> rule — the gates below are the binding *shapes*, not yet the frozen cells.
+> **Status: live slate with receipts.** AT-6 has run and its Lean shim is clear;
+> AT-1 decision #5 is resolved by `AT1_HARNESS_SIGNOFF.md`; all other entries
+> remain slate/spec candidates unless a receipt says otherwise. Nothing here is
+> public. No-publish (docs/chatv2/ is in `DOCS_NO_PUBLISH`). Before any
+> verdict-bearing run, the entry must be lifted into its own frozen spec (exact
+> commands, frozen thresholds) per house rule — the gates below are the binding
+> *shapes*, not yet the frozen cells.
 >
 > Inherits, in full: the determining-modes claim boundary
 > ([`../proof/PDE_DETERMINING_MODES_POSTULATE1.md`](../proof/PDE_DETERMINING_MODES_POSTULATE1.md)
@@ -182,6 +184,13 @@ read is untouched — the discriminator already established control ≠
 predictability without downgrade); palinstrophy physics (dissipation-rate
 proxy) is not asserted to be a *safety-relevant* objective, only a registered
 one.
+
+> **Harness decision (2026-07-02): `AT1_HARNESS_SIGNED_OFF`.** Owner decision #5
+> is resolved in `AT1_HARNESS_SIGNOFF.md`: the frozen C1 harness may be touched
+> only for additive, schema-versioned AT-1 sample emission and post-processing;
+> existing no-export presets must keep their old semantics. This authorizes the
+> harness work needed to write the frozen AT-1 spec. It is not a verdict-bearing
+> run.
 
 ---
 
@@ -429,7 +438,7 @@ empirics on this cell).
 > surface family is hereby re-registered as **SNR-aware** (declared observation-
 > noise model or quantized readouts) with label frequencies inside the window
 > grid, per the receipt's consequence block — the sequencing this entry existed
-> to provide. **Lean shim LANDED 2026-07-02:**
+> to provide. **Lean status: `AT6_LEAN_CLEAR`; shim LANDED 2026-07-02:**
 > `sundogcert/Sundogcert/AveragingDecodability.lean` (axiom-clean, gated, build
 > 8577 GREEN) pins both halves — the amplitude typing packaged from in-tree
 > (`averaging_types_shadows`) and the receipt's finding as a theorem
@@ -561,11 +570,11 @@ Inherited and extended; violations void the offending receipt.
    `navierstokes.html` is not edited from here, chatv2 stays no-publish, and
    no entry inherits promotion from another lane's positive.
 
-## 4. Open owner decisions (explicitly left open)
+## 4. Owner decisions (open unless resolved below)
 
-1. **Board anything at all, and in what order.** Recommended first cut if
-   boarded: AT-1 → AT-6 → AT-2 → AT-3 (AT-4 rides AT-3; AT-5 parallel,
-   compute-free). Slate-only mandate honored: nothing has run.
+1. **Board anything at all, and in what order.** AT-6 has already run and is
+   Lean-clear. Recommended next cut if boarded: AT-1 → AT-2 → AT-3 (AT-4 rides
+   AT-3; AT-5 parallel, compute-free). Long runs stay owner-run.
 2. **σ_modes / σ_traj registration** as schema filtrations in
    `SUFFICIENT_STAT_ORDER_SLATE.md` (owner-committed doc; candidate 10th axis).
 3. **AT-5's module destination** — public sundogcert (needs the standard
@@ -574,9 +583,10 @@ Inherited and extended; violations void the offending receipt.
 4. **The registered decision functional for AT-3/AT-4** — inherit frozen J_q,
    or register a burst/transition functional (new registration, not a rescue);
    and whether AT-1's sibling objective doubles as it.
-5. **AT-1 scope** — rung 1 requires a harness extension touching
-   `pde_c1_kolmogorov_cell.py` (additive, existing presets bit-unchanged);
-   owner sign-off on touching the frozen harness at all.
+5. **AT-1 scope — RESOLVED 2026-07-02.** `AT1_HARNESS_SIGNOFF.md` authorizes an
+   additive AT-1 sample-emission/post-processing path in
+   `pde_c1_kolmogorov_cell.py`, with existing no-export presets kept
+   semantically stable. No AT-1 run is authorized until the frozen spec lands.
 6. **AT-7 / compute posture** — stays parked; any future integrator spend is
    its own decision, not implied here.
 7. **Whether F1 (the closed-pole observation) gets a line in the NSE ledger**
@@ -585,7 +595,8 @@ Inherited and extended; violations void the offending receipt.
 
 ## 5. Receipt / grep map for the inheritor
 
-`Dev\sundog`: this file; `docs/proof/PDE_C1_OBJECTIVE_OVERLAP_DISCRIMINATOR.md`
+`Dev\sundog`: this file; `docs/chatv2/AT1_HARNESS_SIGNOFF.md`;
+`docs/proof/PDE_C1_OBJECTIVE_OVERLAP_DISCRIMINATOR.md`
 §12 (AT-1's foothold); `docs/proof/PDE_C1_SEPARATION_STATEMENT.md` §5 (the
 unrun K-window companion AT-2 absorbs); `docs/proof/PDE_C1_MZ_ENERGY_BUDGET.md`
 (AT-4's slice locator); `docs/RESIST_SIDE_CONSTRUCTION_ROADMAP.md` Pass 4
@@ -601,5 +612,6 @@ owner WIP** (`AnalyticGate`, `AbstractionCert`, uncommitted OR-lane wiring).
 
 ---
 
-*Slate v1, 2026-07-02. Drafted, not run. The owner reviews; nothing runs
-without the owner's word.*
+*Slate v1, 2026-07-02, with same-day receipts. AT-6 ran and is Lean-clear;
+AT-1 harness-scope sign-off is resolved; remaining entries require owner
+review and frozen specs before any verdict-bearing run.*
