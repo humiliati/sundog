@@ -147,7 +147,7 @@ The schema is a Lean `structure` carrying a `Target` type, an order
 `resist ⟺ infinite-order` (`resists_iff_infinite`) are then theorems *of the
 schema* — proved once and inherited by every instance.
 
-**Seven grounded axes plus the resist pole** instantiate the schema — each a
+**Eight grounded axes plus the resist pole** instantiate the schema — each a
 genuinely different filtration, none reducible to the others:
 
 - A **parity-determination instance** (`parityProblem n`): the "total parity on
@@ -186,6 +186,16 @@ genuinely different filtration, none reducible to the others:
   order collapses to `⊤` while the free/torsion projection-vector is `(⊤, m)` — an
   intrinsic mode-vector (canonical, not chosen). Structural rather than deep: it pins
   down that the scalar verdict is *lossy on mixed classes*.
+- A **surface-window instance** (`SurfaceBag` / `SurfaceBagGraded`): the *order*
+  axis. Over bracket strings, the order-blind **bag** (count vector) *determines*
+  nesting **depth** — an exact stack invariant (`bagSufficient_depth`) — yet can
+  **never** determine the **stack-top**: two prefixes `([` and `[(` share every
+  count and disagree on the state (`not_bagSufficient_stackTop`); the split is one
+  statement (`bag_determines_depth_not_stackTop`). The graded form proves the
+  resistance at **every window order** — n-gram/window counts of any order still
+  fail (`stackTop_resists_every_window`): σ_surface = ∞, an earned resist pole.
+  Axiom-lean beyond the house standard: `[propext, Quot.sound]` — no
+  `Classical.choice`.
 - A **resist pole** (`resistPole`): a target no finite budget resolves — order
   `= ⊤` — paired with `resists_iff_infinite` to instantiate the resist side of
   the dichotomy.
@@ -254,6 +264,52 @@ a hard **resist** pole where no finite budget suffices. Difficulty is order-rela
 when we allow ε-slack: the ladder-versus-pole shape survives approximation, and so
 "determine = finite order, resist = infinite order" carries through to the approximate
 setting. This is a proved *dimension* of the same schema, not a separate result.
+
+### The surface-window axis (the 8th filtration): order vs counts, measured at its boundary
+
+Every "surface statistic" — bags of tokens, n-gram counts — is order-blind: it can read
+a label only if the label is a function of *how many*, never of *in what order*. The
+**surface-window axis** (instance list above) makes that a theorem over bracket strings:
+the count vector **determines nesting depth** yet **cannot determine the stack-top**,
+and the resistance holds at **every window order** (σ_surface = ∞), machine-checked and
+axiom-lean (`propext`, `Quot.sound` — no choice). It is also the schema's first axis
+whose boundary has been **measured on a real model**: on real code, a small pretrained
+language model carries the stack-top in its residual stream at 0.931 precisely where the
+count statistic collapses to 0.770 — while at count-determined positions the counts win.
+The high-dimensional version of the question (twenty-plus independent state axes on
+natural data) was then pre-registered and run to an honest negative: six label families,
+two gate designs, and two model scales all failed the matched-baseline gate, with every
+control validating on known-answer cases. What survives is sharp: **state beyond counts
+exists in real models at low dimension, and the boundary above it is now measured, not
+guessed.**
+
+| Plain-language claim | One-liner | Checked by |
+|---|---|---|
+| Counts read depth | Nesting depth is an exact function of the counts — via the stack invariant. | `bagSufficient_depth` (Lean) |
+| Counts never read the top | Two prefixes with identical counts and different stack-tops — no readout of the bag can tell them apart, at any capacity. | `not_bagSufficient_stackTop` (Lean) |
+| The crossover is one statement | One string, one statistic; determine and resist split by whether the label needs order. | `bag_determines_depth_not_stackTop` (Lean) |
+| It holds at every window | Not just bags — n-gram counts of every order fail: σ_surface = ∞. | `stackTop_resists_every_window` (Lean) |
+| Axiom-lean | `propext` + `Quot.sound` only — no choice axiom. | the `AxiomAudit` gate |
+| The measured crossover | Counts 0.965 → 0.770 as positions turn ambiguous; the model holds 0.926 → 0.931. | empirical probe run (real Python code, GPT-2-small) |
+| Matched-baseline discipline | Model claims are gated on three margins: beat the probe suite, beat a random-init twin, and lose accuracy when order is shuffled. | the empirical gating battery |
+| The honest boundary | Six label families, two gate designs, two model scales — no high-dimensional bank passed. | pre-registered negative; receipts filed internally |
+| Controls proved live | Bag-determined axes read at 1.000; models with no state show exactly the null signature. | known-answer control rows |
+
+The empirical half in one 2×2 — linear readout accuracy on real code (GPT-2-small):
+
+| readout of… | all positions | count-ambiguous positions |
+|---|---|---|
+| the count statistic | 0.965 | **0.770** (collapses — the theorem's regime) |
+| the residual stream | 0.926 | **0.931** (holds — the crossover) |
+
+**Boundary, kept true.** (1) The positive is a **low-dimensional existence result** — one
+three-valued state (which bracket closes next) on ambiguous positions of real code;
+never "world model," never "understanding." (2) The Lean theorems are about **labels and
+statistics, not about any model**; "the model carries it" is the *empirical* half,
+claimed only relative to the matched baselines — it *reads the state where counts
+provably can't*, nothing more. (3) The high-dimensional search **failed everywhere it
+was tried**, and that measurement is presented as a result, not as progress toward a
+positive.
 
 ### No prose gaps left
 
@@ -455,9 +511,13 @@ claim); `GradedCancellation` (region count `≤ 4^g · leafCount` recasting
 monotone-vs-general as a graded dial); and an empirical sample-complexity
 result (ε-essential predicts data needs at Spearman 0.68 / 0.78). **Alongside,
 one synthesis core** — the Order-Relative Resolution Law (`OrderRelative`) —
-proves a single schema once: `Resolves k t ↔ ord t ≤ k`, grounded on **seven
+proves a single schema once: `Resolves k t ↔ ord t ≤ k`, grounded on **eight
 instance families** (parity-determination, coordinate-locality, search-reach,
-radical-reach, spectral/moment, algebraic-degree, cohomological torsion-vs-free)
+radical-reach, spectral/moment, algebraic-degree, cohomological torsion-vs-free,
+and the **surface-window** axis — the order-blind count vector determines bracket
+depth but can never determine the stack-top, at every window order, σ_surface = ∞,
+axiom-lean at `propext` + `Quot.sound`, with a **measured model crossover** on its
+exact boundary and a fully-receipted pre-registered negative above it)
 and explicitly guarded by `order_is_schema_not_scalar` against any universal-
 scalar misread. The **composition law** is now a **single general lemma**
 (`orderOf_prod_eq_lcm`) — the group-order axes fall out as instances

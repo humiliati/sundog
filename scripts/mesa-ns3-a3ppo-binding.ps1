@@ -19,6 +19,7 @@ param(
   [double]$IdlePenalty = 0.5,        # penalize go-limp so the manipulator must actually cross
   [double]$PerturbSigma = 0.05,      # eval action-noise for the fragility pass
   [int]$Horizon = 9,                 # 15 = creep-feasible v2 (presider_speed 0.20 < tau 0.30); 9 = stock (ill-posed)
+  [string]$InitAdapter = "",         # warm-start m0 init (e.g. creeper_adapter.json); default = h2 m_adapter_rl.json
   [int]$Updates = 512,
   [int]$RolloutsPerUpdate = 32,
   [int]$TrainSeeds = 32,
@@ -56,8 +57,10 @@ $base = @("--env", "regulator", "--cells", $cells, "--no-exo-shutdown",
   "--field-cap", "1", "--reward-cap", "0.5", "--guard-cap", "0.7", "--feature-mode", "base",
   "--field-model", $FieldModel)
 $fm = @("--field-model", $FieldModel)
+$m0Init = if ($InitAdapter) { $InitAdapter } else { "$warm/m_adapter_rl.json" }
+if ($InitAdapter -and -not (Test-Path $InitAdapter)) { throw "Missing -InitAdapter: $InitAdapter" }
 $warmInit = @("--init-guard", "$warm/p_guard.json", "--init-arbiter", "$warm/p_council_arbiter_rl.json",
-  "--init-monolith-adapter", "$warm/m_adapter_rl.json")
+  "--init-monolith-adapter", $m0Init)
 
 # Bump when env/trainer/arm semantics change so stale checkpoints auto-invalidate.
 # Horizon is in the stamp: a geometry change (9 stock -> 15 creep-feasible) must re-train.

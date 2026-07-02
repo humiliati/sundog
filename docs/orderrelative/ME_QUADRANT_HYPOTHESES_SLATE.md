@@ -126,6 +126,23 @@ tested here).
 **Cost:** low (a few theorems appended to `PercivalTargetCollapse.lean`'s model).
 **Shoppable:** high — "auditing dependence doesn't make enforcing it cheaper; the edge
 is a tax on writes *and* on contracts" is quotable and machine-checked if it lands.
+**RESULT (2026-07-02): LANDED (machine-checked) — the price equivalence holds as an
+iff.** `sundogcert` `Sundogcert/PercivalAuditPay.lean` (extends the OR-4 cell) — gated,
+axiom-clean, full audit 8574 GREEN. **`audit_and_pay_iff`: the transfer scheme keyed on
+the exact probe-table audit implements the target safe point iff `t ≥ ρ − β`** —
+incentive enforcement on a perfect read pays exactly the structural write-price; reads
+do not discount enforcement. Supporting anchors: `comp_le_rho` (**the Bayes ceiling** —
+no policy beats the U-follower; 16-case bash under `1/2 ≤ β ≤ ρ ≤ 1`),
+`followV_comp`/`followV_invariant` (the collapse bound is *tight* — the V-follower
+attains β at the safe point; `followV_invariant` axiom-FREE), `audit_pay_implements`
+(sufficiency: at `t ≥ ρ−β` the audited V-follower weakly dominates every policy),
+`audit_pay_underpays` (necessity: at `t < ρ−β` every safe policy is strictly beaten by
+the unaudited U-follower). Falsifier disposition: the sub-edge scheme is refuted as
+expected (IC algebra); the richer-joint version stays registered (rides ME-5's sweep).
+Scope: quasi-linear payoff, deterministic policies, named-variable audit only (the
+content-level read is the ME-1 census's mirror cell — a different, ∞-order filtration).
+Coherence note: S2.4/B3.2's court-as-punishment-scheme behavior (cliff-edge optimum,
+never zero) is the computed face of the same equivalence.
 
 ### ME-4 — the probe-steer gap on a real substrate *(empirical centerpiece; CPU; chat-v2 discipline applies)*
 **Claim:** GPT-2's stack-top is linearly **readable** in the residual stream (banked:
