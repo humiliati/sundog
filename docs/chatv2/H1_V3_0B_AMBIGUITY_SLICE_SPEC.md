@@ -5,6 +5,10 @@
 > amended here is inherited unchanged — ceilings, balance window, ≥24 axes, no-rescue, fences,
 > the V3-0.5 → V3-1 → V3-2 ladder and its gating. **Non-promotional. No model, no GPU at this
 > rung. Nothing here alters `PROMOTE_GATE.md`.**
+>
+> **Post-run status:** this spec filed `F3-V3b/input` in
+> `H1_V3_0B_SLICE_ADMISSION_RECEIPT.md`. The owner-approved follow-up is the crossover-form
+> gate in `H1_V3_0C_CROSSOVER_SPEC.md`.
 
 ## 1. What this answers
 

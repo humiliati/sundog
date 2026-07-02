@@ -119,7 +119,7 @@ text.**
 
 | hook | promise | risk | testable-now? | status |
 | --- | --- | --- | --- | --- |
-| H1 world/entity-state | high | medium | partial (V3-0 CPU data gate) | **V3-0 RUN 2026-07-01 — F3 both corpora** (code `F3-V3/copy` literal-dominated 0.07 computed; chess `F3-V3/input` all 39 axes bag-readable 0.94+ even in UCI) — witness pairs exist, distribution is bag-dominated. **V3-0b ambiguity-slice redesign RUN 2026-07-01 → `F3-V3b/input` (the STRONG negative): slice collapsed readability 0.95→~0.65 but 28/29 axes still probe-readable above 0.60 — ambiguous fibers are not uniform. Absolute undecodability now failed at SIX families; the lane's positives (H2, R1) were all RELATIVE crossovers. `H1_V3_0B_SLICE_ADMISSION_RECEIPT.md`** |
+| H1 world/entity-state | high | medium | partial (V3-0c CPU bank freeze) | **V3-0 RUN 2026-07-01 — F3 both corpora** (code `F3-V3/copy`; chess `F3-V3/input`). **V3-0b RUN → `F3-V3b/input`**: ambiguity slices collapsed readability 0.95→~0.65 but 28/29 axes still exceeded the absolute 0.60 ceiling; ambiguous fibers are not uniform. Active fork: **V3-0c crossover-form gate frozen** in `H1_V3_0C_CROSSOVER_SPEC.md` (`acc_model >= surface_max + 0.15` and `>= randinit + 0.15`; `>=20` crossing axes; claim = "reads state better than the registered surface statistic allows"). |
 | **H2 stack-top / Dyck** | **high** | **low** | **yes (CPU, GPT-2 + code)** | **CONFIRMED (existence) 2026-07-01** — see result below |
 | H3 cumulative/toggled | medium | medium | partial (bigger model) | PROPOSED |
 | H4 binding under attractors | medium | medium | partial | PROPOSED |

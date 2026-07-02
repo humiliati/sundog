@@ -197,6 +197,27 @@ the shoppable rigor) — the rest are gated on S1.
 
 ---
 
+## Keep-alive follow-ups (registered 2026-07-01, unopened)
+
+Named by the owner at the Angle-1 note pass; registered here so they survive the slate's
+completion. Each is a real probe, none is on a clock.
+
+- **F1 — Weighted Lean generalization.** Lift `PercivalGeneral.lean` from uniform
+  (unweighted-list) bases to weighted tail averages; the computed receipt already covers
+  weighted bases, so this is a formalization gap, not an open question.
+- **F2 — Drift robustness across base-update maps.** B3.1's iterated-tail ruin uses the
+  selected-tail recentering map. Does every tilt still ruin under other update maps —
+  retrain-on-survivors, mixture updates, performative repeated-risk-minimization
+  dynamics? If some natural update map lets a tilt survive iteration, the dynamic half
+  of the counterproductivity claim narrows to the registered model.
+- **F3 — Target-cap reachability under richer joints (the strongest standing
+  falsifier).** S2's collapse was proven under the binary-symmetric CI joint. A richer
+  joint (synergy, multi-cue, non-binary) in which an exogenous projection achieves
+  `c = 0` while retaining above-baseline competence would make the target channel
+  cleanly enforceable and materially soften the Angle-1 note and the cleanliness law.
+
+---
+
 ## Cross-links
 
 - Resolved lane: [`SUNDOG_V_PERCIVAL.md`](../SUNDOG_V_PERCIVAL.md), [`PARTIAL_GRACE_UNTARGETING_POST.md`](PARTIAL_GRACE_UNTARGETING_POST.md).

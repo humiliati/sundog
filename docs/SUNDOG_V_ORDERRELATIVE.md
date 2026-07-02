@@ -5,8 +5,10 @@
 ([`SUFFICIENT_STAT_ORDER_SLATE.md`](SUFFICIENT_STAT_ORDER_SLATE.md)), promoted to a named
 roadmap and pointed at the two laws the Percival reopen handed it on 2026-07-01.*
 
-Status: **OPENED 2026-07-01. ROADMAP + SLATE SPEC FOR RED-TEAM, NOTHING RUN. SHARPENED
-same day by a five-mark critical pass (integrated at owner direction):** the overseer
+Status: **OPENED 2026-07-01. SHARPENED same day by a five-mark critical pass (integrated
+at owner direction); first rung OR-5 RUN + CONFIRMED same day
+(`OR5_SOVOPT_CONTROL_SIDE_CONFIRMED` — see the entry). Remaining entries: SPEC, not
+run.** The pass: the overseer
 filtration split into read/write halves and the bridge restated on WRITE (mark 1 — OR-3
 recut, a pre-run witness banked); OR-1 recut from bare composability to the **margin
 law** (mark 2); OR-2's candidate structures **pre-registered** so the same-lemma fence is
@@ -132,6 +134,27 @@ discipline debt and everything below leans on the tier table — so it runs firs
 double: OR-1..OR-4 inherit a checked table instead of an argued one, and the typing's
 **read/write partition of overseer-accessible variables is the filtration OR-3 consumes**
 — OR-5 is now formally load-bearing for spine 2, not just its void-check.
+**RESULT (2026-07-01): `OR5_SOVOPT_CONTROL_SIDE_CONFIRMED` — S1's registered kill did
+not fire; the classification is checked, not argued.** Leg A (Lean):
+`sundogcert` `Sundogcert/PercivalCapClass.lean` — `cap_sov_le_kappa`,
+`cap_bounds_outgoing_swing` (swing ≤ 2κ under ANY upstream intervention, no internals
+assumption), `cap_ignores_incoming_sensitivity` (∀ M ∃ a raw map with input-sensitivity
+> M passing the cap everywhere — the two-sided separation) — axiom-clean, gated in
+`AxiomAudit.lean`, full build 8569 GREEN. Leg B (computed, on the real machinery):
+fidelity fence discharged by **bit-level reproduction of the banked NS-1-c-0 receipt**
+(6382 histories, all 12 uncapped/capped stats exact) + hand-anchored formula vectors
+(saturating fork: 0.75 uncapped, κ/2 capped — the banked magnitudes) + override intact
+under the cap; classification gates all pass — occupant-blind audit (bit-identical
+across 4 occupants), incoming-edge severance under output replay, the
+dependence/authority **double dissociation** (constant occupant: dependence 0, same
+audited authority; feature occupant: dependence 0.507, capped ≤ κ down to κ = 0.01 with
+0/6382 violations), write-locus cap bounding even adversarial candidates. **Registered
+texture:** `arbiterAuthorityCap` treats κ = 0 as a *disable guard* — the exact
+`Sov_opt = 0` point belongs to the fixed-presider control (occupant removed); the cap
+family reaches it only in the limit. S1's "zero is dialable" earns a footnote, not a
+correction. The read/write partition OR-3 consumes is emitted in the receipt. Spec +
+receipt: [`orderrelative/OR5_SOVOPT_CLASSIFICATION_SPEC.md`](orderrelative/OR5_SOVOPT_CLASSIFICATION_SPEC.md),
+[`orderrelative/OR5_SOVOPT_CLASSIFICATION_RESULTS.md`](orderrelative/OR5_SOVOPT_CLASSIFICATION_RESULTS.md).
 
 ### OR-1 — the keyed-composition MARGIN law *(drill, co-headline; recut per mark 2)*
 **Claim:** in a finite multi-agent model, the **margin** of a behavior-keyed guarantee

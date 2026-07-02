@@ -113,9 +113,11 @@ This is exactly the uneven ledger's mechanism: act and aggregate primitives clip
 inside the policy's function, where no exogenous projection exists (in-channel enforcement
 collapses to a measure retreat priced at the proxy's reliability edge). Three tiers:
 no-primitive (measure), clean / in-channel reachable (act, aggregate), partial /
-retreat-priced (target). Full statement, mapping table, mechanism, and live falsifiers —
-including the open `Sov_opt`-classification check that would void it:
+retreat-priced (target). Full statement, mapping table, mechanism, and falsifiers:
 [`percival/PERCIVAL_S1_CLEANLINESS_LAW.md`](percival/PERCIVAL_S1_CLEANLINESS_LAW.md).
+The headline `Sov_opt`-classification falsifier has since been run by the ORDERRELATIVE
+lane and did not fire (`OR5_SOVOPT_CONTROL_SIDE_CONFIRMED`, with a κ→0-limit texture
+footnote); the law's remaining falsifiers stay live.
 
 ---
 

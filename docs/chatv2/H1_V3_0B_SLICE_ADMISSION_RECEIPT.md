@@ -59,7 +59,7 @@ even where the bag formally underdetermines it.**
 ## Disposition
 
 Per the spec: **no rescue; V3-0.5 and V3-1 do not run; no GPU/H200;
-`PROMOTE_GATE.md` unchanged.** Onward options (owner's call — none taken):
+`PROMOTE_GATE.md` unchanged.** Onward options recorded at filing:
 
 1. **Bank R1 and freeze** — now strongly indicated. The R2 boundary is measured at six
    families, three levels, two slice designs, with a machine-checked theory anchor
@@ -74,6 +74,13 @@ Per the spec: **no rescue; V3-0.5 and V3-1 do not run; no GPU/H200;
 3. High-entropy synthetic-adjacent corpora (shuffled game records etc.) stay parked —
    they would surrender the "real task" half of the R2 claim.
 
+**Owner decision after this receipt:** option 2 is taken. The fresh prereg is
+`H1_V3_0C_CROSSOVER_SPEC.md`, with margins frozen at +0.15 over `surface_max` and
++0.15 over the same-architecture random-init floor, validation-only layer choice,
+and claim language locked to "reads state better than the registered surface
+statistic allows."
+
 Cross-refs: `H1_V3_0B_AMBIGUITY_SLICE_SPEC.md` (the prereg), `H1_V3_0_DATA_ADMISSION_RECEIPT.md`
-(the diagnosis this tested), `R2_INTERSECTION_HYPOTHESES.md` (H2 crossover; H5 σ-bridge),
-`PROMOTE_GATE.md` (unchanged).
+(the diagnosis this tested), `H1_V3_0C_CROSSOVER_SPEC.md` (the owner-approved crossover
+redefinition), `R2_INTERSECTION_HYPOTHESES.md` (H2 crossover; H5 σ-bridge), `PROMOTE_GATE.md`
+(unchanged).

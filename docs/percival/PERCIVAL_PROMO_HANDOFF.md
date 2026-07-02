@@ -92,12 +92,20 @@ target is partial (an incoming-dependence condition, not projectable — in-chan
 enforcement collapses to a measure retreat priced at the proxy's reliability edge).
 Composition rider (S3): behavior-keyed guarantees compose by construction; outcome-keyed
 guarantees compose only as far as the reward decomposes.
-**Status:** synthesis over banked receipts; a *characterization*, with live falsifiers
-(the `Sov_opt` formal classification check is open and would void it).
+**Status:** synthesis over banked receipts; a *characterization*. **The headline
+falsifier has now been run and did not fire:** the `Sov_opt` classification check was
+executed by the ORDERRELATIVE lane (`OR5_SOVOPT_CONTROL_SIDE_CONFIRMED` — two-sided Lean
+separation in `sundogcert PercivalCapClass.lean` + a fidelity-fenced computed check
+reproducing the banked NS-1-c-0 audit;
+`docs/orderrelative/OR5_SOVOPT_CLASSIFICATION_RESULTS.md`). One registered texture rides
+with it: the real cap treats `κ = 0` as a disable guard, so the *exact* safe point
+belongs to the fixed-presider control and the cap family reaches it in the limit —
+footnote-grade, not a correction. Remaining live falsifiers: clean-channel-without-reach,
+partial-channel-with-reach (richer joints), multi-agent presider competence.
 **Audience:** causal-incentives / CID readers (Everitt et al. 2021 is the genus — cite,
 don't reinvent); the alignment-theory blog register.
-**Care level: high.** It earns "law" only while its falsifiers keep not firing; surface
-it with the falsifiers visible, or not at all.
+**Care level: high but UNLOCKED.** Surface it with the remaining falsifiers visible, the
+OR5 receipt linked, and the κ→0-limit footnote carried.
 
 ### Angle 3 — Graded oversight beats threshold oversight *(policy-shaped, most quotable)*
 **Claim:** the cliff-edge temptation — the reward-optimal agent courting right up to the
@@ -130,7 +138,7 @@ disposition, same as the cap-not-council post. Not a promo blast.**
 | `SUNDOG_V_CAUSAL_ACCESS.md` (umbrella) | **CURRENT** | Already carries the S5 duality fold and per-channel ledger; no promo edit needed. It is the internal spine, not a public page. |
 | New public page / post for Angle 1 | **EXPAND (new surface)** | The decoupled theorem note: claim + condition + Lean receipt + fuzz receipt + the four cites. No Grail framing required (works standalone); the romance can be one paragraph of provenance color or omitted. |
 | New short note for Angle 3 | **EXPAND (new surface, optional)** | "Threshold oversight tempts; graded oversight protects" with the width-sweep table. Could ride inside Angle 1's page as a section instead of standing alone. |
-| Angle 2 page | **DEFER** | Wait for the `Sov_opt` formal check (the live falsifier) before giving the law a public page; premature surfacing risks a public recut. |
+| Angle 2 page | **UNLOCKED (was DEFER)** | The gating `Sov_opt` check ran (`OR5_SOVOPT_CONTROL_SIDE_CONFIRMED`, OR lane) and did not fire. A public page may proceed after Angle 1, carrying the OR5 receipt, the κ→0-limit footnote, and the remaining falsifiers visible. |
 | NS released benchmark (`released/non-sovereignty/`) | **NO CHANGE** | RELEASE_READY, Apache-2.0 scoped to its manifest. Percival artifacts are **not** in that manifest (see blockers). |
 
 ---

@@ -95,9 +95,17 @@ B3.2); and why un-targeting is chosen by robustness rather than reward (B3.2) �
 
 ## Falsifiers / what voids S1 (registered, still live)
 
-- **`Sov_opt` misclassified** — a formalization showing it is a response/incoming-
-  dependence constraint rather than a downstream influence cap → S1 void until recut.
-  (Open hook: a Lean-ish check of the classification; not yet done.)
+- **`Sov_opt` misclassified** — ~~a formalization showing it is a response/incoming-
+  dependence constraint rather than a downstream influence cap → S1 void until recut.~~
+  **TESTED 2026-07-01, did not fire: `OR5_SOVOPT_CONTROL_SIDE_CONFIRMED`** (the
+  ORDERRELATIVE lane ran the registered check). Two-sided Lean separation
+  (`sundogcert` `PercivalCapClass.lean`: outgoing swing ≤ 2κ under ANY upstream
+  intervention / incoming sensitivity unconstrained ∀ bounds) + a fidelity-fenced
+  computed check that bit-level reproduces the banked NS-1-c-0 audit —
+  [`../orderrelative/OR5_SOVOPT_CLASSIFICATION_RESULTS.md`](../orderrelative/OR5_SOVOPT_CLASSIFICATION_RESULTS.md).
+  Registered texture: the real cap treats κ = 0 as a disable guard, so the *exact*
+  safe point belongs to the fixed-presider control (occupant removed); the cap family
+  reaches it only in the limit — "zero is dialable" earns a footnote, not a correction.
 - **A clean channel without reach** — an exogenous cap that screens cleanly while unable
   to project to the safe point.
 - **A partial channel with reach** — an in-channel exogenous projection to the target safe

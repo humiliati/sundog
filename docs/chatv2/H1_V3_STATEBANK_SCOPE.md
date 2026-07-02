@@ -7,11 +7,13 @@
 > dimension; H5 upgraded the data gate. H1 asks whether the high-dimensional
 > state-bank version is wide enough to clear `d_dec >= 20`.
 >
-> **Post V3-0 status:** the initial whole-distribution data admission filed
+> **Post V3-0/V3-0b status:** the initial whole-distribution data admission filed
 > `F3-V3/copy` for code and `F3-V3/input` for chess in
-> `H1_V3_0_DATA_ADMISSION_RECEIPT.md`. The active amendment is
-> `H1_V3_0B_AMBIGUITY_SLICE_SPEC.md`: chess becomes the primary ambiguity-slice
-> arm; code is not revived unless an expanded corpus clears its hard floor.
+> `H1_V3_0_DATA_ADMISSION_RECEIPT.md`; the ambiguity-slice admission then filed
+> `F3-V3b/input` in `H1_V3_0B_SLICE_ADMISSION_RECEIPT.md`. The active amendment
+> is now `H1_V3_0C_CROSSOVER_SPEC.md`: the absolute surface ceiling is superseded
+> by a crossover-form gate, with claim language locked to "reads state better than
+> the registered surface statistic allows."
 
 ## 0. Original V3-0 fork calls
 
@@ -26,27 +28,34 @@
 The H200 is for scale and the scaling fork, not for discovering whether H1 has
 a valid data bank.
 
-After V3-0, `H1_V3_0B_AMBIGUITY_SLICE_SPEC.md` amends this ordering: chess is
-the primary V3-0b arm, and code is optional behind a hard corpus-expansion floor.
+After V3-0, `H1_V3_0B_AMBIGUITY_SLICE_SPEC.md` amended this ordering: chess became
+the primary V3-0b arm, and code became optional behind a hard corpus-expansion
+floor. After V3-0b missed, `H1_V3_0C_CROSSOVER_SPEC.md` keeps the chess slice
+construction but replaces the absolute `<= 0.60` ceiling with the registered
+crossover margins.
 
 ## 1. Delivery gate, with the H5 upgrade
 
-H1 can leave scoping only if it produces a state bank with all of:
+The original V3-0/V3-0b gate asked for a state bank with all of:
 
 - **bank headroom:** at least 24 balanced binary axes, so `d_dec >= 20` is
   possible without shopping;
 - **absolute surface-undecodability:** not just linear raw-probe failure. H5
   exposed the count-parity loophole: parity defeats a linear probe while still
-  being a deterministic function of the token bag. H1 must test the stronger
-  claim that the label is not a function of the registered surface statistic;
+  being a deterministic function of the token bag. V3-0/V3-0b tested the
+  stronger claim that the label was not readable from the registered surface
+  statistic under an absolute ceiling;
 - **model carry:** a capable pretrained model carries the bank above a
   same-architecture random-init floor;
 - **full fingerprint:** compact control shadow, H4 liveness, H5
   compute-can't-cross, near-chance cross-latent leak, `body_carry - floor`;
 - **external review:** no R2 promotion without mech-interp review.
 
-The first two bullets are pure data properties and are CPU-checkable now. They
-are V3-0. The model question starts only after they pass.
+The first two bullets were the V3-0/V3-0b absolute data gates, and V3-0b missed
+them. V3-0c keeps witness-certified non-bag-function axes and freezes the
+registered surface baseline on CPU, but moves the decisive model question to the
+crossover form: `acc_model >= surface_max + 0.15` and
+`acc_model >= acc_randinit + 0.15`.
 
 ## 2. Surface criterion
 
@@ -71,8 +80,10 @@ model sees and over canonicalized variants:
 - MLP on n-gram counts, default `w in {1,2,3}`;
 - metadata probes where the domain has structured metadata.
 
-Default survival ceiling: every surface probe must stay `<= 0.60` held-out
-accuracy. The MLP probes close the count-parity loophole.
+Historical V3-0/V3-0b survival ceiling: every surface probe had to stay
+`<= 0.60` held-out accuracy. The active V3-0c amendment replaces that absolute
+ceiling with frozen `surface_max` baselines used in the crossover test. The MLP
+probes still close the count-parity loophole by making the baseline stronger.
 
 ### B. Constructed witness pairs
 
@@ -219,8 +230,9 @@ mechanical annotation path.
 | --- | --- | --- | --- |
 | **V3-0 data admission** | CPU now | mine corpus, build bank, run balance plus H5-upgraded surface suite | `>=24` surviving axes, else `F3-V3/input` |
 | **V3-0b ambiguity-slice admission** | CPU now | define axes on count-ambiguous slices; bounded witness search; slice-conditioned probes | `>=24` surviving axes, else `F3-V3b/*` |
-| **V3-0.5 calibration** | CPU, cheap | H2-style hard-slice probe on GPT-2-small | non-gate expectation anchor |
-| **V3-1 1B admission** | CPU-lite / local 1080 / GPU | Qwen2.5-1.5B or OLMo-2-1B, random-init floor, decision selection | carry above floor at `d_dec >= 20`, else `F2-V3/carry` |
+| **V3-0c bank freeze** | CPU now | repair witnesses, freeze slice bank and `surface_max` baselines | `>=24` axes with witnesses, else `F3-V3c/*` |
+| **V3-0.5 calibration** | CPU, cheap | H2-style crossover probe on GPT-2-small | non-gate expectation anchor |
+| **V3-1 1B admission** | CPU-lite / local 1080 / GPU | Qwen2.5-1.5B or OLMo-2-1B, random-init floor, validation-only layer choice | `>=20` axes crossing both +0.15 margins, else `F2/F4-V3c/*` |
 | **V3-2 full fingerprint** | GPU | complete R2 battery plus external review packet | only rung that can move `PROMOTE_GATE.md` R2 |
 
 ## 7. V3-0 data admission
@@ -275,7 +287,7 @@ gets more attractive.
 
 ## 9. V3-1 1B admission
 
-Run only after V3-0 admits a bank.
+Run only after V3-0c admits a frozen bank and surface-baseline manifest.
 
 Primary models:
 
@@ -299,23 +311,21 @@ Reuse/piggyback:
 
 Admission thresholds:
 
-- at least 24 admitted axes from V3-0;
-- validation `d_dec >= 20`;
-- pretrained median carry at least `0.10` above same-architecture random-init
-  floor;
-- preliminary `body_carry - floor` trend plausibly reaches the final `0.15`
-  threshold;
+- at least 24 admitted axes from V3-0c;
+- layer chosen on validation only from the frozen layer set;
+- at least 20 axes with `acc_model >= surface_max + 0.15`;
+- the same axes also satisfy `acc_model >= acc_randinit + 0.15`;
 - one pre-registered decision selector reaches `z1_acc >= 0.70`.
 
 Branches:
 
 | branch | meaning |
 | --- | --- |
-| `H1-V3-1-ADMIT` | 1B-scale model carries the bank enough to justify final prereg |
-| `F2-V3/carry` | model does not carry the axes |
-| `F2-V3/control` | no compact control shadow |
-| `F4-V3/floor` | random-init floor explains the carry |
-| `F6-V3/compute` | local/H200 route cannot run the registered measurement cleanly |
+| `H1-V3-1-CROSS-ADMIT` | 1B-scale model crosses both margins on at least 20 axes |
+| `F2-V3c/carry` | model does not cross the frozen surface baseline |
+| `F2-V3c/control` | no compact control shadow |
+| `F4-V3c/floor` | random-init floor explains the apparent carry |
+| `F6-V3c/compute` | local/H200 route cannot run the registered measurement cleanly |
 
 ## 10. V3-2 full fingerprint
 
@@ -341,10 +351,11 @@ Only V3-2 plus external review can alter the R2 row in `PROMOTE_GATE.md`.
 ## 11. Immediate build order
 
 1. V3-0 is complete: see `H1_V3_0_DATA_ADMISSION_RECEIPT.md`.
-2. Run V3-0b per `H1_V3_0B_AMBIGUITY_SLICE_SPEC.md`, chess first.
-3. File `H1_V3_0B_SLICE_ADMISSION_RECEIPT.md`.
-4. If and only if V3-0b admits at least one bank, run V3-0.5 GPT-2 calibration
-   on the admitted slices.
+2. V3-0b is complete: see `H1_V3_0B_SLICE_ADMISSION_RECEIPT.md`.
+3. Run V3-0c per `H1_V3_0C_CROSSOVER_SPEC.md` to freeze the bank, witness panels,
+   and `surface_max` baselines.
+4. If and only if V3-0c admits a bank, run V3-0.5 GPT-2 calibration in crossover
+   form.
 5. Stage V3-1 command lines with local CPU/1080 first, H200 second.
 
 This is not the same trap repeated. The failed R2 families were functions of

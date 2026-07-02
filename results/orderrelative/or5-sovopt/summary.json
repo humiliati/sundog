@@ -1,0 +1,187 @@
+{
+  "phase": "OR-5 Sov_opt classification (Leg B)",
+  "generated_at": "2026-07-02T00:05:10.526Z",
+  "spec": "docs/orderrelative/OR5_SOVOPT_CLASSIFICATION_SPEC.md",
+  "cells": [
+    "nominal",
+    "wide-fork",
+    "far-lure"
+  ],
+  "seeds": 48,
+  "history_count": 6382,
+  "leg_a": "passed",
+  "fidelity": {
+    "F2_hand_vectors": true,
+    "F3_reproduction": true,
+    "F3_uncapped": {
+      "max": 0.75,
+      "p95": 0.748786,
+      "mean": 0.433124
+    },
+    "F3_capped": [
+      {
+        "kappa": 0.6,
+        "max": 0.3,
+        "p95": 0.3,
+        "mean": 0.3
+      },
+      {
+        "kappa": 0.4,
+        "max": 0.219057,
+        "p95": 0.211488,
+        "mean": 0.202851
+      },
+      {
+        "kappa": 0.2,
+        "max": 0.126486,
+        "p95": 0.124856,
+        "mean": 0.109399
+      }
+    ],
+    "F3_banked": {
+      "uncapped": {
+        "max": 0.75,
+        "p95": 0.748786,
+        "mean": 0.433124
+      },
+      "capped": [
+        {
+          "kappa": 0.6,
+          "max": 0.3,
+          "p95": 0.3,
+          "mean": 0.3
+        },
+        {
+          "kappa": 0.4,
+          "max": 0.219057,
+          "p95": 0.211488,
+          "mean": 0.202851
+        },
+        {
+          "kappa": 0.2,
+          "max": 0.126486,
+          "p95": 0.124856,
+          "mean": 0.109399
+        }
+      ]
+    },
+    "F4_override": {
+      "corr_k": 1,
+      "invariance": 0
+    }
+  },
+  "classification": {
+    "T_OUT_1_slot_blind": true,
+    "T_OUT_2_severance": true,
+    "T_IN_a_authority_without_dependence": true,
+    "T_IN_b_dependence_without_authority": true,
+    "T_IN_kappa0_disable_guard": true,
+    "T_CAP_write_locus": true,
+    "dependence_ranges": {
+      "constant": 0,
+      "feature": 0.506718
+    },
+    "limit_sweep": [
+      {
+        "kappa": 0.6,
+        "max": 0.3,
+        "p95": 0.3,
+        "mean": 0.3,
+        "violations": 0
+      },
+      {
+        "kappa": 0.4,
+        "max": 0.219057,
+        "p95": 0.211488,
+        "mean": 0.202851,
+        "violations": 0
+      },
+      {
+        "kappa": 0.2,
+        "max": 0.126486,
+        "p95": 0.124856,
+        "mean": 0.109399,
+        "violations": 0
+      },
+      {
+        "kappa": 0.05,
+        "max": 0.03446,
+        "p95": 0.034165,
+        "mean": 0.030314,
+        "violations": 0
+      },
+      {
+        "kappa": 0.01,
+        "max": 0.007035,
+        "p95": 0.006976,
+        "mean": 0.006186,
+        "violations": 0
+      }
+    ]
+  },
+  "partition": {
+    "write": [
+      {
+        "variable": "kappa (cap level)",
+        "locus": "action node (ball radius)",
+        "note": "exogenous dial; kappa=0 is a DISABLE GUARD in arbiterAuthorityCap -- exact zero reached by the fixed-presider control (occupant removed), not by the cap family"
+      },
+      {
+        "variable": "a_capped (ball projection)",
+        "locus": "component-output -> actuator path",
+        "note": "arbiterAuthorityCap(action, a_field, kappa, actionMax): consumes actuator-path variables only"
+      },
+      {
+        "variable": "weight-cap simplex",
+        "locus": "arbiter output slot",
+        "note": "capSimplexProject(raw, caps)"
+      },
+      {
+        "variable": "shutdown trigger",
+        "locus": "post-cap override",
+        "note": "structural; exempt channel, verified intact under the cap (F4)"
+      }
+    ],
+    "read": [
+      {
+        "variable": "realized proposals / weights / actions",
+        "locus": "trajectory",
+        "note": "observational"
+      },
+      {
+        "variable": "I_i(h), Sov_opt",
+        "locus": "output-slot counterfactual replay",
+        "note": "INTERVENTIONAL READ -- computed by substitution at the slot, occupant not an argument"
+      },
+      {
+        "variable": "Corr_k",
+        "locus": "shutdown episodes",
+        "note": "observational"
+      }
+    ],
+    "neither_needed": [
+      {
+        "variable": "occupant internals (arbiter function)",
+        "note": "read by neither the cap nor the audit (T-OUT-1/2)"
+      }
+    ],
+    "bridge_rows": [
+      {
+        "channel": "aggregate",
+        "safe_point": "Sov_opt = 0",
+        "read": "yes (audit)",
+        "write": "yes (kappa -> 0+ / fixed-presider exact)",
+        "tier": "clean"
+      },
+      {
+        "channel": "target (Percival)",
+        "safe_point": "c = 0",
+        "read": "yes (court do(reputation) probes)",
+        "write": "no (S2: every write collapses to masking)",
+        "tier": "partial -- MEASURABLE != ENFORCEABLE"
+      }
+    ]
+  },
+  "failures": [],
+  "branch": "OR5_SOVOPT_CONTROL_SIDE_CONFIRMED"
+}

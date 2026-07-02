@@ -1,0 +1,30 @@
+H1_V3_0C_BANK_FREEZE  chess arm  [NON-PROMOTIONAL, CPU]
+
+(chess) shard columns: ['Event', 'Site', 'White', 'Black', 'Result', 'WhiteTitle', 'BlackTitle', 'WhiteElo', 'BlackElo', 'WhiteRatingDiff']... using 'movetext'; 121332 games
+(chess) 2600 games with >=28 plies loaded
+(bank) marker ply 40: 2113 instances; co-ambiguity median 22 p75 24
+(balance) 29 axes balanced on their slices
+(liveness) 'e2e4-present' LR-counts: 1.000 (>= 0.95 required)
+(witness) 7/29 axes covered, 10 pairs, 425s of 900s budget
+
+      axis n_slice   bal surface_max  wit  in-bank?
+    occ.a7     130  0.50       0.615    0  no (witness)
+    occ.f2     218  0.50       0.667    0  no (witness)
+      b.h7     161  0.51       0.673    0  no (witness)
+    occ.c2     495  0.48       0.631    0  no (witness)
+      w.g2     318  0.53       0.656    0  no (witness)
+    occ.h7     161  0.54       0.633    0  no (witness)
+    occ.f7     268  0.46       0.679    0  no (witness)
+    occ.c7     493  0.46       0.649    0  no (witness)
+    occ.g2     318  0.54       0.667    0  no (witness)
+      w.f1    1606  0.55       0.887    0  no (witness)
+      w.h2     159  0.55       0.750    0  no (witness)
+    occ.f1    1606  0.55       0.898    0  no (witness)
+      w.f2     218  0.45       0.682    0  no (witness)
+      w.c2     495  0.44       0.691    0  no (witness)
+      b.a7     130  0.44       0.590    1  YES
+      b.g7     447  0.56       0.674    0  no (witness)
+    occ.d2    1154  0.43       0.720    0  no (witness)
+    occ.g7     447  0.57       0.659    0  no (witness)
+      b.c7     493  0.43       0.669    1  YES
+    occ.b7     541  0.43       0.712    1  YES
