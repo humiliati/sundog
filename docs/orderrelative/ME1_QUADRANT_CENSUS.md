@@ -97,6 +97,26 @@ real-substrate row in the table.
 - Row-level scopes carried: the structural M∧¬E ∞ inherits S2's family + CI joint; the
   ¬M∧E danger column is model-relative; the ¬M∧¬E row is a premise and says so.
 
+## 2b. Addendum (2026-07-02): the deferred cell ADJUDICATED — `ME4_STEERS`
+
+ME-4 ran ([`ME4_PROBE_STEER_RESULTS.md`](ME4_PROBE_STEER_RESULTS.md)): every treatment
+family passed write-validity at 1.000 and moved the closer behavior to the one-pop-swap
+target (`follow_rel` 0.81–1.05; donor transplant 0.78/0.92), controls at 0.01–0.09,
+manifold intact. **The pre-registered placement fires: the model-state row (GPT-2
+stack-top) joins M∧E** — readable *and* writable at the linear address; write-price ≈ 0.
+The **E∧¬M model-state cell stays unoccupied**: the regime-2 analog failed the verb
+fence and its admission test went the other way. New census row:
+
+| cell | condition C (object) | type | σ_read | σ_write (price) | danger | receipts |
+| --- | --- | --- | --- | --- | --- | --- |
+| **M∧E** | GPT-2 stack-top = τ (model-state) | **owned node** (the residual activation — in the *experimenter's* graph) | 1 (linear probe, 0.965) | 1 (activation patch; price ≈ 0, rest-NLL 1.0×) | none found at this tier; the friendliest cell — interp reads pair with cheap writes | H2 probe + ME-4 |
+
+Typing note: the row *confirms* ME-2's law rather than challenging it — the residual
+activation is an owned **node** in the experimenter's compute graph, and node-conditions
+pair reads with writes. A model-state that resisted patching would have been the
+surprise (an edge-typed state relative to the probed node). Scope: one 3-class state,
+one small model — future rows (deeper states, bigger models) may split.
+
 ## 4b. Addendum (2026-07-02): the structural M∧¬E row upgraded by ME-2
 
 The row's σ_write = ∞ scope was "S2's tested projection family"; ME-2
@@ -106,6 +126,24 @@ per-`v` channel retreat (mask or void) and pays the collapse. The residual scope
 model and the node-typing premise. The typing pattern (§3) is thereby promoted from
 retrodiction to **theorem inside the cell** — owned-node conditions writable
 (`owned_node_writable`, axiom-free), the edge unwritable except by retreat.
+
+## 4c. Addendum (2026-07-02): the PRICED column (ME-5)
+
+The 2×2 truncates a graded structure; ME-5 supplies the price column
+([`ME5_PRICED_QUADRANT_SWEEP.md`](ME5_PRICED_QUADRANT_SWEEP.md) +
+`sundogcert/PercivalSynergy.lean`):
+
+| cell / condition | read-price | write-price |
+| --- | --- | --- |
+| M∧E model-state (GPT-2 stack-top) | ≈ 0 (probe) | ≈ 0 (patch; ME-4 rest-NLL 1.0×) |
+| M∧E act / aggregate | 0 in-model (audit replay) | dialable κ-bill (`ΔC_bill` −0.14@κ0.6 → −0.38@κ0.2) |
+| M∧¬E target, named-variable | 0 in-model | **ρ − β on the banked binary-symmetric CI cell — and that is a FLOOR**: asymmetric-CI fusion prices above the edge formula (30.5% of joints, up to +0.107), synergy up to +0.5 (the machine-checked XOR witness: both channels individually worthless, price 1/2). The price survives every family as the *local Bayes-deficiency* (value gap at the operative prior), ≤ the full deficiency, with equality only where the operative problem attains the sup (43% even on the banked grid) — **prices are per-decision-problem, as σ is per-filtration** |
+| ¬M∧E content-level | N.A. behavioral (∞-order) | total blindness (value → chance) |
+| ¬M∧¬E values | — | — (the frame's routed-around cell) |
+
+Read-price = 0 is the in-model **replay premise**, not a measurement (interventional
+reads are counterfactual replays; nothing is perturbed); the quantum contrast — systems
+where reads disturb — is the named fence.
 
 ## 5. Feeds
 

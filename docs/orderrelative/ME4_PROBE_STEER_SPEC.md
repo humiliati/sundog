@@ -3,8 +3,8 @@
 *Pre-registration. Parent: [`ME_QUADRANT_HYPOTHESES_SLATE.md`](ME_QUADRANT_HYPOTHESES_SLATE.md)
 entry ME-4, upgraded by ME-1's census to the **admission test for the E∧¬M model-state
 cell**. Chat-v2 lane discipline inherited in full (no R2 / promotion / world-model
-language; existence-tier claims only). Status: **SPEC PINNED 2026-07-02, NOT RUN.
-Owner-cadence.***
+language; existence-tier claims only). Status: **SPEC PINNED 2026-07-02; RUN same day —
+`ME4_STEERS` ([`ME4_PROBE_STEER_RESULTS.md`](ME4_PROBE_STEER_RESULTS.md)).***
 
 ## The question
 

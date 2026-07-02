@@ -71,10 +71,25 @@ balance was in fact empirical (it landed 0.50/0.54, so no harm — recorded for 
 ## Status
 
 AT-6 filed: `AT6_TYPING_BROKEN` at both regimes — the entry's own falsifier branch, doing
-its stated job (feeding AT-4's re-registration). The optional Lean shim (rotation-vs-two-
-point interpretation lemma on `ShadowDecayLattice`) remains FORMALIZABLE and is now *more*
-motivated: it would pin the amplitude half formally while the receipt pins the
-decodability half empirically. Not built here.
+its stated job (feeding AT-4's re-registration).
+
+**Lean shim LANDED (2026-07-02): `sundogcert/Sundogcert/AveragingDecodability.lean`** —
+both halves pinned, axiom-clean (`[propext, Classical.choice, Quot.sound]`), gated in
+`AxiomAudit`, full build 8577 GREEN:
+
+- **Amplitude half** (`averaging_types_shadows`): the in-tree AC-resist / lattice-survive
+  separation packaged as the AT-6 typing statement (cites `absCont_resists` +
+  `twoPoint_shadow_survives`).
+- **Decodability half** (`decodable_mul_iff`, `zero_shadow_not_decodable`,
+  `amplitude_washes_readout_does_not`): attenuation by *any nonzero* factor preserves
+  exact decodability (the readout rescales — `mul_div_cancel_left₀`); only the zero-limit
+  shadow kills a non-constant label; and the punchline instantiates on the in-tree
+  Debye–Waller factor, which is **never zero at finite spread** (`Real.exp_ne_zero`) yet
+  **tends to zero** — so wash-out is machine-checked to be a *limit / noise-floor*
+  phenomenon, never a finite-window one. Exactly the measured G=200 behavior, now a
+  theorem about the formalism rather than an anecdote about the cell.
+- The trajectory-average bridge stays a **named import with a measured boundary** (this
+  receipt), stated in the module header per METHOD.md discipline.
 
 Cross-refs: `NSE_ATTRACTOR_TAIL_HYPOTHESES.md` AT-6/AT-4, `AT6_CHARFUN_TYPING_SPEC.md`,
 `results/chatv2/at6/at6_typing.json`, `sundogcert` `ShadowDecay{General,Cauchy,Lattice}.lean`.

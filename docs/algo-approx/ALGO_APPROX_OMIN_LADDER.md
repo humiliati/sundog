@@ -43,18 +43,63 @@ zero new substrate: `Tame s := (frontier s).Finite`, and mathlib's frontier calc
 *Falsifier that did not fire* (`TAME_NEEDS_SUBSTRATE`): the dimension-one axiom could not be stated
 or used without an o-minimal framework. It could — finite-frontier is enough.
 
-## R2 — The dimension-one consequences on the tame base. [FORMALIZABLE, next]
+## R2 — The dimension-one consequences on the tame base. [FORMALIZABLE — SCOPED 2026-07-02]
 
-Three self-contained targets, roughly in order of effort:
+> **Recon receipts (mathlib v4.30.0, verified by grep).** Present: `Set.OrdConnected.isPreconnected`
+> + `isPreconnected_iff_ordConnected` (intervals-are-preconnected is free), `Finset.sort`,
+> `Finset.eq_of_subset_of_card_le` (chain-card injectivity), `Set.InjOn.encard_image` /
+> `ncard_le_ncard` (counting). Absent: any "preconnected + frontier-disjoint ⇒ full-or-empty" split
+> (≈15-line direct proof from the `IsPreconnected` definition); sorted-list *adjacency* lemmas
+> (hand-rolled — the known grind). Strike order = cheapest first, shared machinery last.
 
-1. **Normal form**: `Tame s ↔` s is a finite union of points and open intervals (the ⇒ direction
-   is the components argument; makes the docstring equivalence a theorem).
-2. **Quantitative tameness**: `frontierBound` tied to `netPieceBound` (U-4's modulus) — frontier
-   card ≤ `2·netPieceBound g + 1`-ish, making the o-minimality *rate* checkable, in the same spirit
-   as the piece modulus (representation-dependent, honestly fenced).
-3. **Monotonicity theorem, PL instance**: every `NetDef`-definable function is piecewise monotone
-   with an explicit finite decomposition — the first o-minimal *consequence* theorem, nearly free
-   from `AffineAway`.
+### R2-M — Monotonicity theorem, PL instance (warm-up). [~30 lines]
+
+*Target.* `net_mono_or_anti_between_cuts : ∀ g : Net 1, ∃ S : Finset ℝ, ∀ a b, a ≤ b →
+(∀ s ∈ S, s ∉ Ioo a b) → MonotoneOn (realize1N g) (Icc a b) ∨ AntitoneOn (realize1N g) (Icc a b)`
+— on every cut-free stretch the net is monotone or antitone (affine, by sign of the slope; pure
+algebra off `AffineAway`, no derivatives). *Honest fence:* this is the per-stretch instance; the
+**global sorted decomposition** ("piecewise monotone on an explicit finite partition") is the R2-N
+rider — claiming it here would be the failure mode. No mathematical falsifier; pure assembly.
+
+### R2-Q — Quantitative tameness: the frontier modulus. [~100 lines]
+
+*Target (core, exact `S`-form — the gate target).*
+`(frontier {x | f x = c}).ncard ≤ 2 * S.card + 1` for continuous `f`, `AffineAway f S`.
+*The sharpening over R1:* R1's injection lands in `powerset S` (a `2^|S|` bound, finiteness only).
+But the image of `x ↦ S.filter (· < x)` consists only of **initial segments** — a `⊆`-chain — and
+card is injective on a chain (`eq_of_subset_of_card_le`), so there are at most `|S| + 1` fibers:
+`|S|` cut points + `|S|+1` one-per-fiber points = `2|S|+1` exact.
+*Corollaries (numbers reconciled):* `HasPieceCover k` gives `S.card + 1 ≤ k`, so the level and
+superlevel frontiers have `ncard ≤ 2k − 1`; for nets, `≤ 2 · netPieceBound g − 1` (ℕ-safe:
+`netPieceBound ≥ 1` always). This ties U-4's **piece modulus** to an **o-minimality (frontier)
+modulus** — the definability rate and the tameness rate become one graded story, inheriting the
+representation-dependence fence (linear additive / `2^d` folding) unchanged.
+*Falsifier* (`RATE_NOT_TIGHTER`): the chain/initial-segment argument fails to close in Lean and
+the honest bound stays `|S| + 2^|S|` — reported as the result if so.
+
+### R2-N — Normal form + the strong decomposition (the grind). [~200–250 lines]
+
+*Target.* `Tame s ↔ ∃ (P : Finset ℝ) (𝒥 : Finset (Set ℝ)), (∀ J ∈ 𝒥, IsOpen J ∧ J.OrdConnected) ∧
+s = ↑P ∪ ⋃₀ ↑𝒥` — the docstring equivalence becomes a theorem: tame **is** "finite union of points
+and open intervals" (open + `OrdConnected` = open interval, rays and `univ` included).
+*⇐ (easy):* frontier of an open `OrdConnected` set ⊆ `{sInf s, sSup s}` (junk-value-safe: the
+inclusion holds with ℝ's junk `sInf`/`sSup` since a frontier point of an open interval *is* a
+one-sided bound in closure, hence the genuine `csInf`/`csSup`); points contribute themselves;
+`tame_union` closes.
+*⇒ (the content):* sort the frontier (`Finset.sort`), form the `|F|+1` **gaps** (two rays +
+adjacent-pair `Ioo`s); each gap misses `frontier s`, so `s ∩ gap` is clopen-in-gap and the gap is
+preconnected ⇒ `s ∩ gap = ∅` or the whole gap (the 15-line split lemma); `s` = (its frontier
+points in `s`) ∪ (the full gaps). The grind is the sorted-adjacency cover ("every non-frontier
+point lies in exactly one gap; gaps miss `F`") — mechanical, hand-rolled.
+*Rider (shared machinery):* the **strong** piecewise-monotonicity for nets — `realize1N g` is
+monotone-or-antitone on each gap of one explicit sorted partition — falls out of R2-M + the gap
+enumeration.
+*Falsifier* (`NORMAL_FORM_NEEDS_COMPONENTS`): if sorted-adjacency stalls, ship the ⇐ direction +
+the per-gap split only, and report that ⇒ is where dimension one earns its name.
+
+*Not in R2:* the polynomial strict-monotonicity twin (needs derivative-sign machinery —
+`strictMonoOn_of_deriv_pos` did not surface in the recon grep; name-risk, deferred); anything about
+projection (R3) or the abstract structure (R4).
 
 ## R3 — Projection / quantifier elimination. [FORMALIZABLE-HARD → the real wall]
 

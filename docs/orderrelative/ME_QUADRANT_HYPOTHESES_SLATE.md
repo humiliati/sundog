@@ -2,7 +2,11 @@
 
 *Fresh-hypothesis slate mined from the ORDERRELATIVE lane's banked witness
 (`measurable_ne_enforceable`, `Sundogcert/PercivalTargetCollapse.lean`; OR-3's
-σ_read/σ_write split). Status: **OPENED 2026-07-01. SPEC FOR RED-TEAM, NOTHING RUN.**
+σ_read/σ_write split). Status: **OPENED 2026-07-01 — SLATE COMPLETE 2026-07-02, all
+five entries:** ME-1 census (verb fence fired as registered), ME-2 typing law (every
+enforcer a retreat), ME-3 audit-and-pay (iff at the edge), ME-4 probe-steer
+(`ME4_STEERS`), ME-5 priced quadrant (edge formula = binary-symmetric artifact; price =
+local deficiency). See the entries for receipts, scopes, and live falsifiers.
 Parent: [`../SUNDOG_V_ORDERRELATIVE.md`](../SUNDOG_V_ORDERRELATIVE.md) (post-slate
 follow-on).*
 
@@ -186,6 +190,20 @@ way ("probing is not steering" or "this linear rep steers" both travel).
 model-state cell** — the census deferred chat-v2's regime-2 on the verb fence, and both
 of ME-4's outcomes have pre-registered census placements (`RESISTS` → M∧¬E, `STEERS` →
 M∧E).
+**RESULT (2026-07-02): RUN — `ME4_STEERS`, the pre-registered interp-orthodox branch.**
+Receipt: [`ME4_PROBE_STEER_RESULTS.md`](ME4_PROBE_STEER_RESULTS.md). n = 370
+deduplicated count-ambiguous next-closer positions; G0 = 0.957 (behavior tracks the true
+top); **G1 = 1.000 in every treatment cell** (every write took at the read address);
+`follow_rel` 0.81–1.05 across probe-direction / difference-in-means / donor-transplant
+at L8/L11, controls at 0.01–0.09, rest-NLL ≈ 1.0×. **Census: the model-state row joins
+M∧E (probing IS steering on this substrate); the E∧¬M model-state cell stays
+unoccupied; the M∧¬E "read-but-can't-write" signature did not appear.** Steering price
+≈ 0 (ME-5's column gains its zero anchor — maximal contrast with the target channel's
+edge). Consistent with ME-2 rather than against it: the residual activation is an owned
+NODE in the experimenter's graph, and node-conditions pair reads with writes. Scope:
+existence-tier (one 3-class state, one small model, one corpus); deeper states are
+future rows. Provenance: two runs (run 1 under the query floor; rerun with position
+dedupe — no gate or band changed).
 **SPEC PINNED (2026-07-02):**
 [`ME4_PROBE_STEER_SPEC.md`](ME4_PROBE_STEER_SPEC.md) — full pre-registration: the
 counterfactual is the **one-pop swap** (the alternative unclosed type — the empirical
@@ -212,6 +230,29 @@ entry rides it rather than scheduling new compute).
 in-model/classical reads.
 **Cost:** medium (definitional + the already-registered richer-joint sweep).
 **Shoppable:** medium.
+**RESULT (2026-07-02): RUN — `ME5_EDGE_FORMULA_IS_BINARY_SYMMETRIC_ARTIFACT` +
+`ME5_PRICE_IS_LOCAL_DEFICIENCY`.** Sweep receipt:
+[`ME5_PRICED_QUADRANT_SWEEP.md`](ME5_PRICED_QUADRANT_SWEEP.md) (5,111 joints, four
+families, deterministic); Lean witness: `sundogcert` `Sundogcert/PercivalSynergy.lean`
+(gated, full audit 8578 GREEN). Findings: **(i) the FLOOR theorem held everywhere**
+(price ≥ edge formula, 0/5,111 violations — richer joints only make enforcement MORE
+expensive); **(ii) the reliability-edge formula is exact precisely where it was banked**
+(binary-symmetric CI: 100% exact, price = ρ−β to machine precision) **and even CI alone
+is not enough** — asymmetric-CI fusion breaks it on 30.5% of joints (max +0.107), the
+synergy path grows the error to the maximum **+0.5 at the XOR joint, machine-checked**
+(`synergy_edge_formula_fails`: both single channels individually worthless, edge formula
+0, write-price 1/2 — the case the Blackwell repair was sheathed for, now unsheathed);
+the sweep's λ=1 endpoint reproduces the Lean witness exactly (the anchor gate). **(iii)
+the price survives every family as the LOCAL Bayes-deficiency** (the value gap at the
+operative prior), ≤ the full deficiency always, with equality only where the operative
+problem attains the sup — 43% even on the banked symmetric grid, ~0% on random joints:
+**prices are per-decision-problem, as σ is per-filtration** (the schema pattern, third
+occurrence). Read-price 0 recorded as the in-model replay *premise* with the quantum
+fence — not dressed up as a measurement. **Scope of the caveat-discharge, honest:** this
+retests the PRICE half of S2's richer-joint caveat (the edge-formula/deficiency story);
+the leak-ceiling half (S2.3 reconstruction/incentive-completeness on richer joints)
+remains open and registered. Priced census column added
+([`ME1_QUADRANT_CENSUS.md`](ME1_QUADRANT_CENSUS.md) §4c).
 
 ## Standing residuals this slate inherits (registered, not entries)
 

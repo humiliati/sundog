@@ -117,7 +117,10 @@ row would void the discharge. No such re-annotation is known.
   quantifies over ALL node-writes (input + output surgeries, policy-blind): every
   universal enforcer is a per-`v` retreat (mask or void) and pays ≤ β. The residual
   scope is the model (the binary-symmetric CI cell) and the node-typing premise — no
-  longer the family.
+  longer the family. **PRICE half of the richer-joint caveat retested (ME-5,
+  2026-07-02):** on richer joints the ∞ stands and the *price* only grows — the edge
+  formula is a floor (0/5,111 violations; synergy witness machine-checked at +0.5); the
+  leak-ceiling half (S2.3) of the caveat remains open.
 - The Θ(M) rung is the S3 shared-regime model; the per-knight court is arity-1
   (S3.3 — the fork variable is the reward's aggregation structure).
 - σ_read values are in-model (the computed toys expose `c`; real-world read orders are

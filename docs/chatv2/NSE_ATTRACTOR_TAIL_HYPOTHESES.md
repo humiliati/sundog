@@ -429,7 +429,13 @@ empirics on this cell).
 > surface family is hereby re-registered as **SNR-aware** (declared observation-
 > noise model or quantized readouts) with label frequencies inside the window
 > grid, per the receipt's consequence block — the sequencing this entry existed
-> to provide.
+> to provide. **Lean shim LANDED 2026-07-02:**
+> `sundogcert/Sundogcert/AveragingDecodability.lean` (axiom-clean, gated, build
+> 8577 GREEN) pins both halves — the amplitude typing packaged from in-tree
+> (`averaging_types_shadows`) and the receipt's finding as a theorem
+> (`amplitude_washes_readout_does_not`: the Debye–Waller factor is never zero at
+> finite spread yet → 0, so nonzero attenuation preserves exact decodability and
+> wash-out is a limit/noise-floor phenomenon).
 
 ---
 
