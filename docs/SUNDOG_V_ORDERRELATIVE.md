@@ -5,13 +5,16 @@
 ([`SUFFICIENT_STAT_ORDER_SLATE.md`](SUFFICIENT_STAT_ORDER_SLATE.md)), promoted to a named
 roadmap and pointed at the two laws the Percival reopen handed it on 2026-07-01.*
 
-Status: **OPENED 2026-07-01. SHARPENED same day by a five-mark critical pass (integrated
-at owner direction); OR-5 RUN + CONFIRMED (`OR5_SOVOPT_CONTROL_SIDE_CONFIRMED`), OR-1
-LANDED machine-checked (`keyed_margin_law`, recoding degeneracy refuted incl. affine),
-OR-2 LANDED with the same-lemma fence PASSED (`keyed_boundary_instance` — spine 1's
-verdict is in), and OR-3 RUN (`OR3_BRIDGE_CONFIRMED_SHARPENED` — write tiers derived,
-enforce ≠ determine, measurable ≠ enforceable banked, the enforce-order ladder graded) —
-all the same day; see the entries. Remaining: OR-4 / OR-6, SPEC not run.** The pass: the
+Status: **OPENED 2026-07-01 — and the SLATE COMPLETED the same day, all six entries.**
+Sharpened by a five-mark critical pass (integrated at owner direction); then: OR-5 RUN +
+CONFIRMED (`OR5_SOVOPT_CONTROL_SIDE_CONFIRMED`); OR-1 LANDED machine-checked
+(`keyed_margin_law`, recoding degeneracy refuted incl. affine); OR-2 LANDED with the
+same-lemma fence PASSED (`keyed_boundary_instance` — spine 1's verdict is in); OR-3 RUN
+(`OR3_BRIDGE_CONFIRMED_SHARPENED` — write tiers derived, enforce ≠ determine,
+measurable ≠ enforceable banked, the enforce-order ladder graded); OR-4 LANDED
+(`measurable_ne_enforceable` — the ∞ cell, Blackwell repair sheathed); OR-6 LANDED
+(`stackTop_resists_every_window` — σ_surface = ∞ at every window). Full audit 8573
+GREEN; see the entries for receipts, scopes, and live falsifiers. The pass: the
 overseer
 filtration split into read/write halves and the bridge restated on WRITE (mark 1 — OR-3
 recut, a pre-run witness banked); OR-1 recut from bare composability to the **margin
@@ -333,6 +336,22 @@ either outcome is a deliverable.
 **Cost:** low-medium (the anchor was already registered as a Lean candidate in S2).
 **Shoppable:** medium — it is the standalone machine-checked statement "in-channel target
 enforcement collapses to masking," independent of the Grail frame.
+**RESULT (2026-07-01): LANDED (machine-checked) — the write-side ∞ cell is banked and
+the Blackwell repair stays SHEATHED.** `sundogcert` `Sundogcert/PercivalTargetCollapse.lean`
+— gated, axiom-clean, full audit 8573 GREEN. In S2's exact 2×2×2 CI model (`comp` = the
+explicit eight-cell rational sum): `dou_invariant_factors` (do(U)-invariance factors
+through V — axiom-FREE, constructive), `dou_comp_le_beta` (**the collapse**: every policy
+at the target safe point has competence ≤ β), `followU_comp` (the U-follower collects
+exactly ρ), `target_write_resists` (**the priced write**: every safe-point policy sits
+≥ ρ − β below the U-optimum — the reliability edge, carried *exactly*),
+`dependsU_probe` (**the read side**: named-variable dependence decided by the four-entry
+interventional probe table), and `measurable_ne_enforceable` — the OR-3 witness as one
+packaged Lean statement (readable dependence ∧ edge-priced writes ∧ positive edge).
+**Repair disposition:** the pre-registered falsifier ("bare factorization cannot express
+the price term") did NOT fire at this tier — the finite cell expresses `ρ − β` exactly,
+so the Blackwell-order enrichment stays sheathed, pre-registered for richer joints (where
+S2's binary-symmetric caveat lives). Scope: named-variable dependence only (S2.3's
+content-level split not modeled); single-agent; exact ℚ probabilities.
 
 ### OR-6 — σ_surface grading, w ≥ 2 *(fill; imported from the R2 arc; the 8th filtration hardened)*
 **Claim:** σ_surface(stack-top) = ∞ — for **every** window `w`, there is a witness pair of
@@ -345,6 +364,21 @@ conjectured-∞ hook the `SurfaceBag` module and the schema addendum both flag a
 **Cost:** low (a `SurfaceBag` extension in the same idiom). **Shoppable:** medium —
 hardens the 8th filtration and the R2 state-tracking story ("stack-top is undecodable at
 any window, not just for bags").
+**RESULT (2026-07-01): LANDED (machine-checked) — σ_surface(stack-top) = ∞ at every
+window order.** `sundogcert` `Sundogcert/SurfaceBagGraded.lean` — gated, axiom-clean,
+full audit 8573 GREEN. `stackTop_resists_every_window : ∀ w, ¬ WindowSufficient w
+stackTop`, where `WindowSufficient` is the graded `BagSufficient` (equal counts of every
+substring of length ≤ w on valid prefixes force the label). **The prior's "mechanical"
+was optimistic and the recorded honest note matters:** naive padding fails — equal
+{1,2}-gram counts already *determine a string's last letter* (a degree argument), so
+witnesses must differ at the stack-top while agreeing on all endpoints; the construction
+that works is the **context-swap family** `P ( P [ P` vs `P [ P ( P` (P = w+1 balanced
+pairs — the swapped openers sit in identical length-(2w+2) contexts, one period apart,
+with the gap exceeding every window) plus a **position involution** (`sigma`,
+`window_swap`, `wcount_eq` via `Finset.card_bij'`) transporting every ≤w-gram count.
+Closes `SurfaceBag`'s fence hook and the σ-slate addendum's conjecture (both updated);
+the R2 state-tracking claim upgrades from "undecodable for bags" to "undecodable at
+every finite window."
 
 ---
 

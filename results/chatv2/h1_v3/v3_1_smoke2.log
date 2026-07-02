@@ -17,3 +17,25 @@ H1_V3_1_ADMISSION  Qwen/Qwen2.5-1.5B  A1 battery  [NON-PROMOTIONAL, GATE RUNG]
 (extract) Qwen2.5-1.5B / rand ...
     (cache) signature mismatch - re-extracting
     ... 160/200 (0.4 inst/s, ~2 min left)
+    occ.c2 n=  47 surf=0.631 orig=0.5333 rand=0.4 shuf=0.3333 m={'vs_surface': -0.0976, 'vs_randinit': 0.1333, 'shuffle_drop': 0.2} no_cross
+    occ.c7 n=  57 surf=0.649 orig=0.3889 rand=0.3889 shuf=0.4444 m={'vs_surface': -0.2597, 'vs_randinit': 0.0, 'shuffle_drop': -0.0555} no_cross
+      w.f1 n= 149 surf=0.887 orig=0.6 rand=0.6222 shuf=0.5111 m={'vs_surface': -0.2875, 'vs_randinit': -0.0222, 'shuffle_drop': 0.0889} no_cross
+    occ.f1 n= 149 surf=0.898 orig=0.6 rand=0.6222 shuf=0.5111 m={'vs_surface': -0.2979, 'vs_randinit': -0.0222, 'shuffle_drop': 0.0889} no_cross
+      w.c2 n=  47 surf=0.691 orig=0.5333 rand=0.5333 shuf=0.4667 m={'vs_surface': -0.158, 'vs_randinit': 0.0, 'shuffle_drop': 0.0666} no_cross
+      b.g7 n=  47 surf=0.674 orig=0.4667 rand=0.4 shuf=0.3333 m={'vs_surface': -0.2074, 'vs_randinit': 0.0667, 'shuffle_drop': 0.1334} no_cross
+    occ.d2 n= 108 surf=0.721 orig=0.5455 rand=0.5152 shuf=0.4848 m={'vs_surface': -0.175, 'vs_randinit': 0.0303, 'shuffle_drop': 0.0607} no_cross
+    occ.g7 n=  47 surf=0.659 orig=0.4667 rand=0.4 shuf=0.3333 m={'vs_surface': -0.1926, 'vs_randinit': 0.0667, 'shuffle_drop': 0.1334} no_cross
+      b.c7 n=  57 surf=0.669 orig=0.3889 rand=0.4444 shuf=0.4444 m={'vs_surface': -0.28, 'vs_randinit': -0.0555, 'shuffle_drop': -0.0555} no_cross
+    occ.b7 n=  58 surf=0.712 orig=0.3889 rand=0.7222 shuf=0.4444 m={'vs_surface': -0.3228, 'vs_randinit': -0.3333, 'shuffle_drop': -0.0555} no_cross
+    occ.d7 n= 128 surf=0.771 orig=0.6667 rand=0.5641 shuf=0.5385 m={'vs_surface': -0.104, 'vs_randinit': 0.1026, 'shuffle_drop': 0.1282} no_cross
+      b.d8 n=  76 surf=0.713 orig=0.3043 rand=0.4348 shuf=0.4783 m={'vs_surface': -0.4088, 'vs_randinit': -0.1305, 'shuffle_drop': -0.174} no_cross
+    occ.d8 n=  76 surf=0.713 orig=0.3043 rand=0.4348 shuf=0.4783 m={'vs_surface': -0.4088, 'vs_randinit': -0.1305, 'shuffle_drop': -0.174} no_cross
+      w.d2 n= 108 surf=0.729 orig=0.6061 rand=0.5455 shuf=0.5455 m={'vs_surface': -0.123, 'vs_randinit': 0.0606, 'shuffle_drop': 0.0606} no_cross
+      b.b7 n=  58 surf=0.706 orig=0.3889 rand=0.7222 shuf=0.4444 m={'vs_surface': -0.3166, 'vs_randinit': -0.3333, 'shuffle_drop': -0.0555} no_cross
+      b.d7 n= 128 surf=0.779 orig=0.6667 rand=0.5641 shuf=0.5385 m={'vs_surface': -0.112, 'vs_randinit': 0.1026, 'shuffle_drop': 0.1282} no_cross
+    occ.e2 n= 115 surf=0.715 orig=0.5429 rand=0.5429 shuf=0.4571 m={'vs_surface': -0.1718, 'vs_randinit': 0.0, 'shuffle_drop': 0.0858} no_cross
+
+(result) 0/17 axes cross; blockers {'surface': 17, 'floor': 0, 'shuffle': 0}
+(wrote) C:\Users\hughe\Dev\sundog\scripts\..\results\chatv2\h1_v3\v3_1_admission_Qwen2.5-1.5B_smoke.json
+VERDICT: INCONCLUSIVE - only 17 axes measured (<20; thin subsample or smoke caps); no gate branch issued
+  (Non-promotional. No R2 claim; V3-2 + external review remain gated.)

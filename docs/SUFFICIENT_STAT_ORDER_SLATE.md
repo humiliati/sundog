@@ -281,7 +281,10 @@ different top), packaged as `bag_determines_depth_not_stackTop`. Notes that keep
 honest: (a) this resist is **information-theoretic** — the witness defeats *any* readout of the
 bag, unlike the probe suite's *linear* ceilings (count-parity is the separating case: a
 *nonlinear function of the bag*, so σ_surface = 1 yet linear-probe-invisible); (b) only w = 1 is
-machine-checked — σ_surface(stack-top) = ∞ is conjectured, w ≥ 2 unformalized; (c) per the H1
+machine-checked — ~~σ_surface(stack-top) = ∞ is conjectured, w ≥ 2 unformalized~~ **CLOSED
+2026-07-01 (OR-6): σ_surface(stack-top) = ∞ is machine-checked at EVERY window order**
+(`sundogcert/Sundogcert/SurfaceBagGraded.lean`, `stackTop_resists_every_window` — the
+context-swap witness family `P(P[P` vs `P[P(P` with a position involution); (c) per the H1
 law, σ_surface is *another* per-filtration order, not the universal scalar. Empirical partner:
 the H2 stack-top probe (GPT-2 residual holds 0.931 where counts collapse 0.770 at
 count-ambiguous positions) — the determine/resist crossover measured on a real substrate.

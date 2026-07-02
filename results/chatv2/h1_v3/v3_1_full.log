@@ -1,0 +1,23 @@
+H1_V3_1_ADMISSION  Qwen/Qwen2.5-1.5B  A1 battery  [NON-PROMOTIONAL, GATE RUNG]
+
+(manifest) 29 axes; marker ply 40
+(chess) shard columns: ['Event', 'Site', 'White', 'Black', 'Result', 'WhiteTitle', 'BlackTitle', 'WhiteElo', 'BlackElo', 'WhiteRatingDiff']... using 'movetext'; 121332 games
+(chess) 2600 games with >=28 plies loaded
+(data) 2110 unique slice instances; cache sig 0ad0d983e469b25f
+(layers) hidden-state indices [9, 19, 28] (validation-chosen per axis)
+(extract) Qwen2.5-1.5B / orig ...
+    (cache) signature mismatch - re-extracting
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights:   0%|          | 1/338 [00:01<09:31,  1.70s/it]Loading weights:  51%|#####     | 171/338 [00:02<00:01, 112.55it/s]Loading weights:  60%|#####9    | 202/338 [00:02<00:01, 89.66it/s] Loading weights:  65%|######5   | 221/338 [00:03<00:01, 77.11it/s]Loading weights:  70%|######9   | 235/338 [00:03<00:01, 65.48it/s]Loading weights:  72%|#######2  | 245/338 [00:03<00:01, 54.42it/s]Loading weights:  75%|#######5  | 255/338 [00:04<00:01, 48.14it/s]Loading weights:  79%|#######8  | 267/338 [00:04<00:01, 48.09it/s]Loading weights:  81%|########  | 273/338 [00:04<00:01, 49.27it/s]Loading weights:  83%|########2 | 279/338 [00:04<00:01, 37.83it/s]Loading weights:  86%|########6 | 291/338 [00:05<00:01, 33.97it/s]Loading weights:  87%|########7 | 295/338 [00:05<00:01, 33.39it/s]Loading weights:  90%|########9 | 303/338 [00:05<00:01, 30.10it/s]Loading weights:  91%|######### | 307/338 [00:06<00:01, 27.87it/s]Loading weights:  93%|#########3| 316/338 [00:06<00:00, 33.70it/s]Loading weights:  97%|#########6| 327/338 [00:06<00:00, 32.47it/s]Loading weights: 100%|##########| 338/338 [00:06<00:00, 51.13it/s]
+    ... 320/2110 (10.0 inst/s, ~3 min left)
+    ... 640/2110 (10.3 inst/s, ~2 min left)
+    ... 960/2110 (10.4 inst/s, ~2 min left)
+    ... 1280/2110 (10.4 inst/s, ~1 min left)
+    ... 1600/2110 (10.4 inst/s, ~1 min left)
+    ... 1920/2110 (10.4 inst/s, ~0 min left)
+(extract) Qwen2.5-1.5B / shuf ...
+    (cache) signature mismatch - re-extracting
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights:   0%|          | 1/338 [00:01<08:30,  1.51s/it]Loading weights:  54%|#####4    | 183/338 [00:01<00:01, 150.98it/s]Loading weights:  75%|#######5  | 255/338 [00:02<00:00, 136.06it/s]Loading weights:  89%|########8 | 300/338 [00:03<00:00, 68.66it/s] Loading weights: 100%|##########| 338/338 [00:03<00:00, 85.38it/s]
+    ... 320/2110 (8.0 inst/s, ~4 min left)
+    ... 640/2110 (8.2 inst/s, ~3 min left)
+    ... 960/2110 (8.3 inst/s, ~2 min left)
+    ... 1280/2110 (6.3 inst/s, ~2 min left)
