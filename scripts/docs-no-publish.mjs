@@ -42,6 +42,12 @@ export const DOCS_NO_PUBLISH = new Set([
   // content, and over Cloudflare Pages' 25 MiB per-file limit — it hard-blocks
   // every deploy. Withheld 2026-06-11.
   "lattice/Soduko-Extreme",
+  // Percival B2 gamma-provenance (spec + receipt): registered PRIVATE at
+  // pre-registration (structural characterization only; must not be read as a
+  // measured real-base claim). Withheld 2026-07-01 per the lane's claim-boundary
+  // discipline and the promo handoff's hard fence #3.
+  "percival/PERCIVAL_B2_GAMMA_PROVENANCE_SPEC.md",
+  "percival/PERCIVAL_B2_GAMMA_PROVENANCE_RESULTS.md",
 ]);
 
 // True when a doc path (with or without a leading "docs/" or "/docs/")

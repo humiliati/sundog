@@ -456,6 +456,50 @@ def viz_algo_approx_ledger() -> str:
     return "\n  ".join(parts)
 
 
+def viz_quantilizing() -> str:
+    """Quantilizing OG card: step-function reward with a cliff + best-quantilizer-is-untilted-base caption. In-vitro fence visible."""
+    parts = []
+    # Outer paper card (very slight rotation so it reads as document-on-desk)
+    parts.append('<g filter="url(#cardShadow)">')
+    parts.append('  <rect x="660" y="125" width="490" height="395" rx="6" fill="#F5EFE0" stroke="#8C6F3A" stroke-width="2" transform="rotate(-0.6 905 322)"/>')
+    parts.append('</g>')
+    # Eyebrow line (document heading)
+    parts.append('<text x="905" y="160" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" letter-spacing="2.5" fill="#684811" text-anchor="middle">WHEN QUANTILIZING HURTS &#183; MACHINE-CHECKED</text>')
+    parts.append('<line x1="700" y1="176" x2="1110" y2="176" stroke="#8C6F3A" stroke-width="1" stroke-dasharray="3 5" opacity="0.6"/>')
+    # Chart area: x in [720, 1090], y in [200, 340]; step-function reward with a cliff at c*
+    parts.append('<line x1="720" y1="340" x2="1090" y2="340" stroke="#5A6772" stroke-width="1.2"/>')
+    parts.append('<line x1="720" y1="200" x2="720" y2="340" stroke="#5A6772" stroke-width="1.2"/>')
+    parts.append('<text x="720" y="196" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="10" fill="#5A6772" text-anchor="middle">R(c)</text>')
+    parts.append('<text x="1100" y="343" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="10" fill="#5A6772">c</text>')
+    # Reward curve: honored plateau, cliff, disgraced plateau
+    parts.append('<polyline points="720,225 900,225 900,320 1090,320" fill="none" stroke="#1A3A52" stroke-width="2.6"/>')
+    # Cliff marker
+    parts.append('<line x1="900" y1="200" x2="900" y2="340" stroke="#B53A2C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.7"/>')
+    parts.append('<text x="900" y="355" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="10" font-weight="700" fill="#B53A2C" text-anchor="middle">c*</text>')
+    parts.append('<text x="900" y="368" font-family="Verdana, Geneva, sans-serif" font-size="8" font-weight="700" letter-spacing="0.6" fill="#B53A2C" text-anchor="middle">CLIFF (emergent, Morris&#8211;Shin)</text>')
+    # q=1 marker on honored plateau
+    parts.append('<circle cx="780" cy="225" r="6" fill="#1A7A3A" stroke="#FFFFFF" stroke-width="1.5"/>')
+    parts.append('<text x="778" y="215" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="10" font-weight="800" fill="#1A7A3A" text-anchor="middle">q=1</text>')
+    # q<1 upper-tail arrow tipping past the cliff
+    parts.append('<g stroke="#B53A2C" stroke-width="1.8" fill="none">')
+    parts.append('  <line x1="820" y1="205" x2="960" y2="205"/>')
+    parts.append('  <polyline points="953,199 963,205 953,211"/>')
+    parts.append('</g>')
+    parts.append('<text x="890" y="197" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="9" font-weight="700" fill="#B53A2C" text-anchor="middle">q&lt;1 tail &#8594; past cliff</text>')
+    # Payload caption
+    parts.append('<line x1="700" y1="385" x2="1110" y2="385" stroke="#CFD8DC" stroke-width="1"/>')
+    parts.append('<text x="905" y="407" font-family="Georgia, serif" font-size="18" font-weight="700" font-style="italic" fill="#1A3A52" text-anchor="middle">The best q-quantilizer is the untilted base.</text>')
+    parts.append('<text x="905" y="428" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="700" letter-spacing="1.4" fill="#40505C" text-anchor="middle">ON REWARDS NONINCREASING IN PROXY-PRESSURE</text>')
+    # Receipts badge
+    parts.append('<g transform="translate(700,450)" filter="url(#cardShadow)">')
+    parts.append('  <rect x="0" y="0" width="410" height="20" rx="10" fill="#FFFFFF" stroke="#1A3A52" stroke-width="1.4"/>')
+    parts.append('  <text x="205" y="14" font-family="Verdana, Geneva, sans-serif" font-size="9" font-weight="800" letter-spacing="1.2" fill="#1A3A52" text-anchor="middle">LEAN-CHECKED (finite uniform) &#183; 10.5K FALSIFIER HUNT</text>')
+    parts.append('</g>')
+    # In-vitro fence line (hard-fences discipline)
+    parts.append('<text x="905" y="497" font-family="Verdana, Geneva, sans-serif" font-size="9" font-weight="800" letter-spacing="1.5" fill="#5A2A22" text-anchor="middle">IN-VITRO TOY-TIER &#183; NO FOUNDATION-MODEL CLAIM</text>')
+    return "\n  ".join(parts)
+
+
 CARDS = {
     "index": {
         "filename": "home.png",
@@ -585,6 +629,18 @@ CARDS = {
         ],
         "url": "sundog.cc/algorithmic-approximation",
         "viz": viz_algo_approx_ledger,
+    },
+    "quantilizing": {
+        "filename": "quantilizing.png",
+        "eyebrow": "SUNDOG · ALIGNMENT NOTE",
+        "headline": ["When", "quantilizing", "hurts."],
+        "lede": [
+            "On rewards nonincreasing",
+            "in proxy-pressure —",
+            "the untilted base wins.",
+        ],
+        "url": "sundog.cc/quantilizing",
+        "viz": viz_quantilizing,
     },
 }
 

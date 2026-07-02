@@ -119,7 +119,7 @@ text.**
 
 | hook | promise | risk | testable-now? | status |
 | --- | --- | --- | --- | --- |
-| H1 world/entity-state | high | medium | partial (V3-0c CPU bank freeze) | **V3-0 RUN 2026-07-01 — F3 both corpora** (code `F3-V3/copy`; chess `F3-V3/input`). **V3-0b RUN → `F3-V3b/input`**: ambiguity slices collapsed readability 0.95→~0.65 but 28/29 axes still exceeded the absolute 0.60 ceiling; ambiguous fibers are not uniform. Active fork: **V3-0c crossover-form gate frozen** in `H1_V3_0C_CROSSOVER_SPEC.md` (`acc_model >= surface_max + 0.15` and `>= randinit + 0.15`; `>=20` crossing axes; claim = "reads state better than the registered surface statistic allows"). |
+| H1 world/entity-state | high | medium | active V3-0.5 calibration | **V3-0 RUN — F3 both corpora** (code `F3-V3/copy`; chess `F3-V3/input`). **V3-0b RUN → `F3-V3b/input`**. **V3-0c RUN → `F3-V3c/witness`**: bank formed cleanly, but witness certification was unavailable at bank scale. **A1 adopted:** existing 29-axis bank is `H1-V3-A1-DATA-ADMIT`; next rung is GPT-2 calibration with surface +0.15, random-init +0.15, and order-shuffle drop ≥0.10. |
 | **H2 stack-top / Dyck** | **high** | **low** | **yes (CPU, GPT-2 + code)** | **CONFIRMED (existence) 2026-07-01** — see result below |
 | H3 cumulative/toggled | medium | medium | partial (bigger model) | PROPOSED |
 | H4 binding under attractors | medium | medium | partial | PROPOSED |

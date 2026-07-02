@@ -1620,7 +1620,7 @@
     "LR-meta": 0.5432
    },
    "surface_max": 0.679,
-   "n_witness": 1,
+   "n_witness": 0,
    "gids": [
     2,
     11,
@@ -1891,7 +1891,7 @@
     2589,
     2592
    ],
-   "in_bank": true
+   "in_bank": false
   },
   {
    "axis": "occ.c7",
@@ -1906,7 +1906,7 @@
     "LR-meta": 0.5203
    },
    "surface_max": 0.6486,
-   "n_witness": 1,
+   "n_witness": 0,
    "gids": [
     14,
     20,
@@ -2402,7 +2402,7 @@
     2590,
     2591
    ],
-   "in_bank": true
+   "in_bank": false
   },
   {
    "axis": "occ.g2",
@@ -2417,7 +2417,7 @@
     "LR-meta": 0.5208
    },
    "surface_max": 0.6667,
-   "n_witness": 1,
+   "n_witness": 0,
    "gids": [
     2,
     11,
@@ -2738,7 +2738,7 @@
     2597,
     2599
    ],
-   "in_bank": true
+   "in_bank": false
   },
   {
    "axis": "w.f1",
@@ -6927,7 +6927,7 @@
     "LR-meta": 0.4359
    },
    "surface_max": 0.5897,
-   "n_witness": 3,
+   "n_witness": 1,
    "gids": [
     5,
     10,
@@ -9177,7 +9177,7 @@
     "LR-meta": 0.5473
    },
    "surface_max": 0.6689,
-   "n_witness": 3,
+   "n_witness": 1,
    "gids": [
     14,
     20,
@@ -9688,7 +9688,7 @@
     "LR-meta": 0.5583
    },
    "surface_max": 0.7117,
-   "n_witness": 3,
+   "n_witness": 1,
    "gids": [
     3,
     14,
@@ -14300,7 +14300,7 @@
     "LR-meta": 0.5926
    },
    "surface_max": 0.6914,
-   "n_witness": 3,
+   "n_witness": 1,
    "gids": [
     2,
     11,
@@ -14586,7 +14586,7 @@
     "LR-meta": 0.5767
    },
    "surface_max": 0.7055,
-   "n_witness": 2,
+   "n_witness": 1,
    "gids": [
     3,
     14,

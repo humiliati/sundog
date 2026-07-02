@@ -11,9 +11,12 @@
 > `F3-V3/copy` for code and `F3-V3/input` for chess in
 > `H1_V3_0_DATA_ADMISSION_RECEIPT.md`; the ambiguity-slice admission then filed
 > `F3-V3b/input` in `H1_V3_0B_SLICE_ADMISSION_RECEIPT.md`. The active amendment
-> is now `H1_V3_0C_CROSSOVER_SPEC.md`: the absolute surface ceiling is superseded
-> by a crossover-form gate, with claim language locked to "reads state better than
-> the registered surface statistic allows."
+> `H1_V3_0C_CROSSOVER_SPEC.md` filed `F3-V3c/witness` in
+> `H1_V3_0C_BANK_RECEIPT.md`: the bank and frozen surface baselines formed, but
+> per-axis witness certification is unavailable at bank scale. A1 order-shuffle
+> control is now adopted in `H1_V3_A1_ORDER_SHUFFLE_CONTROL_SPEC.md`; the existing
+> 29-axis bank is `H1-V3-A1-DATA-ADMIT`, and V3-0.5 GPT-2 calibration is the active
+> next step.
 
 ## 0. Original V3-0 fork calls
 
@@ -32,7 +35,8 @@ After V3-0, `H1_V3_0B_AMBIGUITY_SLICE_SPEC.md` amended this ordering: chess beca
 the primary V3-0b arm, and code became optional behind a hard corpus-expansion
 floor. After V3-0b missed, `H1_V3_0C_CROSSOVER_SPEC.md` keeps the chess slice
 construction but replaces the absolute `<= 0.60` ceiling with the registered
-crossover margins.
+crossover margins. V3-0c then missed on witness-certificate availability, not on
+bank formation.
 
 ## 1. Delivery gate, with the H5 upgrade
 
@@ -52,10 +56,11 @@ The original V3-0/V3-0b gate asked for a state bank with all of:
 - **external review:** no R2 promotion without mech-interp review.
 
 The first two bullets were the V3-0/V3-0b absolute data gates, and V3-0b missed
-them. V3-0c keeps witness-certified non-bag-function axes and freezes the
-registered surface baseline on CPU, but moves the decisive model question to the
-crossover form: `acc_model >= surface_max + 0.15` and
-`acc_model >= acc_randinit + 0.15`.
+them. V3-0c kept the frozen surface-baseline half and tried to gate on
+witness-certified non-bag-function axes; it missed because the witness
+certificate is not available at bank scale. A1 moves that loophole control to
+model-time order shuffling: crossing axes must also satisfy
+`acc_orig - acc_shuffle >= 0.10`.
 
 ## 2. Surface criterion
 
@@ -230,9 +235,10 @@ mechanical annotation path.
 | --- | --- | --- | --- |
 | **V3-0 data admission** | CPU now | mine corpus, build bank, run balance plus H5-upgraded surface suite | `>=24` surviving axes, else `F3-V3/input` |
 | **V3-0b ambiguity-slice admission** | CPU now | define axes on count-ambiguous slices; bounded witness search; slice-conditioned probes | `>=24` surviving axes, else `F3-V3b/*` |
-| **V3-0c bank freeze** | CPU now | repair witnesses, freeze slice bank and `surface_max` baselines | `>=24` axes with witnesses, else `F3-V3c/*` |
-| **V3-0.5 calibration** | CPU, cheap | H2-style crossover probe on GPT-2-small | non-gate expectation anchor |
-| **V3-1 1B admission** | CPU-lite / local 1080 / GPU | Qwen2.5-1.5B or OLMo-2-1B, random-init floor, validation-only layer choice | `>=20` axes crossing both +0.15 margins, else `F2/F4-V3c/*` |
+| **V3-0c bank freeze** | CPU now | repair witnesses, freeze slice bank and `surface_max` baselines | filed `F3-V3c/witness`; A1 supersedes witness gate |
+| **A1 data admit** | filed | adopt order-shuffle control; witnesses report-only | `H1-V3-A1-DATA-ADMIT` on existing 29-axis bank |
+| **V3-0.5 calibration** | CPU, cheap | GPT-2 crossover + random-init + order-shuffle readout | non-gate expectation anchor |
+| **V3-1 1B admission** | CPU-lite / local 1080 / GPU | Qwen2.5-1.5B or OLMo-2-1B, random-init floor, validation-only layer choice, A1 shuffle | `>=20` axes crossing all A1 margins, else `F2/F4/F5-V3a1/*` |
 | **V3-2 full fingerprint** | GPU | complete R2 battery plus external review packet | only rung that can move `PROMOTE_GATE.md` R2 |
 
 ## 7. V3-0 data admission
@@ -311,21 +317,23 @@ Reuse/piggyback:
 
 Admission thresholds:
 
-- at least 24 admitted axes from V3-0c;
+- at least 24 admitted axes from A1 data admit;
 - layer chosen on validation only from the frozen layer set;
 - at least 20 axes with `acc_model >= surface_max + 0.15`;
 - the same axes also satisfy `acc_model >= acc_randinit + 0.15`;
+- the same axes satisfy `acc_model - acc_shuffle >= 0.10`;
 - one pre-registered decision selector reaches `z1_acc >= 0.70`.
 
 Branches:
 
 | branch | meaning |
 | --- | --- |
-| `H1-V3-1-CROSS-ADMIT` | 1B-scale model crosses both margins on at least 20 axes |
-| `F2-V3c/carry` | model does not cross the frozen surface baseline |
-| `F2-V3c/control` | no compact control shadow |
-| `F4-V3c/floor` | random-init floor explains the apparent carry |
-| `F6-V3c/compute` | local/H200 route cannot run the registered measurement cleanly |
+| `H1-V3-1-A1-ADMIT` | 1B-scale model crosses surface, floor, and shuffle gates on at least 20 axes |
+| `F2-V3a1/carry` | model does not cross the frozen surface baseline |
+| `F2-V3a1/control` | no compact control shadow |
+| `F4-V3a1/floor` | random-init floor explains the apparent carry |
+| `F5-V3a1/shuffle` | order-shuffle accuracy survives; signal is bag-like or not order-state |
+| `F6-V3a1/compute` | local/H200 route cannot run the registered measurement cleanly |
 
 ## 10. V3-2 full fingerprint
 
@@ -352,11 +360,10 @@ Only V3-2 plus external review can alter the R2 row in `PROMOTE_GATE.md`.
 
 1. V3-0 is complete: see `H1_V3_0_DATA_ADMISSION_RECEIPT.md`.
 2. V3-0b is complete: see `H1_V3_0B_SLICE_ADMISSION_RECEIPT.md`.
-3. Run V3-0c per `H1_V3_0C_CROSSOVER_SPEC.md` to freeze the bank, witness panels,
-   and `surface_max` baselines.
-4. If and only if V3-0c admits a bank, run V3-0.5 GPT-2 calibration in crossover
-   form.
-5. Stage V3-1 command lines with local CPU/1080 first, H200 second.
+3. V3-0c is complete: see `H1_V3_0C_BANK_RECEIPT.md`.
+4. A1 is adopted: see `H1_V3_A1_ORDER_SHUFFLE_CONTROL_SPEC.md`.
+5. Build/run `scripts/chatv2_h1_v3_gpt2_calibration.py`, then file
+   `H1_V3_0_5_GPT2_CALIBRATION_RECEIPT.md`.
 
 This is not the same trap repeated. The failed R2 families were functions of
 surface counts or local triggers. H1 asks for high-dimensional **state**, and

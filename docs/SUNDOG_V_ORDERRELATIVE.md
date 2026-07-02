@@ -6,9 +6,10 @@
 roadmap and pointed at the two laws the Percival reopen handed it on 2026-07-01.*
 
 Status: **OPENED 2026-07-01. SHARPENED same day by a five-mark critical pass (integrated
-at owner direction); first rung OR-5 RUN + CONFIRMED same day
-(`OR5_SOVOPT_CONTROL_SIDE_CONFIRMED` — see the entry). Remaining entries: SPEC, not
-run.** The pass: the overseer
+at owner direction); OR-5 RUN + CONFIRMED (`OR5_SOVOPT_CONTROL_SIDE_CONFIRMED`) and OR-1
+LANDED machine-checked (`keyed_margin_law`, recoding degeneracy refuted incl. affine) the
+same day — see the entries. Remaining: OR-2 / OR-3 / OR-4 / OR-6, SPEC not run.** The
+pass: the overseer
 filtration split into read/write halves and the bridge restated on WRITE (mark 1 — OR-3
 recut, a pre-run witness banked); OR-1 recut from bare composability to the **margin
 law** (mark 2); OR-2's candidate structures **pre-registered** so the same-lemma fence is
@@ -178,6 +179,34 @@ margin-additivity survives the recoding attack when stated formally.
 banked). **Shoppable:** yes — "safety margins add across agents for caps and cliff for
 outcome-keyed guarantees" is quotable, non-literary, and — unlike the bare-composability
 version — *decidable*.
+**RESULT (2026-07-01): LANDED (machine-checked) — the margin law holds and the
+margin-recoding degeneracy is refuted, including the affine dodge.**
+`sundogcert` `Sundogcert/PercivalKeyedMargin.lean` — axiom-clean, gated in
+`AxiomAudit.lean`, full audit 8570 GREEN. Cap side: `cap_bound_additive` (composed bound
+sound at the sum of per-agent caps), `cap_bound_tight` (achieved — so the composed bound
+is *exactly* additive, each agent's marginal exactly its own cap),
+`cap_marginal_profile_independent` (one agent's swap moves the aggregate by exactly
+`x − y` at every co-agent profile — linear, interaction-free). Court side:
+`pivotal_threshold` + `coalition_flips` (the division-free S3.1/S3.2 algebra — `M*` and
+`f*` pinned as inequalities), `court_not_product` (the 2-agent near-definitional anchor,
+kept shallow per the marks), and the headline **`court_value_not_additive`**: for NO
+per-agent recoding `g` and NO affine offset `β` is the court's value
+`β + Σ g(c_m)` over `(m+1)`-agent profiles — a three-profile pigeonhole (all-courting and
+one-purifier force `g(c_γ) = g(0)`; all-pure then demands `0 = 1`). Packaged as
+`keyed_margin_law` (exactly-additive cap ∧ additively-unrepresentable court, one
+statement, shared parameters). **Falsifier disposition:** primary (margin-recoding)
+refuted at the value level including affine offsets; secondary (cap fails additivity)
+refuted by sound + tight. **Recorded residuals (honest):** (a) per-*position* recodings
+`g_i` are not formalized — the same pigeonhole extends by summing the one-purifier
+equations over positions; registered, not claimed; (b) the refutation targets the
+guarantee *value* — the pre-readout aggregate is itself additive, so the cliff provably
+enters at the threshold **readout** (mark 3's locus, now machine-visible), which is
+exactly OR-2's entry point; (c) 1-D/ℚ aggregation skeleton, no court dynamics — the
+computed side remains the banked S3 receipts (caps 0/2583 linear, `f* ≈ 0.286`).
+**OR-2 is now concretely staged:** cap margins live in `(ℚ≥0, +)` via
+`cap_bound_additive`/`tight`; the court readout is the Boolean threshold — OR-2 =
+instantiate `OrderRelativeComposeLaw`'s boundary on exactly these two pre-registered
+structures.
 
 ### OR-2 — keying = the composition boundary *(the queued expedition, executed)*
 **Claim:** OR-1's law is a **literal instance** of the banked boundary: behavior-keyed

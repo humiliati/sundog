@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="When quantilizing hurts: a machine-checked note on rewards nonincreasing in proxy-pressure, where tilting toward the proxy cannot improve true reward — the boundary of that regime, and why graded oversight removes the cliff-edge temptation that threshold oversight creates.">
+    <meta name="theme-color" content="#1A3A52">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://sundog.cc/quantilizing">
+    <title>When Quantilizing Hurts | Sundog</title>
+    <!-- PRE-DEPLOY: owner re-voice + licensing call pending; og/quantilizing.png pending generation. -->
+    <!-- OG-BLOCK-START (managed by public/og/_patch_meta.py; og/quantilizing.png pending generation before deploy) -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Sundog">
+    <meta property="og:title" content="When Quantilizing Hurts">
+    <meta property="og:description" content="On rewards nonincreasing in proxy-pressure, the best quantilizer is the untilted base — machine-checked. The boundary of the regime, and why graded oversight removes the cliff-edge temptation threshold oversight creates.">
+    <meta property="og:image" content="https://sundog.cc/og/quantilizing.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="A reward curve collapsing past a threshold, with the caption 'the best quantilizer is the untilted base.'">
+    <meta property="og:url" content="https://sundog.cc/quantilizing">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="When Quantilizing Hurts">
+    <meta name="twitter:description" content="On rewards nonincreasing in proxy-pressure, quantilizing cannot improve true reward — machine-checked, with the exact boundary of the regime.">
+    <meta name="twitter:image" content="https://sundog.cc/og/quantilizing.png">
+    <meta name="twitter:image:alt" content="A reward curve collapsing past a threshold, with the caption 'the best quantilizer is the untilted base.'">
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "headline": "When Quantilizing Hurts",
+  "description": "A machine-checked note on a regime where the quantilizer's defining move — tilting toward the proxy — cannot improve true reward: the boundary of that regime, and what shape of oversight removes the temptation it creates.",
+  "url": "https://sundog.cc/quantilizing",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Stellar Aqua LLC",
+    "url": "https://stellaraqua.com"
+  },
+  "inLanguage": "en",
+  "isAccessibleForFree": true,
+  "about": [
+    { "@type": "Thing", "name": "Quantilizers" },
+    { "@type": "Thing", "name": "Goodhart's law" },
+    { "@type": "Thing", "name": "Performative prediction" },
+    { "@type": "Thing", "name": "AI alignment" }
+  ]
+}
+    </script>
+    <!-- OG-BLOCK-END -->
+    <link rel="stylesheet" href="/css/sundog-theme.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        main { max-width: 860px; margin: 0 auto; padding: 1.5rem 1.5rem 4rem; }
+        .kicker { font-family: var(--sd-font-data, ui-monospace, monospace); font-size: 0.78rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--primary-mid, #2C5F7F); }
+        h1 { color: var(--primary-dark, #1A3A52); font-family: var(--sd-font-display, Georgia, serif); font-size: clamp(2rem, 6vw, 3rem); line-height: 1.05; margin: 0.5rem 0 0.6rem; }
+        .lede { color: #40505C; font-size: 1.15rem; line-height: 1.7; max-width: 64ch; }
+        h2 { color: var(--primary-dark, #1A3A52); font-size: 1.4rem; margin: 2.4rem 0 0.6rem; }
+        p { color: #40505C; line-height: 1.7; }
+        a { color: var(--primary-mid, #2C5F7F); font-weight: 700; }
+        code { background: rgba(244,196,48,0.12); padding: 0.1rem 0.35rem; border-radius: 3px; font-size: 0.95em; }
+        ul, ol { line-height: 1.7; color: #40505C; }
+        .payload { font-family: var(--sd-font-display, Georgia, serif); font-size: clamp(1.15rem, 3vw, 1.45rem); color: var(--primary-dark, #1A3A52); border-left: 4px solid var(--accent, #F4C430); padding: 0.4rem 0 0.4rem 1rem; margin: 1.6rem 0; line-height: 1.45; }
+        .card { border: 1px solid var(--line, #d8e0e4); border-radius: 8px; padding: 1rem 1.25rem; margin: 1.2rem 0; background: #fff; }
+        .card.fence { border-color: rgba(181,58,44,0.35); background: rgba(181,58,44,0.03); }
+        .card h3 { margin: 0 0 0.5rem; color: var(--primary-dark, #1A3A52); font-size: 1.05rem; }
+        .fine { font-family: var(--sd-font-data, ui-monospace, monospace); font-size: 0.8rem; color: #6A7680; }
+        table.boundary { width: 100%; border-collapse: collapse; margin: 1.2rem 0; font-size: 0.95rem; }
+        table.boundary th, table.boundary td { border: 1px solid var(--line, #d8e0e4); padding: 0.5rem 0.7rem; text-align: left; color: #40505C; line-height: 1.5; }
+        table.boundary th { background: rgba(44,95,127,0.06); color: var(--primary-dark, #1A3A52); font-family: var(--sd-font-data, ui-monospace, monospace); font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; }
+        table.boundary tr.theorem-row td { background: rgba(244,196,48,0.07); }
+        .refs { font-size: 0.92rem; }
+        .refs li { margin-bottom: 0.35rem; }
+        @media (max-width: 620px) { table.boundary { font-size: 0.85rem; } table.boundary th, table.boundary td { padding: 0.4rem 0.45rem; } }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="/" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="/about">About</a>
+                <a href="/sundog">Atlas</a>
+                <a href="/applications-gallery">Applications</a>
+                <a href="/alignment">Align</a>
+                <a href="/chat">Chat</a>
+                <a href="docs/">Docs</a>
+                <a href="https://github.com/humiliati/sundog">GitHub</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <p class="kicker">Sundog &middot; Alignment Note</p>
+        <h1>When quantilizing hurts</h1>
+        <p class="lede">A machine-checked note on a regime where the quantilizer's defining move &mdash; tilting toward the proxy &mdash; cannot improve true reward and strictly hurts except in tie cases, where the boundary of that regime sits, and what shape of oversight removes the temptation it creates. All claims are in-vitro and falsifier-fenced; the scope section is part of the result, not a disclaimer.</p>
+
+        <h2>1. Setup</h2>
+        <p>A <code>q</code>-quantilizer (Taylor, 2015) samples from the top-<code>q</code> fraction of a trusted base distribution <code>&gamma;</code>, ordered by a proxy utility <code>&Ucirc;</code>, instead of arg-maxing <code>&Ucirc;</code>. Its safety guarantee &mdash; expected true cost bounded by <code>(1/q)&middot;E<sub>&gamma;</sub>[cost]</code> &mdash; is the canonical mild-optimization result. Three premises travel with it: the base <code>&gamma;</code> is given and trusted; the joint distribution of (proxy, true value) is <strong>fixed under <code>&gamma;</code></strong>; and the setting is single-shot.</p>
+        <p>This note concerns rewards that violate the second premise in a specific, structured way: <strong>performative rewards</strong> (Perdomo, Zrnic, Mendler-D&uuml;nner &amp; Hardt, 2020) where the deployed policy's optimization pressure on the proxy degrades the reward itself. The motivating instance is a coordination-game &ldquo;court&rdquo;: patronage conferred by a population of noisy graders keyed on the policy's causal proxy-dependence, whose unique global-game equilibrium (Carlsson&ndash;van Damme 1993; Morris&ndash;Shin 1998) produces a sharp collapse threshold that is <em>derived from payoffs and noise</em>, never inserted into the reward. In the Goodhart taxonomy of Manheim &amp; Garrabrant (2018) this is <strong>causal/adversarial</strong> Goodhart &mdash; targeting induces the gap &mdash; as opposed to the regressional/extremal regime the quantilizer was built for. The philosophical genus is older: Elster (1983) called these <em>states that are essentially by-products</em> &mdash; states the very attempt to obtain precludes, systematically, not by accident.</p>
+
+        <h2>2. The result</h2>
+        <div class="payload">
+            On rewards nonincreasing in proxy-pressure &mdash; when the proxy is pointwise misaligned with the true reward &mdash; quantilizing cannot improve true reward; it strictly hurts whenever the selected upper tail drops higher-reward mass.
+        </div>
+        <ol>
+            <li>The best <code>q</code>-quantilizer is the untilted base (<code>q&nbsp;=&nbsp;1</code>); every strict tilt collects weakly less (strictly less under the non-flatness condition above), and tail-collection is monotone in <code>q</code>.</li>
+            <li>In the registered iterated-tail court model, iterated quantilization (each round's selected tail becoming the next base) drifts monotonically into the collapse region and is ruined at a finite round, while the zero-pressure policy is drift-free.</li>
+            <li>A policy with <strong>zero causal proxy-dependence</strong> &mdash; which is <em>not</em> a member of the quantilizer family over any base biased toward the proxy &mdash; strictly out-collects the entire family whenever the base's support lies past the collapse threshold, and out-collects it partially (by the base's disgraced fraction) when the base straddles it.</li>
+        </ol>
+        <p>Two remarks on (3). The zero-dependence policy is defined <em>interventionally</em> &mdash; its action distribution is invariant under <code>do(proxy)</code> holding other cues fixed &mdash; not by zero observational correlation, which the environment can force on honest policies. And the strict domination is conditional on the support geometry: over a base containing genuinely restrained (near-zero-pressure) behavior, only the partial form survives &mdash; the clean form requires a base the quantilizer framework would not call trusted.</p>
+        <div class="card">
+            <h3>Machine-checked core</h3>
+            <p>The finite general form of (1) and the clean case of (3) are proven in Lean 4 + Mathlib for arbitrary finite uniform support (unweighted bases):</p>
+            <ul>
+                <li><code>Sundogcert.Percival.upper_tail_mul_le_base_mul</code> &mdash; for a reward listed nonincreasing along the proxy-pressure order, no upper tail beats the full-base average (cross-multiplied; arbitrary length, arbitrary tail);</li>
+                <li><code>Sundogcert.Percival.best_quantilizer_is_base_general</code> &mdash; the same in average form;</li>
+                <li><code>Sundogcert.Percival.clean_support_above_separation_general</code> &mdash; all-zero support past the threshold &rArr; every tail average is strictly beaten by any positive un-targeted reward.</li>
+            </ul>
+            <p class="fine">All three carry <code>#guard_msgs</code>-pinned axiom audits: exactly <code>[propext, Classical.choice, Quot.sound]</code>, no <code>sorry</code>, no <code>native_decide</code>, registered in the repository-wide axiom audit. A falsifier hunt over 10,500 randomized instances &mdash; unweighted and weighted finite bases, and continuous bases under the actual coordination-court reward &mdash; found zero violations.</p>
+        </div>
+
+        <h2>3. The boundary of the regime (the condition is not optional)</h2>
+        <p>For the theorem above, the condition &mdash; <em>the proxy is pointwise misaligned</em> &mdash; is the exact boundary of the guaranteed class, not a technicality. It is not the only route to <code>q&nbsp;=&nbsp;1</code>: a sufficiently graded tax can also overpower a pointwise-good proxy. Separating the pointwise proxy&ndash;truth relation from the performative tax as independent knobs and sweeping both:</p>
+        <table class="boundary">
+            <thead>
+                <tr><th>proxy pointwise&hellip;</th><th>performative tax</th><th>optimal tilt</th></tr>
+            </thead>
+            <tbody>
+                <tr class="theorem-row"><td>misaligned or neutral</td><td>any monotone tax, <strong>including none</strong></td><td>base is optimal; strict tilt never improves (the theorem)</td></tr>
+                <tr><td>good</td><td>none</td><td>maximal tilt (Goodhart-free; quantilize away)</td></tr>
+                <tr><td>good</td><td>threshold (cliff)</td><td>tilt to <em>just under</em> the threshold &mdash; the temptation regime</td></tr>
+                <tr><td>good</td><td>graded and steep</td><td><code>q* = 1</code> restored &mdash; don't tilt at all</td></tr>
+            </tbody>
+        </table>
+        <p>Drop the condition and the theorem is false: for a pointwise-good proxy with pressure headroom, tilting strictly helps. Performativity alone does not make tilting bad; a threshold creates cliff-edge temptation, while a graded and steep tax can restore <code>q&nbsp;=&nbsp;1</code> by charging marginal pressure. The zero-dependence policy is strictly dominated on the pointwise-good/no-tax half &mdash; so &ldquo;never optimize the proxy&rdquo; is not free wisdom either; it is the right move exactly where the proxy is misaligned or the oversight is graded-and-steep.</p>
+
+        <h2>4. A corollary about oversight shape</h2>
+        <p>The table's third and fourth rows are, we think, the most practically suggestive part. The <strong>cliff-edge temptation</strong> &mdash; the reward-optimal agent courting right up to the review boundary, fragile to any perturbation &mdash; is a <strong>threshold-oversight artifact</strong>: it exists because a threshold tax has a flat, zero-marginal region below the cliff, where tilting is free. A <strong>graded</strong> tax charges every unit of proxy-pressure at the margin, and when its marginal rate dominates the pointwise gain it makes <em>not tilting at all</em> optimal even for a pointwise-good proxy. Genuinely interior optima exist only on the knife-edge between regimes. In short: threshold oversight <em>creates</em> the incentive to operate at the edge of what review permits; graded oversight <em>removes</em> it. (The same conclusion was reached independently, from the empirical side, by a graded-review knob in a related reinforcement-learning testbed &mdash; the theory and the instrument agree.)</p>
+
+        <h2>5. Scope &mdash; what this does and does not claim</h2>
+        <div class="card fence">
+            <h3>It is</h3>
+            <p>A controlled, in-vitro result about a mechanism. The environments are toys (an analytic coordination court, binary cues, uniform bases); the Lean theorems cover unweighted finite bases (uniform weights), with weighted/continuous forms verified computationally only; the multi-agent case is <em>worse</em> for the zero-dependence policy (under a shared-regime court, one agent's purity is non-pivotal and the safe point is reachable only by a coalition), so single-agent numbers must not be extrapolated upward. The unconditional &ldquo;un-targeting beats quantilizers&rdquo; claim is <strong>not</strong> made &mdash; it deflates structurally on any base containing restraint, and we report that as a central finding rather than a caveat.</p>
+            <h3>It is not</h3>
+            <p>A foundation-model or deployed-agent claim; a measured claim about any real base distribution or any real oversight regime; or a replacement for quantilization where its premises hold. Where the fixed-joint premise holds and the proxy is pointwise informative, Taylor's bound is the right tool; this note maps where that stops.</p>
+            <h3>Falsifiers, standing</h3>
+            <ul>
+                <li>A nonincreasing reward and base geometry where some tilt strictly beats the base (would refute the theorem's computed extensions).</li>
+                <li>A natural performative map, monotone in pressure, where tilting helps despite pointwise misalignment (would break the class boundary).</li>
+                <li>An exogenous projection achieving zero causal proxy-dependence while retaining above-baseline competence on an entangled proxy (would make the &ldquo;target channel&rdquo; cleanly enforceable and materially soften this note).</li>
+            </ul>
+        </div>
+
+        <h2>6. Reproduce</h2>
+        <ul>
+            <li>Lean: <code>lake build Sundogcert.AxiomAudit</code> in the <a href="https://github.com/humiliati/sundogcert">sundogcert</a> repository (green build = all anchors compile with the pinned axiom sets).</li>
+            <li>Computed receipts: <code>scripts/percival-s4-counterproductivity-general.mjs</code> (falsifier hunt), <code>scripts/percival-b1-0-court-coordination.mjs</code> (the emergent-threshold court), <code>scripts/percival-b1-separation-bakeoff.mjs</code> (separation boundary map), <code>scripts/percival-b3-composition-stability.mjs</code> (iteration/drift), <code>scripts/percival-s6-class-boundary.mjs</code> (the class-boundary table above), each emitting a markdown receipt and JSON artifact.</li>
+        </ul>
+
+        <h2>References</h2>
+        <ul class="refs">
+            <li>J. Taylor. <em>Quantilizers: A Safer Alternative to Maximizers for Limited Optimization.</em> MIRI technical report / AAAI-16 workshop, 2015.</li>
+            <li>J. Perdomo, T. Zrnic, C. Mendler-D&uuml;nner, M. Hardt. <em>Performative Prediction.</em> ICML 2020.</li>
+            <li>J. Elster. <em>Sour Grapes: Studies in the Subversion of Rationality.</em> Cambridge, 1983.</li>
+            <li>D. Manheim, S. Garrabrant. <em>Categorizing Variants of Goodhart's Law.</em> 2018.</li>
+            <li>H. Carlsson, E. van Damme. <em>Global Games and Equilibrium Selection.</em> Econometrica 1993.</li>
+            <li>S. Morris, H. Shin. <em>Unique Equilibrium in a Model of Self-Fulfilling Currency Attacks.</em> AER 1998.</li>
+        </ul>
+
+        <p class="fine">A Sundog alignment note. Source: <a href="docs/percival/WHEN_QUANTILIZING_HURTS_NOTE.md">the markdown note</a>; the machine-checked anchors live in the sundogcert repository.</p>
+        <p class="fine" style="text-align:right; font-style:italic; opacity:0.7; margin-top:0.35rem;">&mdash; Credit the un-reaching.</p>
+    </main>
+
+    <footer>
+        <p>
+            The Sundog Project - <a href="docs/presentation/message-house.md">Alignment Without Sight</a>
+        </p>
+        <p class="footer-links">
+            <a href="https://github.com/humiliati/sundog">GitHub</a> |
+            <a href="/origin">Origin</a> |
+            <a href="/alignment">Alignment</a> |
+            <a href="/mesa">Mesa</a> |
+            <a href="docs/README.md">Documentation</a>
+        </p>
+        <p class="footer-copyright">
+            &copy; 2026 Stellar Aqua LLC. All rights reserved.
+        </p>
+    </footer>
+
+    <script type="module" src="/js/sundog-chat-widget.mjs"></script>
+</body>
+</html>

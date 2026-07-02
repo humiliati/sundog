@@ -28,3 +28,19 @@ H1_V3_0C_BANK_FREEZE  chess arm  [NON-PROMOTIONAL, CPU]
     occ.g7     447  0.57       0.659    0  no (witness)
       b.c7     493  0.43       0.669    1  YES
     occ.b7     541  0.43       0.712    1  YES
+    occ.d7    1249  0.42       0.771    0  no (witness)
+      b.d8     789  0.58       0.713    0  no (witness)
+    occ.d8     789  0.58       0.713    0  no (witness)
+      w.d2    1154  0.42       0.729    3  YES
+      b.f7     268  0.41       0.691    1  YES
+      b.b7     541  0.41       0.706    1  YES
+      b.d7    1249  0.41       0.779    2  YES
+    occ.e2    1154  0.41       0.715    0  no (witness)
+    occ.h2     159  0.60       0.750    0  no (witness)
+
+  manifest frozen -> results/chatv2/h1_v3/v3_0c_bank_manifest.json (29 axes, 7 in-bank)
+
+  BANK: 7 / 24 needed (witnessed, balanced, floored, baselines frozen)
+
+VERDICT: F3-V3c/witness - repaired search certifies only 7 axes (<24)
+  (Non-promotional bank freeze. No model run, no GPU, no R2 claim.)

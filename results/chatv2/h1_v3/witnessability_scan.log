@@ -1,0 +1,5 @@
+(chess) shard columns: ['Event', 'Site', 'White', 'Black', 'Result', 'WhiteTitle', 'BlackTitle', 'WhiteElo', 'BlackElo', 'WhiteRatingDiff']... using 'movetext'; 121332 games
+(chess) 1400 games with >=20 plies loaded
+ply 16: 1391 inst | floored+balanced axes 1 | witnessed 0 (2s/150s)
+ply 24: 1327 inst | floored+balanced axes 0 | witnessed 0 (0s/150s)
+ply 32: 1203 inst | floored+balanced axes 16 | witnessed 3 (107s/150s)

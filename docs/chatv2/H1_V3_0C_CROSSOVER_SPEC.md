@@ -6,6 +6,11 @@
 > floors, balance, caps, liveness) is inherited unchanged from V3-0b. **This is a gate
 > redefinition adopted by owner decision after `H1_V3_0B_SLICE_ADMISSION_RECEIPT.md`, not
 > a rescue of a failed run.** Non-promotional; nothing here alters `PROMOTE_GATE.md`.
+>
+> **Post-run status:** the data rung filed `F3-V3c/witness` in
+> `H1_V3_0C_BANK_RECEIPT.md`. The bank and frozen surface baselines formed cleanly; the miss
+> is specifically witness-certificate availability at bank scale. A1 order-shuffle control is
+> adopted in `H1_V3_A1_ORDER_SHUFFLE_CONTROL_SPEC.md`.
 
 ## 1. Rationale
 
@@ -81,5 +86,7 @@ decision at V3-2 prereg. All parent fences inherited.
   seed 0 splits; probe cap 1600; liveness ≥ 0.95.
 
 Cross-refs: `H1_V3_0B_AMBIGUITY_SLICE_SPEC.md` + receipt (the negative this answers),
-`H1_V3_STATEBANK_SCOPE.md` (parent), `R2_INTERSECTION_HYPOTHESES.md` (H2 crossover, H5),
+`H1_V3_0C_BANK_RECEIPT.md` (this spec's data-rung result), `H1_V3_STATEBANK_SCOPE.md`
+(parent), `H1_V3_A1_ORDER_SHUFFLE_CONTROL_SPEC.md` (adopted post-run amendment),
+`R2_INTERSECTION_HYPOTHESES.md` (H2 crossover, H5),
 `PHASE1_R1_COMPLETION.md` (`objective_excess` precedent).

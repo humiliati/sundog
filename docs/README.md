@@ -202,7 +202,15 @@ code, experiments, prior theorem materials, and application bridges.
   [Partial Grace post](percival/PARTIAL_GRACE_UNTARGETING_POST.md). Not a
   claim about foundation models; not a transfer to real oversight; the Grail
   corpus does *not* encode a formal `γ`-structure. **Stuck as of 2026-06-30;
-  reopening excuse pending** — catalog-tier surface, no Class A page.
+  reopening excuse pending** — the Percival ledger itself is catalog-tier
+  with no Class A page. However, the de-Percivaled **counterproductivity
+  theorem** (Angle 1 of the [promo handoff](percival/PERCIVAL_PROMO_HANDOFF.md))
+  is staged as a standalone alignment note at
+  [`/quantilizing`](../quantilizing.html) — "When quantilizing hurts,"
+  no Grail framing, machine-checked in Lean for arbitrary finite uniform
+  support, 10,500-instance falsifier hunt. Companion source:
+  [`WHEN_QUANTILIZING_HURTS_NOTE.md`](percival/WHEN_QUANTILIZING_HURTS_NOTE.md).
+  Pre-deploy: owner re-voice + licensing call + OG card generation pending.
 - [H1 Pantheon of Agency spec](mesa/H1_PANTHEON_OF_AGENCY_SPEC.md): first
   typed test of the Tauroctony pantheon thesis; pins the pantheon-vs-monolith
   bake-off, controller families, sovereignty metric, falsifier, and staged
@@ -348,7 +356,6 @@ underlying public problems.
   `/chat` roadmap artifacts.
 - [Chat contents index](../chat/contents.json): roadmap artifact index for
   planned prompts, public data, widget modules, evaluation scripts, and result
-  manifests.
 - [Chat prompt gold slate](../chat/prompts/gold-normal.jsonl): Phase 0 prompt
   slate split across normal, boundary-sensitive, and adversarial JSONL files
   under `../chat/prompts/`.
