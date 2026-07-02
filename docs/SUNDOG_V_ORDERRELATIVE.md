@@ -6,10 +6,11 @@
 roadmap and pointed at the two laws the Percival reopen handed it on 2026-07-01.*
 
 Status: **OPENED 2026-07-01. SHARPENED same day by a five-mark critical pass (integrated
-at owner direction); OR-5 RUN + CONFIRMED (`OR5_SOVOPT_CONTROL_SIDE_CONFIRMED`) and OR-1
-LANDED machine-checked (`keyed_margin_law`, recoding degeneracy refuted incl. affine) the
-same day — see the entries. Remaining: OR-2 / OR-3 / OR-4 / OR-6, SPEC not run.** The
-pass: the overseer
+at owner direction); OR-5 RUN + CONFIRMED (`OR5_SOVOPT_CONTROL_SIDE_CONFIRMED`), OR-1
+LANDED machine-checked (`keyed_margin_law`, recoding degeneracy refuted incl. affine),
+and OR-2 LANDED with the same-lemma fence PASSED (`keyed_boundary_instance` — spine 1's
+verdict is in) — all the same day; see the entries. Remaining: OR-3 / OR-4 / OR-6, SPEC
+not run.** The pass: the overseer
 filtration split into read/write halves and the bridge restated on WRITE (mark 1 — OR-3
 recut, a pre-run witness banked); OR-1 recut from bare composability to the **margin
 law** (mark 2); OR-2's candidate structures **pre-registered** so the same-lemma fence is
@@ -231,6 +232,31 @@ elementary math") is the named warning and the reason the fence is the entry.
 **Cost:** low (reading + one Lean instance file in the `OrderRelative*` idiom).
 **Shoppable:** only if literal — in which case it upgrades OR-1 from "a law about this
 toy" to "an instance of a proved algebraic boundary," which is the lane's whole bet.
+**RESULT (2026-07-01): LANDED — FENCE PASSED (literal instance).**
+`sundogcert` `Sundogcert/OrderRelativeKeyed.lean` — gated, full audit 8571 GREEN. **The
+working lemmas are the banked ones, applied verbatim:** `cap_margins_coproduct` and
+`cap_margin_order_join` are `coproduct_nsmul_eq_zero` and `addOrderOf_prod_eq_lcm` as-is
+at margin tuples (per-agent margins = coordinates of the cancellation-free coproduct —
+the algebraic face of OR-1's profile-independent marginal);
+`court_readout_not_group_order` is `idempotent_eq_one` as-is at `(Bool, ∨)`'s nontrivial
+idempotent (`true ∨ true = true` — the same degeneracy class as the moment semilattice,
+and the algebraic WHY behind OR-1's `court_value_not_additive`). The only new lemmas are
+glue forced by the S3 objects, not engineered structure: `margin_zerosumfree` (in ℚ≥0 a
+sum vanishes iff both parts do — the within-monoid aggregation cannot cancel, the exact
+opposite of the banked `within_group_cancels`) and **`threshold_readout_not_hom` — the
+readout-locus caution resolved machine-checked**: the threshold map `a ↦ (τ ≤ a)` is NOT
+a homomorphism `(ℚ≥0, +) → (Bool, ∨)` at any positive τ (witness `τ/2 + τ/2`), while
+everything upstream is cancellation-free — the boundary is crossed exactly at the
+readout, and nowhere earlier. Keying to the post-readout algebra is therefore natural,
+not bespoke: it is where the guarantee's value lives by definition (OR-1's `courtValue`
+*is* the readout). Packaged as `keyed_boundary_instance`. **Axiom hygiene:** two court
+anchors are leaner than the portfolio standard — `court_readout_idempotent` is
+axiom-FREE, `court_readout_not_group_order` needs `[propext]` only. **Honest note:** the
+ℚ≥0 margin orders are degenerate (torsion-free — the order never drops because nothing
+ever cancels), so the cap side holds the join law at the free pole the way the moment
+axis holds the semilattice pole: the boundary's two ends, which is exactly where the
+lane's law says the two keyings must sit. **Spine 1 verdict is in: the S3 contrast is
+the join-homo boundary as a literal instance — one lemma, two costumes, checked.**
 
 ### OR-3 — the cleanliness-σ bridge, write side *(co-headline, definitional drill; recut per mark 1; gated on OR-5)*
 **Claim:** derive per channel, from OR-5's CID typing, the overseer's **write filtration**

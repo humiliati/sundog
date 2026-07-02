@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="paper" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="#FFFAF0" stop-opacity="0.94"/>
+    </linearGradient>
+    <pattern id="ruled" x="0" y="0" width="1200" height="28" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="27" x2="1200" y2="27" stroke="#63A3DC" stroke-opacity="0.075" stroke-width="1"/>
+    </pattern>
+    <radialGradient id="halo" cx="0.18" cy="0.12" r="0.6">
+      <stop offset="0%" stop-color="#F4C430" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#F4C430" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="125%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6"/>
+      <feOffset dx="0" dy="4"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.15"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <!-- Paper-ruled base: warm cream + horizontal blue rules + red legal-pad margin -->
+  <rect width="1200" height="630" fill="#FEFDFB"/>
+  <rect width="1200" height="630" fill="url(#paper)"/>
+  <rect width="1200" height="630" fill="url(#ruled)"/>
+  <rect x="90" y="0" width="2" height="630" fill="#FF6363" fill-opacity="0.12"/>
+  <rect width="1200" height="630" fill="url(#halo)"/>
+
+  <!-- Top accent rule -->
+  <rect x="60" y="60" width="80" height="3" fill="#C99517"/>
+
+  <!-- Eyebrow -->
+  <text x="60" y="100" font-family="Verdana, Geneva, sans-serif" font-size="20" font-weight="700" fill="#2A5570" letter-spacing="3">SUNDOG · ALIGNMENT NOTE</text>
+
+  <!-- Headline -->
+  <text x="60" y="180" font-family="Georgia, 'Times New Roman', serif" font-size="48" font-weight="700" fill="#1A3A52">When</text>
+  <text x="60" y="230" font-family="Georgia, 'Times New Roman', serif" font-size="48" font-weight="700" fill="#1A3A52">quantilizing</text>
+  <text x="60" y="281" font-family="Georgia, 'Times New Roman', serif" font-size="48" font-weight="700" fill="#1A3A52">hurts.</text>
+
+  <!-- Lede -->
+  <text x="60" y="380" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">On rewards nonincreasing</text>
+  <text x="60" y="412" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">in proxy-pressure —</text>
+  <text x="60" y="444" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">the untilted base wins.</text>
+
+  <!-- URL -->
+  <text x="60" y="560" font-family="Courier New, Courier, monospace" font-size="22" font-weight="700" fill="#1A3A52">sundog.cc/quantilizing</text>
+
+  <!-- Per-page visualization (right side, ~620 to ~1140) -->
+  <g filter="url(#cardShadow)">
+    <rect x="660" y="125" width="490" height="395" rx="6" fill="#F5EFE0" stroke="#8C6F3A" stroke-width="2" transform="rotate(-0.6 905 322)"/>
+  </g>
+  <text x="905" y="160" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" letter-spacing="2.5" fill="#684811" text-anchor="middle">WHEN QUANTILIZING HURTS &#183; MACHINE-CHECKED</text>
+  <line x1="700" y1="176" x2="1110" y2="176" stroke="#8C6F3A" stroke-width="1" stroke-dasharray="3 5" opacity="0.6"/>
+  <line x1="720" y1="340" x2="1090" y2="340" stroke="#5A6772" stroke-width="1.2"/>
+  <line x1="720" y1="200" x2="720" y2="340" stroke="#5A6772" stroke-width="1.2"/>
+  <text x="720" y="196" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="10" fill="#5A6772" text-anchor="middle">R(c)</text>
+  <text x="1100" y="343" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="10" fill="#5A6772">c</text>
+  <polyline points="720,225 900,225 900,320 1090,320" fill="none" stroke="#1A3A52" stroke-width="2.6"/>
+  <line x1="900" y1="200" x2="900" y2="340" stroke="#B53A2C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.7"/>
+  <text x="900" y="355" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="10" font-weight="700" fill="#B53A2C" text-anchor="middle">c*</text>
+  <text x="900" y="368" font-family="Verdana, Geneva, sans-serif" font-size="8" font-weight="700" letter-spacing="0.6" fill="#B53A2C" text-anchor="middle">CLIFF (emergent, Morris&#8211;Shin)</text>
+  <circle cx="780" cy="225" r="6" fill="#1A7A3A" stroke="#FFFFFF" stroke-width="1.5"/>
+  <text x="778" y="215" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="10" font-weight="800" fill="#1A7A3A" text-anchor="middle">q=1</text>
+  <g stroke="#B53A2C" stroke-width="1.8" fill="none">
+    <line x1="820" y1="205" x2="960" y2="205"/>
+    <polyline points="953,199 963,205 953,211"/>
+  </g>
+  <text x="890" y="197" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="9" font-weight="700" fill="#B53A2C" text-anchor="middle">q&lt;1 tail &#8594; past cliff</text>
+  <line x1="700" y1="385" x2="1110" y2="385" stroke="#CFD8DC" stroke-width="1"/>
+  <text x="905" y="407" font-family="Georgia, serif" font-size="18" font-weight="700" font-style="italic" fill="#1A3A52" text-anchor="middle">The best q-quantilizer is the untilted base.</text>
+  <text x="905" y="428" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="700" letter-spacing="1.4" fill="#40505C" text-anchor="middle">ON REWARDS NONINCREASING IN PROXY-PRESSURE</text>
+  <g transform="translate(700,450)" filter="url(#cardShadow)">
+    <rect x="0" y="0" width="410" height="20" rx="10" fill="#FFFFFF" stroke="#1A3A52" stroke-width="1.4"/>
+    <text x="205" y="14" font-family="Verdana, Geneva, sans-serif" font-size="9" font-weight="800" letter-spacing="1.2" fill="#1A3A52" text-anchor="middle">LEAN-CHECKED (finite uniform) &#183; 10.5K FALSIFIER HUNT</text>
+  </g>
+  <text x="905" y="497" font-family="Verdana, Geneva, sans-serif" font-size="9" font-weight="800" letter-spacing="1.5" fill="#5A2A22" text-anchor="middle">IN-VITRO TOY-TIER &#183; NO FOUNDATION-MODEL CLAIM</text>
+
+  <!-- Bottom-right mark -->
+  <text x="1140" y="600" font-family="Verdana, Geneva, sans-serif" font-size="14" font-weight="700" letter-spacing="2" fill="#9AA4AC" text-anchor="end">sundog.cc</text>
+</svg>

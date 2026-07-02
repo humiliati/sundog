@@ -119,7 +119,7 @@ text.**
 
 | hook | promise | risk | testable-now? | status |
 | --- | --- | --- | --- | --- |
-| H1 world/entity-state | high | medium | active V3-0.5 calibration | **V3-0 RUN — F3 both corpora** (code `F3-V3/copy`; chess `F3-V3/input`). **V3-0b RUN → `F3-V3b/input`**. **V3-0c RUN → `F3-V3c/witness`**: bank formed cleanly, but witness certification was unavailable at bank scale. **A1 adopted:** existing 29-axis bank is `H1-V3-A1-DATA-ADMIT`; next rung is GPT-2 calibration with surface +0.15, random-init +0.15, and order-shuffle drop ≥0.10. |
+| H1 world/entity-state | high | medium | V3-1 (1.5B, owner-run) is the live rung | **V3-0 RUN — F3 both corpora** (code `F3-V3/copy`; chess `F3-V3/input`). **V3-0b RUN → `F3-V3b/input`**. **V3-0c RUN → `F3-V3c/witness`**: bank formed cleanly, but witness certification was unavailable at bank scale. **A1 adopted:** existing 29-axis bank is `H1-V3-A1-DATA-ADMIT`. **V3-0.5 GPT-2 calibration RUN (owner): 0/29 cross — zero pretrained carry (orig ≈ random-init floor, median vs_randinit −0.026; shuffle drops null)** — H2's positive does not extend to board state at GPT-2 scale; apparatus validated; V3-1 bar = acc 0.76–0.87. `H1_V3_0_5_GPT2_CALIBRATION_RECEIPT.md` |
 | **H2 stack-top / Dyck** | **high** | **low** | **yes (CPU, GPT-2 + code)** | **CONFIRMED (existence) 2026-07-01** — see result below |
 | H3 cumulative/toggled | medium | medium | partial (bigger model) | PROPOSED |
 | H4 binding under attractors | medium | medium | partial | PROPOSED |
