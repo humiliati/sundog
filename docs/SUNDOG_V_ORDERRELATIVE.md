@@ -8,9 +8,11 @@ roadmap and pointed at the two laws the Percival reopen handed it on 2026-07-01.
 Status: **OPENED 2026-07-01. SHARPENED same day by a five-mark critical pass (integrated
 at owner direction); OR-5 RUN + CONFIRMED (`OR5_SOVOPT_CONTROL_SIDE_CONFIRMED`), OR-1
 LANDED machine-checked (`keyed_margin_law`, recoding degeneracy refuted incl. affine),
-and OR-2 LANDED with the same-lemma fence PASSED (`keyed_boundary_instance` — spine 1's
-verdict is in) — all the same day; see the entries. Remaining: OR-3 / OR-4 / OR-6, SPEC
-not run.** The pass: the overseer
+OR-2 LANDED with the same-lemma fence PASSED (`keyed_boundary_instance` — spine 1's
+verdict is in), and OR-3 RUN (`OR3_BRIDGE_CONFIRMED_SHARPENED` — write tiers derived,
+enforce ≠ determine, measurable ≠ enforceable banked, the enforce-order ladder graded) —
+all the same day; see the entries. Remaining: OR-4 / OR-6, SPEC not run.** The pass: the
+overseer
 filtration split into read/write halves and the bridge restated on WRITE (mark 1 — OR-3
 recut, a pre-run witness banked); OR-1 recut from bare composability to the **margin
 law** (mark 2); OR-2's candidate structures **pre-registered** so the same-lemma fence is
@@ -286,6 +288,30 @@ OR-5's typing).
 if the write-side bridge dies circular; the write-side bridge, if it lands, is one formal
 home for the portfolio's two flagship invariants, and the umbrella's "access is the
 sufficient statistic" line finally earns its noun.
+**RESULT (2026-07-01): `OR3_BRIDGE_CONFIRMED_SHARPENED`** — the pre-registered landing,
+with one unexpected rung. Full drill:
+[`orderrelative/OR3_CLEANLINESS_SIGMA_BRIDGE.md`](orderrelative/OR3_CLEANLINESS_SIGMA_BRIDGE.md).
+(i) **`WRITE_TIERS_DERIVED`** — one channel-blind rule (W = owned-termini writes, R =
+observation + output-slot counterfactual replay) applied to OR-5's typing reproduces the
+tier table with receipts: measure 0 / act 1 / aggregate 1 / target ∞; the
+misclassification falsifier checked row by row, none fires; non-circularity discharged
+with the residual pressure point recorded (ownership = implementation signature facts,
+separately checked only for aggregate — a natural re-annotation flipping a row would
+void it). (ii) **`ENFORCE_ORDER_NOT_DETERMINE_ORDER`** (the sharpening — the drill's own
+catch): σ_write is the least *arity of a projecting write* (a control/budget order in
+the `Resolves` shape), not a sufficiency order — the entry's original identification
+with determine/resist was an H3-class verb conflation and is retired; the corrected
+bridge reads *clean/partial = finite/∞ of the enforce-order σ_write*, with the genuine
+sufficiency-σ living on the read side (σ_read = the schema's 9th filtration; σ_write
+registered as its control-side twin — addendum added to `SUFFICIENT_STAT_ORDER_SLATE.md`).
+(iii) **`MEASURABLE_NE_ENFORCEABLE_BANKED`** — target: σ_read finite (the court itself
+keys on `c`, B1.0 G3 `dRegime/dc ≠ 0`; S2's probes), σ_write = ∞ (inheriting S2's
+family scope exactly — the ∞ is as strong as the equivalence-theorem's quantification,
+recorded). (iv) **The ladder** — S3's coalition threshold is an arity-⌈f*·M⌉ write, so
+the enforce-order is *graded*, not two-point: **1 (behavior-keyed) < Θ(M) (outcome-keyed)
+< ∞ (dependence-keyed) — the keying determines the enforce-order's growth law**, welding
+spine 1 to spine 2. Live falsifiers and honest scope in the doc (§5–6); umbrella fold of
+the verb-split is owner-gated.
 
 ### OR-4 — S2's one law as the bridge's machine-checked cell *(drill, rigor)*
 **Claim:** the 2×2×2 collapse anchor S2 registered ("any do(U)-invariance projection ⟹

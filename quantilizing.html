@@ -11,7 +11,7 @@
     <link rel="manifest" href="/site.webmanifest">
     <link rel="canonical" href="https://sundog.cc/quantilizing">
     <title>When Quantilizing Hurts | Sundog</title>
-    <!-- PRE-DEPLOY: re-voice DRAFTED 2026-07-01 (assistant draft, owner sharpening pending); og/quantilizing.png GENERATED via public/og/_generate.py; licensing call still pending (owner). -->
+    <!-- PRE-DEPLOY: re-voice DRAFTED 2026-07-01 (assistant draft, owner sharpening pending); og/quantilizing.png GENERATED; licensing RESOLVED 2026-07-01 (Apache-2.0 manifest-scoped grant, docs/percival/LICENSE.md). Remaining: owner re-voice sign-off, commit, deploy. -->
     <!-- OG-BLOCK-START (managed by public/og/_patch_meta.py; og/quantilizing.png pending generation before deploy) -->
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Sundog">
@@ -157,9 +157,10 @@
         <h2>6. Reproduce &mdash; then try to break it</h2>
         <ul>
             <li>Lean: <code>lake build Sundogcert.AxiomAudit</code> in the <a href="https://github.com/humiliati/sundogcert">sundogcert</a> repository (green build = all anchors compile with the pinned axiom sets).</li>
-            <li>Computed receipts: <code>scripts/percival-s4-counterproductivity-general.mjs</code> (falsifier hunt), <code>scripts/percival-b1-0-court-coordination.mjs</code> (the emergent-threshold court), <code>scripts/percival-b1-separation-bakeoff.mjs</code> (separation boundary map), <code>scripts/percival-b3-composition-stability.mjs</code> (iteration/drift), <code>scripts/percival-s6-class-boundary.mjs</code> (the class-boundary table above), each emitting a markdown receipt and JSON artifact.</li>
+            <li>Computed receipts: <code>scripts/percival-s4-counterproductivity-general.mjs</code> (falsifier hunt), <code>scripts/percival-b1-0-court-coordination.mjs</code> (the emergent-threshold court), <code>scripts/percival-b1-separation-bakeoff.mjs</code> (separation boundary map), <code>scripts/percival-b2-gamma-provenance.mjs</code> (base provenance &mdash; the structural deflation; declassified 2026-07-01), <code>scripts/percival-b3-composition-stability.mjs</code> (iteration/drift), <code>scripts/percival-s6-class-boundary.mjs</code> (the class-boundary table above), each emitting a markdown receipt and JSON artifact.</li>
         </ul>
         <p>A green build plus zero violations over 10,500 instances is the claim. If you can make either fail, that is a result, and we want it &mdash; the falsifiers above are the door.</p>
+        <p class="fine">Licensing: the Percival receipts, specs, probe scripts, and result artifacts are <strong>Apache-2.0</strong> under a manifest-scoped grant &mdash; see <a href="docs/percival/LICENSE.md">docs/percival/LICENSE.md</a> and its <code>MANIFEST.json</code>. The <a href="https://github.com/humiliati/sundogcert">sundogcert</a> repository (the Lean anchors) is Apache-2.0 repo-wide.</p>
 
         <h2>Coda</h2>
         <p>The honest shape of this work is a hunt for an unconditional separation that paid out a boundary map. That is not a disappointment; it is what a good result does &mdash; it tells you exactly where its own intuition stops. The quantilizer is a fine tool inside its premises. We went and found the wall, and drew it.</p>

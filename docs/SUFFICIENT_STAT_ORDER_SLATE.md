@@ -285,3 +285,24 @@ machine-checked — σ_surface(stack-top) = ∞ is conjectured, w ≥ 2 unformal
 law, σ_surface is *another* per-filtration order, not the universal scalar. Empirical partner:
 the H2 stack-top probe (GPT-2 residual holds 0.931 where counts collapse 0.770 at
 count-ambiguous positions) — the determine/resist crossover measured on a real substrate.
+
+## Addendum (2026-07-01): a 9th filtration + the schema's control-side twin (OR-3)
+
+The ORDERRELATIVE bridge drill
+(`docs/orderrelative/OR3_CLEANLINESS_SIGMA_BRIDGE.md`) adds two order-invariants:
+
+- **σ_read** — sufficiency on the **interventional-read filtration** (observation +
+  output-slot counterfactual replay, the audit pattern). A genuine 9th per-filtration σ.
+  Grounding witness that the interventional part is load-bearing: Percival A3, where the
+  order-1 *observational* statistic misreads the measure channel (raw MI = 1 bit via
+  anti-correlation) while the causal/permutation read classifies correctly.
+- **σ_write** — the least **arity** of an exogenous write projecting a system to a
+  safe-point condition: the schema's **control-side twin** — same form (least order,
+  finite/∞ dichotomy, the `Resolves`-budget shape), different **verb** (enforce, not
+  determine). Kept explicitly distinct per H3's category-error lesson — this slate's own
+  fence caught the bridge's original wording ("clean/partial *is* determine/resist"),
+  which conflated the verbs; the corrected bridge lives on σ_write.
+- The split is the content: **measurable ≠ enforceable** (target channel: σ_read finite,
+  σ_write = ∞ within S2's tested family), and the write ladder is *graded* —
+  1 (behavior-keyed) < ⌈f*·M⌉ (outcome-keyed; S3's coalition threshold) < ∞
+  (dependence-keyed): the keying determines the enforce-order's growth law.

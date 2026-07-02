@@ -43,11 +43,10 @@ export const DOCS_NO_PUBLISH = new Set([
   // every deploy. Withheld 2026-06-11.
   "lattice/Soduko-Extreme",
   // Percival B2 gamma-provenance (spec + receipt): registered PRIVATE at
-  // pre-registration (structural characterization only; must not be read as a
-  // measured real-base claim). Withheld 2026-07-01 per the lane's claim-boundary
-  // discipline and the promo handoff's hard fence #3.
-  "percival/PERCIVAL_B2_GAMMA_PROVENANCE_SPEC.md",
-  "percival/PERCIVAL_B2_GAMMA_PROVENANCE_RESULTS.md",
+  // pre-registration, withheld 2026-07-01, then DECLASSIFIED by owner decision
+  // later 2026-07-01 (published under the manifest-scoped Percival Apache-2.0
+  // grant). The claim boundary is unchanged: structural characterization only,
+  // never a measured real-base claim. Entries removed; kept as history.
 ]);
 
 // True when a doc path (with or without a leading "docs/" or "/docs/")
