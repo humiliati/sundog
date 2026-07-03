@@ -5,8 +5,17 @@ fixed-point gate): do the pairing laws hold on a REAL checkpoint pair? This is t
 can die on contact with reality. Scope only — no code, no downloads; build is gated on owner sign-off
 and the S0 prior-art check.*
 
-Status: **SCOPED 2026-07-03. NOT pre-registered yet** — S0 (prior-art) and S1 (derivation audit) must
-close first; the exact gates below become the pre-registration after that.
+Status: **SCOPED 2026-07-03. S0 CLOSED same day — THE DEMOTION RULE FIRED** (see
+[`PERCIVAL_TRACKC_B1B2_LITPASS_MEMO.md`](PERCIVAL_TRACKC_B1B2_LITPASS_MEMO.md)): the exact ratio law
+is classical (McNemar/Connor lineage) and its paired-vs-unpaired application to LLM benchmarks is
+published (Miller 2024 arXiv:2411.00640 recommends paired analysis; Kotawala 2026 arXiv:2605.30315
+measures paired required-N median 2.15× smaller on real leaderboards). **B1-a is a CALIBRATION gate,
+not a novel-law confirmation; surviving deltas = the checkpoint-distance dial (R(d_s) as a curve),
+the self-pair floor audit, the T=0/T>0 contrast arm, and the Lean anchors.** Substrate correction
+from the floor literature (arXiv:2506.09501): run FP32 + fixed batch size (pushes the B2 floor
+toward zero). B1-c must cite Miller §3.3 ("Don't touch the thermostat!") and state itself as a
+deliberate greedy/loglik-object study. NOT pre-registered yet — S1 (derivation audit) remains, then
+freeze with the demoted language.
 
 ## 0. What is actually being transported
 
