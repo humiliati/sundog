@@ -192,6 +192,23 @@ one.
 > harness work needed to write the frozen AT-1 spec. It is not a verdict-bearing
 > run.
 
+> **Post-run status (2026-07-02): RUN — `AT1_INCONCLUSIVE_MIXED`, and BOTH named
+> hypotheses refuted** (spec `AT1_PALINSTROPHY_BOUNDARY_LAYER_SPEC.md` frozen
+> first; regression gate passed; owner-run lock + rung 2; receipt
+> `AT1_BOUNDARY_LAYER_RECEIPT.md`). Reproduction exact (a_mm 0.1949 vs banked
+> 0.195, R²=1.0). Not a thin boundary layer (a_mm ≥ 0.141 at every powered
+> band); not a second pole (burst-robust sibling a_mm = 0.0002, POSITIVE).
+> **Mechanism found: threshold-on-near-atom degeneracy** — the near-periodic
+> G=200 cell puts ≈0.50 mass within ±10⁻⁶ of one recurring burst peak and the
+> q=0.70 calibration lands e_max inside it; the action label splits the atom at
+> the 6th decimal (ball-straddle = 1.000). Explains the banked G=300 flip
+> (aperiodic → no atom). **F2's two-pole candidate is typed and closed as an
+> instrument degeneracy; the cell is decision-clean for burst-robust
+> palinstrophy. New registration check for AT-2/AT-4: threshold-atom clearance**
+> (the power gate does not catch it — damp was 0.300 while the label was
+> degenerate). Rung 3 does not trigger; AT-1 complete. Same physical root as
+> AT-6's finding: G=200 near-periodicity.
+
 ---
 
 ### AT-2 — The growth law: the decision functional's determining window grows; the energy functional's doesn't (Rank A)

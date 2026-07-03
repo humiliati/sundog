@@ -1,0 +1,61 @@
+{
+ "spec": "AT1_PALINSTROPHY_BOUNDARY_LAYER_SPEC.md",
+ "date": "2026-07-02",
+ "npz": "results/proof/at1-g200/at1-samples.npz",
+ "eps": 0.17598092912503885,
+ "liveness_E_low_a_mm": -0.0007922447820076239,
+ "unbanded": {
+  "a_mm": 0.19494079649462925,
+  "damp": 0.30016,
+  "r2": 0.999951617436073
+ },
+ "sibling_mean": {
+  "a_mm": 0.00023889135396431492,
+  "damp": 0.30018,
+  "powered": true,
+  "r2": 0.9999677029779322
+ },
+ "bands": [
+  {
+   "band": 0.0,
+   "n_kept": 50000,
+   "damp": 0.30016,
+   "powered": true,
+   "a_mm": 0.19494079649462925,
+   "r2": 0.999951617436073
+  },
+  {
+   "band": 0.02,
+   "n_kept": 49000,
+   "damp": 0.29583673469387756,
+   "powered": true,
+   "a_mm": 0.19057536903523184,
+   "r2": 0.9999506178724488
+  },
+  {
+   "band": 0.05,
+   "n_kept": 47500,
+   "damp": 0.2885263157894737,
+   "powered": true,
+   "a_mm": 0.18313781782400482,
+   "r2": 0.9999493008982783
+  },
+  {
+   "band": 0.1,
+   "n_kept": 45000,
+   "damp": 0.2736,
+   "powered": true,
+   "a_mm": 0.17087109614225163,
+   "r2": 0.9999510739757055
+  },
+  {
+   "band": 0.2,
+   "n_kept": 40000,
+   "damp": 0.228375,
+   "powered": true,
+   "a_mm": 0.14095412317486275,
+   "r2": 0.9999532285883319
+  }
+ ],
+ "verdict": "AT1_INCONCLUSIVE_MIXED - neither branch fires cleanly; recorded"
+}

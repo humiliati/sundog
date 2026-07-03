@@ -560,3 +560,29 @@ The worktree currently carries uncommitted lane work; the operator should commit
 (stop); a Stage-1 **non-positive** is inconclusive → Stage-2 (add shard 1, re-merge {0,1}).
 
 **No binding run, no verdict by this amendment.** Stage-1 is admitted + staged; the operator launches it.
+
+### Amendment C.1 — Checkpointed execution layout + AFK auto-escalation (pre-declared, 2026-06-30 PT)
+
+Append-only; an **execution-layer** note that changes no pool, gate, or knob. For an unattended (AFK)
+run, Stage-1's aux generation may be executed as **four durable sub-shards** using the runner's own
+modulo chunking: `chunk = ids[i] with i ≡ shard_index (mod shard_count)`, so
+
+```text
+shard {0} of 8  ≡  sub-shards {0, 8, 16, 24} of 32     (i ≡ 0 mod 8  ⟺  i mod 32 ∈ {0,8,16,24})
+shard {1} of 8  ≡  sub-shards {1, 9, 17, 25} of 32     (Stage-2 delta)
+```
+
+— the **identical aux task set**, in 4 files (~1.5–3 h each) instead of one (~6–12 h); the merge globs
+all present `aux_candidates_shard_*.jsonl` and **canonically sorts by (task_id, instance_id)**, so the
+merged pool is byte-equivalent regardless of shard layout (the Amendment-A design property). Each
+sub-shard file is a crash-checkpoint: `write_jsonl` writes once at the end (all-or-nothing), so a rerun
+skips completed files and only repeats the interrupted sub-shard. The binding manifest will record
+`nAuxShards = 4` (Stage-1) / `8` (Stage-2) accordingly — this note is the audit explanation.
+
+The AFK driver script (printed to the operator, logged via `Start-Transcript`) additionally
+**pre-declares the escalation as conditional**: after the Stage-1 merge it reads the receipt's `branch`
+field; if the branch is a lift (`material_lift` / `selector_lift_below_material`) it **stops**
+(conclusive per Amendment B); otherwise it snapshots the Stage-1 artifacts to `stage1_snapshot/`
+(the audit trail — the Stage-2 merge overwrites in place) and proceeds to the Stage-2 sub-shards +
+re-merge. No label is read by the script other than the pre-registered branch verdict, and no knob
+depends on it — the ladder is exactly Amendment B's.
