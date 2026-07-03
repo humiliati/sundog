@@ -93,6 +93,38 @@ tweak). No middle verdict.
 
 ---
 
-## 5. Pilot verdict
+## 5. Pilot verdict — **PARK** (2026-07-02, 3/3 seeds; result JSON pinned)
 
-*(to be appended after the run — this section intentionally empty at commit time)*
+| seed | base | minority | ceiling | floor1 | floor4 | pass |
+|---|---|---|---|---|---|---|
+| 51235 | 0.991 | 0.450 | 0.837 | 0.599 | 0.678 | ✗ |
+| 61235 | 0.997 | 0.475 | 0.865 | 0.546 | 0.604 | ✗ |
+| 1789 | 0.996 | 0.498 | 0.891 | 0.600 | 0.754 | ✗ |
+
+C1 (base) and C2 (balance) pass everywhere. **C3 fails 3/3** (ceiling 0.84–0.89 < 0.90),
+**C5 fails 3/3** (gap 0.24–0.32 < 0.35), C4 fails on seed 1789 (floor1 0.600 > majority+0.05).
+
+**Diagnosis — both pre-named park-triggers fired, and one is a construct flaw the paper pass
+missed:**
+
+1. **The ceiling failure refutes this review's own C1.** The route-dominance target `r(x)` is
+   defined via ablation contrasts — THREE forward passes — so it is a functional of the trunk's
+   *behavior under counterfactual inputs*, NOT of the single-pass hidden state `h(x)` the head
+   reads. Full view of `h(x)` does not determine `r(x)`; the 0.84–0.89 ceiling is that partial
+   determination measured. C1's "PASS" was wrong as stated: well-posed at α = 0, yes; a
+   *hidden-state functional*, no.
+2. **The bottleneck does not bite.** The pooled shadow carries substantial route signal
+   (`floor1` up to 0.600; `floor4` 0.60–0.75) — route dominance covaries with global activation
+   statistics at width 32, so the mean survives pooling. The bracket is (~0.55, ~0.87): narrow
+   and mushy, not the (chance, ~1.0) bracket a branch-annihilation claim needs headroom for.
+
+**Disposition:** HS9 stays **PARKED**. The named redesign path (for a future slate entry, not a
+silent re-run): (i) a single-pass target — per-route margin contribution decomposed from `h(x)`
+directly (unit-attribution `w2ᵢhᵢ` grouped by pre-registered unit-route alignment), which full
+view determines by construction; (ii) a lossier shadow relative to that target (wider trunk
+and/or a target component orthogonal to global activation statistics). Both change the object
+under test — that is a redesign, and it re-enters through vetting, not through this review.
+
+**What the review bought:** a construct flaw and a dead regime found in minutes of CPU, before
+the prereg froze and before the 1.5–2 day grid burned. The fixed-form HS9 as written in the
+slate does not sit in the nontrivial regime. Gate answered.

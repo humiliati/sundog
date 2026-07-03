@@ -1,0 +1,63 @@
+{
+  "pilot": "hs9_bracketing",
+  "seeds": [
+    51235,
+    61235,
+    1789
+  ],
+  "rows": [
+    {
+      "seed": 51235,
+      "base_acc": 0.9912109375,
+      "route_minority": 0.4497,
+      "majority_rate": 0.55029296875,
+      "ceiling_acc": 0.83740234375,
+      "floor1_acc": 0.59912109375,
+      "floor4_acc": 0.677734375,
+      "criteria": {
+        "c1_base": true,
+        "c2_balance": true,
+        "c3_ceiling": false,
+        "c4_floor": true,
+        "c5_gap": false
+      },
+      "all_pass": false
+    },
+    {
+      "seed": 61235,
+      "base_acc": 0.99658203125,
+      "route_minority": 0.4751,
+      "majority_rate": 0.52490234375,
+      "ceiling_acc": 0.865234375,
+      "floor1_acc": 0.54638671875,
+      "floor4_acc": 0.6044921875,
+      "criteria": {
+        "c1_base": true,
+        "c2_balance": true,
+        "c3_ceiling": false,
+        "c4_floor": true,
+        "c5_gap": false
+      },
+      "all_pass": false
+    },
+    {
+      "seed": 1789,
+      "base_acc": 0.99560546875,
+      "route_minority": 0.498,
+      "majority_rate": 0.501953125,
+      "ceiling_acc": 0.890625,
+      "floor1_acc": 0.60009765625,
+      "floor4_acc": 0.75439453125,
+      "criteria": {
+        "c1_base": true,
+        "c2_balance": true,
+        "c3_ceiling": false,
+        "c4_floor": false,
+        "c5_gap": false
+      },
+      "all_pass": false
+    }
+  ],
+  "verdict": "PARK",
+  "criteria_doc": "docs/atlas/HS9_INTROSPECT_FOLD_DESIGN_REVIEW.md#4"
+}
