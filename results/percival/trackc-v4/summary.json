@@ -1,0 +1,50 @@
+{
+  "phase": "Percival Track-C v4 fixed-point gate",
+  "generated_at": "2026-07-03T08:26:33.283Z",
+  "spec": "docs/percival/PERCIVAL_TRACKC_V4_FIXEDPOINT_SPEC.md",
+  "world": {
+    "GAP": 1,
+    "PRIOR": 0.3
+  },
+  "verdict": "TCV4_GATE_DISCHARGED_SHARPENED",
+  "predictions": {
+    "F1_deterministic_table": true,
+    "F2_absorption_law": true,
+    "F3_wandering_occupancy": true,
+    "F4_noise_asymmetry": true,
+    "F5_noninverted_one_step": true,
+    "F5r_correct_prior_noise_nuance": true
+  },
+  "checks": [
+    {
+      "name": "F1_deterministic_table",
+      "pass": true,
+      "detail": "4 cov cases x 2 starts: converge/absorb-absorb/oscillate/capture"
+    },
+    {
+      "name": "F2_absorption_law",
+      "pass": true,
+      "detail": "n=1: mc=0.6932 ana=0.7000; n=2: mc=0.4888 ana=0.4900; n=5: mc=0.1642 ana=0.1681; n=10: mc=0.0290 ana=0.0282"
+    },
+    {
+      "name": "F3_wandering_occupancy",
+      "pass": true,
+      "detail": "cV=0.3,cW=0.1: mc=0.1256 ana=0.1250; cV=0.3,cW=0.5: mc=0.4175 ana=0.4167; cV=0.7,cW=0.1: mc=0.2465 ana=0.2500; cV=0.7,cW=0.5: mc=0.6247 ana=0.6250; cV=0.9,cW=0.1: mc=0.5021 ana=0.5000; cV=0.9,cW=0.5: mc=0.8334 ana=0.8333"
+    },
+    {
+      "name": "F4_noise_asymmetry",
+      "pass": true,
+      "detail": "σ=0.25: missViol=0 hitRec=0.9762 (ana 0.9761) occ=0.8009 (ana 0.8007); σ=1: missViol=0 hitRec=0.6913 (ana 0.6897) occ=0.4768 (ana 0.4762); σ=5: missViol=0 hitRec=0.5397 (ana 0.5394) occ=0.3454 (ana 0.3439)"
+    },
+    {
+      "name": "F5_noninverted_one_step",
+      "pass": true,
+      "detail": "prior=-0.3, c≡0: V from round 1, both starts"
+    },
+    {
+      "name": "F5r_correct_prior_noise_nuance",
+      "pass": true,
+      "detail": "hit-round fall mc=0.4269 ana=0.4271; miss violations=0"
+    }
+  ]
+}

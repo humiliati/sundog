@@ -1,9 +1,13 @@
-# AT-2 Harness Sign-Off REQUEST (awaiting owner stamp)
+# AT-2 Harness Sign-Off REQUEST — STAMPED
 
 > 2026-07-03. AT-2 (growth law) needs a harness surface beyond `AT1_HARNESS_SIGNOFF.md`'s
-> AT-1-only scope. **Status: REQUESTED — nothing is implemented or run until the owner
-> stamps this.** Same discipline as AT-1: additive only, frozen presets keep semantics,
-> regression gate mandatory.
+> AT-1-only scope. **Status: `AT2_HARNESS_SIGNED_OFF` — stamped by owner instruction
+> ("let's implement", 2026-07-03, alongside the spec's v1.1 amendment). Implemented same
+> day; regression gate PASSED** (self-test ✓; capped smoke with/without `--at2-export`
+> identical on pre-existing manifest fields ✓; K3-consistency check: per-step E_low_K3
+> equals ‖Φ_K3-slice‖² at sample instants to float32 precision ✓; smoke receipts at
+> `results/proof/at2-smoke-{noexp,exp}/`). Same discipline as AT-1: additive only, frozen
+> presets keep semantics.
 
 ## Why a new surface (the coupling trap, found at freeze time)
 

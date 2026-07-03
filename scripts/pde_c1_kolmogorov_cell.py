@@ -130,6 +130,8 @@ def parse_args() -> argparse.Namespace:
             "lock_v7_g300",
             "lock_disc_g200",
             "lock_disc_g300",
+            "at2_growth_g200",
+            "at2_growth_g300",
         ],
         default="smoke",
     )

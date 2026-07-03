@@ -180,15 +180,56 @@ verbatim: `{f | f ∘ σ ∈ A}` (subst), `{g | ∃ y, Fin.snoc g y ∈ A}` (pro
 `{f : Fin 2 → ℝ | f 0 < f 1}` (lt), `{f : Fin 1 → ℝ | f 0 = r}` (singleton),
 `Tame {x | (fun _ => x) ∈ A}` (dim-1); each B-stage lands its glue lemma in that exact shape.
 
-### R4-C — The Monotonicity Theorem, abstract. [2–4 WEEKS]
-For any `OMinStructure` and definable `f : ℝ → ℝ`: a finite partition of ℝ into points and open
-intervals on which `f` is constant or strictly monotone (stage C1), and continuous (stage C2) —
-van den Dries Ch. 3 §1. The proof is elementary but intricate: the sets "locally constant /
-locally increasing / locally decreasing at x" are definable (projection + booleans), o-minimality
-partitions, and infimum arguments glue. This is the first genuine *theorem of the abstract
-theory* in Lean.
-*Falsifier* (`MONOTONICITY_STALLS`): the infimum-gluing arguments fight conditional-completeness
-API; staged fallback = C1 without continuity, honestly reported.
+### R4-C — The Monotonicity Theorem, abstract. [SCOUTED 2026-07-03 — 2–4 WEEKS]
+
+*Target (C1, house cut-set form).* For every `OMinStructure` `S` and `S`-definable `φ`:
+`∃ F : Finset ℝ, ∀ a b, a < b → (∀ s ∈ F, s ∉ Ioo a b) → (φ constant on Ioo a b) ∨
+StrictMonoOn φ (Ioo a b) ∨ StrictAntiOn φ (Ioo a b)` — van den Dries Ch. 3 §1 without
+continuity. C2 (+ continuity on the pieces) is a separate later scope.
+
+*Scout findings (the architecture, adapted to our machinery).*
+1. **The hidden cost-center is definability plumbing**, not mathematics: sets like
+   `{x | ∃ v > x, ∀ y ∈ (x,v), φ y > φ x}` cost 50–100 lines each of raw
+   substitution/projection. **C0 fixes this once**: a reflected formula layer `Fml` (atoms =
+   definable sets pulled back along coordinate maps; `¬`/`∧`/`∃`-last; `∀` derived) with one
+   induction `Fml.definable` — after which every vdD "clearly definable" is a term. C0 also
+   subsumes parametric slicing (constants = singleton atoms + `∃`).
+2. **The pointwise trichotomy is cheap**: at each `x`, the right-sign sets
+   `{y > x | φ y ≷/= φ x}` are parametric only in the *real* `φ x` — already covered by R4-A's
+   level/superlevel machinery; the three tame sets cover a right-window, their finitely many
+   frontiers avoid a small `(x, x+ε)`, and `preconnected_split` (R2-N's engine) forces one to
+   contain it. Every point has an eventual right sign (and left, mirrored).
+3. **The two-sided local-behavior sets** `D_const/D_inc/D_dec` are formulas ⇒ tame; the bad set
+   `B` is their complement. If `B` is infinite it contains an interval
+   (`tame_infinite_contains_Ioo`, a normal-form rider); refining by the one-sided sign classes
+   gives a subinterval with uniform (left, right) signs; **coherent combos glue, mixed combos
+   (local-min-everywhere, etc.) must be killed** — vdD's Lemma-1.3-style sup/inf + tame
+   arguments. This kill step is the intricate ~20% and is exactly where
+   `MONOTONICITY_STALLS` lives.
+4. **The gluing lemmas are pure real analysis, no continuity needed** (verified in scout: the
+   sup-chaining closes through overlap midpoints for neighbor-sense local monotonicity, and the
+   two-sided version dodges the one-sided dead end that sawtooth counterexamples exploit).
+   Mathlib recon: **no local-to-global monotonicity lemma exists** — hand-rolled, ~60–80 lines
+   each; `Set.Ioo_infinite` / `StrictMonoOn` / `StrictAntiOn` present.
+
+*Stages.*
+- **C0 — the formula layer** [~1 session]: `Fml` + `Fml.definable` + convenience atoms
+  (coordinate comparison, coordinate = constant, graph-pullback `φ(x_i) = x_j`) + `forallLast`.
+  Falsifier `FORMULA_LAYER_LEAKS` (universe/index bookkeeping makes the inductive unusable —
+  low risk).
+- **C1a — toolkit riders** [~½ session]: `tame_infinite_contains_Ioo`; the pointwise
+  eventual-sign trichotomy (`preconnected_split` + three tame sets).
+- **C1b — sign partition + refinement** [~1 session]: D-sets as formulas ⇒ tame; the finite
+  cut-set = bad points ∪ the D-set frontiers; on each gap every class is full-or-empty.
+- **C1c — the gluing lemmas** [~1 session]: neighbor-sense locally-increasing on an interval ⇒
+  `StrictMonoOn` (sup-chaining); constant version; anti by the negation closure of
+  `DefinableFun` (a formula) or by mirroring.
+- **C1d — mixed-sign kills + assembly** [~1–2 sessions, THE RISK]: local-extremum-everywhere
+  impossibilities; assemble C1. Falsifier `MONOTONICITY_STALLS` scoped precisely here;
+  fallback = C1-weak (per-gap uniform sign classes), honestly reported as the partial.
+
+Total ≈ 4½–5½ sessions, consistent with the 2–4-week pre-registration. C2 scoped separately
+after C1 lands.
 
 ### R4-D — Cell decomposition, dimension 2 first. [2–4 WEEKS; general n = the long pole]
 Decompose any definable `A ⊆ ℝ²` into finitely many cells (points/intervals over graphs and
