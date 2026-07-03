@@ -1,5 +1,9 @@
 # The o-minimality ladder (opened 2026-07-02, off Slate-4 U-4)
 
+> **Promoted to a lane 2026-07-02:** the roadmap now lives at
+> [`../SUNDOG_V_OMIN.md`](../SUNDOG_V_OMIN.md) (TS-QE todo + the R4 expedition scope). This file
+> stays the rung-receipt ledger (R1–R3 details + gotchas).
+
 > **What this is.** U-4 landed the PL finiteness-modulus (`DefinableRate.lean`) and exposed that the
 > "no o-minimal substrate in mathlib" blocker was a mis-tiering for that hook. The owner's follow-up
 > question — *can we get to formalizing o-minimality itself?* — gets an honest graded answer here:
