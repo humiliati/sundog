@@ -213,10 +213,17 @@ continuity. C2 (+ continuity on the pieces) is a separate later scope.
    each; `Set.Ioo_infinite` / `StrictMonoOn` / `StrictAntiOn` present.
 
 *Stages.*
-- **C0 — the formula layer** [~1 session]: `Fml` + `Fml.definable` + convenience atoms
-  (coordinate comparison, coordinate = constant, graph-pullback `φ(x_i) = x_j`) + `forallLast`.
-  Falsifier `FORMULA_LAYER_LEAKS` (universe/index bookkeeping makes the inductive unusable —
-  low risk).
+- **C0 — the formula layer** ✅ LANDED 2026-07-03: `Sundogcert/OMinimalFormula.lean` (43rd
+  module), axiom-clean, 2 gate entries (`Fml.definable`, `Fml.tame_right_inc`). `Fml S n`
+  (atoms = definable sets pulled back along coordinate maps; `¬`/`∧`/`∃`-last), **one induction
+  `Fml.definable`** (each constructor = one structure axiom, four lines each), derived
+  `∨`/`→`/`∀`, convenience atoms (`ltAt`, `eqConstAt`, `memAt`, `graphAt`, and the two-`∃`
+  `ltGraph` for `φ(x_i) < φ(x_j)`), and `Fml.tame_one` landing dimension-one formulas in `Tame`.
+  **Receipt: `tame_right_inc`** — C1's first D-set (`{x | ∃v > x, ∀y ∈ (x,v), φ x < φ y}`
+  tame) as a six-line formula term. `FORMULA_LAYER_LEAKS` did not fire (one real issue: the
+  `eval` index must be part of the recursion, not a `variable` binder). Ledger gotchas: literal
+  `Fin` indices still need the ascribed snoc helpers; `and_imp` closes the curried/uncurried
+  gap after `eval` simp.
 - **C1a — toolkit riders** [~½ session]: `tame_infinite_contains_Ioo`; the pointwise
   eventual-sign trichotomy (`preconnected_split` + three tame sets).
 - **C1b — sign partition + refinement** [~1 session]: D-sets as formulas ⇒ tame; the finite
