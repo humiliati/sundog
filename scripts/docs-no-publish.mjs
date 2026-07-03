@@ -47,6 +47,10 @@ export const DOCS_NO_PUBLISH = new Set([
   // later 2026-07-01 (published under the manifest-scoped Percival Apache-2.0
   // grant). The claim boundary is unchanged: structural characterization only,
   // never a measured real-base claim. Entries removed; kept as history.
+  // AUGURY lane spine: its own publication-posture section says internal until
+  // the G5 class-A page ships (the page is the only intended public surface).
+  // Withheld 2026-07-03 per that registered posture; remove at G5.
+  "SUNDOG_V_AUGURY.md",
 ]);
 
 // True when a doc path (with or without a leading "docs/" or "/docs/")
