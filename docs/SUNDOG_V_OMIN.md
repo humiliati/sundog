@@ -26,10 +26,11 @@
 | R3-semilinear | Constructive boolean closure + Fourier–Motzkin projection 2→1; semilinear = a genuine structure in dims 1–2 | ✅ 2026-07-02 |
 | R3-semialgebraic | Tarski–Seidenberg QE | **TODO** (below) |
 | R4-A | Abstract `OMinStructure` + definable calculus + `S₁ = Tame` capstone | ✅ 2026-07-02 |
-| R4-B/C/D | n-dim semilinear instance / Monotonicity Theorem / Cell Decomposition | **SCOPED** (below) |
+| R4-B | **`semilinearStructure : OMinStructure` — the first machine-checked o-min structure** | ✅ 2026-07-03 |
+| R4-C/D | Monotonicity Theorem / Cell Decomposition | **SCOPED** (below) |
 
-Modules: `OMinimalOne` / `OMinimalRate` / `OMinimalNormalForm` / `Semilinear` / `FourierMotzkin`
-/ `OMinimalStructure` (34th–39th), 16 gated headline theorems, all axiom-clean. Classical anchor for what's landed:
+Modules: `OMinimalOne` … `SemilinearStructure` (34th–42nd), 24 gated headline theorems, all
+axiom-clean. Classical anchor for what's landed:
 Fourier–Motzkin **is** quantifier elimination for the ordered ℝ-vector-space reduct — the
 semilinear structure result is the machine-checked linear fragment of Tarski.
 
@@ -124,24 +125,41 @@ classical, as in dims 2).
 (presentation-as-predicate — the instance wraps syntax in one `∃`).
 
 *Stages (each with its own build receipt).*
-- **B1 — syntax + booleans** [~1 session]: `AtomN/CellN/SLN` + holds; port the R3 boolean-closure
-  proofs with the atom value abstracted to one opaque real (they never used the 2-var shape);
-  atom complement negates the coefficient row pointwise (`sum` linearity glue).
-- **B2 — substitution** [~½ session]: `substAtom σ` sums coefficients over fibers
-  (`b j := ∑ i ∈ univ.filter (σ · = j), a i`); correctness = the fiberwise-sum lemma +
-  `Finset.sum_mul`. Yields the `definable_subst` axiom, matching `{f | f ∘ σ ∈ A}` exactly.
-- **B3 — n-dim Fourier–Motzkin** [~1–2 sessions]: eliminate the LAST variable: split each atom's
-  row via `Fin.sum_univ_castSucc` into an opaque front value `P := ∑ front + c` and the last
-  coefficient `b`; the entire 2-D architecture ports with `P` replacing `a·x + c` — eq-pin
-  substitution (×`b²` sign-free trick, rows combine linearly), lower/upper split, division-free
-  pairwise atoms, and the explicit between-the-bounds witness. `listMax`/`listMin`/
-  `exists_witness` import VERBATIM from `FourierMotzkin`; the three value-lemmas
-  (`holds_iff_bnd_lt`, `pair_lt_iff`, …) are restated with opaque `P` (cleaner than the 2-D
-  originals). Yields `definable_proj` in the `∃`/`snoc` form exactly.
-- **B4 — atoms + the instance** [~½–1 session]: `lt` = row `![-1, 1]` (`Fin.sum_univ_two`);
-  singleton = `eq ![1] (−r)` (`Fin.sum_univ_one`); `tame_dim_one` by bridging `AtomN 1` to R3's
-  `Atom₁` and reusing `slHolds₁_tame`. Assemble `semilinearStructure : OMinStructure`; land the
-  instantiated payoff corollaries as gates.
+- **B1 — syntax + booleans** ✅ LANDED 2026-07-03: `Sundogcert/SemilinearN.lean` (40th module),
+  axiom-clean, 2 gate entries (`slInterN_holds`, `slComplN_holds`), GREEN on the first build.
+  `AtomN/CellN/SLN` + holds; the R3 boolean-closure proofs ported verbatim with the atom value
+  abstracted — the single new fact is `neg_val` (negating row + constant negates the value),
+  proved name-risk-free from `sum_add_distrib` + `sum_eq_zero` (the `sum_neg_distrib` name is
+  unstable in this mathlib — routed around).
+- **B2 — substitution** ✅ LANDED 2026-07-03 (same module, appended; GREEN on the first build):
+  `substAtomN σ` sums coefficients over fibers; correctness via `reindex_sum`
+  (`Finset.sum_mul` + `sum_fiberwise_of_maps_to`, exactly as recon'd); headline
+  `substSLN_toSet` lands in the binding axiom shape `{f | f ∘ σ ∈ toSet S}` verbatim. Fully
+  computable (genuine `DecidableEq (Fin n)`), gated, axiom-clean.
+- **B3 — n-dim Fourier–Motzkin** ✅ LANDED 2026-07-03: `Sundogcert/FourierMotzkinN.lean` (41st
+  module), axiom-clean, 2 gate entries (`projCellN_correct`, `projSLN_toSet`), green on the
+  second build (one `field_simp`-residue line — the ledger's known gotcha). The port went
+  exactly as pre-registered: `val_snoc` (`Fin.sum_univ_castSucc`) is the only place the last
+  variable is split out; **one shared linearity lemma** (`combo_val`) serves the pairwise atoms
+  and both substitution kinds; the value lemmas restated with opaque `P`
+  (`pos_iff_bnd_lt`/`pos_iff_lt_bnd`/`pairP_lt_iff` + pure-algebra `substP_gt`/`substP_eq`);
+  `listMax`/`exists_witness` imported verbatim from the dims-2 module. Headline `projSLN_toSet`
+  lands the `definable_proj` axiom shape `{g | ∃ y, Fin.snoc g y ∈ toSet S}` verbatim.
+  **`FMN_FRONT_LEAK` did not fire** — no 2-D proof needed the concrete `a·x + c` shape.
+- **B4 — atoms + the instance** ✅ LANDED 2026-07-03: `Sundogcert/SemilinearStructure.lean`
+  (42nd module), axiom-clean, 3 gate entries, green on the second build.
+  **`semilinearStructure : OMinStructure` exists — the first machine-checked nontrivial
+  o-minimal structure** (classically: QE for the ordered ℝ-vector space). Every axiom assembled
+  from its shape-exact supplier (B1 booleans, B2 `substSLN_toSet`, B3 `projSLN_toSet`); atoms =
+  one-cell presentations (`lt` = row `![-1,1]`, singleton = `eq ![1] (−r)`); `tame_dim_one` via
+  the `AtomN 1 → Atom₁` bridge into R3's `slHolds₁_tame`. Instantiated payoffs landed:
+  `semilinear_s1_eq_tame` (its dim-1 definables are EXACTLY the tame sets) and
+  `semilinear_defFun_tame`. **R4-A's non-vacuity fence and R3's n-dim fence are both
+  discharged.** Build gotcha for the ledger: dot-notation `.toSet` fails on a `([] : SLN n)`
+  literal (the abbrev unfolds to `List`) — use the explicit `SLN.toSet` form.
+
+**R4-B COMPLETE 2026-07-03** — scoped at 1–2 weeks, landed in two days (B1+B2 day one, B3+B4 day
+two). None of the three pre-registered falsifiers fired.
 
 *Falsifiers.*
 - `NDIM_BOOKKEEPING_WALL` (pre-registered at lane opening): the reindex closure fails to stay

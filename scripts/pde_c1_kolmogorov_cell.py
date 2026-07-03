@@ -152,6 +152,14 @@ def parse_args() -> argparse.Namespace:
         "Scope: AT1_HARNESS_SIGNOFF.md; spec: AT1_PALINSTROPHY_BOUNDARY_LAYER_SPEC.md.",
     )
     parser.add_argument(
+        "--at2-export",
+        type=Path,
+        default=None,
+        help="AT-2 additive growth-law export (schema v1 npz; at2_growth presets, "
+        "k_signature=6 required). Side artifact only — scoring path and manifests "
+        "unchanged. Scope: AT2_HARNESS_SIGNOFF_REQUEST.md; spec: AT2_GROWTH_LAW_SPEC.md.",
+    )
+    parser.add_argument(
         "--allow-unregistered-overrides",
         action="store_true",
         help="Allow manual smoke-only overrides. Such runs are never verdict-bearing.",
@@ -392,6 +400,21 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         calibration_sample_count = 50_000
         calibration_gap_steps = 5_000
         objective_observable = "discriminator_slate"
+    elif args.preset in ("at2_growth_g200", "at2_growth_g300"):
+        # AT-2 growth-law emission cell (AT2_HARNESS_SIGNOFF_REQUEST.md /
+        # AT2_GROWTH_LAW_SPEC.md): lock_v7 numerics with a WIDER EMITTED shadow
+        # (k_signature = 6) and lookahead 2000 so every tau <= 2000 is computable
+        # in post. NOT verdict-bearing; only the --at2-export side artifact is read.
+        burnin_steps = 100_000
+        sample_count = 50_000
+        kf = 2
+        grashof = 200.0 if args.preset == "at2_growth_g200" else 300.0
+        k_signature = 6
+        objective = "portable-quantile"
+        objective_quantile = 0.70
+        calibration_sample_count = 50_000
+        calibration_gap_steps = 5_000
+        lookahead_steps = 2_000
     else:
         # Smoke is intentionally not the registered cell. It exists to validate
         # the integrator, binning, and receipt plumbing under the repo's
@@ -858,7 +881,7 @@ def score_discriminator_slate(
     }
 
 
-def run_cell(cfg: RunConfig, at1_export: Path | None = None) -> dict:
+def run_cell(cfg: RunConfig, at1_export: Path | None = None, at2_export: Path | None = None) -> dict:
     stepper = KolmogorovStepper(cfg)
     omega_hat = stepper.initial_state()
     interval = cfg.sample_interval_steps
@@ -900,6 +923,27 @@ def run_cell(cfg: RunConfig, at1_export: Path | None = None) -> dict:
     sig_min = np.full(cfg.signature_dimension, np.inf)
     sig_max = np.full(cfg.signature_dimension, -np.inf)
 
+    # AT-2 additive export state (AT2_HARNESS_SIGNOFF_REQUEST.md): per-step E_low over
+    # the FROZEN K=3 registered band (independent of this run's k_signature) + per-sample
+    # state proxies. Side artifact only; no existing path reads these.
+    at2 = None
+    if at2_export is not None:
+        if cfg.k_signature < 6:
+            raise ValueError("--at2-export requires an at2_growth preset (k_signature=6)")
+        _wave_at2 = np.fft.fftfreq(cfg.grid_size, d=1.0 / cfg.grid_size)
+        _k3 = select_low_modes(_wave_at2, 3, cfg.forcing_wavenumber)
+        at2 = {
+            "wave": _wave_at2,
+            "k3_modes": _k3,
+            "ix": np.array([i for i, _ in _k3], dtype=np.intp),
+            "iy": np.array([j for _, j in _k3], dtype=np.intp),
+            "scale": float(cfg.grid_size * cfg.grid_size),
+            "e_low_k3": np.empty(total_steps + 1, dtype=np.float32),
+            "ehigh": np.empty(cfg.sample_count, dtype=np.float64),
+            "hnorm": np.empty(cfg.sample_count, dtype=np.float64),
+        }
+        at2["k2"] = stepper.k2[at2["ix"], at2["iy"]].astype(np.float64)
+
     started = time.perf_counter()
     progress_stride = max(1, total_steps // 10)
     slate = cfg.objective_observable == "discriminator_slate"
@@ -924,6 +968,9 @@ def run_cell(cfg: RunConfig, at1_export: Path | None = None) -> dict:
         else:
             energy = observable(omega_hat)
         energy_by_step[step] = energy
+        if at2 is not None:
+            _amp = omega_hat[at2["ix"], at2["iy"]] / at2["scale"]
+            at2["e_low_k3"][step] = np.sum((_amp * _amp.conjugate()).real / at2["k2"])
         if step <= burn:
             sig = stepper.signature(omega_hat)
             sig_min = np.minimum(sig_min, sig)
@@ -941,11 +988,35 @@ def run_cell(cfg: RunConfig, at1_export: Path | None = None) -> dict:
                 sample_mz[idx, :] = (
                     b["dEdt"], b["g"], b["R"], b["D_low"], b["F_low"], b["T_low"], b["T_lll"]
                 )
+            if at2 is not None:
+                at2["ehigh"][idx] = stepper.high_energy(omega_hat)
+                at2["hnorm"][idx] = float(np.linalg.norm(stepper.high_mode_vector(omega_hat)))
         if step < total_steps:
             omega_hat = stepper.step(omega_hat)
         if step > 0 and step % progress_stride == 0:
             elapsed = time.perf_counter() - started
             print(f"[pde-c1] step {step}/{total_steps} ({100 * step / total_steps:.0f}%), elapsed {elapsed:.1f}s", flush=True)
+
+    if at2 is not None:
+        # Column slices for the nested sub-shadows K=1..6 (select(K) is verified nested;
+        # signature layout = (Re, Im) pairs in low_indices order).
+        _pos = {m: i for i, m in enumerate(stepper.low_indices)}
+        _cols = {}
+        for _k in range(1, 7):
+            _mk = select_low_modes(at2["wave"], _k, cfg.forcing_wavenumber)
+            _cc = sorted(c for m in _mk for c in (2 * _pos[m], 2 * _pos[m] + 1))
+            _cols[f"cols_k{_k}"] = np.array(_cc, dtype=np.int64)
+        _out = Path(at2_export)
+        _out.parent.mkdir(parents=True, exist_ok=True)
+        np.savez(
+            _out, schema_version=1, kind="at2", preset=cfg.preset, grashof=cfg.grashof,
+            dt=cfg.dt, quantile=cfg.objective_quantile, random_seed=cfg.random_seed,
+            e_low_k3=at2["e_low_k3"], phi_k6=sample_signatures,
+            adj_starts=np.array(adj_starts, dtype=np.int64),
+            calib_starts=np.array(calib_starts, dtype=np.int64),
+            sample_e_high=at2["ehigh"], sample_high_norm=at2["hnorm"], **_cols,
+        )
+        print(f"[pde-c1] at2-export wrote {_out}", flush=True)
 
     def _lookahead_max(starts: list[int]) -> np.ndarray:
         return np.array(
@@ -2720,7 +2791,7 @@ def main() -> None:
     cfg = build_config(args)
     if args.allow_unregistered_overrides and cfg.preset in ("lock", "fallback"):
         print("[pde-c1] overrides present; this receipt is not verdict-bearing despite lock/fallback preset", flush=True)
-    result = run_cell(cfg, at1_export=args.at1_export)
+    result = run_cell(cfg, at1_export=args.at1_export, at2_export=args.at2_export)
     if args.allow_unregistered_overrides:
         result["verdict"] = "SMOKE_ONLY"
         result["verdict_label"] = "manual_overrides_non_verdict"

@@ -1,0 +1,3482 @@
+{
+  "phase": "Percival Track-C self-correction",
+  "generated_at": "2026-07-03T07:41:20.376Z",
+  "spec": "docs/percival/PERCIVAL_TRACKC_SELF_CORRECTION_SPEC.md",
+  "world": {
+    "T": 12,
+    "T_IN": 8,
+    "T_DEFECT": 10
+  },
+  "knobs": {
+    "KS": [
+      4,
+      8,
+      10,
+      11,
+      12
+    ],
+    "LAMBDAS": [
+      0,
+      0.05,
+      0.1,
+      0.2
+    ],
+    "ORDERINGS": [
+      {
+        "name": "inverted",
+        "Ldec": 5
+      },
+      {
+        "name": "non_inverted",
+        "Ldec": 11
+      }
+    ],
+    "RHO_WRONGS": [
+      0.3,
+      1
+    ],
+    "REACH": [
+      true,
+      false
+    ]
+  },
+  "verdict": "TC_SELF_CORRECTION_MAPPED",
+  "predictions": {
+    "P1": true,
+    "P2": true,
+    "P3": true,
+    "P3_CTRL": true,
+    "P4": true,
+    "P5": true,
+    "P6": true
+  },
+  "deceptive_capture_region_exact": true,
+  "outcome_counts": {
+    "DECEPTIVE_RISK": 32,
+    "DECEPTIVE_CAPTURE": 48,
+    "SELF_CORRECTED": 76,
+    "TIE_OTHER": 4
+  },
+  "cells": [
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 4,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "U",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 4,
+        "U": 4,
+        "W_naive": 0,
+        "W_dec": 4
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 4,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 3.6,
+        "U": 3.4,
+        "W_naive": -0.15,
+        "W_dec": 3.75
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 4,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 3.2,
+        "U": 2.8,
+        "W_naive": -0.3,
+        "W_dec": 3.5
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 4,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 2.4,
+        "U": 1.6,
+        "W_naive": -0.6,
+        "W_dec": 3
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 8,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "U",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 8,
+        "U": 8,
+        "W_naive": 0,
+        "W_dec": 8
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 8,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 7.6,
+        "U": 7.4,
+        "W_naive": -0.15,
+        "W_dec": 7.75
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 8,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 7.2,
+        "U": 6.8,
+        "W_naive": -0.3,
+        "W_dec": 7.5
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 8,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 6.4,
+        "U": 5.6,
+        "W_naive": -0.6,
+        "W_dec": 7
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 10,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 10,
+        "U": 8.6,
+        "W_naive": 0,
+        "W_dec": 10
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 10,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 9.6,
+        "U": 8,
+        "W_naive": -0.15,
+        "W_dec": 9.75
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 10,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 9.2,
+        "U": 7.4,
+        "W_naive": -0.3,
+        "W_dec": 9.5
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 10,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 8.4,
+        "U": 6.2,
+        "W_naive": -0.6,
+        "W_dec": 9
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 11,
+      "lambda": 0,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 11,
+        "U": 8.9,
+        "W_naive": 0,
+        "W_dec": 10
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 11,
+      "lambda": 0.05,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 10.6,
+        "U": 8.3,
+        "W_naive": -0.15,
+        "W_dec": 9.75
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 11,
+      "lambda": 0.1,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 10.2,
+        "U": 7.7,
+        "W_naive": -0.3,
+        "W_dec": 9.5
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 11,
+      "lambda": 0.2,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 9.4,
+        "U": 6.5,
+        "W_naive": -0.6,
+        "W_dec": 9
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 12,
+      "lambda": 0,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 12,
+        "U": 9.2,
+        "W_naive": 0,
+        "W_dec": 11
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 12,
+      "lambda": 0.05,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 11.6,
+        "U": 8.6,
+        "W_naive": -0.15,
+        "W_dec": 10.75
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 12,
+      "lambda": 0.1,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 11.2,
+        "U": 8,
+        "W_naive": -0.3,
+        "W_dec": 10.5
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 12,
+      "lambda": 0.2,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 10.4,
+        "U": 6.8,
+        "W_naive": -0.6,
+        "W_dec": 10
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 4,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "U",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 4,
+        "U": 4,
+        "W_naive": 0,
+        "W_dec": 4
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 4,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 3.6,
+        "U": 3.4,
+        "W_naive": -0.15,
+        "W_dec": 3.75
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 4,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 3.2,
+        "U": 2.8,
+        "W_naive": -0.3,
+        "W_dec": 3.5
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 4,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 2.4,
+        "U": 1.6,
+        "W_naive": -0.6,
+        "W_dec": 3
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 8,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "U",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 8,
+        "U": 8,
+        "W_naive": 0,
+        "W_dec": 8
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 8,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 7.6,
+        "U": 7.4,
+        "W_naive": -0.15,
+        "W_dec": 7.75
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 8,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 7.2,
+        "U": 6.8,
+        "W_naive": -0.3,
+        "W_dec": 7.5
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 8,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 6.4,
+        "U": 5.6,
+        "W_naive": -0.6,
+        "W_dec": 7
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 10,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "U",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 10,
+        "U": 10,
+        "W_naive": 0,
+        "W_dec": 10
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 10,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 9.6,
+        "U": 9.4,
+        "W_naive": -0.15,
+        "W_dec": 9.75
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 10,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 9.2,
+        "U": 8.8,
+        "W_naive": -0.3,
+        "W_dec": 9.5
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 10,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 8.4,
+        "U": 7.6,
+        "W_naive": -0.6,
+        "W_dec": 9
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 11,
+      "lambda": 0,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "TIE_OTHER",
+      "winners": [
+        "V",
+        "U"
+      ],
+      "scores": {
+        "V": 11,
+        "U": 11,
+        "W_naive": 0,
+        "W_dec": 10
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 11,
+      "lambda": 0.05,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 10.6,
+        "U": 10.4,
+        "W_naive": -0.15,
+        "W_dec": 9.75
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 11,
+      "lambda": 0.1,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 10.2,
+        "U": 9.8,
+        "W_naive": -0.3,
+        "W_dec": 9.5
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 11,
+      "lambda": 0.2,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 9.4,
+        "U": 8.6,
+        "W_naive": -0.6,
+        "W_dec": 9
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 12,
+      "lambda": 0,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "TIE_OTHER",
+      "winners": [
+        "V",
+        "U"
+      ],
+      "scores": {
+        "V": 12,
+        "U": 12,
+        "W_naive": 0,
+        "W_dec": 11
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 12,
+      "lambda": 0.05,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 11.6,
+        "U": 11.4,
+        "W_naive": -0.15,
+        "W_dec": 10.75
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 12,
+      "lambda": 0.1,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 11.2,
+        "U": 10.8,
+        "W_naive": -0.3,
+        "W_dec": 10.5
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 12,
+      "lambda": 0.2,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 10.4,
+        "U": 9.6,
+        "W_naive": -0.6,
+        "W_dec": 10
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 4,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "U",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 4,
+        "U": 4,
+        "W_naive": 0,
+        "W_dec": 4
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 4,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 3.6,
+        "U": 3.4,
+        "W_naive": -0.15,
+        "W_dec": 3.45
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 4,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 3.2,
+        "U": 2.8,
+        "W_naive": -0.3,
+        "W_dec": 2.9
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 4,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 2.4,
+        "U": 1.6,
+        "W_naive": -0.6,
+        "W_dec": 1.8
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 8,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "U",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 8,
+        "U": 8,
+        "W_naive": 0,
+        "W_dec": 8
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 8,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 7.6,
+        "U": 7.4,
+        "W_naive": -0.15,
+        "W_dec": 7.45
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 8,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 7.2,
+        "U": 6.8,
+        "W_naive": -0.3,
+        "W_dec": 6.9
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 8,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 6.4,
+        "U": 5.6,
+        "W_naive": -0.6,
+        "W_dec": 5.8
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 10,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 10,
+        "U": 8.6,
+        "W_naive": 0,
+        "W_dec": 10
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 10,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 9.6,
+        "U": 8,
+        "W_naive": -0.15,
+        "W_dec": 9.45
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 10,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 9.2,
+        "U": 7.4,
+        "W_naive": -0.3,
+        "W_dec": 8.9
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 10,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 8.4,
+        "U": 6.2,
+        "W_naive": -0.6,
+        "W_dec": 7.8
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 11,
+      "lambda": 0,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 11,
+        "U": 8.9,
+        "W_naive": 0,
+        "W_dec": 10
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 11,
+      "lambda": 0.05,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 10.6,
+        "U": 8.3,
+        "W_naive": -0.15,
+        "W_dec": 9.45
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 11,
+      "lambda": 0.1,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 10.2,
+        "U": 7.7,
+        "W_naive": -0.3,
+        "W_dec": 8.9
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 11,
+      "lambda": 0.2,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 9.4,
+        "U": 6.5,
+        "W_naive": -0.6,
+        "W_dec": 7.8
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 12,
+      "lambda": 0,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 12,
+        "U": 9.2,
+        "W_naive": 0,
+        "W_dec": 11
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 12,
+      "lambda": 0.05,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 11.6,
+        "U": 8.6,
+        "W_naive": -0.15,
+        "W_dec": 10.45
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 12,
+      "lambda": 0.1,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 11.2,
+        "U": 8,
+        "W_naive": -0.3,
+        "W_dec": 9.9
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 12,
+      "lambda": 0.2,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 10.4,
+        "U": 6.8,
+        "W_naive": -0.6,
+        "W_dec": 8.8
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 4,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "U",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 4,
+        "U": 4,
+        "W_naive": 0,
+        "W_dec": 4
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 4,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 3.6,
+        "U": 3.4,
+        "W_naive": -0.15,
+        "W_dec": 3.45
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 4,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 3.2,
+        "U": 2.8,
+        "W_naive": -0.3,
+        "W_dec": 2.9
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 4,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 2.4,
+        "U": 1.6,
+        "W_naive": -0.6,
+        "W_dec": 1.8
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 8,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "U",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 8,
+        "U": 8,
+        "W_naive": 0,
+        "W_dec": 8
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 8,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 7.6,
+        "U": 7.4,
+        "W_naive": -0.15,
+        "W_dec": 7.45
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 8,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 7.2,
+        "U": 6.8,
+        "W_naive": -0.3,
+        "W_dec": 6.9
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 8,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 6.4,
+        "U": 5.6,
+        "W_naive": -0.6,
+        "W_dec": 5.8
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 10,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "U",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 10,
+        "U": 10,
+        "W_naive": 0,
+        "W_dec": 10
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 10,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 9.6,
+        "U": 9.4,
+        "W_naive": -0.15,
+        "W_dec": 9.45
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 10,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 9.2,
+        "U": 8.8,
+        "W_naive": -0.3,
+        "W_dec": 8.9
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 10,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 8.4,
+        "U": 7.6,
+        "W_naive": -0.6,
+        "W_dec": 7.8
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 11,
+      "lambda": 0,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "TIE_OTHER",
+      "winners": [
+        "V",
+        "U"
+      ],
+      "scores": {
+        "V": 11,
+        "U": 11,
+        "W_naive": 0,
+        "W_dec": 10
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 11,
+      "lambda": 0.05,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 10.6,
+        "U": 10.4,
+        "W_naive": -0.15,
+        "W_dec": 9.45
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 11,
+      "lambda": 0.1,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 10.2,
+        "U": 9.8,
+        "W_naive": -0.3,
+        "W_dec": 8.9
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 11,
+      "lambda": 0.2,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 9.4,
+        "U": 8.6,
+        "W_naive": -0.6,
+        "W_dec": 7.8
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 12,
+      "lambda": 0,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "TIE_OTHER",
+      "winners": [
+        "V",
+        "U"
+      ],
+      "scores": {
+        "V": 12,
+        "U": 12,
+        "W_naive": 0,
+        "W_dec": 11
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 12,
+      "lambda": 0.05,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 11.6,
+        "U": 11.4,
+        "W_naive": -0.15,
+        "W_dec": 10.45
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 12,
+      "lambda": 0.1,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 11.2,
+        "U": 10.8,
+        "W_naive": -0.3,
+        "W_dec": 9.9
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": true,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 12,
+      "lambda": 0.2,
+      "defect_sampled": true,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 10.4,
+        "U": 9.6,
+        "W_naive": -0.6,
+        "W_dec": 8.8
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 4,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "U",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 4,
+        "U": 4,
+        "W_naive": 0,
+        "W_dec": 4
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 4,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 3.6,
+        "U": 3.4,
+        "W_naive": -0.15,
+        "W_dec": 3.75
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 4,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 3.2,
+        "U": 2.8,
+        "W_naive": -0.3,
+        "W_dec": 3.5
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 4,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 2.4,
+        "U": 1.6,
+        "W_naive": -0.6,
+        "W_dec": 3
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 8,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "U",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 8,
+        "U": 8,
+        "W_naive": 0,
+        "W_dec": 8
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 8,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 7.6,
+        "U": 7.4,
+        "W_naive": -0.15,
+        "W_dec": 7.75
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 8,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 7.2,
+        "U": 6.8,
+        "W_naive": -0.3,
+        "W_dec": 7.5
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 8,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 6.4,
+        "U": 5.6,
+        "W_naive": -0.6,
+        "W_dec": 7
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 10,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 10,
+        "U": 8.6,
+        "W_naive": 0,
+        "W_dec": 10
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 10,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 9.6,
+        "U": 8,
+        "W_naive": -0.15,
+        "W_dec": 9.75
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 10,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 9.2,
+        "U": 7.4,
+        "W_naive": -0.3,
+        "W_dec": 9.5
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 10,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 8.4,
+        "U": 6.2,
+        "W_naive": -0.6,
+        "W_dec": 9
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 11,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 10,
+        "U": 8.6,
+        "W_naive": 0,
+        "W_dec": 10
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 11,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 9.6,
+        "U": 8,
+        "W_naive": -0.15,
+        "W_dec": 9.75
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 11,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 9.2,
+        "U": 7.4,
+        "W_naive": -0.3,
+        "W_dec": 9.5
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 11,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 8.4,
+        "U": 6.2,
+        "W_naive": -0.6,
+        "W_dec": 9
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 12,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 11,
+        "U": 8.9,
+        "W_naive": 0,
+        "W_dec": 11
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 12,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 10.6,
+        "U": 8.3,
+        "W_naive": -0.15,
+        "W_dec": 10.75
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 12,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 10.2,
+        "U": 7.7,
+        "W_naive": -0.3,
+        "W_dec": 10.5
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 0.3,
+      "k": 12,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 9.4,
+        "U": 6.5,
+        "W_naive": -0.6,
+        "W_dec": 10
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 4,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "U",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 4,
+        "U": 4,
+        "W_naive": 0,
+        "W_dec": 4
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 4,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 3.6,
+        "U": 3.4,
+        "W_naive": -0.15,
+        "W_dec": 3.75
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 4,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 3.2,
+        "U": 2.8,
+        "W_naive": -0.3,
+        "W_dec": 3.5
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 4,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 2.4,
+        "U": 1.6,
+        "W_naive": -0.6,
+        "W_dec": 3
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 8,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "U",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 8,
+        "U": 8,
+        "W_naive": 0,
+        "W_dec": 8
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 8,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 7.6,
+        "U": 7.4,
+        "W_naive": -0.15,
+        "W_dec": 7.75
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 8,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 7.2,
+        "U": 6.8,
+        "W_naive": -0.3,
+        "W_dec": 7.5
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 8,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 6.4,
+        "U": 5.6,
+        "W_naive": -0.6,
+        "W_dec": 7
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 10,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "U",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 10,
+        "U": 10,
+        "W_naive": 0,
+        "W_dec": 10
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 10,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 9.6,
+        "U": 9.4,
+        "W_naive": -0.15,
+        "W_dec": 9.75
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 10,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 9.2,
+        "U": 8.8,
+        "W_naive": -0.3,
+        "W_dec": 9.5
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 10,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 8.4,
+        "U": 7.6,
+        "W_naive": -0.6,
+        "W_dec": 9
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 11,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "U",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 10,
+        "U": 10,
+        "W_naive": 0,
+        "W_dec": 10
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 11,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 9.6,
+        "U": 9.4,
+        "W_naive": -0.15,
+        "W_dec": 9.75
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 11,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 9.2,
+        "U": 8.8,
+        "W_naive": -0.3,
+        "W_dec": 9.5
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 11,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 8.4,
+        "U": 7.6,
+        "W_naive": -0.6,
+        "W_dec": 9
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 12,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "U",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 11,
+        "U": 11,
+        "W_naive": 0,
+        "W_dec": 11
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 12,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 10.6,
+        "U": 10.4,
+        "W_naive": -0.15,
+        "W_dec": 10.75
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 12,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 10.2,
+        "U": 9.8,
+        "W_naive": -0.3,
+        "W_dec": 10.5
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "inverted",
+      "Ldec": 5,
+      "rho_wrong": 1,
+      "k": 12,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_CAPTURE",
+      "winners": [
+        "W_dec"
+      ],
+      "scores": {
+        "V": 9.4,
+        "U": 8.6,
+        "W_naive": -0.6,
+        "W_dec": 10
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 4,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "U",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 4,
+        "U": 4,
+        "W_naive": 0,
+        "W_dec": 4
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 4,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 3.6,
+        "U": 3.4,
+        "W_naive": -0.15,
+        "W_dec": 3.45
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 4,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 3.2,
+        "U": 2.8,
+        "W_naive": -0.3,
+        "W_dec": 2.9
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 4,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 2.4,
+        "U": 1.6,
+        "W_naive": -0.6,
+        "W_dec": 1.8
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 8,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "U",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 8,
+        "U": 8,
+        "W_naive": 0,
+        "W_dec": 8
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 8,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 7.6,
+        "U": 7.4,
+        "W_naive": -0.15,
+        "W_dec": 7.45
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 8,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 7.2,
+        "U": 6.8,
+        "W_naive": -0.3,
+        "W_dec": 6.9
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 8,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 6.4,
+        "U": 5.6,
+        "W_naive": -0.6,
+        "W_dec": 5.8
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 10,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 10,
+        "U": 8.6,
+        "W_naive": 0,
+        "W_dec": 10
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 10,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 9.6,
+        "U": 8,
+        "W_naive": -0.15,
+        "W_dec": 9.45
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 10,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 9.2,
+        "U": 7.4,
+        "W_naive": -0.3,
+        "W_dec": 8.9
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 10,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 8.4,
+        "U": 6.2,
+        "W_naive": -0.6,
+        "W_dec": 7.8
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 11,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 10,
+        "U": 8.6,
+        "W_naive": 0,
+        "W_dec": 10
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 11,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 9.6,
+        "U": 8,
+        "W_naive": -0.15,
+        "W_dec": 9.45
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 11,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 9.2,
+        "U": 7.4,
+        "W_naive": -0.3,
+        "W_dec": 8.9
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 11,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 8.4,
+        "U": 6.2,
+        "W_naive": -0.6,
+        "W_dec": 7.8
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 12,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 11,
+        "U": 8.9,
+        "W_naive": 0,
+        "W_dec": 11
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 12,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 10.6,
+        "U": 8.3,
+        "W_naive": -0.15,
+        "W_dec": 10.45
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 12,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 10.2,
+        "U": 7.7,
+        "W_naive": -0.3,
+        "W_dec": 9.9
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 0.3,
+      "k": 12,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 9.4,
+        "U": 6.5,
+        "W_naive": -0.6,
+        "W_dec": 8.8
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 4,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "U",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 4,
+        "U": 4,
+        "W_naive": 0,
+        "W_dec": 4
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 4,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 3.6,
+        "U": 3.4,
+        "W_naive": -0.15,
+        "W_dec": 3.45
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 4,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 3.2,
+        "U": 2.8,
+        "W_naive": -0.3,
+        "W_dec": 2.9
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 4,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 2.4,
+        "U": 1.6,
+        "W_naive": -0.6,
+        "W_dec": 1.8
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 8,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "U",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 8,
+        "U": 8,
+        "W_naive": 0,
+        "W_dec": 8
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 8,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 7.6,
+        "U": 7.4,
+        "W_naive": -0.15,
+        "W_dec": 7.45
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 8,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 7.2,
+        "U": 6.8,
+        "W_naive": -0.3,
+        "W_dec": 6.9
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 8,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": false,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 6.4,
+        "U": 5.6,
+        "W_naive": -0.6,
+        "W_dec": 5.8
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 10,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "U",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 10,
+        "U": 10,
+        "W_naive": 0,
+        "W_dec": 10
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 10,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 9.6,
+        "U": 9.4,
+        "W_naive": -0.15,
+        "W_dec": 9.45
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 10,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 9.2,
+        "U": 8.8,
+        "W_naive": -0.3,
+        "W_dec": 8.9
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 10,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 8.4,
+        "U": 7.6,
+        "W_naive": -0.6,
+        "W_dec": 7.8
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 11,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "U",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 10,
+        "U": 10,
+        "W_naive": 0,
+        "W_dec": 10
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 11,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 9.6,
+        "U": 9.4,
+        "W_naive": -0.15,
+        "W_dec": 9.45
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 11,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 9.2,
+        "U": 8.8,
+        "W_naive": -0.3,
+        "W_dec": 8.9
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 11,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 8.4,
+        "U": 7.6,
+        "W_naive": -0.6,
+        "W_dec": 7.8
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 12,
+      "lambda": 0,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "DECEPTIVE_RISK",
+      "winners": [
+        "V",
+        "U",
+        "W_dec"
+      ],
+      "scores": {
+        "V": 11,
+        "U": 11,
+        "W_naive": 0,
+        "W_dec": 11
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 12,
+      "lambda": 0.05,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 10.6,
+        "U": 10.4,
+        "W_naive": -0.15,
+        "W_dec": 10.45
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 12,
+      "lambda": 0.1,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 10.2,
+        "U": 9.8,
+        "W_naive": -0.3,
+        "W_dec": 9.9
+      },
+      "grace_recovers_V": true
+    },
+    {
+      "reach": false,
+      "ordering": "non_inverted",
+      "Ldec": 11,
+      "rho_wrong": 1,
+      "k": 12,
+      "lambda": 0.2,
+      "defect_sampled": false,
+      "ood_sampled": true,
+      "outcome": "SELF_CORRECTED",
+      "winners": [
+        "V"
+      ],
+      "scores": {
+        "V": 9.4,
+        "U": 8.6,
+        "W_naive": -0.6,
+        "W_dec": 8.8
+      },
+      "grace_recovers_V": true
+    }
+  ]
+}
