@@ -1,0 +1,32 @@
+AT2_GROWTH_LAW  [NON-PROMOTIONAL]  spec: AT2_GROWTH_LAW_SPEC.md v1.1
+
+=== G=200  (at2-samples.npz; n_adj=50000) ===
+(value control) action = E_low_K3 > calib median; K_min = 1
+(state proxy) R2(Phi_K->high_norm) = K1:0.960 K2:0.977 K3:0.977 K4:0.977 K5:0.977 K6:0.977  -> crossing K_state = 1
+(event flag) post-event fraction = 0.300
+
+    tau   damp   atom  incl  K_min(J)  K_ev  K_qu a_mm@K1..K6
+    250  0.300  0.000  True         1     1     1 0.000 -0.002 -0.001 -0.001 -0.001 -0.001
+    500  0.300  0.000  True         1    --     1 0.000 -0.000 -0.001 -0.002 -0.002 -0.002
+   1000  0.000  0.507 False         1    --    -- 0.000 0.000 0.000 0.000 0.000 0.000
+   2000  0.000  1.000 False         1    --    -- 0.000 0.000 0.000 0.000 0.000 0.000
+
+=== G=300  (at2-samples.npz; n_adj=50000) ===
+(value control) action = E_low_K3 > calib median; K_min = 2
+(state proxy) R2(Phi_K->high_norm) = K1:0.442 K2:0.939 K3:0.939 K4:0.974 K5:0.971 K6:0.971  -> crossing K_state = 2
+(event flag) post-event fraction = 0.269
+
+    tau   damp   atom  incl  K_min(J)  K_ev  K_qu a_mm@K1..K6
+    250  0.234  0.000  True         2     2     2 0.082 -0.000 -0.001 0.002 0.004 0.004
+    500  0.269  0.000  True         2    --     2 0.067 0.002 0.001 0.005 0.005 0.005
+   1000  0.530  0.001 False         2    --    -- 0.153 0.001 -0.000 0.004 0.004 0.004
+   2000  1.000  0.000 False         1    --    -- 0.000 0.000 0.000 0.000 0.000 0.000
+
+(verdicts, per frozen table)
+  G=200: NO_GATE_READ (<3 included tau-cells)
+  G=300: NO_GATE_READ (<3 included tau-cells)
+  cross-regime K_min gains at matched tau (G200->G300): [(250, 1), (500, 1)]
+  event sub-read G=200: AT2_EVENT_FLAT  gaps=[(250, 0)]
+  event sub-read G=300: AT2_EVENT_FLAT  gaps=[(250, 0)]
+(wrote) C:/Users/hughe/Dev/sundog/results/proof/at2-g200\at2_growth_law.json
+  (Non-promotional. 32x32 truncation measurement; no infinite-dim NSE claim.)

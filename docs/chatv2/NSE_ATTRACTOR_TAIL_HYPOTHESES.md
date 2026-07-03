@@ -267,6 +267,22 @@ a 32×32 Galerkin cell licenses zero ∞-dim language.
 
 ---
 
+
+> **Post-run status (2026-07-03): RUN — `NO_GATE_READ` at both regimes** (spec
+> v1.1 frozen; harness sign-off stamped + regression gate passed; owner batch;
+> receipt `AT2_GROWTH_LAW_RECEIPT.md`). Only 2/4 τ-cells included per regime —
+> **the finding: lookahead-max is a short-horizon instrument on this cell**
+> (G=200: AT-1's threshold-atom is horizon-dependent, mass 0→0.507→1.000 across
+> τ; G=300: damp saturates 0.53→1.0 — the AT-1-registered atom-clearance check's
+> first live catch). Reported non-gate reads: cross-regime K_min +1 at both
+> matched τ (M2's direction); K_min(decision)=K_min(value)=K_state at every
+> included cell (the §3.6 vacuity PATTERN, visible but not gate-fired — honest
+> prior for any AT-2b is COLLAPSE_VACUOUS, not growth); §2.5 event sub-read
+> `AT2_EVENT_FLAT` both regimes (no motion for the 3D parked lead). **K\*
+> bracket (§5 debt): closed with a typed wall — K\* > 4, twin instrument
+> DEFERRED_COVERAGE (zero evaluable neighborhoods) at K ≥ 5.** σ_modes
+> registration: receipts now weigh against; deferred.
+
 ### AT-3 — The maintained ledger: nudging at sub-determining budget carries the decision without carrying the state (Rank B; the never-built form)
 
 **Claim.** There is an observation budget K_obs strictly below the measured

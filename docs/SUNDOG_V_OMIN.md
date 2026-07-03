@@ -224,13 +224,33 @@ continuity. C2 (+ continuity on the pieces) is a separate later scope.
   `eval` index must be part of the recursion, not a `variable` binder). Ledger gotchas: literal
   `Fin` indices still need the ascribed snoc helpers; `and_imp` closes the curried/uncurried
   gap after `eval` simp.
-- **C1a — toolkit riders** [~½ session]: `tame_infinite_contains_Ioo`; the pointwise
-  eventual-sign trichotomy (`preconnected_split` + three tame sets).
-- **C1b — sign partition + refinement** [~1 session]: D-sets as formulas ⇒ tame; the finite
-  cut-set = bad points ∪ the D-set frontiers; on each gap every class is full-or-empty.
-- **C1c — the gluing lemmas** [~1 session]: neighbor-sense locally-increasing on an interval ⇒
-  `StrictMonoOn` (sup-chaining); constant version; anti by the negation closure of
-  `DefinableFun` (a formula) or by mirroring.
+- **C1a — toolkit riders** ✅ LANDED 2026-07-03: `Sundogcert/OMinimalTrichotomy.lean` (44th
+  module), axiom-clean, 3 gate entries. `tame_infinite_contains_Ioo` (normal form + a ball
+  inside a nonempty open piece); `tame_sublevelSet` (the R4-A payoff gap-fill by tame
+  booleans); `exists_right_window`/`exists_left_window` (frontier-avoiding windows via
+  `Finset.min'`/`max'`); **`eventual_right_sign` / `eventual_left_sign`** — the pointwise
+  trichotomies, exactly per scout: three tame comparison sets parametric only in the real
+  `φ x`, a window avoiding their finitely many frontier points, `preconnected_split` forcing
+  full-or-empty, the midpoint picking the sign. Ledger gotcha: `₊`/`₋` are not legal Lean
+  identifier characters (subscript digits are).
+- **C1b — sign partition + refinement** ✅ LANDED 2026-07-03: `OMinimalSignPartition.lean`
+  (45th module), axiom-clean, 2 gate entries, **green on the first build**. Design improvement
+  over the scout: the two-sided D-sets need **no new formulas** — neighbor-sense
+  locally-increasing is exactly `rightAbove ∩ leftBelow` — so the six one-sided sign-class sets
+  come from **two formula templates** (`tame_right_template`/`tame_left_template`; the six tame
+  proofs are two-liners), the D-sets are tame by intersection, and `eqGraph` (one-`∃` value
+  equality) is the only new combinator. Headline **`sign_partition`**: a finite cut-set (the
+  four frontiers) with exactly one behavior class — `locConst`/`locInc`/`locDec`/`badSet` — per
+  gap, by the full-or-empty engine + midpoint election. Pointwise covers
+  (`right_sign_cover`/`left_sign_cover`) banked for C1d.
+- **C1c — the gluing lemmas** ✅ LANDED 2026-07-03: `OMinimalGluing.lean` (46th module),
+  axiom-clean, 3 gate entries, green on the second build. Design improvement over the scout:
+  **one engine covers all three classes** — the sup-chaining argument only uses transitivity,
+  so `rel_propagate` is proved once over an abstract transitive relation (`T = {z ∈ [u,w] |
+  (u,z] absorbed}`; the sup is absorbed through its left window via a chained `T`-member; `s <
+  w` is impossible via the right window) and instantiated with `<`, flipped-`<`, flipped-`=`:
+  `strictMonoOn_of_locInc`, `strictAntiOn_of_locDec`, `eqOn_of_locConst`. No continuity
+  anywhere; no `-φ` mirroring needed. Two fix rounds (the `subst` rename; `le_or_gt` again).
 - **C1d — mixed-sign kills + assembly** [~1–2 sessions, THE RISK]: local-extremum-everywhere
   impossibilities; assemble C1. Falsifier `MONOTONICITY_STALLS` scoped precisely here;
   fallback = C1-weak (per-gap uniform sign classes), honestly reported as the partial.

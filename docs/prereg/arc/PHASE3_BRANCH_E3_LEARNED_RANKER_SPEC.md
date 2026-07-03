@@ -586,3 +586,71 @@ field; if the branch is a lift (`material_lift` / `selector_lift_below_material`
 (the audit trail — the Stage-2 merge overwrites in place) and proceeds to the Stage-2 sub-shards +
 re-merge. No label is read by the script other than the pre-registered branch verdict, and no knob
 depends on it — the ladder is exactly Amendment B's.
+
+---
+
+## Amendment D — Two-Stage Screening Verdict: REPLICATED ×2, and the oracle ceiling CLOSES the lane (2026-07-01 PT)
+
+Append-only. The operator executed the Amendment-C/C.1 AFK ladder (2026-06-30→07-01). `--allow-dirty`
+was used and **`gitDirty=true` is recorded** in both stage manifests (the Amendment-C rider; the
+worktree carried the uncommitted find/check lane work). Receipt:
+`results/arc/phase3-branch-e3-learned-ranker/` (Stage-2 in place; Stage-1 trail in `stage1_snapshot/`).
+
+### Branches (pre-registered gates, unchanged)
+- **Stage 1 (1/8 aux, 476 aux instances / 4 sub-shards): `branch_e3_ranker_replicated`** → auto-escalated
+  per the ladder.
+- **Stage 2 (1/4 aux, 967 aux instances / 8 sub-shards): `branch_e3_ranker_replicated`.**
+- Capability tables are **identical at both stages**: every selector (`v2_deterministic_selector`,
+  `learned_ranker`, `metadata_only_ranker`) solves exactly 2 distinct tasks per gated lane
+  (`test_lodo` 2/72 @ 0.027, `pttest` 2/72 @ 0.026), `learned_new_vs_v1v2 = 0`.
+- Training was real, not starved as a trained object: Stage-2 23,098 candidate rows / 4,976 positives;
+  learned best_loss 0.002–0.004 across the 5-seed slate vs **`label_shuffle_ranker` 0.94** (the shuffle
+  control cannot learn → no label leakage; the true ranker learns cleanly).
+
+### The decisive pre-registered control: the oracle candidate ceiling
+`candidate_ceiling.csv`: **`ceiling_solvable_tasks = 2` per gated lane — and the ceiling set IS
+`S_v1v2 = {be94b721, f25fbde4}`** (2 solved = 2 ceiling with `learned_new_vs_v1v2 = 0`). Since an exact
+solve requires the target grid to be among the admitted candidates, **every selector's solve set ⊆ the
+ceiling set**. Therefore:
+- `branch_e3_ranker_material_lift` (≥4 distinct/lane, ≥2 outside `S_v1v2`) and even
+  `branch_e3_ranker_selector_lift_below_material` (≥1 outside `S_v1v2`) are **UNSATISFIABLE for any
+  selector over the frozen v2 generator on this register** — learned, oracle-guided, or otherwise.
+- The ceiling is computed from the **U_primary candidate bank only** — it is **aux-independent**. More
+  ranker training data cannot add candidates to the bank. **The full-aux (~48 h) run is MOOT** for the
+  branch decision; the Amendment-B escalation ladder terminates here with its purpose (ruling out
+  data-starvation) superseded by a selector-independent bound.
+- **`replicated` is thus the MAXIMUM attainable branch** — the two-stage screen did not merely fail to
+  find a lift; the pre-registered oracle control proves no lift exists to find.
+
+### Quarantine (the mechanism, per instance, gated lanes)
+`no_admitted_programs` **299/336 (89%)** — for nine in ten held-out instances the frozen bank contains
+**not one train-consistent program at any rank**; `budget_exhausted_candidate_unknown` 28 (8%);
+`v2_ranker_already_solved` 9 (the `S_v1v2` instances). **Zero `v2_crowding_repaired`, zero
+`learned_ranker_miss`, zero regressions — the selection problem is EMPTY on the gated universe.** The
+v2 "top-2 crowding" phenomenon was a validation-lane diagnostic; per-instance validation labels are not
+emitted in `solutions_by_instance.csv` (gated lanes only), so the validation-repair question stays
+open-but-diagnostic. It cannot change the gated conclusion.
+
+### What this establishes (and closes)
+The deterministic program-search program (Branch E v1 → v2 → E3) is **CLOSED at the generator ceiling**:
+- v1: search+verify clears the floor learners floored on (capability, 2 tasks/lane).
+- v2: more primitives of the same deterministic class add nothing (0 new; validation crowding).
+- E3: **no selector can add anything either** — the ceiling equals the solved set; the binding wall on
+  the registered universe is **generator-class expressivity** (the per-task-novel rule is not expressible
+  in the frozen deterministic primitive space within budget — 89% of instances admit no consistent
+  program at all), not selection, not selector training data.
+Materially lifting exact-match now requires a **different candidate-generator class** (richer
+object-centric primitive language, test-time LM proposer, …) under its own pre-registered spec — or
+recording the deterministic program-search capability as bounded at this baseline. Unchanged caveats:
+held-out public-training capability work only; NOT a Blackwell-sufficiency proof, ARC solve,
+public-evaluation result, or Kaggle claim (Phase 6 gates those). No gate, family, budget, feature, or
+seed was retuned after reading `U_primary` labels; the two-stage ladder + conditional escalation were
+pre-declared (Amendments B/C/C.1).
+
+### Public language
+Permitted: "The learned ranker replicated the bounded v1/v2 program-search capability at both bounded
+auxiliary scales, and the pre-registered oracle-candidate-ceiling control showed the ceiling equals the
+already-solved set — so no selector over the frozen generator can materially lift on the registered
+universe. The deterministic program-search lane is closed at its generator ceiling." Forbidden claims
+unchanged (no sufficiency / solve / eval / Kaggle; a bounded-aux non-positive alone is still not an E3
+"floor" — the closure here rests on the ceiling control, not the non-positive).

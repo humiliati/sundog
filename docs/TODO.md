@@ -62,20 +62,20 @@ Yang-Mills; Riemann resolved in-house (off the gating list).
   Eight reopening avenues catalogued for any lab initiate with bandwidth.
   Bandwidth currently directed to three-body Phase 15+ and the
   coarse-graining proof trunk.
-- **ARC Branch E3 learned ranker** — built, compute-paused by operator
-  decision 2026-05-29. Not blocked on a missing artifact; the program
-  chose to spend cycles elsewhere. **Resume-path-(b) specced 2026-06-30**
-  (`PHASE3_BRANCH_E3_LEARNED_RANKER_SPEC.md` Amendment B): bounded-aux
-  two-stage screening (shards {0} =1/8 → {0,1} =1/4 → full {0..7}) with an
-  asymmetric verdict (a bounded lift is CONCLUSIVE = lower bound on the full
-  ranker; a bounded non-positive is inconclusive, escalate). **Freeze-marker
-  smokes GREEN 2026-06-30 (Amendment C): py_compile / dry-run / leak-check 0-0 /
-  capped subset-merge end-to-end (single shard → 28 artifacts, ranker trained 5
-  seeds, 5 controls populated). Subset-merge confirmed; no U_primary/validation
-  cache (escalation re-pays ~4h; optional `--score-only` deferred). Stage-1
-  (1/8 aux) ADMITTED + staged for operator** — exact PowerShell in Amendment C,
-  ~10-16h background, run from a clean/pinned worktree; Stage-2/full gated on
-  Stage-1 being non-positive.
+- **ARC Branch E3 learned ranker — CLOSED AT THE GENERATOR CEILING
+  (2026-07-01, Amendment D).** The operator ran the Amendment-B/C/C.1
+  bounded two-stage screen: Stage-1 (1/8 aux, 476 inst) and Stage-2 (1/4
+  aux, 967 inst) both `branch_e3_ranker_replicated` with IDENTICAL
+  capability tables. Decisive pre-registered control: the oracle candidate
+  ceiling = 2 tasks/lane = exactly S_v1v2 → the lift gates are
+  UNSATISFIABLE for ANY selector over the frozen v2 generator (ceiling is
+  aux-independent) → **the full ~48h aux run is MOOT; `replicated` is the
+  maximum attainable branch.** Quarantine: 89% `no_admitted_programs`
+  (zero crowding-repair opportunities on U_primary). Wall = generator-CLASS
+  expressivity, not selection, not selector data. Next admissible move =
+  a different candidate-generator class (object-centric language / LM
+  proposer) under its own spec, or record the deterministic program-search
+  program bounded at this baseline. No longer compute-blocked.
 
 ### `review-gated` — packet sent, awaiting reply
 

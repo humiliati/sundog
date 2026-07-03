@@ -88,6 +88,22 @@ candidate set to beat top-2 crowding (with an `oracle_candidate_ceiling` control
 the binding run is **PAUSED / compute-blocked (~48 h candidate generation; operator decision; `docs/TODO.md`)**.
 That is the genuinely-open ARC direction, owner-gated on compute — not a coverage question.
 
+**FINAL REFINEMENT (2026-07-01 — E3 ran; selection is SATURATED; the wall is GENERATOR-CLASS).** The E3
+two-stage bounded screen executed (Amendments B/C/C.1/D): `branch_e3_ranker_replicated` at both 1/8 and 1/4
+aux — and the pre-registered **oracle-ceiling control closed the lane**: the ceiling on the gated universe is
+exactly the already-solved set (2 tasks/lane = `S_v1v2`), so **no selector whatsoever can lift over the frozen
+generator** (the ceiling is aux-independent; the full 48 h run is moot). Quarantine: **89% of gated instances
+admit not one train-consistent program** (`no_admitted_programs` 299/336) — the selection problem is *empty*
+on U_primary (v2's crowding was a validation-lane phenomenon). So the FIND wall decomposes as
+**generate-vs-select**, and on the registered universe the binding term is **GENERATE at the class level**:
+the per-task-novel rule is not expressible in any frozen deterministic bank within budget. The correction arc,
+completed honestly: *library-coverage (more-of-the-same)* refuted by v2 → *selection under under-determination*
+suspected (real in the toy + on validation) → E3 shows selection saturated at the ceiling; the wall is
+**generator-class expressivity**. The find/check lens survives intact — CHECK cheap and saturated, FIND is the
+wall — with the ledger's `train_underdetermines` governing wherever candidates DO exist. The next admissible
+ARC move is a different generator class (object-centric language / LM proposer) under its own spec — or the
+deterministic program-search program stands closed at its bounded baseline.
+
 ## Status of the ARC Branch-E gate (updated — partly superseded)
 The slate pre-committed: *file an ARC Branch-E spec only after FC-2 lands a separation AND FC-3 reframes the
 floors falsifiably.* On inspection the premise is **already met by the ARC lane itself**: a
