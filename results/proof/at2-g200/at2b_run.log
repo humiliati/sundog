@@ -1,0 +1,7 @@
+AT2B_GROWTH_LAW  [NON-PROMOTIONAL]  spec: AT2B_GROWTH_LAW_SPEC.md
+
+=== G=200 ===
+(state) K_state=1 | (value) K_min=1 | (event) post-event frac=0.300
+
+  [MEAN-form (PRIMARY)]
+    tau   damp   atom  incl  K_min  Delta  K_ev  K_qu  a_mm@K1..K6
