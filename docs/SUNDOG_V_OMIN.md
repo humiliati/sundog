@@ -27,7 +27,8 @@
 | R3-semialgebraic | Tarski–Seidenberg QE | **TODO** (below) |
 | R4-A | Abstract `OMinStructure` + definable calculus + `S₁ = Tame` capstone | ✅ 2026-07-02 |
 | R4-B | **`semilinearStructure : OMinStructure` — the first machine-checked o-min structure** | ✅ 2026-07-03 |
-| R4-C/D | Monotonicity Theorem / Cell Decomposition | **SCOPED** (below) |
+| R4-C | **THE MONOTONICITY THEOREM, with continuity** (`monotonicity_theorem_continuous`) | ✅ 2026-07-04 |
+| R4-D | Cell Decomposition, dim 2 | **SCOPED** (below) |
 
 Modules: `OMinimalOne` … `SemilinearStructure` (34th–42nd), 24 gated headline theorems, all
 axiom-clean. Classical anchor for what's landed:
@@ -308,13 +309,17 @@ added to every gap (the constant case is trivially continuous, so the conclusion
   ⇒ contains `(p,q)` (`tame_infinite_contains_Ioo`, fourth use) ⇒ the midpoint's preimage is
   order-continuous by the squeeze; plus `constOn_continuousAt` (free). `IMAGE_KILL_GAP` did
   not fire.
-- **C2c — assembly** [~½ session]: `discSet` tame + (infinite ⇒ interval ⇒ shrink to a C1-free
-  sub-gap ⇒ constant-or-monotone ⇒ has a continuity point ⇒ contradiction) ⇒ **`discSet`
-  finite**; final cut-set = C1's `F` ∪ `discSet`; `ContinuousOn` per gap via
-  `continuousOn_of_forall_continuousAt`.
+- **C2c — assembly** ✅ LANDED 2026-07-04, **green on the first build**: `discSet_finite`
+  (interval of discontinuities → C1-free sub-gap → constant-or-monotone → a continuity point,
+  contradiction) and the headline **`monotonicity_theorem_continuous`**.
 
-*Module.* `OMinimalContinuity.lean` (48th); gates: `tame_discSet`, the C2b kill,
-`monotonicity_theorem_continuous`.
+**R4-C COMPLETE 2026-07-04** — `monotonicity_theorem_continuous`: for every o-minimal
+structure and definable `φ`, a finite cut-set outside of which `φ` is piecewise constant,
+strictly increasing, or strictly decreasing, **and continuous** — van den Dries Ch. 3 §1 in
+full, machine-checked. C1 scoped 2–4 weeks / landed 2 days; C2 scoped 2½–3 sessions / landed
+in 2. Module `OMinimalContinuity.lean` (48th); 6 gate entries across C2. Remaining R4: **D —
+cell decomposition, dimension 2** (the uniform finiteness lemma), then the lane's long walls
+(TS-QE, general-n cells).
 
 ### R4-D — Cell decomposition, dimension 2 first. [2–4 WEEKS; general n = the long pole]
 Decompose any definable `A ⊆ ℝ²` into finitely many cells (points/intervals over graphs and
