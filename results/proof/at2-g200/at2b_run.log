@@ -5,3 +5,44 @@ AT2B_GROWTH_LAW  [NON-PROMOTIONAL]  spec: AT2B_GROWTH_LAW_SPEC.md
 
   [MEAN-form (PRIMARY)]
     tau   damp   atom  incl  K_min  Delta  K_ev  K_qu  a_mm@K1..K6
+    100  0.300  0.000  True      1      0     1     1  0.000 -0.001 -0.000 -0.002 -0.002 -0.002
+    250  0.300  0.000  True      1      0     1     1  -0.000 0.001 -0.000 -0.001 0.000 0.000
+    400  0.300  0.000  True      1      0    --     1  -0.000 -0.001 0.000 -0.001 -0.001 -0.001
+    500  0.300  0.000  True      1      0    --     1  0.000 -0.000 0.000 -0.002 -0.002 -0.002
+    750  0.300  0.000  True      1      0    --    --  -0.000 -0.001 -0.000 0.001 0.001 0.001
+
+  [MAX-form (sibling, reported)]
+    tau   damp   atom  incl  K_min  Delta  K_ev  K_qu  a_mm@K1..K6
+    100  0.300  0.001  True      1      0    --    --  0.000 -0.002 0.001 -0.001 -0.001 -0.001
+    250  0.300  0.000  True      1      0    --    --  0.000 -0.002 -0.001 -0.001 -0.001 -0.001
+    400  0.300  0.000  True      1      0    --    --  0.000 -0.000 -0.001 -0.001 -0.001 -0.001
+    500  0.300  0.000  True      1      0    --    --  0.000 -0.000 -0.001 -0.002 -0.002 -0.002
+
+=== G=300 ===
+(state) K_state=2 | (value) K_min=2 | (event) post-event frac=0.269
+
+  [MEAN-form (PRIMARY)]
+    tau   damp   atom  incl  K_min  Delta  K_ev  K_qu  a_mm@K1..K6
+    100  0.236  0.000  True      2      0    --    --  0.171 0.000 0.001 0.002 0.003 0.003
+    250  0.236  0.000  True      2      0     2    --  0.156 0.003 0.002 0.005 0.008 0.009
+    400  0.236  0.000  True      2      0     2     2  0.105 -0.001 0.000 0.001 0.003 0.004
+    500  0.235  0.000  True      2      0     2     2  0.083 -0.000 -0.000 0.003 0.004 0.004
+    750  0.233  0.000  True      2      0    --     2  0.060 -0.001 -0.000 0.004 0.004 0.004
+
+  [MAX-form (sibling, reported)]
+    tau   damp   atom  incl  K_min  Delta  K_ev  K_qu  a_mm@K1..K6
+    100  0.236  0.000  True      2      0    --    --  0.168 0.001 0.000 0.001 0.002 0.002
+    250  0.234  0.000  True      2      0    --    --  0.082 -0.000 -0.001 0.002 0.004 0.004
+    400  0.236  0.000  True      2      0    --    --  0.066 -0.000 -0.001 0.004 0.004 0.004
+    500  0.269  0.000  True      2      0    --    --  0.067 0.002 0.001 0.005 0.005 0.005
+
+(verdicts, per frozen table)
+  G=200: AT2B_COLLAPSE_VACUOUS (K_min = K_state at every included cell)  [K_min(mean) over tau: [(100, 1), (250, 1), (400, 1), (500, 1), (750, 1)]]
+  G=300: AT2B_COLLAPSE_VACUOUS (K_min = K_state at every included cell)  [K_min(mean) over tau: [(100, 2), (250, 2), (400, 2), (500, 2), (750, 2)]]
+  cross-regime: matched-included gains [(100, 1), (250, 1), (400, 1), (500, 1), (750, 1)] -> AT2B_GROWTH_CONFIRMED (cross-regime arm)
+  event sub-read G=200: AT2B_EVENT_FLAT  gaps=[(100, 0), (250, 0)]
+  event sub-read G=300: AT2B_EVENT_FLAT  gaps=[(400, 0), (500, 0)]
+  Delta(K_state - K_min) G=200: [(100, 0), (250, 0), (400, 0), (500, 0), (750, 0)]
+  Delta(K_state - K_min) G=300: [(100, 0), (250, 0), (400, 0), (500, 0), (750, 0)]
+(wrote) results/proof/at2-g200\at2b_growth_law.json
+  (Non-promotional. 32x32 truncation; no infinite-dim NSE claim.)

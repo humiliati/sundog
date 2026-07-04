@@ -251,12 +251,26 @@ continuity. C2 (+ continuity on the pieces) is a separate later scope.
   w` is impossible via the right window) and instantiated with `<`, flipped-`<`, flipped-`=`:
   `strictMonoOn_of_locInc`, `strictAntiOn_of_locDec`, `eqOn_of_locConst`. No continuity
   anywhere; no `-φ` mirroring needed. Two fix rounds (the `subst` rename; `le_or_gt` again).
-- **C1d — mixed-sign kills + assembly** [~1–2 sessions, THE RISK]: local-extremum-everywhere
-  impossibilities; assemble C1. Falsifier `MONOTONICITY_STALLS` scoped precisely here;
-  fallback = C1-weak (per-gap uniform sign classes), honestly reported as the partial.
+- **C1d — mixed-sign kills + assembly** ✅ LANDED 2026-07-04: `OMinimalMonotonicity.lean` (47th
+  module), axiom-clean, 2 gate entries (`badSet_finite`, `monotonicity_theorem`), green on the
+  third build (an import path + a paren — no mathematical fight). **`MONOTONICITY_STALLS` did
+  not fire.** The kills, per scout: a bad interval carries uniform one-sided signs on a
+  frontier-free subwindow (`elect3` twice); the three coherent combos contradict badness; the
+  four eq-mixed combos die by short window contradictions (`kill_rightEq_left` /
+  `kill_leftEq_right`, each handling both strict directions through an abstract `P` with a
+  `ne`-extractor); the two extremum combos die by **countability** — strict neighbor-extrema of
+  any real function inject into ℚ × ℚ via rational witness windows (`countable_min_pts`; two
+  minima sharing a window each dominate the other), `Ioo` is uncountable
+  (`Cardinal.mk_Ioo_real` + `aleph0_lt_continuum`), and the max case is the min case for `-φ`.
+  *Honest note:* the countability kill is ℝ-specific — over a general RCF, van den Dries's
+  constant-or-injective route is required; named refinement, not claimed.
 
-Total ≈ 4½–5½ sessions, consistent with the 2–4-week pre-registration. C2 scoped separately
-after C1 lands.
+**R4-C1 = THE MONOTONICITY THEOREM, COMPLETE 2026-07-04** (`monotonicity_theorem`): for every
+o-minimal structure and definable `φ`, a finite cut-set outside of which `φ` is piecewise
+constant, strictly increasing, or strictly decreasing. Scoped at 2–4 weeks; landed in ~2 days
+(C0+C1a day one, C1b+C1c+C1d day two). One falsifier partially engaged (`MONOTONICITY_STALLS`
+routed via the ℝ-specific kill, honestly fenced); the rest never fired. **C2 (+ continuity on
+the pieces) is the remaining stage of R4-C — scoped separately.**
 
 ### R4-D — Cell decomposition, dimension 2 first. [2–4 WEEKS; general n = the long pole]
 Decompose any definable `A ⊆ ℝ²` into finitely many cells (points/intervals over graphs and

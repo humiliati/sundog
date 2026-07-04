@@ -1,0 +1,80 @@
+{
+ "spec": "AT3_NUDGING_LEDGER_SPEC.md",
+ "grashof": 300.0,
+ "smoke": true,
+ "e_max_true": 0.8729207271666541,
+ "results": [
+  {
+   "k_obs": 2,
+   "mu": 10.0,
+   "mode": "full",
+   "median_tail_err": 3.230402856249749e-16,
+   "state": "synchronized",
+   "decision_acc": 0.375,
+   "majority": 0.575,
+   "n_eval": 300,
+   "elapsed_s": 29.6,
+   "smoke": true
+  },
+  {
+   "k_obs": 2,
+   "mu": 10.0,
+   "mode": "twin",
+   "median_tail_err": 0.9298798548129978,
+   "state": "state_insufficient",
+   "decision_acc": 0.675,
+   "majority": 0.575,
+   "n_eval": 300,
+   "elapsed_s": 20.5,
+   "smoke": true
+  },
+  {
+   "k_obs": 2,
+   "mu": 10.0,
+   "mode": "scrambled",
+   "median_tail_err": 1.147493798069804,
+   "state": "state_insufficient",
+   "decision_acc": 0.425,
+   "majority": 0.575,
+   "n_eval": 300,
+   "elapsed_s": 17.6,
+   "smoke": true
+  },
+  {
+   "k_obs": 6,
+   "mu": 10.0,
+   "mode": "full",
+   "median_tail_err": 2.5734662239483197e-16,
+   "state": "synchronized",
+   "decision_acc": 0.375,
+   "majority": 0.575,
+   "n_eval": 300,
+   "elapsed_s": 18.6,
+   "smoke": true
+  },
+  {
+   "k_obs": 6,
+   "mu": 10.0,
+   "mode": "twin",
+   "median_tail_err": 0.5076824229940697,
+   "state": "state_insufficient",
+   "decision_acc": 0.5,
+   "majority": 0.575,
+   "n_eval": 300,
+   "elapsed_s": 17.5,
+   "smoke": true
+  },
+  {
+   "k_obs": 6,
+   "mu": 10.0,
+   "mode": "scrambled",
+   "median_tail_err": 1.0829927494056553,
+   "state": "state_insufficient",
+   "decision_acc": 0.425,
+   "majority": 0.575,
+   "n_eval": 300,
+   "elapsed_s": 17.8,
+   "smoke": true
+  }
+ ]
+}

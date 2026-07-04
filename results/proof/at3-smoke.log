@@ -1,0 +1,11 @@
+AT3_NUDGING_LEDGER  G=300  window=20000  SMOKE (non-verdict)  [NON-PROMOTIONAL]
+(truth) burn-in done; e_max(500) = 1.0671; calib n = 990; realized in-window damp = 0.000
+(SMOKE FALLBACK) degenerate window damp -> threshold reset to window median 0.8729 (readout-path validation ONLY; non-verdict)
+  k2_mu10_full_smoke: err_tail=0.0000 (synchronized) acc=0.375 maj=0.575 [29.6s]
+  k2_mu10_twin_smoke: err_tail=0.9299 (state_insufficient) acc=0.675 maj=0.575 [20.5s]
+  k2_mu10_scrambled_smoke: err_tail=1.1475 (state_insufficient) acc=0.425 maj=0.575 [17.6s]
+  k6_mu10_full_smoke: err_tail=0.0000 (synchronized) acc=0.375 maj=0.575 [18.6s]
+  k6_mu10_twin_smoke: err_tail=0.5077 (state_insufficient) acc=0.500 maj=0.575 [17.5s]
+  k6_mu10_scrambled_smoke: err_tail=1.0830 (state_insufficient) acc=0.425 maj=0.575 [17.8s]
+(wrote) results/proof/at3-smoke/at3_summary.json
+  (Non-promotional. Verdicts come from the receipt evaluation, not this log.)

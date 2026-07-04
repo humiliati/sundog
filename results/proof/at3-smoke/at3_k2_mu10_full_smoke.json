@@ -1,0 +1,12 @@
+{
+ "k_obs": 2,
+ "mu": 10.0,
+ "mode": "full",
+ "median_tail_err": 3.230402856249749e-16,
+ "state": "synchronized",
+ "decision_acc": 0.375,
+ "majority": 0.575,
+ "n_eval": 300,
+ "elapsed_s": 29.6,
+ "smoke": true
+}

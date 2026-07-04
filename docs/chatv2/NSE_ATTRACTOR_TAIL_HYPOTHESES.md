@@ -283,6 +283,19 @@ a 32×32 Galerkin cell licenses zero ∞-dim language.
 > DEFERRED_COVERAGE (zero evaluable neighborhoods) at K ≥ 5.** σ_modes
 > registration: receipts now weigh against; deferred.
 
+> **AT-2b (2026-07-03): RUN — `AT2B_COLLAPSE_VACUOUS` at BOTH regimes, full
+> strength** (new registration `AT2B_GROWTH_LAW_SPEC.md`, mean-form primary,
+> in-band τ-grid {100..750}; zero new simulation — post-processing on the banked
+> exports; receipt `AT2B_GROWTH_LAW_RECEIPT.md`). 10/10 cells included;
+> K_min(decision)=K_min(value)=K_state at EVERY cell (1's at G=200, 2's at
+> G=300); Δ = 0 everywhere; cross-regime +1 rides the state budget (not
+> decision-specific — adjudicated under the registered precedence); event
+> sub-read FLAT again. **The anchor doc's §3.6 vacuity negative is completed as
+> a first-class measured result: on this cell, deciding and reconstructing cost
+> the same budget. AT-3 is now the slate's sharpest question (can a maintained
+> ledger decouple what the static read cannot); σ_modes registration: defer,
+> definitively.**
+
 ### AT-3 — The maintained ledger: nudging at sub-determining budget carries the decision without carrying the state (Rank B; the never-built form)
 
 **Claim.** There is an observation budget K_obs strictly below the measured
