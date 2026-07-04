@@ -6,9 +6,21 @@ empirical leg are this lane's founding receipts). The opening deliverable is the
 below: which parts of the spine CAN be litpassed against meaningfully, against what, and what kills
 them. The LP slate gates everything public.*
 
-Status: **OPENED 2026-07-03. Spine + litpass slate only; no new experiment.** The name was banked as
-a known **slop-attractor** (a Fiverr reviewer once labeled the owner's h-of-x work "the bodhisattva"
-via GPT slop), so the register discipline below is constitutional, not decorative.
+Status: **OPENED 2026-07-03. Spine + litpass slate; no new experiment.** The name was banked as a known
+**slop-attractor** (a Fiverr reviewer once labeled the owner's h-of-x work "the bodhisattva" via GPT
+slop), so the register discipline below is constitutional, not decorative.
+
+**Cumulative litpass standing — ALL SIX CLOSED (2026-07-04, honest — no glazing).** LP-1 NARROWED, LP-2
+REFINED, LP-3 NARROWED, LP-4 NARROW-SCOPE, LP-5 DEMOTED, LP-6 CLOSED. **Every entry conceded its core to
+prior art; the lane owns NO standalone "we discovered X."** What survives is SYNTHESIS + QUANTIFICATION +
+MACHINE-CHECKING of known pieces (coverage law unifying invariance + self-reducibility; simplicity-margin
+quantifying ELK's inseparability; coverage-reparameterised performative dynamics + characterised wandering
+regime; a formal anti-basin micro-instance CAST asked for; the pairing law calibrated ~3%). Better than
+ornament — real pieces, non-trivial unification, 14 genuine Lean cores — but a **SYNTHESIS lane, not a
+discovery lane. The discovery bar for a splashy standalone page is NOT met.** Disposition (owner call):
+(A) bank as an internal Percival Track-C appendix [recommended]; or (B) a MODEST expository note in the
+cap-not-council register, concessions foregrounded, NO discovery claim, bodhisattva/medievalist framing
+OFF. Full tally + per-entry verdicts in [`BODHISATTVA_LITPASS_MEMO.md`](BODHISATTVA_LITPASS_MEMO.md).
 
 ---
 
@@ -27,10 +39,13 @@ disagreement region D directly, OR — when the true objective is algebraically 
 on the honest region ¬D plus structure linking ¬D to D (oblivious defense). The strict "mass on D" is
 the OPAQUE-objective special case; objective structure is a second recovery route (bridges LP-5).
 
-Falsified by: an internal discriminator that separates corrective from corrupting updates without an
-invariance gap; a repair mechanism that recovers V with NEITHER coverage NOR objective structure (LP-2's
+Falsified by: a repair mechanism that recovers V with NEITHER coverage NOR objective structure (LP-2's
 oblivious defense does NOT do this — it is coverage of ¬D + structure — but a structure-free,
 coverage-free repair would kill the law); a corrigible fixed point that is absorbing under an inverted prior
+without sustained coverage. (NOTE: the earlier falsifier "an internal discriminator without an invariance
+gap" is RETIRED — LP-5 established that self-reducibility is exactly such a discriminator, so it is a
+member of the structure family, not a counterexample; the F2 "all discriminators reduce to invariance"
+claim is dropped.)
 without sustained coverage.
 
 ## What this lane is NOT (the slop fences)
@@ -119,53 +134,47 @@ five entries have house-style litpass verdicts.**
 - **Killed by:** control literature already carrying the coverage-rate math (plausible — randomized
   auditing analysis is their bread and butter); oblivious defense breaking mechanism-independence.
 
-### LP-3 — The three-regime fixed points vs performative prediction — risk: MEDIUM-HIGH
+### LP-3 — The three-regime fixed points vs performative prediction — **VERDICT 2026-07-04: SURVIVES, NARROWED** ([`BODHISATTVA_LITPASS_MEMO.md`](BODHISATTVA_LITPASS_MEMO.md))
 
-- **Claim under test:** v4's classification (bodhisattva/wirehead/wandering) of the deploy-correct
-  chain; coverage as the contraction variable.
-- **Against:** Perdomo et al. 2020 (arXiv:2002.06673 — RRM converges to performative stability iff
-  sensitivity/convexity conditions hold; non-convergence otherwise — TK for exact constants);
-  **Brown–Hod–Kalemaj, "Performative Prediction in a Stateful World" (AISTATS 2022,
-  arXiv:2011.03885 — VERIFIED): necessary AND sufficient RRM convergence conditions, stateful** —
-  our wandering regime is plausibly their non-convergence in two-point clothing.
-- **Delta if survives:** coverage (a probe/information quantity) as the contraction variable rather
-  than loss-geometry constants; the asymmetric noise-robustness (falls deterministic, recoveries
-  probit-thinned); the exact absorbing characterizations. The discrete chain is a *different
-  axis* — theirs is loss geometry, ours is information access — but that has to be SHOWN, not said.
-- **Killed by:** a stateful-performativity result already parameterizing convergence by an
-  information/coverage quantity.
+> Closed against Perdomo 2020 (arXiv:2002.06673) + Brown–Hod–Kalemaj (arXiv:2011.03885, verified).
+> Their convergence is parameterised by **ε-joint-sensitivity / Lipschitz contraction of the transition
+> map** — pure loss/distribution geometry; **0 hits for cycling/oscillation** (they give convergence
+> conditions, not a characterisation of the non-convergent regime). OWNED (concede): performative-stable
+> = fixed points of retraining, convergence-under-contraction. SURVIVES: coverage as the contraction
+> variable (info-access, not loss-geometry) + the CHARACTERISED wandering regime (`wandering_period_two`
+> + occupancy formula, which they lack) + the noise asymmetry + Lean — on a DISCRETE 2-state chain
+> (honest scope: a reparameterisation, not a new continuous performative theorem).
 
-### LP-4 — Corrigibility-not-absorbing vs the basin-of-corrigibility debate — risk: MEDIUM
+### LP-4 — Corrigibility-not-absorbing vs the basin-of-corrigibility debate — **VERDICT 2026-07-04: SURVIVES, NARROW SCOPE** ([`BODHISATTVA_LITPASS_MEMO.md`](BODHISATTVA_LITPASS_MEMO.md))
 
-- **Claim under test:** v4's sharpest consequence — under an inverted prior, corrigibility is NOT
-  absorbing; one uncovered correction round topples it, at any noise level; sustained coverage, not
-  one-time redemption.
-- **Against:** Christiano, "Corrigibility" (ai-alignment.com — the broad-basin-of-attraction claim —
-  VERIFIED); **the live counter-thread: "The corrigibility basin of attraction is a misleading
-  gloss" (LessWrong — VERIFIED) and CAST "Corrigibility as Singular Target" (arXiv:2506.03056, June
-  2025 — VERIFIED);** Soares et al. 2015 "Corrigibility" (TK).
-- **Delta if survives:** a machine-checked micro-instance ON the anti-basin side with EXACT
-  conditions (prior ordering + coverage) — the debate is informal; a formal toy that says precisely
-  *when* the basin fails would be a real contribution at honest scope (two hypotheses, one channel).
-- **Killed by:** CAST or the counter-thread already formalizing the non-absorbing condition; or the
-  toy's scope being too thin to bear on the debate (a real possibility — must be stated as a
-  micro-instance, never "corrigibility is unstable, proved").
+> Closed against Christiano broad-basin (informal blog) + "misleading gloss" (LW, informal) + **CAST
+> arXiv:2506.03056 (verified: a VISION paper — posits the "Corrigibility Attractor Hypothesis" and
+> explicitly calls for the "mathematical proofs" it does NOT provide)** + **Nayebi arXiv:2507.20964
+> "Provably Corrigible Agents" (verified: formal but ORTHOGONAL — a static lexicographic-utility
+> construction for the OFF-SWITCH GAME; its "absorbing" = the shutdown state; no self-correction loop,
+> no coverage, no basin dynamics).** OWNED (concede): the basin debate + the qualitative
+> not-broad concern. SURVIVES: a machine-checked exact-condition anti-basin micro-instance
+> (`fall_without_coverage`, axiom-free) — precisely the formalisation CAST requests, on the anti-basin
+> side, at minimal scope (2 hypotheses, 1 channel). Register: never "corrigibility unstable, proved"
+> — only "one formal setting where the basin provably fails, with exact conditions."
 
-### LP-5 — The invariance discriminator vs IRM/ICP and their failure results — risk: MEDIUM
+### LP-5 — The invariance discriminator vs IRM/ICP and their failure results — **VERDICT 2026-07-04: DEMOTED** ([`BODHISATTVA_LITPASS_MEMO.md`](BODHISATTVA_LITPASS_MEMO.md))
 
-- **Claim under test:** Angle-2's sussed core — the ONLY internal discriminator between corrective
-  and corrupting updates is the context-invariance gap (F2: coherence, prediction-error, ontological
-  robustness all reduce to invariance); corrective bits are extractable from distributional
-  divergence under a structural-simplicity prior.
-- **Against:** IRM (Arjovsky et al. 2019 — TK); Invariant Causal Prediction (Peters–Bühlmann–
-  Meinshausen 2016 — TK); **Rosenfeld et al. 2021 "The Risks of IRM" (TK — already flagged in the
-  lane's own notes: IRM's OOD guarantees are weak, so "self-correction via IRM" is only as strong as
-  they are);** causal-invariance objective-identification follow-ons (unsurveyed).
-- **Delta if survives:** the reduction claim (all internal discriminators ≤ invariance) stated and
-  toy-tested; the three-tier gap×budget frontier.
-- **Killed by:** the reduction being too strong (most likely failure — it needs weakening to a
-  conjecture or a proof before any public statement); or the invariance-discovery literature already
-  owning the objective-discovery framing.
+> The deepest cut of the slate. Closed against ICP (Peters–Bühlmann–Meinshausen 2016), IRM (Arjovsky
+> et al. 2019), **arXiv:2409.08012 (Ovinnikov et al., causal-invariant REWARD learning — verified:
+> "recover reward functions invariant across a population, without exploiting spurious reward
+> features")**, and **arXiv:2010.05761 (Rosenfeld et al. "Risks of IRM" — verified: recovers the
+> invariant predictor iff E > d_e, "extreme" Omega(d) environments; catastrophic non-linear failure).**
+> - **OWNED, concede:** invariance-distinguishes-true-from-proxy is ICP/IRM/Ovinnikov; its extraction
+>   wall (E > d_e) is Rosenfeld's — and is EXACTLY the lane's own "wandering must sample enough
+>   contexts" budget wall, so we cite it AS the budget knob rather than claiming it.
+> - **FALSIFIED:** the F2 reduction claim ("all internal discriminators reduce to invariance") is killed
+>   by LP-2 — self-reducibility is a structural discriminator that recovers V and is NOT invariance.
+>   Dropped. Replacement: invariance + self-reducibility are two members of a **structure family**, each
+>   a coverage-reducer (invariance in environment-space, self-reducibility in input-space).
+> - **SURVIVES:** invariance is a CONCEDED INPUT (the gap knob), not a claim; the lane's unowned content
+>   sits on top of it (simplicity-ordering capture region, coverage law, three-regime dynamics, pairing
+>   theorem, structure-family synthesis).
 
 ### LP-6 — Pairing/evaluation statistics — CLOSED
 

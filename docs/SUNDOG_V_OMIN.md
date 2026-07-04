@@ -269,8 +269,52 @@ continuity. C2 (+ continuity on the pieces) is a separate later scope.
 o-minimal structure and definable `φ`, a finite cut-set outside of which `φ` is piecewise
 constant, strictly increasing, or strictly decreasing. Scoped at 2–4 weeks; landed in ~2 days
 (C0+C1a day one, C1b+C1c+C1d day two). One falsifier partially engaged (`MONOTONICITY_STALLS`
-routed via the ℝ-specific kill, honestly fenced); the rest never fired. **C2 (+ continuity on
-the pieces) is the remaining stage of R4-C — scoped separately.**
+routed via the ℝ-specific kill, honestly fenced); the rest never fired.
+
+### R4-C2 — continuity on the pieces. [SCOPED 2026-07-04 — ~2½–3 SESSIONS]
+
+*Target.* `monotonicity_theorem_continuous`: the C1 statement with `ContinuousOn φ (Ioo a b)`
+added to every gap (the constant case is trivially continuous, so the conclusion is
+`(constant ∨ StrictMonoOn ∨ StrictAntiOn) ∧ ContinuousOn`).
+
+*Two traps flushed at scoping (both would have been landmines):*
+1. **No arithmetic atoms** — the structure has only order + singletons + graphs, so ε-δ
+   continuity is *not expressible*. Route: ℝ's topology is the order topology, so
+   `ContinuousAt` has a pure `<`-characterization —
+   `∀ p q, p < φ x < q → ∃ u v, u < x < v ∧ ∀ y ∈ (u,v), p < φ y < q` — which IS a formula.
+   Bridge lemma `continuousAt_iff_order` via `nhds_basis_Ioo` + `HasBasis.tendsto_iff`
+   (recon: both present; ℝ has `NoMaxOrder`/`NoMinOrder`).
+2. **The `-φ` trick is unavailable wherever definability is consumed** — negation is not an
+   atom, so `DefinableFun (-φ)` is not derivable (C1d's `kill_max` got away with it because
+   the countability kill needed no definability). All decreasing cases in C2 must be mirrored
+   manually.
+
+*Stages.*
+- **C2a — bridge + the discontinuity set** ✅ LANDED 2026-07-04: `OMinimalContinuity.lean`
+  (48th module), axiom-clean, 2 gate entries (`continuousAt_iff_order`, `tame_discSet`), green
+  with zero warnings by the third build (three one-line fixes). **Neither falsifier fired**:
+  the `nhds_basis_Ioo` + `tendsto_iff` plumbing went through directly (`ORDER_BRIDGE_GAP` no),
+  and the depth grind was tamed by a design refinement — **split into usc/lsc**: two
+  five-coordinate formulas (`x, ∀q, ∃u, ∃v, ∀y`) instead of one six-coordinate one, recovering
+  `ContinuousAt` as the conjunction (`continuousAt_iff_usc_lsc`; the max/min window
+  intersection lives at the meta level where arithmetic is free). New combinators
+  `ltCoordGraph`/`ltGraphCoord` (`x_j ≶ φ(x_i)`); snoc battery extended to depths 3→4, 4→5.
+  The five-layer eval-rewrites went through in one `simp only` each.
+- **C2b — the kill** ✅ LANDED 2026-07-04 (same module, appended; green on the second build —
+  two rewrite-orientation fixes from the `by_contra`/`not_lt` equation flip). `tame_image`
+  (the image formula: `∃z, z ∈ Ioi c ∧ z ∈ Iio d ∧ φ z = p` — `memAt` over `definable_Ioi/Iio`
+  earning their keep); `strictMonoOn_exists_continuityPt` + the hand-mirrored
+  `strictAntiOn_exists_continuityPt` — image tame + infinite (`infinite_image_iff` + `injOn`)
+  ⇒ contains `(p,q)` (`tame_infinite_contains_Ioo`, fourth use) ⇒ the midpoint's preimage is
+  order-continuous by the squeeze; plus `constOn_continuousAt` (free). `IMAGE_KILL_GAP` did
+  not fire.
+- **C2c — assembly** [~½ session]: `discSet` tame + (infinite ⇒ interval ⇒ shrink to a C1-free
+  sub-gap ⇒ constant-or-monotone ⇒ has a continuity point ⇒ contradiction) ⇒ **`discSet`
+  finite**; final cut-set = C1's `F` ∪ `discSet`; `ContinuousOn` per gap via
+  `continuousOn_of_forall_continuousAt`.
+
+*Module.* `OMinimalContinuity.lean` (48th); gates: `tame_discSet`, the C2b kill,
+`monotonicity_theorem_continuous`.
 
 ### R4-D — Cell decomposition, dimension 2 first. [2–4 WEEKS; general n = the long pole]
 Decompose any definable `A ⊆ ℝ²` into finitely many cells (points/intervals over graphs and
