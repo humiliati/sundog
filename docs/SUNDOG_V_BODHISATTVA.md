@@ -6,9 +6,17 @@ empirical leg are this lane's founding receipts). The opening deliverable is the
 below: which parts of the spine CAN be litpassed against meaningfully, against what, and what kills
 them. The LP slate gates everything public.*
 
-Status: **OPENED 2026-07-03. Spine + litpass slate; no new experiment.** The name was banked as a known
-**slop-attractor** (a Fiverr reviewer once labeled the owner's h-of-x work "the bodhisattva" via GPT
-slop), so the register discipline below is constitutional, not decorative.
+Status: **OPENED 2026-07-03. Litpass slate COMPLETE (all six closed 2026-07-04). Phase = LEANIFY.** The
+name was banked as a known **slop-attractor** (a Fiverr reviewer once labeled the owner's h-of-x work
+"the bodhisattva" via GPT slop), so the register discipline below is constitutional, not decorative.
+
+**Phase: LEANIFY (2026-07-04).** The final standing is a synthesis lane whose real asset is machine-checked
+cores; the phase is to move the surviving deltas that are toy/MC-only into Lean (raises rigor, NOT novelty;
+does not change the synthesis-vs-discovery verdict). Leanify TODO (full table in the memo): **L4a DONE**
+(LP-4 basin over arbitrary hypothesis space — `PercivalBasin.lean`, 2 axiom-clean theorems, audit 8591
+green); TODO L4b (intermediate-coverage reachability) → L3 (wandering occupancy as stationary law) → L1
+(capture-region lemma; margin already = T1) → L2 (baby random-self-reduction) → L5 (structure-family
+typeclass). No public-surface trigger; disposition (internal appendix vs modest note) still owner-gated.
 
 **Cumulative litpass standing — ALL SIX CLOSED (2026-07-04, honest — no glazing).** LP-1 NARROWED, LP-2
 REFINED, LP-3 NARROWED, LP-4 NARROW-SCOPE, LP-5 DEMOTED, LP-6 CLOSED. **Every entry conceded its core to
@@ -157,6 +165,12 @@ five entries have house-style litpass verdicts.**
 > (`fall_without_coverage`, axiom-free) — precisely the formalisation CAST requests, on the anti-basin
 > side, at minimal scope (2 hypotheses, 1 channel). Register: never "corrigibility unstable, proved"
 > — only "one formal setting where the basin provably fails, with exact conditions."
+> **DIG-IN 2026-07-04 (L4a DONE):** lifted to ARBITRARY hypothesis space — `PercivalBasin.lean`
+> (`basin_empty_without_self_coverage` + `basin_univ_full_coverage`, axiom-clean, audit 8591). Over any
+> `H` (no finiteness/metric/neighbourhood): basin EMPTY without V-self-coverage, WHOLE under full coverage
+> — **breadth swings empty↔total purely on the coverage predicate; `H`-structure plays no role, so breadth
+> is governed by coverage, not preference-neighbourhood.** Register unchanged. TODO L4b = the
+> intermediate-coverage reachability version.
 
 ### LP-5 — The invariance discriminator vs IRM/ICP and their failure results — **VERDICT 2026-07-04: DEMOTED** ([`BODHISATTVA_LITPASS_MEMO.md`](BODHISATTVA_LITPASS_MEMO.md))
 

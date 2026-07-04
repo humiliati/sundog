@@ -244,6 +244,44 @@ construction does not address. Register (binding): never "corrigibility is unsta
 "here is one formal setting where the basin provably fails, with exact conditions." **Kill only if** a
 formalisation of the non-absorbing/coverage condition exists — not found.
 
+**LP-4 DIG-IN 2026-07-04 — lifted off the 2-state chain to ARBITRARY hypothesis space.** New Lean module
+`Dev/sundogcert/Sundogcert/PercivalBasin.lean` (2 theorems, axiom-clean `[propext, Quot.sound]` — even
+`Classical.choice`-free; AxiomAudit-wired, full audit 8591 jobs green). Over an arbitrary hypothesis type
+`H` (no finiteness, no metric, no preference-neighbourhood):
+- `basin_empty_without_self_coverage` — if the corrigible target does not self-cover (`cov V = false`,
+  `fall V ≠ V`), the basin is EMPTY, for EVERY `H`. Breadth is zero regardless of how many preferences
+  sit "near" V — the general form of `fall_without_coverage`, structure-independent.
+- `basin_univ_full_coverage` — if coverage is sustained everywhere, the basin is the WHOLE space.
+The pair makes the sharp point the informal debate lacks: **the basin's breadth swings between empty and
+total purely on the coverage predicate, with `H`'s structure playing NO role — breadth is governed by
+coverage, not by preference-neighbourhood.** This upgrades LP-4 from a 2-point toy to a
+structure-independent statement, which is the honest way to make the anti-basin delta bear weight; it does
+NOT change the register (still "one formal frame where the basin fails on an exact condition," not
+"corrigibility is unstable"). Remaining LP-4 leanify: the intermediate-coverage reachability version
+(basin = the coverage-reachable set) — TODO L4b below.
+
+---
+
+## Leanify TODO — phase: strengthen the surviving deltas to machine-checked
+
+*The final standing is that the lane's real asset is its machine-checked cores, not any discovery. So the
+honest way to make a SYNTHESIS lane worth keeping is to move the surviving deltas that are currently
+TOY / Monte-Carlo-only into Lean. This RAISES RIGOR, not novelty — it does not change the synthesis-lane
+verdict, and it is the prerequisite for either disposition (internal appendix or modest expository note).*
+
+| id | target | what it buys | status |
+| --- | --- | --- | --- |
+| **L4a** | LP-4 basin over arbitrary `H` (`basin_empty_without_self_coverage`, `basin_univ_full_coverage`) | breadth = coverage, structure-independent — the field-requested formalisation | **DONE 2026-07-04** (`PercivalBasin.lean`) |
+| L4b | LP-4 intermediate-coverage: `basin V = ` the coverage-reachable set (finite `H`) | the full "breadth = coverage-reachability" theorem, not just the empty/total poles | TODO (finite-reachability proof; medium) |
+| L3 | LP-3 wandering occupancy `c(W′)/(c(W′)+1−c(V))` as the stationary distribution of the 2-state chain | upgrades the wandering regime from MC-occupancy to machine-checked stationary law | TODO (2-state Markov stationary; medium) |
+| L2 | LP-2 minimal random-self-reduction instance (linear/low-degree `V`, majority correction recovers `V(x*)` with `x*∈D`) | machine-checks the structure-mode of the refined coverage law (the LP-2 concession) | TODO (a baby self-correction proof; medium-hard) |
+| L1 | LP-1 capture-region classification lemma (the margin `= −λ·ΔL` on agreement is already `zero_coverage_margin_noise_invariant` = T1) | closes the LP-1 quantification in Lean; small, mostly done | TODO (small — assemble the region predicate) |
+| L5 | abstract `Coverage`/`Structure` typeclass with invariance + self-reducibility as instances | leanifies the structure-family synthesis (the LP-5↔LP-2 unification) | TODO (speculative; do last) |
+
+Sequence: L4b → L3 → L1 → L2 → L5. After L4b + L3 + L1 the lane's four surviving deltas are all
+machine-checked; L2/L5 are stretch. None of this is a public-surface trigger — the disposition decision
+(internal appendix vs modest note) is unchanged and still owner-gated.
+
 ## Cumulative standing — ALL SIX CLOSED (final honest tally — no glazing)
 
 | entry | verdict | what was conceded | what survived |

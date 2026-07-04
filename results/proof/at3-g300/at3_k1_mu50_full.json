@@ -1,0 +1,12 @@
+{
+ "k_obs": 1,
+ "mu": 50.0,
+ "mode": "full",
+ "median_tail_err": 1.409986472761806,
+ "state": "state_insufficient",
+ "decision_acc": NaN,
+ "majority": NaN,
+ "n_eval": 7500,
+ "elapsed_s": 375.4,
+ "smoke": false
+}

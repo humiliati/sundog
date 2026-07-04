@@ -321,13 +321,48 @@ in 2. Module `OMinimalContinuity.lean` (48th); 6 gate entries across C2. Remaini
 cell decomposition, dimension 2** (the uniform finiteness lemma), then the lane's long walls
 (TS-QE, general-n cells).
 
-### R4-D — Cell decomposition, dimension 2 first. [2–4 WEEKS; general n = the long pole]
-Decompose any definable `A ⊆ ℝ²` into finitely many cells (points/intervals over graphs and
-bands of definable continuous functions), via the **uniform finiteness lemma** (fiberwise
-boundary counts are uniformly bounded — where o-minimality genuinely bites; vdD's I₂/II₂).
-General n (the full induction) is the expedition's long pole and is *not* promised by this scope.
-*Falsifier* (`UNIFORM_FINITENESS_WALL`): the fiber-bound lemma resists at dim 2 — the honest null,
-worth publishing as the located wall.
+### R4-D — Cell decomposition, dimension 2. [SCOUTED 2026-07-04 — THE WALL, STAGED]
+
+*Core target (UF, the o-min bite).* A definable `A ⊆ ℝ²` with every fiber finite has uniformly
+bounded fibers. CDT₂ then follows as assembly (finite-fiber part = finitely many graphs; the
+rest = bands between consecutive graph curves) — D5, scoped after UF.
+
+*Scout verdict — a confidence gradient, stated honestly.* Unlike C1/C2, the finisher is **not
+fully nailed in-scout**. What is nailed:
+1. **D0 — slicing + fiber tameness** [~½–1 session]: parametric slices of 2-D definables are
+   dimension-one definable (the C0 promise, never yet built: `∃z, z = x ∧ (z,y) ∈ A` as a
+   formula with `eqConstAt`); fibers are tame; the fiber-frontier set
+   `Y := {(x,y) | y ∈ frontier(A_x)}` is definable (frontier is order-first-order) and has
+   *automatically finite* fibers — so UF-for-`Y` is the general engine.
+2. **D1 — the counting formulas** [~1 session]: `B_k := {x | |A_x| ≥ k}` via
+   `∃ y₁ < … < y_k ∈ A_x` — an `Fml`-valued **meta-recursion over `k`** (a formula-layer
+   stress test: the formula grows with `k`, which is a Lean natural, not a structure element).
+   Each `B_k` tame; the chain decreases.
+3. **D2 — the dichotomy kill (new, clean, verified in scout)**: if cofinitely many `B_k` are
+   finite: their cardinalities are weakly decreasing naturals ⇒ stabilize ⇒ the chain
+   stabilizes *as sets* ⇒ a common point lies in every `B_k` ⇒ an infinite fiber,
+   contradiction. Hence WLOG **every `B_k` contains an interval** (C1a's
+   `tame_infinite_contains_Ioo`, fifth use). Plus the definable k-th-point functions
+   (bounded-count minima — first-order per `k`).
+4. **D3 — the k-curve extraction** [~1 session]: on an interval inside `B_k`, the `k` ordered
+   point-functions are each piecewise constant-or-strictly-monotone **and continuous**
+   (the continuous Monotonicity Theorem, applied `k` times with a finite refinement) — `k`
+   disjoint ordered continuous definable curves on a common interval, for every `k`.
+5. **D4 — THE WALL** [2–4 sessions, high variance]: the contradiction from "arbitrarily many
+   disjoint curves." Devices verified in scout: an accumulation point via nested compacts
+   (`IsCompact.nonempty_iInter_of_sequence…`, recon ✓) or sup-side rays; one-sided monotone
+   limits exist (`Monotone.tendsto_nhdsLT/GT`, recon ✓); **consecutive curves with *distinct*
+   limits create isolated points of the tame limit-fiber slice, and isolated points of a tame
+   set lie in its frontier ⇒ their count is bounded independent of `k`** (verified in scout —
+   trivial with our `Tame`). The residual, honestly flagged: the **pile case** — many
+   consecutive curves converging to a single limit value — is where van den Dries's full
+   induction earns its keep; candidate kills are a localized secondary recursion on window
+   height, or vdD's verbatim route. Medium confidence, not nailed.
+   *Falsifier* (`UNIFORM_FINITENESS_WALL`, proper): the pile-kill resists — fallback = land
+   D0–D3 + the distinct-limit bound and publish the located pile-wall as the honest partial.
+
+General-`n` cells remain outside this scope. Sizing: D0–D3 ≈ 3–4 sessions, bankable
+independently; D4 is the variance.
 
 ### R4-E — The payoff hook (rides the others). [GARNISH]
 Cell decomposition ⇒ definable families have finite VC dimension (Pillay–Steinhorn / NIP) — the
