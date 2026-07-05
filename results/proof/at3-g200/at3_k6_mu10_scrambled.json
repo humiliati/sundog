@@ -1,0 +1,12 @@
+{
+ "k_obs": 6,
+ "mu": 10.0,
+ "mode": "scrambled",
+ "median_tail_err": 0.9090123510598447,
+ "state": "state_insufficient",
+ "decision_acc": 0.6981818181818182,
+ "majority": 0.6981818181818182,
+ "n_eval": 7500,
+ "elapsed_s": 352.7,
+ "smoke": false
+}
