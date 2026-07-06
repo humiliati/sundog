@@ -40,32 +40,63 @@ sundogcert committed AND pushed through `757222e`; this roadmap committed `5e2ef
 
 ---
 
-## TODO-1 — TS-QE: Tarski–Seidenberg quantifier elimination. [MONTHS — NOT STARTED]
+## TS-QE — Tarski–Seidenberg quantifier elimination. [OPENED 2026-07-06; MONTHS]
 
-*Claim (when taken up).* Every projection of a semialgebraic set is semialgebraic: quantifier
-elimination for the real field, landing the full semialgebraic structure as o-minimal (dim-1
-landing already banked: `polyDef_tame`).
+*Claim.* Every projection of a semialgebraic set is semialgebraic: quantifier elimination for
+the real field, landing `semialgebraicStructure : OMinStructure` — the second (and first
+genuinely nonlinear) witness, through which Monotonicity, UF, and CDT₂ instantiate at the real
+field for free.
 
-*Recon receipts (2026-07-02).* mathlib now has **`IsRealClosed`** (`FieldTheory/IsRealClosed/`)
-— the class exists but is young (squares/odd-degree material; no polynomial sign-change/Sturm
-machinery, no root-counting). No Sturm chains anywhere in mathlib. `ModelTheory/Algebra/Field/`
-has the FO treatment of fields incl. ACF — an in-tree template for the model-theoretic route.
+### TS-0 — ROUTE DECIDED 2026-07-06: Cohen–Hörmander, set-level, over concrete ℝ.
 
-*Staging.*
-- **TS-0 (route decision, days):** effective-algebraic (Cohen–Mahboubi pseudo-remainder + sign
-  determination, port the Coq design) vs Sturm/CAD-style vs model-theoretic (FO RCF theory over
-  `ModelTheory`, following the ACF template). Deliverable: a one-page pre-registered route memo
-  with the kill-criteria for each.
-- **TS-1:** one-variable sign determination over an ordered/real-closed field (root counting —
-  Sturm chains or Cohen–Mahboubi's remainder-sequence bookkeeping). The substrate mathlib lacks.
-- **TS-2:** the single-quantifier elimination step (the projection operator on sign conditions).
-- **TS-3:** iterate to full QE; close the semialgebraic structure (booleans landed in the
-  `PolyDef` style + projection from TS-2); o-min landing via the `polyDef_tame` generalization.
+*The decision.* Follow the **Cohen–Hörmander sign-matrix proof** (the simplest known effective
+TS; Harrison's HOL Light route), formalized **set-level over the concrete reals** — not a
+reflective decision procedure, not FO model theory. Parametric coefficients handled by
+**leading-coefficient branch trees** over `MvPolynomial.finSuccEquiv`
+(`MvPolynomial (Fin (n+1)) ℝ ≃ₐ Polynomial (MvPolynomial (Fin n) ℝ)` — in mathlib, verified).
+Working over ℝ (house-fenced ℝ-specific devices allowed) buys the univariate core by *real
+analysis* — `Polynomial.finite_setOf_isRoot`, `Polynomial.continuous` + IVT, Rolle-adjacent
+monotonicity — instead of the abstract-RCF algebra that makes the Coq development large.
 
-*Falsifier* (`QE_COMBINATORICS_WALL`): the sign-determination combinatorics (the case tables that
-make Coq's development large) fail to stay tractable in Lean at this lane's single-owner scale —
-in which case the honest fallback is TS-1 alone (one-variable sign determination is independently
-valuable and unblocks Sturm-adjacent mathlib gaps).
+*Routes rejected.* Cohen–Mahboubi port (subresultants + BKR sign determination: the full
+abstract-RCF algebra stack, none of it in mathlib — longest runway); CAD (strictly heavier);
+model-theoretic FO route (`ModelTheory` has Presburger only, no RCF; and our target is
+set-level `OMinStructure`, so FO syntax is an impedance mismatch).
+
+*Prior-art receipts (re-checked 2026-07-06).* No Lean 4 TS/QE/semialgebraic anywhere; mathlib's
+`IsRealClosed` still embryonic (squares/odd powers); no Sturm; ModelTheory QE = Presburger only.
+Coq: Cohen–Mahboubi LMCS 2012 (+ a Coq CAD). Isabelle/HOL: a complete real QE (2022).
+HOL Light: Harrison's Cohen–Hörmander. Lean remains open ground.
+Key mathlib assets verified: `finSuccEquiv`, `EuclideanDomain ℝ[X]` (mod/div),
+`Polynomial.finite_setOf_isRoot`, `Polynomial.continuous`, `MvPolynomial.rename`.
+Already banked in-lane: `polyDef_tame` (R1: QF dim-1 tameness), the whole abstract theory
+(R4) waiting as the payoff socket.
+
+*The restaged ladder.*
+- **TS-1 — the univariate sign partition** [1–2 sessions]: for a finite family of nonzero
+  `p ∈ ℝ[X]`, one finite cut set (the union of root sets) off which every member has constant
+  sign on each piece (sign constancy off roots via IVT: a sign change without a root
+  contradicts `intermediate_value`; partition structure in the R2-N normal-form style).
+  Strengthens `polyDef_tame` to the partition form the elimination consumes.
+  *Falsifier:* none serious — this rung is de-risked.
+- **TS-2 — the parametric elimination step** [MONTHS — the pole proper]. Representation
+  `SAN n` (sign-condition lists on `MvPolynomial (Fin n) ℝ`, in the `SLN` style); head-view
+  through `finSuccEquiv`. Sub-rungs:
+  - **TS-2a** — branch trees: leading-coefficient case splits (vanish/sign), degree-drop
+    lemmas, the well-founded measure (multiset of `y`-degrees).
+  - **TS-2b** — the mod-trick: at a root `r` of `p`, `q(r) = (q mod p)(r)` — pointwise-trivial
+    over ℝ (`q = p·s + rem`), giving the sign-matrix column transfer without subresultants.
+  - **TS-2c** — between-roots signs: the derivative family + monotonicity between consecutive
+    roots (the real-analysis input; C1-style window lemmas available).
+  - **TS-2d** — the recursion assembly + correctness:
+    `(elim F σ).toSet = {g | ∃ y, signs of F at (g, y) satisfy σ}`.
+  *Falsifier* (`QE_COMBINATORICS_WALL`, carried over): the sign-matrix bookkeeping fails to
+  stay tractable at single-owner scale — fallback = TS-1 + TS-2b/2c as independently valuable
+  univariate machinery, wall published with location.
+- **TS-3 — the structure** [2–3 sessions once TS-2 lands]: `semialgebraicStructure`:
+  booleans (list ops), substitution (`MvPolynomial.rename`/composition), `definable_lt`/
+  `definable_singleton` (linear polynomials), projection (TS-2), `tame_dim_one` (TS-1).
+  Capstone `semialgebraic_s1_eq_tame`; payoffs: Monotonicity/UF/CDT₂ at the real field.
 
 *Honest scope.* This is the lane's long wall, deliberately queued behind R4-A/B (which produce
 the frame TS-QE's result plugs into). Not started; nothing here claims progress.
