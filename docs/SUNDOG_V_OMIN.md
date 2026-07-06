@@ -28,12 +28,15 @@
 | R4-A | Abstract `OMinStructure` + definable calculus + `S₁ = Tame` capstone | ✅ 2026-07-02 |
 | R4-B | **`semilinearStructure : OMinStructure` — the first machine-checked o-min structure** | ✅ 2026-07-03 |
 | R4-C | **THE MONOTONICITY THEOREM, with continuity** (`monotonicity_theorem_continuous`) | ✅ 2026-07-04 |
-| R4-D | Cell Decomposition, dim 2 | **SCOPED** (below) |
+| R4-D | **UNIFORM FINITENESS (the Finiteness Lemma)** — `uniform_finiteness`; the pile-wall dissolved via the classical tube | ✅ 2026-07-06 |
+| R4-D5 | **CELL DECOMPOSITION FOR ℝ² (CDT₂)** — `cell_decomposition : ∃ cells, IsCellDecomp cells A` | ✅ 2026-07-06 |
 
-Modules: `OMinimalOne` … `SemilinearStructure` (34th–42nd), 24 gated headline theorems, all
-axiom-clean. Classical anchor for what's landed:
-Fourier–Motzkin **is** quantifier elimination for the ordered ℝ-vector-space reduct — the
-semilinear structure result is the machine-checked linear fragment of Tarski.
+Modules: `OMinimalOne` … `OMinimalCellDecomp` (34th–61st), 80 gated headline theorems, all
+axiom-clean; audits 8540 → 8605 GREEN. Classical anchors for what's landed:
+Fourier–Motzkin **is** quantifier elimination for the ordered ℝ-vector-space reduct (the
+machine-checked linear fragment of Tarski); the Monotonicity Theorem, the Finiteness Lemma,
+and CDT₂ are van den Dries Ch. 3 over the abstract structure. Commit state 2026-07-06:
+sundogcert committed AND pushed through `757222e`; this roadmap committed `5e2ef6f4`.
 
 ---
 
