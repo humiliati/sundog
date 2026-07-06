@@ -184,6 +184,12 @@ form and gain), `PDE_C1_FIBER_PROTOCOL.md`,
 > — the unfenced benefit selector formed; the v1 degeneracy was an
 > actuation-strength dial boundary, and the G=300 controllability level shift
 > vanished with the rebound regime (receipt Findings 3–4). Pre-committed stop
-> did not fire. **Rung 1 unblocked, owner-gated** — tooling
-> `scripts/nse_h1_jselector_fiber.py` self-tested 4/4 on synthetic data only;
-> staged commands in the receipt; no real export read.
+> did not fire. Rung 1 was unblocked and owner-cleared.
+
+> **FINAL (2026-07-06): rung 1 fired — `NSE-H1-PROXY-ONLY`**
+> (`NSE_H1_FIBER_RECEIPT.md`). Both cells failed the powered transfer read:
+> a_J fiber disagree 0.1534 / 0.0586 vs same-stream y_pi 0.0429 / 0.0043 at the
+> banked ε_K (criterion-robust; y_pi reproduced the banked constancy). **The
+> two-regime C1 witness is a proxy-relative fact** — Phi_K3 fiber-determines the
+> threshold forecast, not action value. H1 CLOSED. H2 uses the v7 portable
+> selector (slate §4). No criterion was modified after any read.

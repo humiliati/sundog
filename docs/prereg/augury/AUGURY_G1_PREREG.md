@@ -242,3 +242,71 @@ seam chart (7 cities) → nbmscan (cycle map) → the binding KNYC pilot (settle
 exclusion + MaxT-mismatch tables → `pilot_summary.json`). Estimated ~10–11k Kalshi candle
 calls (~45–75 min), resumable via cache. G3 requires a further freeze marker after these
 artifacts land.
+
+---
+
+## Amendment B — Pilot Execution, Tooling Fixes, G2 Adjudication (2026-07-06 PT)
+
+Append-only. The owner executed A.4 (first binding run); the pilot surfaced tooling defects,
+which were fixed and the pilot re-run (candle cache reused; markets/CLI/S3 inputs unchanged
+and immutable). **No §1–§7 constant changed at any point.** Final runner
+sha256 `e2c7b780c1eaba8e0919d284d2f2d162be545ee97c274327fc3293302ac92c4e`; wrapper
+`de55310b7d7c0db39d7a67503bd9379704d09943ade1a0b2fcc70f16aa032faf`; selftest 44/44.
+
+### B.1 Tooling defects found by run 1 and fixed (fix log)
+
+1. **Legacy strike schema:** pre-~2024 market objects carry NO `floor_strike`/`cap_strike`/
+   `strike_type` anywhere (listing or detail endpoint) — bounds now normalize to
+   half-integer thresholds from fields when present, else from the rules text (three
+   phrasings: "is [strictly ]greater than X°" / "is less than X°" / "is between X-Y°|X° and
+   Y°"). Modern semantics verified against settlements: `between` inclusive of both integer
+   ends, `greater`/`less` strict (witness: T90 with CLI high exactly 90 settled NO). The
+   half-integer normalization dissolves Amendment A's inclusive/exclusive variant machinery.
+2. **Two-sided book test was too loose:** `bid=0 / ask<1` books passed. Now strict interior:
+   `0 < bid ≤ ask < 1`.
+3. **Quote persistence:** 1-min candles are change-events, not continuous minutes. Standing
+   book at cutoff = last candle's close; if older than the 60-min window it is admitted only
+   with a **persistence witness** — the next candle *opens* on the identical book. (§5's
+   60-min constant unchanged; this is its honest reading over event-sparse candles.)
+4. **`expiration_value` is an empty string** on legacy markets — treated as absent, reported
+   as its own category (it is never wrong where present: 39 match / 61 absent / 0 mismatch).
+5. Wrapper now defaults to `.venv-augury` Python (run 1's NBM joins all failed on a bare
+   `python` without eccodes); seam station regex now spans commas ("Central Park, New York").
+6. Kalshi's historical DB returns the whole series lineage under the CURRENT ticker
+   (`KXHIGHNY` pagination includes `HIGHNY-*` markets; querying `HIGHNY` returns nothing).
+
+### B.2 Final pilot receipts (run 3; `pilot_summary.json` sha256 `facae7e0…d804e`)
+
+| §8 artifact | outcome |
+| --- | --- |
+| 1. seam chart | **LANDED.** NYC+CHI 2021-09→; AUS+MIA 2023-06→; DEN+PHL 2024-12→; LAX 2025-02→; KX-seam 2024-10/11 for all legacy cities; station text consistent per city every year (KNYC = "Central Park, New York" throughout) |
+| 2. settlement audit | **PASS 50/50** (validation sample also 50/50; expiration-vs-CLI 39 match / 61 absent / 0 mismatch) |
+| 3. t_peak table | **FROZEN, unchanged** (`963b3973…4948b2`) |
+| 4. CDF receipts | **LANDED**, 6/12 OK; 6 = TOO_FEW_VALID at the mid-band cutoff (consistent with §5 exclusions below, not a construction failure; isotonic violations 0 on OK days) |
+| 5. NBM join demo | **PASS 9/9** across 2022/2025/2026 (μ 85.4/32.1/77.8 °F, σ 0.9–2.8 °F, availability lags 4–299 min, afternoon cutoffs correctly join the ~12Z issue) |
+| 6. bucket calibration | **BAND MISSED, POWER-LIMITED:** top bucket 96.88% (62/64), 95% CI [92.6, 100] **contains the 98.6% anchor**; full decile curve monotone (3.5%→96.9%). No construction bug found (audit 50/50 independently validates the outcome mapping); n is small because the pinned snapshot (first valid band cutoff, strict two-sided) is far more restrictive than CalibShi's whole-history sample |
+| 7. exclusion + mismatch tables | **LANDED.** Era structure is the pilot's main empirical finding (B.3) |
+
+### B.3 Empirical findings for G3 planning (reported, not retuned)
+
+- **Liquidity era-structure (NYC, primary band):** valid cutoff rates 2022 7.9% / 2023 0.6%
+  / 2024 1.3% / 2025 31.8% / 2026-H1 61.2%. Failure decomposition: one-sided books
+  (`fail_book`) + spread > 4¢ dominate; staleness ≈ 0 once persistence is witnessed. 2022
+  additionally lists only ~3.4 strikes/day, so the ≥4-valid-strikes rule binds mechanically
+  there (6/day from 2023 on).
+- **Projected primary-band sample:** NYC ≈ 262 valid station-days; with the other six
+  cities' launch dates (B.2 item 1) the pooled projection is ~1,300–1,800 — comfortably
+  above the §7 floor of 500, but **dominated by 2025–2026**. Era-stratified reporting (§5)
+  will carry that visibly.
+- **MaxT-window mismatch:** CLI daily high falls outside the 12Z→00Z window on ~15% of NYC
+  days (winter-skewed) — larger than assumed; stays a diagnostic per §4, now with a number.
+- ~15% of legacy audit rows have absent `expiration_value`; settlement verification for
+  those rests on the (passing) result-vs-CLI mapping.
+
+### B.4 G2 adjudication
+
+Artifacts 1–5 and 7 land clean; artifact 6 misses its pinned band at 62/64 with the anchor
+inside the CI and no bug found under diagnosis. Per §8 ("miss ⇒ construction bug until
+proven otherwise") the proof-otherwise is on record (B.2). **The decision to accept that
+reading and admit G3 spec-work (a G3 freeze-marker amendment) is the owner's**; the runner
+and constants stay frozen at the hashes above meanwhile.

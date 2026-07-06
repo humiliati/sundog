@@ -493,9 +493,45 @@ The classical order restored: UF in hand, CDT₂ is bookkeeping over the rank fu
    the fiber dichotomies; the `Aᶜ`-polarity clauses turned out unneeded — dichotomy +
    A-side-out already forces the complement side). Cell decomposition for `ℝ²` in
    concrete form: `A ∩ (I×ℝ)` = the union of the selected graphs and bands.
-4. **D5d — the packaged CDT₂** [owner-gated shape]: a `Cell₂` structure (point/interval
-   base × graph/band) + `IsDecomposition` + the master statement; or stop at D5c's concrete
-   form. Owner call on the packaging.
+4. **D5d — the packaged CDT₂** [owner go 2026-07-06: pack Cell₂; honest 2-session split]:
+   - **D5d-1 — the packaging layer** ✅ LANDED 2026-07-06: `OMinimalCells.lean`
+     (60th module), axiom-clean, 3 gate entries (`baseCells_covers`, `baseCells_pairwise`,
+     `univ_uniform`). `Cell₁` (pt/ioo/iio/ioi/univ) and `Cell₂` (graph/band/bandLow/
+     bandHigh/full over a base) with `toSet`, `WellFormed` (continuity + ordering on the
+     base), `IsCellDecomp` (covers + pairwise disjoint + adapted + well-formed; cell
+     definability inherited from construction, not in the predicate). **`baseCells`** — the
+     line decomposition from a cut Finset, SORT-FREE: points + adjacent gaps (pairs from
+     `C ×ˢ C` filtered by `adjPair` = no cut point between) + outer rays; proved covering
+     (filter-max'/min' pick the enclosing gap) and pairwise disjoint (`gap_disjoint`: two
+     overlapping adjacent gaps are equal — adjacency tested at each other's endpoints, no
+     WLOG; a self-contained `pairwise_filterMap_of_forall` carrying source memberships
+     replaced the missing library lemma). Ray/univ two-point uniformity upgrades banked.
+     Gotchas: the `ite` inside a `Classical`-defined function must be restated under
+     `open Classical in` or instance mismatch blocks `rw`; `Option.noConfusion` on
+     `none = some c` hits universe metavariables — use `simp at`; `Set.mem_singleton_iff`
+     needs the `toSet` match-def unfolded first (`simp only [Cell₁.toSet, …]`).
+   - **D5d-2 — the assembly** ✅ LANDED 2026-07-06: `OMinimalCellDecomp.lean`
+     (61st module), axiom-clean, 2 gate entries, **green on the second build** (a private
+     lemma to de-privatize, one `-`-in-term-pattern). **THE ARC'S TERMINAL THEOREM:**
+     `cell_decomposition : ∃ cells : List Cell₂, IsCellDecomp cells A` — every definable
+     planar set admits a finite, covering, pairwise-disjoint, adapted, well-formed cell
+     decomposition; `cell_decomposition_mem` = the union form (membership in `A` ⟺
+     membership in an inside-cell). The generic per-base constructor
+     `cells_over_uniform` (bandLow · graphs · bands · bandHigh, or one full column for the
+     frontier-free class; covering = `regions_cover`, disjointness = strict rank ordering,
+     adaptedness = the selections, well-formedness = rank continuity) instantiated over the
+     `baseCells` partition: per-fiber dichotomies at point bases, `band_triviality`
+     directly on the cut-avoiding gaps, the two-point uniformity upgrades (with the class
+     matched across overlapping intervals via a shared interior point) on the rays and the
+     `C = ∅` line; `flatMap` + cross-base disjointness (cells project to their bases).
+
+**R4-D5 COMPLETE — CDT₂ MACHINE-CHECKED (2026-07-06, one day, five modules 57–61).**
+**The whiteboard triple is done: abstract o-minimal structures (R4-A/B) + the Monotonicity
+Theorem (R4-C) + Uniform Finiteness (R4-D) + Cell Decomposition for ℝ² (R4-D5), all
+axiom-clean over the abstract `OMinStructure`, with `semilinearStructure` as the standing
+nontrivial witness.** Remaining lane TODO: TS-QE (the long pole); natural extensions:
+definable-cell clauses in `IsCellDecomp`, multi-set-adapted decompositions, dimension
+theory from cells.
 
    TS-QE remains the long-pole TODO.
 

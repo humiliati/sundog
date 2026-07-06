@@ -1,0 +1,31 @@
+{
+ "spec": "NSE_H1_JSELECTOR_SPEC.md",
+ "grashof": 200.0,
+ "eps_k": 0.06059758455293647,
+ "n_eval": 1600,
+ "n_pairs": 2028,
+ "fiber_disagree_a_j": 0.15335305719921105,
+ "fiber_disagree_y_pi": 0.042899408284023666,
+ "shuffle_floor_mean": 0.4190581854043393,
+ "banked_pi_hat_disagree": 0.0367,
+ "knn_a_j": {
+  "k": 30,
+  "fidelity_count": 0,
+  "fidelity_coverage": 0.0,
+  "incompat_count": 0,
+  "incompat_fraction": NaN
+ },
+ "knn_y_pi": {
+  "k": 30,
+  "fidelity_count": 0,
+  "fidelity_coverage": 0.0,
+  "incompat_count": 0,
+  "incompat_fraction": NaN
+ },
+ "criteria": {
+  "disagree_max": 0.05,
+  "rel_factor": 2.0,
+  "shuffle_floor": 0.25
+ },
+ "cell_transfer": false
+}

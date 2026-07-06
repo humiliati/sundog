@@ -235,13 +235,15 @@ def _fnum(x) -> float | None:
 
 
 def normalize_candle(c: dict) -> dict:
-    def side(name):
+    def side(name, field):
         s = c.get(name) or {}
-        return _fnum(s.get("close_dollars", s.get("close")))
+        return _fnum(s.get(f"{field}_dollars", s.get(field)))
     return {
         "ts": c["end_period_ts"],
-        "bid": side("yes_bid"),
-        "ask": side("yes_ask"),
+        "bid": side("yes_bid", "close"),
+        "ask": side("yes_ask", "close"),
+        "bid_o": side("yes_bid", "open"),
+        "ask_o": side("yes_ask", "open"),
         "vol": _fnum(c.get("volume_fp", c.get("volume"))) or 0.0,
     }
 
@@ -305,9 +307,14 @@ def book_at(cand: list[dict], ts_list: list[int], ts: int,
         return None, "book"
     if ts - c["ts"] <= max_age_min * 60:
         return c, ""
-    if j + 1 < len(cand) and cand[j + 1]["bid"] == c["bid"] \
-            and cand[j + 1]["ask"] == c["ask"]:
-        return c, ""
+    if j + 1 < len(cand):
+        n = cand[j + 1]
+        # persistence witness: the next candle OPENS on the same book (it may
+        # then change within that minute — open, not close, is the state at ts)
+        nb = n["bid_o"] if n["bid_o"] is not None else n["bid"]
+        na = n["ask_o"] if n["ask_o"] is not None else n["ask"]
+        if nb == c["bid"] and na == c["ask"]:
+            return c, ""
     return None, "stale"
 
 
@@ -555,14 +562,19 @@ def stage_selftest() -> None:
     check("rules.between.and", strike_bounds(
         {"rules_primary": "Report, is between 85° and 86°, then"}),
         (84.5, 86.5, "rules"))
-    _bk = [{"ts": 100, "bid": 0.4, "ask": 0.42, "vol": 1.0},
-           {"ts": 8000, "bid": 0.4, "ask": 0.42, "vol": 0.0}]
+    def _c(ts, bid, ask, bid_o=None, ask_o=None):
+        return {"ts": ts, "bid": bid, "ask": ask,
+                "bid_o": bid_o if bid_o is not None else bid,
+                "ask_o": ask_o if ask_o is not None else ask, "vol": 0.0}
+    _bk = [_c(100, 0.4, 0.42), _c(8000, 0.4, 0.42)]
     check("book.fresh", book_at(_bk, [100, 8000], 200, 60)[0] is not None, True)
     check("book.sandwich", book_at(_bk, [100, 8000], 5000, 60)[0] is not None, True)
-    _bk2 = [{"ts": 100, "bid": 0.4, "ask": 0.42, "vol": 1.0},
-            {"ts": 8000, "bid": 0.4, "ask": 0.50, "vol": 0.0}]
+    # next candle opens on the same book, then moves within its minute -> valid
+    _bko = [_c(100, 0.4, 0.42), _c(8000, 0.4, 0.50, bid_o=0.4, ask_o=0.42)]
+    check("book.sandwich.open", book_at(_bko, [100, 8000], 5000, 60)[0] is not None, True)
+    _bk2 = [_c(100, 0.4, 0.42), _c(8000, 0.4, 0.50)]
     check("book.stale", book_at(_bk2, [100, 8000], 5000, 60), (None, "stale"))
-    _bk3 = [{"ts": 100, "bid": 0.0, "ask": 0.55, "vol": 1.0}]
+    _bk3 = [_c(100, 0.0, 0.55)]
     check("book.onesided", book_at(_bk3, [100], 200, 60), (None, "book"))
     check("seam.regex", re.search(
         r"recorded (?:in|at) (.+?),? (?:for|on) ",
@@ -868,11 +880,17 @@ def stage_pilot(admitted: bool) -> None:
 
     top_n, top_y = buckets[9]
     top_rate = 100 * top_y / top_n if top_n else None
+    ci = None
+    if top_n:
+        p = top_y / top_n
+        half = 1.96 * math.sqrt(max(p * (1 - p), 1e-9) / top_n)
+        ci = [round(100 * (p - half), 2), round(100 * min(1.0, p + half), 2)]
     calib = {"buckets": [{"range": f"{b * 10}-{b * 10 + 10}%", "n": n,
                           "yes_rate_pct": round(100 * y / n, 2) if n else None}
                          for b, (n, y) in enumerate(buckets)],
              "top_bucket_rate_pct": round(top_rate, 2) if top_rate else None,
-             "top_bucket_n": top_n,
+             "top_bucket_n": top_n, "top_bucket_ci95_pct": ci,
+             "calibshi_anchor_in_ci": bool(ci and ci[0] <= 98.6 <= ci[1]),
              "pass": (top_rate is not None and
                       C["calibration_top_bucket_low_pct"] <= top_rate
                       <= C["calibration_top_bucket_high_pct"])}
@@ -882,6 +900,9 @@ def stage_pilot(admitted: bool) -> None:
     for era, E in excl.items():
         E["strike_valid_rate"] = round(E["valid_strikes"] / E["strikes"], 4) if E["strikes"] else None
         E["cutoff_valid_rate"] = round(E["valid_cutoffs"] / E["cutoffs"], 4) if E["cutoffs"] else None
+        # listed strikes per event day (the >=4-valid-strikes rule binds
+        # mechanically when fewer than 4 are even listed — era-structural)
+        E["strikes_listed_per_day"] = round(E["strikes"] / E["cutoffs"], 2) if E["cutoffs"] else None
     write_json(RESULTS / "exclusion_table.json",
                {"eras": excl,
                 "maxt_window_mismatch": {e: {"outside": m[0], "with_time": m[1]}
