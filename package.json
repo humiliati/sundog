@@ -240,6 +240,7 @@
     "kakeya:shadow-collision:q7": "node scripts/kakeya-shadow-collision-audit.mjs --q 7",
     "kakeya:shadow-collision:q11": "node scripts/kakeya-shadow-collision-audit.mjs --q 11",
     "kakeya:shadow-collision:all": "npm run kakeya:shadow-collision && npm run kakeya:shadow-collision:q7 && npm run kakeya:shadow-collision:q11",
+    "kakeya:shadow-lemma": "node scripts/kakeya-shadow-lemma-check.mjs",
     "kakeya:adaptive-fibering": "node scripts/kakeya-adaptive-fibering-panel.mjs",
     "kakeya:sparse-excess": "node scripts/kakeya-sparse-excess-metric.mjs",
     "synthesis:collision-table": "node scripts/hodge-kakeya-collision-table.mjs",
@@ -346,7 +347,10 @@
     "yang-mills:phase2:v6:finite-t:polyakov": "node scripts/yang-mills-phase2-v6-finite-t-polyakov.mjs --cell SU2_3D --lattice-size 12x12x4 --boundary periodic --action Wilson --generator su2_heatbath_overrelax_v1 --pilot-beta-grid 6.0,6.3,6.55,6.8,7.1,7.4,7.7,8.0 --out results/yang-mills/phase2/SU2_3D/2026-05-31_su2_3d_finite_t_polyakov_v6a --power-icc-gate 0.50 --power-agreement-gate 0.50 --leakage-cvr2-gate 0.25 --k-primary 5 --bootstrap 1000 --seed 202605310600",
     "augury:g2:pilot": "node scripts/augury-pilot.mjs all --admitted",
     "augury:g2:selftest": "node scripts/augury-pilot.mjs selftest",
-    "augury:g2:smoke": "node scripts/augury-pilot.mjs smoke"
+    "augury:g2:smoke": "node scripts/augury-pilot.mjs smoke",
+    "augury:g3:selftest": "node scripts/augury-g3.mjs selftest",
+    "augury:g3:plan": "node scripts/augury-g3.mjs plan",
+    "augury:g3:run": "node scripts/augury-g3.mjs all --admitted"
   },
   "devDependencies": {
     "vite": "^8.0.10",

@@ -1,0 +1,417 @@
+{
+  "artifactId": "KAK-HK3-SHADOW-COLLISION-LEMMA-CHECK",
+  "generatedAt": "2026-07-06T16:50:08.543Z",
+  "status": "internal finite-geometry lemma receipt",
+  "hook": "H-K3 generalized one-direction shadow collision lemma",
+  "command": "node scripts/kakeya-shadow-lemma-check.mjs",
+  "statement": "For a line L in F_q^2 and any S subset F_q^2 \\ L with |S| <= q - 2, the body L union S covers exactly the direction of L. The first possible second-direction break occurs at |S| = q - 1.",
+  "proofSketch": [
+    "A line parallel to L is disjoint from L, so it requires q outside points.",
+    "A line not parallel to L intersects L in exactly one point, so it requires q - 1 outside points.",
+    "Therefore q - 2 outside points cannot complete any second line.",
+    "At q - 1 outside points, take a nonparallel line through a point of L; its outside points complete a second direction."
+  ],
+  "perQ": [
+    {
+      "q": 5,
+      "directionCount": 6,
+      "pointCount": 25,
+      "lineSize": 5,
+      "outsidePointCount": 20,
+      "maxSafeExtra": 3,
+      "firstBreakExtra": 4,
+      "formula": {
+        "perLine": "sum_{i=0}^{q-2} C(q^2 - q, i)",
+        "perDirection": "q * sum_{i=0}^{q-2} C(q^2 - q, i)",
+        "allDirections": "(q + 1) * q * sum_{i=0}^{q-2} C(q^2 - q, i)",
+        "firstBreak": "q - 1 outside points can complete a second line"
+      },
+      "counts": {
+        "perLine": "1351",
+        "perDirection": "6755",
+        "allDirections": "40530",
+        "linePlusOnePerDirection": "105"
+      },
+      "checks": {
+        "safeRepresentativePass": true,
+        "thresholdRepresentativePass": true,
+        "pass": true
+      },
+      "witnesses": {
+        "safe": [
+          {
+            "direction": "0",
+            "intercept": 0,
+            "extraPoints": 3,
+            "bodySize": 8,
+            "bitset": "100000",
+            "pass": true,
+            "pointIndices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          },
+          {
+            "direction": "0",
+            "intercept": 1,
+            "extraPoints": 3,
+            "bodySize": 8,
+            "bitset": "100000",
+            "pass": true,
+            "pointIndices": [
+              0,
+              1,
+              2,
+              5,
+              6,
+              7,
+              8,
+              9
+            ]
+          }
+        ],
+        "firstBreak": [
+          {
+            "baseDirection": "0",
+            "baseIntercept": 0,
+            "crossingDirection": "1",
+            "crossingIntercept": 0,
+            "extraPoints": 4,
+            "bodySize": 9,
+            "bitset": "110000",
+            "directionsCovered": 2,
+            "pass": true,
+            "pointIndices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              6,
+              12,
+              18,
+              24
+            ]
+          },
+          {
+            "baseDirection": "0",
+            "baseIntercept": 1,
+            "crossingDirection": "1",
+            "crossingIntercept": 0,
+            "extraPoints": 4,
+            "bodySize": 9,
+            "bitset": "110000",
+            "directionsCovered": 2,
+            "pass": true,
+            "pointIndices": [
+              0,
+              5,
+              6,
+              7,
+              8,
+              9,
+              12,
+              18,
+              24
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "q": 7,
+      "directionCount": 8,
+      "pointCount": 49,
+      "lineSize": 7,
+      "outsidePointCount": 42,
+      "maxSafeExtra": 5,
+      "firstBreakExtra": 6,
+      "formula": {
+        "perLine": "sum_{i=0}^{q-2} C(q^2 - q, i)",
+        "perDirection": "q * sum_{i=0}^{q-2} C(q^2 - q, i)",
+        "allDirections": "(q + 1) * q * sum_{i=0}^{q-2} C(q^2 - q, i)",
+        "firstBreak": "q - 1 outside points can complete a second line"
+      },
+      "counts": {
+        "perLine": "974982",
+        "perDirection": "6824874",
+        "allDirections": "54598992",
+        "linePlusOnePerDirection": "301"
+      },
+      "checks": {
+        "safeRepresentativePass": true,
+        "thresholdRepresentativePass": true,
+        "pass": true
+      },
+      "witnesses": {
+        "safe": [
+          {
+            "direction": "0",
+            "intercept": 0,
+            "extraPoints": 5,
+            "bodySize": 12,
+            "bitset": "10000000",
+            "pass": true,
+            "pointIndices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11
+            ]
+          },
+          {
+            "direction": "0",
+            "intercept": 1,
+            "extraPoints": 5,
+            "bodySize": 12,
+            "bitset": "10000000",
+            "pass": true,
+            "pointIndices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13
+            ]
+          }
+        ],
+        "firstBreak": [
+          {
+            "baseDirection": "0",
+            "baseIntercept": 0,
+            "crossingDirection": "1",
+            "crossingIntercept": 0,
+            "extraPoints": 6,
+            "bodySize": 13,
+            "bitset": "11000000",
+            "directionsCovered": 2,
+            "pass": true,
+            "pointIndices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              8,
+              16,
+              24,
+              32,
+              40,
+              48
+            ]
+          },
+          {
+            "baseDirection": "0",
+            "baseIntercept": 1,
+            "crossingDirection": "1",
+            "crossingIntercept": 0,
+            "extraPoints": 6,
+            "bodySize": 13,
+            "bitset": "11000000",
+            "directionsCovered": 2,
+            "pass": true,
+            "pointIndices": [
+              0,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              16,
+              24,
+              32,
+              40,
+              48
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "q": 11,
+      "directionCount": 12,
+      "pointCount": 121,
+      "lineSize": 11,
+      "outsidePointCount": 110,
+      "maxSafeExtra": 9,
+      "firstBreakExtra": 10,
+      "formula": {
+        "perLine": "sum_{i=0}^{q-2} C(q^2 - q, i)",
+        "perDirection": "q * sum_{i=0}^{q-2} C(q^2 - q, i)",
+        "allDirections": "(q + 1) * q * sum_{i=0}^{q-2} C(q^2 - q, i)",
+        "firstBreak": "q - 1 outside points can complete a second line"
+      },
+      "counts": {
+        "perLine": "5087128012693",
+        "perDirection": "55958408139623",
+        "allDirections": "671500897675476",
+        "linePlusOnePerDirection": "1221"
+      },
+      "checks": {
+        "safeRepresentativePass": true,
+        "thresholdRepresentativePass": true,
+        "pass": true
+      },
+      "witnesses": {
+        "safe": [
+          {
+            "direction": "0",
+            "intercept": 0,
+            "extraPoints": 9,
+            "bodySize": 20,
+            "bitset": "100000000000",
+            "pass": true,
+            "pointIndices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19
+            ]
+          },
+          {
+            "direction": "0",
+            "intercept": 1,
+            "extraPoints": 9,
+            "bodySize": 20,
+            "bitset": "100000000000",
+            "pass": true,
+            "pointIndices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              20,
+              21
+            ]
+          }
+        ],
+        "firstBreak": [
+          {
+            "baseDirection": "0",
+            "baseIntercept": 0,
+            "crossingDirection": "1",
+            "crossingIntercept": 0,
+            "extraPoints": 10,
+            "bodySize": 21,
+            "bitset": "110000000000",
+            "directionsCovered": 2,
+            "pass": true,
+            "pointIndices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              12,
+              24,
+              36,
+              48,
+              60,
+              72,
+              84,
+              96,
+              108,
+              120
+            ]
+          },
+          {
+            "baseDirection": "0",
+            "baseIntercept": 1,
+            "crossingDirection": "1",
+            "crossingIntercept": 0,
+            "extraPoints": 10,
+            "bodySize": 21,
+            "bitset": "110000000000",
+            "directionsCovered": 2,
+            "pass": true,
+            "pointIndices": [
+              0,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              20,
+              21,
+              24,
+              36,
+              48,
+              60,
+              72,
+              84,
+              96,
+              108,
+              120
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "pass": true
+}

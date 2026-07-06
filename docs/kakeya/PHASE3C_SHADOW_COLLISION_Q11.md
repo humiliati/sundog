@@ -7,6 +7,7 @@
 - Slate hook: [`../HODGE_KAKEYA_HYPOTHESES_SLATE.md`](../HODGE_KAKEYA_HYPOTHESES_SLATE.md)
 - Script: [`../../scripts/kakeya-shadow-collision-audit.mjs`](../../scripts/kakeya-shadow-collision-audit.mjs)
 - `q=11` manifest: [`../../results/kakeya/shadow-collision-audit-q11/manifest.json`](../../results/kakeya/shadow-collision-audit-q11/manifest.json)
+- Successor lemma: [`PHASE3D_SHADOW_COLLISION_LEMMA.md`](PHASE3D_SHADOW_COLLISION_LEMMA.md)
 
 ## Verdict
 
@@ -86,6 +87,7 @@ Supports only:
 It does not support any statement about Euclidean Kakeya, optimal finite-field Kakeya sets,
 maximal-function estimates, or new incidence geometry. `q=11` is the largest field registered
 in `kakeya-core`; the bounded enumeration is structurally vacuous for `q>=7`, so this
-structured-family measurement is the ceiling of the current approach. The original
-`KAK-SHADOW-REENCODING` guard still fires if a future surface promotes witness lines or point
-membership as the primary signature.
+one-point structured-family measurement is the ceiling of the measured-receipt approach.
+Phase 3D generalizes the same phenomenon to the safe range `line + <= q-2 outside points`.
+The original `KAK-SHADOW-REENCODING` guard still fires if a future surface promotes witness
+lines or point membership as the primary signature.

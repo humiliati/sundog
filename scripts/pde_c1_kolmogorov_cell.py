@@ -55,6 +55,8 @@ VERDICT_BEARING_PRESETS = {
     "lock_v6",
     "lock_v7_g200",
     "lock_v7_g300",
+    "lock_v7_g200_n48",
+    "lock_v7_g300_n48",
     "lock_disc_g200",
     "lock_disc_g300",
 }
@@ -128,6 +130,8 @@ def parse_args() -> argparse.Namespace:
             "lock_v6",
             "lock_v7_g200",
             "lock_v7_g300",
+            "lock_v7_g200_n48",
+            "lock_v7_g300_n48",
             "lock_disc_g200",
             "lock_disc_g300",
             "at2_growth_g200",
@@ -387,6 +391,21 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         objective_quantile = 0.70
         calibration_sample_count = 50_000
         calibration_gap_steps = 5_000
+    elif args.preset in ("lock_v7_g200_n48", "lock_v7_g300_n48"):
+        # H2 N-refinement (NSE_H2_V7_N48_SCOPE.md): lock_v7 portable-quantile
+        # cell with the lock_v5_n48 resolution lift (grid 32 -> 48, n_modes
+        # 16 -> 24; dealias cutoff ~16). Same K=3 signature, dt, seed, split.
+        burnin_steps = 100_000
+        sample_count = 50_000
+        kf = 2
+        grashof = 200.0 if args.preset == "lock_v7_g200_n48" else 300.0
+        k_signature = 3
+        objective = "portable-quantile"
+        objective_quantile = 0.70
+        calibration_sample_count = 50_000
+        calibration_gap_steps = 5_000
+        grid_size = 48
+        n_modes = 24
     elif args.preset in ("lock_disc_g200", "lock_disc_g300"):
         # Objective-overlap discriminator
         # (PDE_C1_OBJECTIVE_OVERLAP_DISCRIMINATOR.md): the v7 portable-quantile

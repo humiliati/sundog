@@ -51,6 +51,12 @@ audits for `q=7` (`2408` states, max nonempty collision class `301`) and `q=11`
 count `q(q^2 - q + 1)` passes across the supported rungs, the empirical
 reencoding falsifier is clear, and `npm run kakeya:test` now pins
 different-size same-shadow collisions across `q in {5, 7, 11}` (`42/42`).
+Phase 3D turns this receipt into a finite-geometry lemma:
+[`kakeya/PHASE3D_SHADOW_COLLISION_LEMMA.md`](kakeya/PHASE3D_SHADOW_COLLISION_LEMMA.md)
+proves the generalized safe range `line + <= q-2 outside points`, the sharp
+first break at `q-1`, and the per-direction count
+`q * sum_{i=0}^{q-2} C(q^2 - q, i)` (`npm run kakeya:shadow-lemma`; core tests
+`48/48`).
 This file is a target-selection and claim-boundary scaffold opened from
 [`SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md`](SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md).
 
@@ -464,6 +470,9 @@ Forbidden:
   - internal H-K3 audit showing the registered direction shadow is many-to-one
   on bounded `q=5` states, structured `q in {5, 7, 11}` line-extension states,
   and the Phase-2 guard witnesses.
+- [`kakeya/PHASE3D_SHADOW_COLLISION_LEMMA.md`](kakeya/PHASE3D_SHADOW_COLLISION_LEMMA.md)
+  - finite-geometry lemma upgrading H-K3 from a measured one-point receipt to a
+  closed-form one-direction collision family with sharp `q-1` break threshold.
 - [`kakeya/EXTERNAL_REVIEW_PACKET.md`](kakeya/EXTERNAL_REVIEW_PACKET.md) -
   owner-pending external-review ask; frames Kakeya as a boundary/pedagogy review,
   not a result-review packet.

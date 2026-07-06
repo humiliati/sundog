@@ -310,3 +310,71 @@ inside the CI and no bug found under diagnosis. Per §8 ("miss ⇒ construction 
 proven otherwise") the proof-otherwise is on record (B.2). **The decision to accept that
 reading and admit G3 spec-work (a G3 freeze-marker amendment) is the owner's**; the runner
 and constants stay frozen at the hashes above meanwhile.
+
+---
+
+## Amendment C — G3 Freeze Marker (2026-07-06 PT)
+
+Append-only. **Owner accepted B.4 and admitted G3 on 2026-07-06** ("squared away admit
+G3"). This amendment freezes the G3 tooling and stages the binding full run. No §1–§7
+constant changed; the pilot runner is imported unmodified at its Amendment-B hash
+(`e2c7b780…`, re-verified at filing).
+
+### C.1 G3 tooling (frozen with these hashes)
+
+| file | sha256 |
+| --- | --- |
+| `docs/prereg/augury/augury_g3.py` | `cf57dcbdc71eb65c64eadbdff79bf7274e8968ca71fa2c96c026e913b16d52f7` |
+| `scripts/augury-g3.mjs` | `8c30c31c30c3d91a38a1de14d71aa548d4a804e23111c58c0c092dc70cb8fe15` |
+
+npm: `augury:g3:selftest` / `augury:g3:plan` / `augury:g3:run`. Results path
+`results/augury/g3-full-run/` (gitignored); resumable via the pilot's HTTP cache + a G3
+NBM scalar cache (`nbm_scalars.jsonl`). G3 selftest 6/6 (IRLS coefficient recovery, MBB
+determinism, logit clip, Φ tail, scoring identity).
+
+### C.2 Implementation pins (§6/§7 operationalized; frozen in the runner docstring)
+
+- **Station-day counts as valid** iff ≥ 1 of its 11 band cutoffs is valid (§5); scores
+  average over valid cutoffs; the §7 floor (500) counts these station-days; the
+  valid-cutoffs-per-day distribution is reported.
+- **DM**: pooled mean of station-day differentials; circular moving-block bootstrap over
+  calendar days (block 7, B = 10,000, seed 20260707; a resampled day carries all its
+  stations); DM stat = mean/se_boot; one-sided p = Φ(stat).
+- **Encompassing**: rows = (station-day, band cutoff, valid strike);
+  `1{high>θ} ~ logit(F_NBM) + logit(F_mkt) + station FE + const`, clip [0.01, 0.99];
+  IRLS (ridge 1e-8); β_mkt 95% percentile CI over **2,000** day-block bootstrap refits
+  (seed 20260708; reduced from 10,000 for refit cost — pinned here, pre-run).
+- **Per-city settlement audit** inside the run: n = 20/city, seed 20260707, gate 20/20
+  per city; a failing city ABORTS the run before scoring (§1 station-match discipline).
+- **NBM**: issue union across all stations' band joins; parallel S3 fetch (6 threads,
+  unthrottled — AWS open data), serial eccodes decode (thread-safety), one decode per
+  issue serving all 7 stations (coordinates pinned in `STATION_LL`).
+- Verdict computed exactly per §7 precedence into `g3_result.json`; exploratory outputs
+  (dominance-by-offset, era/station tables, reliability bins) are declared-exploratory.
+
+### C.3 Plan receipts (dry enumeration, 2026-07-06)
+
+| station | markets | event-days | window |
+| --- | --- | --- | --- |
+| KNYC | 8,908 | 1,641 | 2022-01-01 → 2026-06-30 |
+| KMDW | 8,917 | 1,641 | 2022-01-01 → 2026-06-30 |
+| KAUS | 6,855 | 1,143 | 2023-05-11 → |
+| KMIA | 6,872 | 1,146 | 2023-05-11 → |
+| KDEN | 3,528 | 588 | 2024-11-20 → |
+| KLAX | 3,252 | 542 | 2025-01-05 → |
+| KPHL | 3,528 | 588 | 2024-11-20 → |
+
+Totals: 41,860 markets, 7,289 station-days pre-exclusion; NYC-liquidity-profile projection
+≈ 1,300–1,700 valid station-days (floor 500). Estimated binding-run cost: ~33k new Kalshi
+candle pulls (~2–3 h, throttled), NBM ~16–21k issue decodes ≈ 75–95 GB transfer (~2–4 h,
+scalar-cached so re-runs are free), score+adjudicate ≤ 1 h CPU. **~5–7 h wall, fully
+resumable.**
+
+### C.4 Admitted command (exact, unchanged)
+
+```
+npm run augury:g3:run        # = node scripts/augury-g3.mjs all --admitted
+```
+
+Stages market → audit → nbm → score → adjudicate; emits `g3_result.json` with the §7
+verdict. Adjudication language after the run is restricted to §7 tokens + §9.

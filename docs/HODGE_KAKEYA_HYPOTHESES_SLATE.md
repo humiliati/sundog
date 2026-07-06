@@ -203,7 +203,18 @@ collision class is **exactly `q(q^2 - q + 1)`** (`5->105, 7->301, 11->1221`),
 i.e. the shadow's lossiness grows **cubically in `q`** - a closed-form derived
 from the `q` slope-0 lines plus their `q^2-q` one-point extensions. Note the
 bounded brute force is line-free (vacuous) for `q>=7` since a line needs `q>6`
-points, so the structured family is the ceiling of this approach.
+points, so the one-point structured family is the ceiling of that measured
+receipt shape.
+
+*Finite-geometry lemma (PHASE3D, 2026-07-06).* The measured receipt is now a
+tiny lemma; see
+[`kakeya/PHASE3D_SHADOW_COLLISION_LEMMA.md`](kakeya/PHASE3D_SHADOW_COLLISION_LEMMA.md)
+and `npm run kakeya:shadow-lemma`. If `L` is a line and
+`S subset F_q^2 \ L` has `|S| <= q - 2`, then `L union S` covers exactly the
+direction of `L`. The first possible second-direction break is sharp at
+`|S| = q - 1`. The one-direction collision count becomes
+`q * sum_{i=0}^{q-2} C(q^2 - q, i)` per direction (`6755`, `6824874`,
+`55958408139623` for `q=5,7,11`), with regression `48/48`.
 
 *Claim.* A finite-field Kakeya workbench becomes more than a spectacle if its
 displayed direction shadow is provably many-to-one: different point sets can

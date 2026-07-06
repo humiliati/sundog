@@ -1,6 +1,6 @@
 {
   "artifactId": "KAK-HK3-SHADOW-COLLISION-AUDIT",
-  "generatedAt": "2026-07-06T15:06:09.152Z",
+  "generatedAt": "2026-07-06T16:50:11.365Z",
   "status": "internal measurement receipt",
   "hook": "H-K3 direction-shadow collision audit for finite-field Kakeya",
   "parameters": {

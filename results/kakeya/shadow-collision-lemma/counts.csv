@@ -1,0 +1,4 @@
+q,outside_point_count,max_safe_extra,first_break_extra,per_line,per_direction,all_directions,line_plus_one_per_direction,safe_check,threshold_check
+5,20,3,4,1351,6755,40530,105,true,true
+7,42,5,6,974982,6824874,54598992,301,true,true
+11,110,9,10,5087128012693,55958408139623,671500897675476,1221,true,true

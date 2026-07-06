@@ -130,6 +130,45 @@ for (const q of Qs) {
   }
   check(`q=${q} T8d structured-line-extension-count`, structuredCounts);
 
+  // 8e. Lemma boundary: a line plus up to q - 2 off-line points still covers
+  //     exactly the original direction.
+  let safeBoundary = true;
+  for (let dirIndex = 0; dirIndex < dirs.length; dirIndex++) {
+    const d = dirs[dirIndex];
+    const expectedBits = dirs.map((_, i) => (i === dirIndex ? 1 : 0));
+    for (let intercept = 0; intercept < q; intercept++) {
+      const line = K.lineMask(d, intercept, q);
+      const body = new Set(line);
+      for (let p = 0; p < n && body.size < q + (q - 2); p++) {
+        if (!line.has(p)) body.add(p);
+      }
+      safeBoundary = safeBoundary && bitsEqual(K.shadowBitset(q, body), expectedBits);
+    }
+  }
+  check(`q=${q} T8e line-plus-q-minus-2-safe`, safeBoundary);
+
+  // 8f. First break: q - 1 off-line points can complete a second direction.
+  let firstBreak = true;
+  for (let dirIndex = 0; dirIndex < dirs.length; dirIndex++) {
+    const d = dirs[dirIndex];
+    const otherIndex = (dirIndex + 1) % dirs.length;
+    const other = dirs[otherIndex];
+    for (let intercept = 0; intercept < q; intercept++) {
+      const line = K.lineMask(d, intercept, q);
+      const crossing = K.lineMask(other, 0, q);
+      const body = new Set(line);
+      for (const p of crossing) body.add(p);
+      const bits = K.shadowBitset(q, body);
+      firstBreak =
+        firstBreak &&
+        body.size === q + (q - 1) &&
+        bits[dirIndex] === 1 &&
+        bits[otherIndex] === 1 &&
+        bits.reduce((sum, bit) => sum + bit, 0) >= 2;
+    }
+  }
+  check(`q=${q} T8f line-plus-q-minus-1-break`, firstBreak);
+
   // 9. Greedy line-cover construction covers all directions.
   check(
     `q=${q} T9 greedy-complete`,
