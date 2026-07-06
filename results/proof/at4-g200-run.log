@@ -1,0 +1,31 @@
+AT4_CROSSOVER_TRANSPLANT  G=200 carrier=(K1, mu10)  [NON-PROMOTIONAL]
+(truth) calibration pass done; collecting calib obs stream ...
+(window) integrating truth + ledger + scrambled ...
+(window) done in 618s
+(labels) n=7500 damp=0.299 | slice mass=0.300 n_slice=2251 slice-damp=0.930
+          ledger: bulk=1.000 slice=1.000
+       scrambled: bulk=0.698 slice=0.931
+   ceiling_truth: bulk=0.997 slice=0.991
+  surface W= 250    moments: bulk=0.974 slice=0.958 perm=0.958
+  surface W= 250  quantiles: bulk=0.865 slice=0.958 perm=0.958
+  surface W= 250    gram_w1: bulk=0.699 slice=0.933 perm=0.933
+  surface W= 250    gram_w2: bulk=0.701 slice=0.990 perm=0.934
+  surface W= 250    gram_w4: bulk=0.711 slice=0.990 perm=0.909
+  surface W= 250    gram_w8: bulk=0.722 slice=0.994 perm=0.925
+  surface W= 500    moments: bulk=0.848 slice=1.000 perm=1.000
+  surface W= 500  quantiles: bulk=0.843 slice=0.996 perm=0.996
+  surface W= 500    gram_w1: bulk=0.701 slice=0.970 perm=0.970
+  surface W= 500    gram_w2: bulk=0.703 slice=1.000 perm=0.993
+  surface W= 500    gram_w4: bulk=0.710 slice=1.000 perm=0.964
+  surface W= 500    gram_w8: bulk=0.734 slice=1.000 perm=0.931
+  (liveness) window-mean axis on-slice: 1.000
+  surface W=1000    moments: bulk=0.919 slice=0.991 perm=0.991
+  surface W=1000  quantiles: bulk=0.935 slice=0.988 perm=0.988
+  surface W=1000    gram_w1: bulk=0.700 slice=0.952 perm=0.952
+  surface W=1000    gram_w2: bulk=0.697 slice=0.952 perm=0.940
+  surface W=1000    gram_w4: bulk=0.699 slice=0.952 perm=0.927
+  surface W=1000    gram_w8: bulk=0.717 slice=0.937 perm=0.931
+
+VERDICT: AT4_SURFACE_SUFFICIENT - surface_max 1.000 >= ledger 1.000-0.05: the label is window-statistic-determined on-slice
+(wrote) results/proof/at4-g200/at4_summary.json
+  (Non-promotional. Relay-form caveat carries over; no world-model language.)

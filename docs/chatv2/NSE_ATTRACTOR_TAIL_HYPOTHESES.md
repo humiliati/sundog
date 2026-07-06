@@ -358,6 +358,19 @@ controls.
 
 ---
 
+> **Post-run status (2026-07-04): RUN — `AT3_LEDGER_SPLIT_CONFIRMED` at G=200**
+> (spec v1.1 frozen; owner-run 42-config sweeps × 2 regimes; receipt
+> `AT3_NUDGING_LEDGER_RECEIPT.md`). Split-positive at (K_obs=1, μ∈{10,50}):
+> state-insufficient (err 0.75–1.20) ∧ acc 0.997–1.000 vs floor 0.698 ∧ twin gap
+> 0.001 ∧ K_obs < K_sync. **K_sync = 2 at every μ, BOTH regimes (sharp cliff);
+> the three-budget ladder reads decide = 1 < synchronize = 2 < K\* > 4 — the
+> §3.6 vacuity does NOT complete at the ledger level: AT-2b's collapse was
+> gauge-relative.** Mechanism typed honestly: relay form (observation-relay +
+> temporal pairing; scrambled = exact floor, twin matches to 0.001). G=300 =
+> sync table only (labels degenerate even at 500k — envelope wander; power
+> requirement recorded). The slate's central question has its first
+> maintained-ledger positive; AT-4 rides this estimator next.
+
 ### AT-4 — The crossover transplant: order-blind window statistics collapse on the decision-ambiguous slice; the maintained ledger holds (Rank B; rides AT-3)
 
 **Claim.** On slices of the C1 observation stream where the registered
@@ -421,6 +434,21 @@ better than the registered surface statistic allows" — the locked claim
 grammar from the state-crossover handoff, nothing more.
 
 ---
+
+> **Post-run status (2026-07-04): RUN — `AT4_SURFACE_SUFFICIENT`** (spec frozen;
+> carrier = AT-3's split cell; receipt `AT4_CROSSOVER_TRANSPLANT_RECEIPT.md`).
+> surface_max = 1.000 = ledger on-slice (even restricted to strictly
+> permutation-invariant arms); bulk margin 0.026 < δ. The crossover form does
+> not separate on this cell — the surface never fails. Two catches recorded:
+> the margin-band slice inherited label imbalance (slice-damp 0.930; the LLM
+> balance gate was a transplant gap, owned — AT-4b would re-register it), and
+> J_q(500)@G=200 is trailing-window-determined (the third empirical mirror of
+> `AveragingDecodability`). **Slate-level: the two target forms now have
+> opposite, complementary measured answers — the maintained-ledger form
+> separates (AT-3: decide 1 < sync 2), the crossover form does not (AT-4) —
+> mirroring the LLM arc exactly (H2 ↔ AT-3; V3 ↔ AT-4), same root cause. F3's
+> cross-substrate symmetry is measured on both sides.** Remaining: AT-5
+> (compute-free, open), AT-7 (parked).
 
 ### AT-6 — charFun typing of compact shadows: time-averaging keeps regime-type functionals, washes phase/timing-type (Rank C, cheapest in rank; feeds AT-4)
 
