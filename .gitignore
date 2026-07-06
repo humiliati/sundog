@@ -94,3 +94,5 @@ scripts/_halosim_calib*.png
 # Local Cloudflare Pages Functions secrets — NEVER commit
 .dev.vars
 .dev.vars.*
+results/augury/
+.venv-augury/

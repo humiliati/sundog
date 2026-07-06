@@ -9,7 +9,9 @@ temperature off prices, and Roll (1984) showed the augur beats the bureau at the
 trivially to `SUNDOG_V_WEATHER` / `_KALSHI` if the codename reads too cute — it's a filename and a
 header, not a claim.*
 
-Status: **OPENED 2026-07-02 as a spine.** Frame only. No data, no score, no page.
+Status: **G1 PREREG FILED 2026-07-06** ([`prereg/augury/AUGURY_G1_PREREG.md`](prereg/augury/AUGURY_G1_PREREG.md)).
+G0 lit-pass PASSED 2026-07-05 ([`AUGURY_LIT_PASS_MEMO.md`](AUGURY_LIT_PASS_MEMO.md) — gap real, all rungs
+pullable with receipts). Nothing scored; G2 pilot execution gated on a tooling freeze-marker amendment.
 
 ---
 

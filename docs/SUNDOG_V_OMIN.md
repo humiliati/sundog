@@ -413,8 +413,20 @@ fully nailed in-scout**. What is nailed:
      boxes). The neighbor relations `maxBelowSet`/`minAboveSet` feed **betaFn's own graph
      back into the formula layer as an atom** — definable functions compose. Bad sets
      `tame_badFin`/`tame_notNormalTop`/`tame_notNormalBot` all tame. D4c inputs complete.
-   - **D4c — the tube kill**: Monotonicity+continuity on β⁻, β, β⁺ over an interval in `B`;
-     constants-c-d boxes inside the tube; the graph-split; `(x, β(x))` normal ⇒ `B` finite.
+   - **D4c — the tube kill** ✅ LANDED 2026-07-06: `OMinimalBadFinite.lean` (55th module),
+     axiom-clean, 3 gate entries (`notNormalTop_finite`, `badFin_finite`,
+     `abnormal_finite`), green round 4 (arity pins on restated `Fml.eval`s; `open Topology`
+     for `𝓝`; C1 already owns the name `badSet_finite` — master renamed `abnormal_finite`;
+     one `▸`→`rw`). **THE BAD SETS ARE FINITE.** Ray kills: fiber-max/min continuity +
+     one constant caps a window (the offending A-point itself witnesses the spec — no
+     domain bookkeeping). The tube proper: interval of bad parameters → dodge finitely many
+     `¬NormalBot` (β exists) → `split_interval` (new: tame split with the disjunction
+     packed inside the existential, deferring the 2×2×2 case tree) on the three tame flags
+     (below-β/above-β/graph) → ONE avoidance shrink over the three cut-sets → constants
+     `c < β < d` between the fiber neighbors → **the tube is A-free except the β-graph**
+     (`htube`) → graph box (thin + β-continuity = the selection) or empty box →
+     `(a*, β a*)` normal, contradicting leastness. `avoid_finset` de-privatized (the
+     ladder's workhorse).
    - **D4d — count constancy + UF**: at fully-normal parameters the count is locally
      constant (graph boxes count, gap intervals empty via Heine–Borel on `[c,d]` — ℝ-specific,
      honestly fenced like C1d's countability); assembly: **UNIFORM FINITENESS** —

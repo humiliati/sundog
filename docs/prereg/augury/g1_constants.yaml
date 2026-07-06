@@ -1,0 +1,70 @@
+# AUGURY G1 constants mirror — canonical source is AUGURY_G1_PREREG.md (§1–§7).
+# Flat key: value format (parsed by augury_pilot.py without external deps).
+# §4-NBM comparator construction is specified by Amendment A (qmd product receipted
+# unavailable for the primary window: 2022-era qmd = APCP-only; NBP TXN rows V5-era only).
+
+# §1 universe
+primary_window_start: 2022-01-01
+primary_window_end: 2026-06-30
+ladder_window_start: 2023-02-01
+ladder_window_end: 2026-06-30
+stations: KNYC,KMDW,KDEN,KLAX,KAUS,KMIA,KPHL
+pilot_station: KNYC
+knyc_lat: 40.7789
+knyc_lon: -73.9692
+lst_offset_KNYC: -5
+lst_offset_KMDW: -6
+lst_offset_KDEN: -7
+lst_offset_KLAX: -8
+lst_offset_KAUS: -6
+lst_offset_KMIA: -5
+lst_offset_KPHL: -5
+series_current_KNYC: KXHIGHNY
+series_legacy_KNYC: HIGHNY
+
+# §3 primary band
+tpeak_source_start_year: 2015
+tpeak_source_end_year: 2019
+band_start_offset_hours: -12
+band_end_offset_hours: -2
+
+# §5 validity / liquidity (frozen constants)
+max_spread_cents: 4
+max_quote_age_minutes: 60
+min_valid_strikes: 4
+min_event_volume_contracts: 250
+
+# §6 inference
+prob_clip_low: 0.01
+prob_clip_high: 0.99
+block_length_days: 7
+bootstrap_resamples: 10000
+alpha_one_sided: 0.05
+
+# §7 sample floor
+min_valid_station_days: 500
+
+# §8 pilot pins
+settlement_audit_n: 50
+settlement_audit_seed: 20260706
+strike_semantics_discovery_seed: 20260705
+calibration_top_bucket_low_pct: 97
+calibration_top_bucket_high_pct: 100
+cdf_receipt_days: 2025-07-01,2025-08-01,2025-09-01,2025-10-01,2025-11-01,2025-12-01,2026-01-01,2026-02-01,2026-03-01,2026-04-01,2026-05-01,2026-06-01
+nbm_join_demo_days: 2022-07-15,2025-01-15,2026-06-15
+
+# Amendment A — NBM comparator (era-uniform construction)
+nbm_bucket: noaa-nbm-grib2-pds
+nbm_variable: TMAX
+nbm_level: 2 m above ground
+nbm_window_end_utc_hour: 0
+nbm_distribution: normal_mu_sigma
+nbm_grid_point: nearest
+# NBM MaxT nominal valid window (12h ending 00Z UTC) for the CLI-day mismatch diagnostic
+nbm_maxt_window_start_utc_hour: 12
+
+# HTTP discipline
+kalshi_base: https://api.elections.kalshi.com/trade-api/v2
+iem_cli: https://mesonet.agron.iastate.edu/json/cli.py
+http_min_interval_seconds: 0.12
+http_retries: 4

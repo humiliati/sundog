@@ -87,6 +87,8 @@ spent — the two-rung design did exactly its job.
   (`TrajectoryWindow` aliases over `SurfaceBagGraded`) only if the owner wants the
   σ_traj vocabulary inside `sundogcert`. Kill conditions per the scope.
 - **AT-7:** parked; any integrator spend is its own future decision.
+- **Fresh successor slate:** `NSE_POST_AT_HYPOTHESES_SLATE.md` starts the
+  post-AT board from the closed receipt set; it does not reopen AT-4/AT-4b.
 - Website / public / promo work: out of scope unless separately requested; the
   state-crossover handoff's keep-true box governs anything that ever surfaces.
 
@@ -97,5 +99,6 @@ BOUNDARY_LAYER_SPEC/RECEIPT` + `AT1_HARNESS_SIGNOFF`, `AT2_HARNESS_SIGNOFF_REQUE
 `AT2_GROWTH_LAW_SPEC/RECEIPT`, `AT2B_GROWTH_LAW_SPEC/RECEIPT`, `AT3_NUDGING_LEDGER_
 SPEC/RECEIPT`, `AT4_CROSSOVER_TRANSPLANT_SPEC/RECEIPT`, `AT4B_ROLLOUT_CROSSOVER_SCOPE`,
 `AT4B_ROLLOUT_DETRENDED_SPEC`, `AT4B0_ADMISSION_RECEIPT`, `NSE_AT_SYNTHESIS_AT5_SCOPE`,
+`NSE_POST_AT_HYPOTHESES_SLATE.md`,
 `PDE_DETERMINING_MODES_POSTULATE1.md` (claim boundary), sundogcert
 `AveragingDecodability.lean` / `SurfaceBag.lean` / `SurfaceBagGraded.lean`.
