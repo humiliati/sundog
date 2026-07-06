@@ -86,8 +86,21 @@ Already banked in-lane: `polyDef_tame` (R1: QF dim-1 tameness), the whole abstra
 - **TS-2 — the parametric elimination step** [MONTHS — the pole proper]. Representation
   `SAN n` (sign-condition lists on `MvPolynomial (Fin n) ℝ`, in the `SLN` style); head-view
   through `finSuccEquiv`. Sub-rungs:
-  - **TS-2a** — branch trees: leading-coefficient case splits (vanish/sign), degree-drop
-    lemmas, the well-founded measure (multiset of `y`-degrees).
+  - **TS-2a** — branch trees ✅ LANDED 2026-07-06: `PolyBranchTrees.lean` (63rd module),
+    axiom-clean, 3 gate entries (`spec_eval_cons`, `resolve_spec`, `spec_natDegree_eq`),
+    green round 3 (dite/ite mismatch in WF-def unfolds — keep dite, use `dif_pos/dif_neg`;
+    `eraseLead_natDegree_le` lands at `natDegree − 1`; beta-unreduced motives need `change`;
+    `famDegrees` noncomputable). `spec g` (coefficient evaluation) bridged to
+    `MvPolynomial.eval (Fin.cons y g)` by mathlib's `eval_eq_eval_mv_eval'` — verbatim, no
+    work; `resolve g` (strip vanishing leading coefficients, WF on support size) with a
+    reusable `resolve_cases` induction principle; specialization preserved
+    (`resolve_spec`) and DEGREE-EXACT on resolutions (`spec_natDegree_eq`,
+    `spec_eq_zero_iff`, `spec_leadingCoeff_eq` via `natDegree_map_of_leadingCoeff_ne_zero`);
+    the finite `truncChain` every branch lands in + compositional branch conditions
+    (`resolve_eq_self_iff`, `resolve_of_lead_vanish`); `famDegrees` + mathlib's
+    Dershowitz–Manna well-founded order (in-tree! `instWellFoundedIsDershowitzMannaLT`) as
+    the pre-registered 2d measure. First-vs-last variable mismatch (finSuccEquiv vs snoc)
+    noted: recovered by a rename at TS-3.
   - **TS-2b** — the mod-trick: at a root `r` of `p`, `q(r) = (q mod p)(r)` — pointwise-trivial
     over ℝ (`q = p·s + rem`), giving the sign-matrix column transfer without subresultants.
   - **TS-2c** — between-roots signs: the derivative family + monotonicity between consecutive
