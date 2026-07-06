@@ -60,6 +60,22 @@ failure diagnoses, and the only candidate preserving every house discipline.**
   the bar), pre-registered LIFT/MARGINAL/EMPTY gates with an absolute anchor (≥ max(2×, +3) distinct tasks),
   and ONE pre-named v1 extension round (5 families) so extension ≠ tuning. **Probe execution NOT admitted —
   next = the tooling freeze-marker amendment (runner + smoke + staged command), owner-gated.**
+
+#### GEN-1 RESULT (2026-07-01): `GEN1_CEILING_EMPTY` at v0 — GEN-1 CLOSED by its own gate
+
+Tooling built + verified (Amendment A: self-test 6/6 incl. both CEGIS solvers + a negative control;
+leak-check 0-0; smoke 0.6 s/inst) and the binding probe ran the full validation universe (155 instances,
+76 s; Amendment B). **Gate `GEN1_CEILING_EMPTY`: gen1 pooled ceiling = 1 task (`cd3c21df`, a genuine
+object rule — "crop the unique-colored object") vs v2 baseline = 1 (`b94a9452`); no-admitted 149/155
+(96%, worse than the v2 bank's 87%).** The per-task-novel rules are not depth-1 object sentences. EMPTY
+at v0 = immediate death per the pre-registered §3 (no v1 round — that was MARGINAL-only). Baseline
+cross-checked (the E-v1 `48131b3c` validation solve is a v2-budget-horizon casualty, another
+bigger-bank-hurts instance; verdict robust to the union baseline). **The pre-named terminal state stands:
+the ARC program is closed at the deterministic baseline with the generator-class wall characterized —
+v1 → v2 → E3 → GEN-1 v0, every step receipted. GEN-3 (phase-gated on GEN-1) is moot. The sole remaining
+open candidate is GEN-4 (LM proposer), gated on its two fences — owner decision.** Any richer object
+grammar is a NEW slate candidate that must first justify why it escapes this receipt.
+
 - **Gate 1 (the ceiling probe, pre-registered):** freeze the perception vocabulary + rule grammar v0; enumerate/
   solve candidates on **validation lanes only**; measure oracle target-in-bank rate + no-admitted rate vs the
   frozen v2 bank's on the same lanes. Proceed only on a material ceiling lift.

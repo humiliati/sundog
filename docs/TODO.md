@@ -87,12 +87,14 @@ Yang-Mills; Riemann resolved in-house (off the gating list).
 
 ### `design-blocked` — sharper spec needed before execution
 
-- **ARC GEN-1 object-DSL ceiling probe** — v0 perception/grammar freeze + probe
-  protocol FILED 2026-07-01 (`prereg/arc/GEN1_OBJECT_DSL_V0_PROBE_SPEC.md`;
-  gate-0 σ pre-test passed via FC-4). Execution needs the tooling freeze-marker
-  amendment (runner `gen1_object_dsl_probe.py`, leak-check, synthetic smoke,
-  timing, staged command). Validation lanes only; adjudicates no capability
-  branch — decides only whether a Branch-F spec may be written.
+- **ARC GEN-1 object-DSL ceiling probe — CLOSED `GEN1_CEILING_EMPTY`
+  (2026-07-01, Amendments A+B).** Tooling built (self-test 6/6, leak-check 0-0),
+  binding probe ran full validation (155 inst, 76 s): gen1 ceiling 1 task
+  (`cd3c21df`) vs v2 baseline 1; no-admitted 96%. EMPTY at v0 = GEN-1 dies per
+  the pre-registered gate (no v1 round). Terminal state: the ARC program stands
+  closed at the deterministic baseline (v1 → v2 → E3 → GEN-1 v0, all receipted);
+  the sole open generator-class candidate is GEN-4 (LM proposer, two fences,
+  owner decision).
 
 - **Navier-Stokes C1 regime-generality** — the portable-objective design decision
   is resolved (held-out look-ahead-max quantile; two-regime separation). Now

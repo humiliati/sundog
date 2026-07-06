@@ -161,3 +161,91 @@ After a probe receipt, the ONLY permitted statements are the gate outcomes of §
 measurements ("the v0 object-DSL bank's validation oracle ceiling was X distinct tasks vs the v2 bank's Y"),
 never capability, sufficiency, solve, public-eval, or Kaggle claims. A `LIFT` outcome permits saying a binding
 spec may now be written; it is not itself a capability result.
+
+---
+
+## Amendment A — Tooling Freeze Marker (2026-07-01 PT)
+
+Append-only. Discharges §5: the probe tooling exists, is verified, and the probe run is admitted.
+
+### Tooling
+- Runner `docs/prereg/arc/gen1_object_dsl_probe.py` (perception parser for the 3 frozen views; the 12
+  frozen selectors; the frozen transform families with CEGIS hole-solvers for κ/δ/dims; render engine;
+  budgeted admission; barrier→ceiling pipeline; v2 baseline read OFFLINE from the E3 validation
+  fingerprint file with its sha256 recorded). Deterministic implementation choices are frozen in the
+  module docstring (canonical object order, tie-breaks, gravity far-side-first ordering, clipping,
+  budget = full verifications ≤ 20000, hole domains).
+- Wrapper `scripts/arc-gen1-ceiling-probe.mjs` (honors `SUNDOG_PYTHON`); npm `arc:gen1:ceiling-probe`;
+  `.gitignore` `results/arc/gen1-object-dsl-ceiling-probe/`.
+
+### Verification
+- `py_compile` clean.
+- **Solver-correctness self-test 6/6 PASS** (`--self-test`): extract-largest (be94b721 analog; winner
+  `cc4|input_copy|argmax_area|identity|delete|crop_nonzero_bbox`), recolor-unique-shape (CEGIS κ solved
+  → `recolor(4)`), gravity-down, move-by-δ (CEGIS δ solved → `move((2,1))`), delete-smallest, and a
+  random-noise NEGATIVE control (no false universal). Verification counts 10.6k–16.2k per synthetic —
+  under the 20k budget, exhaustion logged when hit.
+- Leak-check `arc:phase0:leak-check`: **0 fail / 0 warn** (28 ARC scripts incl. the new wrapper).
+- Capped 3-task validation smoke: 17 instances, **10 s wall (~0.6 s/instance)**, all 12 artifacts
+  emitted, v2 baseline file read + hashed, gate adjudicated (`EMPTY` at the cap — a smoke, NOT a result).
+
+### Ten-minute rule
+Full validation = 155 instances ≈ **3–8 min** projected — within the ten-minute rule (run inline or as a
+short background job; far below every prior ARC binding run). `--allow-dirty` will be passed (the
+worktree carries uncommitted lane work); `gitDirty` is recorded in the manifest per the E-v2 precedent.
+
+### Exact binding command
+```powershell
+node scripts/arc-gen1-ceiling-probe.mjs `
+  --data-dir "$env:USERPROFILE\Datasets\ARC-AGI-2\data" `
+  --register docs/prereg/arc/P0_TASK_REGISTER_EXPANDED_FOR_FIBERS.csv `
+  --split-mode sha256_expansion --progress --allow-dirty `
+  --out results/arc/gen1-object-dsl-ceiling-probe
+```
+Read back: `manifest.json`, `ceiling_summary.csv`, `v2_baseline_ceiling.csv`, `per_prior_ceiling.csv`,
+`probe_adjudication.md`. Gate mapping frozen in §3.
+
+---
+
+## Amendment B — Probe Verdict: `GEN1_CEILING_EMPTY` — GEN-1 dies at v0 (2026-07-01 PT)
+
+Append-only. The binding probe ran on the full validation universe (155 instances, both lanes, 76 s wall,
+`gitDirty=true` recorded per Amendment A). Receipt: `results/arc/gen1-object-dsl-ceiling-probe/`.
+
+### The numbers
+- **Gate: `GEN1_CEILING_EMPTY`** — gen1 pooled ceiling **1 distinct task** (`cd3c21df`) vs v2 baseline
+  **1** (`b94a9452`); 1 ≤ 1+1 fires EMPTY. Per §3, **EMPTY at v0 = GEN-1 dies immediately; the §4 v1
+  extension round is NOT available** (it was authorized only on MARGINAL). Honored as pre-registered.
+- **The mechanism:** gen1 `no_admitted_programs` = **149/155 (96%)** — worse than the v2 bank's 87%
+  zero-candidate rate. The v0 depth-1 object grammar admits *less* than the deterministic bank on real
+  validation tasks; the per-task-novel rules are not depth-1 (view, canvas, select, transform) sentences.
+- **The one catch is a genuine object rule:** `cd3c21df` = "crop to the unique-colored object"
+  (`cc4|selection_bbox_crop|unique_color|identity`), consistent across all 4 instances — the class works
+  exactly where its bet says it should; there is simply almost nowhere on this register where a *depth-1*
+  object sentence is the whole rule. Near-misses (admitted-but-wrong): `351d6448`, `3906de3d`.
+- **Baseline cross-check (anomaly resolved honestly):** E-v1's Amendment B reported validation solves of
+  `48131b3c` and `b94a9452`; our v2-bank ceiling contains only `b94a9452`. Inspection of the E3
+  fingerprints shows `48131b3c` admits 0 candidates on 3/4 instances under the **v2** generator — the v2
+  expansion's enumeration order pushes the v1-solving program (`tile>>color_rule`) past the frozen 20k
+  budget horizon. Another instance of the v2 "bigger bank hurts" effect; the baseline is correct for the
+  frozen v2 bank, and the verdict is **robust** to a v1∪v2 union baseline (2): gen1=1 ≤ 2+1 → still EMPTY.
+
+### What this closes
+GEN-1 (the object-centric DSL class, at its pre-registered v0 scope) is **dead by its own gate**. With it,
+the **deterministic avenue is exhausted end-to-end, every step receipted**: Branch E v1 (capability,
+2 tasks/lane) → v2 (more primitives: 0 new, crowding) → E3 (no selector can lift: ceiling = solved set)
+→ **GEN-1 v0 (a different deterministic class: ceiling ≈ the old bank's)**. Per the generator-class
+slate's pre-named terminal state: *the ARC program stands closed at the deterministic baseline, with the
+generator-class wall characterized.* The GEN-3 (library-learning) candidate was phase-gated on GEN-1 and
+is therefore moot; the only remaining open slate candidate is **GEN-4 (test-time LM proposer)**, which
+requires its two pre-written fences (contamination, determinism) and is an owner decision.
+
+Post-hoc observation (recorded, NOT a reopen): the 96% no-admitted rate is consistent with the rules
+needing the §4 v1 families (relational placement, drawing, counting) and/or composition — but the v0
+gate was pre-committed precisely to prevent grammar-growing-until-it-works, and it fired. Any richer
+object grammar is a NEW slate candidate that must first justify why it escapes this receipt.
+
+### Public language (per §6)
+"The v0 object-DSL bank's validation oracle ceiling was 1 distinct task vs the v2 bank's 1 — the
+pre-registered `GEN1_CEILING_EMPTY` gate fired and the GEN-1 candidate class is closed. No capability,
+sufficiency, solve, public-eval, or Kaggle claim."
