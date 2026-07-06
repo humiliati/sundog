@@ -289,6 +289,29 @@ falsified, Lee-Brickell beating the predicted-best Stern at `w=12`).
 Cataloguing the mode - success or
 failure - is what turns each substrate into a design constraint for the next.
 
+> **Third-axis hardness de-imported (2026-07-04).** The syndrome instance witnesses the
+> capacity axis but with two honest caveats: its "find is hard" is *imported* (syndrome
+> decoding NP-hardness, conditional on P≠NP) and its measured gap is an *upper bound against
+> tested attackers*, not a lower bound. Those caveats are now removed for the axis *as an
+> axis*: `Sundogcert/QueryGapCapacity.lean` (`capacity_certificate`, axiom-clean, in
+> AxiomAudit) supplies a **non-imported** witness in the decision-tree query model — the
+> unstructured-search shadow is (i) DETERMINABLE (a correct decider of depth exactly `n`
+> exists — finite query order, so the resistance is *not* informational), yet (ii) FIND
+> resists (`search_needs_n_queries`: every correct decider needs `≥ n` queries, by the
+> adversary) with (iii) CHECK flat (`checkTree_depth = 1`). So `check (=1) ≪ find (≥ n)`,
+> gap growing unboundedly in `n`, **proved not imported**. The trade the honesty costs:
+> syndrome gives a *dramatic but conditional* gap (exponential, imported); QueryGapCapacity
+> gives a *modest but unconditional* one (linear-in-`n`, proved-in-model). Together the axis
+> is no longer purely imported. **Determine/resist placement:** this occupies a cell the
+> informational schema (`SUFFICIENT_STAT_ORDER_SLATE`, σ finite vs ∞) cannot — *determinable
+> (finite σ) yet find-resisting* — i.e. the capacity axis is the schema's **computational
+> coordinate**, orthogonal to the informational finite/∞ dichotomy. It is also the
+> computational substrate of the Bodhisattva LP-2 concession (GKVZ undetectable backdoors =
+> planted find-hardness; oblivious defense = the labels' find-*easiness* / self-reducibility);
+> the Bodhisattva L2 leanify target is this same easy pole. Honest ceiling unchanged: the
+> underlying query-complexity fact is classical — the contribution is a machine-checked,
+> non-imported *instantiation* that de-imports the axis, not a new complexity theorem.
+
 ## 1. What Transfers
 
 Mesa and Geometry both converged on field-shaped structure:

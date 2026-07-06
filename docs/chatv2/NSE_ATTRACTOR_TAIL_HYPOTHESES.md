@@ -458,18 +458,17 @@ grammar from the state-crossover handoff, nothing more.
 > label horizon beyond autocorrelation, G=300 drift-aware objective, and a
 > balance-gated slice. This would be a new registration, not a rescue of AT-4.
 
-> **AT-4b Rung 0 status (2026-07-05): RUN —
-> `AT4B_UNPOWERED_INPUT` (slice stage)** (`AT4B_ROLLOUT_DETRENDED_SPEC.md` v1.1,
-> receipt `AT4B0_ADMISSION_RECEIPT.md`). The label fix worked: matched-functional
-> rolling calibration powered `tau = 1500` at damp 0.395, beyond the detrended
-> autocorrelation scale (about 500 steps). The slice still could not be formed:
-> window-quintile damp ran 0.684 → 0.794 → 0.496 → 0.000 → 0.000 and the test
-> block had zero positives. **No surface or crossover number was read.** Typed
-> finding: G=300 is non-stationary at 500k contiguous-window scale even under
-> drift-aware calibration; AT-2's 2.5M blocks keep this as a window-scale fact,
-> not a regime impossibility. Owner fork: close AT-4b here, or commission one
-> bundled v1.2 formation amendment (2M window + blocked alternating split; no
-> v1.3).
+> **AT-4b final status (2026-07-05): RUN —
+> `AT4B_UNPOWERED_INPUT` final** (`AT4B_ROLLOUT_DETRENDED_SPEC.md`,
+> `AT4B0_ADMISSION_RECEIPT.md`). v1.1 proved the label could power at 500k
+> (`tau=1500`, damp 0.395) but could not form a balanced slice. The
+> owner-selected v1.2 formation amendment then used the AT-2-measured 2M scale
+> plus blocked alternating split and failed at horizon formation: damp
+> 0.091 / 0.107 / 0.103 for `tau = 1500 / 2500 / 5000`, all beyond the
+> detrended autocorrelation scale. **No surface or crossover number was read.**
+> Pre-committed stop fires: no v1.3, no rung-1 ledger rollout. AT-4b closes
+> with the crossover form terminal on this C1 substrate: G=200 surface-saturated,
+> G=300 input-unformable under the registered drift-aware route.
 
 ### AT-6 — charFun typing of compact shadows: time-averaging keeps regime-type functionals, washes phase/timing-type (Rank C, cheapest in rank; feeds AT-4)
 
@@ -593,6 +592,14 @@ lesson cuts the other way here: this is the U-4 situation, not the H-A5 one).
 filtration *registration* (that is an owner decision, §4) — the module stands
 alone as another `SurfaceBag`-family instance regardless.
 
+> **Next-work scope (2026-07-05):** see `NSE_AT_SYNTHESIS_AT5_SCOPE.md`.
+> Recommendation: write the internal synthesis first; treat AT-5 as a thin
+> companion, because the formal core already exists in
+> `sundogcert/Sundogcert/SurfaceBagGraded.lean` as
+> `stackTop_resists_every_window`, AxiomAudit-gated. AT-5 should be
+> `AT5_FORMAL_CORE_ALREADY_LANDED` unless the owner wants a vocabulary-specific
+> trajectory-window shim (`AT5_LEAN_SHIM_LANDED`). It does not reopen AT-4/AT-4b.
+
 ---
 
 ### AT-7 — The natural-resistance candidate, named and parked: control-relevant low-energy intermittency (Rank D; compute-gated, NOT runnable)
@@ -672,9 +679,10 @@ Inherited and extended; violations void the offending receipt.
    AT-3; AT-5 parallel, compute-free). Long runs stay owner-run.
 2. **σ_modes / σ_traj registration** as schema filtrations in
    `SUFFICIENT_STAT_ORDER_SLATE.md` (owner-committed doc; candidate 10th axis).
-3. **AT-5's module destination** — public sundogcert (needs the standard
-   sensitivity scan; "attractor/itinerary" vocabulary check against the
-   frozen-lane term list) vs held.
+3. **AT-5's module destination** — scoped in
+   `NSE_AT_SYNTHESIS_AT5_SCOPE.md`: docs-only interpretation is sufficient
+   because `SurfaceBagGraded.stackTop_resists_every_window` already carries the
+   formal core; a Lean shim is optional and should be vocabulary-specific only.
 4. **The registered decision functional for AT-3/AT-4** — inherit frozen J_q,
    or register a burst/transition functional (new registration, not a rescue);
    and whether AT-1's sibling objective doubles as it.
@@ -691,6 +699,7 @@ Inherited and extended; violations void the offending receipt.
 ## 5. Receipt / grep map for the inheritor
 
 `Dev\sundog`: this file; `docs/chatv2/AT1_HARNESS_SIGNOFF.md`;
+`docs/chatv2/NSE_AT_SYNTHESIS_AT5_SCOPE.md`;
 `docs/chatv2/AT4B_ROLLOUT_CROSSOVER_SCOPE.md`;
 `docs/chatv2/AT4B_ROLLOUT_DETRENDED_SPEC.md`;
 `docs/chatv2/AT4B0_ADMISSION_RECEIPT.md`;

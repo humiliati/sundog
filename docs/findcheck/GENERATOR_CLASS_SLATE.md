@@ -45,8 +45,21 @@ failure diagnoses, and the only candidate preserving every house discipline.**
   are one short object-rule but an inexpressible pixel-composition. The FC-4 σ-conjecture states this
   precisely: abstraction tasks are high-σ in the pixel filtration, low-σ in the object filtration.
 - **Cheap pre-test (before ANY DSL build):** run FC-4 — measure σ (order-meter) under pixel vs object feature
-  maps on register tasks; predict σ_pixel ≫ σ_object. If no separation, the class bet is wrong at the cheapest
-  possible price.
+  maps; predict σ_pixel ≫ σ_object. If no separation, the class bet is wrong at the cheapest possible price.
+  **GATE-0 PASSED (2026-07-01):** FC-4 ran on a controlled toy family (`scripts/findcheck_fc4_sigma_split.py`;
+  RESULT block in `FIND_CHECK_SUFFICIENCY_SLATE.md`): object-order-1 R²=1.000 vs best bounded-pixel 0.535 (gap
+  0.465, raw-MLP 0.000 — the Minsky–Papert anchor empirically); apparatus control passed; reverse control (v2,
+  v1 flaw self-caught) passed — σ is per-filtration, the object map not universally richer. **GEN-1's next gate
+  = perception-vocabulary + grammar-v0 freeze, then the ceiling probe (owner-gated).**
+  **GATE-1 FILED (2026-07-01):** the v0 freeze + probe protocol is pre-registered —
+  `docs/prereg/arc/GEN1_OBJECT_DSL_V0_PROBE_SPEC.md`: 3 enumerated views (cc4/cc8/blob4 — view choice is
+  IN-PROGRAM, answering the segmentation-underdetermination kill structurally), frozen attribute list
+  (area/color/bbox/centroid/shape/shapeD4/border/n_holes), the (view, canvas, select, transform, others)
+  grammar with CEGIS-solved holes (~14k skeletons < 20k budget), the validation-only ceiling probe with the
+  **v2 baseline computed OFFLINE from the E3 receipt's validation fingerprints** (87% zero-candidate rate =
+  the bar), pre-registered LIFT/MARGINAL/EMPTY gates with an absolute anchor (≥ max(2×, +3) distinct tasks),
+  and ONE pre-named v1 extension round (5 families) so extension ≠ tuning. **Probe execution NOT admitted —
+  next = the tooling freeze-marker amendment (runner + smoke + staged command), owner-gated.**
 - **Gate 1 (the ceiling probe, pre-registered):** freeze the perception vocabulary + rule grammar v0; enumerate/
   solve candidates on **validation lanes only**; measure oracle target-in-bank rate + no-admitted rate vs the
   frozen v2 bank's on the same lanes. Proceed only on a material ceiling lift.

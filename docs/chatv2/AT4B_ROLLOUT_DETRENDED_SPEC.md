@@ -122,3 +122,12 @@ this box. If it reaches the surface suite, the receipt should be
 `AT4B0_V12_ADMISSION_RECEIPT.md` or an appended v1.2 section in
 `AT4B0_ADMISSION_RECEIPT.md`, with the exact branch and a direct statement of
 whether any surface numbers were read.
+
+> **Post-run v1.2 status (2026-07-05): final
+> `AT4B_UNPOWERED_INPUT` (horizon stage).** Owner run:
+> `results/proof/at4b0-g300-v12/at4b0_summary.json`. Truth run was 2,005,001
+> steps in 872s; detrended autocorr first zero ≈ 500 steps; all registered
+> horizons were beyond-autocorr but underpowered (`tau=1500`: 0.091,
+> `tau=2500`: 0.107, `tau=5000`: 0.103). No horizon cleared `[0.20, 0.40]`, so
+> no slice, surface, or crossover number was read. The pre-committed stop fires:
+> no v1.3 and no rung 1.

@@ -95,15 +95,15 @@ scale, even under rolling matched-functional calibration. This is a window-scale
 formation failure, not a regime impossibility: AT-2's G=300 blocks were 2.5M
 steps and pinned damp at 0.30.
 
-Owner decision after Rung 0: commission the one bundled v1.2 formation
-amendment.
+Owner selected the one bundled v1.2 formation amendment. It used a
+2,000,000-step truth window and a blocked alternating split: 50,000-step train
+block, 5,000-step guard gap, 50,000-step test block, 5,000-step guard gap,
+repeated.
 
-The v1.2 amendment uses a 2,000,000-step truth window and a blocked alternating
-split: 50,000-step train block, 5,000-step guard gap, 50,000-step test block,
-5,000-step guard gap, repeated. The guard gap is `max(W, tau) = 5,000`, so
-trailing windows and lookahead labels cannot leak across train/test blocks. If
-v1.2 still fails at horizon or slice formation, no v1.3: file
-`AT4B_UNPOWERED_INPUT` as final.
+v1.2 final: `AT4B_UNPOWERED_INPUT` (horizon stage). No registered horizon
+cleared the damp window (`tau=1500`: 0.091, `tau=2500`: 0.107, `tau=5000`:
+0.103), all beyond the detrended autocorrelation scale. No slice, surface, or
+crossover number was read. The pre-committed stop fires: no v1.3 and no rung 1.
 
 ## Branch Shapes
 

@@ -1,0 +1,28 @@
+{
+ "verdict": "AT4B_UNPOWERED_INPUT",
+ "stage": "horizon",
+ "formation_version": "v1.2",
+ "stream_steps": 2000000,
+ "split": "blocked_alternating",
+ "horizon_rows": [
+  {
+   "tau": 1500,
+   "damp": 0.09112820512820513,
+   "beyond_autocorr": true,
+   "clears": false
+  },
+  {
+   "tau": 2500,
+   "damp": 0.10735897435897436,
+   "beyond_autocorr": true,
+   "clears": false
+  },
+  {
+   "tau": 5000,
+   "damp": 0.10335897435897436,
+   "beyond_autocorr": true,
+   "clears": false
+  }
+ ],
+ "surface_read": false
+}

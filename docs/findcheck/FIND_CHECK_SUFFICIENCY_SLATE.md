@@ -204,6 +204,40 @@ pixel features but finite-σ in object features** — a quantitative read on why
 - **Why it survived (barely):** a clean conjecture that fuses two lanes; lowest strength because it depends on
   FC-1/FC-2 for a task family and the σ-schema caveat blunts a clean headline.
 
+#### FC-4 RESULT (run 2026-07-01): LANDED — the σ split CONFIRMED; the GEN-1 pre-test PASSES
+
+Probe: `scripts/findcheck_fc4_sigma_split.py` (controlled toy family we own — no ARC dataset; pre-registered
+gates in the header). Elevated from "optional synthesis" to **GEN-1's gate-0 pre-test** by
+`GENERATOR_CLASS_SLATE.md`. Named imported anchor (measured, NOT proved): **Minsky–Papert perceptron order**
+(connectivity-class predicates are not computable by bounded-order/diameter-limited feature families).
+
+- **The family (confounds designed out):** 16×16 grids, 3–7 non-adjacent rectangles (1-cell gaps ⇒ every rect
+  its own component), colors reused, **total colored area FIXED at 48** (kills the order-1 total-count statistic
+  by construction). Latent = **area of the largest connected component** — the canonical ARC-style object rule,
+  order-1 in the object filtration *by construction*; a global connectivity-class property in pixels.
+- **SPLIT — PASSED (the headline):** OBJECT order-1 own-R² = **1.000** vs bounded-pixel ladder: hist **0.000**
+  (the fixed-total design working), pairs 0.525, 2×2 patch 0.535, 3×3 patch 0.143 → best bounded pixel
+  **0.535**, gap **0.465** (gate ≥0.30). The partial pixel R² is the pre-named honest leak (patches count
+  corners ⇒ estimate fragmentation ⇒ max-area anticorrelates with n at fixed total). **Raw-grid MLP diagnostic
+  = 0.000** — even the trained encoder fails the global property at this scale (the Minsky–Papert anchor,
+  empirically). Trivial-FAIL = 0.000.
+- **APPARATUS — PASSED:** pixel-easy latent (color-1 count) on the same grids: hist own-R² = 1.000 — the pixel
+  ladder is live, not rigged to fail.
+- **REVERSE — v1 flaw SELF-CAUGHT, v2 PASSED (the σ-schema/artifact kill):** v1 (variable m, one dot species)
+  leaked — the frozen object vocabulary was *more informative than predicted*: `n_comps` minus the count of
+  area≥4 rows reconstructs the dot count exactly (obj R²=0.994) → control redesigned, both runs reported. **v2**
+  isolates the latent from the vocabulary (m∈{6,7} rects so no dot rows are visible in top-6; 0–6 nuisance
+  color-6 dots confound `n_comps`): hist = **1.000**, obj = **0.509**, gap **0.491** (gate ≥0.20) — and the
+  residual obj R² lands on the *predicted* confound value (~0.48 from the variance analysis), confirming the
+  mechanism is understood. The pixel filtration wins on its home turf ⇒ **σ is PER-FILTRATION (a schema), the
+  object map is not universally richer** — the kill condition ("artifact of the feature map") does not fire.
+- **Honest scope:** a designed toy family (like every Shadow-lane probe); the claim is the split's *existence
+  and direction* for abstraction-style rules, per-filtration, not a universal ordering and not an ARC result.
+
+**Verdict: FC-4 LANDED (strength 4.5 → delivered as GEN-1 gate-0).** The GEN-1 class bet — ARC-style rules are
+low-σ in the object filtration, high-σ in bounded pixels — passes its cheapest falsification. Next GEN-1 gate
+per the generator-class slate: freeze the perception vocabulary + rule grammar v0, then the ceiling probe.
+
 ## The ARC Branch-E gate (the reopen criterion — RESOLVED / SUPERSEDED 2026-06-30)
 Reopening ARC was **NOT** assumed by this slate. It was gated:
 > **IF** FC-2 lands a clean toy find/check separation (axiom-clean, non-strawman) **AND** FC-3 shows the ARC

@@ -338,16 +338,35 @@ fully nailed in-scout**. What is nailed:
    and its negation, glued by `frontier_eq_closure_inter_closure`;
    `fiberFrontier_fiber_finite` — the fiber of `Y` at `x` *is* `frontier(A_x)` and `Tame` is
    frontier-finiteness, so the finiteness is one rewrite.
-2. **D1 — the counting formulas** [~1 session]: `B_k := {x | |A_x| ≥ k}` via
-   `∃ y₁ < … < y_k ∈ A_x` — an `Fml`-valued **meta-recursion over `k`** (a formula-layer
-   stress test: the formula grows with `k`, which is a Lean natural, not a structure element).
-   Each `B_k` tame; the chain decreases.
-3. **D2 — the dichotomy kill (new, clean, verified in scout)**: if cofinitely many `B_k` are
-   finite: their cardinalities are weakly decreasing naturals ⇒ stabilize ⇒ the chain
-   stabilizes *as sets* ⇒ a common point lies in every `B_k` ⇒ an infinite fiber,
-   contradiction. Hence WLOG **every `B_k` contains an interval** (C1a's
-   `tame_infinite_contains_Ioo`, fifth use). Plus the definable k-th-point functions
-   (bounded-count minima — first-order per `k`).
+2. **D1 — the counting formulas** ✅ LANDED 2026-07-04: `OMinimalCounting.lean` (50th module),
+   axiom-clean, 3 gate entries (`Fml.eval_reindex`, `tame_countSet`,
+   `infinite_fiber_of_mem_all`), green by the third build (a dotted-notation qualification, a
+   `notMem` rename, an `omega`). **Formula-layer upgrade shipped**: `Fml.reindex` — pullback
+   of *whole formulas* along coordinate maps (`∃` threads through
+   `extendMap σ = snoc (castSucc ∘ σ) last`; semantics by one clean pattern-based induction,
+   no literal indices). The counting recursion: semantic `AboveCount` mirror + syntactic
+   `gtCount` recursing through `reindex ![0,2]` at the freshly bound point; `eval_gtCount`
+   closed in ONE `simp only` per case. Chain kit banked for D2: `countSet_anti`,
+   `aboveCount_exists_finset` (strictly-increasing witnesses ⇒ distinct),
+   `aboveCount_of_finset` (`min'`-peeling), `mem_countSet_of_finset`, and
+   `infinite_fiber_of_mem_all`.
+3. **D2 — the dichotomy kill + rank functions** ✅ LANDED 2026-07-04:
+   `OMinimalPointFns.lean` (51st module), axiom-clean, 3 gate entries
+   (`exists_interval_in_countSet`, `isNth_exists`, `definableFun_nthFn`), green by the third
+   build (omega needed the beta-reduced sInf link spelled out; `Finset.exists_subset_card_eq`
+   is the current name; `open Classical in` must precede the docstring). **The dichotomy,
+   machine-checked exactly as scouted**: infinite `B_k` → interval directly
+   (`tame_infinite_contains_Ioo`, fifth use); finite `B_k` → the tail's cardinalities take
+   their `sInf` at some `B_{k+j₀}`, every later set equals it by
+   `Set.eq_of_subset_of_ncard_le`, its point lies in every `B_{k'}` →
+   `infinite_fiber_of_mem_all` contradicts fiber-finiteness. **Rank functions**: `BelowCount`
+   mirror (`ltCount` formula, `max'`-peeling construction, extraction); exact-rank
+   `IsNth A j x z` (member + exactly `j` below) — uniqueness is four lines (the lower of two
+   rank-`j` points hands the higher an illegal `(j+1)`-th below-witness); existence by
+   min-peeling above the previous rank point, with the two "overflow" kills running through
+   `Finset.pred_card_le_card_erase`; the totalized `nthFn` (0 off-domain) has definable graph
+   via a 4-piece formula (`(∃-rank ∧ rank) ∨ (¬∃-rank ∧ z = 0)`) — `definableFun_nthFn` is
+   D3's direct input to the continuous Monotonicity Theorem.
 4. **D3 — the k-curve extraction** [~1 session]: on an interval inside `B_k`, the `k` ordered
    point-functions are each piecewise constant-or-strictly-monotone **and continuous**
    (the continuous Monotonicity Theorem, applied `k` times with a finite refinement) — `k`

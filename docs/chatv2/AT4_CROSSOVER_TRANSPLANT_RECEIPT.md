@@ -62,13 +62,13 @@ surface-dominated; wash-out needs a noise floor). The cross-substrate symmetry t
 slate conjectured in F3 is now measured on both sides.
 
 **Remaining:** AT-5 (compute-free Lean module, the σ_traj = ∞ symbolic anchor — open,
-buildable any time); AT-7 parked by design. AT-4b Rung 0 is now filed:
-`AT4B_UNPOWERED_INPUT` (slice stage) in `AT4B0_ADMISSION_RECEIPT.md`. The
-mechanism-bearing successor did fix the G=300 label power at `tau = 1500`, but the
-balanced slice could not be formed in a 500k contiguous window because the envelope is
-still non-stationary at that scale; no surface or crossover number was read. Owner
-selected exactly one v1.2 formation amendment: 2M window plus blocked alternating split
-(50k train/test blocks with 5k guard gaps); if formation fails again, no v1.3.
+buildable any time); AT-7 parked by design. AT-4b is now closed:
+`AT4B_UNPOWERED_INPUT` final in `AT4B0_ADMISSION_RECEIPT.md`. The mechanism-bearing
+successor first powered the G=300 label at v1.1 but could not form a balanced slice;
+the owner-selected v1.2 amendment then used the AT-2-measured 2M scale plus blocked
+alternating split and failed earlier, at horizon formation (damp 0.091 / 0.107 / 0.103
+for τ = 1500 / 2500 / 5000). No surface or crossover number was read. Per the
+pre-committed stop: no v1.3, no rung-1 ledger rollout.
 
 Cross-refs: `AT4_CROSSOVER_TRANSPLANT_SPEC.md`, `AT3_NUDGING_LEDGER_RECEIPT.md` (carrier),
 `AT6_CHARFUN_TYPING_RECEIPT.md` (taxonomy + noise-floor lesson),
