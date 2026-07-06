@@ -329,11 +329,15 @@ rest = bands between consecutive graph curves) — D5, scoped after UF.
 
 *Scout verdict — a confidence gradient, stated honestly.* Unlike C1/C2, the finisher is **not
 fully nailed in-scout**. What is nailed:
-1. **D0 — slicing + fiber tameness** [~½–1 session]: parametric slices of 2-D definables are
-   dimension-one definable (the C0 promise, never yet built: `∃z, z = x ∧ (z,y) ∈ A` as a
-   formula with `eqConstAt`); fibers are tame; the fiber-frontier set
-   `Y := {(x,y) | y ∈ frontier(A_x)}` is definable (frontier is order-first-order) and has
-   *automatically finite* fibers — so UF-for-`Y` is the general engine.
+1. **D0 — slicing + fiber tameness** ✅ LANDED 2026-07-04: `OMinimalSlice.lean` (49th module),
+   axiom-clean, 3 gate entries (`tame_slice`, `definable_fiberFrontier`,
+   `fiberFrontier_fiber_finite`), **green on the first build, zero warnings after two unused
+   simp args**. `tame_slice` discharges C0's slicing IOU (`∃z, z = x ∧ (z,y) ∈ A`);
+   `mem_closure_iff_order` (the `Ioo`-basis closure bridge); `definable_fiberFrontier` via a
+   parameterized closure block (`closBlock`, C1b-template style) instantiated at the `A`-atom
+   and its negation, glued by `frontier_eq_closure_inter_closure`;
+   `fiberFrontier_fiber_finite` — the fiber of `Y` at `x` *is* `frontier(A_x)` and `Tame` is
+   frontier-finiteness, so the finiteness is one rewrite.
 2. **D1 — the counting formulas** [~1 session]: `B_k := {x | |A_x| ≥ k}` via
    `∃ y₁ < … < y_k ∈ A_x` — an `Fml`-valued **meta-recursion over `k`** (a formula-layer
    stress test: the formula grows with `k`, which is a Lean natural, not a structure element).

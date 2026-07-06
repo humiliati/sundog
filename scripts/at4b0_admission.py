@@ -55,14 +55,17 @@ def main():
     zc = int(np.argmax(ac < 0)) * INTERVAL if (ac < 0).any() else -1
     print(f"(detrended) autocorr first zero ~ {zc} steps", flush=True)
 
-    # rolling threshold at eval instants
-    thr_pts, thr = rolling_quantile(e[:STREAM], EPOCH, RQ, INTERVAL)
-    # horizon selection: first tau with damp in window over eval instants
-    usable = thr_pts[thr_pts + max(TAUS) < total]
-    thr_u = thr[: len(usable)]
+    # v1.1 matched-functional rolling threshold: threshold_s = rolling q of the trailing
+    # lookahead-maxes m_tau(p), p in [s-EPOCH, s-tau) — windows entirely in s's past.
+    from numpy.lib.stride_tricks import sliding_window_view
+    usable = np.arange(EPOCH, STREAM, INTERVAL)
+    usable = usable[usable + max(TAUS) < total]
     tau_primary, y = None, None
     for tau in TAUS:
-        m = np.array([float(np.max(e[p + 1:p + tau + 1])) for p in usable])
+        mfull = sliding_window_view(e, tau).max(axis=1)  # mfull[t] = max e[t:t+tau]
+        m = mfull[usable + 1]                            # m_tau(s) = max e(s, s+tau]
+        thr_u = np.array([float(np.quantile(mfull[s - EPOCH + 1:s - tau + 1], RQ))
+                          for s in usable])
         yy = (m > thr_u).astype(int)
         damp = float(yy.mean())
         ok = DAMP_WIN[0] <= damp <= DAMP_WIN[1]

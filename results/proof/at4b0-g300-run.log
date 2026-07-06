@@ -1,1 +1,8 @@
 AT4B0_ADMISSION  G=300  truth-only  [NON-PROMOTIONAL]
+(truth) 505001 steps in 209s
+(detrended) autocorr first zero ~ 500 steps
+(horizon) tau=1500: damp=0.395 beyond-autocorr=True <- PRIMARY
+(horizon) tau=2500: damp=0.465 beyond-autocorr=True 
+(horizon) tau=5000: damp=0.448 beyond-autocorr=True 
+
+VERDICT: AT4B_UNPOWERED_INPUT (no balanced slice with test mass)

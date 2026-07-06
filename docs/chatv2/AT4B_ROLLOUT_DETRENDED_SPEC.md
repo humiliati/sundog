@@ -10,10 +10,16 @@
 
 - **Cell:** G=300, seed 0, burn-in 100k, truth stream 500,000 steps + 5,001-step
   lookahead tail. No ledgers at this rung.
-- **Drift-aware label (the new registered objective, frozen):** threshold_s = rolling
-  q = 0.70 quantile of E_low_K3(u) over the trailing epoch [s − 50,000, s);
-  y(s; τ) = max E_low_K3(u) over (s, s + τ] > threshold_s. Margin_s = that max −
-  threshold_s.
+- **Drift-aware label (the new registered objective; v1.1):** threshold_s = rolling
+  q = 0.70 quantile of the **matched functional** — the trailing lookahead-maxes
+  {m_τ(p) = max E_low_K3 over (p, p+τ] : p ∈ [s − 50,000, s − τ)} (windows entirely in
+  s's past — no future leakage); y(s; τ) = m_τ(s) > threshold_s; margin = m_τ(s) −
+  threshold_s. *(v1.1 amendment, 2026-07-05, made at the horizon-formation stage BEFORE
+  any surface or slice number was read: the v1 value-quantile shape — the scope's literal
+  example — is degenerate for max-functionals at beyond-autocorr horizons: rung 0 v1
+  measured damp 0.977–0.979 at every τ and filed `AT4B_UNPOWERED_INPUT`. The
+  matched-functional quantile is the AT-3-proven portable-quantile idiom, made rolling.
+  The v1 receipt row is retained in the rung-0 receipt.)*
 - **Horizon (ordered list, first-clearing rule):** τ ∈ {1500, 2500, 5000}; the primary
   horizon = the first τ with label damp ∈ [0.20, 0.40] over post-warmup eval instants.
   None clearing ⇒ `AT4B_UNPOWERED_INPUT`. The detrended autocorrelation time (E_low
