@@ -62,15 +62,17 @@ surface-dominated; wash-out needs a noise floor). The cross-substrate symmetry t
 slate conjectured in F3 is now measured on both sides.
 
 **Remaining:** AT-5 (compute-free Lean module, the σ_traj = ∞ symbolic anchor — open,
-buildable any time); AT-7 parked by design. AT-4b has a scoped fork in
-`AT4B_ROLLOUT_CROSSOVER_SCOPE.md`: balance-gate-only AT-4b is
-`AT4B_BALANCE_ONLY_NOT_RECOMMENDED`, but a mechanism-bearing successor is available as
-`AT4B_ROLLOUT_DETRENDED_G300` (sub-sync ledger rollout forecast, horizon beyond
-autocorrelation, drift-aware G=300 objective, balance-gated slice). This is a new
-registration if commissioned, not a rescue of AT-4.
+buildable any time); AT-7 parked by design. AT-4b Rung 0 is now filed:
+`AT4B_UNPOWERED_INPUT` (slice stage) in `AT4B0_ADMISSION_RECEIPT.md`. The
+mechanism-bearing successor did fix the G=300 label power at `tau = 1500`, but the
+balanced slice could not be formed in a 500k contiguous window because the envelope is
+still non-stationary at that scale; no surface or crossover number was read. Owner
+selected exactly one v1.2 formation amendment: 2M window plus blocked alternating split
+(50k train/test blocks with 5k guard gaps); if formation fails again, no v1.3.
 
 Cross-refs: `AT4_CROSSOVER_TRANSPLANT_SPEC.md`, `AT3_NUDGING_LEDGER_RECEIPT.md` (carrier),
 `AT6_CHARFUN_TYPING_RECEIPT.md` (taxonomy + noise-floor lesson),
 `AT1_BOUNDARY_LAYER_RECEIPT.md` (margin-band idiom), `sundogcert/AveragingDecodability.lean`
 (the theorem this mirrors), `AT4B_ROLLOUT_CROSSOVER_SCOPE.md`,
+`AT4B_ROLLOUT_DETRENDED_SPEC.md`, `AT4B0_ADMISSION_RECEIPT.md`,
 `NSE_ATTRACTOR_TAIL_HYPOTHESES.md` AT-4/F3.

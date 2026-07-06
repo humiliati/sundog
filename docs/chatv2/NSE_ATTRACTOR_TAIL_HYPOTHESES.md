@@ -458,6 +458,19 @@ grammar from the state-crossover handoff, nothing more.
 > label horizon beyond autocorrelation, G=300 drift-aware objective, and a
 > balance-gated slice. This would be a new registration, not a rescue of AT-4.
 
+> **AT-4b Rung 0 status (2026-07-05): RUN —
+> `AT4B_UNPOWERED_INPUT` (slice stage)** (`AT4B_ROLLOUT_DETRENDED_SPEC.md` v1.1,
+> receipt `AT4B0_ADMISSION_RECEIPT.md`). The label fix worked: matched-functional
+> rolling calibration powered `tau = 1500` at damp 0.395, beyond the detrended
+> autocorrelation scale (about 500 steps). The slice still could not be formed:
+> window-quintile damp ran 0.684 → 0.794 → 0.496 → 0.000 → 0.000 and the test
+> block had zero positives. **No surface or crossover number was read.** Typed
+> finding: G=300 is non-stationary at 500k contiguous-window scale even under
+> drift-aware calibration; AT-2's 2.5M blocks keep this as a window-scale fact,
+> not a regime impossibility. Owner fork: close AT-4b here, or commission one
+> bundled v1.2 formation amendment (2M window + blocked alternating split; no
+> v1.3).
+
 ### AT-6 — charFun typing of compact shadows: time-averaging keeps regime-type functionals, washes phase/timing-type (Rank C, cheapest in rank; feeds AT-4)
 
 *(Ordered before AT-5 within rank: it is an afternoon of post-processing.)*
@@ -679,6 +692,8 @@ Inherited and extended; violations void the offending receipt.
 
 `Dev\sundog`: this file; `docs/chatv2/AT1_HARNESS_SIGNOFF.md`;
 `docs/chatv2/AT4B_ROLLOUT_CROSSOVER_SCOPE.md`;
+`docs/chatv2/AT4B_ROLLOUT_DETRENDED_SPEC.md`;
+`docs/chatv2/AT4B0_ADMISSION_RECEIPT.md`;
 `docs/proof/PDE_C1_OBJECTIVE_OVERLAP_DISCRIMINATOR.md`
 §12 (AT-1's foothold); `docs/proof/PDE_C1_SEPARATION_STATEMENT.md` §5 (the
 unrun K-window companion AT-2 absorbs); `docs/proof/PDE_C1_MZ_ENERGY_BUDGET.md`

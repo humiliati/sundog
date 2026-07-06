@@ -78,6 +78,33 @@ control. Compare the direct ledger rollout forecast to `surface_max`,
 scrambled, persistence, and the truth-rollout ceiling on the same split and
 balanced slice.
 
+## Rung 0 Status
+
+`AT4B_UNPOWERED_INPUT` (slice stage) is filed in
+`AT4B0_ADMISSION_RECEIPT.md`.
+
+The v1.1 label fix worked: replacing the literal value-quantile threshold with
+the rolling quantile of the matched lookahead-max functional powered the label
+at `tau = 1500` (`damp = 0.395`) beyond the detrended autocorrelation scale
+(about 500 steps). But the balanced slice could not be formed. Quintile damp
+over the 500k window ran `0.684 -> 0.794 -> 0.496 -> 0.000 -> 0.000`; the test
+block had zero positives. No surface or crossover number was read.
+
+Diagnosis: the G=300 envelope is non-stationary at the 500k contiguous-window
+scale, even under rolling matched-functional calibration. This is a window-scale
+formation failure, not a regime impossibility: AT-2's G=300 blocks were 2.5M
+steps and pinned damp at 0.30.
+
+Owner decision after Rung 0: commission the one bundled v1.2 formation
+amendment.
+
+The v1.2 amendment uses a 2,000,000-step truth window and a blocked alternating
+split: 50,000-step train block, 5,000-step guard gap, 50,000-step test block,
+5,000-step guard gap, repeated. The guard gap is `max(W, tau) = 5,000`, so
+trailing windows and lookahead labels cannot leak across train/test blocks. If
+v1.2 still fails at horizon or slice formation, no v1.3: file
+`AT4B_UNPOWERED_INPUT` as final.
+
 ## Branch Shapes
 
 The frozen spec should keep these branches or make any deviations explicit.

@@ -75,3 +75,50 @@ The scope's claim boundary verbatim; additionally: the rolling-quantile objectiv
 new registration whose relation to frozen J_q is measured, never assumed; the
 deterministic truth-rollout ceiling ≈ 1 is a property of a noiseless proxy, named as
 such; a rung-0 stop is a first-class outcome, not a failure to launch.
+
+---
+
+> **Post-run status (2026-07-05): Rung 0 filed —
+> `AT4B_UNPOWERED_INPUT` (slice stage)** in `AT4B0_ADMISSION_RECEIPT.md`.
+> The v1.1 matched-functional rolling threshold powered the label at `tau = 1500`
+> (`damp = 0.395`) beyond the detrended autocorrelation scale, but no balanced
+> held-out slice could be formed: the test block had zero positives. No surface
+> or crossover number was read. Live owner fork: close here, or commission one
+> bundled v1.2 formation amendment (2M window + blocked alternating split; no
+> v1.3).
+
+## 5. v1.2 Formation Amendment (commissioned; pre-committed stop)
+
+> 2026-07-05. Owner selected the one bundled v1.2 formation amendment after the
+> v1.1 slice-stage `AT4B_UNPOWERED_INPUT` receipt. This amendment changes only
+> the Rung 0 formation scale and split. It is frozen before any v1.2 surface or
+> crossover number is read.
+
+**Overrides to §1:**
+
+- Truth stream: `500,000 -> 2,000,000` steps, plus the same `5,001`-step
+  lookahead tail. The scale is imported from AT-2's measured G=300 powering
+  block, not guessed.
+- Split: contiguous 70/30 is replaced by a fixed blocked alternating split:
+  50,000-step train block, 5,000-step guard gap, 50,000-step test block,
+  5,000-step guard gap, repeated. Even blocks are train, odd blocks are test;
+  no shuffling. The guard gap is `max(W, tau) = 5,000`, protecting both trailing
+  windows and forward lookahead labels against train/test leakage.
+- Everything else in §1 stays unchanged: matched-functional rolling threshold,
+  `tau` list `{1500, 2500, 5000}`, damp gate `[0.20, 0.40]`, balanced-slice
+  ladder, surface suite, liveness, and admission branch.
+
+**Pre-committed stop:** if v1.2 fails at horizon or slice formation, file
+`AT4B_UNPOWERED_INPUT` as final for AT-4b. No v1.3.
+
+**Staged owner command (do not agent-run; expected >10 min):**
+
+```powershell
+python scripts/at4b0_admission.py --formation-version v1.2 --out results/proof/at4b0-g300-v12
+```
+
+Expected wall-clock: roughly 4x the 500k truth-only rung, around 60 minutes on
+this box. If it reaches the surface suite, the receipt should be
+`AT4B0_V12_ADMISSION_RECEIPT.md` or an appended v1.2 section in
+`AT4B0_ADMISSION_RECEIPT.md`, with the exact branch and a direct statement of
+whether any surface numbers were read.
