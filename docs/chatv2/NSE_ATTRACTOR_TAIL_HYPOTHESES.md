@@ -450,6 +450,14 @@ grammar from the state-crossover handoff, nothing more.
 > cross-substrate symmetry is measured on both sides.** Remaining: AT-5
 > (compute-free, open), AT-7 (parked).
 
+> **AT-4b scope (2026-07-05):** see `AT4B_ROLLOUT_CROSSOVER_SCOPE.md`.
+> Balance-gate-only AT-4b is `AT4B_BALANCE_ONLY_NOT_RECOMMENDED`: it fixes the
+> inherited 93/7 slice imbalance but leaves the persistence-readable label and
+> G=200 no-noise-floor causes standing. The only recommended successor is
+> `AT4B_ROLLOUT_DETRENDED_G300`: carrier = sub-sync ledger rollout forecast,
+> label horizon beyond autocorrelation, G=300 drift-aware objective, and a
+> balance-gated slice. This would be a new registration, not a rescue of AT-4.
+
 ### AT-6 — charFun typing of compact shadows: time-averaging keeps regime-type functionals, washes phase/timing-type (Rank C, cheapest in rank; feeds AT-4)
 
 *(Ordered before AT-5 within rank: it is an afternoon of post-processing.)*
@@ -670,6 +678,7 @@ Inherited and extended; violations void the offending receipt.
 ## 5. Receipt / grep map for the inheritor
 
 `Dev\sundog`: this file; `docs/chatv2/AT1_HARNESS_SIGNOFF.md`;
+`docs/chatv2/AT4B_ROLLOUT_CROSSOVER_SCOPE.md`;
 `docs/proof/PDE_C1_OBJECTIVE_OVERLAP_DISCRIMINATOR.md`
 §12 (AT-1's foothold); `docs/proof/PDE_C1_SEPARATION_STATEMENT.md` §5 (the
 unrun K-window companion AT-2 absorbs); `docs/proof/PDE_C1_MZ_ENERGY_BUDGET.md`
