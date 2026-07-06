@@ -111,6 +111,13 @@ the CHECK stays ours — and the class where the receipt discipline must work ha
   harness investment.
 - **Kill if:** the contamination fence cannot be written tightly enough to make any claim meaningful;
   reproducibility collapses; or the probe ceiling is not material.
+- **GATE-1 FILED (2026-07-05):** the two fences + probe protocol are pre-registered —
+  `docs/prereg/arc/GEN4_LM_PROPOSER_PROBE_SPEC.md` (local open-weights only + memorization canary +
+  upper-bound language; pinned-everything determinism with a bitwise-repro requirement, else pre-declared
+  distributional receipts; pure-Python sandboxed proposals, k ≤ 64, unchanged FC-1 CHECK; same validation
+  universe + barrier as GEN-1; gates vs measured baselines v2=1 / GEN-1=1: LIFT ≥ 4, EMPTY ≤ 2, one
+  pre-named MARGINAL round). **Execution NOT admitted — next = the tooling amendment: MODEL PIN (owner
+  hardware/model decision) + sandbox runner + smokes + bitwise-repro check.**
 - **Why it survived / caps:** the only plausibly ARC-competitive class; capped at 5 because the two fences are
   each heavier than the solver itself, and a memorization-confounded positive is worth far less to this lab
   than a clean deterministic one.

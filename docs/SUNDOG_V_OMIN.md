@@ -367,22 +367,58 @@ fully nailed in-scout**. What is nailed:
    `Finset.pred_card_le_card_erase`; the totalized `nthFn` (0 off-domain) has definable graph
    via a 4-piece formula (`(∃-rank ∧ rank) ∨ (¬∃-rank ∧ z = 0)`) — `definableFun_nthFn` is
    D3's direct input to the continuous Monotonicity Theorem.
-4. **D3 — the k-curve extraction** [~1 session]: on an interval inside `B_k`, the `k` ordered
-   point-functions are each piecewise constant-or-strictly-monotone **and continuous**
-   (the continuous Monotonicity Theorem, applied `k` times with a finite refinement) — `k`
-   disjoint ordered continuous definable curves on a common interval, for every `k`.
-5. **D4 — THE WALL** [2–4 sessions, high variance]: the contradiction from "arbitrarily many
-   disjoint curves." Devices verified in scout: an accumulation point via nested compacts
-   (`IsCompact.nonempty_iInter_of_sequence…`, recon ✓) or sup-side rays; one-sided monotone
-   limits exist (`Monotone.tendsto_nhdsLT/GT`, recon ✓); **consecutive curves with *distinct*
-   limits create isolated points of the tame limit-fiber slice, and isolated points of a tame
-   set lie in its frontier ⇒ their count is bounded independent of `k`** (verified in scout —
-   trivial with our `Tame`). The residual, honestly flagged: the **pile case** — many
-   consecutive curves converging to a single limit value — is where van den Dries's full
-   induction earns its keep; candidate kills are a localized secondary recursion on window
-   height, or vdD's verbatim route. Medium confidence, not nailed.
-   *Falsifier* (`UNIFORM_FINITENESS_WALL`, proper): the pile-kill resists — fallback = land
-   D0–D3 + the distinct-limit bound and publish the located pile-wall as the honest partial.
+4. **D3 — the k-curve extraction** ✅ LANDED 2026-07-04: `OMinimalCurves.lean` (52nd module),
+   axiom-clean, 3 gate entries (`isNth_lt`, `isNth_exists_of_mem_countSet`,
+   `exists_k_ordered_curves`), green on the SECOND build (one fix: a `BelowCount`-match
+   behind a metavariable won't unify — pin `(k' := j'+1)` explicitly). Headline
+   `exists_k_ordered_curves`: for every `k`, one interval on which the `k` rank functions
+   are **genuine** (exact rank, graphs in `A`), **continuous**, and **strictly ordered** —
+   `k` pairwise disjoint definable curves over one base. Assembly = D2's dichotomy interval
+   + `monotonicity_theorem_continuous` per rank (via `definableFun_nthFn`) + `choose` over
+   the `k` cut-sets + one `Finset.induction` avoidance window (`avoid_finset`: a finite set
+   can't block every subinterval — split at the offending point, keep the left piece).
+   `isNth_lt` = the disjointness engine: equality or inversion of ranks both manufacture an
+   illegal below-witness (four lines each).
+5. **D4 — THE WALL, DISSOLVED (replan receipt 2026-07-05).** Prior-art recovery (vdD Ch. 3
+   Finiteness Lemma via the Ghorbani REU exposition, fetched + read in full) shows the
+   classical proof kills the pile with a device our scout missed: **the
+   least-non-normal-height tube**. Define *normal* points by boxes (empty, or meeting `A` in
+   exactly the graph of a continuous selection); the bad set `B` (parameters with a
+   non-normal height, ±∞ included) is definable; if `B` is infinite it contains an interval,
+   where the three definable functions `β⁻ < β < β⁺` (least non-normal height + its fiber
+   neighbors) turn continuous after a Monotonicity shrink — and then every `(x, β(x))` is
+   provably normal (the tube between the fiber neighbors is A-free, so would-be pile
+   invaders ARE the continuous selection), contradicting β's definition. `B` finite then
+   gives locally-constant counts on the complement intervals and the bound. All order-only,
+   single-structure, every ingredient banked. The pre-registered
+   `UNIFORM_FINITENESS_WALL` falsifier is RETIRED — replaced by the classical route:
+   - **D4a — the normality layer** ✅ LANDED 2026-07-05: `OMinimalNormal.lean` (53rd module),
+     axiom-clean, 3 gate entries (`definable_normal`, `normal_slice_isOpen`,
+     `tame_normalTop`), **GREEN ON THE FIRST BUILD** (504 lines). Box predicates
+     (`IsEmptyBox`/`IsThinBox`/`IsSelContBox`, shapes tuned to their formulas so the eval
+     lemmas close by one both-sides `simp`); `Normal`, `NormalTop/Bot`; definability via the
+     deepest formula of the ladder (selection-continuity at ambient 12) over a
+     python-generated 77-lemma snoc battery (`attribute [local simp]`) + general
+     `compPair`/`compQuad` collapses + `Fml.reindex` templates; `eqAt` combinator;
+     `normal_slice_isOpen` (graph boxes certify neighbors by carving empty boxes from the
+     continuity clause), `notNormal_slice_isClosed`, `tame_notNormal_slice`.
+   - **D4b — the β-machinery** ✅ LANDED 2026-07-06: `OMinimalBeta.lean` (54th module),
+     axiom-clean, 3 gate entries (`definableFun_selFn`, `definableFun_betaFn`,
+     `tame_badFin`), green on the first build (round 2 only stripped six redundant simp
+     args). **The generic selector engine `selFn`**: any definable *functional* relation
+     `R ⊆ ℝ²` totalizes (by 0) to a `DefinableFun` — D2's `nthFn` 4-piece pattern abstracted
+     over the atom, proved ONCE, instantiated FIVE times (β, fiber max/min, β⁻/β⁺). `betaFn`
+     exists on the bad set via `IsClosed.csInf_mem` + the new ray-normality bounds
+     (`notNormal_bddBelow/Above`: bottom/top-ray normality pushes far heights into empty
+     boxes). The neighbor relations `maxBelowSet`/`minAboveSet` feed **betaFn's own graph
+     back into the formula layer as an atom** — definable functions compose. Bad sets
+     `tame_badFin`/`tame_notNormalTop`/`tame_notNormalBot` all tame. D4c inputs complete.
+   - **D4c — the tube kill**: Monotonicity+continuity on β⁻, β, β⁺ over an interval in `B`;
+     constants-c-d boxes inside the tube; the graph-split; `(x, β(x))` normal ⇒ `B` finite.
+   - **D4d — count constancy + UF**: at fully-normal parameters the count is locally
+     constant (graph boxes count, gap intervals empty via Heine–Borel on `[c,d]` — ℝ-specific,
+     honestly fenced like C1d's countability); assembly: **UNIFORM FINITENESS** —
+     `∃ N, ∀ x, |A_x| ≤ N`, i.e. some `countSet A (N+1) = ∅`.
 
 General-`n` cells remain outside this scope. Sizing: D0–D3 ≈ 3–4 sessions, bankable
 independently; D4 is the variance.

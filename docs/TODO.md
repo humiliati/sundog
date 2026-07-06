@@ -87,6 +87,18 @@ Yang-Mills; Riemann resolved in-house (off the gating list).
 
 ### `design-blocked` — sharper spec needed before execution
 
+- **ARC GEN-4 LM-proposer ceiling probe — tooling GREEN, binding staged for the
+  hyperbolic.ai offload bundle (Amendment A, 2026-07-05).** Fences + protocol
+  filed; runner + sandbox + llama-server driver built and verified on the local
+  GTX 1080 (sandbox self-test 5/5; **Fence-2 bitwise greedy repro PASS**;
+  harness end-to-end ~30 s/instance at k=8 on the 7B). Split decision
+  (evidence-backed): local 7B admitted 0/8 on the easiest synthetic → 7B/1.5B
+  are HARNESS-TIER ONLY (a local binding probe would be model-starvation
+  -confounded); **binding probe = rented GPU, default Qwen2.5-Coder-32B Q4_K_M,
+  k=16, on-box bitwise re-check + smoke first** (staged command in Amendment A).
+  Gates vs measured baselines (v2 = 1, GEN-1 v0 = 1): LIFT ≥ 4 / EMPTY ≤ 2
+  pooled non-contaminated tasks.
+
 - **ARC GEN-1 object-DSL ceiling probe — CLOSED `GEN1_CEILING_EMPTY`
   (2026-07-01, Amendments A+B).** Tooling built (self-test 6/6, leak-check 0-0),
   binding probe ran full validation (155 inst, 76 s): gen1 ceiling 1 task
