@@ -73,12 +73,16 @@ Already banked in-lane: `polyDef_tame` (R1: QF dim-1 tameness), the whole abstra
 (R4) waiting as the payoff socket.
 
 *The restaged ladder.*
-- **TS-1 — the univariate sign partition** [1–2 sessions]: for a finite family of nonzero
-  `p ∈ ℝ[X]`, one finite cut set (the union of root sets) off which every member has constant
-  sign on each piece (sign constancy off roots via IVT: a sign change without a root
-  contradicts `intermediate_value`; partition structure in the R2-N normal-form style).
-  Strengthens `polyDef_tame` to the partition form the elimination consumes.
-  *Falsifier:* none serious — this rung is de-risked.
+- **TS-1 — the univariate sign partition** ✅ LANDED 2026-07-06: `PolySignPartition.lean`
+  (62nd module), axiom-clean, 3 gate entries (`poly_sign_constant`, `family_sign_partition`,
+  `family_sign_eq`), green on the second build (one fix: `push Not` already normalizes
+  `¬(0 < ·)` to `≤`). New arc namespace `Sundog.TarskiQE`. The IVT core
+  (`poly_sign_constant`: a sign change without a root manufactures one via
+  `intermediate_value_Ioo`/`Ioo'` — 20 lines, exactly the TS-0 payoff of working over ℝ);
+  `finite_familyRoots`; `family_sign_partition` (ONE Finset cut set, C-avoiding interface
+  matching the R4 plumbing so TS-2 composes); `family_sign_eq` (sign-vector constancy — the
+  clause TS-2d's correctness cites); `tame_zeroSet` (exact-sign atoms complete R1's
+  `polyDef_tame` picture).
 - **TS-2 — the parametric elimination step** [MONTHS — the pole proper]. Representation
   `SAN n` (sign-condition lists on `MvPolynomial (Fin n) ℝ`, in the `SLN` style); head-view
   through `finSuccEquiv`. Sub-rungs:
