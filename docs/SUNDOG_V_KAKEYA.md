@@ -45,10 +45,12 @@ external sanity check plus SEO/social readiness.
 The H-K3 shadow-collision audit is also filed as an internal Phase-3B receipt:
 [`kakeya/PHASE3B_SHADOW_COLLISION_AUDIT.md`](kakeya/PHASE3B_SHADOW_COLLISION_AUDIT.md)
 records a reproduced bounded `q=5` enumeration where `245506` bodies collapse to
-`7` registered direction-shadow signatures, plus a `q=7` deterministic
-line-extension audit with `2408` states and max nonempty collision class `301`.
-The empirical reencoding falsifier is clear, and `npm run kakeya:test` now pins
-different-size same-shadow collisions across `q in {5, 7, 11}`.
+`7` registered direction-shadow signatures, plus deterministic line-extension
+audits for `q=7` (`2408` states, max nonempty collision class `301`) and `q=11`
+(`14652` states, max nonempty collision class `1221`). The exact structured
+count `q(q^2 - q + 1)` passes across the supported rungs, the empirical
+reencoding falsifier is clear, and `npm run kakeya:test` now pins
+different-size same-shadow collisions across `q in {5, 7, 11}` (`42/42`).
 This file is a target-selection and claim-boundary scaffold opened from
 [`SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md`](SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md).
 
@@ -460,8 +462,8 @@ Forbidden:
   instance gallery.
 - [`kakeya/PHASE3B_SHADOW_COLLISION_AUDIT.md`](kakeya/PHASE3B_SHADOW_COLLISION_AUDIT.md)
   - internal H-K3 audit showing the registered direction shadow is many-to-one
-  on bounded `q=5` states, structured `q=7` line-extension states, and the
-  Phase-2 guard witnesses.
+  on bounded `q=5` states, structured `q in {5, 7, 11}` line-extension states,
+  and the Phase-2 guard witnesses.
 - [`kakeya/EXTERNAL_REVIEW_PACKET.md`](kakeya/EXTERNAL_REVIEW_PACKET.md) -
   owner-pending external-review ask; frames Kakeya as a boundary/pedagogy review,
   not a result-review packet.

@@ -264,6 +264,26 @@ function runEnumeration(q, table, maxSize, maxStates) {
   };
 }
 
+function lineExtensionExpectation(q) {
+  const directionCount = Core.directionCount(q);
+  const pointCount = Core.pointCount(q);
+  const outsidePointsPerLine = pointCount - q;
+  const bodiesPerDirection = q * (outsidePointsPerLine + 1);
+  return {
+    family: "line-plus-one-outside-point",
+    directionCount,
+    pointCount,
+    linesPerDirection: q,
+    lineSize: q,
+    outsidePointsPerLine,
+    bodiesPerDirection,
+    totalStates: directionCount * bodiesPerDirection,
+    signatureCount: directionCount,
+    maxNonemptyCollisionClassCount: bodiesPerDirection,
+    formula: "(q + 1) * q * (q^2 - q + 1)",
+  };
+}
+
 function runLineExtensionFamily(q, table) {
   const n = Core.pointCount(q);
   const groups = new Map();
@@ -319,6 +339,23 @@ function runLineExtensionFamily(q, table) {
   const largestCollision = collisionSignatures[0] ?? null;
   const largestNonemptyCollision =
     collisionSignatures.find((g) => g.directionsCovered > 0) ?? null;
+  const expected = lineExtensionExpectation(q);
+  const exactCountCheck = {
+    pass:
+      stateCount === expected.totalStates &&
+      signatures.length === expected.signatureCount &&
+      collisionSignatures.length === expected.signatureCount &&
+      differentSizeCollisionSignatures.length === expected.signatureCount &&
+      (largestNonemptyCollision?.count ?? 0) === expected.maxNonemptyCollisionClassCount,
+    expected,
+    observed: {
+      stateCount,
+      signatureCount: signatures.length,
+      collisionSignatureCount: collisionSignatures.length,
+      differentSizeCollisionSignatureCount: differentSizeCollisionSignatures.length,
+      maxNonemptyCollisionClassCount: largestNonemptyCollision?.count ?? 0,
+    },
+  };
 
   return {
     q,
@@ -330,6 +367,7 @@ function runLineExtensionFamily(q, table) {
     differentSizeCollisionSignatureCount: differentSizeCollisionSignatures.length,
     maxCollisionClassCount: largestCollision?.count ?? 0,
     maxNonemptyCollisionClassCount: largestNonemptyCollision?.count ?? 0,
+    exactCountCheck,
     largestCollision,
     largestNonemptyCollision,
     signatures,
@@ -533,7 +571,10 @@ function main() {
     Boolean(enumeration.largestNonemptyCollision) ||
     Boolean(structuredLineExtensions.largestNonemptyCollision);
   const falsifierFired =
-    !registeredGuard.pass || !hasManyToOneMeasurement || !hasNonemptyCollisionMeasurement;
+    !registeredGuard.pass ||
+    !hasManyToOneMeasurement ||
+    !hasNonemptyCollisionMeasurement ||
+    !structuredLineExtensions.exactCountCheck.pass;
 
   const manifest = {
     artifactId: ARTIFACT_ID,
@@ -576,6 +617,7 @@ function main() {
         structuredLineExtensions.differentSizeCollisionSignatureCount,
       maxCollisionClassCount: structuredLineExtensions.maxCollisionClassCount,
       maxNonemptyCollisionClassCount: structuredLineExtensions.maxNonemptyCollisionClassCount,
+      exactCountCheck: structuredLineExtensions.exactCountCheck,
       largestCollision: structuredLineExtensions.largestCollision,
       largestNonemptyCollision: structuredLineExtensions.largestNonemptyCollision,
     },
@@ -583,7 +625,7 @@ function main() {
       name: "KAK_SHADOW_REENCODING_EMPIRICAL",
       fired: falsifierFired,
       reason: falsifierFired
-        ? "The registered guard failed or the measured state families did not produce nonempty collisions."
+        ? "The registered guard, nonempty collision measurement, or structured-family count invariant failed."
         : `The registered q=${q} shadow is many-to-one on bounded or structured states and on guard witnesses.`,
     },
     interpretation:
@@ -610,6 +652,7 @@ function main() {
         largestNonemptyCollision: enumeration.largestNonemptyCollision,
         structuredLargestCollision: structuredLineExtensions.largestCollision,
         structuredLargestNonemptyCollision: structuredLineExtensions.largestNonemptyCollision,
+        structuredExactCountCheck: structuredLineExtensions.exactCountCheck,
       },
       null,
       2,
@@ -636,6 +679,7 @@ function main() {
       `structured_states=${structuredLineExtensions.stateCount}`,
       `structured_signatures=${structuredLineExtensions.signatureCount}`,
       `structured_max_nonempty_collision=${structuredLineExtensions.maxNonemptyCollisionClassCount}`,
+      `structured_exact=${structuredLineExtensions.exactCountCheck.pass ? "pass" : "fail"}`,
       `guard=${registeredGuard.pass ? "pass" : "fail"}`,
       `falsifier=${falsifierFired ? "fired" : "clear"}`,
       `out=${outDir}`,

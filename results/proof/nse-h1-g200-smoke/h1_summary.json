@@ -1,0 +1,42 @@
+{
+ "spec": "NSE_H1_JSELECTOR_SPEC.md",
+ "preset": "nse_h1_g200",
+ "grashof": 200.0,
+ "smoke": true,
+ "n_cal": 78,
+ "n_eval": 160,
+ "m_margin": -0.6025262636272182,
+ "e_max_cal": 0.734054138994434,
+ "damp_cal": 0.3076923076923077,
+ "damp_eval": 0.3375,
+ "blockwise_damp": [
+  0.4,
+  0.325,
+  0.25,
+  0.375
+ ],
+ "blockwise_n": [
+  40,
+  40,
+  40,
+  40
+ ],
+ "atom": {
+  "mass_near_m": 0.0,
+  "straddle_below": 0.0,
+  "straddle_above": 0.0
+ },
+ "liveness": {
+  "zero_frac": 0.0,
+  "iqr": 0.0134622887486886,
+  "median_j0": 0.7311430790551823,
+  "median_j1": 1.3389156956502497,
+  "median_delta": -0.606217910675982
+ },
+ "overlap_pi_hat_REPORTED_NOT_GATED": 0.4875,
+ "a_j_lag1_autocorr": -0.09365079365079361,
+ "gate_failures": [
+  "G5_power"
+ ],
+ "branch": "SMOKE_NON_VERDICT"
+}

@@ -1,6 +1,6 @@
 {
   "artifactId": "KAK-HK3-SHADOW-COLLISION-AUDIT",
-  "generatedAt": "2026-06-29T19:07:18.468Z",
+  "generatedAt": "2026-07-06T15:06:09.152Z",
   "status": "internal measurement receipt",
   "hook": "H-K3 direction-shadow collision audit for finite-field Kakeya",
   "parameters": {
@@ -866,6 +866,29 @@
     "differentSizeCollisionSignatureCount": 8,
     "maxCollisionClassCount": 301,
     "maxNonemptyCollisionClassCount": 301,
+    "exactCountCheck": {
+      "pass": true,
+      "expected": {
+        "family": "line-plus-one-outside-point",
+        "directionCount": 8,
+        "pointCount": 49,
+        "linesPerDirection": 7,
+        "lineSize": 7,
+        "outsidePointsPerLine": 42,
+        "bodiesPerDirection": 301,
+        "totalStates": 2408,
+        "signatureCount": 8,
+        "maxNonemptyCollisionClassCount": 301,
+        "formula": "(q + 1) * q * (q^2 - q + 1)"
+      },
+      "observed": {
+        "stateCount": 2408,
+        "signatureCount": 8,
+        "collisionSignatureCount": 8,
+        "differentSizeCollisionSignatureCount": 8,
+        "maxNonemptyCollisionClassCount": 301
+      }
+    },
     "largestCollision": {
       "bitset": "10000000",
       "bits": [

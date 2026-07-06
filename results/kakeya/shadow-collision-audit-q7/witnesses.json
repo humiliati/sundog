@@ -957,5 +957,28 @@
         7
       ]
     }
+  },
+  "structuredExactCountCheck": {
+    "pass": true,
+    "expected": {
+      "family": "line-plus-one-outside-point",
+      "directionCount": 8,
+      "pointCount": 49,
+      "linesPerDirection": 7,
+      "lineSize": 7,
+      "outsidePointsPerLine": 42,
+      "bodiesPerDirection": 301,
+      "totalStates": 2408,
+      "signatureCount": 8,
+      "maxNonemptyCollisionClassCount": 301,
+      "formula": "(q + 1) * q * (q^2 - q + 1)"
+    },
+    "observed": {
+      "stateCount": 2408,
+      "signatureCount": 8,
+      "collisionSignatureCount": 8,
+      "differentSizeCollisionSignatureCount": 8,
+      "maxNonemptyCollisionClassCount": 301
+    }
   }
 }

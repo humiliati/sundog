@@ -198,7 +198,7 @@ different-size same-shadow collisions across `q in {5, 7, 11}`.
 field (`npm run kakeya:shadow-collision:q11`; receipt
 [`kakeya/PHASE3C_SHADOW_COLLISION_Q11.md`](kakeya/PHASE3C_SHADOW_COLLISION_Q11.md)):
 `12` structured signatures, max nonempty collision class `1221`, guard pass,
-falsifier clear, regression `39/39`. Across all three rungs the largest nonempty
+falsifier clear, exact structured count pass, regression `42/42`. Across all three rungs the largest nonempty
 collision class is **exactly `q(q^2 - q + 1)`** (`5->105, 7->301, 11->1221`),
 i.e. the shadow's lossiness grows **cubically in `q`** - a closed-form derived
 from the `q` slope-0 lines plus their `q^2-q` one-point extensions. Note the

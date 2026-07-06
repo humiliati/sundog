@@ -246,34 +246,79 @@ def normalize_candle(c: dict) -> dict:
     }
 
 
-def strike_bounds(m: dict) -> tuple[float | None, float | None]:
-    lo = _fnum(m.get("floor_strike"))
-    hi = _fnum(m.get("cap_strike"))
-    return lo, hi
+def strike_bounds(m: dict) -> tuple[float | None, float | None, str]:
+    """Normalized half-integer thresholds (lo, hi, source): YES iff lo < high < hi
+    (None = unbounded). Modern fields: between floor..cap inclusive of both ends;
+    greater/less strict (verified: T90 with high 90 settled NO). Legacy markets
+    lack the fields; their rules text carries one of three phrasings ("is
+    [strictly ]greater than X°" / "is less than X°" / "is between X-Y°" or
+    "between X° and Y°"), parsed as the fallback."""
+    st = m.get("strike_type")
+    fl, cp = _fnum(m.get("floor_strike")), _fnum(m.get("cap_strike"))
+    if st == "between" and fl is not None and cp is not None:
+        return fl - 0.5, cp + 0.5, "fields"
+    if st == "greater" and fl is not None:
+        return fl + 0.5, None, "fields"
+    if st == "less" and cp is not None:
+        return None, cp - 0.5, "fields"
+    if st is None and (fl is not None or cp is not None):
+        if fl is not None and cp is not None:
+            return fl - 0.5, cp + 0.5, "fields"
+        if fl is not None:
+            return fl + 0.5, None, "fields"
+        return None, cp - 0.5, "fields"
+    r = m.get("rules_primary") or ""
+    mt = re.search(r"is (?:strictly )?greater than (\d+(?:\.\d+)?)", r)
+    if mt:
+        return float(mt.group(1)) + 0.5, None, "rules"
+    mt = re.search(r"is less than (\d+(?:\.\d+)?)", r)
+    if mt:
+        return None, float(mt.group(1)) - 0.5, "rules"
+    mt = re.search(r"is between (\d+(?:\.\d+)?)\s*°?\s*(?:and|-|–|to)\s*(\d+(?:\.\d+)?)", r)
+    if mt:
+        return float(mt.group(1)) - 0.5, float(mt.group(2)) + 0.5, "rules"
+    return None, None, "none"
 
 
-def outcome_yes(high: float, lo: float | None, hi: float | None, variant: str) -> bool | None:
+def outcome_yes(high: float, lo: float | None, hi: float | None) -> bool | None:
     if lo is None and hi is None:
         return None
-    if variant == "exclusive":
-        if lo is not None and hi is not None:
-            return lo < high < hi
-        return (high < hi) if lo is None else (high > lo)
-    if lo is not None and hi is not None:
-        return lo <= high <= hi
-    return (high <= hi) if lo is None else (high >= lo)
+    return (lo is None or high > lo) and (hi is None or high < hi)
 
 
-def quote_at(candles: list[dict], cutoff_ts: int, max_age_min: int) -> dict | None:
-    """Last two-sided quote at or before cutoff within the age window (§5)."""
-    best = None
-    for c in candles:
-        if (c["ts"] <= cutoff_ts and cutoff_ts - c["ts"] <= max_age_min * 60
-                and c["bid"] is not None and c["ask"] is not None
-                and not (c["bid"] <= 0.0 and c["ask"] >= 1.0)):
-            if best is None or c["ts"] > best["ts"]:
-                best = c
-    return best
+def _two_sided(c: dict) -> bool:
+    return (c["bid"] is not None and c["ask"] is not None
+            and 0.0 < c["bid"] <= c["ask"] < 1.0)
+
+
+def book_at(cand: list[dict], ts_list: list[int], ts: int,
+            max_age_min: int) -> tuple[dict | None, str]:
+    """Standing book at ts (§5). The last candle at-or-before ts is the latest
+    known book state: valid if strictly two-sided AND (within the age window,
+    OR provably persistent — the next candle carries the identical book,
+    sandwiching ts). Returns (candle|None, fail_reason)."""
+    j = bisect.bisect_right(ts_list, ts) - 1
+    if j < 0:
+        return None, "book"
+    c = cand[j]
+    if not _two_sided(c):
+        return None, "book"
+    if ts - c["ts"] <= max_age_min * 60:
+        return c, ""
+    if j + 1 < len(cand) and cand[j + 1]["bid"] == c["bid"] \
+            and cand[j + 1]["ask"] == c["ask"]:
+        return c, ""
+    return None, "stale"
+
+
+def prep_candles(market: dict, end_dt: dt.datetime):
+    cand = sorted(candles_for(market, end_dt), key=lambda c: c["ts"])
+    ts_list = [c["ts"] for c in cand]
+    vol_pfx, acc = [], 0.0
+    for c in cand:
+        acc += c["vol"]
+        vol_pfx.append(acc)
+    return cand, ts_list, vol_pfx
 
 
 def build_exceedance(bins: list[tuple[float | None, float | None, float]]):
@@ -490,9 +535,39 @@ def stage_selftest() -> None:
     check("dst.jul", is_us_dst(dt.date(2022, 7, 1)), True)
     check("dst.jan", is_us_dst(dt.date(2022, 1, 15)), False)
     check("dst.mar13", is_us_dst(dt.date(2022, 3, 13)), True)
-    check("sem.excl.cap", outcome_yes(94, None, 98, "exclusive"), True)
-    check("sem.excl.between", outcome_yes(86, 85.5, 87.5, "exclusive"), True)
-    check("sem.incl.floor", outcome_yes(90, 90, None, "inclusive"), True)
+    check("sem.T90.at90", outcome_yes(90, *strike_bounds(
+        {"strike_type": "greater", "floor_strike": 90})[:2]), False)
+    check("sem.less98.at97", outcome_yes(97, *strike_bounds(
+        {"strike_type": "less", "cap_strike": 98})[:2]), True)
+    check("sem.between.at104", outcome_yes(104, *strike_bounds(
+        {"strike_type": "between", "floor_strike": 104, "cap_strike": 105})[:2]), True)
+    check("sem.between.at103", outcome_yes(103, *strike_bounds(
+        {"strike_type": "between", "floor_strike": 104, "cap_strike": 105})[:2]), False)
+    check("rules.greater", strike_bounds(
+        {"rules_primary": "temperature ..., is strictly greater than 50°, then"}),
+        (50.5, None, "rules"))
+    check("rules.less", strike_bounds(
+        {"rules_primary": "Report, is less than 87°, then the market"}),
+        (None, 86.5, "rules"))
+    check("rules.between.hyphen", strike_bounds(
+        {"rules_primary": "Report, is between 89-90°, then the market"}),
+        (88.5, 90.5, "rules"))
+    check("rules.between.and", strike_bounds(
+        {"rules_primary": "Report, is between 85° and 86°, then"}),
+        (84.5, 86.5, "rules"))
+    _bk = [{"ts": 100, "bid": 0.4, "ask": 0.42, "vol": 1.0},
+           {"ts": 8000, "bid": 0.4, "ask": 0.42, "vol": 0.0}]
+    check("book.fresh", book_at(_bk, [100, 8000], 200, 60)[0] is not None, True)
+    check("book.sandwich", book_at(_bk, [100, 8000], 5000, 60)[0] is not None, True)
+    _bk2 = [{"ts": 100, "bid": 0.4, "ask": 0.42, "vol": 1.0},
+            {"ts": 8000, "bid": 0.4, "ask": 0.50, "vol": 0.0}]
+    check("book.stale", book_at(_bk2, [100, 8000], 5000, 60), (None, "stale"))
+    _bk3 = [{"ts": 100, "bid": 0.0, "ask": 0.55, "vol": 1.0}]
+    check("book.onesided", book_at(_bk3, [100], 200, 60), (None, "book"))
+    check("seam.regex", re.search(
+        r"recorded (?:in|at) (.+?),? (?:for|on) ",
+        "recorded in Central Park, New York for October 23, 2024 as").group(1),
+        "Central Park, New York")
     check("evdate", event_date_of("HIGHNY-22JUL04-T86"), dt.date(2022, 7, 4))
     check("normsf.mid", round(norm_sf(0, 0, 1), 4), 0.5)
     check("normsf.1sd", round(norm_sf(1, 0, 1), 4), 0.1587)
@@ -610,7 +685,7 @@ def stage_seam() -> None:
                      (jget(f"{KB}/markets?event_ticker={ev}&limit=3", ok404=True)
                       or {}).get("markets") or []
                 if ms:
-                    m = re.search(r"recorded (?:in|at) ([^,]+?)(?: for| on)",
+                    m = re.search(r"recorded (?:in|at) (.+?),? (?:for|on) ",
                                   ms[0].get("rules_primary", ""))
                     info["stations_by_year"][str(d.year)] = m.group(1) if m else "UNPARSED"
             chart[st][series] = info
@@ -657,21 +732,22 @@ def _nyc_markets() -> list[dict]:
     return out
 
 
-def _audit_one(m: dict, cli: dict, variant: str) -> dict:
+def _audit_one(m: dict, cli: dict) -> dict:
     d = dt.date.fromisoformat(m["_event_date"])
     row = cli.get(d)
-    lo, hi = strike_bounds(m)
+    lo, hi, src = strike_bounds(m)
     rec = {"ticker": m["ticker"], "event_date": m["_event_date"],
-           "floor": lo, "cap": hi, "api_result": m["result"],
+           "lo": lo, "hi": hi, "bounds_source": src, "api_result": m["result"],
            "expiration_value": m.get("expiration_value")}
     if row is None:
         rec["status"] = "NO_CLI_DAY"
         return rec
     high = row["high"]
     rec["cli_high"] = high
-    ev = _fnum(m.get("expiration_value"))
-    rec["expiration_matches_cli"] = (ev is not None and abs(ev - high) < 0.01)
-    pred = outcome_yes(high, lo, hi, variant)
+    ev = _fnum(m.get("expiration_value") or None)  # '' on legacy markets = absent
+    rec["expiration_status"] = ("absent" if ev is None else
+                                "match" if abs(ev - high) < 0.01 else "MISMATCH")
+    pred = outcome_yes(high, lo, hi)
     rec["predicted"] = None if pred is None else ("yes" if pred else "no")
     rec["match"] = rec["predicted"] == m["result"]
     rec["status"] = "OK"
@@ -695,28 +771,30 @@ def stage_pilot(admitted: bool) -> None:
     y1 = dt.date.fromisoformat(C["primary_window_end"]).year
     cli = cli_days("KNYC", y0, y1)
 
-    # -- artifact 2a: strike-semantics discovery (seed 20260705)
+    # -- artifact 2a: semantics validation sample (seed 20260705)
     rng = random.Random(C["strike_semantics_discovery_seed"])
     disc = rng.sample(markets, min(C["settlement_audit_n"], len(markets)))
-    votes = {}
-    for variant in ("exclusive", "inclusive"):
-        rows = [_audit_one(m, cli, variant) for m in disc]
-        votes[variant] = sum(1 for r in rows if r.get("match"))
-    variant = max(votes, key=lambda v: votes[v])
+    disc_rows = [_audit_one(m, cli) for m in disc]
+    disc_ok = sum(1 for r in disc_rows if r.get("match"))
     disc_tickers = {m["ticker"] for m in disc}
     # -- artifact 2b: settlement audit (seed 20260706, disjoint)
     rng2 = random.Random(C["settlement_audit_seed"])
     pool = [m for m in markets if m["ticker"] not in disc_tickers]
     audit = rng2.sample(pool, min(C["settlement_audit_n"], len(pool)))
-    rows = [_audit_one(m, cli, variant) for m in audit]
+    rows = [_audit_one(m, cli) for m in audit]
     n_ok = sum(1 for r in rows if r.get("match"))
-    n_exp = sum(1 for r in rows if r.get("expiration_matches_cli"))
+    exp_counts = {}
+    for r in disc_rows + rows:
+        s = r.get("expiration_status")
+        if s:
+            exp_counts[s] = exp_counts.get(s, 0) + 1
     write_json(RESULTS / "settlement_audit.json", {
-        "discovery_votes": votes, "bound_variant": variant,
+        "validation_sample": {"n": len(disc_rows), "matches": disc_ok},
         "audit_n": len(rows), "result_matches": n_ok,
-        "expiration_matches_cli": n_exp, "rows": rows})
-    summary["settlement_audit"] = f"{n_ok}/{len(rows)} (variant={variant}, exp-val {n_exp})"
-    print(f"settlement audit: {n_ok}/{len(rows)} variant={variant}")
+        "expiration_status_counts": exp_counts,
+        "validation_rows": disc_rows, "rows": rows})
+    summary["settlement_audit"] = f"audit {n_ok}/{len(rows)}, validation {disc_ok}/{len(disc_rows)}, exp {exp_counts}"
+    print(f"settlement audit: {n_ok}/{len(rows)} (validation {disc_ok}/{len(disc_rows)})")
 
     # -- group markets by event day
     by_day: dict[str, list[dict]] = {}
@@ -738,7 +816,7 @@ def stage_pilot(admitted: bool) -> None:
         era = str(day.year) if day.year < 2026 else "2026H1"
         E = excl.setdefault(era, {"days": 0, "cutoffs": 0, "valid_cutoffs": 0,
                                   "strikes": 0, "valid_strikes": 0,
-                                  "fail_spread": 0, "fail_age": 0, "fail_onesided": 0})
+                                  "fail_spread": 0, "fail_stale": 0, "fail_book": 0})
         M = mismatch.setdefault(era, [0, 0])
         h = day_hour(day)
         if h is None:
@@ -751,16 +829,8 @@ def stage_pilot(admitted: bool) -> None:
             if not in_window:
                 M[0] += 1
         cuts = band_cutoffs("KNYC", day, h)
-        prep = {}
-        for m in dms:
-            cand = sorted(candles_for(m, cuts[-1] + dt.timedelta(hours=1)),
-                          key=lambda c: c["ts"])
-            ts_list = [c["ts"] for c in cand]
-            vol_pfx, acc = [], 0.0
-            for c in cand:
-                acc += c["vol"]
-                vol_pfx.append(acc)
-            prep[m["ticker"]] = (cand, ts_list, vol_pfx)
+        prep = {m["ticker"]: prep_candles(m, cuts[-1] + dt.timedelta(hours=1))
+                for m in dms}
         first_valid_mid: dict[str, float] = {}
         for T in cuts:
             ts = int(T.timestamp())
@@ -772,17 +842,9 @@ def stage_pilot(admitted: bool) -> None:
                 j = bisect.bisect_right(ts_list, ts) - 1
                 if j >= 0:
                     vol += vol_pfx[j]
-                q = None
-                k = j
-                while k >= 0 and ts - cand[k]["ts"] <= max_age * 60:
-                    ck = cand[k]
-                    if ck["bid"] is not None and ck["ask"] is not None and \
-                            not (ck["bid"] <= 0.0 and ck["ask"] >= 1.0):
-                        q = ck
-                        break
-                    k -= 1
+                q, why = book_at(cand, ts_list, ts, max_age)
                 if q is None:
-                    E["fail_age"] += 1
+                    E["fail_stale" if why == "stale" else "fail_book"] += 1
                     continue
                 spread_c = (q["ask"] - q["bid"]) * 100
                 if spread_c > C["max_spread_cents"]:
@@ -839,10 +901,13 @@ def stage_pilot(admitted: bool) -> None:
         ts = int(T.timestamp())
         bins = []
         for m in dms:
-            q = quote_at(candles_for(m, T + dt.timedelta(hours=1)), ts, max_age)
+            cand, ts_list, _ = prep_candles(m, T + dt.timedelta(hours=1))
+            q, _why = book_at(cand, ts_list, ts, max_age)
             if q is None or (q["ask"] - q["bid"]) * 100 > C["max_spread_cents"]:
                 continue
-            lo, hi = strike_bounds(m)
+            lo, hi, _src = strike_bounds(m)
+            if lo is None and hi is None:
+                continue
             bins.append((lo, hi, (q["bid"] + q["ask"]) / 2))
         if len(bins) < C["min_valid_strikes"]:
             receipts.append({"day": dstr, "status": "TOO_FEW_VALID", "n": len(bins)})

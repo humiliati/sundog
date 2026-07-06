@@ -103,6 +103,33 @@ for (const q of Qs) {
       whole.size !== wholeMinus.size,
   );
 
+  // 8d. Structured line-extension count. For each direction, each of q lines
+  //     and that line plus one outside point cast the same one-direction shadow.
+  const expectedPerDirection = q * (n - q + 1);
+  let structuredCounts = true;
+  for (let dirIndex = 0; dirIndex < dirs.length; dirIndex++) {
+    const sigCounts = new Map();
+    const d = dirs[dirIndex];
+    for (let intercept = 0; intercept < q; intercept++) {
+      const line = K.lineMask(d, intercept, q);
+      const lineBits = K.shadowBitset(q, line).join("");
+      sigCounts.set(lineBits, (sigCounts.get(lineBits) ?? 0) + 1);
+      for (let p = 0; p < n; p++) {
+        if (line.has(p)) continue;
+        const extended = new Set(line);
+        extended.add(p);
+        const extendedBits = K.shadowBitset(q, extended).join("");
+        sigCounts.set(extendedBits, (sigCounts.get(extendedBits) ?? 0) + 1);
+      }
+    }
+    const expectedBits = dirs.map((_, i) => (i === dirIndex ? 1 : 0)).join("");
+    structuredCounts =
+      structuredCounts &&
+      sigCounts.size === 1 &&
+      sigCounts.get(expectedBits) === expectedPerDirection;
+  }
+  check(`q=${q} T8d structured-line-extension-count`, structuredCounts);
+
   // 9. Greedy line-cover construction covers all directions.
   check(
     `q=${q} T9 greedy-complete`,

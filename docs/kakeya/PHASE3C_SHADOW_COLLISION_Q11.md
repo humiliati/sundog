@@ -25,14 +25,14 @@ projection-discipline receipt: no extremal-set search, no Euclidean Kakeya, no p
 ## Commands Run
 
 ```powershell
-node scripts/kakeya-workbench-tests.mjs            # KAKEYA_WORKBENCH_TESTS q={5,7,11} pass=39 fail=0
+node scripts/kakeya-workbench-tests.mjs            # KAKEYA_WORKBENCH_TESTS q={5,7,11} pass=42 fail=0
 node scripts/kakeya-shadow-collision-audit.mjs --q 11
 ```
 
 The `q=11` audit reported (and re-ran reproducibly):
 
 ```text
-KAK_SHADOW_COLLISION_AUDIT q=11 states=300000 signatures=1 collisions=1 max_collision=300000 max_nonempty_collision=0 structured_states=14652 structured_signatures=12 structured_max_nonempty_collision=1221 guard=pass falsifier=clear out=results\kakeya\shadow-collision-audit-q11
+KAK_SHADOW_COLLISION_AUDIT q=11 states=300000 signatures=1 collisions=1 max_collision=300000 max_nonempty_collision=0 structured_states=14652 structured_signatures=12 structured_max_nonempty_collision=1221 structured_exact=pass guard=pass falsifier=clear out=results\kakeya\shadow-collision-audit-q11
 ```
 
 ## Receipt Fields (q = 11)
@@ -49,6 +49,7 @@ KAK_SHADOW_COLLISION_AUDIT q=11 states=300000 signatures=1 collisions=1 max_coll
 | structured line-extension states | `14652` |
 | structured signature count | `12` |
 | structured max nonempty collision | `1221`, shadow `100000000000` |
+| structured exact count check | pass |
 | guard witnesses | pass |
 | falsifier `KAK_SHADOW_REENCODING_EMPIRICAL` | clear |
 

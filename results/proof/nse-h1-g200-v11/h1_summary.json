@@ -1,0 +1,53 @@
+{
+ "spec": "NSE_H1_JSELECTOR_SPEC.md",
+ "preset": "nse_h1_g200",
+ "grashof": 200.0,
+ "formation_version": "v1.1",
+ "mu_act": 1.0,
+ "smoke": false,
+ "n_cal": 398,
+ "n_eval": 1600,
+ "m_margin": 0.025119359820169284,
+ "e_max_cal": 0.7344105026897143,
+ "benefit_mass_eval": 1.0,
+ "benefit_mass_cal": 1.0,
+ "m_sign_fence": "benefit-positive-at-margin",
+ "damp_cal": 0.3015075376884422,
+ "damp_eval": 0.301875,
+ "blockwise_damp": [
+  0.32,
+  0.28,
+  0.315,
+  0.295,
+  0.29,
+  0.325,
+  0.28,
+  0.31
+ ],
+ "blockwise_n": [
+  200,
+  200,
+  200,
+  200,
+  200,
+  200,
+  200,
+  200
+ ],
+ "atom": {
+  "mass_near_m": 0.0,
+  "straddle_below": 0.0,
+  "straddle_above": 0.0
+ },
+ "liveness": {
+  "zero_frac": 0.0,
+  "iqr": 0.01176885535566563,
+  "median_j0": 0.7311430785439976,
+  "median_j1": 0.7114628789629852,
+  "median_delta": 0.01932181160884111
+ },
+ "overlap_pi_hat_REPORTED_NOT_GATED": 0.634375,
+ "a_j_lag1_autocorr": -0.1293977885520708,
+ "gate_failures": [],
+ "branch": "H1_CELL_ADMITTED"
+}

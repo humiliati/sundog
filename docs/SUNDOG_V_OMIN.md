@@ -427,10 +427,77 @@ fully nailed in-scout**. What is nailed:
      (`htube`) → graph box (thin + β-continuity = the selection) or empty box →
      `(a*, β a*)` normal, contradicting leastness. `avoid_finset` de-privatized (the
      ladder's workhorse).
-   - **D4d — count constancy + UF**: at fully-normal parameters the count is locally
-     constant (graph boxes count, gap intervals empty via Heine–Borel on `[c,d]` — ℝ-specific,
-     honestly fenced like C1d's countability); assembly: **UNIFORM FINITENESS** —
-     `∃ N, ∀ x, |A_x| ≤ N`, i.e. some `countSet A (N+1) = ∅`.
+   - **D4d — count constancy + UF** ✅ LANDED 2026-07-06: `OMinimalUniformFiniteness.lean`
+     (56th module), axiom-clean, 3 gate entries (`count_locally_constant`,
+     `uniform_finiteness`, `exists_empty_countSet`), green round 3.
+     **THE FINITENESS LEMMA IS COMPLETE — vdD Ch. 3 (1.7) machine-checked over the abstract
+     `OMinStructure`**: `uniform_finiteness : ∃ N, ∀ x, |A_x|.ncard ≤ N` for definable `A`
+     with all fibers finite; equivalently some counting set is empty.
+     `count_locally_constant`: `≥` by a min-peeling strips induction (one fresh separator
+     per step; the selection-continuity bracket traps each selection below its separator,
+     the recursion floor keeps the rest above — sort-free); `≤` by ray boxes + Heine–Borel
+     on the compact leftover `K = Icc ∖ strips` (ℝ-specific, fenced like C1d's countability)
+     + thin-box injection into the fiber of `a`. Counting-set frontiers ⊆ the finite
+     abnormal set. The chain kill: witnesses off the abnormal set, infinitely many share
+     one abnormal-gap (pigeonhole on below-sets via `Finite.exists_infinite_fiber` —
+     sort-free), `preconnected_split` (R2-N, its third life) propagates membership across
+     the gap, and the earliest witness lands in every counting set — an infinite fiber,
+     contradiction. The `countSet ⊆ abnormal` side-case dies in two lines: D2's dichotomy
+     puts an interval inside a finite set.
+
+   **R4-D COMPLETE (2026-07-04 → 2026-07-06): UNIFORM FINITENESS from the axioms in seven
+   modules (D0 slices/fiber-frontier, D1 counting formulas, D2 dichotomy + rank functions,
+   D3 k-curves, D4a normality, D4b β-machinery, D4c tube kill, D4d UF).**
+
+### R4-D5 — CDT₂: cell decomposition for `ℝ²` from UF (spine registered 2026-07-06)
+
+The classical order restored: UF in hand, CDT₂ is bookkeeping over the rank functions of
+`fiberFrontier A`. Stages:
+
+1. **D5a — the uniform frontier bound + exact-count partition** ✅ LANDED 2026-07-06:
+   `OMinimalFrontierBound.lean` (57th module), axiom-clean, 3 gate entries
+   (`frontier_ncard_bound`, `ranks_enumerate`, `frontier_partition`), **GREEN ON THE FIRST
+   BUILD**. The arc closes on itself: `uniform_finiteness` applied to D0's `fiberFrontier`
+   (definable + automatically finite fibers) gives `|∂(A_x)| ≤ N` for EVERY definable `A`,
+   no hypothesis. Plus: `exists_isNth_of_mem` (every point of a finite fiber is the rank of
+   its below-count — `Set.ncard_lt_ncard` on the strict below-subset), `ranks_enumerate`
+   (membership ⟺ one of the first `ncard` rank values), the tame `exactSet` classes, and
+   the capstone `frontier_partition` (over the `k`-class, the `k` rank functions of
+   `fiberFrontier A` enumerate every fiber frontier). The countSet–ncard bridge
+   de-privatized + hypothesis-localized in D4d.
+2. **D5b — the master refinement** ✅ LANDED 2026-07-06: `OMinimalRefinement.lean`
+   (58th module), axiom-clean, 3 gate entries (`tame_bandIn`, `tame_const_on`,
+   `master_refinement`), **GREEN ON THE FIRST BUILD** (round 2 dropped one lint).
+   `master_refinement`: ONE bound `N` + ONE finite cut set `C`; on every `C`-avoiding
+   interval — a single exact-count class, all `N` rank functions of `fiberFrontier A`
+   continuous, and every structural test constant: `graphIn`, `bandIn` between consecutive
+   ranks, `rayLowIn`/`rayHighIn`, `allIn` — **both polarities via the complement trick**
+   (`bandOut A = bandIn Aᶜ`, one tame lemma each, instantiated at `A` and
+   `S.definable_compl hA`; the polarity quantifier `∀ B' ∈ {A, Aᶜ}` keeps the statement
+   flat). Five parameterized tame lemmas (rank-graph atoms + `exists_eq_left'` collapse);
+   `tame_const_on` = `preconnected_split` on frontier-free intervals (pure topology);
+   `C` = one `Finset` bundling rank cut-sets + class frontiers + test frontiers, with
+   the membership chains factored into seven inclusion lemmas.
+3. **D5c — band triviality (the CDT₂ core)** ✅ LANDED 2026-07-06:
+   `OMinimalBandTriviality.lean` (59th module), axiom-clean, 3 gate entries
+   (`band_dichotomy_fiber`, `regions_cover`, `band_triviality`), **GREEN ON THE FIRST
+   BUILD** (round 2 dropped two unused hypotheses — `regions_cover` turned out to be pure
+   order combinatorics, no class membership needed). The falsifier never fired. Per-fiber
+   dichotomies: `mem_rank_of_frontier` (every fiber-frontier point is a rank value, via
+   `ranks_enumerate` + the class count) makes each region frontier-free, and
+   `preconnected_split` (its 5th/6th/7th/8th lives: `Ioo`, `Iio`, `Ioi`, `univ`) forces
+   all-in/all-out per fiber. `regions_cover`: `Nat.findGreatest` on the largest rank
+   ≤ target — rays + graphs + bands exhaust the line. Capstone `band_triviality`: one
+   `N`, one `C`; per `C`-avoiding interval — one class `k ≤ N`, ranks continuous +
+   strictly ordered, and **every region uniformly in or out of `A`** (D5b constancy +
+   the fiber dichotomies; the `Aᶜ`-polarity clauses turned out unneeded — dichotomy +
+   A-side-out already forces the complement side). Cell decomposition for `ℝ²` in
+   concrete form: `A ∩ (I×ℝ)` = the union of the selected graphs and bands.
+4. **D5d — the packaged CDT₂** [owner-gated shape]: a `Cell₂` structure (point/interval
+   base × graph/band) + `IsDecomposition` + the master statement; or stop at D5c's concrete
+   form. Owner call on the packaging.
+
+   TS-QE remains the long-pole TODO.
 
 General-`n` cells remain outside this scope. Sizing: D0–D3 ≈ 3–4 sessions, bankable
 independently; D4 is the variance.
