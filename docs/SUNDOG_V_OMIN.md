@@ -116,8 +116,20 @@ Already banked in-lane: `polyDef_tame` (R1: QF dim-1 tameness), the whole abstra
     disappears. `emod_eval_at_root` (the `S·P` term dies at roots) and the headline
     `sign_transfer`: three-way sign equality of `Q` and its evenized remainder at every
     root of `spec g P` — the elimination's degree-descent engine.
-  - **TS-2c** — between-roots signs: the derivative family + monotonicity between consecutive
-    roots (the real-analysis input; C1-style window lemmas available).
+  - **TS-2c** — between-roots signs ✅ LANDED 2026-07-06: `PolyDerivZones.lean`
+    (65th module), axiom-clean, 3 gate entries (`spec_derivative`,
+    `strictMonoOn_sign_zones`, `deriv_free_sign_zones`), **GREEN ON THE FIRST BUILD**.
+    `spec_derivative` (the derivative family is parametric — `derivative_map`, one line);
+    derivative sign ⇒ strict monotonicity on the closed interval
+    (`strictMonoOn_of_deriv_pos` + `Polynomial.deriv`); the sign-zone trichotomies
+    (endpoint trichotomy + IVT: all-positive / all-negative / ONE interior root with clean
+    strict zones, both orientations); the capstone `deriv_free_sign_zones` — on any
+    derivative-root-free interval a nonzero polynomial has at most one root and one of six
+    diagrams (TS-1's `poly_sign_constant` on the derivative picks the orientation; the
+    constant case dies by `eq_C_of_derivative_eq_zero`); end behavior:
+    `eventually_pos/neg_atTop` (tendsto asymptotics; constants separate) and the `−∞`
+    mirrors with the `(−1)^deg` parity twist via `comp (−X)` + `leadingCoeff_comp`.
+    The 2d recursion's real-analysis inputs are now complete.
   - **TS-2d** — the recursion assembly + correctness:
     `(elim F σ).toSet = {g | ∃ y, signs of F at (g, y) satisfy σ}`.
   *Falsifier* (`QE_COMBINATORICS_WALL`, carried over): the sign-matrix bookkeeping fails to
