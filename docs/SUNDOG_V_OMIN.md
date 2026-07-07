@@ -130,8 +130,33 @@ Already banked in-lane: `polyDef_tame` (R1: QF dim-1 tameness), the whole abstra
     `eventually_pos/neg_atTop` (tendsto asymptotics; constants separate) and the `−∞`
     mirrors with the `(−1)^deg` parity twist via `comp (−X)` + `leadingCoeff_comp`.
     The 2d recursion's real-analysis inputs are now complete.
-  - **TS-2d** — the recursion assembly + correctness:
-    `(elim F σ).toSet = {g | ∃ y, signs of F at (g, y) satisfy σ}`.
+  - **TS-2d** — the recursion assembly + correctness. STAGED (summit push, 2026-07-06):
+    - **TS-2d-1 — base camp** ✅ LANDED 2026-07-06: `SignDiagrams.lean` (66th module),
+      axiom-clean, 3 gate entries (`exists_diagram`, `elim_of_diagramPartition`,
+      `diagramPartition_of_constants`), green round 3 (SignType's constructor order is
+      zero-first; `Finset.sort_sorted_lt` → `sortedLT_sort` + `.pairwise`; a goal-side
+      rewrite needed `conv_lhs`). **`SADef`** (QF-semialgebraic parameter sets, `PolyDef`
+      style) with the full closure algebra (inter/zero/`signEq` atoms/finite list unions);
+      **the sign-diagram representation**: `signVec`, `ColsFrom` (structural recursion on
+      the sample list with an `Option`-barrier — `∀ l ∈ lo, l < y` makes `none` vacuous),
+      `Realizes` (sorted samples containing every root of every nonzero member);
+      `exists_diagram` (sorted root Finset + IVT gap constancy); `realizes_exists_iff`
+      (columns are exactly the attained sign vectors — cells are nonempty);
+      **`DiagramPartition` = THE SUMMIT STATEMENT** (finitely many `SADef` branches, each
+      carrying one diagram valid branch-wide — branch-wide validity is load-bearing: a
+      cover with per-point diagrams would break the union argument);
+      `elim_of_diagramPartition` (the elimination is a filter-union corollary);
+      `diagramPartition_of_constants` (the induction's base case via the `allSignVecs`
+      enumeration).
+    - **TS-2d-2 — the reconstruction step** [next; the wall watches here]: from a
+      branch-wide diagram of `F' = {P'} ∪ (F \ {P}) ∪ {emod q P : q ∈ …}`, reconstruct a
+      branch-wide diagram of `F`: P's signs at F'-sample points via `sign_transfer`, P's
+      root insertion per gap via `deriv_free_sign_zones`, ends via
+      `eventually_sign_atTop/atBot` + branch data; the diagram surgery (column splicing)
+      is the honest hard part.
+    - **TS-2d-3 — the descent**: the Dershowitz–Manna induction wrapping 2d-2, degree
+      bookkeeping through `resolve`-branches; `diagramPartition` for every family;
+      `elim_signVector` unconditionally.
   *Falsifier* (`QE_COMBINATORICS_WALL`, carried over): the sign-matrix bookkeeping fails to
   stay tractable at single-owner scale — fallback = TS-1 + TS-2b/2c as independently valuable
   univariate machinery, wall published with location.
