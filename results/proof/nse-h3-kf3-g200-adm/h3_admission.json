@@ -1,0 +1,35 @@
+{
+ "scope": "NSE_H3_KF3_SCOPE.md",
+ "cell": "kf3_g200_grid32",
+ "seed": 20260528,
+ "threshold_q70": 0.3213057508494504,
+ "damp_heldout": 0.0,
+ "blockwise_damp": [
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0
+ ],
+ "atom_mass": 1.0,
+ "iqr_m": 0.0,
+ "n_cal": 2000,
+ "n_eval": 8000,
+ "regime_character_REPORTED": {
+  "e_low_mean": 0.32130575084944984,
+  "e_low_std": 2.938322248337023e-15,
+  "e_low_min": 0.32130575084943536,
+  "e_low_max": 0.3213057508494543,
+  "detrended_autocorr_first_zero_steps": 21894
+ },
+ "gate_failures": [
+  "G1_damp=0.000",
+  "G2_blockwise",
+  "G3_atom=1.000",
+  "G4_liveness_iqr=0.000e+00"
+ ],
+ "branch": "NSE-H3-INPUT-UNPOWERED"
+}

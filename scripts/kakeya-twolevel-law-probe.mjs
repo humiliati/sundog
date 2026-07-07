@@ -28,15 +28,21 @@ import * as Core from "../kakeya/kakeya-core.js";
 
 const ARTIFACT_ID = "KAK-PHASE3K-TWOLEVEL-PROBE";
 const DEFAULT_OUT = path.join("results", "kakeya", "twolevel-law-probe");
-const DEFAULT_FIELDS = [7, 11, 13, 17, 19];
+// Default = controls + q17 (~2h). q = 19 is staged as an owner-fired run
+// (projected multi-day at current solver): --fields 7,11,13,19
+const DEFAULT_FIELDS = [7, 11, 13, 17];
 const CONTROL_EXPECTED = {
   7: { harmonic: 2, equianharmonic: 3 },
   11: { harmonic: 4, generic: 4 },
   13: { harmonic: 6, equianharmonic: 5, generic: 5 },
 };
 const REPS_CONTROL = 8; // lex-first 4 + lex-last 4 (PHASE3J protocol)
-const REPS_PROBE = 4; // lex-first 2 + lex-last 2 at q in {17, 19}
-const NODE_BUDGET = 500_000_000;
+// Amendment A (after the v1 timing run exhausted the node budget on all six
+// q=17 solves): probe-field reps 4 -> 2. Rep invariance is theorem-backed
+// (PGL-equivalence of same-orbit stars) and audited 580/580 at q <= 11; the
+// probe's job is the per-orbit LEVEL, which one exact solve determines.
+const REPS_PROBE = 2; // lex-first 1 + lex-last 1 at q in {17, 19}
+const NODE_BUDGET = 2_000_000_000;
 const INF = -1;
 
 function parseArgs(argv) {
@@ -165,7 +171,11 @@ function greedySeed(q, ordered, words, dirOrder) {
   return count;
 }
 
-function solveCompletion(q, K, nodeBudget) {
+// starPivotSymmetry is sound ONLY for bodies fixed by every scaling about the
+// origin (our probe stars): the GL-stabilizer of 4 distinct directions is the
+// scalars, and scaling multiplies every chosen intercept by lambda, so any
+// completion is equivalent to one whose ROOT direction intercept is 0 or 1.
+function solveCompletion(q, K, nodeBudget, starPivotSymmetry = false) {
   const dirs = Core.directions(q);
   const words = wordCount(q);
   const bits = Core.shadowBitset(q, K);
@@ -245,9 +255,12 @@ function solveCompletion(q, K, nodeBudget) {
       return;
     }
     const prev = unions[level];
-    // Best-first child ordering: expand cheapest unions first.
+    // Best-first child ordering: expand cheapest unions first. At the root,
+    // under star-pivot symmetry, intercepts {0, 1} suffice (scaling orbit
+    // representatives).
+    const bLimit = starPivotSymmetry && level === 0 ? 2 : q;
     const children = [];
-    for (let b = 0; b < q; b++) {
+    for (let b = 0; b < bLimit; b++) {
       nodes++;
       let newCount = 0;
       const m = ordered[level][b].mask;
@@ -361,7 +374,7 @@ function probeField(q, reps) {
     const exValues = new Set();
     for (const quad of repQuads) {
       const body = starBody(q, quad);
-      const solved = solveCompletion(q, body, NODE_BUDGET);
+      const solved = solveCompletion(q, body, NODE_BUDGET, true);
       solverExact = solverExact && solved.status === "exact";
       const completion = body.size + solved.joint;
       const ex = completion - bm;
@@ -496,7 +509,8 @@ function main() {
       `sampling: ${REPS_PROBE} reps/orbit at probe fields (lex-first 2 + lex-last 2), ${REPS_CONTROL} at controls; exact solves only`,
       "controls: q in {7, 11, 13} through the upgraded solver must reproduce PHASE3I/3J exactly",
     ],
-    solverUpgrades: "best-first child ordering + multi-order greedy seed (8 orders)",
+    solverUpgrades:
+      "best-first child ordering + multi-order greedy seed (8 orders) + star-pivot scaling symmetry (root intercepts {0,1}; sound for origin-star bodies, validated by the controls)",
     nodeBudget: NODE_BUDGET,
     falsifier: {
       name: "TWOLEVEL_INSTRUMENT_MISMATCH",

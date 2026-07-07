@@ -1,0 +1,104 @@
+{
+  "artifactId": "KAK-PHASE3K-TWOLEVEL-PROBE",
+  "generatedAt": "2026-07-07T08:22:15.426Z",
+  "status": "internal out-of-register probe receipt (q = 17/19 sidecars)",
+  "hook": "H-K3 two-level law + harmonic mod-4 rule + generic uniformity + equianharmonic orientation",
+  "command": "node scripts/kakeya-twolevel-law-probe.mjs",
+  "registerNote": "q in {17, 19} are NOT added to the workbench; SUPPORTED_Q, the Phase-2 spec, the UI, and the regression suite are untouched. ex is relative to the pinned Blokhuis-Mazzocca odd-q minimum.",
+  "preRegistered": [
+    "TL-1: all orbit ex in {(q-3)/2, (q-1)/2} at q in {17, 19}",
+    "HM-1: harmonic ex = (q-1)/2 at q=17 (1 mod 4), = (q-3)/2 at q=19 (3 mod 4)",
+    "GU-1: the two generic orbits inside each probe field are equal, both (q-3)/2",
+    "EQ-3 (weak, 2 prior points): equianharmonic at q=19 = (q-1)/2, anti-correlated with harmonic",
+    "sampling: 2 reps/orbit at probe fields (lex-first 2 + lex-last 2), 8 at controls; exact solves only",
+    "controls: q in {7, 11, 13} through the upgraded solver must reproduce PHASE3I/3J exactly"
+  ],
+  "solverUpgrades": "best-first child ordering + multi-order greedy seed (8 orders) + star-pivot scaling symmetry (root intercepts {0,1}; sound for origin-star bodies, validated by the controls)",
+  "nodeBudget": 500000000,
+  "falsifier": {
+    "name": "TWOLEVEL_INSTRUMENT_MISMATCH",
+    "description": "Instrument-only: fires on budget exhaustion, intra-orbit variation among reps, control mismatch vs PHASE3I/3J, orbit-inventory mismatch vs field arithmetic, or witness-anchor failure at the probe fields. Hypothesis outcomes cannot fire it.",
+    "status": "clear"
+  },
+  "witnessChecks": {},
+  "hypotheses": {},
+  "perQ": [
+    {
+      "q": 7,
+      "bmMinimum": 31,
+      "inventoryMatch": true,
+      "orbitResults": [
+        {
+          "label": "harmonic",
+          "sixSet": "2,4,6",
+          "quadrupleCount": 42,
+          "repsSolved": 8,
+          "ex": "2"
+        },
+        {
+          "label": "equianharmonic",
+          "sixSet": "3,5",
+          "quadrupleCount": 28,
+          "repsSolved": 8,
+          "ex": "3"
+        }
+      ],
+      "solverExact": true,
+      "invariance": true
+    },
+    {
+      "q": 11,
+      "bmMinimum": 71,
+      "inventoryMatch": true,
+      "orbitResults": [
+        {
+          "label": "harmonic",
+          "sixSet": "2,6,10",
+          "quadrupleCount": 165,
+          "repsSolved": 8,
+          "ex": "4"
+        },
+        {
+          "label": "generic",
+          "sixSet": "3,4,5,7,8,9",
+          "quadrupleCount": 330,
+          "repsSolved": 8,
+          "ex": "4"
+        }
+      ],
+      "solverExact": true,
+      "invariance": true
+    },
+    {
+      "q": 13,
+      "bmMinimum": 97,
+      "inventoryMatch": true,
+      "orbitResults": [
+        {
+          "label": "harmonic",
+          "sixSet": "2,7,12",
+          "quadrupleCount": 273,
+          "repsSolved": 8,
+          "ex": "6"
+        },
+        {
+          "label": "generic",
+          "sixSet": "3,5,6,8,9,11",
+          "quadrupleCount": 546,
+          "repsSolved": 8,
+          "ex": "5"
+        },
+        {
+          "label": "equianharmonic",
+          "sixSet": "4,10",
+          "quadrupleCount": 182,
+          "repsSolved": 8,
+          "ex": "5"
+        }
+      ],
+      "solverExact": true,
+      "invariance": true
+    }
+  ],
+  "pass": true
+}

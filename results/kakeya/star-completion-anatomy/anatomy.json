@@ -1,0 +1,799 @@
+{
+  "generatedAt": "2026-07-07T15:39:54.108Z",
+  "report": [
+    {
+      "q": 5,
+      "orbit": "harmonic",
+      "quad": "0 1 2 3",
+      "completion": 19,
+      "ex": 2,
+      "level": "HIGH",
+      "consistent": true,
+      "witness": {
+        "size": 19,
+        "sacrifice": 4,
+        "exFromIdentity": 2,
+        "multiplicityProfile": "1:11 2:6 3:1 4:1",
+        "pivotMult": 4,
+        "chosenThroughPivot": 0,
+        "heavyPoints": [
+          {
+            "point": "(0,0)",
+            "mult": 4,
+            "lines": [
+              "0:0*",
+              "1:0*",
+              "2:0*",
+              "3:0*"
+            ]
+          },
+          {
+            "point": "(1,0)",
+            "mult": 3,
+            "lines": [
+              "0:0*",
+              "4:1",
+              "inf:1"
+            ]
+          }
+        ],
+        "chosenIntercepts": [
+          "4:1",
+          "inf:1"
+        ],
+        "conicChosen": {
+          "fitted": false,
+          "maxOnConic": 2,
+          "parabola": null
+        },
+        "conicAll": {
+          "fitted": true,
+          "maxOnConic": 6,
+          "parabola": false
+        }
+      },
+      "optima": {
+        "count": 16,
+        "capped": false,
+        "pivotMultDistribution": "4:16",
+        "chosenOnConicDistribution": "2/2:16"
+      }
+    },
+    {
+      "q": 7,
+      "orbit": "harmonic",
+      "quad": "0 1 2 3",
+      "completion": 33,
+      "ex": 2,
+      "level": "LOW",
+      "consistent": true,
+      "witness": {
+        "size": 33,
+        "sacrifice": 5,
+        "exFromIdentity": 2,
+        "multiplicityProfile": "1:14 2:16 3:2 4:1",
+        "pivotMult": 4,
+        "chosenThroughPivot": 0,
+        "heavyPoints": [
+          {
+            "point": "(0,0)",
+            "mult": 4,
+            "lines": [
+              "0:0*",
+              "1:0*",
+              "2:0*",
+              "3:0*"
+            ]
+          },
+          {
+            "point": "(1,0)",
+            "mult": 3,
+            "lines": [
+              "0:0*",
+              "6:1",
+              "inf:1"
+            ]
+          },
+          {
+            "point": "(0,1)",
+            "mult": 3,
+            "lines": [
+              "4:1",
+              "5:1",
+              "6:1"
+            ]
+          }
+        ],
+        "chosenIntercepts": [
+          "4:1",
+          "5:1",
+          "6:1",
+          "inf:1"
+        ],
+        "conicChosen": {
+          "fitted": false,
+          "maxOnConic": 4,
+          "parabola": null
+        },
+        "conicAll": {
+          "fitted": true,
+          "maxOnConic": 7,
+          "parabola": false
+        }
+      },
+      "optima": {
+        "count": 96,
+        "capped": false,
+        "pivotMultDistribution": "4:96",
+        "chosenOnConicDistribution": "4/4:96"
+      }
+    },
+    {
+      "q": 7,
+      "orbit": "equianharmonic",
+      "quad": "0 1 2 4",
+      "completion": 34,
+      "ex": 3,
+      "level": "HIGH",
+      "consistent": true,
+      "witness": {
+        "size": 34,
+        "sacrifice": 6,
+        "exFromIdentity": 3,
+        "multiplicityProfile": "1:17 2:13 3:3 4:1",
+        "pivotMult": 4,
+        "chosenThroughPivot": 0,
+        "heavyPoints": [
+          {
+            "point": "(0,0)",
+            "mult": 4,
+            "lines": [
+              "0:0*",
+              "1:0*",
+              "2:0*",
+              "4:0*"
+            ]
+          },
+          {
+            "point": "(1,0)",
+            "mult": 3,
+            "lines": [
+              "0:0*",
+              "6:1",
+              "inf:1"
+            ]
+          },
+          {
+            "point": "(1,4)",
+            "mult": 3,
+            "lines": [
+              "4:0*",
+              "3:1",
+              "inf:1"
+            ]
+          },
+          {
+            "point": "(0,1)",
+            "mult": 3,
+            "lines": [
+              "3:1",
+              "5:1",
+              "6:1"
+            ]
+          }
+        ],
+        "chosenIntercepts": [
+          "3:1",
+          "5:1",
+          "6:1",
+          "inf:1"
+        ],
+        "conicChosen": {
+          "fitted": false,
+          "maxOnConic": 4,
+          "parabola": null
+        },
+        "conicAll": {
+          "fitted": true,
+          "maxOnConic": 7,
+          "parabola": false
+        }
+      },
+      "optima": {
+        "count": 480,
+        "capped": false,
+        "pivotMultDistribution": "4:480",
+        "chosenOnConicDistribution": "4/4:480"
+      }
+    },
+    {
+      "q": 11,
+      "orbit": "harmonic",
+      "quad": "0 1 2 5",
+      "completion": 75,
+      "ex": 4,
+      "level": "LOW",
+      "consistent": true,
+      "witness": {
+        "size": 75,
+        "sacrifice": 9,
+        "exFromIdentity": 4,
+        "multiplicityProfile": "1:26 2:42 3:6 4:1",
+        "pivotMult": 4,
+        "chosenThroughPivot": 0,
+        "heavyPoints": [
+          {
+            "point": "(0,0)",
+            "mult": 4,
+            "lines": [
+              "0:0*",
+              "1:0*",
+              "2:0*",
+              "5:0*"
+            ]
+          },
+          {
+            "point": "(9,0)",
+            "mult": 3,
+            "lines": [
+              "0:0*",
+              "8:5",
+              "inf:9"
+            ]
+          },
+          {
+            "point": "(1,1)",
+            "mult": 3,
+            "lines": [
+              "1:0*",
+              "6:6",
+              "7:5"
+            ]
+          },
+          {
+            "point": "(10,9)",
+            "mult": 3,
+            "lines": [
+              "2:0*",
+              "3:1",
+              "7:5"
+            ]
+          },
+          {
+            "point": "(1,5)",
+            "mult": 3,
+            "lines": [
+              "5:0*",
+              "4:1",
+              "10:6"
+            ]
+          },
+          {
+            "point": "(10,8)",
+            "mult": 3,
+            "lines": [
+              "4:1",
+              "8:5",
+              "9:6"
+            ]
+          },
+          {
+            "point": "(0,6)",
+            "mult": 3,
+            "lines": [
+              "6:6",
+              "9:6",
+              "10:6"
+            ]
+          }
+        ],
+        "chosenIntercepts": [
+          "3:1",
+          "4:1",
+          "6:6",
+          "7:5",
+          "8:5",
+          "9:6",
+          "10:6",
+          "inf:9"
+        ],
+        "conicChosen": {
+          "fitted": true,
+          "maxOnConic": 6,
+          "parabola": false
+        },
+        "conicAll": {
+          "fitted": true,
+          "maxOnConic": 7,
+          "parabola": false
+        }
+      },
+      "optima": null
+    },
+    {
+      "q": 11,
+      "orbit": "generic",
+      "quad": "0 1 2 3",
+      "completion": 75,
+      "ex": 4,
+      "level": "LOW",
+      "consistent": true,
+      "witness": {
+        "size": 75,
+        "sacrifice": 9,
+        "exFromIdentity": 4,
+        "multiplicityProfile": "1:26 2:42 3:6 4:1",
+        "pivotMult": 4,
+        "chosenThroughPivot": 0,
+        "heavyPoints": [
+          {
+            "point": "(0,0)",
+            "mult": 4,
+            "lines": [
+              "0:0*",
+              "1:0*",
+              "2:0*",
+              "3:0*"
+            ]
+          },
+          {
+            "point": "(8,0)",
+            "mult": 3,
+            "lines": [
+              "0:0*",
+              "4:1",
+              "10:8"
+            ]
+          },
+          {
+            "point": "(8,5)",
+            "mult": 3,
+            "lines": [
+              "2:0*",
+              "6:1",
+              "7:4"
+            ]
+          },
+          {
+            "point": "(6,7)",
+            "mult": 3,
+            "lines": [
+              "3:0*",
+              "9:8",
+              "inf:6"
+            ]
+          },
+          {
+            "point": "(10,8)",
+            "mult": 3,
+            "lines": [
+              "3:0*",
+              "4:1",
+              "7:4"
+            ]
+          },
+          {
+            "point": "(0,1)",
+            "mult": 3,
+            "lines": [
+              "4:1",
+              "5:1",
+              "6:1"
+            ]
+          },
+          {
+            "point": "(6,2)",
+            "mult": 3,
+            "lines": [
+              "7:4",
+              "10:8",
+              "inf:6"
+            ]
+          }
+        ],
+        "chosenIntercepts": [
+          "4:1",
+          "5:1",
+          "6:1",
+          "7:4",
+          "8:4",
+          "9:8",
+          "10:8",
+          "inf:6"
+        ],
+        "conicChosen": {
+          "fitted": true,
+          "maxOnConic": 6,
+          "parabola": false
+        },
+        "conicAll": {
+          "fitted": true,
+          "maxOnConic": 7,
+          "parabola": false
+        }
+      },
+      "optima": null
+    },
+    {
+      "q": 13,
+      "orbit": "harmonic",
+      "quad": "0 1 2 5",
+      "completion": 103,
+      "ex": 6,
+      "level": "HIGH",
+      "consistent": true,
+      "witness": {
+        "size": 103,
+        "sacrifice": 12,
+        "exFromIdentity": 6,
+        "multiplicityProfile": "1:35 2:58 3:9 4:1",
+        "pivotMult": 4,
+        "chosenThroughPivot": 0,
+        "heavyPoints": [
+          {
+            "point": "(0,0)",
+            "mult": 4,
+            "lines": [
+              "0:0*",
+              "1:0*",
+              "2:0*",
+              "5:0*"
+            ]
+          },
+          {
+            "point": "(4,4)",
+            "mult": 3,
+            "lines": [
+              "1:0*",
+              "4:1",
+              "8:11"
+            ]
+          },
+          {
+            "point": "(5,5)",
+            "mult": 3,
+            "lines": [
+              "1:0*",
+              "11:2",
+              "inf:5"
+            ]
+          },
+          {
+            "point": "(6,6)",
+            "mult": 3,
+            "lines": [
+              "1:0*",
+              "3:1",
+              "10:11"
+            ]
+          },
+          {
+            "point": "(7,7)",
+            "mult": 3,
+            "lines": [
+              "1:0*",
+              "7:10",
+              "9:9"
+            ]
+          },
+          {
+            "point": "(11,11)",
+            "mult": 3,
+            "lines": [
+              "1:0*",
+              "6:10",
+              "12:9"
+            ]
+          },
+          {
+            "point": "(1,5)",
+            "mult": 3,
+            "lines": [
+              "5:0*",
+              "4:1",
+              "9:9"
+            ]
+          },
+          {
+            "point": "(3,2)",
+            "mult": 3,
+            "lines": [
+              "5:0*",
+              "6:10",
+              "10:11"
+            ]
+          },
+          {
+            "point": "(5,12)",
+            "mult": 3,
+            "lines": [
+              "5:0*",
+              "8:11",
+              "inf:5"
+            ]
+          },
+          {
+            "point": "(8,1)",
+            "mult": 3,
+            "lines": [
+              "5:0*",
+              "7:10",
+              "12:9"
+            ]
+          }
+        ],
+        "chosenIntercepts": [
+          "3:1",
+          "4:1",
+          "6:10",
+          "7:10",
+          "8:11",
+          "9:9",
+          "10:11",
+          "11:2",
+          "12:9",
+          "inf:5"
+        ],
+        "conicChosen": {
+          "fitted": true,
+          "maxOnConic": 10,
+          "parabola": true
+        },
+        "conicAll": {
+          "fitted": true,
+          "maxOnConic": 12,
+          "parabola": true
+        }
+      },
+      "optima": null
+    },
+    {
+      "q": 13,
+      "orbit": "generic",
+      "quad": "0 1 2 4",
+      "completion": 102,
+      "ex": 5,
+      "level": "LOW",
+      "consistent": true,
+      "witness": {
+        "size": 102,
+        "sacrifice": 11,
+        "exFromIdentity": 5,
+        "multiplicityProfile": "1:32 2:61 3:8 4:1",
+        "pivotMult": 4,
+        "chosenThroughPivot": 0,
+        "heavyPoints": [
+          {
+            "point": "(0,0)",
+            "mult": 4,
+            "lines": [
+              "0:0*",
+              "1:0*",
+              "2:0*",
+              "4:0*"
+            ]
+          },
+          {
+            "point": "(2,0)",
+            "mult": 3,
+            "lines": [
+              "0:0*",
+              "7:12",
+              "11:4"
+            ]
+          },
+          {
+            "point": "(4,0)",
+            "mult": 3,
+            "lines": [
+              "0:0*",
+              "3:1",
+              "12:4"
+            ]
+          },
+          {
+            "point": "(5,0)",
+            "mult": 3,
+            "lines": [
+              "0:0*",
+              "5:1",
+              "inf:5"
+            ]
+          },
+          {
+            "point": "(11,0)",
+            "mult": 3,
+            "lines": [
+              "0:0*",
+              "8:3",
+              "9:5"
+            ]
+          },
+          {
+            "point": "(5,7)",
+            "mult": 3,
+            "lines": [
+              "4:0*",
+              "11:4",
+              "inf:5"
+            ]
+          },
+          {
+            "point": "(6,11)",
+            "mult": 3,
+            "lines": [
+              "4:0*",
+              "10:3",
+              "12:4"
+            ]
+          },
+          {
+            "point": "(9,10)",
+            "mult": 3,
+            "lines": [
+              "4:0*",
+              "7:12",
+              "8:3"
+            ]
+          },
+          {
+            "point": "(12,9)",
+            "mult": 3,
+            "lines": [
+              "4:0*",
+              "5:1",
+              "9:5"
+            ]
+          }
+        ],
+        "chosenIntercepts": [
+          "3:1",
+          "5:1",
+          "6:5",
+          "7:12",
+          "8:3",
+          "9:5",
+          "10:3",
+          "11:4",
+          "12:4",
+          "inf:5"
+        ],
+        "conicChosen": {
+          "fitted": true,
+          "maxOnConic": 10,
+          "parabola": true
+        },
+        "conicAll": {
+          "fitted": true,
+          "maxOnConic": 12,
+          "parabola": true
+        }
+      },
+      "optima": null
+    },
+    {
+      "q": 13,
+      "orbit": "equianharmonic",
+      "quad": "0 1 2 3",
+      "completion": 102,
+      "ex": 5,
+      "level": "LOW",
+      "consistent": true,
+      "witness": {
+        "size": 102,
+        "sacrifice": 11,
+        "exFromIdentity": 5,
+        "multiplicityProfile": "1:32 2:61 3:8 4:1",
+        "pivotMult": 4,
+        "chosenThroughPivot": 0,
+        "heavyPoints": [
+          {
+            "point": "(0,0)",
+            "mult": 4,
+            "lines": [
+              "0:0*",
+              "1:0*",
+              "2:0*",
+              "3:0*"
+            ]
+          },
+          {
+            "point": "(2,0)",
+            "mult": 3,
+            "lines": [
+              "0:0*",
+              "6:1",
+              "inf:2"
+            ]
+          },
+          {
+            "point": "(5,0)",
+            "mult": 3,
+            "lines": [
+              "0:0*",
+              "5:1",
+              "12:5"
+            ]
+          },
+          {
+            "point": "(12,0)",
+            "mult": 3,
+            "lines": [
+              "0:0*",
+              "7:7",
+              "9:9"
+            ]
+          },
+          {
+            "point": "(3,3)",
+            "mult": 3,
+            "lines": [
+              "1:0*",
+              "5:1",
+              "11:9"
+            ]
+          },
+          {
+            "point": "(1,2)",
+            "mult": 3,
+            "lines": [
+              "2:0*",
+              "8:7",
+              "10:5"
+            ]
+          },
+          {
+            "point": "(6,12)",
+            "mult": 3,
+            "lines": [
+              "2:0*",
+              "4:1",
+              "12:5"
+            ]
+          },
+          {
+            "point": "(0,1)",
+            "mult": 3,
+            "lines": [
+              "4:1",
+              "5:1",
+              "6:1"
+            ]
+          },
+          {
+            "point": "(11,4)",
+            "mult": 3,
+            "lines": [
+              "5:1",
+              "8:7",
+              "9:9"
+            ]
+          }
+        ],
+        "chosenIntercepts": [
+          "4:1",
+          "5:1",
+          "6:1",
+          "7:7",
+          "8:7",
+          "9:9",
+          "10:5",
+          "11:9",
+          "12:5",
+          "inf:2"
+        ],
+        "conicChosen": {
+          "fitted": true,
+          "maxOnConic": 8,
+          "parabola": false
+        },
+        "conicAll": {
+          "fitted": true,
+          "maxOnConic": 8,
+          "parabola": false
+        }
+      },
+      "optima": null
+    }
+  ]
+}

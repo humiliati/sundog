@@ -1,0 +1,7 @@
+q,quadruple,orbit,six_set,completion,ex,nodes,status
+17,0 1 2 7,harmonic,"2,9,16",168,7,500000005,budget
+17,14 15 16 inf,harmonic,"2,9,16",168,7,500000005,budget
+17,0 1 2 4,generic-a,"3,6,8,10,12,15",168,7,500000005,budget
+17,13 15 16 inf,generic-a,"3,6,8,10,12,15",168,7,500000005,budget
+17,0 1 2 3,generic-b,"4,5,7,11,13,14",168,7,500000005,budget
+17,13 14 15 16,generic-b,"4,5,7,11,13,14",168,7,500000005,budget

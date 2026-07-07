@@ -109,6 +109,27 @@ all 8 measured orbit-field pairs have `ex in {(q-3)/2, (q-1)/2}` (never above
 the concurrency budget, never more than one below), with the harmonic orbit
 at full budget exactly when `q = 1 (mod 4)`; discriminating fields `q=17`/
 `q=19` banked as new pre-registrations (`npm run kakeya:equianharmonic`).
+Phase 3K runs the `q=17` sidecar:
+[`kakeya/PHASE3K_TWOLEVEL_PROBE.md`](kakeya/PHASE3K_TWOLEVEL_PROBE.md)
+certifies all three `q=17` orbits exactly at the LOW level (`7/7/7`) - the
+**two-level law strengthens to 11/11** and generic orbits are uniform, but
+the **harmonic mod-4 rule is falsified** (second consecutive first-test
+pattern death); instrument amendments documented (star-pivot scaling
+symmetry ~8x, controls revalidated); surviving mod-8 observation flagged as
+third-iteration forking-paths suspect; `q=19` staged as an owner-fired run
+with pre-registrations (`npm run kakeya:twolevel`).
+Phase 3L takes the construction route (Track 1):
+[`kakeya/PHASE3L_STAR_PARABOLA_CONSTRUCTION.md`](kakeya/PHASE3L_STAR_PARABOLA_CONSTRUCTION.md)
+anatomizes the optimal completions (pivot always exactly mult-4, everything
+else triples; parabola-tangent signature at `q=13`), extracts a parabola
+family (axis in star directions + tangents in the non-star directions) that
+matches the solver-certified optimum at 10/11 known field-orbits (gap:
+`q=11` harmonic), and maps the excess to `q = 37` in seconds: two-level law
+extends 37/37 in upper-bound form, mod-8 harmonic rule survives everywhere
+decidable, chi-equianharmonic gets a definitive low at `q=37`, generic
+uniformity breaks at `q in {23, 31}` (upper bounds), and the staged `q=19`
+B&B shrinks to two load-bearing solves (`npm run kakeya:star-anatomy`,
+`npm run kakeya:star-construction`).
 This file is a target-selection and claim-boundary scaffold opened from
 [`SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md`](SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md).
 
@@ -553,6 +574,18 @@ Forbidden:
   (harmonic is the `q=13` deviator, 6 vs 5); banked two-level law
   `ex in {budget-1, budget}` (8/8) with harmonic at full budget iff
   `q = 1 (mod 4)` (4/4); register untouched, no new pins.
+- [`kakeya/PHASE3K_TWOLEVEL_PROBE.md`](kakeya/PHASE3K_TWOLEVEL_PROBE.md)
+  - `q=17` sidecar, certified exact: all orbits low (`7/7/7`), two-level law
+  11/11, generic uniformity confirmed, harmonic mod-4 rule FALSIFIED;
+  star-pivot symmetry solver amendment; `q=19` staged owner-fired with
+  pre-registrations; mod-8 observation banked as explicitly suspect.
+- [`kakeya/PHASE3L_STAR_PARABOLA_CONSTRUCTION.md`](kakeya/PHASE3L_STAR_PARABOLA_CONSTRUCTION.md)
+  - Track-1 construction rung: optimal-completion anatomy (pivot exactly
+  mult-4 + all-triples; parabola signature), parabola-tangent family matching
+  10/11 solver exacts (gap `q=11` harmonic), excess map extended to `q=37` as
+  verified upper bounds; two-level 37/37; low-side pattern confirmations
+  definitive at 23/31/37; generic split observed; q=19 B&B reduced to two
+  solves.
 - [`kakeya/EXTERNAL_REVIEW_PACKET.md`](kakeya/EXTERNAL_REVIEW_PACKET.md) -
   owner-pending external-review ask; frames Kakeya as a boundary/pedagogy review,
   not a result-review packet.
