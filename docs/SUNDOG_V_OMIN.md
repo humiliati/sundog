@@ -150,7 +150,7 @@ Already banked in-lane: `polyDef_tame` (R1: QF dim-1 tameness), the whole abstra
       enumeration).
     - **TS-2d-2 — the reconstruction step** [in progress; the wall watches here].
       Pitches: 2a padding removal ✅ / 2b P-column augmentation ◐ (foothold landed) /
-      2c root-insertion splice ✅ (toolkit landed).
+      2c root-insertion splice ✅ (toolkit landed) / 2d-3 walk ✅ (see below).
       - **2d-2a ✅ LANDED 2026-07-06**: `DiagramNormalize.lean` (67th module), axiom-clean,
         3 gate entries (`dropPadding_paddingFree`, `realizes_dropPadding`,
         `realizes_samples_root`), green round 4. `dropPadding` merges away point-columns
@@ -199,11 +199,28 @@ Already banked in-lane: `polyDef_tame` (R1: QF dim-1 tameness), the whole abstra
         (`spec_eq_zero_of_gap_roots` + `eq_C_of_derivative_eq_zero`). Because `P'` is a
         base member, at most one `P`-root per gap/ray — the kit covers every case the
         walk meets.
-    - **TS-2d-3 — the descent**: the whole-diagram walk assembling 2b's sample signs +
-      2c's graft kit into `Realizes g (P :: F) D̂` with `D̂` a function of (diagram,
-      branch data); then the Dershowitz–Manna induction wrapping 2d-2, degree
-      bookkeeping through `resolve`-branches; `diagramPartition` for every family;
-      `elim_signVector` unconditionally.
+    - **TS-2d-3 — the walk + the descent** [walk ✅]:
+      - **THE WALK ✅ LANDED 2026-07-06**: `DiagramWalk.lean` (70th module), axiom-clean,
+        3 gate entries (`colsFrom_pairwise`, `graftWalk_colsFrom`, `realizes_graftWalk`),
+        **GREEN ON THE FIRST BUILD** (~300 lines, the arc's hardest single construction).
+        `GapPlan` (`flow s` / `graft s₁ s₂`) + per-sample sign list = the annotation as
+        DIAGRAM-LEVEL DATA; `graftWalk sP plans D` = the `P :: F` diagram as a **pure
+        list function** of the annotation and the old columns — the branch-uniformity
+        payload: branch-constant inputs give ONE branch-wide output diagram, and only
+        the validity contract (`GraftData`, `ColsFrom`-shaped Option-barrier recursion)
+        mentions the point `g`. The walk theorem produces `ξ'` (old samples + grafted
+        roots) with `ColsFrom g (P::F) lo ξ' (graftWalk sP plans D)`, keeps old samples,
+        and catches EVERY root of a nonzero `spec g P`: a root inside any flow/zone
+        forces that zone's sign to 0, so P vanishes on an interval and dies by 2d-2b's
+        degeneracy lemma — no strictness side conditions needed. `P = 0` needs no
+        special case (all-zero annotation is valid; coverage is `≠ 0`-guarded; Realizes
+        exempts zero members). Capstone `realizes_graftWalk`; sortedness recovered by
+        the new utility `colsFrom_pairwise` (samples clear the barrier + strictly
+        increasing, by barrier-chaining induction).
+      - **The descent [next]**: compute `(sP, plans)` from the 2d-2b transfer data +
+        2c's keyed zone lemmas + branch end-sign conditions; the Dershowitz–Manna
+        induction wrapping 2d-2; degree bookkeeping through `resolve`-branches;
+        `DiagramPartition` for every family; `elim_signVector` unconditionally.
   *Falsifier* (`QE_COMBINATORICS_WALL`, carried over): the sign-matrix bookkeeping fails to
   stay tractable at single-owner scale — fallback = TS-1 + TS-2b/2c as independently valuable
   univariate machinery, wall published with location.
