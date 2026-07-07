@@ -169,6 +169,77 @@ for (const q of Qs) {
   }
   check(`q=${q} T8f line-plus-q-minus-1-break`, firstBreak);
 
+  // 8g. Activation floor: for a bare line, every other direction is exactly
+  //     q - 1 added points away (min over its q intercept lines).
+  const activationCost = (dir, body) => {
+    let best = Infinity;
+    for (let b = 0; b < q; b++) {
+      let missing = 0;
+      for (const p of K.lineMask(dir, b, q)) if (!body.has(p)) missing++;
+      best = Math.min(best, missing);
+    }
+    return best;
+  };
+  const bareLine = K.lineMask(dirs[0], 0, q);
+  let activationFloor = true;
+  for (let dirIndex = 1; dirIndex < dirs.length; dirIndex++) {
+    activationFloor = activationFloor && activationCost(dirs[dirIndex], bareLine) === q - 1;
+  }
+  check(`q=${q} T8g bare-line-activation-q-minus-1`, activationFloor);
+
+  // 8h. Star ladder: k concurrent lines (k <= q - 1) put every missing
+  //     direction exactly q - k points away; the k = q star (pencil minus one
+  //     direction) already covers all q + 1 directions.
+  let starLadder = true;
+  for (const k of [2, q - 1]) {
+    const star = new Set();
+    for (let i = 0; i < k; i++) for (const p of K.lineMask(dirs[i], 0, q)) star.add(p);
+    for (let dirIndex = k; dirIndex < dirs.length; dirIndex++) {
+      starLadder = starLadder && activationCost(dirs[dirIndex], star) === q - k;
+    }
+  }
+  const pencilMinusOne = new Set();
+  for (let m = 0; m < q; m++) for (const p of K.lineMask(dirs[m], 0, q)) pencilMinusOne.add(p);
+  starLadder =
+    starLadder && K.shadowSummary(q, pencilMinusOne).directionsCovered === q + 1;
+  check(`q=${q} T8h star-ladder-activation`, starLadder);
+
+  // 8i. Joint-vs-marginal pair law: from empty, lighting any two directions
+  //     jointly costs exactly 2q - 1 (one shared point), gap = 1.
+  const jointPair = (dirA, dirB) => {
+    let best = Infinity;
+    for (let b1 = 0; b1 < q; b1++) {
+      const L1 = K.lineMask(dirA, b1, q);
+      for (let b2 = 0; b2 < q; b2++) {
+        const union = new Set(L1);
+        for (const p of K.lineMask(dirB, b2, q)) union.add(p);
+        best = Math.min(best, union.size);
+      }
+    }
+    return best;
+  };
+  check(
+    `q=${q} T8i joint-pair-2q-minus-1`,
+    jointPair(dirs[0], dirs[1]) === 2 * q - 1 &&
+      jointPair(dirs[0], dirs[q]) === 2 * q - 1,
+  );
+
+  // 8j. Parabola witness: the q tangents of y = x^2 (slope 2t, intercept -t^2)
+  //     plus one vertical form a complete Kakeya set of size
+  //     q(q+1)/2 + (q-1)/2 (the odd-q planar minimum, imported anchor).
+  const parabola = new Set();
+  for (let t = 0; t < q; t++) {
+    const slope = (2 * t) % q;
+    const intercept = ((-(t * t)) % q + q) % q;
+    for (const p of K.lineMask(dirs[slope], intercept, q)) parabola.add(p);
+  }
+  for (const p of K.lineMask(dirs[q], 0, q)) parabola.add(p);
+  check(
+    `q=${q} T8j parabola-minimal-kakeya`,
+    parabola.size === (q * (q + 1)) / 2 + (q - 1) / 2 &&
+      K.shadowSummary(q, parabola).directionsCovered === q + 1,
+  );
+
   // 9. Greedy line-cover construction covers all directions.
   check(
     `q=${q} T9 greedy-complete`,

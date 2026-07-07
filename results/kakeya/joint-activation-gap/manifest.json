@@ -1,0 +1,942 @@
+{
+  "artifactId": "KAK-PHASE3F-JOINT-ACTIVATION-GAP",
+  "generatedAt": "2026-07-07T01:13:39.780Z",
+  "status": "internal workbench diagnostic receipt",
+  "hook": "H-K3 joint-vs-marginal activation gap (interaction structure of shared added points)",
+  "command": "node scripts/kakeya-joint-activation-gap.mjs",
+  "statement": "For a set D of unlit directions of a body K, joint(D, K) = min over per-direction line choices of |union(M_d \\ K)| is the exact minimal number of added points lighting all of D. Gap = sum of marginals - joint satisfies 0 <= gap <= C(|D|, 2) for any body (pairwise inclusion-exclusion: distinct-direction lines share at most one point). Deficit = C(|D|,2) - gap is the forced concurrence tax.",
+  "provenAnchors": [
+    "sandwich: max marginal <= joint <= sum of marginals",
+    "gap bound: 0 <= gap <= C(k, 2) for any body and any D",
+    "finite-slope tightness from empty (odd q): parabola tangents (slope 2t, no three concurrent) achieve gap = C(k, 2) for every all-finite-slope D",
+    "parabola tangents + one vertical = complete Kakeya set of size q(q+1)/2 + (q-1)/2"
+  ],
+  "importedAnchor": "Blokhuis-Mazzocca: q(q+1)/2 + (q-1)/2 is the exact planar minimum for odd q. Machine-verified as exhaustive enumeration at q in {5, 7}; at q = 11 the workbench only witnesses the upper bound - equality is cited, not derived. Bibliographic pin owed to KAKEYA_LITPASS_MEMO.md.",
+  "subsetCaps": {
+    "5": 6,
+    "7": 8,
+    "11": 4
+  },
+  "falsifier": {
+    "name": "JOINT_GAP_MISMATCH",
+    "description": "Fires if the sandwich or gap bound fails on any enumerated row, a singleton disagrees with the PHASE3E marginal, a joint witness fails to light its direction set at the claimed cost, the finite-slope tightness or full-pencil/parabola anchors fail, or the q=5 exhaustive search finds a smaller joint addition.",
+    "status": "clear"
+  },
+  "perQ": [
+    {
+      "q": 5,
+      "subsetCap": 6,
+      "bodies": [
+        {
+          "id": "empty",
+          "bodySize": 0,
+          "missingCount": 6,
+          "activations": [
+            {
+              "direction": "0",
+              "cost": 5
+            },
+            {
+              "direction": "1",
+              "cost": 5
+            },
+            {
+              "direction": "2",
+              "cost": 5
+            },
+            {
+              "direction": "3",
+              "cost": 5
+            },
+            {
+              "direction": "4",
+              "cost": 5
+            },
+            {
+              "direction": "inf",
+              "cost": 5
+            }
+          ],
+          "rowCount": 63,
+          "maxGap": 13,
+          "maxDeficit": 2,
+          "tightRows": 56,
+          "multiRows": 57,
+          "nodesTotal": 35480,
+          "bruteSubsets": 0,
+          "checks": {
+            "pass": true,
+            "bruteForce": true
+          }
+        },
+        {
+          "id": "single-line",
+          "bodySize": 5,
+          "missingCount": 5,
+          "activations": [
+            {
+              "direction": "1",
+              "cost": 4
+            },
+            {
+              "direction": "2",
+              "cost": 4
+            },
+            {
+              "direction": "3",
+              "cost": 4
+            },
+            {
+              "direction": "4",
+              "cost": 4
+            },
+            {
+              "direction": "inf",
+              "cost": 4
+            }
+          ],
+          "rowCount": 31,
+          "maxGap": 8,
+          "maxDeficit": 2,
+          "tightRows": 25,
+          "multiRows": 26,
+          "nodesTotal": 5715,
+          "bruteSubsets": 0,
+          "checks": {
+            "pass": true,
+            "bruteForce": true
+          }
+        },
+        {
+          "id": "star-k2",
+          "bodySize": 9,
+          "missingCount": 4,
+          "activations": [
+            {
+              "direction": "2",
+              "cost": 3
+            },
+            {
+              "direction": "3",
+              "cost": 3
+            },
+            {
+              "direction": "4",
+              "cost": 3
+            },
+            {
+              "direction": "inf",
+              "cost": 3
+            }
+          ],
+          "rowCount": 15,
+          "maxGap": 4,
+          "maxDeficit": 2,
+          "tightRows": 10,
+          "multiRows": 11,
+          "nodesTotal": 1020,
+          "bruteSubsets": 0,
+          "checks": {
+            "pass": true,
+            "bruteForce": true
+          }
+        },
+        {
+          "id": "star-k4",
+          "bodySize": 17,
+          "missingCount": 2,
+          "activations": [
+            {
+              "direction": "4",
+              "cost": 1
+            },
+            {
+              "direction": "inf",
+              "cost": 1
+            }
+          ],
+          "rowCount": 3,
+          "maxGap": 0,
+          "maxDeficit": 1,
+          "tightRows": 0,
+          "multiRows": 1,
+          "nodesTotal": 40,
+          "bruteSubsets": 8,
+          "checks": {
+            "pass": true,
+            "bruteForce": true
+          }
+        },
+        {
+          "id": "random-third",
+          "bodySize": 8,
+          "missingCount": 6,
+          "activations": [
+            {
+              "direction": "0",
+              "cost": 3
+            },
+            {
+              "direction": "1",
+              "cost": 2
+            },
+            {
+              "direction": "2",
+              "cost": 2
+            },
+            {
+              "direction": "3",
+              "cost": 2
+            },
+            {
+              "direction": "4",
+              "cost": 2
+            },
+            {
+              "direction": "inf",
+              "cost": 2
+            }
+          ],
+          "rowCount": 63,
+          "maxGap": 4,
+          "maxDeficit": 11,
+          "tightRows": 6,
+          "multiRows": 57,
+          "nodesTotal": 7665,
+          "bruteSubsets": 272,
+          "checks": {
+            "pass": true,
+            "bruteForce": true
+          }
+        },
+        {
+          "id": "random-half",
+          "bodySize": 12,
+          "missingCount": 5,
+          "activations": [
+            {
+              "direction": "0",
+              "cost": 1
+            },
+            {
+              "direction": "1",
+              "cost": 2
+            },
+            {
+              "direction": "2",
+              "cost": 2
+            },
+            {
+              "direction": "3",
+              "cost": 2
+            },
+            {
+              "direction": "4",
+              "cost": 1
+            }
+          ],
+          "rowCount": 31,
+          "maxGap": 3,
+          "maxDeficit": 7,
+          "tightRows": 5,
+          "multiRows": 26,
+          "nodesTotal": 1585,
+          "bruteSubsets": 975,
+          "checks": {
+            "pass": true,
+            "bruteForce": true
+          }
+        }
+      ],
+      "anchors": {
+        "finiteSlopeTight": true,
+        "parabolaWitness": {
+          "size": 17,
+          "complete": true,
+          "pass": true
+        },
+        "fullPencil": {
+          "enumerated": true,
+          "joint": 17,
+          "bmMinimum": 17,
+          "witnessedUpperBound": 17,
+          "deficit": 2,
+          "expectedDeficit": 2
+        },
+        "fullPencilPass": true,
+        "greedy": {
+          "size": 17,
+          "bmMinimum": 17,
+          "beatsGreedy": false
+        },
+        "pass": true
+      },
+      "pass": true
+    },
+    {
+      "q": 7,
+      "subsetCap": 8,
+      "bodies": [
+        {
+          "id": "empty",
+          "bodySize": 0,
+          "missingCount": 8,
+          "activations": [
+            {
+              "direction": "0",
+              "cost": 7
+            },
+            {
+              "direction": "1",
+              "cost": 7
+            },
+            {
+              "direction": "2",
+              "cost": 7
+            },
+            {
+              "direction": "3",
+              "cost": 7
+            },
+            {
+              "direction": "4",
+              "cost": 7
+            },
+            {
+              "direction": "5",
+              "cost": 7
+            },
+            {
+              "direction": "6",
+              "cost": 7
+            },
+            {
+              "direction": "inf",
+              "cost": 7
+            }
+          ],
+          "rowCount": 255,
+          "maxGap": 25,
+          "maxDeficit": 3,
+          "tightRows": 246,
+          "multiRows": 247,
+          "nodesTotal": 6058108,
+          "bruteSubsets": 0,
+          "checks": {
+            "pass": true,
+            "bruteForce": null
+          }
+        },
+        {
+          "id": "single-line",
+          "bodySize": 7,
+          "missingCount": 7,
+          "activations": [
+            {
+              "direction": "1",
+              "cost": 6
+            },
+            {
+              "direction": "2",
+              "cost": 6
+            },
+            {
+              "direction": "3",
+              "cost": 6
+            },
+            {
+              "direction": "4",
+              "cost": 6
+            },
+            {
+              "direction": "5",
+              "cost": 6
+            },
+            {
+              "direction": "6",
+              "cost": 6
+            },
+            {
+              "direction": "inf",
+              "cost": 6
+            }
+          ],
+          "rowCount": 127,
+          "maxGap": 18,
+          "maxDeficit": 3,
+          "tightRows": 119,
+          "multiRows": 120,
+          "nodesTotal": 691131,
+          "bruteSubsets": 0,
+          "checks": {
+            "pass": true,
+            "bruteForce": null
+          }
+        },
+        {
+          "id": "star-k2",
+          "bodySize": 13,
+          "missingCount": 6,
+          "activations": [
+            {
+              "direction": "2",
+              "cost": 5
+            },
+            {
+              "direction": "3",
+              "cost": 5
+            },
+            {
+              "direction": "4",
+              "cost": 5
+            },
+            {
+              "direction": "5",
+              "cost": 5
+            },
+            {
+              "direction": "6",
+              "cost": 5
+            },
+            {
+              "direction": "inf",
+              "cost": 5
+            }
+          ],
+          "rowCount": 63,
+          "maxGap": 12,
+          "maxDeficit": 3,
+          "tightRows": 56,
+          "multiRows": 57,
+          "nodesTotal": 88914,
+          "bruteSubsets": 0,
+          "checks": {
+            "pass": true,
+            "bruteForce": null
+          }
+        },
+        {
+          "id": "star-k6",
+          "bodySize": 37,
+          "missingCount": 2,
+          "activations": [
+            {
+              "direction": "6",
+              "cost": 1
+            },
+            {
+              "direction": "inf",
+              "cost": 1
+            }
+          ],
+          "rowCount": 3,
+          "maxGap": 0,
+          "maxDeficit": 1,
+          "tightRows": 0,
+          "multiRows": 1,
+          "nodesTotal": 70,
+          "bruteSubsets": 0,
+          "checks": {
+            "pass": true,
+            "bruteForce": null
+          }
+        },
+        {
+          "id": "random-third",
+          "bodySize": 16,
+          "missingCount": 8,
+          "activations": [
+            {
+              "direction": "0",
+              "cost": 3
+            },
+            {
+              "direction": "1",
+              "cost": 4
+            },
+            {
+              "direction": "2",
+              "cost": 2
+            },
+            {
+              "direction": "3",
+              "cost": 2
+            },
+            {
+              "direction": "4",
+              "cost": 3
+            },
+            {
+              "direction": "5",
+              "cost": 3
+            },
+            {
+              "direction": "6",
+              "cost": 3
+            },
+            {
+              "direction": "inf",
+              "cost": 3
+            }
+          ],
+          "rowCount": 255,
+          "maxGap": 8,
+          "maxDeficit": 20,
+          "tightRows": 9,
+          "multiRows": 247,
+          "nodesTotal": 368669,
+          "bruteSubsets": 0,
+          "checks": {
+            "pass": true,
+            "bruteForce": null
+          }
+        },
+        {
+          "id": "random-half",
+          "bodySize": 24,
+          "missingCount": 7,
+          "activations": [
+            {
+              "direction": "1",
+              "cost": 2
+            },
+            {
+              "direction": "2",
+              "cost": 2
+            },
+            {
+              "direction": "3",
+              "cost": 2
+            },
+            {
+              "direction": "4",
+              "cost": 3
+            },
+            {
+              "direction": "5",
+              "cost": 2
+            },
+            {
+              "direction": "6",
+              "cost": 2
+            },
+            {
+              "direction": "inf",
+              "cost": 1
+            }
+          ],
+          "rowCount": 127,
+          "maxGap": 5,
+          "maxDeficit": 16,
+          "tightRows": 7,
+          "multiRows": 120,
+          "nodesTotal": 46025,
+          "bruteSubsets": 0,
+          "checks": {
+            "pass": true,
+            "bruteForce": null
+          }
+        }
+      ],
+      "anchors": {
+        "finiteSlopeTight": true,
+        "parabolaWitness": {
+          "size": 31,
+          "complete": true,
+          "pass": true
+        },
+        "fullPencil": {
+          "enumerated": true,
+          "joint": 31,
+          "bmMinimum": 31,
+          "witnessedUpperBound": 31,
+          "deficit": 3,
+          "expectedDeficit": 3
+        },
+        "fullPencilPass": true,
+        "greedy": {
+          "size": 31,
+          "bmMinimum": 31,
+          "beatsGreedy": false
+        },
+        "pass": true
+      },
+      "pass": true
+    },
+    {
+      "q": 11,
+      "subsetCap": 4,
+      "bodies": [
+        {
+          "id": "empty",
+          "bodySize": 0,
+          "missingCount": 12,
+          "activations": [
+            {
+              "direction": "0",
+              "cost": 11
+            },
+            {
+              "direction": "1",
+              "cost": 11
+            },
+            {
+              "direction": "2",
+              "cost": 11
+            },
+            {
+              "direction": "3",
+              "cost": 11
+            },
+            {
+              "direction": "4",
+              "cost": 11
+            },
+            {
+              "direction": "5",
+              "cost": 11
+            },
+            {
+              "direction": "6",
+              "cost": 11
+            },
+            {
+              "direction": "7",
+              "cost": 11
+            },
+            {
+              "direction": "8",
+              "cost": 11
+            },
+            {
+              "direction": "9",
+              "cost": 11
+            },
+            {
+              "direction": "10",
+              "cost": 11
+            },
+            {
+              "direction": "inf",
+              "cost": 11
+            }
+          ],
+          "rowCount": 793,
+          "maxGap": 6,
+          "maxDeficit": 0,
+          "tightRows": 781,
+          "multiRows": 781,
+          "nodesTotal": 8302184,
+          "bruteSubsets": 0,
+          "checks": {
+            "pass": true,
+            "bruteForce": null
+          }
+        },
+        {
+          "id": "single-line",
+          "bodySize": 11,
+          "missingCount": 11,
+          "activations": [
+            {
+              "direction": "1",
+              "cost": 10
+            },
+            {
+              "direction": "2",
+              "cost": 10
+            },
+            {
+              "direction": "3",
+              "cost": 10
+            },
+            {
+              "direction": "4",
+              "cost": 10
+            },
+            {
+              "direction": "5",
+              "cost": 10
+            },
+            {
+              "direction": "6",
+              "cost": 10
+            },
+            {
+              "direction": "7",
+              "cost": 10
+            },
+            {
+              "direction": "8",
+              "cost": 10
+            },
+            {
+              "direction": "9",
+              "cost": 10
+            },
+            {
+              "direction": "10",
+              "cost": 10
+            },
+            {
+              "direction": "inf",
+              "cost": 10
+            }
+          ],
+          "rowCount": 561,
+          "maxGap": 6,
+          "maxDeficit": 0,
+          "tightRows": 550,
+          "multiRows": 550,
+          "nodesTotal": 5563096,
+          "bruteSubsets": 0,
+          "checks": {
+            "pass": true,
+            "bruteForce": null
+          }
+        },
+        {
+          "id": "star-k2",
+          "bodySize": 21,
+          "missingCount": 10,
+          "activations": [
+            {
+              "direction": "2",
+              "cost": 9
+            },
+            {
+              "direction": "3",
+              "cost": 9
+            },
+            {
+              "direction": "4",
+              "cost": 9
+            },
+            {
+              "direction": "5",
+              "cost": 9
+            },
+            {
+              "direction": "6",
+              "cost": 9
+            },
+            {
+              "direction": "7",
+              "cost": 9
+            },
+            {
+              "direction": "8",
+              "cost": 9
+            },
+            {
+              "direction": "9",
+              "cost": 9
+            },
+            {
+              "direction": "10",
+              "cost": 9
+            },
+            {
+              "direction": "inf",
+              "cost": 9
+            }
+          ],
+          "rowCount": 385,
+          "maxGap": 6,
+          "maxDeficit": 0,
+          "tightRows": 375,
+          "multiRows": 375,
+          "nodesTotal": 3563450,
+          "bruteSubsets": 0,
+          "checks": {
+            "pass": true,
+            "bruteForce": null
+          }
+        },
+        {
+          "id": "star-k10",
+          "bodySize": 101,
+          "missingCount": 2,
+          "activations": [
+            {
+              "direction": "10",
+              "cost": 1
+            },
+            {
+              "direction": "inf",
+              "cost": 1
+            }
+          ],
+          "rowCount": 3,
+          "maxGap": 0,
+          "maxDeficit": 1,
+          "tightRows": 0,
+          "multiRows": 1,
+          "nodesTotal": 154,
+          "bruteSubsets": 0,
+          "checks": {
+            "pass": true,
+            "bruteForce": null
+          }
+        },
+        {
+          "id": "random-third",
+          "bodySize": 40,
+          "missingCount": 12,
+          "activations": [
+            {
+              "direction": "0",
+              "cost": 5
+            },
+            {
+              "direction": "1",
+              "cost": 6
+            },
+            {
+              "direction": "2",
+              "cost": 5
+            },
+            {
+              "direction": "3",
+              "cost": 5
+            },
+            {
+              "direction": "4",
+              "cost": 5
+            },
+            {
+              "direction": "5",
+              "cost": 5
+            },
+            {
+              "direction": "6",
+              "cost": 6
+            },
+            {
+              "direction": "7",
+              "cost": 6
+            },
+            {
+              "direction": "8",
+              "cost": 5
+            },
+            {
+              "direction": "9",
+              "cost": 5
+            },
+            {
+              "direction": "10",
+              "cost": 5
+            },
+            {
+              "direction": "inf",
+              "cost": 5
+            }
+          ],
+          "rowCount": 793,
+          "maxGap": 5,
+          "maxDeficit": 4,
+          "tightRows": 41,
+          "multiRows": 781,
+          "nodesTotal": 2266286,
+          "bruteSubsets": 0,
+          "checks": {
+            "pass": true,
+            "bruteForce": null
+          }
+        },
+        {
+          "id": "random-half",
+          "bodySize": 60,
+          "missingCount": 12,
+          "activations": [
+            {
+              "direction": "0",
+              "cost": 3
+            },
+            {
+              "direction": "1",
+              "cost": 3
+            },
+            {
+              "direction": "2",
+              "cost": 3
+            },
+            {
+              "direction": "3",
+              "cost": 3
+            },
+            {
+              "direction": "4",
+              "cost": 2
+            },
+            {
+              "direction": "5",
+              "cost": 3
+            },
+            {
+              "direction": "6",
+              "cost": 3
+            },
+            {
+              "direction": "7",
+              "cost": 4
+            },
+            {
+              "direction": "8",
+              "cost": 4
+            },
+            {
+              "direction": "9",
+              "cost": 2
+            },
+            {
+              "direction": "10",
+              "cost": 2
+            },
+            {
+              "direction": "inf",
+              "cost": 3
+            }
+          ],
+          "rowCount": 793,
+          "maxGap": 4,
+          "maxDeficit": 6,
+          "tightRows": 16,
+          "multiRows": 781,
+          "nodesTotal": 672936,
+          "bruteSubsets": 0,
+          "checks": {
+            "pass": true,
+            "bruteForce": null
+          }
+        }
+      ],
+      "anchors": {
+        "finiteSlopeTight": true,
+        "parabolaWitness": {
+          "size": 71,
+          "complete": true,
+          "pass": true
+        },
+        "fullPencil": {
+          "enumerated": false,
+          "joint": null,
+          "bmMinimum": 71,
+          "witnessedUpperBound": 71,
+          "deficit": null,
+          "expectedDeficit": 5
+        },
+        "fullPencilPass": true,
+        "greedy": {
+          "size": 77,
+          "bmMinimum": 71,
+          "beatsGreedy": true
+        },
+        "pass": true
+      },
+      "pass": true
+    }
+  ],
+  "pass": true
+}

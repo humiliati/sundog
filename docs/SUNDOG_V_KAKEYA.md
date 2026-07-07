@@ -57,6 +57,22 @@ proves the generalized safe range `line + <= q-2 outside points`, the sharp
 first break at `q-1`, and the per-direction count
 `q * sum_{i=0}^{q-2} C(q^2 - q, i)` (`npm run kakeya:shadow-lemma`; core tests
 `48/48`).
+Phase 3E generalizes the threshold into a per-direction metric:
+[`kakeya/PHASE3E_DIRECTION_ACTIVATION_SPECTRUM.md`](kakeya/PHASE3E_DIRECTION_ACTIVATION_SPECTRUM.md)
+computes, for any body, the exact witnessed minimal number of added points
+that lights each direction (`min` over that direction's intercept lines of
+the missing-point count), with closed-form spectra for lines, stars, and the
+pencil-minus-one closure (`npm run kakeya:activation-spectrum`; q=5 exhaustive
+minimality cross-check; core tests `54/54`).
+Phase 3F solves the joint problem:
+[`kakeya/PHASE3F_JOINT_ACTIVATION_GAP.md`](kakeya/PHASE3F_JOINT_ACTIVATION_GAP.md)
+computes the exact minimal addition lighting a *set* of directions, proves the
+gap sandwich `0 <= sum-of-marginals - joint <= C(k,2)`, and locates the tax:
+from structured bodies the deficit is zero for every proper direction subset
+and exactly `(q-1)/2` for the full pencil, whose joint cost is the minimal
+complete Kakeya set - exhaustively `17`/`31` at `q=5`/`7` (= the imported
+Blokhuis-Mazzocca minimum) and witnessed `<= 71 < 77 = greedy` at `q=11` via
+parabola tangents (`npm run kakeya:joint-gap`; core tests `60/60`).
 This file is a target-selection and claim-boundary scaffold opened from
 [`SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md`](SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md).
 
@@ -473,6 +489,15 @@ Forbidden:
 - [`kakeya/PHASE3D_SHADOW_COLLISION_LEMMA.md`](kakeya/PHASE3D_SHADOW_COLLISION_LEMMA.md)
   - finite-geometry lemma upgrading H-K3 from a measured one-point receipt to a
   closed-form one-direction collision family with sharp `q-1` break threshold.
+- [`kakeya/PHASE3E_DIRECTION_ACTIVATION_SPECTRUM.md`](kakeya/PHASE3E_DIRECTION_ACTIVATION_SPECTRUM.md)
+  - direction activation spectrum: exact witnessed minimal added-point cost per
+  unlit direction for any body, with closed-form line/star/pencil spectra and a
+  `q=5` exhaustive minimality cross-check.
+- [`kakeya/PHASE3F_JOINT_ACTIVATION_GAP.md`](kakeya/PHASE3F_JOINT_ACTIVATION_GAP.md)
+  - joint-vs-marginal activation gap: exact joint lighting cost for direction
+  sets, gap sandwich `[0, C(k,2)]`, full-pencil concurrence tax `(q-1)/2`, and
+  machine-verified Blokhuis-Mazzocca instances at `q in {5, 7}` (imported
+  anchor; litpass pin owed).
 - [`kakeya/EXTERNAL_REVIEW_PACKET.md`](kakeya/EXTERNAL_REVIEW_PACKET.md) -
   owner-pending external-review ask; frames Kakeya as a boundary/pedagogy review,
   not a result-review packet.
