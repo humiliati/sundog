@@ -232,11 +232,29 @@ Already banked in-lane: `polyDef_tame` (R1: QF dim-1 tameness), the whole abstra
         Capstone `exists_graftData`: derivative-roots-among-samples ⇒ a valid
         annotation exists (per-gap trichotomy via TS-1 `poly_sign_constant`), so
         `realizes_graftWalk` fires end-to-end.
-      - **The descent [next]**: make the annotation branch-CONSTANT (sample signs via
-        the 2d-2b transfer = remainder column entries; end signs via resolve-branch
-        lead-sign/parity conditions as `SADef` refinements); the Dershowitz–Manna
-        induction wrapping 2d-2; degree bookkeeping through `resolve`-branches;
-        `DiagramPartition` for every family; `elim_signVector` unconditionally.
+      - **THE DESCENT ENGINE ✅ LANDED 2026-07-06**: `DiagramDescent.lean` (72nd
+        module), axiom-clean, 4 gate entries (`column_reads_sample_sign`,
+        `readPlan_valid_gap`, `famDegrees_derived_lt`, `famDegrees_induction`), green
+        round 2 (only the `show`→`change` lint). Three layers:
+        **(A) the reading layer** — the annotation as functions of COLUMN ENTRIES:
+        `column_reads_sample_sign` is the TS-2b transfer made positional (a `zero` at
+        base-position `i` forces entry `base.length + i` to be P's sign at the sample
+        — same column ⇒ same value at every `g` in the branch: "`sP` is
+        branch-constant" in its exact formal content); `column_reads_gap_sign` (the
+        derivative's gap sign = entry 0). **(B) the plan reader** — `readPlan σ' sa sb`
+        (interior flanks = sample reads, end flanks = `BotSign`/`TopSign` tags from
+        resolved lead sign + degree parity) with four validity bridges through the
+        DiagramAnnotate lemmas; degenerate `σ' = 0` collapses to the constant case with
+        the end tag pinned by `botSign_const`/`topSign_const`. **(C) the measure** —
+        `famDegrees_derived_lt`: derivative + remainders strictly drop the
+        Dershowitz–Manna measure (one removal, all additions below it);
+        `famDegrees_induction`: the well-founded principle, via `InvImage.wf` over
+        mathlib's `wellFounded_isDershowitzMannaLT`.
+      - **The assembly [next, the arc's last wall]**: compose the reads over a concrete
+        branch diagram (walking the columns), refine branches by `truncChain` live-lead
+        + end-sign `SADef` conditions, the drop-a-member projection (P′ out of the
+        walked family), and the recursion: `DiagramPartition` for every family;
+        `elim_signVector` unconditionally.
   *Falsifier* (`QE_COMBINATORICS_WALL`, carried over): the sign-matrix bookkeeping fails to
   stay tractable at single-owner scale — fallback = TS-1 + TS-2b/2c as independently valuable
   univariate machinery, wall published with location.
