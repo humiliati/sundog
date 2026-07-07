@@ -283,11 +283,26 @@ Already banked in-lane: `polyDef_tame` (R1: QF dim-1 tameness), the whole abstra
         `graftWalk (readAnnot m εp εm D) (baseDrop m D)` — every ingredient a pure
         function of `(D, εm, εp)`: a branch-constant diagram + end tags give ONE
         branch-wide diagram. The C–H reconstruction step is now fully machine-checked.
-      - **The recursion [next]**: `SADef` branch conditions pinning `(εm, εp)` + live
-        leads (`truncChain` refinement), the drop-a-member projection (`Pd` out of
-        `P :: Pd :: bres`), and the DM recursion (`famDegrees_induction` +
-        `famDegrees_derived_lt`): `DiagramPartition` for every family;
-        `elim_signVector` unconditionally.
+      - **THE RECURSION, pitch 1 ✅ LANDED 2026-07-07**: `DiagramSelect.lean` (75th
+        module), axiom-clean, 3 gate entries (`realizes_selectFam`, `topSign_live`,
+        `botSign_live`), **GREEN ON THE FIRST BUILD**. Two of the recursion's three
+        remaining legs: **the selection transport** — `realizes_selectFam`: a realized
+        diagram restricts to ANY family whose members occur in the original, columns
+        re-read through first-occurrence `idxOf` indices (membership suffices;
+        duplicates carry equal entries) — ONE lemma subsuming the drop-a-member
+        projection AND the permutation back to the original `F` (via
+        `Q = P ∨ Q ∈ F.erase P`), killing the planned permutation machinery outright;
+        **the end-sign branches** — `topSign_live`/`botSign_live` pin `(εm, εp)` by
+        the sign of the evaluated leading coefficient (degree exactness on a live lead
+        via `resolve_eq_self_iff`); the pinning conditions are already `SADef` by the
+        2d-1 sign-condition algebra, so on a sign-refined branch the master's end tags
+        are constants.
+      - **The recursion, pitch 2 [next, the last leg]**: the vanishing-lead branch
+        layer (`truncChain` assignments: on each `SADef` cell "top coefficients
+        vanish, next is live", members behave as their truncations via
+        `resolve_spec`), then the DM assembly (`famDegrees_induction` +
+        `famDegrees_derived_lt` + max-degree pick): `DiagramPartition` for every
+        family; `elim_signVector` unconditionally.
   *Falsifier* (`QE_COMBINATORICS_WALL`, carried over): the sign-matrix bookkeeping fails to
   stay tractable at single-owner scale — fallback = TS-1 + TS-2b/2c as independently valuable
   univariate machinery, wall published with location.
