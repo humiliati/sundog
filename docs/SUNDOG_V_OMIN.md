@@ -297,12 +297,25 @@ Already banked in-lane: `polyDef_tame` (R1: QF dim-1 tameness), the whole abstra
         via `resolve_eq_self_iff`); the pinning conditions are already `SADef` by the
         2d-1 sign-condition algebra, so on a sign-refined branch the master's end tags
         are constants.
-      - **The recursion, pitch 2 [next, the last leg]**: the vanishing-lead branch
-        layer (`truncChain` assignments: on each `SADef` cell "top coefficients
-        vanish, next is live", members behave as their truncations via
-        `resolve_spec`), then the DM assembly (`famDegrees_induction` +
-        `famDegrees_derived_lt` + max-degree pick): `DiagramPartition` for every
-        family; `elim_signVector` unconditionally.
+      - **The recursion, pitch 2 ✅ LANDED 2026-07-07**: `DiagramBranches.lean` (76th
+        module), axiom-clean, 4 gate entries (`realizes_congr`, `realizes_zero_cons`,
+        `sadef_resolve_cell`, `exists_resolve_cell`), green round 2. The vanishing-lead
+        branch layer: `resolve g q` (TS-2a) already IS the pointwise truncation —
+        spec-preserving, zero-or-live, finitely many values — so the layer is:
+        **`sadef_resolve_fiber`** ({g | resolve g q = t} is `SADef`, by support
+        induction splitting on lead vanishing via `resolve_of_lead_vanish`/
+        `resolve_eq_self_iff`) and **`sadef_resolve_cell`** (a family cell = `Forall₂`
+        of fibers); **`resolve_cell_props`** (on a cell: spec-equal truncations, each
+        zero-or-live — the master's `hlive` contract); **`exists_resolve_cell`** (every
+        `g` lies in the cell of its own resolutions, inside the finite `truncChain`s);
+        plus the two transports: **`realizes_congr`** (spec-equal families share
+        diagrams — the truncated family's diagram IS the original's, on the cell) and
+        **`realizes_zero_cons`** (zero truncations rejoin as all-zero rows, positioned
+        by `realizes_selectFam`).
+      - **The recursion, pitch 3 [next, the assembly]**: max-degree pick + the
+        Dershowitz–Manna induction (`famDegrees_induction`, `famDegrees_derived_lt`)
+        composing `realizes_readAnnot` + the pitch-1/2 transports per cell:
+        `DiagramPartition` for every family; `elim_signVector` unconditionally.
   *Falsifier* (`QE_COMBINATORICS_WALL`, carried over): the sign-matrix bookkeeping fails to
   stay tractable at single-owner scale — fallback = TS-1 + TS-2b/2c as independently valuable
   univariate machinery, wall published with location.
