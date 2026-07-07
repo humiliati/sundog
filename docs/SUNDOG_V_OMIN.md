@@ -148,12 +148,24 @@ Already banked in-lane: `polyDef_tame` (R1: QF dim-1 tameness), the whole abstra
       `elim_of_diagramPartition` (the elimination is a filter-union corollary);
       `diagramPartition_of_constants` (the induction's base case via the `allSignVecs`
       enumeration).
-    - **TS-2d-2 — the reconstruction step** [next; the wall watches here]: from a
-      branch-wide diagram of `F' = {P'} ∪ (F \ {P}) ∪ {emod q P : q ∈ …}`, reconstruct a
-      branch-wide diagram of `F`: P's signs at F'-sample points via `sign_transfer`, P's
-      root insertion per gap via `deriv_free_sign_zones`, ends via
-      `eventually_sign_atTop/atBot` + branch data; the diagram surgery (column splicing)
-      is the honest hard part.
+    - **TS-2d-2 — the reconstruction step** [in progress; the wall watches here].
+      Pitches: 2a padding removal ✅ / 2b P-column augmentation / 2c root-insertion splice.
+      - **2d-2a ✅ LANDED 2026-07-06**: `DiagramNormalize.lean` (67th module), axiom-clean,
+        3 gate entries (`dropPadding_paddingFree`, `realizes_dropPadding`,
+        `realizes_samples_root`), green round 4. `dropPadding` merges away point-columns
+        with no zero entry — the diagram itself knows its padding, so the operation is
+        branch-uniform; realization is preserved (in the drop case NO member can be zero
+        at `g` — a zero member puts `zero` in every column — the dropped sample is a root
+        of nothing, and the flanking columns provably agree by `signVec_eq_of_gap` across
+        it); the output is padding-free, and in a padding-free realized diagram EVERY
+        sample is a root of some member — the TS-2b transfer reaches every sample.
+        Formalization lesson (banked): WF defs with LIST PATTERNS don't yield usable
+        unfold equations — use fuel-structured auxiliaries (structural recursion, clean
+        `simp` equations) + a fuel-irrelevance congruence + a thin wrapper with per-shape
+        rewrite lemmas.
+      - **2d-2b [next]**: augment every column of a padding-free F'-diagram with P's sign
+        (transfer at root-samples; gap columns from flanking data + monotonicity).
+      - **2d-2c**: the root-insertion splice per derivative-gap + ends.
     - **TS-2d-3 — the descent**: the Dershowitz–Manna induction wrapping 2d-2, degree
       bookkeeping through `resolve`-branches; `diagramPartition` for every family;
       `elim_signVector` unconditionally.
