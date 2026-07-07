@@ -217,8 +217,24 @@ Already banked in-lane: `polyDef_tame` (R1: QF dim-1 tameness), the whole abstra
         exempts zero members). Capstone `realizes_graftWalk`; sortedness recovered by
         the new utility `colsFrom_pairwise` (samples clear the barrier + strictly
         increasing, by barrier-chaining induction).
-      - **The descent [next]**: compute `(sP, plans)` from the 2d-2b transfer data +
-        2c's keyed zone lemmas + branch end-sign conditions; the Dershowitz–Manna
+      - **THE ANNOTATION ✅ LANDED 2026-07-06**: `DiagramAnnotate.lean` (71st module),
+        axiom-clean, 3 gate entries (`gapValid_incr`, `gapValid_left_incr`,
+        `exists_graftData`), **GREEN ON THE FIRST BUILD** (~470 lines of casework, zero
+        fix rounds). `(sP, plans)` computed from what the machinery provides:
+        `BotSign`/`TopSign` end-sign contracts (existence from leading-coefficient
+        trichotomy via TS-2c's `eventually_*`; the `zero` case = the zero polynomial,
+        dissolved against strict monotonicity wherever it conflicts); decision functions
+        `gapPlanMono`/`gapPlanAnti` (flank signs select flow-vs-graft); TEN validity
+        lemmas — bounded gap / left ray / terminal ray / whole line × incr/anti, plus
+        the constant-P pair — each discharged by exactly one 2d-2c keyed zone lemma
+        (the keyed design paid off: no disjunct refutation anywhere); sign-constancy
+        on root-free rays/line from the de-privatized `sign_eq_of_no_root_Icc`.
+        Capstone `exists_graftData`: derivative-roots-among-samples ⇒ a valid
+        annotation exists (per-gap trichotomy via TS-1 `poly_sign_constant`), so
+        `realizes_graftWalk` fires end-to-end.
+      - **The descent [next]**: make the annotation branch-CONSTANT (sample signs via
+        the 2d-2b transfer = remainder column entries; end signs via resolve-branch
+        lead-sign/parity conditions as `SADef` refinements); the Dershowitz–Manna
         induction wrapping 2d-2; degree bookkeeping through `resolve`-branches;
         `DiagramPartition` for every family; `elim_signVector` unconditionally.
   *Falsifier* (`QE_COMBINATORICS_WALL`, carried over): the sign-matrix bookkeeping fails to
