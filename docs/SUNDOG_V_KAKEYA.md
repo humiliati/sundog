@@ -73,6 +73,14 @@ and exactly `(q-1)/2` for the full pencil, whose joint cost is the minimal
 complete Kakeya set - exhaustively `17`/`31` at `q=5`/`7` (= the imported
 Blokhuis-Mazzocca minimum) and witnessed `<= 71 < 77 = greedy` at `q=11` via
 parabola tangents (`npm run kakeya:joint-gap`; core tests `60/60`).
+Phase 3G probes embeddability in minimal sets:
+[`kakeya/PHASE3G_EMBED_MINIMAL_PROBE.md`](kakeya/PHASE3G_EMBED_MINIMAL_PROBE.md)
+proves the concurrency-budget identity `ex = sacrifice - (q-1)/2` (a `k`-star
+embeds only if `(k-1)(k-2)/2 <= (q-1)/2`) and resolves the frontier at all
+three fields: 3-stars and below embed everywhere, 4-stars nowhere (budget
+necessary but not sufficient), with measured cross-ratio dependence
+(`ex = 2` vs `3` at `q=7`) and greedy's `q=11` excess `6` = its sacrifice
+overspend (`npm run kakeya:embed-probe`; core tests `66/66`).
 This file is a target-selection and claim-boundary scaffold opened from
 [`SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md`](SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md).
 
@@ -498,6 +506,11 @@ Forbidden:
   sets, gap sandwich `[0, C(k,2)]`, full-pencil concurrence tax `(q-1)/2`, and
   machine-verified Blokhuis-Mazzocca instances at `q in {5, 7}` (imported
   anchor; litpass pin owed).
+- [`kakeya/PHASE3G_EMBED_MINIMAL_PROBE.md`](kakeya/PHASE3G_EMBED_MINIMAL_PROBE.md)
+  - embeddability-in-minimal-sets probe: concurrency-budget identity
+  `ex = sacrifice - (q-1)/2`, star frontier (3-stars embed, 4-stars do not,
+  cross-ratio-dependent excess), affine certificates plus exact completion
+  solver, all bodies resolved at `q in {5, 7, 11}`.
 - [`kakeya/EXTERNAL_REVIEW_PACKET.md`](kakeya/EXTERNAL_REVIEW_PACKET.md) -
   owner-pending external-review ask; frames Kakeya as a boundary/pedagogy review,
   not a result-review packet.

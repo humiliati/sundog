@@ -243,6 +243,7 @@
     "kakeya:shadow-lemma": "node scripts/kakeya-shadow-lemma-check.mjs",
     "kakeya:activation-spectrum": "node scripts/kakeya-direction-activation-spectrum.mjs",
     "kakeya:joint-gap": "node scripts/kakeya-joint-activation-gap.mjs",
+    "kakeya:embed-probe": "node scripts/kakeya-embed-minimal-probe.mjs",
     "kakeya:adaptive-fibering": "node scripts/kakeya-adaptive-fibering-panel.mjs",
     "kakeya:sparse-excess": "node scripts/kakeya-sparse-excess-metric.mjs",
     "synthesis:collision-table": "node scripts/hodge-kakeya-collision-table.mjs",

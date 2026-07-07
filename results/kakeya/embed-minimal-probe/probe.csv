@@ -1,0 +1,40 @@
+q,body,body_size,missing,completion,ex,embeds,method,solver_status,nodes,sacrifice,multiplicity_profile,certifier_map
+5,line,5,5,17,0,true,parabola-affine-containment+solver-exact,exact,760,,,"M=[[0,1],[1,0]] v=(0,0)"
+5,line-plus-1,6,5,17,0,true,parabola-affine-containment+solver-exact,exact,530,,,"M=[[0,1],[1,0]] v=(0,0)"
+5,star-k2,9,4,17,0,true,parabola-affine-containment+solver-exact,exact,155,,,"M=[[0,1],[1,0]] v=(0,1)"
+5,star-k3,13,3,17,0,true,parabola-affine-containment+solver-exact,exact,30,,,"M=[[0,1],[1,3]] v=(0,1)"
+5,star-k4,17,2,19,2,false,arithmetic-exclusion+solver-exact,exact,10,,,
+5,star-k4-alt,17,2,19,2,false,arithmetic-exclusion+solver-exact,exact,10,,,
+5,star-k5,21,0,21,4,false,complete-arithmetic,,,6,1:15 2:5 5:1,
+5,tangent-triple,12,3,17,0,true,parabola-affine-containment+solver-exact,exact,35,,,"M=[[0,1],[1,3]] v=(0,3)"
+5,pencil-minus-one,21,0,21,4,false,complete-arithmetic,,,6,1:15 2:5 5:1,
+5,greedy-cover,17,0,17,0,true,complete-arithmetic,,,2,1:6 2:9 3:2,
+5,parabola-witness,17,0,17,0,true,complete-arithmetic,,,2,1:6 2:9 3:2,
+5,random-third,8,6,17,0,true,parabola-affine-containment+solver-exact,exact,360,,,"M=[[0,1],[1,0]] v=(4,3)"
+5,random-half,12,5,17,0,true,parabola-affine-containment+solver-exact,exact,60,,,"M=[[1,4],[0,2]] v=(0,4)"
+7,line,7,7,31,0,true,parabola-affine-containment+solver-exact,exact,17528,,,"M=[[0,1],[1,0]] v=(0,0)"
+7,line-plus-1,8,7,31,0,true,parabola-affine-containment+solver-exact,exact,15351,,,"M=[[0,1],[1,0]] v=(0,0)"
+7,star-k2,13,6,31,0,true,parabola-affine-containment+solver-exact,exact,2569,,,"M=[[0,1],[1,0]] v=(0,5)"
+7,star-k3,19,5,31,0,true,parabola-affine-containment+solver-exact,exact,595,,,"M=[[0,1],[1,1]] v=(0,6)"
+7,star-k4,25,4,33,2,false,solver-exact,exact,224,,,
+7,star-k4-alt,25,4,34,3,false,solver-exact,exact,364,,,
+7,star-k5,31,3,35,4,false,arithmetic-exclusion+solver-exact,exact,56,,,
+7,tangent-triple,18,5,31,0,true,parabola-affine-containment+solver-exact,exact,413,,,"M=[[0,1],[1,1]] v=(0,2)"
+7,pencil-minus-one,43,0,43,12,false,complete-arithmetic,,,15,1:35 2:7 7:1,
+7,greedy-cover,31,0,31,0,true,complete-arithmetic,,,3,1:9 2:19 3:3,
+7,parabola-witness,31,0,31,0,true,complete-arithmetic,,,3,1:9 2:19 3:3,
+7,random-third,16,8,31,0,true,parabola-affine-containment+solver-exact,exact,5824,,,"M=[[0,1],[6,4]] v=(3,0)"
+7,random-half,24,7,33,2,false,solver-exact,exact,784,,,
+11,line,11,11,71,0,true,parabola-affine-containment,,,,,"M=[[0,1],[1,0]] v=(0,0)"
+11,line-plus-1,12,11,71,0,true,parabola-affine-containment,,,,,"M=[[0,1],[1,0]] v=(0,0)"
+11,star-k2,21,10,71,0,true,parabola-affine-containment,,,,,"M=[[0,1],[1,0]] v=(0,8)"
+11,star-k3,31,9,71,0,true,parabola-affine-containment,,,,,"M=[[0,1],[1,2]] v=(0,6)"
+11,star-k4,41,8,75,4,false,solver-exact,exact,137995,,,
+11,star-k4-alt,41,8,75,4,false,solver-exact,exact,140371,,,
+11,star-k5,51,7,,,false,arithmetic-exclusion,,,,,
+11,tangent-triple,30,9,71,0,true,parabola-affine-containment,,,,,"M=[[0,1],[1,5]] v=(0,5)"
+11,pencil-minus-one,111,0,111,40,false,complete-arithmetic,,,45,1:99 2:11 11:1,
+11,greedy-cover,77,0,77,6,false,complete-arithmetic,,,11,1:32 2:36 3:8 4:1,
+11,parabola-witness,71,0,71,0,true,complete-arithmetic,,,5,1:15 2:51 3:5,
+11,random-third,40,12,77,6,false,solver-exact,exact,13222583,,,
+11,random-half,60,12,83,12,false,solver-exact,exact,747648,,,

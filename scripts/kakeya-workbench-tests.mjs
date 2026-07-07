@@ -240,6 +240,48 @@ for (const q of Qs) {
       K.shadowSummary(q, parabola).directionsCovered === q + 1,
   );
 
+  // 8k. Concurrency-budget identity: the parabola witness decomposes into
+  //     q + 1 canonical lines whose point multiplicities sacrifice exactly
+  //     (q-1)/2 pairwise savings - (q-1)/2 triple points, nothing heavier.
+  const decompose = (body) => {
+    const mult = new Map();
+    for (const d of dirs) {
+      const w = K.witnessLine(d, q, body);
+      if (!w) return null;
+      for (const p of w.points) mult.set(p, (mult.get(p) ?? 0) + 1);
+    }
+    let sacrifice = 0;
+    let maxMult = 0;
+    let triples = 0;
+    for (const m of mult.values()) {
+      sacrifice += ((m - 1) * (m - 2)) / 2;
+      if (m > maxMult) maxMult = m;
+      if (m === 3) triples++;
+    }
+    return { sacrifice, maxMult, triples, unionSize: mult.size };
+  };
+  const witnessProfile = decompose(parabola);
+  check(
+    `q=${q} T8k parabola-concurrency-budget`,
+    witnessProfile !== null &&
+      witnessProfile.unionSize === parabola.size &&
+      witnessProfile.sacrifice === (q - 1) / 2 &&
+      witnessProfile.maxMult === 3 &&
+      witnessProfile.triples === (q - 1) / 2,
+  );
+
+  // 8l. Budget corollary on the pencil-minus-one: a complete line-union's
+  //     excess over the minimum is its sacrifice minus the budget -
+  //     (q-1)(q-2)/2 - (q-1)/2 = the measured q^2 - q + 1 vs minimum gap.
+  const pencilProfile = decompose(pencilMinusOne);
+  check(
+    `q=${q} T8l pencil-budget-corollary`,
+    pencilProfile !== null &&
+      pencilProfile.unionSize === pencilMinusOne.size &&
+      pencilMinusOne.size - ((q * (q + 1)) / 2 + (q - 1) / 2) ===
+        pencilProfile.sacrifice - (q - 1) / 2,
+  );
+
   // 9. Greedy line-cover construction covers all directions.
   check(
     `q=${q} T9 greedy-complete`,
