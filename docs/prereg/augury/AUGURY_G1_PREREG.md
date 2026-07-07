@@ -378,3 +378,16 @@ npm run augury:g3:run        # = node scripts/augury-g3.mjs all --admitted
 
 Stages market → audit → nbm → score → adjudicate; emits `g3_result.json` with the §7
 verdict. Adjudication language after the run is restricted to §7 tokens + §9.
+
+### C.5 Audit-sampling clarification (2026-07-06, post first firing)
+
+The first firing of C.4 aborted correctly at the audit gate: the KMIA sample drew
+`KXHIGHMIA-24NOV05-B82.5`, whose event day (2024-11-05) has **no CLI row on IEM** — an
+isolated archive gap (KMIA coverage is 360–365 days/yr; exactly that one day missing in
+Nov 2024), not a semantics or station-match failure. Clarification (no §1–§7 change): the
+audit samples only from CLI-covered markets — a missing CLI day is a ground-truth
+**coverage gap**, unscoreable and already skipped by scoring, now counted and reported per
+city (`cli_gap_days`). Re-run: **all 7 cities 20/20**; gap days across the full universe =
+12 of 7,289 station-days (NYC 2, MIA 8, LAX 2, others 0; ≈0.16%). Updated runner sha256:
+`66a73aceed1fa46830d7bc98e440b4e177265bdd908a1265ba113427653d2fe3` (supersedes C.1's;
+wrapper unchanged). The C.4 command is unchanged and remains admitted.

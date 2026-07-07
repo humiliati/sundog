@@ -155,6 +155,10 @@ def stage_market() -> None:
 
 
 def stage_audit() -> None:
+    """Per-city settlement-SEMANTICS audit (§1). Samples only markets whose
+    event day has CLI ground truth: a missing CLI day is a coverage gap (the
+    day is unscoreable and skipped by stage_score), not a semantics failure —
+    it is counted and reported per city instead of consuming an audit draw."""
     receipts = {}
     ok_all = True
     for st in CITIES:
@@ -162,13 +166,19 @@ def stage_audit() -> None:
         y1 = dt.date.fromisoformat(C["primary_window_end"]).year
         cli = ap.cli_days(st, y0, y1)
         ms = station_markets(st)
+        covered = [m for m in ms
+                   if dt.date.fromisoformat(m["_event_date"]) in cli]
+        gap_days = sorted({m["_event_date"] for m in ms
+                           if dt.date.fromisoformat(m["_event_date"]) not in cli})
         rng = random.Random(AUDIT_SEED_CITY)
-        pick = rng.sample(ms, min(AUDIT_N_CITY, len(ms)))
+        pick = rng.sample(covered, min(AUDIT_N_CITY, len(covered)))
         rows = [ap._audit_one(m, cli) for m in pick]
         n_ok = sum(1 for r in rows if r.get("match"))
-        receipts[st] = {"n": len(rows), "matches": n_ok, "rows": rows}
+        receipts[st] = {"n": len(rows), "matches": n_ok,
+                        "cli_gap_days": len(gap_days),
+                        "cli_gap_sample": gap_days[:10], "rows": rows}
         ok_all = ok_all and n_ok == len(rows)
-        print(f"audit {st}: {n_ok}/{len(rows)}")
+        print(f"audit {st}: {n_ok}/{len(rows)} (CLI gap days: {len(gap_days)})")
     wjson(RESULTS / "city_settlement_audit.json", receipts)
     if not ok_all:
         sys.exit("CITY SETTLEMENT AUDIT FAILED — inspect city_settlement_audit.json; "
