@@ -76,3 +76,44 @@ Cross-refs: `NSE_H2_V7_N48_SCOPE.md` (design rationale),
 `NSE_POST_AT_HYPOTHESES_SLATE.md` §4, `PDE_C1_REGIME_GENERALITY_v1.md` (§3–§6
 inherited verbatim), `PDE_C1_ROBUSTNESS_WAVE.md` + `results/proof/c1-n48-twin/`,
 `NSE_H1_FIBER_RECEIPT.md`, `NSE_STATIONARITY_GATE_CHECKLIST.md`.
+
+---
+
+## 6. v1.2 Solver-Stability Amendment (commissioned 2026-07-06; frozen pre-run)
+
+> Owner green-lit `lock_v7_g300_n48_dt5` after the R3/R4 diagnostics failure and
+> the CFL probe (dt=0.01 non-finite at step 300; dt=0.005 stable through the full
+> 600k-step / 3,000-time-unit soak). **Frozen here before any dt5 number exists.**
+
+- **One physical change:** `dt 0.01 → 0.005` at the G=300/n48 cell only — a
+  CFL-consistent solver-stability accommodation (dt_crit scales with dx), not a
+  free dial. **Step-count constants rescale ×2 so every physical quantity is
+  held fixed:** burn-in 200k steps (1,000 tu), sample interval 100 steps
+  (0.5 tu), lookahead 1,000 steps (τ = 5.0 tu), calibration gap 10k steps
+  (50 tu). Sample counts (50k cal / 50k adj), objective, q, K, seed, and all
+  adjudicator constants unchanged. Total ≈ 10.21M steps ≈ 2–2.3 h per run.
+- **Gates:** §3 verbatim (diagnostics → portability → kNN → twin), targets and
+  criteria unchanged.
+- **Typed caveat (pre-registered):** a dt5 pass makes the two-regime claim
+  "N-refinement-stable with CFL-consistent dt at the refined grid"; a dt5
+  gates-2–4 failure is `NSE-H2-RES-SENSITIVE(g300)` with a dt-vs-grid
+  disambiguation NOT pre-committed (a G=200/n48/dt5 run would be a future
+  registration, not a rescue of this one).
+- **Pre-committed stop:** if dt5 also fails gate 1 (diagnostics),
+  `NSE-H2-NUMERIC-WALL(g300)` stands **final — no v1.3, no further dt moves.**
+- Commands (owner-run):
+  `python scripts/pde_c1_kolmogorov_cell.py --preset lock_v7_g300_n48_dt5 --adjudicator knn-sweep --out results/proof/c1-h2-g300-n48-dt5-knn-sweep`
+  then `--adjudicator twin-state --out results/proof/c1-h2-g300-n48-dt5-twin`.
+
+---
+
+> **Post-run status (2026-07-06): R1–R4 owner-run; receipt filed
+> (`NSE_H2_N48_RECEIPT.md`).** R1 `STRICTNESS_WITNESS_POSITIVE` + R2
+> `TWIN_STATE_CERTIFIED` at G=200/n48 with near-invariant comparability (E_max /
+> ε_K to 4–5 decimals, δ_H to 6, twin pairs within 0.7%, high-mode complement
+> 2.5×) ⇒ **`NSE-H2-V7-N48-STABLE` banked.** R3/R4 hit a solver blow-up
+> (overflow → NaN in the early transient; no verdict field produced) ⇒
+> **`NSE-H2-NUMERIC-WALL(g300)`**, probe-confirmed as the explicit-advection
+> CFL boundary (dt=0.01 non-finite at step 300; dt=0.005 stable). Live owner
+> fork in receipt §5: bounded v1.2 dt-amendment (`lock_v7_g300_n48_dt5`,
+> physical quantities held fixed, ~2–2.3 h × 2 runs) or close at the wall.

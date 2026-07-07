@@ -57,6 +57,7 @@ VERDICT_BEARING_PRESETS = {
     "lock_v7_g300",
     "lock_v7_g200_n48",
     "lock_v7_g300_n48",
+    "lock_v7_g300_n48_dt5",
     "lock_disc_g200",
     "lock_disc_g300",
 }
@@ -132,6 +133,7 @@ def parse_args() -> argparse.Namespace:
             "lock_v7_g300",
             "lock_v7_g200_n48",
             "lock_v7_g300_n48",
+            "lock_v7_g300_n48_dt5",
             "lock_disc_g200",
             "lock_disc_g300",
             "at2_growth_g200",
@@ -406,6 +408,27 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         calibration_gap_steps = 5_000
         grid_size = 48
         n_modes = 24
+    elif args.preset == "lock_v7_g300_n48_dt5":
+        # H2 v1.2 solver-stability amendment (NSE_H2_N48_RECEIPT.md section 5 /
+        # NSE_H2_V7_N48_SPEC.md section 6): the lock_v7_g300_n48 cell at the
+        # CFL-consistent dt = 0.005 (probe: dt=0.01 non-finite at step 300;
+        # dt=0.005 stable through a 600k-step soak). Step-count constants
+        # rescale x2 so every PHYSICAL quantity is fixed: burn-in 1,000 tu,
+        # sample spacing 0.5 tu, tau = 5.0 tu, calibration gap 50 tu.
+        burnin_steps = 200_000
+        sample_count = 50_000
+        kf = 2
+        grashof = 300.0
+        k_signature = 3
+        objective = "portable-quantile"
+        objective_quantile = 0.70
+        calibration_sample_count = 50_000
+        calibration_gap_steps = 10_000
+        grid_size = 48
+        n_modes = 24
+        dt = 0.005
+        sample_interval_steps = 100
+        lookahead_steps = 1_000
     elif args.preset in ("lock_disc_g200", "lock_disc_g300"):
         # Objective-overlap discriminator
         # (PDE_C1_OBJECTIVE_OVERLAP_DISCRIMINATOR.md): the v7 portable-quantile
