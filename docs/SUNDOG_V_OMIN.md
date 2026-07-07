@@ -149,7 +149,8 @@ Already banked in-lane: `polyDef_tame` (R1: QF dim-1 tameness), the whole abstra
       `diagramPartition_of_constants` (the induction's base case via the `allSignVecs`
       enumeration).
     - **TS-2d-2 — the reconstruction step** [in progress; the wall watches here].
-      Pitches: 2a padding removal ✅ / 2b P-column augmentation / 2c root-insertion splice.
+      Pitches: 2a padding removal ✅ / 2b P-column augmentation ◐ (foothold landed) /
+      2c root-insertion splice.
       - **2d-2a ✅ LANDED 2026-07-06**: `DiagramNormalize.lean` (67th module), axiom-clean,
         3 gate entries (`dropPadding_paddingFree`, `realizes_dropPadding`,
         `realizes_samples_root`), green round 4. `dropPadding` merges away point-columns
@@ -163,8 +164,24 @@ Already banked in-lane: `polyDef_tame` (R1: QF dim-1 tameness), the whole abstra
         unfold equations — use fuel-structured auxiliaries (structural recursion, clean
         `simp` equations) + a fuel-irrelevance congruence + a thin wrapper with per-shape
         rewrite lemmas.
-      - **2d-2b [next]**: augment every column of a padding-free F'-diagram with P's sign
-        (transfer at root-samples; gap columns from flanking data + monotonicity).
+      - **2d-2b ◐ FOOTHOLD LANDED 2026-07-06**: `DiagramAugment.lean` (68th module),
+        axiom-clean, 4 gate entries, green round 2. The load-bearing design move:
+        **prefix projection** (`realizes_project_prefix`) — with the recursive family
+        laid out `base ++ base.map (emod · P)`, a realized diagram of the whole family
+        restricts to a realized diagram of the base (columns truncated to the prefix
+        length, same samples), and a `dropPadding` pass on the PROJECTED diagram makes
+        every sample a BASE root. This dissolves the remainder-only-sample worry: a
+        sample where only a remainder vanishes can't be merged in the FULL diagram (the
+        remainder's own entry flips), but after projection its column carries no zero
+        and drops cleanly. Plus `sign_transfer_signType` (TS-2b's three-way transfer as
+        one SignType equation) and `spec_eq_zero_of_gap_roots` (interval-vanishing ⇒
+        zero polynomial — the degeneracy that turns a zero P'-gap-column into "P is
+        constant", banked for 2c). Integration receipt `augment_foothold`: live base
+        leads ⇒ a padding-free realized base-diagram exists at EVERY sample of which
+        P's sign equals the sign of `emod q P` for a base member q vanishing there.
+        Remaining in 2b: the augmentation as diagram DATA (branch-uniform column
+        rewriting via positions — the column-to-member indexing), P's sign on gap/ray
+        columns from flanking samples + monotonicity.
       - **2d-2c**: the root-insertion splice per derivative-gap + ends.
     - **TS-2d-3 — the descent**: the Dershowitz–Manna induction wrapping 2d-2, degree
       bookkeeping through `resolve`-branches; `diagramPartition` for every family;
