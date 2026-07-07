@@ -105,6 +105,17 @@ inherited verbatim), `PDE_C1_ROBUSTNESS_WAVE.md` + `results/proof/c1-n48-twin/`,
   `python scripts/pde_c1_kolmogorov_cell.py --preset lock_v7_g300_n48_dt5 --adjudicator knn-sweep --out results/proof/c1-h2-g300-n48-dt5-knn-sweep`
   then `--adjudicator twin-state --out results/proof/c1-h2-g300-n48-dt5-twin`.
 
+> **Post-run status (2026-07-07): v1.2 FINAL — `NSE-H2-TWO-REGIME-N48-STABLE`**
+> (receipt, v1.2 section). Both dt5 runs clean (no overflow across 2×10.21M
+> steps): kNN `STRICTNESS_WITNESS_POSITIVE` (a_mm −0.00008, slope 0.5690 vs
+> banked 0.564; damp 0.28548) + twin `TWIN_STATE_CERTIFIED` +
+> `PAIRED_FIBER_CONSTANCY_POSITIVE` (918,672 pairs; ε_K 0.066375 vs banked
+> 0.066422; δ_H 0.011099 vs 0.011103). The G=300 wall was a dt artifact —
+> crossed by the frozen amendment, not rescued. **H2 CLOSED at the slate's
+> strongest branch, CFL-dt caveat carried.** (First dt5 attempt died in a
+> box-wide memory squeeze — external ~35.5 GB process, Windows event 2004,
+> nothing written; the rerun is the verdict-bearing run.)
+
 ---
 
 > **Post-run status (2026-07-06): R1–R4 owner-run; receipt filed

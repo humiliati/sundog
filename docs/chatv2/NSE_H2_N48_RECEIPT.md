@@ -88,3 +88,51 @@ Cross-refs: `NSE_H2_V7_N48_SPEC.md`, `NSE_H2_V7_N48_SCOPE.md`,
 `results/proof/c1-h2-g200-n48-{knn-sweep,twin}/manifest.json`,
 `NSE_H1_FIBER_RECEIPT.md` (proxy-relative typing carried),
 `NSE_STATIONARITY_GATE_CHECKLIST.md`.
+
+---
+
+# v1.2 Solver-Stability Amendment — Receipt (owner-run 2026-07-07; FINAL)
+
+> Lock runs of spec §6 (`lock_v7_g300_n48_dt5`; frozen pre-run). Artifacts
+> `results/proof/c1-h2-g300-n48-dt5-{knn-sweep,twin}/`. First attempt died in a
+> box-wide memory squeeze (a concurrent ~35.5 GB process; Windows event 2004;
+> nothing written); the clean rerun completed without a single overflow warning
+> across 2 × 10.21M steps. **Non-promotional.**
+
+## v1.2 run and gate table — all gates pass
+
+| gate | measured | banked grid-32 G=300 |
+| --- | --- | --- |
+| 1 diagnostics | clean (burn-in envelope bounded by the 4.686 transient peak, matching the probe; 1,323 steps/s) | — |
+| 2 portability damp [0.20,0.40] | **0.28548** (calib 0.300) | 0.2688 |
+| 3 kNN | **`STRICTNESS_WITNESS_POSITIVE`**, a_mm −0.0000797, slope 0.5690 | a_mm +0.00058, slope 0.564 |
+| 4 twin | **`TWIN_STATE_CERTIFIED`** + `PAIRED_FIBER_CONSTANCY_POSITIVE`, 918,672 pairs, coverage 1.0 | 942,834 pairs |
+
+Comparability (reported): E_max 0.88113 vs 0.8823; ε_K 0.066375 vs 0.066422;
+δ_H **0.011099 vs 0.011103**; fiber disagree 0.0385 vs 0.0382; pair count within
+2.6% — across a grid refinement **and** a dt halving simultaneously. Composition
+holds: both halves read at the same n48 ε_K. Wall-clock 7,703 s + 6,941 s
+(~2.1 h + 1.9 h, on estimate).
+
+## Final H2 verdict: `NSE-H2-TWO-REGIME-N48-STABLE`
+
+Per the frozen table, with the pre-registered caveat attached verbatim: the
+G=300 half is N-refinement-stable **with CFL-consistent dt at the refined grid**
+(dt is a solver-stability requirement scaling with dx, not a free dial; the
+grid-32 comparators ran at dt=0.01, the grid-48 G=300 cell at dt=0.005 with
+every physical quantity held fixed). `NSE-H2-NUMERIC-WALL(g300)` is superseded
+by the registered amendment — the wall was a dt artifact, crossed, not rescued:
+the amendment was frozen before any dt5 number existed and its pre-committed
+stop never fired.
+
+**Licensed claim (the slate's own phrase, with both carried fences):** the C1
+witness is now a **two-regime, current-selector, N-refinement-stable witness**
+— two Grashof regimes × two objectives (G=200) × two resolutions × (at G=300/48)
+two step sizes, every half composing at matched ε_K. It remains finite-Galerkin,
+sampled-support, numerical, and **proxy-relative** (`NSE-H1-PROXY-ONLY`). Not a
+theorem, not promotion, no infinite-dimensional claim. `docs/chatv2/` no-publish.
+
+Post-AT slate ledger after this close: H1 `NSE-H1-PROXY-ONLY`; H2
+`NSE-H2-TWO-REGIME-N48-STABLE`; H3 parked (by design); H4
+`NSE-H4-STATIONARITY-GATE-LANDED`; H5 `AT5_FORMAL_CORE_ALREADY_LANDED`.
+**Every boarded entry of the slate is dispositioned.**
