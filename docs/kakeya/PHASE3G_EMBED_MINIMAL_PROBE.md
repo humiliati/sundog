@@ -120,7 +120,8 @@ Verdict machinery, in order:
 At `q = 11` the two verdict directions have different epistemic weight:
 **"does not embed" is fully workbench-derived** (solver-exact completion
 `> 71`, and `BM <= 71` from the explicit witness), while **"embeds" leans on
-the imported floor** (`BM >= 71`, Blokhuis-Mazzocca; litpass pin still owed).
+the imported floor** (`BM >= 71`, Blokhuis-Mazzocca; bibliographic pin landed
+2026-07-06 in [`../KAKEYA_LITPASS_MEMO.md`](../KAKEYA_LITPASS_MEMO.md)).
 
 ## Executable Receipt
 

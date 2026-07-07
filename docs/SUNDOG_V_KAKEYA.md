@@ -81,6 +81,17 @@ three fields: 3-stars and below embed everywhere, 4-stars nowhere (budget
 necessary but not sufficient), with measured cross-ratio dependence
 (`ex = 2` vs `3` at `q=7`) and greedy's `q=11` excess `6` = its sacrifice
 overspend (`npm run kakeya:embed-probe`; core tests `66/66`).
+Phase 3H closes the deficit-onset question:
+[`kakeya/PHASE3H_DEFICIT_ONSET.md`](kakeya/PHASE3H_DEFICIT_ONSET.md)
+dissolves the inf-dichotomy by axis avoidance - a parabola's tangent family
+covers every direction except its axis, so any direction set with `k <= q`
+achieves zero deficit via an axis-avoiding parabola, self-certified against
+the proven pairwise bound (4094 sets at `q=11`, retiring the Phase-3F cap);
+the onset is exactly `k = q+1` ("no axis left"; dually, arc saturation), tax
+`(q-1)/2`, boundary axis-symmetric across all `q+1` axis choices
+(`npm run kakeya:deficit-onset`; core tests `72/72`). The Blokhuis-Mazzocca
+planar minimum is now bibliographically pinned in the litpass memo addendum
+(2026-07-06).
 This file is a target-selection and claim-boundary scaffold opened from
 [`SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md`](SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md).
 
@@ -505,12 +516,17 @@ Forbidden:
   - joint-vs-marginal activation gap: exact joint lighting cost for direction
   sets, gap sandwich `[0, C(k,2)]`, full-pencil concurrence tax `(q-1)/2`, and
   machine-verified Blokhuis-Mazzocca instances at `q in {5, 7}` (imported
-  anchor; litpass pin owed).
+  anchor; bibliographic pin landed 2026-07-06 in the litpass memo addendum).
 - [`kakeya/PHASE3G_EMBED_MINIMAL_PROBE.md`](kakeya/PHASE3G_EMBED_MINIMAL_PROBE.md)
   - embeddability-in-minimal-sets probe: concurrency-budget identity
   `ex = sacrifice - (q-1)/2`, star frontier (3-stars embed, 4-stars do not,
   cross-ratio-dependent excess), affine certificates plus exact completion
   solver, all bodies resolved at `q in {5, 7, 11}`.
+- [`kakeya/PHASE3H_DEFICIT_ONSET.md`](kakeya/PHASE3H_DEFICIT_ONSET.md)
+  - deficit onset by axis avoidance: zero deficit for every direction set with
+  `k <= q` via axis-avoiding parabola tangents (self-certifying against the
+  proven bound; full subset lattice at all fields), onset exactly at the full
+  pencil with tax `(q-1)/2`, axis-symmetric boundary.
 - [`kakeya/EXTERNAL_REVIEW_PACKET.md`](kakeya/EXTERNAL_REVIEW_PACKET.md) -
   owner-pending external-review ask; frames Kakeya as a boundary/pedagogy review,
   not a result-review packet.

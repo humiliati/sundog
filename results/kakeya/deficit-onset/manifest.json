@@ -1,0 +1,271 @@
+{
+  "artifactId": "KAK-PHASE3H-DEFICIT-ONSET",
+  "generatedAt": "2026-07-07T03:07:35.039Z",
+  "status": "internal workbench theorem receipt",
+  "hook": "H-K3 deficit onset: axis avoidance dissolves the inf-dichotomy; onset exactly at k = q + 1",
+  "command": "node scripts/kakeya-deficit-onset-check.mjs",
+  "statement": "For ANY direction set D with |D| = k <= q (odd q), the deficit is 0: the k tangents (directions in D) of a parabola whose axis avoids D form a family with no three concurrent, so the union has exactly kq - C(k,2) points, matching the proven PHASE3F lower bound - self-certifying optimality, no search. The onset is exactly k = q + 1, where no axis remains (dually: a (q+2)-arc through the infinity point, impossible for odd q), with tax (q-1)/2.",
+  "construction": "Standard tangents y = 2tx - t^2 (axis = inf); for axis = slope s apply the affine map (x, y) -> (y, x + s*y), which sends inf to slope s and is a bijection on the remaining directions.",
+  "importedAnchor": "The k = q + 1 tax value at q = 11 rests on the Blokhuis-Mazzocca minimum (pinned: Building Bridges, Bolyai Soc. Math. Studies 19, Springer 2008, pp. 205-218; arXiv:0911.4370). At q in {5, 7} it is derived exhaustively (PHASE3F).",
+  "falsifier": {
+    "name": "DEFICIT_ONSET_MISMATCH",
+    "description": "Fires if any axis family is not a direction-bijection of q full lines, any D with k <= q misses the exact kq - C(k,2) union size, the exhaustive q in {5,7} cross-check disagrees with the closed form, or any axis completion misses the Blokhuis-Mazzocca size or completeness.",
+    "status": "clear"
+  },
+  "perQ": [
+    {
+      "q": 5,
+      "familiesValid": true,
+      "subsetsChecked": 62,
+      "perK": "1:6 2:15 3:20 4:15 5:6",
+      "constructionPass": true,
+      "axisCompletions": true,
+      "completions": [
+        {
+          "axis": "0",
+          "tangentUnion": 15,
+          "lastLineCost": 2,
+          "total": 17,
+          "complete": true,
+          "pass": true
+        },
+        {
+          "axis": "1",
+          "tangentUnion": 15,
+          "lastLineCost": 2,
+          "total": 17,
+          "complete": true,
+          "pass": true
+        },
+        {
+          "axis": "2",
+          "tangentUnion": 15,
+          "lastLineCost": 2,
+          "total": 17,
+          "complete": true,
+          "pass": true
+        },
+        {
+          "axis": "3",
+          "tangentUnion": 15,
+          "lastLineCost": 2,
+          "total": 17,
+          "complete": true,
+          "pass": true
+        },
+        {
+          "axis": "4",
+          "tangentUnion": 15,
+          "lastLineCost": 2,
+          "total": 17,
+          "complete": true,
+          "pass": true
+        },
+        {
+          "axis": "inf",
+          "tangentUnion": 15,
+          "lastLineCost": 2,
+          "total": 17,
+          "complete": true,
+          "pass": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "q": 7,
+      "familiesValid": true,
+      "subsetsChecked": 254,
+      "perK": "1:8 2:28 3:56 4:70 5:56 6:28 7:8",
+      "constructionPass": true,
+      "axisCompletions": true,
+      "completions": [
+        {
+          "axis": "0",
+          "tangentUnion": 28,
+          "lastLineCost": 3,
+          "total": 31,
+          "complete": true,
+          "pass": true
+        },
+        {
+          "axis": "1",
+          "tangentUnion": 28,
+          "lastLineCost": 3,
+          "total": 31,
+          "complete": true,
+          "pass": true
+        },
+        {
+          "axis": "2",
+          "tangentUnion": 28,
+          "lastLineCost": 3,
+          "total": 31,
+          "complete": true,
+          "pass": true
+        },
+        {
+          "axis": "3",
+          "tangentUnion": 28,
+          "lastLineCost": 3,
+          "total": 31,
+          "complete": true,
+          "pass": true
+        },
+        {
+          "axis": "4",
+          "tangentUnion": 28,
+          "lastLineCost": 3,
+          "total": 31,
+          "complete": true,
+          "pass": true
+        },
+        {
+          "axis": "5",
+          "tangentUnion": 28,
+          "lastLineCost": 3,
+          "total": 31,
+          "complete": true,
+          "pass": true
+        },
+        {
+          "axis": "6",
+          "tangentUnion": 28,
+          "lastLineCost": 3,
+          "total": 31,
+          "complete": true,
+          "pass": true
+        },
+        {
+          "axis": "inf",
+          "tangentUnion": 28,
+          "lastLineCost": 3,
+          "total": 31,
+          "complete": true,
+          "pass": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "q": 11,
+      "familiesValid": true,
+      "subsetsChecked": 4094,
+      "perK": "1:12 2:66 3:220 4:495 5:792 6:924 7:792 8:495 9:220 10:66 11:12",
+      "constructionPass": true,
+      "axisCompletions": true,
+      "completions": [
+        {
+          "axis": "0",
+          "tangentUnion": 66,
+          "lastLineCost": 5,
+          "total": 71,
+          "complete": true,
+          "pass": true
+        },
+        {
+          "axis": "1",
+          "tangentUnion": 66,
+          "lastLineCost": 5,
+          "total": 71,
+          "complete": true,
+          "pass": true
+        },
+        {
+          "axis": "2",
+          "tangentUnion": 66,
+          "lastLineCost": 5,
+          "total": 71,
+          "complete": true,
+          "pass": true
+        },
+        {
+          "axis": "3",
+          "tangentUnion": 66,
+          "lastLineCost": 5,
+          "total": 71,
+          "complete": true,
+          "pass": true
+        },
+        {
+          "axis": "4",
+          "tangentUnion": 66,
+          "lastLineCost": 5,
+          "total": 71,
+          "complete": true,
+          "pass": true
+        },
+        {
+          "axis": "5",
+          "tangentUnion": 66,
+          "lastLineCost": 5,
+          "total": 71,
+          "complete": true,
+          "pass": true
+        },
+        {
+          "axis": "6",
+          "tangentUnion": 66,
+          "lastLineCost": 5,
+          "total": 71,
+          "complete": true,
+          "pass": true
+        },
+        {
+          "axis": "7",
+          "tangentUnion": 66,
+          "lastLineCost": 5,
+          "total": 71,
+          "complete": true,
+          "pass": true
+        },
+        {
+          "axis": "8",
+          "tangentUnion": 66,
+          "lastLineCost": 5,
+          "total": 71,
+          "complete": true,
+          "pass": true
+        },
+        {
+          "axis": "9",
+          "tangentUnion": 66,
+          "lastLineCost": 5,
+          "total": 71,
+          "complete": true,
+          "pass": true
+        },
+        {
+          "axis": "10",
+          "tangentUnion": 66,
+          "lastLineCost": 5,
+          "total": 71,
+          "complete": true,
+          "pass": true
+        },
+        {
+          "axis": "inf",
+          "tangentUnion": 66,
+          "lastLineCost": 5,
+          "total": 71,
+          "complete": true,
+          "pass": true
+        }
+      ],
+      "pass": true
+    }
+  ],
+  "exhaustiveCrossCheck": [
+    {
+      "q": 5,
+      "checked": 62,
+      "pass": true
+    },
+    {
+      "q": 7,
+      "checked": 254,
+      "pass": true
+    }
+  ],
+  "pass": true
+}

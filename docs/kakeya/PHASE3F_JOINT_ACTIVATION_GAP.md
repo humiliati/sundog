@@ -95,7 +95,9 @@ lines is complete). The workbench:
 `q(q+1)/2 + (q-1)/2` as the exact odd-`q` planar minimum is the
 **Blokhuis-Mazzocca theorem, imported**: machine-verified as an exhaustive
 instance at `q in {5, 7}`, cited (not derived) at `q = 11`. Bibliographic pin
-owed to [`../KAKEYA_LITPASS_MEMO.md`](../KAKEYA_LITPASS_MEMO.md). Note the
+landed 2026-07-06 in [`../KAKEYA_LITPASS_MEMO.md`](../KAKEYA_LITPASS_MEMO.md)
+(Addendum: Blokhuis-Mazzocca, Building Bridges, Bolyai Soc. Math. Studies 19,
+Springer 2008, pp. 205-218; arXiv:0911.4370). Note the
 Dvir floor `q(q+1)/2` is strictly below the true minimum by `(q-1)/2` - the
 same quantity as the pencil's concurrence tax.
 

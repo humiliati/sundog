@@ -88,6 +88,28 @@ unlinked `NOT PEER REVIEWED` page may exist as a reviewer surface.
 | Nicholas G. Polson and Daniel Zantedeschi, "Kakeya Conjecture and Conditional Kolmogorov Complexity", arXiv:2603.25611 (2026) | https://arxiv.org/abs/2603.25611 | Body/shadow bridge: fiber label as direction shadow, chain-rule body/residual split, incompressibility as maximal body-resistance, adaptive-fibering obstruction. | Binding fence: body-resistance only, not regime-2/control sufficiency. |
 | math-inc/KakeyaFiniteFields, Lean 4 repository | https://github.com/math-inc/KakeyaFiniteFields | AI-assisted Lean 4 formalization of the finite-field Kakeya theorem, produced by Math Inc.'s Gauss agent from a LaTeX blueprint. Front-A evaluator exhibit. | Read/cite/audit only unless licensing changes; no code copying into Sundog without a visible license grant. |
 
+## Addendum 2026-07-06 - Planar Minimum Pin (Blokhuis-Mazzocca)
+
+Owed by [`kakeya/PHASE3F_JOINT_ACTIVATION_GAP.md`](kakeya/PHASE3F_JOINT_ACTIVATION_GAP.md)
+and [`kakeya/PHASE3G_EMBED_MINIMAL_PROBE.md`](kakeya/PHASE3G_EMBED_MINIMAL_PROBE.md);
+pinned in this pass.
+
+| Source | Public URL | Supports | Boundary action |
+| --- | --- | --- | --- |
+| Aart Blokhuis and Francesco Mazzocca, "The Finite Field Kakeya Problem", in *Building Bridges: Between Mathematics and Computer Science* (Grotschel, Katona eds.), Bolyai Society Mathematical Studies 19, Springer (2008), pp. 205-218; arXiv:0911.4370 | https://arxiv.org/abs/0911.4370 (chapter: https://link.springer.com/chapter/10.1007/978-3-540-85221-6_6) | Planar minimum: minimal Kakeya (Besicovitch) sets in `AG(2,q)` have size exactly `q(q+1)/2 + (q-1)/2` for odd `q` (sharp; conic-tangent construction) and `q(q+1)/2` for even `q` (sharp). For odd `q`, all extremal examples come from the conic construction (Segre-style classification of `(q+1)`-arcs). | Import-and-check only. The workbench machine-verified the odd-`q` value as exhaustive instances at `q in {5, 7}` (PHASE3F) and constructs the `q = 11` witness; equality at `q = 11` is cited, not derived. Not a workbench theorem; no Euclidean transfer. |
+
+Consequences already visible in the receipts:
+
+- The classification implies no odd-`q` minimal set has a point of
+  line-multiplicity `>= 4`, which is the literature-side explanation of
+  PHASE3G's measured "concurrency budget is necessary but not sufficient"
+  (4-stars embed nowhere despite fitting the budget), and answers PHASE3G's
+  next-rung (iii) census question from outside: all minimal sets are
+  conic-profile.
+- The even-`q` sharp value `q(q+1)/2` (zero concurrency tax, hyperoval
+  territory) is a contrast remark only; the workbench has no even `q` and
+  makes no even-`q` claim.
+
 ## Track A - Euclidean Boundary
 
 Wang-Zahl is the current landscape anchor: the Euclidean Kakeya set conjecture

@@ -282,6 +282,62 @@ for (const q of Qs) {
         pencilProfile.sacrifice - (q - 1) / 2,
   );
 
+  // 8m. Axis avoidance: the tangent family of a parabola with axis = slope 0
+  //     (standard family mapped by (x,y) -> (y, x)) covers all directions
+  //     except slope 0; taking all q of them (an inf-CONTAINING set of size
+  //     k = q) gives a deficit-0 union of exactly q(q+1)/2 points (= kq -
+  //     C(k,2), the proven joint minimum from empty; also the Dvir floor).
+  const rotatedFamily = new Set();
+  const rotatedBits = new Array(dirs.length).fill(0);
+  for (let t = 0; t < q; t++) {
+    const linePts = new Set();
+    for (let x = 0; x < q; x++) {
+      const y = ((2 * t * x - t * t) % q + q) % q;
+      linePts.add(K.pointIndex(y, x, q)); // (x,y) -> (y, x + 0*y)
+    }
+    for (const p of linePts) rotatedFamily.add(p);
+  }
+  {
+    const bits = K.shadowBitset(q, rotatedFamily);
+    check(
+      `q=${q} T8m axis-avoiding-family-deficit-zero`,
+      rotatedFamily.size === (q * (q + 1)) / 2 && bits[0] === 0 && bits[q] === 1,
+    );
+  }
+
+  // 8n. Onset boundary is axis-symmetric: for EVERY axis direction, the q
+  //     tangents plus the cheapest axis line cost exactly (q-1)/2 extra and
+  //     land on the Blokhuis-Mazzocca minimum, complete. (Spot-check axes:
+  //     inf and slope 0.)
+  let axisSym = true;
+  for (const axisIndex of [q, 0]) {
+    const union = new Set();
+    for (let t = 0; t < q; t++) {
+      for (let x = 0; x < q; x++) {
+        const y = ((2 * t * x - t * t) % q + q) % q;
+        if (axisIndex === q) union.add(K.pointIndex(x, y, q));
+        else union.add(K.pointIndex(y, (x + axisIndex * y) % q, q));
+      }
+    }
+    let bestAdd = Infinity;
+    let bestB = 0;
+    for (let b = 0; b < q; b++) {
+      let add = 0;
+      for (const p of K.lineMask(dirs[axisIndex], b, q)) if (!union.has(p)) add++;
+      if (add < bestAdd) {
+        bestAdd = add;
+        bestB = b;
+      }
+    }
+    for (const p of K.lineMask(dirs[axisIndex], bestB, q)) union.add(p);
+    axisSym =
+      axisSym &&
+      bestAdd === (q - 1) / 2 &&
+      union.size === (q * (q + 1)) / 2 + (q - 1) / 2 &&
+      K.shadowSummary(q, union).directionsCovered === q + 1;
+  }
+  check(`q=${q} T8n axis-symmetric-pencil-completion`, axisSym);
+
   // 9. Greedy line-cover construction covers all directions.
   check(
     `q=${q} T9 greedy-complete`,
