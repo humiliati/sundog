@@ -101,8 +101,21 @@ Already banked in-lane: `polyDef_tame` (R1: QF dim-1 tameness), the whole abstra
     Dershowitz–Manna well-founded order (in-tree! `instWellFoundedIsDershowitzMannaLT`) as
     the pre-registered 2d measure. First-vs-last variable mismatch (finSuccEquiv vs snoc)
     noted: recovered by a rename at TS-3.
-  - **TS-2b** — the mod-trick: at a root `r` of `p`, `q(r) = (q mod p)(r)` — pointwise-trivial
-    over ℝ (`q = p·s + rem`), giving the sign-matrix column transfer without subresultants.
+  - **TS-2b** — the mod-trick ✅ LANDED 2026-07-06: `PseudoRemainder.lean` (64th module),
+    axiom-clean, 3 gate entries (`pseudoModExp_identity`, `emod_eval_at_root`,
+    `sign_transfer`), green round 4 (classical decidability for ring-equality ites;
+    `ring`/`linear_combination` treat `a^k` with opaque `k` as an atom — normalize
+    `pow_succ` first AND keep `pstep P Q` atomic, feeding its definition as a separate
+    equation with coefficient `−c^k`). **Pseudo-division built from scratch, generic over
+    any `CommRing`** (mathlib has none — giftable): `pstep` exact top-cancellation (no
+    domain hypothesis, ~coeff bashing over `coeff_X_pow_mul'` + `degree_lt_iff_coeff_zero`),
+    `pseudoModExp` WF recursion on a zero-guarded degree measure, identity
+    `∃ S, C c^k · Q = S·P + rem` with degree guard. **The even-exponent trick** (`emod`/
+    `eexp`): pad `k` to even — the transfer factor `c(g)^k` is strictly positive on the
+    live branch (`Even.pow_pos`), so classical Cohen–Hörmander's sign-twist bookkeeping
+    disappears. `emod_eval_at_root` (the `S·P` term dies at roots) and the headline
+    `sign_transfer`: three-way sign equality of `Q` and its evenized remainder at every
+    root of `spec g P` — the elimination's degree-descent engine.
   - **TS-2c** — between-roots signs: the derivative family + monotonicity between consecutive
     roots (the real-analysis input; C1-style window lemmas available).
   - **TS-2d** — the recursion assembly + correctness:
