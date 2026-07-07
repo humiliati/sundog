@@ -250,11 +250,26 @@ Already banked in-lane: `polyDef_tame` (R1: QF dim-1 tameness), the whole abstra
         Dershowitz–Manna measure (one removal, all additions below it);
         `famDegrees_induction`: the well-founded principle, via `InvImage.wf` over
         mathlib's `wellFounded_isDershowitzMannaLT`.
-      - **The assembly [next, the arc's last wall]**: compose the reads over a concrete
-        branch diagram (walking the columns), refine branches by `truncChain` live-lead
-        + end-sign `SADef` conditions, the drop-a-member projection (P′ out of the
-        walked family), and the recursion: `DiagramPartition` for every family;
-        `elim_signVector` unconditionally.
+      - **THE READS ✅ LANDED 2026-07-06**: `DiagramReads.lean` (73rd module),
+        axiom-clean, 3 gate entries (`readPtSign_correct`, `headD_reads_gap_sign`,
+        `colsFrom_widen`), green round 2 (one renamed core lemma). GraftData's inputs
+        as pure functions of column data: `readZeroIdx`/`readPtSign` (own index-finder
+        — no core-API roulette) with `readPtSign_correct` = the sample read IS P's sign
+        (via `column_reads_sample_sign`); `headD_reads_gap_sign` (σ′ = `headD` of the
+        gap column on a `Pd`-headed family); the two structural walk functions
+        `baseDrop`/`readAnnot` (keep-later merging, no fuel needed); `colsFrom_widen`
+        (barrier widening). **Design settled and documented in the module header**: the
+        fused master carries a pending-gap accumulator (last kept barrier `lo₀`, its
+        flank tag, the pending projected gap column with no-zero invariant) because the
+        annotation cannot be restated at intermediate dropped barriers — P's grafted
+        root may lie left of a dropped sample; plan validity discharges only at keep
+        time over the whole merged gap.
+      - **The fused master [next]**: the strong induction producing
+        `ColsFrom g base lo ξk (baseDrop m cols)` and
+        `GraftData g P lo ξk (readAnnot m εp sa cols)` together; then branch
+        refinement (`truncChain` live-lead + end-sign `SADef` conditions), the
+        drop-a-member projection, and the DM recursion: `DiagramPartition` for every
+        family; `elim_signVector` unconditionally.
   *Falsifier* (`QE_COMBINATORICS_WALL`, carried over): the sign-matrix bookkeeping fails to
   stay tractable at single-owner scale — fallback = TS-1 + TS-2b/2c as independently valuable
   univariate machinery, wall published with location.
