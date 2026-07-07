@@ -9,9 +9,13 @@ temperature off prices, and Roll (1984) showed the augur beats the bureau at the
 trivially to `SUNDOG_V_WEATHER` / `_KALSHI` if the codename reads too cute — it's a filename and a
 header, not a claim.*
 
-Status: **G1 PREREG FILED 2026-07-06** ([`prereg/augury/AUGURY_G1_PREREG.md`](prereg/augury/AUGURY_G1_PREREG.md)).
-G0 lit-pass PASSED 2026-07-05 ([`AUGURY_LIT_PASS_MEMO.md`](AUGURY_LIT_PASS_MEMO.md) — gap real, all rungs
-pullable with receipts). Nothing scored; G2 pilot execution gated on a tooling freeze-marker amendment.
+Status: **G3 RUN COMPLETE 2026-07-07 → `AUGURY_MARGIN_CONFIRMED`**
+([`prereg/augury/AUGURY_G3_RESULT.md`](prereg/augury/AUGURY_G3_RESULT.md)). Market is a non-redundant
+pantheon member (encompassing β_mkt CI [0.670,0.776]>0; DM p≈0) with the predicted horizon-localized
+crossover (edge −0.010 at −12h → −0.043 at −2h). Caveat: NBM comparator = mean+spread Gaussian (native
+percentiles unavailable) — encompassing survival is the robust core. G0/G1/G2/G3 all in
+[`AUGURY_G1_PREREG.md`](prereg/augury/AUGURY_G1_PREREG.md) (Amendments A–C.6). **G4 (allelopathy) + G5
+(augury.html) now unlocked, owner-gated; DOCS_NO_PUBLISH until G5.**
 
 ---
 

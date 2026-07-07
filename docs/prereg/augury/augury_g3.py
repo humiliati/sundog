@@ -237,22 +237,100 @@ def latest_issue(day: dt.date, cutoff: dt.datetime) -> dict | None:
     return None
 
 
+def _raw_get(url: str, lo: int, hi: int) -> bytes:
+    """Unthrottled ranged GET for AWS open-data S3 (no politeness rate-limit;
+    concurrency is the point). Retries with backoff; no global _last_call gate."""
+    import urllib.error
+    import urllib.request
+    req = urllib.request.Request(url, headers={"User-Agent": ap.UA})
+    req.add_header("Range", f"bytes={lo}-{hi - 1}")
+    for attempt in range(5):
+        try:
+            with urllib.request.urlopen(req, timeout=90) as r:
+                return r.read()
+        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError):
+            if attempt == 4:
+                raise
+            time.sleep(1.0 * 2 ** attempt)
+    return b""
+
+
 def _fetch_msg(key: str, rec: dict) -> bytes:
-    return ap.http_get(f"https://{C['nbm_bucket']}.s3.amazonaws.com/{key}",
-                       rng=(rec["start"], rec["end"] or rec["start"] + 40_000_000))
+    return _raw_get(f"https://{C['nbm_bucket']}.s3.amazonaws.com/{key}",
+                    rec["start"], rec["end"] or rec["start"] + 40_000_000)
 
 
 def _fetch_issue(issue: dict) -> tuple[dict, bytes, bytes]:
-    return issue, _fetch_msg(issue["key"], issue["mean"]), \
-        _fetch_msg(issue["key"], issue["sd"])
+    """One combined range request per issue: the TMAX mean and 'ens std dev'
+    records are adjacent in the .idx, so [mean.start, sd.end] covers both — half
+    the request count vs two fetches. Each slice is a complete GRIB message."""
+    m, s = issue["mean"], issue["sd"]
+    m_end = m["end"] or m["start"] + 40_000_000
+    s_end = s["end"] or s["start"] + 40_000_000
+    lo, hi = min(m["start"], s["start"]), max(m_end, s_end)
+    buf = _raw_get(f"https://{C['nbm_bucket']}.s3.amazonaws.com/{issue['key']}",
+                   lo, hi)
+    b_mean = buf[m["start"] - lo:m_end - lo]
+    b_sd = buf[s["start"] - lo:s_end - lo]
+    return issue, b_mean, b_sd
+
+
+# Fast point extraction: NBM core.co is a Lambert grid with alternativeRowScanning=1
+# (boustrophedon — odd rows stored right-to-left). codes_grib_find_nearest is correct
+# but rebuilds a KD-tree per handle (~2.3 s/call) => infeasible at 20k+ messages and the
+# tree is the OOM source. Instead we compute each station's values-array index ONCE per
+# grid geometry via pyproj projection + the boustrophedon flip, VALIDATED against
+# find_nearest for all 7 stations (must be 7/7 or we abort), then read only those indices.
+# Verified exact (7/7) on both eras (v4-2022 core.f036, v5-2026 core.f012).
+_geom_idx: dict = {}
+
+
+def _grid_indices(h) -> dict[str, int]:
+    import eccodes
+    from pyproj import CRS, Transformer
+    g = lambda k: eccodes.codes_get(h, k)  # noqa: E731
+    sig = (g("Ni"), g("Nj"), round(g("latitudeOfFirstGridPointInDegrees"), 4),
+           round(g("longitudeOfFirstGridPointInDegrees"), 4), g("LoVInDegrees"),
+           g("Latin1InDegrees"), g("Latin2InDegrees"), round(g("DxInMetres"), 3),
+           g("iScansNegatively"), g("jScansPositively"), g("alternativeRowScanning"))
+    if sig in _geom_idx:
+        return _geom_idx[sig]
+    Nx, Ny = g("Ni"), g("Nj")
+    crs = CRS.from_dict({"proj": "lcc", "lat_1": g("Latin1InDegrees"),
+                         "lat_2": g("Latin2InDegrees"), "lat_0": g("Latin1InDegrees"),
+                         "lon_0": g("LoVInDegrees"), "R": 6371200})
+    to_xy = Transformer.from_crs("EPSG:4326", crs, always_xy=True)
+    x0, y0 = to_xy.transform(g("longitudeOfFirstGridPointInDegrees"),
+                             g("latitudeOfFirstGridPointInDegrees"))
+    Dx, Dy = g("DxInMetres"), g("DyInMetres")
+    alt = g("alternativeRowScanning")
+    idx = {}
+    for st, (la, lo) in STATION_LL.items():
+        x, y = to_xy.transform(lo, la)
+        i = min(max(round((x - x0) / Dx), 0), Nx - 1)
+        j = min(max(round((y - y0) / Dy), 0), Ny - 1)
+        ii = (Nx - 1 - i) if (alt and j % 2 == 1) else i
+        idx[st] = j * Nx + ii
+    # one-time validation against the authoritative (slow) nearest
+    vals = eccodes.codes_get_array(h, "values")
+    for st, (la, lo) in STATION_LL.items():
+        fn = eccodes.codes_grib_find_nearest(h, la, lo)[0].value
+        if abs(float(vals[idx[st]]) - fn) > 1e-6:
+            raise RuntimeError(
+                f"grid-index validation FAILED for {st} on geom {sig}: "
+                f"idx={vals[idx[st]]:.3f} vs find_nearest={fn:.3f}")
+    _geom_idx[sig] = idx
+    print(f"  grid geometry validated 7/7: Ni={Nx} Nj={Ny} alt={alt}", flush=True)
+    return idx
 
 
 def _decode_all_stations(data: bytes) -> dict[str, float]:
     import eccodes
     h = eccodes.codes_new_from_message(data)
     try:
-        return {st: eccodes.codes_grib_find_nearest(h, lat, lon)[0].value
-                for st, (lat, lon) in STATION_LL.items()}
+        idx = _grid_indices(h)
+        vals = eccodes.codes_get_array(h, "values")
+        return {st: float(vals[i]) for st, i in idx.items()}
     finally:
         eccodes.codes_release(h)
 
@@ -286,21 +364,29 @@ def stage_nbm() -> None:
     path = RESULTS / "nbm_scalars.jsonl"
     path.parent.mkdir(parents=True, exist_ok=True)
     done = 0
-    # parallel S3 fetch (threads), serial eccodes decode (not thread-safe)
-    with cf.ThreadPoolExecutor(max_workers=6) as pool, \
+    # BATCHED: parallel S3 fetch (6 threads) then serial eccodes decode, one
+    # batch of BATCH issues in flight at a time. `pool.map` on the whole list
+    # would submit all tasks eagerly and buffer every fetched ~1-2 MB message
+    # (2 per issue) until the single decoder drains it — 10k+ issues => OOM
+    # (eccodes then fails its ~30 MB nearest-neighbour alloc). Batching bounds
+    # resident memory to ~BATCH x 2 messages + eccodes' per-handle working set.
+    BATCH = 96
+    with cf.ThreadPoolExecutor(max_workers=12) as pool, \
             path.open("a", encoding="utf-8") as fh:
-        for issue, b_mean, b_sd in pool.map(_fetch_issue, todo):
-            raw_mu = _decode_all_stations(b_mean)
-            raw_sd = _decode_all_stations(b_sd)
-            rec = {"key": issue["key"], "cycle": issue["cycle"],
-                   "available": issue["available"],
-                   "mu": {s: round((v - 273.15) * 1.8 + 32, 3)
-                          for s, v in raw_mu.items()},
-                   "sd": {s: round(v * 1.8, 3) for s, v in raw_sd.items()}}
-            fh.write(json.dumps(rec, sort_keys=True) + "\n")
-            fh.flush()
-            done += 1
-            if done % 100 == 0:
+        for b0 in range(0, len(todo), BATCH):
+            batch = todo[b0:b0 + BATCH]
+            for issue, b_mean, b_sd in pool.map(_fetch_issue, batch):
+                raw_mu = _decode_all_stations(b_mean)
+                raw_sd = _decode_all_stations(b_sd)
+                rec = {"key": issue["key"], "cycle": issue["cycle"],
+                       "available": issue["available"],
+                       "mu": {s: round((v - 273.15) * 1.8 + 32, 3)
+                              for s, v in raw_mu.items()},
+                       "sd": {s: round(v * 1.8, 3) for s, v in raw_sd.items()}}
+                fh.write(json.dumps(rec, sort_keys=True) + "\n")
+                fh.flush()  # per-record: a crash never loses committed decodes
+                done += 1
+            if done % (BATCH * 10) < BATCH or done >= len(todo):
                 print(f"  decoded {done}/{len(todo)}")
     print(f"nbm stage done: +{done} issues")
 

@@ -391,3 +391,49 @@ city (`cli_gap_days`). Re-run: **all 7 cities 20/20**; gap days across the full 
 12 of 7,289 station-days (NYC 2, MIA 8, LAX 2, others 0; ≈0.16%). Updated runner sha256:
 `66a73aceed1fa46830d7bc98e440b4e177265bdd908a1265ba113427653d2fe3` (supersedes C.1's;
 wrapper unchanged). The C.4 command is unchanged and remains admitted.
+
+---
+
+## Amendment C.6 — NBM decode-path fix + G3 execution + adjudication (2026-07-07 PT)
+
+Append-only. The first binding `nbm` decode crashed (OOM / hard exit); the fix below made the
+decode fast and stable, the full run then completed and adjudicated. **No §1–§7 constant
+changed;** the NBM extracted values are provably identical to the original `find_nearest`
+reference (7/7, both eras). Final runner sha256:
+`86e86ff039b9c7b2f1e00fc0b2f708ddd6a871e72b30cfaa52b11cbe84689775` (supersedes C.5; pilot
+unchanged at `e2c7b780…`).
+
+### C.6.1 The decode fix (root cause + resolution, receipted)
+
+- **Root cause:** `codes_grib_find_nearest` rebuilds a spatial KD-tree **per GRIB message**
+  (~2.3 s each) — the entire time cost (~97 h projected) *and* the OOM source. `ThreadPoolExecutor.map`
+  over the whole todo also eagerly buffered every fetched message → memory flood.
+- **Resolution:** extract each station's value by **grid index**, computed **once per grid
+  geometry** via pyproj Lambert projection **+ the boustrophedon odd-row flip** (NBM core.co has
+  `alternativeRowScanning=1` — odd rows stored right-to-left; this was the reason naïve index /
+  `find_nearest.index` / `get_array('latitudes')` all disagreed with `find_nearest` for exactly
+  the odd-row stations). Validated **7/7 against `find_nearest` in both eras** (v4-2022
+  `core.f036`, v5-2026 `core.f012`; identical grid geometry). The runner re-validates 7/7 at
+  first decode and aborts on any disagreement. Decode ~2.3 s → ~0.4 s/message, no KD-tree, no
+  memory growth. Fetch: combined the adjacent mean+`ens std dev` records into one range request
+  per issue; unthrottled S3 GET (AWS open data) at 12-way concurrency; per-record flush for
+  crash-safe resume. New dep: `pyproj` 3.7.2 (`.venv-augury`).
+- **Run:** `nbm` 10,990 issues in ~2.05 h (bandwidth-bound, ~49 GB), `score` 84,923 strike rows
+  in 300 s, `adjudicate` 160 s. Fully resumable throughout.
+
+### C.6.2 Verdict — `AUGURY_MARGIN_CONFIRMED`
+
+Both pre-registered tests pass (detail + caveats in
+[`AUGURY_G3_RESULT.md`](AUGURY_G3_RESULT.md); `g3_result.json` sha256 `bed09869…`):
+
+- DM one-sided **p ≈ 0** (market strike-Brier 0.0127 lower; stat −4.73), n = **3,488** valid
+  station-days.
+- Encompassing **β_mkt = 0.725, 95% CI [0.670, 0.776] > 0** (survives); β_NBM = 0.340 > 0 (NBM
+  also non-redundant) → market is a non-redundant pantheon member.
+- Exploratory crossover present: market edge grows −0.010 (−12h) → −0.043 (−2h); broad across
+  all 7 stations; holds excluding the densest era.
+
+Binding caveats (AUGURY_G3_RESULT §"caveats"): the comparator is the NBM mean+spread **Gaussian**
+(native percentiles unavailable, Amdt A.1) — the **encompassing survival is the robust core**;
+the short-lead win is against the operational MaxT **as issued**. `MARGIN_CONFIRMED` unlocks G4
+(allelopathy) + G5 (page), both owner-gated.
