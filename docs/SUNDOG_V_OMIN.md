@@ -150,7 +150,7 @@ Already banked in-lane: `polyDef_tame` (R1: QF dim-1 tameness), the whole abstra
       enumeration).
     - **TS-2d-2 — the reconstruction step** [in progress; the wall watches here].
       Pitches: 2a padding removal ✅ / 2b P-column augmentation ◐ (foothold landed) /
-      2c root-insertion splice.
+      2c root-insertion splice ✅ (toolkit landed).
       - **2d-2a ✅ LANDED 2026-07-06**: `DiagramNormalize.lean` (67th module), axiom-clean,
         3 gate entries (`dropPadding_paddingFree`, `realizes_dropPadding`,
         `realizes_samples_root`), green round 4. `dropPadding` merges away point-columns
@@ -182,8 +182,26 @@ Already banked in-lane: `polyDef_tame` (R1: QF dim-1 tameness), the whole abstra
         Remaining in 2b: the augmentation as diagram DATA (branch-uniform column
         rewriting via positions — the column-to-member indexing), P's sign on gap/ray
         columns from flanking samples + monotonicity.
-      - **2d-2c**: the root-insertion splice per derivative-gap + ends.
-    - **TS-2d-3 — the descent**: the Dershowitz–Manna induction wrapping 2d-2, degree
+      - **2d-2c ✅ TOOLKIT LANDED 2026-07-06**: `DiagramGraft.lean` (69th module),
+        axiom-clean, 4 gate entries (`colsFrom_insert`, `gap_cross_mono`,
+        `ray_left_cross_mono`, `ray_right_cross_mono`), GREEN ON THE FIRST BUILD
+        (round 2 = two unused-binder lints). The complete per-gap/per-ray graft kit:
+        **keyed gap zones** (all-pos / all-neg / one-root-with-zones SELECTED by the
+        flank signs — the walk never refutes mismatched disjuncts of the TS-2c
+        trichotomies), **ray monotonicity** on `Iic`/`Ici` from derivative sign (shrink
+        to `Icc`), **keyed ray zones** (boundary-sample sign + end sign from
+        `eventually_*` + branch data; a crossing manufactures its far witness from the
+        eventual bound via `min`/`max` and grafts exactly one root), and the
+        **`ColsFrom`-level graft mechanism**: `colsFrom_insert` splits the first gap
+        into `[gap, point, gap]`, `colsFrom_insert_last` splits the terminal ray;
+        `colsFrom_graft_root` = the receipt that for the old family the three columns
+        just repeat (nothing moves but the sample). Constant case needs no new lemma
+        (`spec_eq_zero_of_gap_roots` + `eq_C_of_derivative_eq_zero`). Because `P'` is a
+        base member, at most one `P`-root per gap/ray — the kit covers every case the
+        walk meets.
+    - **TS-2d-3 — the descent**: the whole-diagram walk assembling 2b's sample signs +
+      2c's graft kit into `Realizes g (P :: F) D̂` with `D̂` a function of (diagram,
+      branch data); then the Dershowitz–Manna induction wrapping 2d-2, degree
       bookkeeping through `resolve`-branches; `diagramPartition` for every family;
       `elim_signVector` unconditionally.
   *Falsifier* (`QE_COMBINATORICS_WALL`, carried over): the sign-matrix bookkeeping fails to
