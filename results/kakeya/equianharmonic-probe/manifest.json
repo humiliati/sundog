@@ -1,0 +1,122 @@
+{
+  "artifactId": "KAK-PHASE3J-EQUIANHARMONIC-PROBE",
+  "generatedAt": "2026-07-07T03:51:23.422Z",
+  "status": "internal out-of-register probe receipt (q = 13 sidecar)",
+  "hook": "H-K3 equianharmonic structure test (PHASE3I reopen condition)",
+  "command": "node scripts/kakeya-equianharmonic-probe.mjs",
+  "registerNote": "q = 13 is NOT added to the workbench: SUPPORTED_Q, the Phase-2 spec lock, the UI, and the regression suite are untouched. Core geometry functions are total in q; this script passes q = 13 explicitly. ex at q = 13 is relative to the pinned Blokhuis-Mazzocca minimum (odd-q formula; the litpass pin covers general odd q).",
+  "preRegistered": [
+    "EQ-1: ex(harmonic, 13) = ex(generic, 13)",
+    "EQ-2: ex(equianharmonic, 13) differs from the common value",
+    "EQ-2': the difference is +1 (q = 7 magnitude)",
+    "sampling: 8 representatives per orbit (lex-first 4 + lex-last 4), exact solves only",
+    "controls: q in {7, 11} through the same code path must reproduce PHASE3I (2/3 and 4/4)"
+  ],
+  "falsifier": {
+    "name": "EQUIANHARMONIC_INSTRUMENT_MISMATCH",
+    "description": "Instrument-only: fires on solver budget exhaustion, intra-orbit ex variation among sampled representatives, control mismatch vs PHASE3I, orbit-inventory mismatch vs field arithmetic, or the q=13 parabola witness missing size 97 / completeness / the 6-triple profile. Hypothesis outcomes (EQ-1/2/2') are measurements and cannot fire it.",
+    "status": "clear"
+  },
+  "q13Witness": {
+    "size": 97,
+    "sacrifice": 6,
+    "maxMult": 3,
+    "pass": true
+  },
+  "hypotheses": {
+    "EQ-1 harmonic = generic at q=13": {
+      "predicted": true,
+      "measured": false,
+      "values": "harmonic=6 generic=5"
+    },
+    "EQ-2 equianharmonic deviates at q=13": {
+      "predicted": true,
+      "measured": true,
+      "values": "equianharmonic=5"
+    },
+    "EQ-2' deviation is +1": {
+      "predicted": true,
+      "measured": false,
+      "values": "delta=-1"
+    }
+  },
+  "perQ": [
+    {
+      "q": 7,
+      "bmMinimum": 31,
+      "inventoryMatch": true,
+      "orbitResults": [
+        {
+          "label": "harmonic",
+          "sixSet": "2,4,6",
+          "quadrupleCount": 42,
+          "repsSolved": 8,
+          "ex": "2"
+        },
+        {
+          "label": "equianharmonic",
+          "sixSet": "3,5",
+          "quadrupleCount": 28,
+          "repsSolved": 8,
+          "ex": "3"
+        }
+      ],
+      "solverExact": true,
+      "invariance": true
+    },
+    {
+      "q": 11,
+      "bmMinimum": 71,
+      "inventoryMatch": true,
+      "orbitResults": [
+        {
+          "label": "generic",
+          "sixSet": "3,4,5,7,8,9",
+          "quadrupleCount": 330,
+          "repsSolved": 8,
+          "ex": "4"
+        },
+        {
+          "label": "harmonic",
+          "sixSet": "2,6,10",
+          "quadrupleCount": 165,
+          "repsSolved": 8,
+          "ex": "4"
+        }
+      ],
+      "solverExact": true,
+      "invariance": true
+    },
+    {
+      "q": 13,
+      "bmMinimum": 97,
+      "inventoryMatch": true,
+      "orbitResults": [
+        {
+          "label": "equianharmonic",
+          "sixSet": "4,10",
+          "quadrupleCount": 182,
+          "repsSolved": 8,
+          "ex": "5"
+        },
+        {
+          "label": "generic",
+          "sixSet": "3,5,6,8,9,11",
+          "quadrupleCount": 546,
+          "repsSolved": 8,
+          "ex": "5"
+        },
+        {
+          "label": "harmonic",
+          "sixSet": "2,7,12",
+          "quadrupleCount": 273,
+          "repsSolved": 8,
+          "ex": "6"
+        }
+      ],
+      "solverExact": true,
+      "invariance": true
+    }
+  ],
+  "pass": true
+}

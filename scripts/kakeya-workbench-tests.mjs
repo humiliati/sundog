@@ -338,6 +338,62 @@ for (const q of Qs) {
   }
   check(`q=${q} T8n axis-symmetric-pencil-completion`, axisSym);
 
+  // 8o. Cross-ratio orbit arithmetic: the six-set classes {l, 1/l, 1-l,
+  //     1/(1-l), l/(l-1), (l-1)/l} partition F_q \ {0,1}, the harmonic class
+  //     {-1, 2, (q+1)/2} is present, and the class count is 1/2/2 for
+  //     q = 5/7/11 (q=5: everything is harmonic; q=7: harmonic +
+  //     equianharmonic; q=11: harmonic + one generic class).
+  const invMod = (x) => {
+    for (let i = 1; i < q; i++) if ((x * i) % q === 1) return i;
+    return 0;
+  };
+  const sixSetOf = (l) => {
+    const s = new Set([
+      l,
+      invMod(l),
+      (((1 - l) % q) + q) % q,
+      invMod((((1 - l) % q) + q) % q),
+      (l * invMod((((l - 1) % q) + q) % q)) % q,
+      (((((l - 1) % q) + q) % q) * invMod(l)) % q,
+    ]);
+    return [...s].sort((x, y) => x - y).join(",");
+  };
+  const classes = new Set();
+  let partitionOk = true;
+  for (let l = 2; l < q; l++) {
+    const key = sixSetOf(l);
+    classes.add(key);
+    for (const v of key.split(",").map(Number)) {
+      if (v < 2 || v >= q) partitionOk = false;
+    }
+  }
+  const harmonicKey = [2, (q + 1) / 2, q - 1].sort((x, y) => x - y).join(",");
+  const expectedClassCount = { 5: 1, 7: 2, 11: 2 }[q];
+  check(
+    `q=${q} T8o crossratio-orbit-classes`,
+    partitionOk && classes.has(harmonicKey) && classes.size === expectedClassCount,
+  );
+
+  // 8p. Cross-ratio placement of the PHASE3G/3I anchor quadruples: {0,1,2,3}
+  //     is harmonic at q in {5,7} and generic at q=11; {0,1,2,4} is harmonic
+  //     at q=5, equianharmonic at q=7, generic at q=11.
+  const cr = (a, b, c, d) =>
+    (((((a - c) * (b - d)) % q) + q) % q * invMod((((a - d) * (b - c)) % q + q) % q)) % q;
+  const labelOf = (l) => {
+    const key = sixSetOf(l);
+    if (key === harmonicKey) return "harmonic";
+    const parts = key.split(",").map(Number);
+    if (parts.length === 2 && parts.every((v) => (v * v - v + 1) % q === 0))
+      return "equianharmonic";
+    return "generic";
+  };
+  const expected0123 = { 5: "harmonic", 7: "harmonic", 11: "generic" }[q];
+  const expected0124 = { 5: "harmonic", 7: "equianharmonic", 11: "generic" }[q];
+  check(
+    `q=${q} T8p anchor-quadruple-orbits`,
+    labelOf(cr(0, 1, 2, 3)) === expected0123 && labelOf(cr(0, 1, 2, 4)) === expected0124,
+  );
+
   // 9. Greedy line-cover construction covers all directions.
   check(
     `q=${q} T9 greedy-complete`,

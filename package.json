@@ -245,6 +245,8 @@
     "kakeya:joint-gap": "node scripts/kakeya-joint-activation-gap.mjs",
     "kakeya:embed-probe": "node scripts/kakeya-embed-minimal-probe.mjs",
     "kakeya:deficit-onset": "node scripts/kakeya-deficit-onset-check.mjs",
+    "kakeya:crossratio-sweep": "node scripts/kakeya-crossratio-orbit-sweep.mjs",
+    "kakeya:equianharmonic": "node scripts/kakeya-equianharmonic-probe.mjs",
     "kakeya:adaptive-fibering": "node scripts/kakeya-adaptive-fibering-panel.mjs",
     "kakeya:sparse-excess": "node scripts/kakeya-sparse-excess-metric.mjs",
     "synthesis:collision-table": "node scripts/hodge-kakeya-collision-table.mjs",

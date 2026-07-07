@@ -1,0 +1,119 @@
+{
+  "artifactId": "KAK-PHASE3I-CROSSRATIO-ORBIT-SWEEP",
+  "generatedAt": "2026-07-07T03:20:12.638Z",
+  "status": "internal workbench diagnostic receipt",
+  "hook": "H-K3 4-star cross-ratio orbit sweep (PHASE3G banked reopener)",
+  "command": "node scripts/kakeya-crossratio-orbit-sweep.mjs",
+  "statement": "The embeddability excess ex of a 4-star is a PGL(2,q)-orbit invariant of its direction quadruple, classified by the cross-ratio six-set. Full sweep of every quadruple at q in {5, 7, 11} maps ex per orbit, machine-checks orbit invariance (solver audit), and tests the pinned Blokhuis-Mazzocca classification consequence ex >= 1 (no odd-q minimal set has a mult-4 point).",
+  "preRegistered": [
+    "PR1: ex constant on each orbit (affine-equivalence theorem; full-sweep solver audit)",
+    "PR2: q=5 harmonic ex=2 (single orbit); q=7 harmonic ex=2, equianharmonic ex=3 (PHASE3G anchors)",
+    "PR3: every orbit has ex >= 1 (classification consequence, machine-tested)",
+    "PR4: ex(harmonic, q=11) - OPEN, new measurement (both PHASE3G q=11 probes were generic)"
+  ],
+  "falsifier": {
+    "name": "CROSSRATIO_ORBIT_MISMATCH",
+    "description": "Fires if ex varies within any orbit, the measured orbit inventory disagrees with the field-arithmetic six-set classes, any orbit has ex = 0 (would contradict the pinned classification), any solve exhausts its budget, or a PHASE3G anchor value is not reproduced.",
+    "status": "clear"
+  },
+  "anchors3G": true,
+  "perQ": [
+    {
+      "q": 5,
+      "bmMinimum": 17,
+      "quadruples": 15,
+      "orbitCount": 1,
+      "expectedOrbitCount": 1,
+      "orbitTable": [
+        {
+          "label": "harmonic",
+          "sixSet": "2,3,4",
+          "j": 3,
+          "quadruples": 15,
+          "ex": "2",
+          "invariant": true,
+          "sample": "0 1 2 3"
+        }
+      ],
+      "checks": {
+        "invariance": true,
+        "inventoryMatch": true,
+        "allExPositive": true,
+        "solverExact": true
+      },
+      "nodesTotal": 150,
+      "pass": true
+    },
+    {
+      "q": 7,
+      "bmMinimum": 31,
+      "quadruples": 70,
+      "orbitCount": 2,
+      "expectedOrbitCount": 2,
+      "orbitTable": [
+        {
+          "label": "harmonic",
+          "sixSet": "2,4,6",
+          "j": 6,
+          "quadruples": 42,
+          "ex": "2",
+          "invariant": true,
+          "sample": "0 1 2 3"
+        },
+        {
+          "label": "equianharmonic",
+          "sixSet": "3,5",
+          "j": 0,
+          "quadruples": 28,
+          "ex": "3",
+          "invariant": true,
+          "sample": "0 1 2 4"
+        }
+      ],
+      "checks": {
+        "invariance": true,
+        "inventoryMatch": true,
+        "allExPositive": true,
+        "solverExact": true
+      },
+      "nodesTotal": 18480,
+      "pass": true
+    },
+    {
+      "q": 11,
+      "bmMinimum": 71,
+      "quadruples": 495,
+      "orbitCount": 2,
+      "expectedOrbitCount": 2,
+      "orbitTable": [
+        {
+          "label": "generic",
+          "sixSet": "3,4,5,7,8,9",
+          "j": 2,
+          "quadruples": 330,
+          "ex": "4",
+          "invariant": true,
+          "sample": "0 1 2 3"
+        },
+        {
+          "label": "harmonic",
+          "sixSet": "2,6,10",
+          "j": 1,
+          "quadruples": 165,
+          "ex": "4",
+          "invariant": true,
+          "sample": "0 1 2 5"
+        }
+      ],
+      "checks": {
+        "invariance": true,
+        "inventoryMatch": true,
+        "allExPositive": true,
+        "solverExact": true
+      },
+      "nodesTotal": 74131761,
+      "pass": true
+    }
+  ],
+  "pass": true
+}

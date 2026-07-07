@@ -92,6 +92,23 @@ the onset is exactly `k = q+1` ("no axis left"; dually, arc saturation), tax
 (`npm run kakeya:deficit-onset`; core tests `72/72`). The Blokhuis-Mazzocca
 planar minimum is now bibliographically pinned in the litpass memo addendum
 (2026-07-06).
+Phase 3I sweeps the 4-star cross-ratio orbits:
+[`kakeya/PHASE3I_CROSSRATIO_ORBIT_SWEEP.md`](kakeya/PHASE3I_CROSSRATIO_ORBIT_SWEEP.md)
+solves all 580 direction quadruples exactly - embeddability excess is
+constant on every PGL(2,q) orbit, with the split real at `q=7` (harmonic 2 vs
+equianharmonic 3) and collapsed at `q=11` (harmonic = generic = 4, the new
+measurement); reopen condition for the equianharmonic question is `q=13`,
+outside the locked field range (`npm run kakeya:crossratio-sweep`; core tests
+`78/78`).
+Phase 3J runs that reopen condition as an out-of-register `q=13` sidecar
+(register untouched):
+[`kakeya/PHASE3J_EQUIANHARMONIC_PROBE.md`](kakeya/PHASE3J_EQUIANHARMONIC_PROBE.md)
+**falsifies the equianharmonic conjecture** - at `q=13` the deviator is the
+*harmonic* orbit (6 vs 5=5) - and replaces it with a sharper banked pattern:
+all 8 measured orbit-field pairs have `ex in {(q-3)/2, (q-1)/2}` (never above
+the concurrency budget, never more than one below), with the harmonic orbit
+at full budget exactly when `q = 1 (mod 4)`; discriminating fields `q=17`/
+`q=19` banked as new pre-registrations (`npm run kakeya:equianharmonic`).
 This file is a target-selection and claim-boundary scaffold opened from
 [`SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md`](SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md).
 
@@ -527,6 +544,15 @@ Forbidden:
   `k <= q` via axis-avoiding parabola tangents (self-certifying against the
   proven bound; full subset lattice at all fields), onset exactly at the full
   pencil with tax `(q-1)/2`, axis-symmetric boundary.
+- [`kakeya/PHASE3I_CROSSRATIO_ORBIT_SWEEP.md`](kakeya/PHASE3I_CROSSRATIO_ORBIT_SWEEP.md)
+  - 4-star cross-ratio orbit sweep: excess is a PGL-orbit invariant (580/580
+  exact solves), split at `q=7` (harmonic 2, equianharmonic 3), collapsed at
+  `q=11` (both orbits 4); equianharmonic reopen condition = `q=13`.
+- [`kakeya/PHASE3J_EQUIANHARMONIC_PROBE.md`](kakeya/PHASE3J_EQUIANHARMONIC_PROBE.md)
+  - `q=13` out-of-register sidecar: equianharmonic conjecture FALSIFIED
+  (harmonic is the `q=13` deviator, 6 vs 5); banked two-level law
+  `ex in {budget-1, budget}` (8/8) with harmonic at full budget iff
+  `q = 1 (mod 4)` (4/4); register untouched, no new pins.
 - [`kakeya/EXTERNAL_REVIEW_PACKET.md`](kakeya/EXTERNAL_REVIEW_PACKET.md) -
   owner-pending external-review ask; frames Kakeya as a boundary/pedagogy review,
   not a result-review packet.
