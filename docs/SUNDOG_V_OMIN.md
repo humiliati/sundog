@@ -264,12 +264,30 @@ Already banked in-lane: `polyDef_tame` (R1: QF dim-1 tameness), the whole abstra
         annotation cannot be restated at intermediate dropped barriers — P's grafted
         root may lie left of a dropped sample; plan validity discharges only at keep
         time over the whole merged gap.
-      - **The fused master [next]**: the strong induction producing
-        `ColsFrom g base lo ξk (baseDrop m cols)` and
-        `GraftData g P lo ξk (readAnnot m εp sa cols)` together; then branch
-        refinement (`truncChain` live-lead + end-sign `SADef` conditions), the
-        drop-a-member projection, and the DM recursion: `DiagramPartition` for every
-        family; `elim_signVector` unconditionally.
+      - **THE FUSED MASTER ✅ LANDED 2026-07-07**: `DiagramMaster.lean` (74th module),
+        axiom-clean, 2 gate entries (`colsFrom_master`, `realizes_readAnnot`), green
+        round 3 (~460 lines; only two trivial syntax fixes — the hardest theorem of
+        the arc landed essentially first-try off the banked design). The strong
+        induction carries the pending-gap accumulator exactly as designed: last kept
+        barrier `lo₀` + `FlankTag` + the carried fact "base sign vector on `(lo₀, lo]`
+        = base projection of the CURRENT gap column"; keep-steps discharge plan
+        validity over the whole merged gap via `readPlan_valid_*` and re-establish
+        pending vacuously; drop-steps re-establish it by two projected
+        `signVec_eq_of_gap` applications — and with the keep-later walk functions the
+        drop case became pure plumbing (the recursion's outputs ARE the goal outputs;
+        `colsFrom_widen` ended up unused). Live leads exclude zero members
+        (`spec_ne_zero_of_live` via `coeff_map`), which also yields the no-root-in-
+        pending argument (a zero in a gap's base projection would be a base root
+        inside a gap). **Capstone `realizes_readAnnot`**: from
+        `Realizes g (base ++ remainders) D`, the family `P :: Pd :: bres` realizes
+        `graftWalk (readAnnot m εp εm D) (baseDrop m D)` — every ingredient a pure
+        function of `(D, εm, εp)`: a branch-constant diagram + end tags give ONE
+        branch-wide diagram. The C–H reconstruction step is now fully machine-checked.
+      - **The recursion [next]**: `SADef` branch conditions pinning `(εm, εp)` + live
+        leads (`truncChain` refinement), the drop-a-member projection (`Pd` out of
+        `P :: Pd :: bres`), and the DM recursion (`famDegrees_induction` +
+        `famDegrees_derived_lt`): `DiagramPartition` for every family;
+        `elim_signVector` unconditionally.
   *Falsifier* (`QE_COMBINATORICS_WALL`, carried over): the sign-matrix bookkeeping fails to
   stay tractable at single-owner scale — fallback = TS-1 + TS-2b/2c as independently valuable
   univariate machinery, wall published with location.
