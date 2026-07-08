@@ -141,6 +141,14 @@ Sorted by reviewer landing intent.
   pre-registered five-locus boundary map; Cut 2 separability held, Cut 3
   still open.
 
+**If you landed via the machine-checked Lean formalization work:**
+
+- [`docs/SUNDOG_V_OMIN.md`](docs/SUNDOG_V_OMIN.md) — the o-minimality + Tarski–Seidenberg lane roadmap with per-stage receipts (opened 2026-07-02; TS-QE + R4-E LANDED 2026-07-08).
+- [`docs/SUNDOG_V_OMIN_WRITEUP.md`](docs/SUNDOG_V_OMIN_WRITEUP.md) — the accurate, citable technical write-up. Result: three van den Dries Chapter-3 theorems (Monotonicity, Uniform Finiteness, Cell Decomposition for ℝ²) proved once over an abstract `OMinStructure` interface and instantiated at two concrete witnesses (semilinear via Fourier–Motzkin; semialgebraic via Tarski–Seidenberg proved as `elim_signVector` by Cohen–Hörmander sign-diagrams), with a Pillay–Steinhorn-style VC-finiteness bridge (R4-E). Approved framing: **"to our knowledge, and per prior-art review, this is the first machine-checked Tarski–Seidenberg quantifier elimination and the first machine-checked o-minimal structures in Lean."** Sibling formalizations exist in *other* proof assistants — Coq (Cohen–Mahboubi), Isabelle/HOL (2022), HOL Light (Harrison's Cohen–Hörmander). **Scope:** the dim ≤ 2 core of van den Dries Chapter 3, not the full dimension tower; VC bound is the one-parameter planar case, not general Pillay–Steinhorn / NIP. Formalization, not discovery — classical theorems from the 1940s–50s. Axiom-clean (`[propext, Classical.choice, Quot.sound]`; no `sorry`, no custom axioms, no `native_decide`); final green build 8,624 verification jobs.
+- [`docs/SUNDOG_V_CERTIFICATE_LEAN.md`](docs/SUNDOG_V_CERTIFICATE_LEAN.md) — the machine-checked-cores ledger this program extends; the new o-min/T-S subsection sits alongside the Universal-Approximation Constructive Capstone as a **second capstone-tier surface** of a different type (verification of classical cornerstones vs. constructive-approximation).
+- **Reproduction (post-push):** `lake build Sundogcert.AxiomAudit` from a clean checkout of the `sundogcert` repository will re-verify every theorem down to its pinned axioms.
+- **Push gate:** modules 62–79 (`Sundogcert.OMin.*`) are committed locally and pending owner-side push. Until then, no external "here's the code" beat; the docs above reference the modules by name only.
+
 **If you want the working surfaces:**
 
 - [Applications map](docs/APPLICATIONS.md) — how Three-Body, Balance,
@@ -350,6 +358,28 @@ Present it carefully:
   [`docs/SUNDOG_V_CAPSET.md`](docs/SUNDOG_V_CAPSET.md) — Sundog's
   apparatus as an evaluator for AI-produced mathematics, with the
   cap-set workbench as the one current anchor.
+- **Machine-checked o-minimality + Tarski–Seidenberg (Lean)** wrap-up
+  landed 2026-07-08 —
+  [`docs/SUNDOG_V_OMIN.md`](docs/SUNDOG_V_OMIN.md) (lane roadmap) +
+  [`docs/SUNDOG_V_OMIN_WRITEUP.md`](docs/SUNDOG_V_OMIN_WRITEUP.md)
+  (technical write-up). Three van den Dries Chapter-3 theorems proved
+  once over an abstract `OMinStructure` and instantiated at two
+  witnesses (semilinear + semialgebraic via Tarski–Seidenberg by
+  Cohen–Hörmander sign-diagrams); Pillay–Steinhorn-style VC-finiteness
+  bridge (R4-E). **To our knowledge, and per prior-art review, the
+  first machine-checked Tarski–Seidenberg quantifier elimination and
+  the first machine-checked o-minimal structures in Lean.** Sibling
+  formalizations exist in *other* proof assistants — Coq
+  (Cohen–Mahboubi), Isabelle/HOL (2022), HOL Light (Harrison's
+  Cohen–Hörmander). Scope: the dim ≤ 2 core of van den Dries Chapter 3,
+  not the full dimension tower; VC bound is the one-parameter planar
+  case, not general Pillay–Steinhorn / NIP. Formalization, not
+  discovery. Axiom-clean (`[propext, Classical.choice, Quot.sound]`);
+  final green build 8,624 verification jobs. Modules 62–79
+  (`Sundogcert.OMin.*`) pending owner-side push before external
+  reference. See the
+  [Certificate (Lean) ledger's o-min section](docs/SUNDOG_V_CERTIFICATE_LEAN.md#the-o-minimality--tarskiseidenberg-lane-machine-checked-classical-cornerstones)
+  for the ledger-level statement.
 - **Social-readiness state** tracked in
   [`docs/site/SEO_AND_SOCIAL_READINESS_ROADMAP.md`](docs/site/SEO_AND_SOCIAL_READINESS_ROADMAP.md)
   — Phase 1 cleared 2026-05-21 across thirteen Class A pages; Phase 2
