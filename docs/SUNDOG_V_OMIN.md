@@ -24,7 +24,7 @@
 | R1 | Dim-1 o-minimality via finite-frontier `Tame`; ReLU/semilinear + QF-semialgebraic structures tame | ✅ 2026-07-02 |
 | R2 | Monotonicity PL instance; frontier modulus `≤ 2\|S\|+1` (U-4 bridge); `tame_iff_normalForm` | ✅ 2026-07-02 |
 | R3-semilinear | Constructive boolean closure + Fourier–Motzkin projection 2→1; semilinear = a genuine structure in dims 1–2 | ✅ 2026-07-02 |
-| R3-semialgebraic | **TARSKI–SEIDENBERG, ELIMINATION FORM** — `elim_signVector`: the existential sign-vector set is `SADef` (TS-2 closed; TS-3 structure-packaging below) | ✅ 2026-07-07 |
+| R3-semialgebraic | **TARSKI–SEIDENBERG QE + `semialgebraicStructure : OMinStructure`** — `elim_signVector` + the second (first nonlinear) machine-checked o-min structure; Monotonicity/UF/CDT₂ instantiate at the real field | ✅ 2026-07-07 |
 | R4-A | Abstract `OMinStructure` + definable calculus + `S₁ = Tame` capstone | ✅ 2026-07-02 |
 | R4-B | **`semilinearStructure : OMinStructure` — the first machine-checked o-min structure** | ✅ 2026-07-03 |
 | R4-C | **THE MONOTONICITY THEOREM, with continuity** (`monotonicity_theorem_continuous`) | ✅ 2026-07-04 |
@@ -336,13 +336,29 @@ Already banked in-lane: `polyDef_tame` (R1: QF dim-1 tameness), the whole abstra
   *Falsifier* (`QE_COMBINATORICS_WALL`, carried over): the sign-matrix bookkeeping fails to
   stay tractable at single-owner scale — fallback = TS-1 + TS-2b/2c as independently valuable
   univariate machinery, wall published with location.
-- **TS-3 — the structure** [2–3 sessions once TS-2 lands]: `semialgebraicStructure`:
-  booleans (list ops), substitution (`MvPolynomial.rename`/composition), `definable_lt`/
-  `definable_singleton` (linear polynomials), projection (TS-2), `tame_dim_one` (TS-1).
-  Capstone `semialgebraic_s1_eq_tame`; payoffs: Monotonicity/UF/CDT₂ at the real field.
+- **TS-3 ✅ LANDED 2026-07-07 — THE ARC IS COMPLETE**: `SemialgebraicStructure.lean`
+  (78th module), axiom-clean, 5 gate entries (**`semialgebraicStructure`**, `sadef_proj`,
+  `semialgebraic_s1_eq_tame`, `semialgebraic_uniform_finiteness`,
+  `semialgebraic_cell_decomposition`), green round 3.
+  **`semialgebraicStructure : OMinStructure` — the second machine-checked o-minimal
+  structure, the first genuinely nonlinear one.** The eight axioms: booleans = the 2d-1
+  `SADef` algebra; substitution = atom transport along `MvPolynomial.rename`
+  (`eval_rename`); **projection = Tarski–Seidenberg**: `sadef_sign_char` (every `SADef`
+  set is a sign-vector condition on a finite family, by induction over the
+  `allSignVecs` enumeration with filter-complements and take/drop-splits), the
+  snoc→cons rotation `Fin.snoc Fin.succ 0` into the `finSuccEquiv` frame, and
+  `elim_signVector` per fiber, glued by `SADef.list_biUnion`; the `lt`/singleton atoms
+  are linear polynomials; `tame_dim_one` via TS-1's `family_sign_partition` (the sign
+  vector is constant between the cuts, so the frontier lies in the finite cut set —
+  with a hand-rolled `avoid_around` interval lemma). **The whiteboard at the real
+  field**: `semialgebraic_s1_eq_tame` (dim-1 semialgebraic = tame),
+  `semialgebraic_uniform_finiteness`, `semialgebraic_cell_decomposition` — the
+  Monotonicity Theorem, Uniform Finiteness, and CDT₂ now hold for semialgebraic sets
+  by instantiation, exactly as the abstract build was designed to deliver.
 
-*Honest scope.* This is the lane's long wall, deliberately queued behind R4-A/B (which produce
-the frame TS-QE's result plugs into). Not started; nothing here claims progress.
+*The arc, closed.* TS-QE opened 2026-07-06 and closed 2026-07-07: 17 modules
+(62nd–78th), route Cohen–Hörmander set-level over concrete ℝ, all axiom-clean. Lean
+was open ground for Tarski–Seidenberg when TS-0 was decided; it isn't anymore.
 
 ---
 
