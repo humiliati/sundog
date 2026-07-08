@@ -31,6 +31,7 @@
 | R4-D | **UNIFORM FINITENESS (the Finiteness Lemma)** — `uniform_finiteness`; the pile-wall dissolved via the classical tube | ✅ 2026-07-06 |
 | R4-D5 | **CELL DECOMPOSITION FOR ℝ² (CDT₂)** — `cell_decomposition : ∃ cells, IsCellDecomp cells A` | ✅ 2026-07-06 |
 | R4-E | **PILLAY–STEINHORN NIP/VC BRIDGE** — `definable_family_nip` (shattering ≤ 2·cells+1 in any o-min structure) + `semialgebraic_family_nip`/`semilinear_family_nip`: the bridge back to the approximation lane | ✅ 2026-07-08 |
+| Sigmoid (dim-1) | **DIM-1 SIGMOID TAMENESS** — `sigmoid_dnf_tame`: every finite DNF of one-variable logistic-sigmoid thresholds is `Tame`, off R1 with no exponential structure (the exp/Wilkie witness stays a parked wall) | ✅ 2026-07-08 |
 
 Modules: `OMinimalOne` … `OMinimalCellDecomp` (34th–61st), 80 gated headline theorems, all
 axiom-clean; audits 8540 → 8605 GREEN. Classical anchors for what's landed:
@@ -373,6 +374,26 @@ order-connected by band shape; `cell_decomposition` supplies the uniform K =
 families have uniformly bounded shattering — tameness ⇒ VC-finiteness, the citation
 hook back to the algo-approx lane (arXiv 2509.18025). Full account:
 `docs/SUNDOG_V_OMIN_WRITEUP.md`.
+
+## Sigmoid (dim-1) — the exponential activation, in dimension one. [LANDED 2026-07-08]
+
+`SigmoidTame.lean` (80th module), axiom-clean, 4 gate entries
+(`tame_sublevel_of_injective`, `sigmoid_strictMono`, `sigmoid_lt_tame`,
+`sigmoid_dnf_tame`), green round 3 (two fixes: `rw [← closure_eq]` rewrote inside
+`frontier` — use a `calc`; `show`→`change`); audit **8625 GREEN**. Motivation: "is the
+sigmoid class tame?" — mathematically yes (σ is definable in R_exp, o-minimal by
+Wilkie), but that needs the exponential structure, which no assistant has formalized
+and which Cohen–Hörmander cannot reach. The **dimension-one fragment** is free off R1:
+a continuous injective `f` has tame threshold sets (`frontier_superlevel_subset` sends
+the superlevel frontier into the level-set frontier; an injective level set is a
+subsingleton, hence finite). The concrete logistic `σ(x) = (1 + e^{-x})⁻¹` is
+continuous and strictly increasing (`Real.exp` monotonicity; `gcongr` for the inverse),
+so it is genuinely the *transcendental* activation — not reachable through the
+semialgebraic witness. `sigmoid_dnf_tame`: every finite DNF of one-variable
+affine-sigmoid bands is `Tame`, via R1's Boolean closure. Three pre-registered
+falsifiers (`SIGMOID_MONO_FRONTIER`, `BOOL_CLOSURE_LEAK`, `SIGMOID_INSTANCE_VACUOUS`)
+all cleared. *Parked wall:* composition and dimension ≥ 2 need
+`expStructure : OMinStructure` (Wilkie / Pfaffian–Khovanskii), a build not attempted.
 
 *The arc, closed.* TS-QE opened 2026-07-06 and closed 2026-07-07: 17 modules
 (62nd–78th), route Cohen–Hörmander set-level over concrete ℝ, all axiom-clean. Lean
