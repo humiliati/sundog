@@ -82,3 +82,133 @@ additive preset `lock_v7_g675_kf3` (`lock_v7` block with `kf=3`, `grashof=675`,
 g675 preset/out-dirs; ~40 + 35 min). Decision gate §5 unchanged:
 `NSE-H3-FORCING-GENERAL` / `NSE-H3-GRASHOF-LOCAL` / `NSE-H3-INPUT-UNPOWERED`
 (the lock portability gate [0.20, 0.40] remains the binding formation gate).
+
+---
+
+# v1.1 Rung 1 — Locks Receipt (owner-run 2026-07-07): both adjudicators DEFER on coverage
+
+> Preset applied under sign-off (self-test, config echo incl. Re_f 25.0 = 25.0,
+> smoke — all clean). Artifacts `results/proof/c1-h3-kf3-g675-{knn-sweep,twin}/`.
+> Integration clean both runs (~43 + 45 min; 1,958 steps/s). **Non-promotional.**
+
+## What the locks measured
+
+- **Formation PASSED (the binding gate):** damp 0.30856 (calib 0.29992), inside
+  [0.20, 0.40] — the portable objective is powered and portable at the new cell.
+  Not `INPUT-UNPOWERED`.
+- **kNN-sweep: `INCONCLUSIVE_CONVERGENCE`** (`insufficient_coverage_passing_
+  sweep_points`, `interpretable: false`): **zero** of the seven sweep points had
+  fidelity coverage (r_k ≤ ε_K) sufficient to enter the fit — the a_mm read
+  never formed.
+- **Twin-state: `TWIN_STATE_DEFERRED_COVERAGE`** (`insufficient_signature_near_
+  pair_coverage`, `PAIRED_FIBER_UNDEFINED`): candidate coverage **0.4588 <
+  s_pos = 0.50** (registered gate, pre-dating this registration; every G-axis
+  cell sat at 1.0). Witness pairs that do exist (38,577) behave anchor-like
+  (disagree 0.0329), but the certificate correctly refuses a support-level claim
+  from a minority of the sample.
+- **Mechanism (measured):** matched Re_f preserved chaos but not attractor
+  compactness. The G=675 cell's sampled energy range is **[0.386, 1.352]**
+  (3.5:1) vs the anchor's [0.715, 0.735] (1.03:1), while the rule-derived ε_K
+  *shrank* to 0.0589 (E_max 0.6946) — the same-rule fiber ball covers a far
+  smaller fraction of a far wider signature distribution. High-mode norms
+  spread likewise ([0.207, 0.760] vs [0.220, 0.244]).
+
+## Verdict: `NSE-H3-INCONCLUSIVE_COVERAGE` (typed by precedent; spec-gap noted)
+
+The scope §5 table did not enumerate a deferral row — an honest spec gap. Both
+harness verdicts are the registered **deferral** category (neither positive nor
+diagnosed failure), matching the RG-family precedent row
+(`PDE-C1-RG-INCONCLUSIVE_CONTROL`, RG-v0 §6). The witness at (k_f=3, G=675) is
+**neither established nor refuted**: the apparatus at its registered sample
+density (50k) cannot resolve ε_K-fibers on this wider attractor. Not
+`GRASHOF-LOCAL` (nothing failed while powered); not `FORCING-GENERAL`. No gate
+was widened; no number reinterpreted.
+
+**The forcing axis has now resisted in two distinct, measured ways:** laminar at
+fixed G (v1), coverage-walled at matched Re_f (v1.1). Both are apparatus/regime
+facts, not witness facts — the anchor witness stands exactly as receipted.
+
+## Owner fork (staged, not spent)
+
+1. **Coverage power move (new registration):** `fallback_v7_g675_kf3` —
+   `sample_count 50k → 200k`, the house `fallback_v5` idiom (a registered
+   bigger-N variant with precedent), everything else identical. ≈ 12.7M steps
+   ≈ ~2–2.2 h per run × 2, owner-run, one more 3-site sign-off. Honest odds
+   note: coverage grows as r_k shrinks ~N^(1/d_eff); with d_eff unknown at this
+   cell the lift from 0.459 past 0.50 is plausible but not guaranteed — and a
+   200k deferral would itself measure the cell as
+   coverage-walled-at-house-scale. Pre-committed stop: if 200k also defers, H3
+   closes final on this axis.
+2. **Close H3 at `NSE-H3-INCONCLUSIVE_COVERAGE`** — two typed walls, axis open
+   for future registrations, anchor untouched.
+
+Cross-refs: `results/proof/c1-h3-kf3-g675-{knn-sweep,twin}/manifest.json`,
+`PDE_C1_REGIME_GENERALITY_v0.md` §6 (the deferral precedent row),
+`pde_c1_kolmogorov_cell.py` (`s_pos` coverage gate; `fit_rows < 2` sweep gate),
+`NSE_H3_KF3_SCOPE.md` §5+§7.
+
+---
+
+# v1.2 Coverage Power Move — Receipt (owner-run 2026-07-07): the stop fires. H3 FINAL.
+
+> `fallback_v7_g675_kf3` locks per the frozen scope §8 (adjudication N 50k → 200k,
+> nothing else). Artifacts `results/proof/c1-h3-kf3-g675-fb-{knn-sweep,twin}/`.
+> Integration clean, ~98 + 96 min. **Non-promotional.**
+
+## The measurement: coverage is nearly N-flat
+
+| quantity | 50k (v1.1) | 200k (v1.2) |
+| --- | --- | --- |
+| twin candidate coverage (gate ≥ 0.50) | 0.4588 | **0.4692** |
+| kNN sweep coverage-passing fit points (need ≥ 2) | 0 | **0** |
+| held-out damp (formation) | 0.30856 | 0.30674 |
+| fiber pairs that exist / their disagree | 38,577 / 0.0329 | 179,516 / 0.0339 |
+
+Quadrupling the adjudication sample moved candidate coverage **+0.010**. The
+shortfall is not sample density: the r₅₀ radii shrink as N^(1/d_eff), and a 4×
+lift that barely moves the ≤ε_K fraction reads as a large local effective
+dimension over most of the sampled support. Linear-in-log-N extrapolation puts
+the 0.50 gate ~two more quadruplings away (≈3.2M samples ≈ 160M steps ≈ 34 h per
+run) — outside house scale, and clearing the twin gate would still leave the
+sweep at zero fit points. Meanwhile everything that *can* be read is stable
+across N: formation (damp ~0.307), and the existing fiber pairs stay
+anchor-like (disagree ~0.033) at both sample sizes.
+
+## Verdict (pre-committed, fires as frozen): `NSE-H3-INCONCLUSIVE_COVERAGE` — FINAL
+
+Per scope §8: any registered deferral at 200k closes H3 **final** —
+coverage-walled at house scale. No v1.3; the ε_K rule and `s_pos` stay untouched
+forever under this scope (changing either after these reads would be
+gate-widening). The witness at (k_f=3, G=675) is neither established nor
+refuted, and the anchor witness is untouched.
+
+## H3 close-out: the forcing axis, mapped
+
+Three measured walls in one day, none of them witness failures:
+
+1. **v1 (k_f=3, G=200):** the fixed-G axis exits the chaotic window — steady
+   state, typed by the atom gate in ~5 min.
+2. **v1.1 (k_f=3, G=675, matched Re_f):** chaos restored, objective portable
+   (damp 0.307–0.309 at every N), but the attractor widens ~3.5× in signature
+   range while rule-ε_K shrinks — both adjudicators defer.
+3. **v1.2 (200k):** the deferral is N-flat — an attractor-geometry fact, not a
+   sampling accident.
+
+What a future reopening would need (future scope, not this one): a
+coverage-adaptive apparatus registration — e.g., density-stratified fibers or a
+regime-conditioned ε_K — which is a *protocol* change requiring its own
+pre-registration and comparability argument against the banked G-axis cells.
+
+## Post-AT slate ledger — FINAL (all entries dispositioned)
+
+| entry | verdict |
+| --- | --- |
+| H1 proxy-faithfulness | `NSE-H1-PROXY-ONLY` (the witness is a proxy-relative fact) |
+| H2 resolution stability | `NSE-H2-TWO-REGIME-N48-STABLE` (CFL-dt caveat carried) |
+| H3 forcing-axis | `NSE-H3-INCONCLUSIVE_COVERAGE` (final; axis mapped, three typed walls) |
+| H4 stationarity doctrine | `NSE-H4-STATIONARITY-GATE-LANDED` |
+| H5 AT symbolic closeout | `AT5_FORMAL_CORE_ALREADY_LANDED` |
+
+Cross-refs: `results/proof/c1-h3-kf3-g675-fb-{knn-sweep,twin}/manifest.json`,
+`NSE_H3_KF3_SCOPE.md` §8, `NSE_H1_FIBER_RECEIPT.md`, `NSE_H2_N48_RECEIPT.md`,
+`NSE_POST_AT_HYPOTHESES_SLATE.md`.

@@ -123,3 +123,31 @@ Cross-refs: `NSE_POST_AT_HYPOTHESES_SLATE.md` §5, `PDE_C1_REGIME_GENERALITY_v1.
 - **Rung 1 (only on admission; owner sign-off then owner-run):** preset
   **`lock_v7_g675_kf3`** — the `lock_v7` block with `kf=3`, `grashof=675`,
   `burnin_steps=200_000`; same two locks, same §5 decision gate.
+
+## 8. v1.2 — Coverage Power Move (commissioned 2026-07-07; frozen pre-run)
+
+> Owner registered `fallback_v7_g675_kf3` after the v1.1 locks deferred on the
+> registered coverage gates (`NSE-H3-INCONCLUSIVE_COVERAGE`, receipt locks
+> section: sweep 0/7 fit points; twin candidate coverage 0.4588 < s_pos 0.50;
+> mechanism = wider attractor at shrunken rule-ε_K). **Frozen here before any
+> 200k number exists.**
+
+- **One change, house-precedented:** adjudication `sample_count 50k → 200k` —
+  the `fallback_v5` idiom (the repo's registered bigger-N variant size, imported
+  rather than guessed). Calibration block (50k samples), gap, burn-in 200k,
+  seed, objective, ε_K/δ_H rules, both adjudicators' gates: all unchanged.
+  Coverage is the only quantity this move addresses (r_k shrinks ~N^(1/d_eff)
+  at fixed protocol).
+- **Cost:** ≈ 12.71M steps ≈ ~2–2.2 h per run × 2, owner-run; twin
+  post-processing grows ~16× in pairs (manageable; run on a quiet box — the
+  2026-07-06 memory-squeeze precedent applies at 200k sample arrays).
+- **Decision gate:** §5 unchanged for interpretable outcomes
+  (`FORCING-GENERAL` / `GRASHOF-LOCAL`), **plus the previously missing deferral
+  row, now enumerated:** any registered deferral verdict at 200k ⇒
+  **`NSE-H3-INCONCLUSIVE_COVERAGE` final — coverage-walled at house scale; no
+  v1.3, no ε_K-rule or s_pos change ever** (that would be gate-widening). A
+  200k deferral is itself a measurement: the cell's effective dimension
+  outruns the house apparatus.
+- Commands (owner-run):
+  `python scripts/pde_c1_kolmogorov_cell.py --preset fallback_v7_g675_kf3 --adjudicator knn-sweep --out results/proof/c1-h3-kf3-g675-fb-knn-sweep`
+  then `--adjudicator twin-state --out results/proof/c1-h3-kf3-g675-fb-twin`.

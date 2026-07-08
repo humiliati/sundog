@@ -59,6 +59,7 @@ VERDICT_BEARING_PRESETS = {
     "lock_v7_g300_n48",
     "lock_v7_g300_n48_dt5",
     "lock_v7_g675_kf3",
+    "fallback_v7_g675_kf3",
     "lock_disc_g200",
     "lock_disc_g300",
 }
@@ -136,6 +137,7 @@ def parse_args() -> argparse.Namespace:
             "lock_v7_g300_n48",
             "lock_v7_g300_n48_dt5",
             "lock_v7_g675_kf3",
+            "fallback_v7_g675_kf3",
             "lock_disc_g200",
             "lock_disc_g300",
             "at2_growth_g200",
@@ -440,6 +442,21 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         # (deeper attractor at higher G).
         burnin_steps = 200_000
         sample_count = 50_000
+        kf = 3
+        grashof = 675.0
+        k_signature = 3
+        objective = "portable-quantile"
+        objective_quantile = 0.70
+        calibration_sample_count = 50_000
+        calibration_gap_steps = 5_000
+    elif args.preset == "fallback_v7_g675_kf3":
+        # H3 v1.2 coverage power move (NSE_H3_KF3_SCOPE.md section 8): the
+        # lock_v7_g675_kf3 cell with the fallback_v5 idiom -- adjudication
+        # sample_count 50k -> 200k to shrink r_k at fixed protocol, after the
+        # v1.1 registered coverage deferrals (candidate coverage 0.4588 <
+        # s_pos; 0/7 sweep fit points). Calibration block unchanged.
+        burnin_steps = 200_000
+        sample_count = 200_000
         kf = 3
         grashof = 675.0
         k_signature = 3
