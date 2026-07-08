@@ -531,6 +531,12 @@ def stage_score():
     mos = _scalar_cache("mos_scalars.jsonl")
     gefs_by_day = _by_day(gefs)
     ecm_by_day = _by_day(ecm)
+    ecmwf_on = len(ecm) > 0
+    mos_ok = sum(1 for r in mos.values() if r.get("maxt") is not None)
+    mos_on = len(mos) > 0 and mos_ok / len(mos) > 0.5
+    print(f"score: ECMWF rung {'ON' if ecmwf_on else 'OFF (throttle-blocked)'}; "
+          f"MOS rung {'ON' if mos_on else f'OFF (coverage {mos_ok}/{len(mos)} — NBS archive sparse)'}",
+          flush=True)
     sd = _station_days()
     out = (RESULTS / "scores_g4.jsonl").open("w", encoding="utf-8")
     n = 0
@@ -578,10 +584,12 @@ def stage_score():
                     continue
                 # freshest cached rung issue available at this cutoff
                 g_rec = _pick_cached(gefs_by_day, dstr, T)
-                e_rec = _pick_cached(ecm_by_day, dstr, T)
+                e_rec = _pick_cached(ecm_by_day, dstr, T) if ecmwf_on else True
                 nb = g3.latest_issue(day, T)
-                mrec = _mos_at(mos, st, day, T)
-                if not g_rec or not e_rec or nb is None or nb["key"] not in nbm or mrec is None:
+                mrec = _mos_at(mos, st, day, T) if mos_on else None
+                if not g_rec or not e_rec or nb is None or nb["key"] not in nbm:
+                    continue
+                if mos_on and mrec is None:
                     continue
                 nmu, nsd = nbm[nb["key"]]["mu"][st], nbm[nb["key"]]["sd"][st]
                 bnds, _raw, mono = g3.build_exceedance(bins)
@@ -591,9 +599,11 @@ def stage_score():
                            "z": 1 if high > b else 0,
                            "f_mkt": round(fmkt, 6),
                            "f_nbm": round(_norm_sf(b, nmu, nsd), 6),
-                           "f_gefs": round(_norm_sf(b, g_rec["mu"][st], g_rec["sd"][st]), 6),
-                           "ecmwf_margin": round(e_rec["maxt"][st] - b, 3),
-                           "mos_margin": round(mrec - b, 3)}
+                           "f_gefs": round(_norm_sf(b, g_rec["mu"][st], g_rec["sd"][st]), 6)}
+                    if mos_on:
+                        rec["mos_margin"] = round(mrec - b, 3)
+                    if ecmwf_on:
+                        rec["ecmwf_margin"] = round(e_rec["maxt"][st] - b, 3)
                     out.write(json.dumps(rec) + "\n")
                     n += 1
         print(f"  {st} scored (rows so far {n})", flush=True)
@@ -654,14 +664,33 @@ def _ridge_irls(X, z, pen):
     return beta
 
 
+def _rung_names(rows):
+    base = ["gefs", "nbm"]
+    if "ecmwf_margin" in rows[0]:
+        base.append("ecmwf")
+    if "mos_margin" in rows[0]:
+        base.append("mos")
+    base.append("mkt")
+    return base
+
+
 def _design(rows, sts):
-    cols = [_logit(np.array([r["f_gefs"] for r in rows])),
-            _logit(np.array([r["f_nbm"] for r in rows])),
-            np.array([r["ecmwf_margin"] for r in rows]) / 10.0,
-            np.array([r["mos_margin"] for r in rows]) / 10.0,
-            _logit(np.array([r["f_mkt"] for r in rows])),
-            np.ones(len(rows))]
-    names = ["gefs", "nbm", "ecmwf", "mos", "mkt", "const"]
+    rungs = _rung_names(rows)
+    cols, names = [], []
+    for rn in rungs:
+        if rn == "gefs":
+            cols.append(_logit(np.array([r["f_gefs"] for r in rows])))
+        elif rn == "nbm":
+            cols.append(_logit(np.array([r["f_nbm"] for r in rows])))
+        elif rn == "ecmwf":
+            cols.append(np.array([r["ecmwf_margin"] for r in rows]) / 10.0)
+        elif rn == "mos":
+            cols.append(np.array([r["mos_margin"] for r in rows]) / 10.0)
+        elif rn == "mkt":
+            cols.append(_logit(np.array([r["f_mkt"] for r in rows])))
+        names.append(rn)
+    cols.append(np.ones(len(rows)))
+    names.append("const")
     for s in sts[1:]:
         cols.append(np.array([1.0 if r["st"] == s else 0.0 for r in rows]))
         names.append(f"st_{s}")
@@ -670,26 +699,28 @@ def _design(rows, sts):
 
 def _fit_ci(rows, sts, lam, seed):
     X, names = _design(rows, sts)
+    rungs = _rung_names(rows)
+    nr = len(rungs)
     z = np.array([float(r["z"]) for r in rows])
-    pen = np.array([lam if n in ("gefs", "nbm", "ecmwf", "mos", "mkt") else 0.0 for n in names])
+    pen = np.array([lam if n in rungs else 0.0 for n in names])
     beta = _ridge_irls(X, z, pen)
     rows_by_day = {}
     for i, r in enumerate(rows):
         rows_by_day.setdefault(r["day"], []).append(i)
     days = sorted(rows_by_day)
     rng = random.Random(seed)
-    boot = {n: np.empty(ENC_BOOT) for n in names[:5]}
+    boot = {n: np.empty(ENC_BOOT) for n in names[:nr]}
     for b in range(ENC_BOOT):
         idx = np.array([i for d in g3._mbb_days(days, rng, C["block_length_days"])
                         for i in rows_by_day.get(d, [])])
         bb = _ridge_irls(X[idx], z[idx], pen)
-        for j, n in enumerate(names[:5]):
+        for j, n in enumerate(names[:nr]):
             boot[n][b] = bb[j]
         if (b + 1) % 500 == 0:
             print(f"    boot {b+1}/{ENC_BOOT}", flush=True)
     ci = {n: [round(float(np.percentile(boot[n], 2.5)), 4),
-              round(float(np.percentile(boot[n], 97.5)), 4)] for n in names[:5]}
-    coef = {n: round(float(beta[j]), 4) for j, n in enumerate(names[:5])}
+              round(float(np.percentile(boot[n], 97.5)), 4)] for n in names[:nr]}
+    coef = {n: round(float(beta[j]), 4) for j, n in enumerate(names[:nr])}
     return coef, ci
 
 
@@ -697,6 +728,7 @@ def _pick_lambda(rows, sts):
     """day-blocked CV deviance over the grid; return the lambda minimizing it."""
     X, names = _design(rows, sts)
     z = np.array([float(r["z"]) for r in rows])
+    rungs = _rung_names(rows)
     days = sorted({r["day"] for r in rows})
     folds = 5
     rng = random.Random(12345)
@@ -706,7 +738,7 @@ def _pick_lambda(rows, sts):
     fold_of = np.array([assign[r["day"]] for r in rows])
     best, bestlam = 1e18, RIDGE_GRID[0]
     for lam in RIDGE_GRID:
-        pen = np.array([lam if n in ("gefs", "nbm", "ecmwf", "mos", "mkt") else 0.0 for n in names])
+        pen = np.array([lam if n in rungs else 0.0 for n in names])
         dev = 0.0
         for f in range(folds):
             tr, te = fold_of != f, fold_of == f
@@ -734,7 +766,8 @@ def stage_adjudicate():
     long = [r for r in rows if r["off"] in LONG_OFFSETS]
     coef_s, ci_s = _fit_ci(short, sts, lam, G4_SEED_ENC + 1)
     coef_l, ci_l = _fit_ci(long, sts, lam, G4_SEED_ENC + 2)
-    det_set = [n for n in ("gefs", "nbm", "ecmwf", "mos", "mkt") if ci_all[n][0] > 0]
+    rungs = _rung_names(rows)
+    det_set = [n for n in rungs if ci_all[n][0] > 0]
     mkt_short = ci_s["mkt"][0] > 0
     mkt_long = ci_l["mkt"][0] > 0
     if n_sd < C["min_valid_station_days"]:
@@ -746,6 +779,7 @@ def stage_adjudicate():
     else:
         verdict = "AUGURY_G4_GAP"
     res = {"verdict": verdict, "n_station_days": n_sd, "n_rows": len(rows),
+           "ecmwf_rung": "ecmwf" in rungs, "ladder": rungs,
            "lambda": lam, "determining_set_pooled": det_set,
            "pooled": {"coef": coef_all, "ci95": ci_all},
            "short": {"coef": coef_s, "ci95": ci_s, "market_in_set": mkt_short},

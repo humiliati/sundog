@@ -99,6 +99,39 @@ and per horizon; every rung's coefficient + CI by horizon; how the set changes S
   will record the new runner (`augury_g4.py`), the λ grid + rule, and the exact command before
   any binding run. Results → `results/augury/g4-run/` (gitignored).
 
+## Amendment G4-α — ECMWF S3 throttle wall + execution plan (2026-07-08)
+
+Append-only. During the build, ECMWF's `ecmwf-forecasts` bucket (eu-central-1) proved to
+**503 "Slow Down"–throttle sustained access** to the point of infeasibility: after this
+session's recon+test bursts, a single ENS issue (84 fields) took ~500s and *failed*, and even
+one **HRES** issue (4 fields) took ~470s and failed. The throttle is a burst penalty that
+clears with cooldown, but a sustained ~3,000-issue pull re-triggers it. Point extraction itself
+is verified correct 7/7 on GEFS and ECMWF (regular_ll) — this is purely a rate-limit wall, not
+a data or code problem.
+
+**Execution plan (forced by the wall):**
+1. Pull the throttle-free rungs now: **GEFS** (`geavg`+`gespr` TMAX, regular_ll 7/7) and **MOS**
+   (IEM text). These + reused **NBM** scalars + **market** candles = the **core-4 ladder**
+   {GEFS, NBM, MOS, market} — a legitimate physics/statistics/human/aggregate determining-set.
+2. Let ECMWF cool (no access) while 1 runs, then attempt a **gentle ECMWF-HRES** pull
+   (deterministic `oper` mx2t3, 4 fields/issue, 0.25 s pace, 503-backoff). HRES enters as a
+   **deterministic margin covariate** (like MOS), fenced as the ENS-throttle fallback — the
+   flagship deterministic IFS, not the ensemble the owner picked (ENS was walled by S3, not by
+   choice).
+3. The runner is **rung-optional**: `score`/`adjudicate` include each of ECMWF and MOS only if
+   its scalar cache is present/dense enough, else drop it. Either way a `AUGURY_G4_*` verdict
+   lands. ECMWF-ENS remains a possible future sub-amendment from an un-throttled context.
+
+**MOS rung DROPPED (data unavailability, not choice):** IEM's NBS (NBM-MOS) archive via the API
+is essentially empty at 0/6/12/18Z runtimes historically — coverage 0% (2023), 0% (2024),
+0% (2025), 24% (2026). MAV (short GFS-MOS) returns HTTP 422; MEX (extended GFS-MOS) has a deep
+archive but is days-3+ only (no same-day `n_x`). No reliable historical same-day point-MOS
+source was found. The "human/statistical-point" rung is therefore dropped and fenced as
+unavailable; the reliable ladder is **{GEFS (physics ensemble), NBM (statistical blend),
+market (aggregate)}** + ECMWF-HRES if the bucket cools. This still tests the core question:
+is the market non-redundant given the physics ensemble + the operational blend (+ deterministic
+ECMWF)?
+
 ## §6 — Estimated cost (full pantheon)
 
 - **GEFS** ≈ NBM order (geavg+gespr × 2 daily-max blocks per issue, 0.25° fields;
