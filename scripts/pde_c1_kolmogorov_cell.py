@@ -58,6 +58,7 @@ VERDICT_BEARING_PRESETS = {
     "lock_v7_g200_n48",
     "lock_v7_g300_n48",
     "lock_v7_g300_n48_dt5",
+    "lock_v7_g675_kf3",
     "lock_disc_g200",
     "lock_disc_g300",
 }
@@ -134,6 +135,7 @@ def parse_args() -> argparse.Namespace:
             "lock_v7_g200_n48",
             "lock_v7_g300_n48",
             "lock_v7_g300_n48_dt5",
+            "lock_v7_g675_kf3",
             "lock_disc_g200",
             "lock_disc_g300",
             "at2_growth_g200",
@@ -429,6 +431,22 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         dt = 0.005
         sample_interval_steps = 100
         lookahead_steps = 1_000
+    elif args.preset == "lock_v7_g675_kf3":
+        # H3 v1.1 Reynolds-matched forcing move (NSE_H3_KF3_SCOPE.md section 7):
+        # the lock_v7 portable-quantile cell with forcing geometry moved
+        # k_f 2 -> 3 at matched forcing-scale Reynolds Re_f = G/k_f^3 = 25
+        # (G = 675). The forced mode (0,3) is force-inserted into the K=3
+        # signature set (d stays 18). Burn-in 200k: the lock_hidim precedent
+        # (deeper attractor at higher G).
+        burnin_steps = 200_000
+        sample_count = 50_000
+        kf = 3
+        grashof = 675.0
+        k_signature = 3
+        objective = "portable-quantile"
+        objective_quantile = 0.70
+        calibration_sample_count = 50_000
+        calibration_gap_steps = 5_000
     elif args.preset in ("lock_disc_g200", "lock_disc_g300"):
         # Objective-overlap discriminator
         # (PDE_C1_OBJECTIVE_OVERLAP_DISCRIMINATOR.md): the v7 portable-quantile

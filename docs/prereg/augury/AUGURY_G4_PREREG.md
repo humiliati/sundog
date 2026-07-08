@@ -35,12 +35,13 @@ functional (weather), not the synthetic functional that capped the chatv2/allelo
 
 | ECMWF-ENS | physics+AI | `ecmwf-forecasts` enfo `mx2t3` (0.25°, since 2023-01-18) | per-member civil-day max = max of the 3-h `mx2t3` blocks covering 12Z–00Z; ensemble μ, σ over the member subsample → Normal(μ,σ) survival |
 
-- **ECMWF is a core rung** (owner choice). Because open-data enfo ships **members only** (50
-  perturbed + control; no ensemble mean/spread product), μ,σ are computed from a **fixed
-  member subsample**: control + perturbed members {1..20} = **21 members** (a named
-  approximation — 21 members estimate ensemble μ/σ adequately for a determining-set read; full
-  50 would ~2.4× the cost for negligible μ/σ change). Blocks: the `mx2t3` 3-h blocks covering
-  the CLI civil day (ending 15/18/21/00 UTC). AIFS stays dropped (G1 flag).
+- **ECMWF is a core rung** (owner choice). Because open-data enfo ships **members only** (no
+  ensemble mean/spread product), μ,σ are computed from a **fixed member subsample**: perturbed
+  members **{1..21} = 21 members** (the `mx2t3` product carries no control record —
+  perturbed-only; a named approximation — 21 members estimate ensemble μ/σ adequately for a
+  determining-set read; the full 50 would ~2.4× the cost for negligible μ/σ change). Blocks:
+  the `mx2t3` 3-h blocks covering the CLI civil day (ending 15/18/21/00 UTC). Rate-limited S3
+  (503 Slow Down) → 503-aware backoff + gentle pacing. AIFS stays dropped (G1 flag).
 - GEFS civil-day-max window handling is a **named approximation** (max-of-block-means for μ;
   the max-contributing block's σ for the spread) — fenced as such; it makes GEFS a coarse
   Gaussian rung, adequate for a determining-set read, not a calibrated GEFS CRPS claim. ECMWF

@@ -130,6 +130,15 @@ decidable, chi-equianharmonic gets a definitive low at `q=37`, generic
 uniformity breaks at `q in {23, 31}` (upper bounds), and the staged `q=19`
 B&B shrinks to two load-bearing solves (`npm run kakeya:star-anatomy`,
 `npm run kakeya:star-construction`).
+Phase 3M executes the three banked moves:
+[`kakeya/PHASE3M_INVARIANT_HUNT_AND_EXTENSION.md`](kakeya/PHASE3M_INVARIANT_HUNT_AND_EXTENSION.md)
+mines the orbit invariants (bare chi-signature FAILS on exact data; two
+survivors: `sig+type` and `sig+chi(j-1728)`, the latter subsuming mod-8 via
+harmonic j = 1728 identically), closes the `q=11`-harmonic family gap by
+descent (validation 11/11 MATCH-ALL), finds every construction high
+descent-resistant, and isolates ONE rule-vs-instrument divergence -
+19-harmonic (rules LOW, descent 9) - under exact adjudication by the two
+in-flight q=19 solves (Amendment D flags; results to append).
 This file is a target-selection and claim-boundary scaffold opened from
 [`SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md`](SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md).
 
@@ -586,6 +595,11 @@ Forbidden:
   verified upper bounds; two-level 37/37; low-side pattern confirmations
   definitive at 23/31/37; generic split observed; q=19 B&B reduced to two
   solves.
+- [`kakeya/PHASE3M_INVARIANT_HUNT_AND_EXTENSION.md`](kakeya/PHASE3M_INVARIANT_HUNT_AND_EXTENSION.md)
+  - invariant hunt (two surviving character rules; mod-8 subsumed), descent
+  extension closing the `q=11`-harmonic gap (11/11 MATCH-ALL), all highs
+  descent-resistant, 19-harmonic divergence isolated; two q=19 exact solves
+  in flight (Amendment D).
 - [`kakeya/EXTERNAL_REVIEW_PACKET.md`](kakeya/EXTERNAL_REVIEW_PACKET.md) -
   owner-pending external-review ask; frames Kakeya as a boundary/pedagogy review,
   not a result-review packet.

@@ -76,7 +76,9 @@ function usage() {
 
 Options:
   --fields <list>     Comma-separated fields (debug). Default: ${DEFAULT_FIELDS.join(",")}
-  --reps <n>          Reps per orbit override (debug).
+  --reps <n>          Reps per orbit override (n = 1 -> lex-first only).
+  --orbits <labels>   Comma-separated orbit-label filter (Amendment D).
+  --budget <n>        Node budget override (Amendment D).
   --out <dir>         Output directory. Default: ${DEFAULT_OUT}
   --help              Show this message.
 
@@ -325,7 +327,7 @@ function dirValue(index, q) {
   return index === q ? INF : index;
 }
 
-function probeField(q, reps) {
+function probeField(q, reps, orbitFilter = null, nodeBudget = NODE_BUDGET) {
   const dirCount = q + 1;
   const bm = bmMinimum(q);
 
@@ -368,13 +370,18 @@ function probeField(q, reps) {
   let invariance = true;
 
   for (const key of [...buckets.keys()].sort()) {
+    if (orbitFilter && !orbitFilter.includes(labels.get(key))) continue;
     const bucket = buckets.get(key);
-    const half = reps / 2;
-    const repQuads = [...bucket.quads.slice(0, half), ...bucket.quads.slice(-half)];
+    // Amendment D: reps = 1 means lex-first only; even reps split first/last.
+    const half = Math.floor(reps / 2);
+    const repQuads =
+      reps === 1
+        ? [bucket.quads[0]]
+        : [...bucket.quads.slice(0, half), ...bucket.quads.slice(-half)];
     const exValues = new Set();
     for (const quad of repQuads) {
       const body = starBody(q, quad);
-      const solved = solveCompletion(q, body, NODE_BUDGET, true);
+      const solved = solveCompletion(q, body, nodeBudget, true);
       solverExact = solverExact && solved.status === "exact";
       const completion = body.size + solved.joint;
       const ex = completion - bm;
@@ -437,8 +444,10 @@ function main() {
     };
   }
 
+  const orbitFilter = args.orbits ? String(args.orbits).split(",") : null;
+  const budgetOverride = args.budget ? Number(args.budget) : NODE_BUDGET;
   const perQ = fields.map((q) =>
-    probeField(q, repsOverride ?? (q >= 17 ? REPS_PROBE : REPS_CONTROL)),
+    probeField(q, repsOverride ?? (q >= 17 ? REPS_PROBE : REPS_CONTROL), orbitFilter, budgetOverride),
   );
 
   // Instrument checks.
@@ -449,6 +458,7 @@ function main() {
     const q = Number(qs);
     if (!fields.includes(q)) continue;
     for (const [label, ex] of Object.entries(expected)) {
+      if (orbitFilter && !orbitFilter.includes(label)) continue; // Amendment D
       controls = controls && exOf(q, label) === String(ex);
     }
   }

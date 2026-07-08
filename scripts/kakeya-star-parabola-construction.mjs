@@ -150,6 +150,7 @@ function searchOrbit(q, quad) {
 
   let best = { ex: Infinity };
   let candidates = 0;
+  let starts = [];
 
   for (const axis of quad) {
     // Preimage slopes for the needed directions under this axis map.
@@ -192,6 +193,11 @@ function searchOrbit(q, quad) {
             }
           }
           const ex = sacrifice - (q - 1) / 2;
+          if (ex <= best.ex + 2) {
+            starts.push({ ex, axisIndex: axis, alpha, beta, gamma });
+            if (starts.length > 4000)
+              starts = starts.filter((s) => s.ex <= best.ex + 2).slice(0, 2000);
+          }
           if (ex < best.ex) {
             best = {
               ex,
@@ -206,7 +212,116 @@ function searchOrbit(q, quad) {
           }
         }
   }
-  return { best, candidates };
+  starts = starts
+    .filter((s) => s.ex <= best.ex + 2)
+    .sort((a, b) => a.ex - b.ex)
+    .slice(0, 200);
+  return { best, candidates, starts };
+}
+
+// --- descent refinement (PHASE3M extension) ---------------------------------------
+// Coordinate descent over single-direction line swaps, from the top pure-
+// parabola candidates plus seeded random restarts. Closes family gaps where
+// the pure family misses the optimum (validation: q=11 harmonic 5 -> 4).
+// Upper bounds remain verified completions; epistemics unchanged.
+
+function interceptOfTangent(q, axis, alpha, beta, gamma, dirIndex) {
+  // The transformed tangent covering direction dirIndex, as (dirIndex, b).
+  const buf = new Array(q);
+  tangentPoints(q, axis, alpha, beta, gamma, slopePreimage(q, axis, dirIndex), buf);
+  const { x, y } = Core.indexToXY(buf[0], q);
+  if (dirIndex === q) return x; // vertical: x = b
+  return mod(y - dirIndex * x, q);
+}
+
+function descentRefine(q, quad, starts, seeds) {
+  const dirs = Core.directions(q);
+  const n = Core.pointCount(q);
+  const neededDirs = [];
+  for (let i = 0; i < dirs.length; i++) if (!quad.includes(i)) neededDirs.push(i);
+  // Precompute all line point-lists per (dir, b).
+  const linePts = dirs.map((d, i) => {
+    const perB = [];
+    for (let b = 0; b < q; b++) perB.push([...Core.lineMask(dirs[i], b, q)]);
+    return perB;
+  });
+
+  const count = new Uint8Array(n);
+  let sacrifice = 0;
+  const addLine = (i, b) => {
+    for (const p of linePts[i][b]) {
+      const m = count[p];
+      if (m >= 2) sacrifice += m - 1;
+      count[p] = m + 1;
+    }
+  };
+  const removeLine = (i, b) => {
+    for (const p of linePts[i][b]) {
+      const m = count[p];
+      if (m >= 3) sacrifice -= m - 2;
+      count[p] = m - 1;
+    }
+  };
+
+  let bestEx = Infinity;
+  let bestAssign = null;
+
+  const descendFrom = (assign) => {
+    count.fill(0);
+    sacrifice = 0;
+    for (const i of quad) addLine(i, 0);
+    for (const d of neededDirs) addLine(d, assign.get(d));
+    let improved = true;
+    while (improved) {
+      improved = false;
+      for (const d of neededDirs) {
+        const cur = assign.get(d);
+        removeLine(d, cur);
+        let bestB = cur;
+        let bestSac = Infinity;
+        for (let b = 0; b < q; b++) {
+          addLine(d, b);
+          if (sacrifice < bestSac) {
+            bestSac = sacrifice;
+            bestB = b;
+          }
+          removeLine(d, b);
+        }
+        addLine(d, bestB);
+        if (bestB !== cur) improved = true;
+        assign.set(d, bestB);
+      }
+    }
+    const ex = sacrifice - (q - 1) / 2;
+    if (ex < bestEx) {
+      bestEx = ex;
+      bestAssign = new Map(assign);
+    }
+  };
+
+  for (const s of starts) {
+    const assign = new Map();
+    for (const d of neededDirs)
+      assign.set(d, interceptOfTangent(q, s.axisIndex, s.alpha, s.beta, s.gamma, d));
+    descendFrom(assign);
+  }
+  for (let seed = 1; seed <= seeds; seed++) {
+    const rng = Core.mulberry32(seed);
+    const assign = new Map();
+    for (const d of neededDirs) assign.set(d, Math.floor(rng() * q));
+    descendFrom(assign);
+  }
+
+  // Independent rebuild of the refined winner.
+  const body = new Set();
+  for (const i of quad) for (const p of Core.lineMask(dirs[i], 0, q)) body.add(p);
+  for (const [d, b] of bestAssign) for (const p of Core.lineMask(dirs[d], b, q)) body.add(p);
+  const summary = Core.shadowSummary(q, body);
+  return {
+    ex: bestEx,
+    verified: summary.complete && body.size === bmMinimum(q) + bestEx,
+    size: body.size,
+  };
 }
 
 // Independent verification of the winning candidate: rebuild the completion
@@ -240,6 +355,7 @@ function main() {
     ? process.argv[process.argv.indexOf("--out") + 1]
     : DEFAULT_OUT;
 
+  const refine = process.argv.includes("--refine"); // PHASE3M descent extension
   const rows = [];
   let validationPass = true;
   let instrumentPass = true;
@@ -247,23 +363,31 @@ function main() {
   for (const q of [...VALIDATION_FIELDS, ...EVALUATION_FIELDS]) {
     for (const rep of orbitReps(q)) {
       const t0 = Date.now();
-      const { best, candidates } = searchOrbit(q, rep.quad);
+      const { best, candidates, starts } = searchOrbit(q, rep.quad);
       const verify = verifyCandidate(q, rep.quad, best);
+      const refined = refine ? descentRefine(q, rep.quad, starts, 50) : null;
+      const finalEx = refined ? Math.min(best.ex, refined.ex) : best.ex;
       const known = KNOWN_EXACT[q]?.[rep.label] ?? null;
       const level =
-        best.ex === (q - 1) / 2 ? "HIGH" : best.ex === (q - 3) / 2 ? "LOW" : "OTHER";
+        finalEx === (q - 1) / 2 ? "HIGH" : finalEx === (q - 3) / 2 ? "LOW" : "OTHER";
       const ok =
-        best.sizeIdentityOk && verify.complete && verify.sizeMatches && verify.exVerified === best.ex;
+        best.sizeIdentityOk &&
+        verify.complete &&
+        verify.sizeMatches &&
+        verify.exVerified === best.ex &&
+        (refined === null || refined.verified);
       instrumentPass = instrumentPass && ok;
-      if (known !== null && best.ex !== known) validationPass = false;
+      if (known !== null && finalEx !== known) validationPass = false;
       rows.push({
         q,
         orbit: rep.label,
         quad: rep.quad.map((i) => Core.directions(q)[i].label).join(" "),
         constructionEx: best.ex,
+        refinedEx: refined ? refined.ex : null,
+        finalEx,
         level,
         knownExact: known,
-        matchesExact: known === null ? null : best.ex === known,
+        matchesExact: known === null ? null : finalEx === known,
         axis: best.axis,
         params: `a=${best.alpha} b=${best.beta} g=${best.gamma}`,
         candidates,
@@ -272,9 +396,9 @@ function main() {
       });
       const r = rows[rows.length - 1];
       console.log(
-        `q=${q} ${rep.label.padEnd(15)} constructionEx=${best.ex} ${level.padEnd(5)} ` +
-          `${known !== null ? `exact=${known} ${best.ex === known ? "MATCH" : "GAP"}` : "eval"} ` +
-          `axis=${best.axis} ${r.params} verified=${ok} (${r.seconds.toFixed(1)}s)`,
+        `q=${q} ${rep.label.padEnd(15)} pure=${best.ex}${refined ? ` refined=${refined.ex}` : ""} final=${finalEx} ${level.padEnd(5)} ` +
+          `${known !== null ? `exact=${known} ${finalEx === known ? "MATCH" : "GAP"}` : "eval"} ` +
+          `verified=${ok} (${r.seconds.toFixed(1)}s)`,
       );
     }
   }
@@ -293,7 +417,7 @@ function main() {
       name: "CONSTRUCTION_INSTRUMENT_MISMATCH",
       description:
         "Instrument-only: fires if any winning candidate fails the size identity, completeness, or independent rebuild, or if a construction ex beats a solver-certified exact value (impossible for a valid upper bound). Validation gaps (construction > exact) and evaluation outcomes are measurements.",
-      status: instrumentPass && rows.every((r) => r.knownExact === null || r.constructionEx >= r.knownExact) ? "clear" : "fired",
+      status: instrumentPass && rows.every((r) => r.knownExact === null || r.finalEx >= r.knownExact) ? "clear" : "fired",
     },
     rows,
   };
