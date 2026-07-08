@@ -30,6 +30,7 @@
 | R4-C | **THE MONOTONICITY THEOREM, with continuity** (`monotonicity_theorem_continuous`) | ✅ 2026-07-04 |
 | R4-D | **UNIFORM FINITENESS (the Finiteness Lemma)** — `uniform_finiteness`; the pile-wall dissolved via the classical tube | ✅ 2026-07-06 |
 | R4-D5 | **CELL DECOMPOSITION FOR ℝ² (CDT₂)** — `cell_decomposition : ∃ cells, IsCellDecomp cells A` | ✅ 2026-07-06 |
+| R4-E | **PILLAY–STEINHORN NIP/VC BRIDGE** — `definable_family_nip` (shattering ≤ 2·cells+1 in any o-min structure) + `semialgebraic_family_nip`/`semilinear_family_nip`: the bridge back to the approximation lane | ✅ 2026-07-08 |
 
 Modules: `OMinimalOne` … `OMinimalCellDecomp` (34th–61st), 80 gated headline theorems, all
 axiom-clean; audits 8540 → 8605 GREEN. Classical anchors for what's landed:
@@ -355,6 +356,23 @@ Already banked in-lane: `polyDef_tame` (R1: QF dim-1 tameness), the whole abstra
   `semialgebraic_uniform_finiteness`, `semialgebraic_cell_decomposition` — the
   Monotonicity Theorem, Uniform Finiteness, and CDT₂ now hold for semialgebraic sets
   by instantiation, exactly as the abstract build was designed to deliver.
+
+## R4-E — the Pillay–Steinhorn NIP/VC bridge. [LANDED 2026-07-08]
+
+`OMinimalNIP.lean` (79th module), axiom-clean, 4 gate entries
+(`shatter_le_of_ordConnected_pieces`, `definable_family_nip`,
+`semialgebraic_family_nip`, `semilinear_family_nip`), green round 2 (one fix: `omega`
+cannot see through `Fin.val` of a literal mk — `change` to raw arithmetic first);
+audit **8624 GREEN**. `ShattersFam` = trace-shattering (the combinatorial content of
+NIP, no FO syntax). The core: a family whose members are unions of ≤ K order-connected
+pieces cannot shatter 2K+2 points — the K+1 even-indexed points of a shattered chain
+need pairwise-distinct pieces (any two share an excluded odd point between them), then
+pigeonhole via `orderEmbOfFin` + `card_image_of_injective`. Cell fibers are
+order-connected by band shape; `cell_decomposition` supplies the uniform K =
+`cells.length`. Instantiated through BOTH witnesses: polynomial AND ReLU-class planar
+families have uniformly bounded shattering — tameness ⇒ VC-finiteness, the citation
+hook back to the algo-approx lane (arXiv 2509.18025). Full account:
+`docs/SUNDOG_V_OMIN_WRITEUP.md`.
 
 *The arc, closed.* TS-QE opened 2026-07-06 and closed 2026-07-07: 17 modules
 (62nd–78th), route Cohen–Hörmander set-level over concrete ℝ, all axiom-clean. Lean
