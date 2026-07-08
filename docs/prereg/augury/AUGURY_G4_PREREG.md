@@ -10,6 +10,10 @@ Parent / boundary documents:
 
 Filed: **2026-07-07 (PT)**. Status: **DRAFT — EXECUTION NOT ADMITTED.** Gated on owner
 admission + a tooling freeze-marker (as G2/G3 were). `DOCS_NO_PUBLISH` until G5.
+**Owner chose the full pantheon incl. ECMWF-ENS (2026-07-07).** Scope below updated: ECMWF is a
+core rung; the full-ladder window is 2023-02-01 → 2026-06-30 (ECMWF archive start). Point
+extraction verified 7/7 vs `find_nearest` on all three GRIB rungs (NBM Lambert+boustrophedon
+reused from G3; GEFS + ECMWF are regular 0.25° lat/lon — trivial indexing, no boustrophedon).
 
 ## §0 — The question
 
@@ -29,32 +33,37 @@ functional (weather), not the synthetic functional that capped the chatv2/allelo
 | MOS | human/statistical point | IEM `NBS`/`MEX` MaxT (text; cheap) | **deterministic point** → margin covariate `(MaxT − θ)`; enters as a rung but never a distribution (fenced) |
 | market | aggregate | Kalshi candles (reused, no re-pull) | PAV-monotonized midpoint exceedance (as G3) |
 
-- **ECMWF-ENS (physics+AI): DEFERRED to an exploratory sub-amendment** (open-data enfo ships
-  all-members files — a much larger pull, and its window starts 2023-02, shrinking the sample).
-  The **core determining set is {GEFS, NBM, MOS, market}**; ECMWF is a later add if the core
-  result warrants it. AIFS stays dropped (G1 flag).
+| ECMWF-ENS | physics+AI | `ecmwf-forecasts` enfo `mx2t3` (0.25°, since 2023-01-18) | per-member civil-day max = max of the 3-h `mx2t3` blocks covering 12Z–00Z; ensemble μ, σ over the member subsample → Normal(μ,σ) survival |
+
+- **ECMWF is a core rung** (owner choice). Because open-data enfo ships **members only** (50
+  perturbed + control; no ensemble mean/spread product), μ,σ are computed from a **fixed
+  member subsample**: control + perturbed members {1..20} = **21 members** (a named
+  approximation — 21 members estimate ensemble μ/σ adequately for a determining-set read; full
+  50 would ~2.4× the cost for negligible μ/σ change). Blocks: the `mx2t3` 3-h blocks covering
+  the CLI civil day (ending 15/18/21/00 UTC). AIFS stays dropped (G1 flag).
 - GEFS civil-day-max window handling is a **named approximation** (max-of-block-means for μ;
   the max-contributing block's σ for the spread) — fenced as such; it makes GEFS a coarse
-  Gaussian rung, adequate for a determining-set read, not a calibrated GEFS CRPS claim.
+  Gaussian rung, adequate for a determining-set read, not a calibrated GEFS CRPS claim. ECMWF
+  uses the same block-max composition per member before the ensemble μ/σ.
 
 ## §2 — Universe, cutoffs, scoring (inherited)
 
-Stations, primary window (2022-01-01 → 2026-06-30), the diurnal band (11 cutoffs), matched
-**availability** cutoffs, validity/liquidity exclusions, strike-set Brier — **all exactly as
-G1/G3**. G4 scores the identical (station, day, band-cutoff, valid strike) rows produced by G3's
-`score` stage; it only appends the GEFS and MOS forecaster columns per row. Sample floor 500
-valid station-days (inherited).
+Stations, the diurnal band (11 cutoffs), matched **availability** cutoffs, validity/liquidity
+exclusions, strike-set Brier — **all exactly as G1/G3**. Window: the full-ladder run is
+**2023-02-01 → 2026-06-30** (ECMWF archive start; G1's exploratory-ladder window). G4 scores the
+subset of G3's (station, day, band-cutoff, valid strike) rows falling in that window and appends
+the GEFS, ECMWF, and MOS forecaster columns per row. Sample floor 500 valid station-days.
 
 ## §3 — The determining-set read (the G4 machinery)
 
 Per (station-day, band cutoff, valid strike) row, with `z = 1{high > θ}`:
 
-1. **Joint encompassing (full ladder), ridge-regularized** (G1's collinearity mandate — GEFS
-   and NBM are near-duplicate physics-derived rungs):
-   `z ~ logit(F_GEFS) + logit(F_NBM) + (MaxT_MOS − θ) + logit(F_mkt) + station FE`,
-   L2 penalty on the forecaster coefficients (λ chosen by one pre-registered rule: minimize
-   day-blocked CV deviance over a fixed λ grid; the grid + rule frozen in the tooling amendment).
-   Probabilities clipped [0.01, 0.99].
+1. **Joint encompassing (full ladder), ridge-regularized** (G1's collinearity mandate — GEFS,
+   NBM, ECMWF are near-duplicate physics-derived rungs):
+   `z ~ logit(F_GEFS) + logit(F_NBM) + logit(F_ECMWF) + (MaxT_MOS − θ) + logit(F_mkt) +
+   station FE`, L2 penalty on the forecaster coefficients (λ chosen by one pre-registered rule:
+   minimize day-blocked CV deviance over a fixed λ grid; the grid + rule frozen in the tooling
+   amendment). Probabilities clipped [0.01, 0.99].
 2. **A rung is "in the determining set"** iff its coefficient's **95% day-block-bootstrap CI
    excludes 0** in the joint model (adds information beyond all other rungs). This is the
    encompassing test, generalized to k rungs.
@@ -89,8 +98,15 @@ and per horizon; every rung's coefficient + CI by horizon; how the set changes S
   will record the new runner (`augury_g4.py`), the λ grid + rule, and the exact command before
   any binding run. Results → `results/augury/g4-run/` (gitignored).
 
-## §6 — Estimated cost
+## §6 — Estimated cost (full pantheon)
 
-GEFS pull ≈ the NBM order of magnitude (2 products × 2 daily-max blocks per issue, 0.25°
-fields; issue-cached, resumable) — **~2–3 h**. MOS via IEM text — cheap. Score + adjudicate ≤
-1 h. No ECMWF in the core. **~3–4 h wall, fully resumable.**
+- **GEFS** ≈ NBM order (geavg+gespr × 2 daily-max blocks per issue, 0.25° fields;
+  issue-cached, resumable) — **~2–3 h**.
+- **ECMWF-ENS** is the driver: 21 members × ~3–4 `mx2t3` blocks × ~3,000 distinct issues over
+  2023-02→2026-06 at 0.64 MB/field ≈ **~120 GB, ~13 h** (bandwidth-bound; per-issue scalar
+  cache, fully resumable). The 21-member subsample (vs 50) already trims this ~2.4×.
+- **MOS** via IEM text — cheap. **Score + adjudicate** ≤ 1 h.
+- **Total ~16–18 h wall, overnight, fully resumable.** Cheaper fallback if that is too much:
+  swap ECMWF-ENS for **ECMWF-HRES** (the deterministic IFS `oper` run) as a point covariate
+  like MOS — ~1–2 h, but loses the ensemble distribution (a determinstic ECMWF rung, not the
+  physics+AI *ensemble* the owner chose).

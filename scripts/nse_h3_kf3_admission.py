@@ -74,6 +74,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out")
     ap.add_argument("--self-test", action="store_true")
+    ap.add_argument("--grashof", type=float, default=200.0)
+    ap.add_argument("--burnin", type=int, default=BURNIN)
     a = ap.parse_args()
     if a.self_test:
         self_test()
@@ -85,12 +87,13 @@ def main():
     if os.path.exists(summary_path):
         print(f"[skip, done] {summary_path}", flush=True)
         return
-    print("NSE_H3_KF3 rung 0  k_f=3 G=200  LOCK-SEED  [NON-PROMOTIONAL]", flush=True)
-    cfg = make_cfg()
+    print(f"NSE_H3_KF3 rung 0  k_f=3 G={a.grashof:.0f}  burnin={a.burnin}  "
+          f"LOCK-SEED  [NON-PROMOTIONAL]", flush=True)
+    cfg = make_cfg(a.grashof, a.burnin)
     stepper = KolmogorovStepper(cfg)
     u = stepper.initial_state()
     t0 = time.time()
-    for _ in range(BURNIN):
+    for _ in range(a.burnin):
         u = stepper.step(u)
     total = WINDOW + TAIL
     e = np.empty(total, dtype=np.float64)
@@ -137,7 +140,8 @@ def main():
         fails.append(f"G4_liveness_iqr={iqr:.3e}")
     branch = "H3_CELL_ADMITTED_PROBE_TIER" if not fails else "NSE-H3-INPUT-UNPOWERED"
     result = {
-        "scope": "NSE_H3_KF3_SCOPE.md", "cell": "kf3_g200_grid32", "seed": 20260528,
+        "scope": "NSE_H3_KF3_SCOPE.md", "cell": f"kf3_g{int(a.grashof)}_grid32",
+        "seed": 20260528, "burnin": a.burnin,
         "threshold_q70": thr, "damp_heldout": damp, "blockwise_damp": blk_damp,
         "atom_mass": atom, "iqr_m": iqr, "n_cal": int(cal_mask.sum()),
         "n_eval": int(len(ev_m)),

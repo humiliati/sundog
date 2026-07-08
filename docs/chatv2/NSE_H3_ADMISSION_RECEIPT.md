@@ -50,3 +50,35 @@ of truth integration. Rung 1 was never unlocked; no harness change was made.
 Cross-refs: `NSE_H3_KF3_SCOPE.md`, `NSE_POST_AT_HYPOTHESES_SLATE.md` §5,
 `NSE_H1_ADMISSION_RECEIPT.md` (the two-rung idiom), `AT1_BOUNDARY_LAYER_RECEIPT.md`
 (the atom mandate that fired here), `results/proof/nse-h3-kf3-g200-adm/`.
+
+---
+
+# v1.1 Reynolds-Matched Move — Rung 0 Receipt (2026-07-07)
+
+> Probe run of scope §7 (frozen pre-run): `(k_f=3, G=675)`, Re_f held at the
+> anchor's 25, burn-in 200k (the `lock_hidim` precedent). Artifact
+> `results/proof/nse-h3-kf3-g675-adm/h3_admission.json`.
+
+## Result: `H3_CELL_ADMITTED_PROBE_TIER` — the matched-Re cell is chaotic and forms
+
+| gate | measured | window |
+| --- | --- | --- |
+| G1 held-out damp | **0.333** | [0.20, 0.80] (also inside the lock's binding [0.20, 0.40]) |
+| G2 blockwise (8 × 50k) | 0.245–0.398, no collapse | [0.10, 0.90] |
+| G3 atom mass | **0.000** | ≤ 0.05 |
+| G4 liveness IQR(M) | 8.503e-2 | ≥ 1e-9 |
+
+Regime character (reported): E_low envelope [0.404, 1.151], detrended
+autocorrelation first zero ≈ 6,421 steps — a genuinely aperiodic cell, in sharp
+contrast to v1's fixed point at the same k_f. **Re_f-matching is what made the
+forcing-geometry move testable**; the v1/v1.1 pair is itself a measured result:
+at fixed G the k_f axis exits the chaotic window, at matched Re_f it does not.
+
+## Disposition
+
+Per scope §7: **rung 1 unblocked, pending the one owner sign-off** — 3-site
+additive preset `lock_v7_g675_kf3` (`lock_v7` block with `kf=3`, `grashof=675`,
+`burnin_steps=200_000`), then the two owner-run locks (§4 commands with the
+g675 preset/out-dirs; ~40 + 35 min). Decision gate §5 unchanged:
+`NSE-H3-FORCING-GENERAL` / `NSE-H3-GRASHOF-LOCAL` / `NSE-H3-INPUT-UNPOWERED`
+(the lock portability gate [0.20, 0.40] remains the binding formation gate).
