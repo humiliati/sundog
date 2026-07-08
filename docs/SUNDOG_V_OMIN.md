@@ -24,7 +24,7 @@
 | R1 | Dim-1 o-minimality via finite-frontier `Tame`; ReLU/semilinear + QF-semialgebraic structures tame | ✅ 2026-07-02 |
 | R2 | Monotonicity PL instance; frontier modulus `≤ 2\|S\|+1` (U-4 bridge); `tame_iff_normalForm` | ✅ 2026-07-02 |
 | R3-semilinear | Constructive boolean closure + Fourier–Motzkin projection 2→1; semilinear = a genuine structure in dims 1–2 | ✅ 2026-07-02 |
-| R3-semialgebraic | Tarski–Seidenberg QE | **TODO** (below) |
+| R3-semialgebraic | **TARSKI–SEIDENBERG, ELIMINATION FORM** — `elim_signVector`: the existential sign-vector set is `SADef` (TS-2 closed; TS-3 structure-packaging below) | ✅ 2026-07-07 |
 | R4-A | Abstract `OMinStructure` + definable calculus + `S₁ = Tame` capstone | ✅ 2026-07-02 |
 | R4-B | **`semilinearStructure : OMinStructure` — the first machine-checked o-min structure** | ✅ 2026-07-03 |
 | R4-C | **THE MONOTONICITY THEOREM, with continuity** (`monotonicity_theorem_continuous`) | ✅ 2026-07-04 |
@@ -312,10 +312,27 @@ Already banked in-lane: `polyDef_tame` (R1: QF dim-1 tameness), the whole abstra
         diagrams — the truncated family's diagram IS the original's, on the cell) and
         **`realizes_zero_cons`** (zero truncations rejoin as all-zero rows, positioned
         by `realizes_selectFam`).
-      - **The recursion, pitch 3 [next, the assembly]**: max-degree pick + the
-        Dershowitz–Manna induction (`famDegrees_induction`, `famDegrees_derived_lt`)
-        composing `realizes_readAnnot` + the pitch-1/2 transports per cell:
-        `DiagramPartition` for every family; `elim_signVector` unconditionally.
+      - **THE RECURSION, pitch 3 ✅ LANDED 2026-07-07 — TS-2 IS CLOSED**:
+        `DiagramAssembly.lean` (77th module), axiom-clean, 2 gate entries
+        (**`diagramPartition_all`**, **`elim_signVector`**), green round 2 (three small
+        fixes: a `Nat.cast_sub` cast, a flexible-simp lint, multiset-coe ascriptions).
+        The Dershowitz–Manna assembly: `famDegrees_induction` over resolve-cells; per
+        cell the constants base case or the max-degree elimination — measure chain
+        `famDegrees_derived_lt` ∘ sub-multiset (zeros dropped, `Multiset.cons_erase` +
+        `filter_sublist`) ∘ componentwise truncation (`famDegrees_le_dm`), glued by
+        mathlib's `IsDershowitzMannaLT.trans`; per recursive branch × end-sign cell the
+        full pipeline `realizes_readAnnot → realizes_zero_cons → realizes_selectFam →
+        realizes_congr`, with every branch set `SADef` (resolve-cells + `signEq` atoms)
+        and every branch diagram a pure function of the recursive diagram and end tags.
+        Supporting: `derivative_lead_live` (the derivative's lead is live on a live
+        lead, via `coeff_derivative` + `le_natDegree_of_ne_zero` in char 0), the DM
+        micro-lemmas (`dm_sub`/`dm_cons`/`dm_single`), the max-degree pick, `cellsOf`
+        enumeration, and the `attach`-based gluing lemma.
+        **`elim_signVector (F) (σ) : SADef n {g | ∃ y, signVec F g y = σ}` —
+        TARSKI–SEIDENBERG, ELIMINATION FORM, MACHINE-CHECKED.** The TS-QE ladder now
+        stands TS-0 ✅ TS-1 ✅ TS-2a–d ✅ (16 modules, 62nd–77th); the
+        `QE_COMBINATORICS_WALL` falsifier is RETIRED — the bookkeeping stayed
+        tractable at single-owner scale.
   *Falsifier* (`QE_COMBINATORICS_WALL`, carried over): the sign-matrix bookkeeping fails to
   stay tractable at single-owner scale — fallback = TS-1 + TS-2b/2c as independently valuable
   univariate machinery, wall published with location.
