@@ -370,6 +370,76 @@ respected by N-1 + `GradedCancellation`). Axiom-clean
 (`[propext, Classical.choice, Quot.sound]`), full `lake build` green, the
 kernel re-checks every theorem in seconds.
 
+## The o-minimality + Tarski–Seidenberg lane (machine-checked classical cornerstones)
+
+Alongside the constructive-approximation capstone, the lane carries a **second
+capstone-tier surface** of a different type: a machine-checked formalization
+of *classical* cornerstone theorems from real algebraic geometry. Where the
+Universal-Approximation Capstone is a constructive result Sundog authored end-to-end
+over the analytic-gate chain, this program is a **verification** of established
+70-year-old theorems, brought into Lean 4 with the receipts. The story is rigor
+and completeness — not discovery.
+
+> **Approved framing (verbatim):** to our knowledge, and per prior-art review on
+> 2026-07-02 and 2026-07-06, this is the **first machine-checked Tarski–Seidenberg
+> quantifier elimination and the first machine-checked o-minimal structures in Lean.**
+> Never dropped: the "in Lean, to our knowledge" qualifier. Comparable formalizations
+> exist in **other proof assistants** — Coq (Cohen–Mahboubi, a different algebraic
+> route), Isabelle/HOL (a complete real QE, 2022), and HOL Light (Harrison's
+> Cohen–Hörmander). Lean was open ground; this fills it.
+
+**The core theorems (all `#print axioms`-gated in `Sundogcert/AxiomAudit.lean`):**
+
+| Theorem | Content |
+|---|---|
+| `monotonicity_theorem_continuous` | The Monotonicity Theorem (with continuity), over any `OMinStructure` |
+| `uniform_finiteness` | The Finiteness Lemma (van den Dries (1.7)), over any `OMinStructure` |
+| `cell_decomposition` | Cell decomposition for ℝ², over any `OMinStructure` |
+| `semilinearStructure` | First witness: the ordered ℝ-vector-space reduct (Fourier–Motzkin projection) |
+| `elim_signVector` | **Tarski–Seidenberg, elimination form** (Cohen–Hörmander sign-diagram method): `{g \| ∃ y, signVec F g y = σ}` is semialgebraic |
+| `semialgebraicStructure` | Second witness: the real field (projection = `elim_signVector`) |
+| `semialgebraic_cell_decomposition` (etc.) | The three Chapter-3 theorems instantiated at ℝ for free |
+
+**The architectural move.** The three Chapter-3 theorems are proved **once** over
+an abstract `OMinStructure` interface (Monotonicity + Uniform Finiteness + Cell
+Decomposition for ℝ²), then instantiated at each concrete witness "for free." Two
+witnesses ship: the **piecewise-linear (ReLU-class)** semilinear structure via
+Fourier–Motzkin, and the **real field** semialgebraic structure via Tarski–Seidenberg
+proved as `elim_signVector`.
+
+**The learning-theory bridge (R4-E — the "so what").** A Pillay–Steinhorn-style
+corollary carries the tameness back to the approximation-theory lane: **definable
+families in either witness structure have uniformly bounded shattering
+(VC-finiteness).** The chain is *tameness (geometric) → machine-verifiable → VC-finiteness
+(learning-theoretic)*, and it applies uniformly to **polynomial** *and* **ReLU-class**
+families — the two witness structures composed. That is the arc that makes this a
+peer-tier surface next to the Universal-Approximation Capstone: one is
+constructive-approximation, the other is finite-shattering / uniform-generalization
+substrate.
+
+**Scope, stated explicitly on every downstream surface.**
+- **Dimension bound:** the **dim ≤ 2 core** of van den Dries Chapter 3 (Monotonicity
+  + Uniform Finiteness + Cell Decomposition for ℝ²). **Not** the full-dimension
+  o-minimality tower.
+- **VC bound:** the **one-parameter planar case with an explicit bound**. **Not**
+  general Pillay–Steinhorn or general NIP.
+- **Formalization, not discovery.** These are classical theorems from the 1940s–50s;
+  the Sundog contribution is the machine-checked Lean development, not a new theorem.
+- **Axiom envelope:** `[propext, Classical.choice, Quot.sound]` only; **no** `sorry`,
+  **no** custom axioms, **no** `native_decide` shortcut. Enforced by `AxiomAudit.lean`
+  at final green build of 8,624 verification jobs.
+
+**Claim boundary.** Not a claim of Tarski–Seidenberg priority (the theorem is 70 years
+old, and formalized in other assistants). Not a claim of complete o-minimality (the
+full dimension tower is out of scope). Not a claim of general NIP or general
+Pillay–Steinhorn (the VC-finiteness result is one-parameter planar). **Not** a
+breakthrough narrative — the verification story survives on its own without impact
+language. Names not linked: the Lean modules for T-S and the two structures are
+`Sundogcert.OMin.*` (modules 62–79), committed locally and pending owner-side push;
+the ledger references them **by name** only until the public repository history includes
+them. Companion write-up: [`SUNDOG_V_OMIN_WRITEUP.md`](SUNDOG_V_OMIN_WRITEUP.md).
+Lane roadmap with per-stage receipts: [`SUNDOG_V_OMIN.md`](SUNDOG_V_OMIN.md).
+
 ## P-vs-NP certificate core
 
 The first Lean surface is still the deductive core of the P-vs-NP

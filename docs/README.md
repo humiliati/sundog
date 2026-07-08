@@ -118,6 +118,34 @@ code, experiments, prior theorem materials, and application bridges.
   (empirical with named SGD residual), and
   [`ALGO_APPROX_CD2_GROKKING_RESULT.md`](algo-approx/ALGO_APPROX_CD2_GROKKING_RESULT.md)
   (the prior null this redeems).
+- [Sundog o-Minimality lane ledger](SUNDOG_V_OMIN.md) **— TS-QE + R4-E
+  LANDED 2026-07-08**: lane roadmap with per-stage receipts for the
+  machine-checked o-minimality + Tarski–Seidenberg program (opened
+  2026-07-02). Companion technical write-up:
+  [`SUNDOG_V_OMIN_WRITEUP.md`](SUNDOG_V_OMIN_WRITEUP.md). Result: three
+  van den Dries Chapter-3 theorems (Monotonicity, Uniform Finiteness, Cell
+  Decomposition for ℝ²) proved once over an abstract `OMinStructure` interface
+  and instantiated at two concrete witnesses — semilinear (Fourier–Motzkin) and
+  semialgebraic (via Tarski–Seidenberg proved as `elim_signVector`, the
+  Cohen–Hörmander sign-diagram method) — plus a Pillay–Steinhorn-style bridge
+  to VC-finiteness for definable polynomial + ReLU-class families (R4-E).
+  **To our knowledge, and per prior-art review 2026-07-02/07-06, the first
+  machine-checked Tarski–Seidenberg QE and the first machine-checked o-minimal
+  structures in Lean.** Sibling formalizations exist in *other* proof
+  assistants — Coq (Cohen–Mahboubi, different algebraic route), Isabelle/HOL
+  (complete real QE, 2022), HOL Light (Harrison's Cohen–Hörmander).
+  **Scope explicit:** the *dim ≤ 2 core* of van den Dries Chapter 3, not the
+  full dimension tower; the VC bound is the *one-parameter planar case*, not
+  general Pillay–Steinhorn or general NIP. Formalization, not discovery —
+  classical theorems from the 1940s–50s. Axiom-clean (`[propext,
+  Classical.choice, Quot.sound]`, no `sorry`, no custom axioms, no
+  `native_decide`). Final green build: 8,624 verification jobs.
+  **Modules 62–79 (`Sundogcert.OMin.*`) committed locally on `sundogcert`
+  and pending owner-side push** — ledger references them by name, not by
+  public URL, until the pushed commit is confirmed. Approved framing: always
+  keep "in Lean, to our knowledge" — never drop to a bare "first ever." See
+  the [Certificate (Lean) ledger's o-min section](SUNDOG_V_CERTIFICATE_LEAN.md#the-o-minimality--tarskiseidenberg-lane-machine-checked-classical-cornerstones)
+  for the ledger-level statement.
 - [Sundog Certificate (Lean) ledger](SUNDOG_V_CERTIFICATE_LEAN.md) **— now
   fifteen worked examples + one synthesis law + one constructive
   universal-approximation capstone**: the worked-example ledger (finite-field,
@@ -329,7 +357,6 @@ underlying public problems.
   OpenAI unit-distance / cap-set disproof context; evaluator front plus
   substrate-analogue horizon.
 - [ARC-AGI roadmap](SUNDOG_V_ARC.md): abstraction-coupling trial promoted from
-  the Gravity ledger, with a Phase 0 preregistration lane under `prereg/arc/`.
 - [ARC-AGI preregistration folder](prereg/arc/README.md): task registers,
   decoder floors, Branch D variants, Phase 3E fiber certificates, and the
   current relative-locality execution hold.

@@ -147,7 +147,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--adjudicator",
-        choices=["bin", "knn", "knn-sweep", "twin-state", "mz-budget", "state-recon"],
+        choices=["bin", "knn", "knn-sweep", "twin-state", "twin-state-adaptive", "mz-budget", "state-recon"],
         default="bin",
         help="Fiber-locality adjudicator: hard binning (default), kNN/disintegration, "
         "knn-sweep (convergence check over k), or twin-state support certificate.",
@@ -960,7 +960,8 @@ def score_discriminator_slate(
     }
 
 
-def run_cell(cfg: RunConfig, at1_export: Path | None = None, at2_export: Path | None = None) -> dict:
+def run_cell(cfg: RunConfig, at1_export: Path | None = None, at2_export: Path | None = None,
+             sample_export: Path | None = None) -> dict:
     stepper = KolmogorovStepper(cfg)
     omega_hat = stepper.initial_state()
     interval = cfg.sample_interval_steps
@@ -991,7 +992,7 @@ def run_cell(cfg: RunConfig, at1_export: Path | None = None, at2_export: Path | 
     sample_energy = np.empty(cfg.sample_count, dtype=np.float64)
     sample_high_modes = (
         np.empty((cfg.sample_count, 2 * len(stepper.high_indices)), dtype=np.float64)
-        if cfg.adjudicator in ("twin-state", "state-recon")
+        if cfg.adjudicator in ("twin-state", "twin-state-adaptive", "state-recon")
         else None
     )
     sample_mz = (
@@ -1164,6 +1165,20 @@ def run_cell(cfg: RunConfig, at1_export: Path | None = None, at2_export: Path | 
         result, bin_rows, sample_rows, twin_witness_rows = aggregate_twin_state(
             sample_signatures, sample_high_modes, actions, epsilon_k, cfg
         )
+    elif cfg.adjudicator == "twin-state-adaptive":
+        result, bin_rows, sample_rows, twin_witness_rows = aggregate_twin_state_adaptive(
+            sample_signatures, sample_high_modes, actions, epsilon_k, cfg
+        )
+        if sample_export is not None and sample_high_modes is not None:
+            _se = Path(sample_export)
+            _se.parent.mkdir(parents=True, exist_ok=True)
+            np.savez_compressed(
+                _se, schema_version=1, kind="twin_state_adaptive_samples",
+                preset=cfg.preset, grashof=cfg.grashof, epsilon_k=epsilon_k,
+                signatures=sample_signatures, high_modes=sample_high_modes,
+                actions=actions,
+            )
+            print(f"[pde-c1] sample-export wrote {_se}", flush=True)
     elif cfg.adjudicator == "mz-budget":
         result, bin_rows, sample_rows, _ = aggregate_mz_budget(
             sample_signatures, sample_mz, actions, epsilon_k, cfg
@@ -2074,6 +2089,193 @@ def summarize_twin_state(
     }
 
 
+# Approach A (NSE_COVERAGE_ADAPTIVE_APPARATUS_SPEC.md, frozen). epsilon_k is
+# UNCHANGED; these govern only coverage bookkeeping.
+ADAPTIVE_K_MIN = 10            # dense-fiber threshold: >= this many of the (k-1) NN within epsilon_k
+ADAPTIVE_COVERED_FLOOR = 0.10  # covered fraction f below this -> ADAPTIVE_SLIVER
+
+
+def aggregate_twin_state_adaptive(
+    signatures: np.ndarray,
+    high_vectors: np.ndarray | None,
+    actions: np.ndarray,
+    epsilon_k: float,
+    cfg: RunConfig,
+) -> tuple[dict, list, list, list]:
+    """Approach A -- fixed-radius density-stratified twin-state.
+
+    `epsilon_k` is UNCHANGED (same global rule): no pair beyond `epsilon_k` is ever
+    compared, so fidelity is preserved. A sample is an admitted dense-fiber center
+    iff >= ADAPTIVE_K_MIN of its `twin_k_neighbors` nearest neighbours lie within
+    `epsilon_k`. The certificate is read on the union of admitted fibers (both
+    endpoints admitted); the covered fraction `f` REPLACES the `s_pos` coverage
+    gate as a reported scope fence (`f < ADAPTIVE_COVERED_FLOOR -> SLIVER`). The
+    frozen twin verdict is computed in the same pass (via the untouched
+    aggregator) for the regression gate. On a compact attractor every sample is
+    admitted and this is bit-identical to frozen. Spec:
+    docs/chatv2/NSE_COVERAGE_ADAPTIVE_APPARATUS_SPEC.md.
+    """
+    if high_vectors is None:
+        raise ValueError("twin-state-adaptive adjudicator requires captured high-mode vectors")
+    from sklearn.neighbors import BallTree
+
+    # Frozen read via the untouched aggregator -- the regression comparator.
+    frozen, _, _, _ = aggregate_twin_state(signatures, high_vectors, actions, epsilon_k, cfg)
+
+    n = int(signatures.shape[0])
+    high_norms = np.linalg.norm(high_vectors, axis=1) if high_vectors.size else np.zeros(n)
+    high_norm_median = float(np.median(high_norms)) if n else 0.0
+    delta_h = max(cfg.twin_high_norm_floor, cfg.twin_delta_high_fraction * high_norm_median)
+    damp = int(actions.sum())
+    no_op = int(n - damp)
+
+    def pct(a: np.ndarray, q: float) -> float:
+        return float(np.percentile(a, q)) if a.size else 0.0
+
+    frozen_keys = {
+        "frozen_verdict": frozen.get("verdict"),
+        "frozen_verdict_label": frozen.get("verdict_label"),
+        "frozen_paired_fiber_verdict": frozen.get("paired_fiber_verdict"),
+        "frozen_candidate_sample_fraction": frozen.get("candidate_sample_fraction", 0.0),
+        "frozen_witness_pair_count_unique": frozen.get("witness_pair_count_unique", 0),
+        "frozen_witness_action_disagree_fraction_unique": frozen.get(
+            "witness_action_disagree_fraction_unique", float("nan")
+        ),
+    }
+    base = {
+        "adjudicator_family": "twin-state-adaptive", "n_samples": n,
+        "epsilon_k_radius_threshold": epsilon_k, "delta_h": delta_h,
+        "adaptive_k_min": ADAPTIVE_K_MIN, "adaptive_covered_floor": ADAPTIVE_COVERED_FLOOR,
+        "twin_min_witness_fraction": cfg.twin_min_witness_fraction,
+        "twin_min_unique_pairs": cfg.twin_min_unique_pairs,
+        "adaptive_delta_action": cfg.delta_action,
+        "no_op_count": no_op, "damp_low_band_count": damp,
+        "damp_fraction": damp / max(1, n), "high_norm_median": high_norm_median,
+        **frozen_keys,
+    }
+
+    if n < 2 or high_norm_median <= cfg.twin_high_norm_floor:
+        base.update({
+            "verdict": "TWIN_STATE_ADAPTIVE_HIGH_MODE_FLOOR" if n >= 2 else "TWIN_STATE_ADAPTIVE_DEGENERATE",
+            "verdict_label": "sampled_support_high_modes_numerically_flat" if n >= 2 else "n_lt_2",
+            "interpretable": False, "adaptive_paired_fiber_verdict": "PAIRED_FIBER_UNDEFINED",
+            "adaptive_covered_fraction": 0.0,
+        })
+        return base, [], [], []
+
+    k = min(max(2, cfg.twin_k_neighbors), n)
+    tree = BallTree(signatures, metric="euclidean")
+    dist, idx = tree.query(signatures, k=k)
+    nbr_dist = dist[:, 1:]
+    nbr_idx = idx[:, 1:]
+    within = nbr_dist <= epsilon_k
+    dense_count = within.sum(axis=1).astype(np.int64)
+    admitted = dense_count >= ADAPTIVE_K_MIN
+    covered_fraction = float(admitted.mean())
+
+    cand_sample = np.zeros(n, dtype=bool)
+    wit_sample = np.zeros(n, dtype=bool)
+    cand_dir = wit_dir = 0
+    cand_code: list[np.ndarray] = []
+    wit_code: list[np.ndarray] = []
+    wit_dis_code: list[np.ndarray] = []
+    wit_high_chunks: list[np.ndarray] = []
+    wit_sig_chunks: list[np.ndarray] = []
+    max_cand_high = 0.0
+    witness_rows: list[dict] = []
+    row_limit = 200
+    chunk_size = 512
+    for start in range(0, n, chunk_size):
+        end = min(start + chunk_size, n)
+        row_ids = np.arange(start, end, dtype=np.int64)
+        dist_chunk = nbr_dist[start:end]
+        idx_chunk = nbr_idx[start:end]
+        # Fidelity (<= epsilon_k) AND both endpoints admitted dense-fiber centers.
+        cmask = (dist_chunk <= epsilon_k) & admitted[row_ids][:, None] & admitted[idx_chunk]
+        if not bool(cmask.any()):
+            continue
+        cand_sample[start:end] = cmask.any(axis=1)
+        cand_dir += int(cmask.sum())
+        diff = high_vectors[idx_chunk] - high_vectors[row_ids[:, None]]
+        high_dist = np.linalg.norm(diff, axis=2)
+        ch = high_dist[cmask]
+        if ch.size:
+            max_cand_high = max(max_cand_high, float(ch.max()))
+        lo = np.minimum(row_ids[:, None], idx_chunk)
+        hi = np.maximum(row_ids[:, None], idx_chunk)
+        codes = lo * n + hi
+        cand_code.append(codes[cmask])
+        action_diff = actions[idx_chunk] != actions[row_ids[:, None]]
+        wmask = cmask & (high_dist >= delta_h)
+        if not bool(wmask.any()):
+            continue
+        wit_sample[start:end] = wmask.any(axis=1)
+        wit_dir += int(wmask.sum())
+        wit_code.append(codes[wmask])
+        wit_high_chunks.append(high_dist[wmask])
+        wit_sig_chunks.append(dist_chunk[wmask])
+        wit_dis_code.append(codes[wmask & action_diff])
+        if len(witness_rows) < row_limit:
+            for local_i, local_j in np.argwhere(wmask):
+                i = int(row_ids[local_i])
+                j = int(idx_chunk[local_i, local_j])
+                witness_rows.append({
+                    "sample_i": i, "sample_j": j,
+                    "signature_distance": float(dist_chunk[local_i, local_j]),
+                    "high_mode_distance": float(high_dist[local_i, local_j]),
+                    "action_i": int(actions[i]), "action_j": int(actions[j]),
+                    "action_agree": bool(actions[i] == actions[j]),
+                })
+                if len(witness_rows) >= row_limit:
+                    break
+
+    cand_unique = unique_pair_count(cand_code)
+    wit_unique = unique_pair_count(wit_code)
+    wit_dis_unique = unique_pair_count(wit_dis_code)
+    wit_high = np.concatenate(wit_high_chunks) if wit_high_chunks else np.asarray([], dtype=np.float64)
+    wit_sig = np.concatenate(wit_sig_chunks) if wit_sig_chunks else np.asarray([], dtype=np.float64)
+    wit_sample_frac = float(wit_sample.sum()) / n
+    wit_disagree_frac = wit_dis_unique / wit_unique if wit_unique else float("nan")
+
+    if cfg.preset not in VERDICT_BEARING_PRESETS:
+        verdict, label, interp = "SMOKE_ONLY", "", False
+    elif covered_fraction < ADAPTIVE_COVERED_FLOOR:
+        verdict, label, interp = "TWIN_STATE_ADAPTIVE_SLIVER", "covered_fraction_below_floor", False
+    elif wit_sample_frac >= cfg.twin_min_witness_fraction and wit_unique >= cfg.twin_min_unique_pairs:
+        verdict, label, interp = "TWIN_STATE_ADAPTIVE_CERTIFIED", "dense_fiber_high_mode_separated_twins", True
+    else:
+        verdict, label, interp = "TWIN_STATE_ADAPTIVE_NO_CERTIFICATE", "no_positive_mass_dense_fiber_witness", False
+
+    if verdict != "TWIN_STATE_ADAPTIVE_CERTIFIED" or wit_unique == 0:
+        paired = "PAIRED_FIBER_UNDEFINED"
+    elif damp == 0 or no_op == 0:
+        paired = "PAIRED_FIBER_DEFERRED_VACUITY"
+    elif wit_disagree_frac <= cfg.delta_action:
+        paired = "PAIRED_FIBER_CONSTANCY_POSITIVE"
+    else:
+        paired = "PDE-C1-PAIRED-NEG"
+
+    base.update({
+        "verdict": verdict, "verdict_label": label, "interpretable": interp,
+        "adaptive_paired_fiber_verdict": paired,
+        "adaptive_covered_fraction": covered_fraction,
+        "adaptive_dense_count_p05": pct(dense_count.astype(float), 5),
+        "adaptive_dense_count_p50": pct(dense_count.astype(float), 50),
+        "adaptive_dense_count_p95": pct(dense_count.astype(float), 95),
+        "adaptive_candidate_sample_count": int(cand_sample.sum()),
+        "adaptive_candidate_pair_count_unique": cand_unique,
+        "adaptive_witness_sample_count": int(wit_sample.sum()),
+        "adaptive_witness_sample_fraction": wit_sample_frac,
+        "adaptive_witness_pair_count_unique": wit_unique,
+        "adaptive_witness_action_disagree_unique": wit_dis_unique,
+        "adaptive_witness_action_disagree_fraction_unique": wit_disagree_frac,
+        "adaptive_witness_high_distance_p50": pct(wit_high, 50),
+        "adaptive_witness_signature_distance_p50": pct(wit_sig, 50),
+        "adaptive_max_candidate_high_distance": max_cand_high,
+    })
+    return base, [], [], witness_rows
+
+
 def aggregate_mz_budget(
     sample_signatures: np.ndarray,
     sample_mz: np.ndarray,
@@ -2350,6 +2552,8 @@ def write_outputs(out_dir: Path, cfg: RunConfig, result: dict, write_samples: bo
         write_csv(out_dir / "knn-radius-histogram.csv", result.get("knn_histogram", []))
     elif cfg.adjudicator == "twin-state":
         write_csv(out_dir / "twin-state-witnesses.csv", result.get("twin_witness_rows", []))
+    elif cfg.adjudicator == "twin-state-adaptive":
+        write_csv(out_dir / "twin-state-adaptive-witnesses.csv", result.get("twin_witness_rows", []))
     elif cfg.adjudicator == "mz-budget":
         write_csv(out_dir / "mz-budget-samples.csv", result.get("sample_rows", []))
     else:
@@ -2409,6 +2613,9 @@ def write_receipt(path: Path, manifest: dict) -> None:
         return
     if c.get("adjudicator") == "twin-state":
         write_receipt_twin_state(path, manifest)
+        return
+    if c.get("adjudicator") == "twin-state-adaptive":
+        write_receipt_twin_state_adaptive(path, manifest)
         return
     if c.get("adjudicator") == "mz-budget":
         write_receipt_mz_budget(path, manifest)
@@ -2597,6 +2804,44 @@ def write_receipt_knn_sweep(path: Path, manifest: dict) -> None:
             "larger `N` or wider clean-`k` range is needed. No verdict filed."
         )
     lines.extend(["", "## Files", "", "- `manifest.json`", "- `knn-sweep.csv`"])
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def write_receipt_twin_state_adaptive(path: Path, manifest: dict) -> None:
+    r = manifest["result"]
+    c = manifest["config"]
+    lines = [
+        "# PDE C1 Twin-State Adaptive (Coverage-Adaptive Apparatus) Receipt",
+        "",
+        f"**Status (adaptive):** {r['verdict']}  ({r.get('verdict_label', '')})",
+        f"**Frozen comparator:** {r.get('frozen_verdict')}  "
+        f"(disagree `{r.get('frozen_witness_action_disagree_fraction_unique')}`, "
+        f"coverage `{r.get('frozen_candidate_sample_fraction')}`)",
+        f"**Preset:** `{c['preset']}`  **Adjudicator:** `twin-state-adaptive`",
+        f"**Interpretable:** `{r.get('interpretable')}`",
+        "",
+        "## Readout (Approach A; epsilon_K unchanged)",
+        "",
+        f"- `epsilon_K`: `{r.get('epsilon_k_radius_threshold'):.6g}`  "
+        f"`delta_H`: `{r.get('delta_h'):.6g}`  `k_min`: `{r.get('adaptive_k_min')}`",
+        f"- **covered fraction f**: `{r.get('adaptive_covered_fraction'):.6g}` "
+        f"(floor `{r.get('adaptive_covered_floor')}`)",
+        f"- dense-count p05/p50/p95: `{r.get('adaptive_dense_count_p05')}` / "
+        f"`{r.get('adaptive_dense_count_p50')}` / `{r.get('adaptive_dense_count_p95')}`",
+        f"- admitted witness pairs (unique): `{r.get('adaptive_witness_pair_count_unique')}`  "
+        f"witness sample fraction: `{r.get('adaptive_witness_sample_fraction'):.6g}`",
+        f"- **paired fiber-constancy**: `{r.get('adaptive_paired_fiber_verdict')}`  "
+        f"(disagree `{r.get('adaptive_witness_action_disagree_fraction_unique')}`, "
+        f"threshold `{r.get('adaptive_delta_action')}`)",
+        "",
+        "## Regression cross-check (compact cells must reduce to frozen)",
+        "",
+        f"- frozen verdict `{r.get('frozen_verdict')}` vs adaptive `{r['verdict']}`; "
+        f"f should be 1.000 on compact cells (here `{r.get('adaptive_covered_fraction'):.6g}`).",
+        "",
+        "Non-promotional; apparatus-generality only. Spec: "
+        "`docs/chatv2/NSE_COVERAGE_ADAPTIVE_APPARATUS_SPEC.md`.",
+    ]
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
@@ -2870,7 +3115,11 @@ def main() -> None:
     cfg = build_config(args)
     if args.allow_unregistered_overrides and cfg.preset in ("lock", "fallback"):
         print("[pde-c1] overrides present; this receipt is not verdict-bearing despite lock/fallback preset", flush=True)
-    result = run_cell(cfg, at1_export=args.at1_export, at2_export=args.at2_export)
+    sample_export = (
+        args.out / "samples.npz" if cfg.adjudicator == "twin-state-adaptive" else None
+    )
+    result = run_cell(cfg, at1_export=args.at1_export, at2_export=args.at2_export,
+                      sample_export=sample_export)
     if args.allow_unregistered_overrides:
         result["verdict"] = "SMOKE_ONLY"
         result["verdict_label"] = "manual_overrides_non_verdict"
