@@ -1,0 +1,255 @@
+{
+  "artifactId": "KAK-PHASE3P-DUAL-ARC-VERIFY",
+  "generatedAt": "2026-07-09T08:51:52.900Z",
+  "status": "internal dual-arc verification (PHASE3P support)",
+  "command": "node scripts/kakeya-dual-arc-verify.mjs",
+  "statement": "For the optimal parabola completion: (D1) the 4 star lines dualize to 4 collinear points; (D2) the q+1 dual points have exactly one 4-rich line (O*), T 3-rich lines (T=sacrifice-3), and no >=5-rich line; (D3) the q-3 non-star dual points lie on one conic. So the completion lines are conic tangents and T = #3-secants of a near-arc, the Segre/Blokhuis-Mazzocca backbone of parabola-optimality.",
+  "falsifier": {
+    "name": "DUAL_ARC_MISMATCH",
+    "description": "Fires if D1/D2/D3 fail on any exact field-orbit.",
+    "status": "clear"
+  },
+  "rows": [
+    {
+      "q": 5,
+      "orbit": "harmonic",
+      "sac": 4,
+      "ex": 2,
+      "T": 1,
+      "rich4": 1,
+      "rich3": 1,
+      "richHigher": 0,
+      "checks": {
+        "d1_star_collinear": true,
+        "d2_rich_profile": true,
+        "d3_nonstar_conic": true
+      },
+      "ok": true
+    },
+    {
+      "q": 7,
+      "orbit": "harmonic",
+      "sac": 5,
+      "ex": 2,
+      "T": 2,
+      "rich4": 1,
+      "rich3": 2,
+      "richHigher": 0,
+      "checks": {
+        "d1_star_collinear": true,
+        "d2_rich_profile": true,
+        "d3_nonstar_conic": true
+      },
+      "ok": true
+    },
+    {
+      "q": 7,
+      "orbit": "equianharmonic",
+      "sac": 6,
+      "ex": 3,
+      "T": 3,
+      "rich4": 1,
+      "rich3": 3,
+      "richHigher": 0,
+      "checks": {
+        "d1_star_collinear": true,
+        "d2_rich_profile": true,
+        "d3_nonstar_conic": true
+      },
+      "ok": true
+    },
+    {
+      "q": 11,
+      "orbit": "harmonic",
+      "sac": 10,
+      "ex": 5,
+      "T": 7,
+      "rich4": 1,
+      "rich3": 7,
+      "richHigher": 0,
+      "checks": {
+        "d1_star_collinear": true,
+        "d2_rich_profile": true,
+        "d3_nonstar_conic": true
+      },
+      "ok": true
+    },
+    {
+      "q": 11,
+      "orbit": "generic",
+      "sac": 9,
+      "ex": 4,
+      "T": 6,
+      "rich4": 1,
+      "rich3": 6,
+      "richHigher": 0,
+      "checks": {
+        "d1_star_collinear": true,
+        "d2_rich_profile": true,
+        "d3_nonstar_conic": true
+      },
+      "ok": true
+    },
+    {
+      "q": 13,
+      "orbit": "harmonic",
+      "sac": 12,
+      "ex": 6,
+      "T": 9,
+      "rich4": 1,
+      "rich3": 9,
+      "richHigher": 0,
+      "checks": {
+        "d1_star_collinear": true,
+        "d2_rich_profile": true,
+        "d3_nonstar_conic": true
+      },
+      "ok": true
+    },
+    {
+      "q": 13,
+      "orbit": "generic",
+      "sac": 11,
+      "ex": 5,
+      "T": 8,
+      "rich4": 1,
+      "rich3": 8,
+      "richHigher": 0,
+      "checks": {
+        "d1_star_collinear": true,
+        "d2_rich_profile": true,
+        "d3_nonstar_conic": true
+      },
+      "ok": true
+    },
+    {
+      "q": 13,
+      "orbit": "equianharmonic",
+      "sac": 11,
+      "ex": 5,
+      "T": 8,
+      "rich4": 1,
+      "rich3": 8,
+      "richHigher": 0,
+      "checks": {
+        "d1_star_collinear": true,
+        "d2_rich_profile": true,
+        "d3_nonstar_conic": true
+      },
+      "ok": true
+    },
+    {
+      "q": 17,
+      "orbit": "harmonic",
+      "sac": 15,
+      "ex": 7,
+      "T": 12,
+      "rich4": 1,
+      "rich3": 12,
+      "richHigher": 0,
+      "checks": {
+        "d1_star_collinear": true,
+        "d2_rich_profile": true,
+        "d3_nonstar_conic": true
+      },
+      "ok": true
+    },
+    {
+      "q": 17,
+      "orbit": "generic-a",
+      "sac": 15,
+      "ex": 7,
+      "T": 12,
+      "rich4": 1,
+      "rich3": 12,
+      "richHigher": 0,
+      "checks": {
+        "d1_star_collinear": true,
+        "d2_rich_profile": true,
+        "d3_nonstar_conic": true
+      },
+      "ok": true
+    },
+    {
+      "q": 17,
+      "orbit": "generic-b",
+      "sac": 15,
+      "ex": 7,
+      "T": 12,
+      "rich4": 1,
+      "rich3": 12,
+      "richHigher": 0,
+      "checks": {
+        "d1_star_collinear": true,
+        "d2_rich_profile": true,
+        "d3_nonstar_conic": true
+      },
+      "ok": true
+    },
+    {
+      "q": 19,
+      "orbit": "harmonic",
+      "sac": 18,
+      "ex": 9,
+      "T": 15,
+      "rich4": 1,
+      "rich3": 15,
+      "richHigher": 0,
+      "checks": {
+        "d1_star_collinear": true,
+        "d2_rich_profile": true,
+        "d3_nonstar_conic": true
+      },
+      "ok": true
+    },
+    {
+      "q": 19,
+      "orbit": "generic-a",
+      "sac": 17,
+      "ex": 8,
+      "T": 14,
+      "rich4": 1,
+      "rich3": 14,
+      "richHigher": 0,
+      "checks": {
+        "d1_star_collinear": true,
+        "d2_rich_profile": true,
+        "d3_nonstar_conic": true
+      },
+      "ok": true
+    },
+    {
+      "q": 19,
+      "orbit": "generic-b",
+      "sac": 17,
+      "ex": 8,
+      "T": 14,
+      "rich4": 1,
+      "rich3": 14,
+      "richHigher": 0,
+      "checks": {
+        "d1_star_collinear": true,
+        "d2_rich_profile": true,
+        "d3_nonstar_conic": true
+      },
+      "ok": true
+    },
+    {
+      "q": 19,
+      "orbit": "equianharmonic",
+      "sac": 18,
+      "ex": 9,
+      "T": 15,
+      "rich4": 1,
+      "rich3": 15,
+      "richHigher": 0,
+      "checks": {
+        "d1_star_collinear": true,
+        "d2_rich_profile": true,
+        "d3_nonstar_conic": true
+      },
+      "ok": true
+    }
+  ],
+  "pass": true
+}

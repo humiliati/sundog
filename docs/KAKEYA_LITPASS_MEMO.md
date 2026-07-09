@@ -110,6 +110,20 @@ Consequences already visible in the receipts:
   territory) is a contrast remark only; the workbench has no even `q` and
   makes no even-`q` claim.
 
+## Addendum 2026-07-09 - Segre's oval theorem (relative-Segre reduction)
+
+Owed by [`kakeya/PHASE3P_PARABOLA_OPTIMALITY.md`](kakeya/PHASE3P_PARABOLA_OPTIMALITY.md),
+which reduces the 4-star parabola-optimality lemma to a *relative* version of
+Segre's classification.
+
+| Source | Public URL | Supports | Boundary action |
+| --- | --- | --- | --- |
+| Beniamino Segre, "Ovals in a finite projective plane", *Canadian Journal of Mathematics* 7 (1955), 414-416 | https://www.cambridge.org/core/journals/canadian-journal-of-mathematics/article/ovals-in-a-finite-projective-plane/C436473E65277F46C5A60279667CE257 | Segre's theorem: every oval (`(q+1)`-arc, no 3 collinear) in `PG(2,q)`, `q` odd, is a nonsingular conic. The classical backbone of "the extremal min-3-secant configuration is a conic". | Import-and-cite only. PHASE3P uses it for the *dual* arc reformulation; the workbench reduces parabola-optimality to a RELATIVE Segre statement (4 points forced on a line) which is NOT a corollary of Segre or Blokhuis-Mazzocca and stays OPEN. No reproving; no Euclidean transfer. |
+
+The `q=11`-harmonic exception (PHASE3O) shows any proof must use `q >= 13`;
+since Segre holds for all odd `q`, the difficulty is precisely the relative /
+pivot-constrained content, not the absolute arc classification.
+
 ## Track A - Euclidean Boundary
 
 Wang-Zahl is the current landscape anchor: the Euclidean Kakeya set conjecture

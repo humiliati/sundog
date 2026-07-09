@@ -168,6 +168,30 @@ small-field anomaly geometrically; and the parabola prices `q=43` harmonic
 HIGH in ms, subsuming the infeasible depth-40 exact solve (lever 1). Lever 2
 reduces to two sharp finite-geometry lemmas (parabola-optimality for `q>=13`;
 the cross-ratio pole-incidence count) (`npm run kakeya:triple-anatomy`).
+Phase 3P attacks parabola-optimality (lever 2, lemma 1):
+[`kakeya/PHASE3P_PARABOLA_OPTIMALITY.md`](kakeya/PHASE3P_PARABOLA_OPTIMALITY.md)
+PROVES the concurrency identity `sacrifice = |K| - q(q+1)/2` (so minimizing
+sacrifice = minimizing the completion's point count), the optimal profile
+`sacrifice = 3 + T`, and the dual reformulation (completion -> `q+1` points
+with the 4 star lines forced collinear on `O*`; multiplicity = rich-line
+count), verified `D1+D2+D3` at every exact field (`npm run kakeya:dual-arc`).
+It then REDUCES parabola-optimality to a *relative Segre* statement (min-
+3-secant near-arc with a forced pivot line = conic on the free points),
+cited to Segre 1955 + Blokhuis-Mazzocca, shown NOT a corollary of BM, with
+the `q=11` exception forcing any proof to use `q>=13`. Honest status: the
+reduction and scaffolding are proved/verified; the relative-Segre lemma
+itself is OPEN (Segre pinned in the litpass memo addendum).
+Phase 3Q attempts to close the relative-Segre lemma and reports the honest
+outcome - it does NOT close:
+[`kakeya/PHASE3Q_RELATIVE_SEGRE_STATUS.md`](kakeya/PHASE3Q_RELATIVE_SEGRE_STATUS.md)
+PROVES parabola-optimality exhaustively as a finite theorem (`q<=19` exact,
+recomputed from scratch at `q<=13`) with the SINGLE exception `q=11`
+harmonic, which DISPROVES the universal form; locates why the general
+`q>=13` case resists (non-arc dual config with a forced 4-secant, so Segre's
+Lemma of Tangents is obstructed; not the Ball-Blokhuis-Domenzain result;
+untested beyond `q=19`); and reframes to the cleaner exception-free FLOOR
+conjecture `ex >= (q-3)/2` (holds at all tested `q` incl. 11) as the better
+target. No proof of the general lemma is claimed (`npm run kakeya:parabola-opt`).
 This file is a target-selection and claim-boundary scaffold opened from
 [`SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md`](SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md).
 
@@ -641,6 +665,19 @@ Forbidden:
   tangents concurrent), verified G1-G3 at exact fields; parabola optimal except
   `q=11`-harmonic (non-parabola optimum = the anomaly); prices `q=43` HIGH in
   ms (lever 1); lever 2 reduced to two finite-geometry lemmas.
+- [`kakeya/PHASE3P_PARABOLA_OPTIMALITY.md`](kakeya/PHASE3P_PARABOLA_OPTIMALITY.md)
+  - parabola-optimality reduction: PROVES concurrency identity
+  (`sacrifice = |K| - q(q+1)/2`), optimal profile (`3 + T`), and dual
+  reformulation (D1 star-collinearity proved; D2/D3 verified); REDUCES the
+  lemma to a relative-Segre statement (cited Segre 1955 + BM, not a BM
+  corollary; `q=11` forces `q>=13`), left honestly OPEN.
+- [`kakeya/PHASE3Q_RELATIVE_SEGRE_STATUS.md`](kakeya/PHASE3Q_RELATIVE_SEGRE_STATUS.md)
+  - honest close-attempt: parabola-optimality PROVED exhaustively for `q<=19`
+  4-stars with the single exception `q=11` harmonic (which disproves the
+  universal form); general `q>=13` OPEN (non-arc dual config obstructs
+  Segre's Lemma of Tangents; not in the literature; untested beyond `q=19`);
+  cleaner exception-free FLOOR conjecture `ex>=(q-3)/2` recommended. Not
+  closed.
 - [`kakeya/EXTERNAL_REVIEW_PACKET.md`](kakeya/EXTERNAL_REVIEW_PACKET.md) -
   owner-pending external-review ask; frames Kakeya as a boundary/pedagogy review,
   not a result-review packet.

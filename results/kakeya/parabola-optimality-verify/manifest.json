@@ -1,0 +1,87 @@
+{
+  "artifactId": "KAK-PHASE3Q-PARABOLA-OPTIMALITY-VERIFY",
+  "generatedAt": "2026-07-09T09:12:24.616Z",
+  "status": "internal exhaustive finite-case verification (PHASE3Q)",
+  "command": "node scripts/kakeya-parabola-optimality-verify.mjs",
+  "theorem": "For q in {5,7,11,13}, both min-sacrifice quantities are exact minima (exhaustive B&B / full parabola search). Parabola-optimality (parabolaSacrifice == exactSacrifice) holds for every orbit EXCEPT q=11 harmonic (exact ex=4 < parabola ex=5). This is a rigorous finite theorem; the general q>=13 statement is open.",
+  "falsifier": {
+    "name": "PARABOLA_OPT_FINITE_MISMATCH",
+    "description": "Fires if any orbit other than q=11 harmonic is parabola-suboptimal on these exhaustively-solved fields, or if a parabola beats the exact minimum (impossible).",
+    "status": "clear"
+  },
+  "rows": [
+    {
+      "q": 5,
+      "orbit": "harmonic",
+      "exactSacrifice": 4,
+      "parabolaSacrifice": 4,
+      "exactEx": 2,
+      "parabolaEx": 2,
+      "parabolaOptimal": true
+    },
+    {
+      "q": 7,
+      "orbit": "harmonic",
+      "exactSacrifice": 5,
+      "parabolaSacrifice": 5,
+      "exactEx": 2,
+      "parabolaEx": 2,
+      "parabolaOptimal": true
+    },
+    {
+      "q": 7,
+      "orbit": "equianharmonic",
+      "exactSacrifice": 6,
+      "parabolaSacrifice": 6,
+      "exactEx": 3,
+      "parabolaEx": 3,
+      "parabolaOptimal": true
+    },
+    {
+      "q": 11,
+      "orbit": "harmonic",
+      "exactSacrifice": 9,
+      "parabolaSacrifice": 10,
+      "exactEx": 4,
+      "parabolaEx": 5,
+      "parabolaOptimal": false
+    },
+    {
+      "q": 11,
+      "orbit": "generic",
+      "exactSacrifice": 9,
+      "parabolaSacrifice": 9,
+      "exactEx": 4,
+      "parabolaEx": 4,
+      "parabolaOptimal": true
+    },
+    {
+      "q": 13,
+      "orbit": "harmonic",
+      "exactSacrifice": 12,
+      "parabolaSacrifice": 12,
+      "exactEx": 6,
+      "parabolaEx": 6,
+      "parabolaOptimal": true
+    },
+    {
+      "q": 13,
+      "orbit": "generic",
+      "exactSacrifice": 11,
+      "parabolaSacrifice": 11,
+      "exactEx": 5,
+      "parabolaEx": 5,
+      "parabolaOptimal": true
+    },
+    {
+      "q": 13,
+      "orbit": "equianharmonic",
+      "exactSacrifice": 11,
+      "parabolaSacrifice": 11,
+      "exactEx": 5,
+      "parabolaEx": 5,
+      "parabolaOptimal": true
+    }
+  ],
+  "onlyException11h": true
+}
