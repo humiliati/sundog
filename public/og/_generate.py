@@ -500,6 +500,48 @@ def viz_quantilizing() -> str:
     return "\n  ".join(parts)
 
 
+def viz_augury() -> str:
+    """Augury OG card: the market's forecast edge over the models growing toward
+    the final hours before the daily high. Information-claim fence visible."""
+    parts = []
+    # Outer paper card (document-on-desk)
+    parts.append('<g filter="url(#cardShadow)">')
+    parts.append('  <rect x="660" y="125" width="490" height="395" rx="6" fill="#F5EFE0" stroke="#8C6F3A" stroke-width="2" transform="rotate(-0.6 905 322)"/>')
+    parts.append('</g>')
+    # Eyebrow (document heading)
+    parts.append('<text x="905" y="160" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="800" letter-spacing="2" fill="#684811" text-anchor="middle">MARKET vs MODELS &#183; MATCHED CUTOFFS</text>')
+    parts.append('<line x1="700" y1="176" x2="1110" y2="176" stroke="#8C6F3A" stroke-width="1" stroke-dasharray="3 5" opacity="0.6"/>')
+    # Chart axes: x in [715, 1085], y in [200, 350]
+    parts.append('<line x1="715" y1="350" x2="1085" y2="350" stroke="#5A6772" stroke-width="1.2"/>')
+    parts.append('<line x1="715" y1="200" x2="715" y2="350" stroke="#5A6772" stroke-width="1.2"/>')
+    # "models even" baseline near the bottom (zero advantage)
+    parts.append('<line x1="715" y1="350" x2="1085" y2="350" stroke="#9AA4AC" stroke-width="1" stroke-dasharray="4 4"/>')
+    parts.append('<text x="1082" y="366" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="9" fill="#8a949c" text-anchor="end">models even with the market</text>')
+    parts.append('<text x="711" y="196" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="10" fill="#5A6772" text-anchor="end">market edge</text>')
+    # Area under the rising edge curve
+    parts.append('<path d="M715,319 L752,309 L789,315 L826,309 L863,322 L900,309 L937,297 L974,278 L1011,275 L1048,243 L1085,215 L1085,350 L715,350 Z" fill="#2E7D5A" fill-opacity="0.12"/>')
+    # The edge curve (grows toward the right / final hours)
+    parts.append('<polyline points="715,319 752,309 789,315 826,309 863,322 900,309 937,297 974,278 1011,275 1048,243 1085,215" fill="none" stroke="#2E7D5A" stroke-width="2.6" stroke-linejoin="round"/>')
+    parts.append('<circle cx="1085" cy="215" r="6" fill="#2E7D5A" stroke="#FFFFFF" stroke-width="1.5"/>')
+    parts.append('<circle cx="715" cy="319" r="4" fill="#2E7D5A" fill-opacity="0.5"/>')
+    # x labels
+    parts.append('<text x="715" y="366" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="9" fill="#8a949c" text-anchor="start">&#8722;12h</text>')
+    parts.append('<text x="900" y="378" font-family="Verdana, Geneva, sans-serif" font-size="9" font-weight="700" letter-spacing="0.5" fill="#5A6772" text-anchor="middle">HOURS BEFORE THE DAILY HIGH</text>')
+    parts.append('<text x="1085" y="205" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" font-weight="800" fill="#2E7D5A" text-anchor="end">4&#215; larger</text>')
+    # Payload caption
+    parts.append('<line x1="700" y1="398" x2="1110" y2="398" stroke="#CFD8DC" stroke-width="1"/>')
+    parts.append('<text x="905" y="420" font-family="Georgia, serif" font-size="17" font-weight="700" font-style="italic" fill="#1A3A52" text-anchor="middle">The augur beats the bureau at the margin &#8212;</text>')
+    parts.append('<text x="905" y="442" font-family="Georgia, serif" font-size="17" font-weight="700" font-style="italic" fill="#1A3A52" text-anchor="middle">but only where the bureau has stopped looking.</text>')
+    # Determining-set badge
+    parts.append('<g transform="translate(700,460)" filter="url(#cardShadow)">')
+    parts.append('  <rect x="0" y="0" width="410" height="20" rx="10" fill="#FFFFFF" stroke="#1A3A52" stroke-width="1.4"/>')
+    parts.append('  <text x="205" y="14" font-family="Verdana, Geneva, sans-serif" font-size="9" font-weight="800" letter-spacing="1" fill="#1A3A52" text-anchor="middle">NON-REDUNDANT SET: NBM &#183; ECMWF &#183; MARKET (GEFS SCREENED)</text>')
+    parts.append('</g>')
+    # Information-claim fence line (hard-fences discipline)
+    parts.append('<text x="905" y="505" font-family="Verdana, Geneva, sans-serif" font-size="9" font-weight="800" letter-spacing="1.4" fill="#5A2A22" text-anchor="middle">INFORMATION CLAIM ONLY &#183; NOT INVESTMENT ADVICE</text>')
+    return "\n  ".join(parts)
+
+
 CARDS = {
     "index": {
         "filename": "home.png",
@@ -641,6 +683,18 @@ CARDS = {
         ],
         "url": "sundog.cc/quantilizing",
         "viz": viz_quantilizing,
+    },
+    "augury": {
+        "filename": "augury.png",
+        "eyebrow": "SUNDOG · AUGURY",
+        "headline": ["Do the gamblers", "beat the bureau?"],
+        "lede": [
+            "Weather prediction markets, scored",
+            "against the model stack at matched",
+            "cutoffs. The edge is in the final hours.",
+        ],
+        "url": "sundog.cc/augury",
+        "viz": viz_augury,
     },
 }
 
