@@ -83,5 +83,37 @@
     "m_enc": 0.0,
     "m_pool": -0.0494,
     "verdict": "c_partial_mixed"
+  },
+  "back_action": {
+    "null_cka_thr": 0.7313,
+    "null_drift_thr": 0.0067,
+    "joint": {
+      "0.3": {
+        "rec_joint": 0.4063,
+        "d_acc": 0.7891,
+        "cka": 0.8571,
+        "drift": 0.0162,
+        "cka_outside_null": false,
+        "drift_outside_null": true
+      },
+      "1.0": {
+        "rec_joint": 0.4116,
+        "d_acc": 0.7887,
+        "cka": 0.8586,
+        "drift": 0.0166,
+        "cka_outside_null": false,
+        "drift_outside_null": true
+      },
+      "3.0": {
+        "rec_joint": 0.4269,
+        "d_acc": 0.7938,
+        "cka": 0.8701,
+        "drift": 0.0116,
+        "cka_outside_null": false,
+        "drift_outside_null": true
+      }
+    },
+    "verdict_beta": null,
+    "verdict": "objective_abandoned"
   }
 }
