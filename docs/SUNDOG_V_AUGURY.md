@@ -21,8 +21,13 @@ percentiles unavailable) — encompassing survival is the robust core. G0/G1/G2/
 the full ladder {GEFS, NBM, ECMWF-HRES, market} (MOS dropped — no historical source; ECMWF-ENS throttle-
 walled → HRES, Amdt G4-α). **Minimal determining set = {NBM, ECMWF-HRES, market}; GEFS screened off** (raw
 physics ensemble redundant given NBM). Market in the set at both horizons (stronger short); ECMWF in only at
-long lead — market & ECMWF at opposite ends of the horizon. **G5 (augury.html) now the remaining gate,
-owner-gated; DOCS_NO_PUBLISH until G5.**
+long lead — market & ECMWF at opposite ends of the horizon.
+
+**G5 PAGE BUILT 2026-07-09** — `augury.html` (kicker/lede, two inline SVG exhibits [the G3 crossover line +
+the G4 determining-set bars], Steinmetz parable, honest-fence card, Roll-1984 sources); registered in
+`site-pages.json` (evidence-page), sitemap + routes + copy-integrity clean, Vite build OK. **Pre-deploy owed
+(owner-gated):** generate `og/augury.png`, owner asset/license check, then `npm run deploy`. Not yet deployed;
+this is the only public surface — `DOCS_NO_PUBLISH` holds until deploy.
 
 ---
 

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Augury: do weather prediction markets beat the forecast models? Snapshotted at matched information cutoffs, Kalshi's implied temperature odds are a non-redundant member of the forecaster pantheon - they carry weather information the operational model stack does not, concentrated in the final hours before the day's high.">
+    <meta name="theme-color" content="#1A3A52">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://sundog.cc/augury">
+    <title>Augury - Do the Gamblers Beat the Bureau? | Sundog</title>
+    <!-- OG-BLOCK-START (managed by public/og/_patch_meta.py; og/augury.png pending generation before deploy) -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Sundog">
+    <meta property="og:title" content="Augury - Do the Gamblers Beat the Bureau?">
+    <meta property="og:description" content="Weather prediction markets, scored against the operational model stack at matched information cutoffs. The market is a non-redundant forecaster - and its edge is a raw model that turns out redundant, not the market.">
+    <meta property="og:image" content="https://sundog.cc/og/augury.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="A line chart of the market's forecast edge over the National Blend of Models, growing steadily toward the final hours before the daily high.">
+    <meta property="og:url" content="https://sundog.cc/augury">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Augury - Do the Gamblers Beat the Bureau?">
+    <meta name="twitter:description" content="Weather prediction markets vs the operational model stack at matched cutoffs. The market is a non-redundant member of the forecaster pantheon; its edge concentrates in the final hours.">
+    <meta name="twitter:image" content="https://sundog.cc/og/augury.png">
+    <meta name="twitter:image:alt" content="A line chart of the market's forecast edge over the models, growing toward the final hours.">
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "headline": "Augury - Do the Gamblers Beat the Bureau?",
+  "description": "Weather prediction markets scored against the operational forecast model stack (GEFS, NBM, ECMWF) at matched information cutoffs. The market survives an encompassing kill-test as a non-redundant member of the minimal determining set; its marginal information is horizon-localized to the final hours before the daily high.",
+  "url": "https://sundog.cc/augury",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Stellar Aqua LLC",
+    "url": "https://stellaraqua.com"
+  },
+  "inLanguage": "en",
+  "isAccessibleForFree": true,
+  "about": [
+    { "@type": "Thing", "name": "Prediction markets" },
+    { "@type": "Thing", "name": "Weather forecasting" },
+    { "@type": "Thing", "name": "Forecast encompassing" }
+  ]
+}
+    </script>
+    <!-- OG-BLOCK-END -->
+    <link rel="stylesheet" href="/css/sundog-theme.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        main { max-width: 900px; margin: 0 auto; padding: 1.5rem 1.5rem 4rem; }
+        .kicker { font-family: var(--sd-font-data, ui-monospace, monospace); font-size: 0.78rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--primary-mid, #2C5F7F); }
+        h1 { color: var(--primary-dark, #1A3A52); font-family: var(--sd-font-display, Georgia, serif); font-size: clamp(2rem, 6vw, 3rem); line-height: 1.05; margin: 0.5rem 0 0.6rem; }
+        .lede { color: #40505C; font-size: 1.15rem; line-height: 1.7; max-width: 64ch; }
+        h2 { color: var(--primary-dark, #1A3A52); font-size: 1.4rem; margin: 2.4rem 0 0.6rem; }
+        p { color: #40505C; line-height: 1.7; }
+        a { color: var(--primary-mid, #2C5F7F); font-weight: 700; }
+        code { background: rgba(244,196,48,0.12); padding: 0.1rem 0.35rem; border-radius: 3px; font-size: 0.95em; }
+        strong { color: var(--primary-dark, #1A3A52); }
+        .payload { font-family: var(--sd-font-display, Georgia, serif); font-size: clamp(1.25rem, 3.4vw, 1.7rem); color: var(--primary-dark, #1A3A52); border-left: 4px solid var(--accent, #F4C430); padding: 0.4rem 0 0.4rem 1rem; margin: 1.6rem 0; line-height: 1.3; }
+
+        .exhibit { border: 1px solid var(--line, #d8e0e4); border-radius: 10px; background: #fff; padding: 1rem 1.15rem 1.2rem; margin: 1.4rem 0; }
+        .exhibit h3 { margin: 0 0 0.15rem; color: var(--primary-dark, #1A3A52); font-size: 1.02rem; }
+        .exhibit .sub { font-size: 0.86rem; color: #6A7680; margin: 0 0 0.7rem; }
+        .exhibit svg { width: 100%; height: auto; display: block; }
+        .caption { font-size: 0.82rem; color: #6A7680; margin-top: 0.6rem; line-height: 1.55; }
+        .legend { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 0.6rem; font-size: 0.82rem; color: #6A7680; }
+        .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+
+        .card { border: 1px solid var(--line, #d8e0e4); border-radius: 8px; padding: 1rem 1.25rem; margin: 1.2rem 0; background: #fff; }
+        .card.fence { border-color: rgba(181,58,44,0.35); background: rgba(181,58,44,0.03); }
+        .card h3 { margin: 0 0 0.5rem; color: var(--primary-dark, #1A3A52); font-size: 1.05rem; }
+        ul { line-height: 1.7; color: #40505C; }
+        .fine { font-family: var(--sd-font-data, ui-monospace, monospace); font-size: 0.8rem; color: #6A7680; }
+        .parable { font-family: var(--sd-font-display, Georgia, serif); font-style: italic; color: #5A6A76; border-left: 3px solid var(--line, #d8e0e4); padding: 0.35rem 0 0.35rem 1.1rem; margin: 1.4rem 0; line-height: 1.65; }
+        .parable .tag { display: block; font-family: var(--sd-font-data, ui-monospace, monospace); font-style: normal; font-size: 0.75rem; color: #8a949c; margin-top: 0.45rem; }
+        .svgtxt { font-family: var(--sd-font-data, ui-monospace, monospace); }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="/" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="/about">About</a>
+                <a href="/sundog">Atlas</a>
+                <a href="/applications-gallery">Applications</a>
+                <a href="/alignment">Align</a>
+                <a href="/chat">Chat</a>
+                <a href="docs/">Docs</a>
+                <a href="https://github.com/humiliati/sundog">GitHub</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <p class="kicker">Sundog &middot; Augury</p>
+        <h1>Do the gamblers beat the bureau?</h1>
+        <p class="lede">Every day, thousands of dollars trade on tomorrow's high temperature in a dozen cities. Weather forecasting has a mature, publicly funded model stack &mdash; physics ensembles, statistical blends, the works. So here is a fair question: does the betting crowd's price carry any weather information the models miss? We scored the market against the model stack at <em>matched information cutoffs</em>, over three and a half years. It does &mdash; and the surprise is <em>which</em> forecaster turns out redundant.</p>
+
+        <section class="exhibit" aria-label="The market's forecast edge over the National Blend of Models, by lead time">
+            <h3>The edge is in the final hours</h3>
+            <p class="sub">Market forecast skill minus the National Blend of Models, by hours before the daily high. Lower is a bigger market advantage. Pooled over 7 cities, 2023&ndash;2026.</p>
+            <svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A line falling from a small market advantage at 12 hours before the high to a four-times larger advantage at 2 hours before.">
+                <!-- baseline (models even with market) -->
+                <line x1="60" y1="40" x2="670" y2="40" stroke="#c4ccc7" stroke-width="1.5" stroke-dasharray="4 4"/>
+                <text x="64" y="34" class="svgtxt" font-size="12" fill="#8a949c">models even with the market</text>
+                <!-- y axis label -->
+                <text x="20" y="150" class="svgtxt" font-size="12" fill="#6A7680" transform="rotate(-90 20 150)" text-anchor="middle">market advantage &rarr;</text>
+                <!-- area under the curve -->
+                <path d="M70,82 L128,95 L186,86 L244,95 L302,78 L360,95 L418,111 L476,137 L534,141 L592,183 L650,221 L650,260 L70,260 Z" fill="rgba(46,125,90,0.10)"/>
+                <!-- the curve -->
+                <polyline points="70,82 128,95 186,86 244,95 302,78 360,95 418,111 476,137 534,141 592,183 650,221" fill="none" stroke="#2E7D5A" stroke-width="2.5" stroke-linejoin="round"/>
+                <!-- emphasized endpoint -->
+                <circle cx="650" cy="221" r="5.5" fill="#2E7D5A"/>
+                <circle cx="70" cy="82" r="4" fill="#2E7D5A" fill-opacity="0.5"/>
+                <!-- x ticks -->
+                <text x="70" y="285" class="svgtxt" font-size="12" fill="#6A7680" text-anchor="middle">&minus;12h</text>
+                <text x="360" y="285" class="svgtxt" font-size="12" fill="#6A7680" text-anchor="middle">&minus;7h</text>
+                <text x="650" y="285" class="svgtxt" font-size="12" fill="#6A7680" text-anchor="middle">&minus;2h</text>
+                <text x="70" y="70" class="svgtxt" font-size="12" fill="#2E7D5A" text-anchor="middle">small</text>
+                <text x="650" y="209" class="svgtxt" font-size="13" font-weight="700" fill="#2E7D5A" text-anchor="middle">4&times; larger</text>
+                <text x="150" y="270" class="svgtxt" font-size="11.5" fill="#8a949c">long lead (day-3 territory)</text>
+                <text x="560" y="270" class="svgtxt" font-size="11.5" fill="#8a949c">final hours</text>
+            </svg>
+            <p class="caption">The market wins by a hair at long lead and roughly four times as much in the final hours &mdash; exactly where "it is already 88&deg; at 2pm" bounds the day's high in a way the morning model run cannot. The crossover is the finding, not the average.</p>
+        </section>
+
+        <p class="payload">The augur reads tomorrow off the price. At the margin, the augur beats the bureau &mdash; but only where the bureau has stopped looking.</p>
+
+        <div class="parable">
+            A town kept two weather-tellers. One was the Bureau, which each dawn nailed a careful notice to the well and did not change it. The other was the Market &mdash; a knot of traders by the well who re-shouted their odds every hour as the day wore on. At sunrise the two agreed almost exactly, for the Market mostly read the Bureau's notice aloud. But by mid-afternoon, with the heat already in the air and the notice hours stale, the traders knew something the dawn notice never could: today was already what it was. The Bureau was not wrong. It had simply stopped speaking while the Market kept listening.
+            <span class="tag">A parable, not a proof. The chart above is the real measurement.</span>
+        </div>
+
+        <h2>The question, made fair</h2>
+        <p>Prediction markets like Kalshi settle each city's daily-high contract on the National Weather Service's official climate report. So the market is not competing to <em>measure</em> the temperature &mdash; it competes to <em>forecast</em> it, against the same models everyone else has. The honest way to ask "does the crowd know more?" is to freeze the clock at a given minute and compare, at that instant, the market's implied odds against <strong>the freshest model guidance available at the very same minute</strong>. Snapshot both at 6am; snapshot both at 2pm. Anything less measures staleness, not skill.</p>
+        <p>We did that at every hour across the run-up to each day's high, in seven cities, from February 2023 through June 2026 &mdash; roughly 3,300 city-days. Ground truth is the settling climate report; scoring is done at exactly the temperature thresholds the market trades, so nobody gets a home-field metric.</p>
+
+        <h2>The pantheon, and the one that folds</h2>
+        <p>A single "market beats one model" result is weak &mdash; a lossy echo of that model produces it by luck. The real test puts the whole forecaster pantheon in one regression and asks which members are <em>non-redundant</em>: whose information survives once everyone else's is already accounted for. We ran the market against a physics ensemble (the GEFS), the operational statistical blend (the National Blend of Models), and a second independent model (the ECMWF).</p>
+
+        <section class="exhibit" aria-label="Which forecasters are non-redundant once all others are accounted for">
+            <h3>Who is still in the room?</h3>
+            <p class="sub">Each forecaster's marginal contribution with all others present (encompassing coefficient, 95% interval). Above zero = carries information no one else has.</p>
+            <svg viewBox="0 0 700 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bar chart: market, ECMWF, and NBM all sit above zero; GEFS sits below zero and is screened out.">
+                <!-- zero line -->
+                <line x1="146" y1="20" x2="146" y2="210" stroke="#8a949c" stroke-width="1.5"/>
+                <text x="146" y="230" class="svgtxt" font-size="12" fill="#6A7680" text-anchor="middle">0 (redundant)</text>
+                <!-- market -->
+                <rect x="146" y="34" width="301" height="22" rx="3" fill="rgba(46,125,90,0.85)"/>
+                <line x1="423" y1="45" x2="468" y2="45" stroke="#1A3A52" stroke-width="1.5"/>
+                <text x="150" y="30" class="svgtxt" font-size="12.5" font-weight="700" fill="#1A3A52">market &mdash; 0.70</text>
+                <!-- ECMWF -->
+                <rect x="146" y="84" width="263" height="22" rx="3" fill="rgba(44,95,127,0.8)"/>
+                <line x1="198" y1="95" x2="650" y2="95" stroke="#1A3A52" stroke-width="1.5"/>
+                <text x="150" y="80" class="svgtxt" font-size="12.5" font-weight="700" fill="#1A3A52">ECMWF (deterministic) &mdash; 0.61</text>
+                <!-- NBM -->
+                <rect x="146" y="134" width="160" height="22" rx="3" fill="rgba(44,95,127,0.8)"/>
+                <line x1="282" y1="145" x2="335" y2="145" stroke="#1A3A52" stroke-width="1.5"/>
+                <text x="150" y="130" class="svgtxt" font-size="12.5" font-weight="700" fill="#1A3A52">NBM (blend) &mdash; 0.37</text>
+                <!-- GEFS (screened, below zero) -->
+                <rect x="114" y="184" width="32" height="22" rx="3" fill="rgba(181,58,44,0.75)"/>
+                <line x1="98" y1="195" x2="130" y2="195" stroke="#1A3A52" stroke-width="1.5"/>
+                <text x="94" y="180" class="svgtxt" font-size="12.5" font-weight="700" fill="#B53A2C" text-anchor="end">GEFS (physics ensemble) &mdash; screened out &rarr;</text>
+            </svg>
+            <div class="legend">
+                <span><i style="background:rgba(46,125,90,0.85)"></i>the aggregate (market)</span>
+                <span><i style="background:rgba(44,95,127,0.8)"></i>a model, still non-redundant</span>
+                <span><i style="background:rgba(181,58,44,0.75)"></i>redundant / screened out</span>
+            </div>
+            <p class="caption">The minimal set of forecasters that survives is <strong>{ National Blend, ECMWF, market }</strong>. The one member that folds is the raw physics ensemble &mdash; because the National Blend already post-processes exactly that kind of physics, so the raw ensemble adds nothing on top of it. When the whole model stack is in the room, it is a model that proves redundant, not the market.</p>
+        </section>
+
+        <h2>Market and model, at opposite ends of the day</h2>
+        <p>Splitting the same test by lead time sharpens it. The market is non-redundant at <em>both</em> ends but strongest in the final hours &mdash; its advantage is real-time observation the stale model cycle cannot carry. The ECMWF is the mirror image: it earns its place at <em>long</em> lead, where genuine model skill separates the forecasters, and fades in the final hours where the market's live reading takes over. The two non-blend members of the set carry their information at opposite ends of the horizon. That is an information-access result, not a curiosity: each forecaster wins exactly where it has access the others lack.</p>
+
+        <div class="card fence">
+            <h3>What this is and is not</h3>
+            <ul>
+                <li>It <strong>is</strong> an information claim, scored on raw market midpoints against operational model guidance at matched information cutoffs, with ground truth from the settling climate report.</li>
+                <li>It is <strong>not</strong> a trading strategy and <strong>not</strong> investment advice. Fees and the bid-ask spread eat the tails; a "tradable edge" is a separate, weaker claim this page does not make.</li>
+                <li>The comparators are the models' mean-and-spread rendered as a normal distribution, and the ECMWF rung is its deterministic run (its full ensemble was blocked by data-provider rate limits). The robust backbone is the encompassing survival, not any single model's calibrated score.</li>
+                <li>The "human forecaster" rung (station MOS) is <strong>absent</strong> &mdash; no reliable historical same-day source was available &mdash; so the pantheon here is physics-ensemble, statistical-blend, and second-model, plus the market.</li>
+                <li>The horizon crossover is the headline; the exact per-hour map is a supporting exploratory view, not a separately adjudicated claim.</li>
+            </ul>
+        </div>
+
+        <h2>Why it is not obvious</h2>
+        <p>The efficient guess is that the market is just a fast mirror of the models &mdash; arbitrage bots reprice within seconds of every model cycle, so the price should be a lossy shadow of the best public model, minus fees. That guess is mostly right, and it is exactly why the residual matters: after the models are fully accounted for, a non-zero, horizon-shaped signal remains. Richard Roll noticed the same shape forty years ago in orange-juice futures, which predicted errors in the government's Florida temperature forecasts. The market was reading the weather off the price. Here we can say <em>where</em>: at the margin, and in the final hours.</p>
+
+        <h2>Sources &amp; further reading</h2>
+        <ul>
+            <li>R. Roll, <a href="https://www.anderson.ucla.edu/documents/areas/fac/finance/1984-6.pdf">"Orange Juice and Weather"</a>, <em>American Economic Review</em> (1984) &mdash; the founding observation.</li>
+            <li>Forecast encompassing / matched-cutoff scoring in the prediction-market setting: cf. the FluSight-vs-market comparison (arXiv:2605.11220), the method template adapted here to weather.</li>
+            <li>Model guidance: NOAA's <a href="https://vlab.noaa.gov/web/mdl/nbm">National Blend of Models</a> and <a href="https://registry.opendata.aws/noaa-gefs/">GEFS</a>; <a href="https://www.ecmwf.int/en/forecasts/datasets/open-data">ECMWF open data</a>. Ground truth: NWS Daily Climate Report via the Iowa Environmental Mesonet.</li>
+            <li>Sundog write-up: the Augury ledger and its pre-registration (internal until this page).</li>
+        </ul>
+
+        <p class="fine">A Sundog evidence page. Real data, real ground truth, honest fences. Not investment advice.</p>
+    </main>
+
+    <footer>
+        <p>
+            The Sundog Project - <a href="docs/presentation/message-house.md">Alignment Without Sight</a>
+        </p>
+        <p class="footer-links">
+            <a href="https://github.com/humiliati/sundog">GitHub</a> |
+            <a href="/origin">Origin</a> |
+            <a href="/applications-gallery">Applications Gallery</a> |
+            <a href="docs/README.md">Documentation</a>
+        </p>
+        <p class="footer-copyright">
+            &copy; 2026 Stellar Aqua LLC. All rights reserved.
+        </p>
+    </footer>
+
+    <script type="module" src="/js/sundog-chat-widget.mjs"></script>
+</body>
+</html>
