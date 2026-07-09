@@ -34,6 +34,9 @@
 | Sigmoid (dim-1) | **DIM-1 SIGMOID TAMENESS** — `sigmoid_dnf_tame`: every finite DNF of one-variable logistic-sigmoid thresholds is `Tame`, off R1 with no exponential structure (the exp/Wilkie witness stays a parked wall) | ✅ 2026-07-08 |
 | Tanh (dim-1) | **DIM-1 TANH TAMENESS** — `tanh_dnf_tame`: same, for `Real.tanh` (continuity from `sinh/cosh`, injectivity from mathlib's `Real.tanh_injective` — no strictMono needed; the general core is reused) | ✅ 2026-07-08 |
 | Softplus (dim-1) | **DIM-1 SOFTPLUS TAMENESS** — `softplus_dnf_tame`: same, for `log(1 + eˣ)` (unbounded activation; continuity via `Continuous.log`, strict mono via `Real.log_lt_log`) — third confirmation of the monotone-activation factory | ✅ 2026-07-09 |
+| Arctan (dim-1) | **DIM-1 ARCTAN TAMENESS** — `arctan_dnf_tame`: same, for `Real.arctan` (both facts mathlib's) — fourth confirmation | ✅ 2026-07-09 |
+| Erf (dim-1) | **DIM-1 ERF TAMENESS** — `erf_dnf_tame`: mathlib has NO error function, so `erf(x) = (2/√π)∫₀ˣe^{-t²}` is defined here; continuity + strict mono by real analysis (first from-scratch build in the series) | ✅ 2026-07-09 |
+| GELU (dim-1) | **NON-MONOTONE — PARKED**: GELU `= x·Φ(x)` is not injective (min near −0.75) so the factory doesn't apply, and mathlib has no Gaussian CDF Φ to even express it. Needs a finite-fiber core + Φ. See note below. | ⏸ 2026-07-09 |
 
 Modules: `OMinimalOne` … `OMinimalCellDecomp` (34th–61st), 80 gated headline theorems, all
 axiom-clean; audits 8540 → 8605 GREEN. Classical anchors for what's landed:
@@ -426,6 +429,37 @@ monotonicity (hence injectivity) from `Real.log_lt_log`, then the reused core gi
 `softplus_dnf_tame`. Three-for-three on the monotone-activation factory. Live falsifier
 `SOFTPLUS_INSTANCE_VACUOUS` cleared; `MONO_FRONTIER` / `BOOL_CLOSURE_LEAK`
 inherited-cleared. Parked wall unchanged.
+
+## Arctan + Erf (dim-1), and the GELU boundary. [2026-07-09]
+
+**Arctan** — `ArctanTame.lean` (83rd module), 3 gates (`arctan_injective`,
+`arctan_lt_tame`, `arctan_dnf_tame`), green on the first build. The cleanest instance:
+`Real.continuous_arctan` and `Real.arctan_strictMono` are both mathlib's, so it is pure
+reuse of the core. Fourth confirmation.
+
+**Erf** — `ErfTame.lean` (84th module), 3 gates (`erf_strictMono`, `erf_lt_tame`,
+`erf_dnf_tame`), green round 3 (module-path fixes: `FundThmCalculus` moved under
+`IntervalIntegral/`; the `intervalIntegrable` measure needed pinning to `volume` via a
+type-ascribed helper). The falsifier `ERF_ABSENT` **fired** — prior-art check found no
+error function anywhere in mathlib — so this is the first FROM-SCRATCH build in the
+series: `erf(x) = (2/√π)·∫₀ˣ e^{-t²} dt`, with continuity from
+`intervalIntegral.continuous_primitive` and strict monotonicity from the strictly
+positive integrand (`intervalIntegral_pos_of_pos_on` + `integral_add_adjacent_intervals`,
+the positive constant preserving it). Then the core applies unchanged. Fifth
+confirmation, and the axiom gate confirms the integral machinery stays clean
+(`[propext, Classical.choice, Quot.sound]`).
+
+**GELU — the boundary of the factory (PARKED, honest).** The natural sixth candidate
+does NOT fit: exact GELU is `x·Φ(x)` with `Φ` the standard normal CDF, and it is
+**non-monotone** (a minimum near `x ≈ −0.75`), so it is not injective and
+`tame_*_of_injective` cannot apply. It is also blocked upstream: mathlib has only the
+Gaussian PDF (`gaussianPDFReal`) and measure (`gaussianReal`), no CDF `Φ` — so the exact
+GELU cannot even be *written*. Dim-1 GELU tameness is still TRUE (two monotone branches ⇒
+level sets ≤ 2 points ⇒ finite frontier), but proving it needs (a) a **finite-fiber**
+generalization of the core (`Tame` from continuous + finite level sets — cheap, replaces
+"subsingleton" with "finite" in `tame_level_of_injective`) and (b) `Φ` plus a
+derivative-sign / two-branch argument for finiteness. GELU is therefore the honest first
+activation that escapes the monotone factory — a real boundary, filed, not faked.
 
 *The arc, closed.* TS-QE opened 2026-07-06 and closed 2026-07-07: 17 modules
 (62nd–78th), route Cohen–Hörmander set-level over concrete ℝ, all axiom-clean. Lean
