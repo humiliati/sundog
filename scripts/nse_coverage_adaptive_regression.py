@@ -108,9 +108,10 @@ def evaluate(g200_dir, g300_dir):
         c5_ok = abs(ad - BANKED_DISAGREE[g]) <= DISAGREE_TOL
         cell_ok = c1_ok and c2_ok and c3_ok and c4_ok
         ok = ok and cell_ok
-        print(f"  G={g}: frozen={fv}[{ '✓' if c1_ok else 'X'}] adaptive={av}[{'✓' if c2_ok else 'X'}] "
-              f"f={f:.4f}[{'✓' if c3_ok else 'X'}] |adap-froz|={abs(ad-fd):.5f}[{'✓' if c4_ok else 'X'}] "
-              f"(banked {BANKED_DISAGREE[g]}: |Δ|={abs(ad-BANKED_DISAGREE[g]):.4f}[{'✓' if c5_ok else 'info'}])",
+        def m(b): return "OK" if b else "X"
+        print(f"  G={g}: frozen={fv}[{m(c1_ok)}] adaptive={av}[{m(c2_ok)}] "
+              f"f={f:.4f}[{m(c3_ok)}] |adap-froz|={abs(ad-fd):.5f}[{m(c4_ok)}] "
+              f"(banked {BANKED_DISAGREE[g]}: |d|={abs(ad-BANKED_DISAGREE[g]):.4f}[{m(c5_ok) if c5_ok else 'info'}])",
               flush=True)
     print(f"REGRESSION: {'PASS -> G=675 read unblocked' if ok else 'FAIL -> NSE-H3-APPARATUS-REJECTED'}",
           flush=True)

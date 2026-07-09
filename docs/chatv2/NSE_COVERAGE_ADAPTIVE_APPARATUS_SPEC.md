@@ -113,3 +113,20 @@ Cross-refs: `NSE_COVERAGE_ADAPTIVE_APPARATUS_SCOPE.md`,
 `PDE_C1_REGIME_GENERALITY_v1.md` (ε_K rule), `results/proof/c1-paired-fiber-g{200,300}/`
 (banked regression comparators), `results/proof/c1-h3-kf3-g675-fb-twin/`
 (the R1 target cell).
+
+---
+
+> **Post-run status (2026-07-07): R0 regression PASS** (`NSE_COVERAGE_ADAPTIVE_
+> RECEIPT.md`). Both compact cells reduced to frozen **bit-identically**
+> (f=1.0000, |adaptive−frozen| disagree 0.00000, pair sets 693,774 / 942,834
+> identical to frozen; banked xref within 0.0001). The apparatus is the same
+> test where the test already worked ⇒ **G=675 read unblocked** (not
+> APPARATUS-REJECTED). R1 staged (owner-run): `fallback_v7_g675_kf3` with
+> `--adjudicator twin-state-adaptive`, ~2 h.
+
+> **FINAL (2026-07-07): R1 `TWIN_STATE_ADAPTIVE_SLIVER` ⇒ `NSE-H3-COVERAGE-SLIVER`.**
+> Covered fraction f=0.036 (< 0.10 floor), dense-count median **0**, p95 8 (< k_min).
+> The fidelity-preserving apparatus confirms the G=675 attractor lacks ε_K-dense
+> fiber structure — the wall is a **geometric fact, not bookkeeping**. Forcing
+> axis closed across four concordant probes. Anchor witness + closed slate
+> untouched.

@@ -13,6 +13,9 @@ build/
 results/threebody/
 results/balance/
 results/bayes/
+# Raw per-sample exports (twin-state-adaptive --adjudicator): large, regenerable,
+# local-only for future post-processing. The manifest + witness CSV carry the verdict.
+results/proof/**/samples.npz
 results/mines/
 results/mesa/
 results/isotrophy/

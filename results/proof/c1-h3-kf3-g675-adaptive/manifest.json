@@ -1,0 +1,145 @@
+{
+  "startedAt": "2026-07-09T08:04:26.059791+00:00",
+  "script": "scripts/pde_c1_kolmogorov_cell.py",
+  "spec": "docs/proof/PDE_C1_CELLSET_KOLMOGOROV.md",
+  "protocol": "docs/proof/PDE_C1_FIBER_PROTOCOL.md",
+  "config": {
+    "preset": "fallback_v7_g675_kf3",
+    "grid_size": 32,
+    "n_modes": 16,
+    "k_signature": 3,
+    "forcing_wavenumber": 3,
+    "grashof": 675.0,
+    "forcing_amplitude": 1.0,
+    "viscosity": 0.03849001794597505,
+    "dt": 0.01,
+    "burnin_steps": 200000,
+    "sample_count": 200000,
+    "sample_interval_steps": 50,
+    "lookahead_steps": 500,
+    "n_min": 30,
+    "delta_action": 0.1,
+    "s_pos": 0.5,
+    "delta_proxy_min": 0.01,
+    "e_max_burnin_fraction": 1.0,
+    "random_seed": 20260528,
+    "integrator": "pseudo_spectral_vorticity_semi_implicit_euler",
+    "signature_dimension": 18,
+    "action_tiebreak": "no_op",
+    "adjudicator": "twin-state-adaptive",
+    "k_neighbors": 30,
+    "delta_incompat": 0.01,
+    "twin_k_neighbors": 50,
+    "twin_delta_high_fraction": 0.05,
+    "twin_high_norm_floor": 1e-06,
+    "twin_min_witness_fraction": 0.01,
+    "twin_min_unique_pairs": 100,
+    "objective": "portable-quantile",
+    "objective_quantile": 0.7,
+    "calibration_sample_count": 50000,
+    "calibration_gap_steps": 5000,
+    "objective_observable": "energy"
+  },
+  "environment": {
+    "python": "3.14.4 (tags/v3.14.4:23116f9, Apr  7 2026, 14:10:54) [MSC v.1944 64 bit (AMD64)]",
+    "numpy": "2.4.4",
+    "platform": "win32",
+    "cwd": "C:\\Users\\hughe\\Dev\\sundog"
+  },
+  "result": {
+    "adjudicator_family": "twin-state-adaptive",
+    "n_samples": 200000,
+    "epsilon_k_radius_threshold": 0.058933369371296965,
+    "delta_h": 0.01748155371688438,
+    "adaptive_k_min": 10,
+    "adaptive_covered_floor": 0.1,
+    "twin_min_witness_fraction": 0.01,
+    "twin_min_unique_pairs": 100,
+    "adaptive_delta_action": 0.1,
+    "no_op_count": 138652,
+    "damp_low_band_count": 61348,
+    "damp_fraction": 0.30674,
+    "high_norm_median": 0.34963107433768753,
+    "frozen_verdict": "TWIN_STATE_DEFERRED_COVERAGE",
+    "frozen_verdict_label": "insufficient_signature_near_pair_coverage",
+    "frozen_paired_fiber_verdict": "PAIRED_FIBER_UNDEFINED",
+    "frozen_candidate_sample_fraction": 0.469195,
+    "frozen_witness_pair_count_unique": 179516,
+    "frozen_witness_action_disagree_fraction_unique": 0.03394683482252278,
+    "verdict": "TWIN_STATE_ADAPTIVE_SLIVER",
+    "verdict_label": "covered_fraction_below_floor",
+    "interpretable": false,
+    "adaptive_paired_fiber_verdict": "PAIRED_FIBER_UNDEFINED",
+    "adaptive_covered_fraction": 0.03644,
+    "adaptive_dense_count_p05": 0.0,
+    "adaptive_dense_count_p50": 0.0,
+    "adaptive_dense_count_p95": 8.0,
+    "adaptive_candidate_sample_count": 7254,
+    "adaptive_candidate_pair_count_unique": 44218,
+    "adaptive_witness_sample_count": 7183,
+    "adaptive_witness_sample_fraction": 0.035915,
+    "adaptive_witness_pair_count_unique": 35739,
+    "adaptive_witness_action_disagree_unique": 1056,
+    "adaptive_witness_action_disagree_fraction_unique": 0.029547553093259463,
+    "adaptive_witness_high_distance_p50": 0.03831852223526946,
+    "adaptive_witness_signature_distance_p50": 0.04399538681934607,
+    "adaptive_max_candidate_high_distance": 0.09157006441727461,
+    "adjudicator": "twin-state-adaptive",
+    "objective": "portable-quantile",
+    "objective_quantile": 0.7,
+    "calibration_sample_count": 50000,
+    "calibration_damp_fraction": 0.29992,
+    "e_max": 0.6946284050907446,
+    "epsilon_k": 0.058933369371296965,
+    "h_k": 0.013890728373538556,
+    "burnin_energy_min": 0.39180625069231,
+    "burnin_energy_max": 2.0832032789478623,
+    "burnin_energy_mean": 0.6417961524986231,
+    "sample_energy_min": 0.36859693996517046,
+    "sample_energy_max": 1.3697992045104301,
+    "sample_energy_mean": 0.6413444786978905,
+    "low_modes": [
+      {
+        "kx": 0,
+        "ky": 1
+      },
+      {
+        "kx": 1,
+        "ky": 0
+      },
+      {
+        "kx": 1,
+        "ky": 1
+      },
+      {
+        "kx": -1,
+        "ky": 1
+      },
+      {
+        "kx": 0,
+        "ky": 2
+      },
+      {
+        "kx": 1,
+        "ky": 2
+      },
+      {
+        "kx": 2,
+        "ky": 0
+      },
+      {
+        "kx": 2,
+        "ky": 1
+      },
+      {
+        "kx": 0,
+        "ky": 3
+      }
+    ],
+    "high_mode_count": 211,
+    "high_mode_dimension": 422,
+    "elapsed_seconds": 7409.9106553000165,
+    "total_steps": 12705900,
+    "steps_per_second": 1714.7170309263097
+  }
+}
