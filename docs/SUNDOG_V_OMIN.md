@@ -39,6 +39,7 @@
 | Finite-fiber core | **THRESHOLD TAMENESS BEYOND MONOTONICITY** — `tame_*_of_finite`: continuous `f` + finite level set ⇒ threshold sets tame (injectivity was only ever used for finiteness). Entry point for non-monotone activations. | ✅ 2026-07-09 |
 | Rolle counting | **FINITE CRITICAL POINTS ⇒ FINITE FIBERS** — `finite_fiber_of_finite_deriv_zeros`: reusable engine for non-monotone tameness (Rolle + sorted-finset pigeonhole) | ✅ 2026-07-09 |
 | GELU (dim-1) | **NON-MONOTONE, CLOSED UNCONDITIONALLY** — `geluFibersFinite` proved (`gelu'' = Ed·(2−x²)/2`, `Ed>0`, so `{gelu''=0}={±√2}` ⇒ Rolle twice); `gelu_dnf_tame'` is unconditional. First non-monotone activation, fully tame. | ✅ 2026-07-09 |
+| SiLU/swish (dim-1) | **NON-MONOTONE, CLOSED** — `siluFibersFinite`: the GELU derivative-clearing trick fails (sigmoid keeps derivatives transcendental), so use the equation transform `silu(x)=c ⟺ (x−c)eˣ=c`, one critical point ⇒ Rolle once; `silu_dnf_tame` unconditional | ✅ 2026-07-09 |
 
 Modules: `OMinimalOne` … `OMinimalCellDecomp` (34th–61st), 80 gated headline theorems, all
 axiom-clean; audits 8540 → 8605 GREEN. Classical anchors for what's landed:
@@ -493,6 +494,22 @@ Then `{gelu''=0}` finite ⇒ (Rolle) `{gelu'=0}` finite ⇒ (Rolle) `{gelu = c}`
 algebra — is axiom-clean (`[propext, Classical.choice, Quot.sound]`). Audit **8633 GREEN**.
 GELU is the first non-monotone activation, fully tame, and `finite_fiber_of_finite_deriv_zeros`
 now extends the factory to any `C²` activation with finitely many critical points.
+
+## SiLU/swish (dim-1) — the transform variant of the Rolle route. [LANDED 2026-07-09]
+
+`SiluTame.lean` (89th module, 3 gates: `siluFibersFinite`, `silu_lt_tame`,
+`silu_dnf_tame`), **green on the first build**; audit **8634 GREEN**. `silu(x) = x·σ(x)`
+is non-monotone (min near `x ≈ −1.28`), but the GELU trick does NOT transfer — and this
+is the interesting distinction: differentiating a Gaussian introduces polynomial-in-`x`
+factors (`φ' = −xφ`), so GELU clears to a polynomial; the sigmoid gives `σ' = σ(1 − σ)`
+(polynomial in `σ`, not `x`), so `silu'' = σ(1−σ)(2 + x(1−2σ))` stays transcendental at
+every derivative level. The direct "differentiate to a polynomial" route stalls
+(`SILU_DERIV_NONPOLY`, confirmed). The Rolle ENGINE still closes it via an equation
+transform: `silu(x) = c ⟺ (x − c)eˣ = c`, and `g_c(x) = (x − c)eˣ` has a single critical
+point (`g_c' = (x − c + 1)eˣ`, zero only at `c − 1`), so ONE application of
+`finite_fiber_of_finite_deriv_zeros` gives `{silu = c}` finite — `silu_dnf_tame`,
+unconditional. Two ways to feed the Rolle engine now: GELU differentiates to a
+polynomial factor; SiLU transforms the equation to a single-critical-point function.
 
 *The arc, closed.* TS-QE opened 2026-07-06 and closed 2026-07-07: 17 modules
 (62nd–78th), route Cohen–Hörmander set-level over concrete ℝ, all axiom-clean. Lean
