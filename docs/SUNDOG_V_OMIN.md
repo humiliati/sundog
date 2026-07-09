@@ -40,6 +40,7 @@
 | Rolle counting | **FINITE CRITICAL POINTS ⇒ FINITE FIBERS** — `finite_fiber_of_finite_deriv_zeros`: reusable engine for non-monotone tameness (Rolle + sorted-finset pigeonhole) | ✅ 2026-07-09 |
 | GELU (dim-1) | **NON-MONOTONE, CLOSED UNCONDITIONALLY** — `geluFibersFinite` proved (`gelu'' = Ed·(2−x²)/2`, `Ed>0`, so `{gelu''=0}={±√2}` ⇒ Rolle twice); `gelu_dnf_tame'` is unconditional. First non-monotone activation, fully tame. | ✅ 2026-07-09 |
 | SiLU/swish (dim-1) | **NON-MONOTONE, CLOSED** — `siluFibersFinite`: the GELU derivative-clearing trick fails (sigmoid keeps derivatives transcendental), so use the equation transform `silu(x)=c ⟺ (x−c)eˣ=c`, one critical point ⇒ Rolle once; `silu_dnf_tame` unconditional | ✅ 2026-07-09 |
+| Mish (dim-1) | **NON-MONOTONE, CLOSED (two exp scales)** — `mishFibersFinite`: `tanh∘softplus` gives both `eˣ` and `e^{2x}`; rational form ⇒ `mish(x)=c ⟺ (x−c)e^{2x}+2(x−c)eˣ−2c=0`, Rolle engine applied down to `h₁''=(2x−2c+5)eˣ` (zeros `{c−5/2}`); `mish_dnf_tame` unconditional | ✅ 2026-07-09 |
 
 Modules: `OMinimalOne` … `OMinimalCellDecomp` (34th–61st), 80 gated headline theorems, all
 axiom-clean; audits 8540 → 8605 GREEN. Classical anchors for what's landed:
@@ -510,6 +511,23 @@ point (`g_c' = (x − c + 1)eˣ`, zero only at `c − 1`), so ONE application of
 `finite_fiber_of_finite_deriv_zeros` gives `{silu = c}` finite — `silu_dnf_tame`,
 unconditional. Two ways to feed the Rolle engine now: GELU differentiates to a
 polynomial factor; SiLU transforms the equation to a single-critical-point function.
+
+## Mish (dim-1) — two exponential scales, deeper Rolle. [LANDED 2026-07-09]
+
+`MishTame.lean` (90th module, 3 gates: `mishFibersFinite`, `mish_lt_tame`,
+`mish_dnf_tame`); audit **8635 GREEN**. `mish(x) = x·tanh(softplus x)` is the hardest of
+the series: `tanh∘softplus` carries TWO exponential scales (`eˣ` and `e^{2x}`), so
+neither the GELU differentiate-to-polynomial route nor SiLU's one-step transform closes
+it. The rational identity `tanh(ln(1+eˣ)) = (e^{2x}+2eˣ)/(e^{2x}+2eˣ+2)` (via
+`tanh_eq_sinh_div_cosh` + `exp_log` + `field_simp`) turns the equation into
+`mish(x)=c ⟺ G(x) := (x−c)e^{2x}+2(x−c)eˣ−2c = 0`. Then `G' = eˣ·h₁` with
+`h₁ = (2x−2c+1)eˣ+2(x−c+1)`, and `h₁'' = (2x−2c+5)eˣ` bottoms out at the single point
+`{c−5/2}`. The Rolle counting lemma applied down the chain
+`{h₁''=0}→{h₁'=0}→{h₁=0}={G'=0}→{G=0}={mish=c}` gives finite fibers; `mish_dnf_tame` is
+unconditional. **The Rolle depth tracks the number of exponential scales**: GELU/SiLU one
+scale (one step), Mish two scales (deeper chain). The engine `finite_fiber_of_finite_deriv_zeros`
+absorbs all of it. Activation factory: 6 monotone + 3 non-monotone (GELU, SiLU, Mish), all
+axiom-clean.
 
 *The arc, closed.* TS-QE opened 2026-07-06 and closed 2026-07-07: 17 modules
 (62nd–78th), route Cohen–Hörmander set-level over concrete ℝ, all axiom-clean. Lean
