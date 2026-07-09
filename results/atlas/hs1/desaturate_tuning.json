@@ -1,0 +1,58 @@
+{
+  "pass_name": "hs1_desaturate",
+  "knob": "SIGMA_D",
+  "sweep": [
+    {
+      "sigma_d": 6.0,
+      "train_fit": 0.9456,
+      "pooled_d_acc": 0.9014,
+      "perunit_d_acc": 0.7784
+    },
+    {
+      "sigma_d": 7.0,
+      "train_fit": 0.924,
+      "pooled_d_acc": 0.8679,
+      "perunit_d_acc": 0.7259
+    },
+    {
+      "sigma_d": 8.0,
+      "train_fit": 0.9126,
+      "pooled_d_acc": 0.8379,
+      "perunit_d_acc": 0.6799
+    },
+    {
+      "sigma_d": 8.5,
+      "train_fit": 0.9021,
+      "pooled_d_acc": 0.8178,
+      "perunit_d_acc": 0.6624
+    },
+    {
+      "sigma_d": 9.0,
+      "train_fit": 0.9131,
+      "pooled_d_acc": 0.8004,
+      "perunit_d_acc": 0.6524
+    },
+    {
+      "sigma_d": 10.0,
+      "train_fit": 0.8898,
+      "pooled_d_acc": 0.7754,
+      "perunit_d_acc": 0.6294
+    }
+  ],
+  "chosen_sigma_d": 9.0,
+  "chosen_pooled_d_acc": 0.8004,
+  "chosen_perunit_d_acc": 0.6524,
+  "status": "LANDED",
+  "gates": {
+    "C0_raw_mean_c_r2": 0.0,
+    "C0_pass": true,
+    "C1_single_unit_c_r2": 0.9988,
+    "C1_pass": true
+  },
+  "target_band": [
+    0.75,
+    0.85
+  ],
+  "tune_seed": 86235,
+  "note": "control-only; touches no c-probe threshold; SIGMA_D to pin into prereg section 7"
+}
