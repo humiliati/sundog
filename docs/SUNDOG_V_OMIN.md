@@ -36,7 +36,8 @@
 | Softplus (dim-1) | **DIM-1 SOFTPLUS TAMENESS** — `softplus_dnf_tame`: same, for `log(1 + eˣ)` (unbounded activation; continuity via `Continuous.log`, strict mono via `Real.log_lt_log`) — third confirmation of the monotone-activation factory | ✅ 2026-07-09 |
 | Arctan (dim-1) | **DIM-1 ARCTAN TAMENESS** — `arctan_dnf_tame`: same, for `Real.arctan` (both facts mathlib's) — fourth confirmation | ✅ 2026-07-09 |
 | Erf (dim-1) | **DIM-1 ERF TAMENESS** — `erf_dnf_tame`: mathlib has NO error function, so `erf(x) = (2/√π)∫₀ˣe^{-t²}` is defined here; continuity + strict mono by real analysis (first from-scratch build in the series) | ✅ 2026-07-09 |
-| GELU (dim-1) | **NON-MONOTONE — PARKED**: GELU `= x·Φ(x)` is not injective (min near −0.75) so the factory doesn't apply, and mathlib has no Gaussian CDF Φ to even express it. Needs a finite-fiber core + Φ. See note below. | ⏸ 2026-07-09 |
+| Finite-fiber core | **THRESHOLD TAMENESS BEYOND MONOTONICITY** — `tame_*_of_finite`: continuous `f` + finite level set ⇒ threshold sets tame (injectivity was only ever used for finiteness). Entry point for non-monotone activations. | ✅ 2026-07-09 |
+| GELU (dim-1) | **NON-MONOTONE, REDUCED** — GELU defined in-lane via `erf` (`Φ = (1+erf(·/√2))/2`), continuous, and `gelu_dnf_tame` GIVEN `GeluFibersFinite` (level sets finite). The one open analytic lemma is stated, not faked. | ◐ 2026-07-09 |
 
 Modules: `OMinimalOne` … `OMinimalCellDecomp` (34th–61st), 80 gated headline theorems, all
 axiom-clean; audits 8540 → 8605 GREEN. Classical anchors for what's landed:
@@ -460,6 +461,19 @@ generalization of the core (`Tame` from continuous + finite level sets — cheap
 "subsingleton" with "finite" in `tame_level_of_injective`) and (b) `Φ` plus a
 derivative-sign / two-branch argument for finiteness. GELU is therefore the honest first
 activation that escapes the monotone factory — a real boundary, filed, not faked.
+
+**Both (a) and the reduction, landed 2026-07-09.** `FiniteFiberTame.lean` (85th module,
+1 gate) is the finite-fiber core: `tame_{level,sublevel,superlevel,le,ge}_of_finite` —
+continuous `f` + `{f = c}` finite ⇒ threshold sets tame, the injective core's proofs with
+"subsingleton" relaxed to "finite". `GeluTame.lean` (86th module, 3 gates:
+`gelu_continuous`, `gelu_lt_tame`, `gelu_dnf_tame`) resolves the *expressibility* problem —
+GELU is defined in-lane through the lane's own `erf` (`Φ(x) = (1 + erf(x/√2))/2`, so
+`gelu(x) = x·(1 + erf(x/√2))/2`), proved continuous, and its full threshold/band/DNF class
+is tame **given** the single named hypothesis `GeluFibersFinite : ∀ c, {gelu = c}.Finite`
+(affine pre-composition preserves finite fibers via injective-map preimage). What remains
+open is exactly `GeluFibersFinite` — GELU unimodality (`gelu' = Φ + x·φ`, single sign
+change), an analytic lift needing Gaussian tail/integral facts. Audit **8631 GREEN**. GELU
+is now in-lane, continuous, and tame-modulo-one-lemma — the boundary made precise.
 
 *The arc, closed.* TS-QE opened 2026-07-06 and closed 2026-07-07: 17 modules
 (62nd–78th), route Cohen–Hörmander set-level over concrete ℝ, all axiom-clean. Lean
