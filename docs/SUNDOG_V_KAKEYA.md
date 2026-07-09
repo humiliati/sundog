@@ -137,8 +137,26 @@ survivors: `sig+type` and `sig+chi(j-1728)`, the latter subsuming mod-8 via
 harmonic j = 1728 identically), closes the `q=11`-harmonic family gap by
 descent (validation 11/11 MATCH-ALL), finds every construction high
 descent-resistant, and isolates ONE rule-vs-instrument divergence -
-19-harmonic (rules LOW, descent 9) - under exact adjudication by the two
-in-flight q=19 solves (Amendment D flags; results to append).
+19-harmonic (rules LOW, descent 9). The q=19 harmonic B&B solve
+(12.2B nodes, exact) returns **9 = HIGH**: the descent was right, both
+character rules die, and re-mining shows the entire character battery is
+exhausted (the critical 11-h/19-h pair is separated only by `chi(j)`, which
+is globally inconsistent) - the level is not orbit-character-determined, so a
+deeper arithmetic invariant is forced (PHASE3N reopener). Two-level law
+survives (`9 in {8,9}`); the equianharmonic solve returns **9 = HIGH**
+(exact, EQ-3 confirmed), closing the PHASE3M empirical leg - descent exact at
+13/13 known field-orbits, two-level exact-confirmed through `q=19` and
+UB-verified to `q=37`, global character classifier falsified, one
+within-equianharmonic sub-pattern still live.
+Phase 3N resolves the deeper-invariant thread as a NULL:
+[`kakeya/PHASE3N_DEEPER_INVARIANT.md`](kakeya/PHASE3N_DEEPER_INVARIANT.md)
+reduces the whole classification to `sig+type` with a UNIQUE exception
+(`11-harmonic`), isolates the question to `q=3 (mod 8)` harmonic (where the
+governing quartic character degenerates), and extends by construction to find
+**`q=11` is the only LOW in the class** (`19..131` all HIGH). No arithmetic
+invariant separates `q=11` - it is a small-field anomaly. The level IS
+`sig+type` (quadratic-character signature + orbit type), full stop; the
+deeper-invariant hypothesis is retired (`npm run kakeya:deeper-invariant`).
 This file is a target-selection and claim-boundary scaffold opened from
 [`SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md`](SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md).
 
@@ -599,7 +617,13 @@ Forbidden:
   - invariant hunt (two surviving character rules; mod-8 subsumed), descent
   extension closing the `q=11`-harmonic gap (11/11 MATCH-ALL), all highs
   descent-resistant, 19-harmonic divergence isolated; two q=19 exact solves
-  in flight (Amendment D).
+  (both HIGH, character battery exhausted).
+- [`kakeya/PHASE3N_DEEPER_INVARIANT.md`](kakeya/PHASE3N_DEEPER_INVARIANT.md)
+  - deeper-invariant thread resolved NULL: classification reduces to
+  `sig+type` with unique exception `11-harmonic`; `q=3 (mod 8)` harmonic is
+  HIGH for `19..131`, LOW only at `q=11`; no arithmetic separator (quartic
+  character degenerates in-class); `q=11` is a small-field anomaly, deeper
+  invariant retired.
 - [`kakeya/EXTERNAL_REVIEW_PACKET.md`](kakeya/EXTERNAL_REVIEW_PACKET.md) -
   owner-pending external-review ask; frames Kakeya as a boundary/pedagogy review,
   not a result-review packet.

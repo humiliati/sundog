@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-08T08:40:28.339Z",
+  "generatedAt": "2026-07-09T06:04:25.404Z",
   "signatureClassInvariant": true,
   "rows": [
     {
@@ -168,7 +168,7 @@
       "cM1": -1,
       "c2": -1,
       "level": "HIGH",
-      "epistemics": "UB-HIGH"
+      "epistemics": "EXACT"
     },
     {
       "q": 19,
@@ -523,46 +523,469 @@
   ],
   "mining": {
     "sig": {
-      "consistent": false
+      "consistent": false,
+      "collisions": [
+        [
+          "7/equianharmonic(HIGH)",
+          "11/harmonic(LOW)",
+          "@sig=-1-1-1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "13/generic(LOW)",
+          "@sig=1-1-1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "17/generic-a(LOW)",
+          "@sig=1-1-1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "17/generic-b(LOW)",
+          "@sig=1-1-1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "29/generic-a(LOW)",
+          "@sig=1-1-1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "29/generic-b(LOW)",
+          "@sig=1-1-1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "29/generic-d(LOW)",
+          "@sig=1-1-1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "37/generic-a(LOW)",
+          "@sig=1-1-1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "37/generic-c(LOW)",
+          "@sig=1-1-1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "37/generic-d(LOW)",
+          "@sig=1-1-1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "37/generic-e(LOW)",
+          "@sig=1-1-1"
+        ]
+      ]
     },
     "sig+type": {
-      "consistent": true,
-      "predictions": [
-        "19/harmonic: LOW",
-        "19/equianharmonic: HIGH",
-        "23/generic-c: ?(unseen)",
-        "29/harmonic: HIGH",
-        "31/generic-b: ?(unseen)",
-        "31/equianharmonic: HIGH",
-        "37/harmonic: HIGH"
+      "consistent": false,
+      "collisions": [
+        [
+          "11/harmonic(LOW)",
+          "19/harmonic(HIGH)",
+          "@sig+type=-1-1-1|harmonic"
+        ]
       ]
     },
     "cJ": {
-      "consistent": false
+      "consistent": false,
+      "collisions": [
+        [
+          "5/harmonic(HIGH)",
+          "7/harmonic(LOW)",
+          "@cJ=-1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "11/generic(LOW)",
+          "@cJ=-1"
+        ],
+        [
+          "11/harmonic(LOW)",
+          "13/harmonic(HIGH)",
+          "@cJ=1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "13/generic(LOW)",
+          "@cJ=-1"
+        ],
+        [
+          "7/equianharmonic(HIGH)",
+          "13/equianharmonic(LOW)",
+          "@cJ=0"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "17/harmonic(LOW)",
+          "@cJ=-1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "17/generic-a(LOW)",
+          "@cJ=-1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "19/generic-b(LOW)",
+          "@cJ=-1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "23/generic-a(LOW)",
+          "@cJ=-1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "29/generic-c(LOW)",
+          "@cJ=-1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "29/generic-d(LOW)",
+          "@cJ=-1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "31/harmonic(LOW)",
+          "@cJ=-1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "31/generic-c(LOW)",
+          "@cJ=-1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "31/generic-d(LOW)",
+          "@cJ=-1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "37/generic-b(LOW)",
+          "@cJ=-1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "37/generic-d(LOW)",
+          "@cJ=-1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "37/generic-e(LOW)",
+          "@cJ=-1"
+        ],
+        [
+          "7/equianharmonic(HIGH)",
+          "37/equianharmonic(LOW)",
+          "@cJ=0"
+        ]
+      ]
     },
     "cJ2": {
-      "consistent": false
+      "consistent": false,
+      "collisions": [
+        [
+          "5/harmonic(HIGH)",
+          "7/harmonic(LOW)",
+          "@cJ2=0"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "11/harmonic(LOW)",
+          "@cJ2=0"
+        ],
+        [
+          "7/equianharmonic(HIGH)",
+          "11/generic(LOW)",
+          "@cJ2=1"
+        ],
+        [
+          "7/equianharmonic(HIGH)",
+          "13/generic(LOW)",
+          "@cJ2=1"
+        ],
+        [
+          "7/equianharmonic(HIGH)",
+          "13/equianharmonic(LOW)",
+          "@cJ2=1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "17/harmonic(LOW)",
+          "@cJ2=0"
+        ],
+        [
+          "7/equianharmonic(HIGH)",
+          "17/generic-a(LOW)",
+          "@cJ2=1"
+        ],
+        [
+          "7/equianharmonic(HIGH)",
+          "17/generic-b(LOW)",
+          "@cJ2=1"
+        ],
+        [
+          "7/equianharmonic(HIGH)",
+          "19/generic-a(LOW)",
+          "@cJ2=1"
+        ],
+        [
+          "7/equianharmonic(HIGH)",
+          "19/generic-b(LOW)",
+          "@cJ2=1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "23/harmonic(LOW)",
+          "@cJ2=0"
+        ],
+        [
+          "7/equianharmonic(HIGH)",
+          "23/generic-a(LOW)",
+          "@cJ2=1"
+        ],
+        [
+          "7/equianharmonic(HIGH)",
+          "23/generic-b(LOW)",
+          "@cJ2=1"
+        ],
+        [
+          "7/equianharmonic(HIGH)",
+          "29/generic-a(LOW)",
+          "@cJ2=1"
+        ],
+        [
+          "7/equianharmonic(HIGH)",
+          "29/generic-b(LOW)",
+          "@cJ2=1"
+        ],
+        [
+          "7/equianharmonic(HIGH)",
+          "29/generic-c(LOW)",
+          "@cJ2=1"
+        ],
+        [
+          "7/equianharmonic(HIGH)",
+          "29/generic-d(LOW)",
+          "@cJ2=1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "31/harmonic(LOW)",
+          "@cJ2=0"
+        ],
+        [
+          "7/equianharmonic(HIGH)",
+          "31/generic-c(LOW)",
+          "@cJ2=1"
+        ],
+        [
+          "7/equianharmonic(HIGH)",
+          "31/generic-d(LOW)",
+          "@cJ2=1"
+        ],
+        [
+          "7/equianharmonic(HIGH)",
+          "31/generic-a(LOW)",
+          "@cJ2=1"
+        ],
+        [
+          "7/equianharmonic(HIGH)",
+          "37/generic-a(LOW)",
+          "@cJ2=1"
+        ],
+        [
+          "7/equianharmonic(HIGH)",
+          "37/generic-b(LOW)",
+          "@cJ2=1"
+        ],
+        [
+          "7/equianharmonic(HIGH)",
+          "37/generic-c(LOW)",
+          "@cJ2=1"
+        ],
+        [
+          "7/equianharmonic(HIGH)",
+          "37/generic-d(LOW)",
+          "@cJ2=1"
+        ],
+        [
+          "7/equianharmonic(HIGH)",
+          "37/generic-e(LOW)",
+          "@cJ2=1"
+        ],
+        [
+          "7/equianharmonic(HIGH)",
+          "37/equianharmonic(LOW)",
+          "@cJ2=1"
+        ]
+      ]
     },
     "cJ+cJ2": {
-      "consistent": false
+      "consistent": false,
+      "collisions": [
+        [
+          "5/harmonic(HIGH)",
+          "7/harmonic(LOW)",
+          "@cJ+cJ2=-1|0"
+        ],
+        [
+          "11/harmonic(LOW)",
+          "13/harmonic(HIGH)",
+          "@cJ+cJ2=1|0"
+        ],
+        [
+          "7/equianharmonic(HIGH)",
+          "13/equianharmonic(LOW)",
+          "@cJ+cJ2=0|1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "17/harmonic(LOW)",
+          "@cJ+cJ2=-1|0"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "31/harmonic(LOW)",
+          "@cJ+cJ2=-1|0"
+        ],
+        [
+          "7/equianharmonic(HIGH)",
+          "37/equianharmonic(LOW)",
+          "@cJ+cJ2=0|1"
+        ]
+      ]
     },
     "sig+cJ": {
-      "consistent": false
+      "consistent": false,
+      "collisions": [
+        [
+          "5/harmonic(HIGH)",
+          "13/generic(LOW)",
+          "@sig+cJ=1-1-1|-1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "17/generic-a(LOW)",
+          "@sig+cJ=1-1-1|-1"
+        ],
+        [
+          "13/harmonic(HIGH)",
+          "17/generic-b(LOW)",
+          "@sig+cJ=1-1-1|1"
+        ],
+        [
+          "13/harmonic(HIGH)",
+          "29/generic-a(LOW)",
+          "@sig+cJ=1-1-1|1"
+        ],
+        [
+          "13/harmonic(HIGH)",
+          "29/generic-b(LOW)",
+          "@sig+cJ=1-1-1|1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "29/generic-d(LOW)",
+          "@sig+cJ=1-1-1|-1"
+        ],
+        [
+          "13/harmonic(HIGH)",
+          "37/generic-a(LOW)",
+          "@sig+cJ=1-1-1|1"
+        ],
+        [
+          "13/harmonic(HIGH)",
+          "37/generic-c(LOW)",
+          "@sig+cJ=1-1-1|1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "37/generic-d(LOW)",
+          "@sig+cJ=1-1-1|-1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "37/generic-e(LOW)",
+          "@sig+cJ=1-1-1|-1"
+        ]
+      ]
     },
     "sig+cJ2": {
-      "consistent": true,
-      "predictions": [
-        "19/harmonic: LOW",
-        "19/equianharmonic: HIGH",
-        "23/generic-c: HIGH",
-        "29/harmonic: HIGH",
-        "31/generic-b: HIGH",
-        "31/equianharmonic: HIGH",
-        "37/harmonic: HIGH"
+      "consistent": false,
+      "collisions": [
+        [
+          "11/harmonic(LOW)",
+          "19/harmonic(HIGH)",
+          "@sig+cJ2=-1-1-1|0"
+        ]
       ]
     },
     "cM1+c2+cJ": {
-      "consistent": false
+      "consistent": false,
+      "collisions": [
+        [
+          "5/harmonic(HIGH)",
+          "13/generic(LOW)",
+          "@cM1+c2+cJ=1|-1|-1"
+        ],
+        [
+          "11/generic(LOW)",
+          "19/harmonic(HIGH)",
+          "@cM1+c2+cJ=-1|-1|-1"
+        ],
+        [
+          "13/harmonic(HIGH)",
+          "29/generic-a(LOW)",
+          "@cM1+c2+cJ=1|-1|1"
+        ],
+        [
+          "13/harmonic(HIGH)",
+          "29/generic-b(LOW)",
+          "@cM1+c2+cJ=1|-1|1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "29/generic-c(LOW)",
+          "@cM1+c2+cJ=1|-1|-1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "29/generic-d(LOW)",
+          "@cM1+c2+cJ=1|-1|-1"
+        ],
+        [
+          "13/harmonic(HIGH)",
+          "37/generic-a(LOW)",
+          "@cM1+c2+cJ=1|-1|1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "37/generic-b(LOW)",
+          "@cM1+c2+cJ=1|-1|-1"
+        ],
+        [
+          "13/harmonic(HIGH)",
+          "37/generic-c(LOW)",
+          "@cM1+c2+cJ=1|-1|1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "37/generic-d(LOW)",
+          "@cM1+c2+cJ=1|-1|-1"
+        ],
+        [
+          "5/harmonic(HIGH)",
+          "37/generic-e(LOW)",
+          "@cM1+c2+cJ=1|-1|-1"
+        ]
+      ]
     }
   }
 }

@@ -1,0 +1,357 @@
+{
+  "artifactId": "KAK-PHASE3N-DEEPER-INVARIANT-PROBE",
+  "generatedAt": "2026-07-09T06:09:28.304Z",
+  "status": "internal deeper-invariant probe receipt (PHASE3N)",
+  "command": "node scripts/kakeya-deeper-invariant-probe.mjs",
+  "reduction": "PHASE3M sig+type separates all 33 known field-orbits with a UNIQUE collision {11-harmonic LOW, 19-harmonic HIGH}. Harmonic sig={chi(2),chi(-1),chi(2)}=-1-1-1 <=> q=3(mod8); harmonic level is a pure function of q (j=1728 fixed). So the deeper invariant reduces to: for q=3(mod8), harmonic LOW or HIGH?",
+  "epistemicsNote": "DEF-LOW = verified completion at (q-3)/2 (hard). PROB-HIGH = descent could not beat (q-1)/2 (upper bound; the only gap ever seen was q=11 pure, closed by descent). Controls reproduce known harmonic levels at q in {5,7,13,17,29,37}.",
+  "controlsPass": true,
+  "falsifier": {
+    "name": "DEEPER_INVARIANT_INSTRUMENT_MISMATCH",
+    "description": "Instrument-only: fires if any completion fails verification (completeness + size identity) or a control field's construction level disagrees with its known harmonic level. Battery outcomes are measurements.",
+    "status": "clear"
+  },
+  "controlRows": [
+    {
+      "q": 5,
+      "quad": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "ex": 2,
+      "low": 1,
+      "high": 2,
+      "level": "HIGH",
+      "epistemics": "PROB-HIGH",
+      "verified": true,
+      "control": true,
+      "expected": "HIGH"
+    },
+    {
+      "q": 7,
+      "quad": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "ex": 2,
+      "low": 2,
+      "high": 3,
+      "level": "LOW",
+      "epistemics": "DEF-LOW",
+      "verified": true,
+      "control": true,
+      "expected": "LOW"
+    },
+    {
+      "q": 13,
+      "quad": [
+        0,
+        1,
+        2,
+        5
+      ],
+      "ex": 6,
+      "low": 5,
+      "high": 6,
+      "level": "HIGH",
+      "epistemics": "PROB-HIGH",
+      "verified": true,
+      "control": true,
+      "expected": "HIGH"
+    },
+    {
+      "q": 17,
+      "quad": [
+        0,
+        1,
+        2,
+        7
+      ],
+      "ex": 7,
+      "low": 7,
+      "high": 8,
+      "level": "LOW",
+      "epistemics": "DEF-LOW",
+      "verified": true,
+      "control": true,
+      "expected": "LOW"
+    },
+    {
+      "q": 29,
+      "quad": [
+        0,
+        1,
+        2,
+        11
+      ],
+      "ex": 14,
+      "low": 13,
+      "high": 14,
+      "level": "HIGH",
+      "epistemics": "PROB-HIGH",
+      "verified": true,
+      "control": true,
+      "expected": "HIGH"
+    },
+    {
+      "q": 37,
+      "quad": [
+        0,
+        1,
+        2,
+        13
+      ],
+      "ex": 18,
+      "low": 17,
+      "high": 18,
+      "level": "HIGH",
+      "epistemics": "PROB-HIGH",
+      "verified": true,
+      "control": true,
+      "expected": "HIGH"
+    }
+  ],
+  "classRows": [
+    {
+      "q": 11,
+      "quad": [
+        0,
+        1,
+        2,
+        5
+      ],
+      "ex": 4,
+      "low": 4,
+      "high": 5,
+      "level": "LOW",
+      "epistemics": "DEF-LOW",
+      "verified": true,
+      "control": false
+    },
+    {
+      "q": 19,
+      "quad": [
+        0,
+        1,
+        2,
+        7
+      ],
+      "ex": 9,
+      "low": 8,
+      "high": 9,
+      "level": "HIGH",
+      "epistemics": "PROB-HIGH",
+      "verified": true,
+      "control": false
+    },
+    {
+      "q": 43,
+      "quad": [
+        0,
+        1,
+        2,
+        15
+      ],
+      "ex": 21,
+      "low": 20,
+      "high": 21,
+      "level": "HIGH",
+      "epistemics": "PROB-HIGH",
+      "verified": true,
+      "control": false
+    },
+    {
+      "q": 59,
+      "quad": [
+        0,
+        1,
+        2,
+        21
+      ],
+      "ex": 29,
+      "low": 28,
+      "high": 29,
+      "level": "HIGH",
+      "epistemics": "PROB-HIGH",
+      "verified": true,
+      "control": false
+    },
+    {
+      "q": 67,
+      "quad": [
+        0,
+        1,
+        2,
+        23
+      ],
+      "ex": 33,
+      "low": 32,
+      "high": 33,
+      "level": "HIGH",
+      "epistemics": "PROB-HIGH",
+      "verified": true,
+      "control": false
+    },
+    {
+      "q": 83,
+      "quad": [
+        0,
+        1,
+        2,
+        29
+      ],
+      "ex": 41,
+      "low": 40,
+      "high": 41,
+      "level": "HIGH",
+      "epistemics": "PROB-HIGH",
+      "verified": true,
+      "control": false
+    },
+    {
+      "q": 107,
+      "quad": [
+        0,
+        1,
+        2,
+        37
+      ],
+      "ex": 53,
+      "low": 52,
+      "high": 53,
+      "level": "HIGH",
+      "epistemics": "PROB-HIGH",
+      "verified": true,
+      "control": false
+    },
+    {
+      "q": 131,
+      "quad": [
+        0,
+        1,
+        2,
+        45
+      ],
+      "ex": 65,
+      "low": 64,
+      "high": 65,
+      "level": "HIGH",
+      "epistemics": "PROB-HIGH",
+      "verified": true,
+      "control": false
+    }
+  ],
+  "battery": {
+    "q mod 16": {
+      "consistent": false,
+      "collisions": [
+        "11(LOW) vs 43(HIGH) @11",
+        "11(LOW) vs 59(HIGH) @11",
+        "11(LOW) vs 107(HIGH) @11"
+      ],
+      "definedOn": 2
+    },
+    "q mod 24": {
+      "consistent": false,
+      "collisions": [
+        "11(LOW) vs 59(HIGH) @11",
+        "11(LOW) vs 83(HIGH) @11",
+        "11(LOW) vs 107(HIGH) @11",
+        "11(LOW) vs 131(HIGH) @11"
+      ],
+      "definedOn": 2
+    },
+    "q mod 3": {
+      "consistent": false,
+      "collisions": [
+        "11(LOW) vs 59(HIGH) @2",
+        "11(LOW) vs 83(HIGH) @2",
+        "11(LOW) vs 107(HIGH) @2",
+        "11(LOW) vs 131(HIGH) @2"
+      ],
+      "definedOn": 2
+    },
+    "q mod 5": {
+      "consistent": false,
+      "collisions": [
+        "11(LOW) vs 131(HIGH) @1"
+      ],
+      "definedOn": 4
+    },
+    "q mod 7": {
+      "consistent": false,
+      "collisions": [
+        "11(LOW) vs 67(HIGH) @4"
+      ],
+      "definedOn": 6
+    },
+    "chi3(-1)": {
+      "consistent": true,
+      "collisions": [],
+      "definedOn": 0
+    },
+    "res4(2)": {
+      "consistent": true,
+      "collisions": [],
+      "definedOn": 0
+    },
+    "res8(2)": {
+      "consistent": true,
+      "collisions": [],
+      "definedOn": 0
+    },
+    "res3(2)": {
+      "consistent": true,
+      "collisions": [],
+      "definedOn": 3
+    },
+    "chi(3)": {
+      "consistent": false,
+      "collisions": [
+        "11(LOW) vs 59(HIGH) @1",
+        "11(LOW) vs 83(HIGH) @1",
+        "11(LOW) vs 107(HIGH) @1",
+        "11(LOW) vs 131(HIGH) @1"
+      ],
+      "definedOn": 2
+    },
+    "chi(5)": {
+      "consistent": false,
+      "collisions": [
+        "11(LOW) vs 19(HIGH) @1",
+        "11(LOW) vs 59(HIGH) @1",
+        "11(LOW) vs 131(HIGH) @1"
+      ],
+      "definedOn": 2
+    },
+    "chi(q-2)": {
+      "consistent": false,
+      "collisions": [
+        "11(LOW) vs 19(HIGH) @1",
+        "11(LOW) vs 43(HIGH) @1",
+        "11(LOW) vs 59(HIGH) @1",
+        "11(LOW) vs 67(HIGH) @1",
+        "11(LOW) vs 83(HIGH) @1",
+        "11(LOW) vs 107(HIGH) @1",
+        "11(LOW) vs 131(HIGH) @1"
+      ],
+      "definedOn": 1
+    },
+    "cls_2_cubefree": {
+      "consistent": true,
+      "collisions": [],
+      "definedOn": 3
+    },
+    "smallfield(q<=11)": {
+      "consistent": true,
+      "collisions": [],
+      "definedOn": 2
+    }
+  },
+  "elapsedSeconds": 124.027,
+  "pass": true
+}

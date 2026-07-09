@@ -41,7 +41,9 @@ const KNOWN = {
     "generic-b": ["LOW", "EXACT"],
   },
   19: {
-    harmonic: ["HIGH", "UB-HIGH"],
+    // 19-harmonic promoted UB-HIGH -> EXACT by the PHASE3M q=19 B&B solve
+    // (ex=9, solverExact, falsifier clear; 2026-07-08).
+    harmonic: ["HIGH", "EXACT"],
     equianharmonic: ["HIGH", "UB-HIGH"],
     "generic-a": ["LOW", "DEF-LOW"],
     "generic-b": ["LOW", "DEF-LOW"],
@@ -199,19 +201,26 @@ function main() {
   };
   const mining = {};
   for (const [name, f] of Object.entries(candidates)) {
-    const map = new Map();
+    const map = new Map(); // value -> first row with that value
     let consistent = true;
+    const collisions = [];
     for (const r of train) {
       const v = f(r);
-      if (!map.has(v)) map.set(v, r.level);
-      else if (map.get(v) !== r.level) consistent = false;
+      if (!map.has(v)) map.set(v, r);
+      else if (map.get(v).level !== r.level) {
+        consistent = false;
+        collisions.push([
+          `${map.get(v).q}/${map.get(v).orbit}(${map.get(v).level})`,
+          `${r.q}/${r.orbit}(${r.level})`,
+          `@${name}=${v}`,
+        ]);
+      }
     }
-    mining[name] = { consistent };
+    mining[name] = { consistent, collisions };
     if (consistent) {
-      // Predictions for UB-HIGH rows (value unseen in training -> "?").
       mining[name].predictions = rows
         .filter((r) => r.epistemics === "UB-HIGH")
-        .map((r) => `${r.q}/${r.orbit}: ${map.get(f(r)) ?? "?(unseen)"}`);
+        .map((r) => `${r.q}/${r.orbit}: ${map.get(f(r))?.level ?? "?(unseen)"}`);
     }
   }
 
@@ -230,7 +239,12 @@ function main() {
   }
   console.log("\nRule mining (train = EXACT + DEF-LOW):");
   for (const [name, m] of Object.entries(mining)) {
-    console.log(`  ${name.padEnd(12)} consistent=${m.consistent}${m.consistent ? "  predictions: " + m.predictions.join("  ") : ""}`);
+    console.log(
+      `  ${name.padEnd(12)} consistent=${m.consistent}` +
+        (m.consistent
+          ? "  predictions: " + m.predictions.join("  ")
+          : "  collisions: " + m.collisions.map((c) => c.join(" vs ")).join(" ; ")),
+    );
   }
 }
 

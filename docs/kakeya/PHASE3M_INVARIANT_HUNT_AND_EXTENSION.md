@@ -111,3 +111,63 @@ banked conjectures, not claims. Construction values remain upper bounds.
 `ex` imports the pinned Blokhuis-Mazzocca minimum. Register untouched, no
 pins (sidecar fields). No Euclidean claim, no incidence-geometry novelty
 claim.
+
+## Addendum 2026-07-08 - q=19 harmonic solve: HIGH, rules dead, battery exhausted
+
+**19-harmonic = ex 9 = HIGH, exact** (`solverExact`, falsifier clear,
+12,240,259,365 nodes, ~18.4 h). The showdown resolves against the invariant
+rules:
+
+- **The descent was right, the rules were wrong.** The descent-augmented
+  construction returned 9 and could not find 8 - because 8 does not exist.
+  Both surviving rules predicted LOW(8). The construction now reproduces the
+  exact optimum at **12/12** known field-orbits, upgrading it from
+  "upper bound with occasional gaps" toward a reliable optimum-finder (its
+  other evaluation highs gain credibility, though they remain formally UB
+  until solved).
+- **Re-mining with 19-harmonic promoted to EXACT: all eight battery rules go
+  inconsistent** (`npm run kakeya:invariant-hunt`). The character battery is
+  exhausted.
+
+**Correction to the pre-registration wording.** The Step-3 note said "11-h and
+19-h agree on every column"; that is not literally true. They agree on
+signature `{-,-,-}`, type (harmonic), `chi(j-1728) = 0`, `chi(-1)`, and
+`chi(2)` - but **differ on `cJ = chi(j)`** (`chi(1) = +1` at `q=11` vs
+`chi(18) = chi(-1) = -1` at `q=19`). Exhaustion holds for a subtler reason:
+`cJ` is the *only* character coarsening in the battery that separates the
+critical pair, and every rule employing `cJ` is inconsistent on other
+training rows (it was `consistent=false` before the promotion). So no
+conjunction of battery invariants is a consistent classifier - the level is
+not a function of the orbit's quadratic-character data.
+
+**What this forces.** The complete PGL invariant `j` does separate the pair
+(1 vs 18) - but that is the orbit label, not a predictive rule. A genuine
+level rule needs arithmetic of `j` finer than its quadratic character:
+candidates for a PHASE3N reopener are higher-power residue symbols of `j`
+(cubic/quartic), or the level being genuinely not orbit-determined (a
+field-global term). Banked, not claimed.
+
+**Two-level law survives**: `9 in {8, 9} = {(q-3)/2, (q-1)/2}` - the excess is
+still two-level; only the *which-level* character rule died.
+
+**EQ-3 (equianharmonic) solve: ex 9 = HIGH, exact** (`solverExact`, falsifier
+clear, 12,560,647,473 nodes, ~18.7 h). EQ-3 confirmed: the equianharmonic
+roots `{8, 12}` are both non-QR mod 19, and the level is HIGH, matching the
+within-equianharmonic sub-pattern (roots-QR -> low, roots-non-QR -> high),
+which now reads high at `q in {7, 19}` (exact) + `31` (UB), low at
+`q in {13}` (exact) + `37` (UB-def-low). Two-level law holds (`9 in {8, 9}`).
+
+**Scope of the battery death vs the equianharmonic sub-pattern.** The
+exhaustion above concerns the *global* classifier over all orbit types; its
+fatal collision is 11-harmonic (LOW) vs 19-harmonic (HIGH), both harmonic.
+The *within-equianharmonic* roots-character sub-pattern is untouched by that
+collision and remains consistent on its five data points - a smaller,
+still-live conjecture. (The harmonic mod-8 rule, by contrast, is dead:
+`19 = 3 (mod 8)` predicted low, actual high.)
+
+**Both q=19 solves complete; the PHASE3M empirical leg is closed.** Net: the
+descent-augmented construction is exact at 13/13 solver-known field-orbits;
+the two-level law is exact-confirmed at all of `q <= 19` and holds in
+verified upper bounds through `q = 37`; the global character classifier is
+falsified; one within-type sub-pattern survives. The open thread is the
+PHASE3N deeper-invariant question (owner-gated).
