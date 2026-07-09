@@ -23,11 +23,12 @@ walled → HRES, Amdt G4-α). **Minimal determining set = {NBM, ECMWF-HRES, mark
 physics ensemble redundant given NBM). Market in the set at both horizons (stronger short); ECMWF in only at
 long lead — market & ECMWF at opposite ends of the horizon.
 
-**G5 PAGE BUILT 2026-07-09** — `augury.html` (kicker/lede, two inline SVG exhibits [the G3 crossover line +
-the G4 determining-set bars], Steinmetz parable, honest-fence card, Roll-1984 sources); registered in
-`site-pages.json` (evidence-page), sitemap + routes + copy-integrity clean, Vite build OK. **Pre-deploy owed
-(owner-gated):** generate `og/augury.png`, owner asset/license check, then `npm run deploy`. Not yet deployed;
-this is the only public surface — `DOCS_NO_PUBLISH` holds until deploy.
+**G5 PAGE DEPLOYED 2026-07-09** — `augury.html` (kicker/lede, two inline SVG exhibits [the G3 crossover line +
+the G4 determining-set bars], Steinmetz parable, honest-fence card, Roll-1984 sources); bespoke OG card
+`og/augury.png` (viz_augury in the public/og pipeline). **LIVE at https://sundog.cc/augury** (HTTP 200;
+OG card HTTP 200), Cloudflare Pages deploy `ba0638bf`. `DOCS_NO_PUBLISH` **lifted** — the page is the public
+surface and is now published. **Full G-ladder G0→G5 COMPLETE + DEPLOYED.** Optional follow-ons: LinkedIn post
+from the page; ECMWF-ENS sub-amendment from an un-throttled context (would only strengthen the ECMWF rung).
 
 ---
 
