@@ -147,7 +147,8 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--adjudicator",
-        choices=["bin", "knn", "knn-sweep", "twin-state", "twin-state-adaptive", "mz-budget", "state-recon"],
+        choices=["bin", "knn", "knn-sweep", "twin-state", "twin-state-adaptive",
+                 "twin-state-relative", "mz-budget", "state-recon"],
         default="bin",
         help="Fiber-locality adjudicator: hard binning (default), kNN/disintegration, "
         "knn-sweep (convergence check over k), or twin-state support certificate.",
@@ -992,7 +993,7 @@ def run_cell(cfg: RunConfig, at1_export: Path | None = None, at2_export: Path | 
     sample_energy = np.empty(cfg.sample_count, dtype=np.float64)
     sample_high_modes = (
         np.empty((cfg.sample_count, 2 * len(stepper.high_indices)), dtype=np.float64)
-        if cfg.adjudicator in ("twin-state", "twin-state-adaptive", "state-recon")
+        if cfg.adjudicator in ("twin-state", "twin-state-adaptive", "twin-state-relative", "state-recon")
         else None
     )
     sample_mz = (
@@ -1165,8 +1166,10 @@ def run_cell(cfg: RunConfig, at1_export: Path | None = None, at2_export: Path | 
         result, bin_rows, sample_rows, twin_witness_rows = aggregate_twin_state(
             sample_signatures, sample_high_modes, actions, epsilon_k, cfg
         )
-    elif cfg.adjudicator == "twin-state-adaptive":
-        result, bin_rows, sample_rows, twin_witness_rows = aggregate_twin_state_adaptive(
+    elif cfg.adjudicator in ("twin-state-adaptive", "twin-state-relative"):
+        _agg = (aggregate_twin_state_adaptive if cfg.adjudicator == "twin-state-adaptive"
+                else aggregate_twin_state_relative)
+        result, bin_rows, sample_rows, twin_witness_rows = _agg(
             sample_signatures, sample_high_modes, actions, epsilon_k, cfg
         )
         if sample_export is not None and sample_high_modes is not None:
@@ -2276,6 +2279,260 @@ def aggregate_twin_state_adaptive(
     return base, [], [], witness_rows
 
 
+# Approach B (NSE_REGIME_CONDITIONED_EPS_SCOPE.md, frozen). These CHANGE the
+# fidelity criterion, so B carries the tercile scale-consistency anti-inflation guard.
+RELATIVE_CONSISTENCY_TOL = 0.03   # v1 tercile-spread (RETIRED as gating; reported diagnostic only)
+RELATIVE_COVERED_FLOOR = 0.10     # covered fraction below this -> RELATIVE_SLIVER
+RELATIVE_MIN_TERCILE_PAIRS = 30   # per-tercile witness pairs for the v1 diagnostic
+# v2 inflation-shell guard (NSE_REGIME_CONDITIONED_EPS_V2_SPEC.md, frozen). The
+# SHELL = pairs the relative radius adds beyond frozen eps_K; it must be
+# fiber-constant and not much worse than the trusted CORE.
+RELATIVE_INFLATION_MARGIN = 0.05  # shell disagree may exceed core by <= this (anchor-calibrated)
+RELATIVE_MIN_SHELL_PAIRS = 100    # shell power floor; below -> no inflation to test (clean)
+
+
+def aggregate_twin_state_relative(
+    signatures: np.ndarray,
+    high_vectors: np.ndarray | None,
+    actions: np.ndarray,
+    epsilon_k: float,
+    cfg: RunConfig,
+) -> tuple[dict, list, list, list]:
+    """Approach B -- regime-conditioned (relative) epsilon_K.
+
+    Per-sample eps_K(u) = 0.05*sqrt(2*E_low(u)), E_low = ||Phi_K||^2; a pair (i,j)
+    is a fiber pair iff ||Phi_i - Phi_j|| <= 0.05*sqrt(2*E_pair), E_pair =
+    mean(E_i,E_j). This CHANGES the fidelity criterion (unlike Approach A), so it
+    reduces to frozen only approximately on compact cells and carries the
+    tercile SCALE-CONSISTENCY guard: fiber-constancy must hold uniformly across
+    energy scales, else the relative radius is smearing different states in
+    high-energy regions (inflation). The frozen read is computed in the same pass.
+    Spec: docs/chatv2/NSE_REGIME_CONDITIONED_EPS_SCOPE.md.
+    """
+    if high_vectors is None:
+        raise ValueError("twin-state-relative adjudicator requires captured high-mode vectors")
+    from sklearn.neighbors import BallTree
+
+    frozen, _, _, _ = aggregate_twin_state(signatures, high_vectors, actions, epsilon_k, cfg)
+
+    n = int(signatures.shape[0])
+    E_low = np.sum(signatures.astype(np.float64) ** 2, axis=1)  # ||Phi_K||^2 per sample
+    high_norms = np.linalg.norm(high_vectors, axis=1) if high_vectors.size else np.zeros(n)
+    high_norm_median = float(np.median(high_norms)) if n else 0.0
+    delta_h = max(cfg.twin_high_norm_floor, cfg.twin_delta_high_fraction * high_norm_median)
+    damp = int(actions.sum())
+    no_op = int(n - damp)
+
+    def pct(a: np.ndarray, q: float) -> float:
+        return float(np.percentile(a, q)) if a.size else 0.0
+
+    frozen_keys = {
+        "frozen_verdict": frozen.get("verdict"),
+        "frozen_verdict_label": frozen.get("verdict_label"),
+        "frozen_paired_fiber_verdict": frozen.get("paired_fiber_verdict"),
+        "frozen_candidate_sample_fraction": frozen.get("candidate_sample_fraction", 0.0),
+        "frozen_witness_pair_count_unique": frozen.get("witness_pair_count_unique", 0),
+        "frozen_witness_action_disagree_fraction_unique": frozen.get(
+            "witness_action_disagree_fraction_unique", float("nan")
+        ),
+    }
+    base = {
+        "adjudicator_family": "twin-state-relative", "n_samples": n,
+        "epsilon_k_frozen_reference": epsilon_k, "delta_h": delta_h,
+        "relative_consistency_tol": RELATIVE_CONSISTENCY_TOL,
+        "relative_covered_floor": RELATIVE_COVERED_FLOOR,
+        "relative_eps_k_p05": pct(0.05 * np.sqrt(2.0 * E_low), 5),
+        "relative_eps_k_p50": pct(0.05 * np.sqrt(2.0 * E_low), 50),
+        "relative_eps_k_p95": pct(0.05 * np.sqrt(2.0 * E_low), 95),
+        "twin_min_witness_fraction": cfg.twin_min_witness_fraction,
+        "twin_min_unique_pairs": cfg.twin_min_unique_pairs,
+        "relative_delta_action": cfg.delta_action,
+        "no_op_count": no_op, "damp_low_band_count": damp,
+        "damp_fraction": damp / max(1, n), "high_norm_median": high_norm_median,
+        **frozen_keys,
+    }
+
+    if n < 2 or high_norm_median <= cfg.twin_high_norm_floor:
+        base.update({
+            "verdict": "TWIN_STATE_RELATIVE_HIGH_MODE_FLOOR" if n >= 2 else "TWIN_STATE_RELATIVE_DEGENERATE",
+            "verdict_label": "sampled_support_high_modes_numerically_flat" if n >= 2 else "n_lt_2",
+            "interpretable": False, "relative_paired_fiber_verdict": "PAIRED_FIBER_UNDEFINED",
+            "relative_covered_fraction": 0.0, "relative_inflation_clean": None,
+        })
+        return base, [], [], []
+
+    k = min(max(2, cfg.twin_k_neighbors), n)
+    tree = BallTree(signatures, metric="euclidean")
+    dist, idx = tree.query(signatures, k=k)
+    nbr_dist = dist[:, 1:]
+    nbr_idx = idx[:, 1:]
+    # Query-clip diagnostic: samples whose own relative radius exceeds their kth-NN reach.
+    r_kth = dist[:, -1]
+    self_radius = 0.05 * np.sqrt(2.0 * E_low)
+    clip_fraction = float(np.mean(self_radius > r_kth))
+
+    cand_sample = np.zeros(n, dtype=bool)
+    wit_sample = np.zeros(n, dtype=bool)
+    cand_dir = wit_dir = 0
+    cand_code: list[np.ndarray] = []
+    wit_code: list[np.ndarray] = []
+    wit_dis_code: list[np.ndarray] = []
+    wit_high_chunks: list[np.ndarray] = []
+    wit_epair_chunks: list[np.ndarray] = []
+    wit_disbool_chunks: list[np.ndarray] = []
+    # v2 inflation-shell accumulators: witness pairs split by frozen eps_K.
+    core_code: list[np.ndarray] = []
+    core_dis_code: list[np.ndarray] = []
+    shell_code: list[np.ndarray] = []
+    shell_dis_code: list[np.ndarray] = []
+    max_cand_high = 0.0
+    witness_rows: list[dict] = []
+    row_limit = 200
+    chunk_size = 512
+    for start in range(0, n, chunk_size):
+        end = min(start + chunk_size, n)
+        row_ids = np.arange(start, end, dtype=np.int64)
+        dist_chunk = nbr_dist[start:end]
+        idx_chunk = nbr_idx[start:end]
+        e_i = E_low[row_ids][:, None]
+        e_j = E_low[idx_chunk]
+        e_pair = 0.5 * (e_i + e_j)
+        pair_radius = 0.05 * np.sqrt(2.0 * e_pair)   # relative fidelity radius
+        cmask = dist_chunk <= pair_radius
+        if not bool(cmask.any()):
+            continue
+        cand_sample[start:end] = cmask.any(axis=1)
+        cand_dir += int(cmask.sum())
+        diff = high_vectors[idx_chunk] - high_vectors[row_ids[:, None]]
+        high_dist = np.linalg.norm(diff, axis=2)
+        ch = high_dist[cmask]
+        if ch.size:
+            max_cand_high = max(max_cand_high, float(ch.max()))
+        lo = np.minimum(row_ids[:, None], idx_chunk)
+        hi = np.maximum(row_ids[:, None], idx_chunk)
+        codes = lo * n + hi
+        cand_code.append(codes[cmask])
+        action_diff = actions[idx_chunk] != actions[row_ids[:, None]]
+        wmask = cmask & (high_dist >= delta_h)
+        if not bool(wmask.any()):
+            continue
+        wit_sample[start:end] = wmask.any(axis=1)
+        wit_dir += int(wmask.sum())
+        wit_code.append(codes[wmask])
+        wit_high_chunks.append(high_dist[wmask])
+        wit_dis_code.append(codes[wmask & action_diff])
+        wit_epair_chunks.append(e_pair[wmask])
+        wit_disbool_chunks.append(action_diff[wmask])
+        # v2: split witness pairs into CORE (within frozen eps_K) and SHELL
+        # (frozen eps_K < d <= relative radius -- added only by the relative radius).
+        core_mask = wmask & (dist_chunk <= epsilon_k)
+        shell_mask = wmask & (dist_chunk > epsilon_k)
+        core_code.append(codes[core_mask])
+        core_dis_code.append(codes[core_mask & action_diff])
+        shell_code.append(codes[shell_mask])
+        shell_dis_code.append(codes[shell_mask & action_diff])
+        if len(witness_rows) < row_limit:
+            for local_i, local_j in np.argwhere(wmask):
+                i = int(row_ids[local_i])
+                j = int(idx_chunk[local_i, local_j])
+                witness_rows.append({
+                    "sample_i": i, "sample_j": j,
+                    "signature_distance": float(dist_chunk[local_i, local_j]),
+                    "high_mode_distance": float(high_dist[local_i, local_j]),
+                    "e_pair": float(e_pair[local_i, local_j]),
+                    "action_i": int(actions[i]), "action_j": int(actions[j]),
+                    "action_agree": bool(actions[i] == actions[j]),
+                })
+                if len(witness_rows) >= row_limit:
+                    break
+
+    cand_unique = unique_pair_count(cand_code)
+    wit_unique = unique_pair_count(wit_code)
+    wit_dis_unique = unique_pair_count(wit_dis_code)
+    f_rel = float(cand_sample.mean())
+    wit_sample_frac = float(wit_sample.sum()) / n
+    wit_disagree_frac = wit_dis_unique / wit_unique if wit_unique else float("nan")
+
+    # v1 tercile spread -- RETIRED as gating (it conflated a true positive's
+    # natural energy-disagree structure with inflation); reported as a diagnostic.
+    epair_all = np.concatenate(wit_epair_chunks) if wit_epair_chunks else np.asarray([], dtype=np.float64)
+    disbool_all = np.concatenate(wit_disbool_chunks) if wit_disbool_chunks else np.asarray([], dtype=bool)
+    tercile_spread = float("nan")
+    tercile_disagree: list = []
+    tercile_n: list = []
+    if epair_all.size >= 3 * RELATIVE_MIN_TERCILE_PAIRS:
+        q1, q2 = np.quantile(epair_all, [1.0 / 3.0, 2.0 / 3.0])
+        masks = [epair_all <= q1, (epair_all > q1) & (epair_all <= q2), epair_all > q2]
+        for m in masks:
+            cnt = int(m.sum())
+            tercile_n.append(cnt)
+            tercile_disagree.append(float(disbool_all[m].mean()) if cnt else float("nan"))
+        if all(c >= RELATIVE_MIN_TERCILE_PAIRS for c in tercile_n):
+            tercile_spread = float(max(tercile_disagree) - min(tercile_disagree))
+
+    # v2 inflation-shell guard (binding): the pairs the relative radius adds
+    # beyond frozen eps_K (SHELL) must be fiber-constant and not much worse than
+    # the trusted CORE. Inert when the SHELL is empty (compact cells).
+    core_unique = unique_pair_count(core_code)
+    core_dis_unique = unique_pair_count(core_dis_code)
+    shell_unique = unique_pair_count(shell_code)
+    shell_dis_unique = unique_pair_count(shell_dis_code)
+    disagree_core = core_dis_unique / core_unique if core_unique else float("nan")
+    disagree_shell = shell_dis_unique / shell_unique if shell_unique else float("nan")
+    if shell_unique < RELATIVE_MIN_SHELL_PAIRS:
+        inflation_clean = None   # no radius-added pairs to test -> no inflation
+    else:
+        inflation_clean = bool(
+            disagree_shell <= cfg.delta_action
+            and disagree_shell <= disagree_core + RELATIVE_INFLATION_MARGIN
+        )
+
+    if cfg.preset not in VERDICT_BEARING_PRESETS:
+        verdict, label, interp = "SMOKE_ONLY", "", False
+    elif f_rel < RELATIVE_COVERED_FLOOR:
+        verdict, label, interp = "TWIN_STATE_RELATIVE_SLIVER", "relative_covered_fraction_below_floor", False
+    elif wit_sample_frac >= cfg.twin_min_witness_fraction and wit_unique >= cfg.twin_min_unique_pairs:
+        verdict, label, interp = "TWIN_STATE_RELATIVE_CERTIFIED", "relative_fiber_high_mode_separated_twins", True
+    else:
+        verdict, label, interp = "TWIN_STATE_RELATIVE_NO_CERTIFICATE", "no_positive_mass_relative_fiber_witness", False
+
+    if verdict != "TWIN_STATE_RELATIVE_CERTIFIED" or wit_unique == 0:
+        paired = "PAIRED_FIBER_UNDEFINED"
+    elif damp == 0 or no_op == 0:
+        paired = "PAIRED_FIBER_DEFERRED_VACUITY"
+    elif wit_disagree_frac <= cfg.delta_action:
+        paired = "PAIRED_FIBER_CONSTANCY_POSITIVE"
+    else:
+        paired = "PDE-C1-PAIRED-NEG"
+
+    base.update({
+        "verdict": verdict, "verdict_label": label, "interpretable": interp,
+        "relative_paired_fiber_verdict": paired,
+        "relative_covered_fraction": f_rel,
+        "relative_query_clip_fraction": clip_fraction,
+        "relative_candidate_pair_count_unique": cand_unique,
+        "relative_witness_sample_fraction": wit_sample_frac,
+        "relative_witness_pair_count_unique": wit_unique,
+        "relative_witness_action_disagree_fraction_unique": wit_disagree_frac,
+        "relative_max_candidate_high_distance": max_cand_high,
+        # v2 inflation-shell guard (BINDING anti-inflation test):
+        "relative_inflation_clean": inflation_clean,
+        "relative_inflation_margin": RELATIVE_INFLATION_MARGIN,
+        "relative_disagree_core": disagree_core,
+        "relative_disagree_shell": disagree_shell,
+        "relative_core_pair_count_unique": core_unique,
+        "relative_shell_pair_count_unique": shell_unique,
+        # v1 tercile spread (RETIRED as gating; reported diagnostic only):
+        "relative_scale_consistent_v1_diagnostic": (
+            None if math.isnan(tercile_spread) else bool(tercile_spread <= RELATIVE_CONSISTENCY_TOL)
+        ),
+        "relative_tercile_spread": tercile_spread,
+        "relative_tercile_disagree": tercile_disagree,
+        "relative_tercile_n": tercile_n,
+    })
+    return base, [], [], witness_rows
+
+
 def aggregate_mz_budget(
     sample_signatures: np.ndarray,
     sample_mz: np.ndarray,
@@ -2554,6 +2811,8 @@ def write_outputs(out_dir: Path, cfg: RunConfig, result: dict, write_samples: bo
         write_csv(out_dir / "twin-state-witnesses.csv", result.get("twin_witness_rows", []))
     elif cfg.adjudicator == "twin-state-adaptive":
         write_csv(out_dir / "twin-state-adaptive-witnesses.csv", result.get("twin_witness_rows", []))
+    elif cfg.adjudicator == "twin-state-relative":
+        write_csv(out_dir / "twin-state-relative-witnesses.csv", result.get("twin_witness_rows", []))
     elif cfg.adjudicator == "mz-budget":
         write_csv(out_dir / "mz-budget-samples.csv", result.get("sample_rows", []))
     else:
@@ -2616,6 +2875,9 @@ def write_receipt(path: Path, manifest: dict) -> None:
         return
     if c.get("adjudicator") == "twin-state-adaptive":
         write_receipt_twin_state_adaptive(path, manifest)
+        return
+    if c.get("adjudicator") == "twin-state-relative":
+        write_receipt_twin_state_relative(path, manifest)
         return
     if c.get("adjudicator") == "mz-budget":
         write_receipt_mz_budget(path, manifest)
@@ -2841,6 +3103,47 @@ def write_receipt_twin_state_adaptive(path: Path, manifest: dict) -> None:
         "",
         "Non-promotional; apparatus-generality only. Spec: "
         "`docs/chatv2/NSE_COVERAGE_ADAPTIVE_APPARATUS_SPEC.md`.",
+    ]
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def write_receipt_twin_state_relative(path: Path, manifest: dict) -> None:
+    r = manifest["result"]
+    c = manifest["config"]
+    ic = r.get("relative_inflation_clean")
+    ic_txt = ("None (SHELL empty -> no inflation to test)" if ic is None
+              else ("clean" if ic else "INFLATED (SHELL smears)"))
+    lines = [
+        "# PDE C1 Twin-State Relative v2 (Inflation-Shell Guard) Receipt",
+        "",
+        f"**Status (relative):** {r['verdict']}  ({r.get('verdict_label', '')})",
+        f"**v2 inflation-shell guard:** {ic_txt}  "
+        f"(core disagree {r.get('relative_disagree_core')} on {r.get('relative_core_pair_count_unique')} pairs; "
+        f"shell disagree {r.get('relative_disagree_shell')} on {r.get('relative_shell_pair_count_unique')} pairs; "
+        f"margin {r.get('relative_inflation_margin')})",
+        f"**v1 tercile diagnostic (retired):** spread {r.get('relative_tercile_spread')} "
+        f"disagree {r.get('relative_tercile_disagree')}",
+        f"**Frozen comparator:** {r.get('frozen_verdict')}  "
+        f"(disagree `{r.get('frozen_witness_action_disagree_fraction_unique')}`)",
+        f"**Preset:** `{c['preset']}`  **Adjudicator:** `twin-state-relative`",
+        f"**Interpretable:** `{r.get('interpretable')}`",
+        "",
+        "## Readout (Approach B; eps_K(u) = 0.05*sqrt(2*E_low(u)))",
+        "",
+        f"- relative eps_K(u) p05/p50/p95: `{r.get('relative_eps_k_p05'):.5g}` / "
+        f"`{r.get('relative_eps_k_p50'):.5g}` / `{r.get('relative_eps_k_p95'):.5g}` "
+        f"(frozen ref `{r.get('epsilon_k_frozen_reference'):.5g}`)",
+        f"- **covered fraction f_rel**: `{r.get('relative_covered_fraction'):.6g}` "
+        f"(floor `{r.get('relative_covered_floor')}`)  "
+        f"query-clip: `{r.get('relative_query_clip_fraction'):.4g}`",
+        f"- witness pairs (unique): `{r.get('relative_witness_pair_count_unique')}`  "
+        f"disagree: `{r.get('relative_witness_action_disagree_fraction_unique')}`",
+        f"- **paired fiber-constancy**: `{r.get('relative_paired_fiber_verdict')}`",
+        "",
+        "A relative positive requires CERTIFIED + paired POSITIVE + inflation_clean "
+        "in {True, None}; it is scoped to relative resolution and does not overturn "
+        "the Approach-A absolute-resolution null. Spec: "
+        "`docs/chatv2/NSE_REGIME_CONDITIONED_EPS_V2_SPEC.md`.",
     ]
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
@@ -3116,7 +3419,8 @@ def main() -> None:
     if args.allow_unregistered_overrides and cfg.preset in ("lock", "fallback"):
         print("[pde-c1] overrides present; this receipt is not verdict-bearing despite lock/fallback preset", flush=True)
     sample_export = (
-        args.out / "samples.npz" if cfg.adjudicator == "twin-state-adaptive" else None
+        args.out / "samples.npz"
+        if cfg.adjudicator in ("twin-state-adaptive", "twin-state-relative") else None
     )
     result = run_cell(cfg, at1_export=args.at1_export, at2_export=args.at2_export,
                       sample_export=sample_export)
