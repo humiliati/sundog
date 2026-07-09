@@ -564,7 +564,7 @@ def stage_score():
             high = row_cli["high"]
             dms = by_day[dstr]
             prep = {m["ticker"]: g3.ap.prep_candles(m, cuts[-1] + dt.timedelta(hours=1)) for m in dms}
-            bounds = {m["ticker"]: g3.strike_bounds(m) for m in dms}
+            bounds = {m["ticker"]: ap.strike_bounds(m) for m in dms}
             for off, T in zip(range(C["band_start_offset_hours"], C["band_end_offset_hours"] + 1), cuts):
                 ts = int(T.timestamp())
                 bins, vol = [], 0.0
@@ -592,7 +592,7 @@ def stage_score():
                 if mos_on and mrec is None:
                     continue
                 nmu, nsd = nbm[nb["key"]]["mu"][st], nbm[nb["key"]]["sd"][st]
-                bnds, _raw, mono = g3.build_exceedance(bins)
+                bnds, _raw, mono = ap.build_exceedance(bins)
                 for b, fmkt in zip(bnds, mono):
                     fmkt = min(1.0, max(0.0, fmkt))
                     rec = {"st": st, "day": dstr, "off": off, "b": b,

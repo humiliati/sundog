@@ -14,8 +14,15 @@ Status: **G3 RUN COMPLETE 2026-07-07 → `AUGURY_MARGIN_CONFIRMED`**
 pantheon member (encompassing β_mkt CI [0.670,0.776]>0; DM p≈0) with the predicted horizon-localized
 crossover (edge −0.010 at −12h → −0.043 at −2h). Caveat: NBM comparator = mean+spread Gaussian (native
 percentiles unavailable) — encompassing survival is the robust core. G0/G1/G2/G3 all in
-[`AUGURY_G1_PREREG.md`](prereg/augury/AUGURY_G1_PREREG.md) (Amendments A–C.6). **G4 (allelopathy) + G5
-(augury.html) now unlocked, owner-gated; DOCS_NO_PUBLISH until G5.**
+[`AUGURY_G1_PREREG.md`](prereg/augury/AUGURY_G1_PREREG.md) (Amendments A–C.6).
+
+**G4 COMPLETE 2026-07-08 → `AUGURY_G4_MARKET_MEMBER`**
+([`prereg/augury/AUGURY_G4_RESULT.md`](prereg/augury/AUGURY_G4_RESULT.md)). Determining-shadow-set read on
+the full ladder {GEFS, NBM, ECMWF-HRES, market} (MOS dropped — no historical source; ECMWF-ENS throttle-
+walled → HRES, Amdt G4-α). **Minimal determining set = {NBM, ECMWF-HRES, market}; GEFS screened off** (raw
+physics ensemble redundant given NBM). Market in the set at both horizons (stronger short); ECMWF in only at
+long lead — market & ECMWF at opposite ends of the horizon. **G5 (augury.html) now the remaining gate,
+owner-gated; DOCS_NO_PUBLISH until G5.**
 
 ---
 
