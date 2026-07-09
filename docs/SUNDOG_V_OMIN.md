@@ -37,7 +37,8 @@
 | Arctan (dim-1) | **DIM-1 ARCTAN TAMENESS** — `arctan_dnf_tame`: same, for `Real.arctan` (both facts mathlib's) — fourth confirmation | ✅ 2026-07-09 |
 | Erf (dim-1) | **DIM-1 ERF TAMENESS** — `erf_dnf_tame`: mathlib has NO error function, so `erf(x) = (2/√π)∫₀ˣe^{-t²}` is defined here; continuity + strict mono by real analysis (first from-scratch build in the series) | ✅ 2026-07-09 |
 | Finite-fiber core | **THRESHOLD TAMENESS BEYOND MONOTONICITY** — `tame_*_of_finite`: continuous `f` + finite level set ⇒ threshold sets tame (injectivity was only ever used for finiteness). Entry point for non-monotone activations. | ✅ 2026-07-09 |
-| GELU (dim-1) | **NON-MONOTONE, REDUCED** — GELU defined in-lane via `erf` (`Φ = (1+erf(·/√2))/2`), continuous, and `gelu_dnf_tame` GIVEN `GeluFibersFinite` (level sets finite). The one open analytic lemma is stated, not faked. | ◐ 2026-07-09 |
+| Rolle counting | **FINITE CRITICAL POINTS ⇒ FINITE FIBERS** — `finite_fiber_of_finite_deriv_zeros`: reusable engine for non-monotone tameness (Rolle + sorted-finset pigeonhole) | ✅ 2026-07-09 |
+| GELU (dim-1) | **NON-MONOTONE, CLOSED UNCONDITIONALLY** — `geluFibersFinite` proved (`gelu'' = Ed·(2−x²)/2`, `Ed>0`, so `{gelu''=0}={±√2}` ⇒ Rolle twice); `gelu_dnf_tame'` is unconditional. First non-monotone activation, fully tame. | ✅ 2026-07-09 |
 
 Modules: `OMinimalOne` … `OMinimalCellDecomp` (34th–61st), 80 gated headline theorems, all
 axiom-clean; audits 8540 → 8605 GREEN. Classical anchors for what's landed:
@@ -474,6 +475,24 @@ is tame **given** the single named hypothesis `GeluFibersFinite : ∀ c, {gelu =
 open is exactly `GeluFibersFinite` — GELU unimodality (`gelu' = Φ + x·φ`, single sign
 change), an analytic lift needing Gaussian tail/integral facts. Audit **8631 GREEN**. GELU
 is now in-lane, continuous, and tame-modulo-one-lemma — the boundary made precise.
+
+**`GeluFibersFinite`, PROVED 2026-07-09 — GELU closed unconditionally.**
+`FiniteFiberRolle.lean` (87th module, 1 gate) is the reusable engine:
+`finite_fiber_of_finite_deriv_zeros` — a differentiable `g` with `{g' = 0}` finite has
+`{g = c}` finite (Rolle between consecutive level points yields distinct critical points;
+sorted-finset pigeonhole via `orderEmbOfFin`, the NIP template). The route sidesteps the
+Gaussian analysis entirely: NOT the unimodality/tail-bound path, but two Rolle steps. In
+`GeluFiniteFibers.lean` (88th module, 3 gates: `finite_fiber_of_finite_deriv_zeros` re-gate,
+`geluFibersFinite`, `gelu_dnf_tame'`), the derivatives are computed via FTC
+(`intervalIntegral.integral_hasDerivAt_right` for `erf' = (2/√π)e^{−x²}`) and the
+chain/product rules, giving `gelu'' = Ed(x)·(2 − x²)/2` with `Ed(x) > 0` from `exp_pos`
+alone — so `{gelu'' = 0} = {±√2}`, finite with NO Gaussian integral and NO tail bounds.
+Then `{gelu''=0}` finite ⇒ (Rolle) `{gelu'=0}` finite ⇒ (Rolle) `{gelu = c}` finite =
+`geluFibersFinite`. Feeding it to the conditional theorems gives the UNCONDITIONAL
+`gelu_dnf_tame'`. The whole chain — FTC, Rolle, sorted-finset pigeonhole, derivative
+algebra — is axiom-clean (`[propext, Classical.choice, Quot.sound]`). Audit **8633 GREEN**.
+GELU is the first non-monotone activation, fully tame, and `finite_fiber_of_finite_deriv_zeros`
+now extends the factory to any `C²` activation with finitely many critical points.
 
 *The arc, closed.* TS-QE opened 2026-07-06 and closed 2026-07-07: 17 modules
 (62nd–78th), route Cohen–Hörmander set-level over concrete ℝ, all axiom-clean. Lean
