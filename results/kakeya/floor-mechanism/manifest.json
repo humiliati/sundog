@@ -1,0 +1,247 @@
+{
+  "artifactId": "KAK-PHASE3R-M1M2-FLOOR-MECHANISM",
+  "generatedAt": "2026-07-09T15:05:10.979Z",
+  "status": "internal scope-support probe (PHASE3R M1-M2)",
+  "command": "node scripts/kakeya-floor-mechanism.mjs",
+  "M1": {
+    "note": "Redei grounding: covered-line divisibility + pencil shared-root c=0",
+    "results": [
+      {
+        "q": 5,
+        "quad": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "sacrifice": 4,
+        "allCoveredLinesDivisibleByQ": true,
+        "starDirC0Mult": [
+          5,
+          5,
+          5,
+          5
+        ],
+        "nonStarC0MultRange": [
+          2,
+          2
+        ],
+        "pencilSharedRoot": true
+      },
+      {
+        "q": 7,
+        "quad": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "sacrifice": 5,
+        "allCoveredLinesDivisibleByQ": true,
+        "starDirC0Mult": [
+          7,
+          7,
+          7,
+          7
+        ],
+        "nonStarC0MultRange": [
+          2,
+          4
+        ],
+        "pencilSharedRoot": true
+      },
+      {
+        "q": 11,
+        "quad": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "sacrifice": 9,
+        "allCoveredLinesDivisibleByQ": true,
+        "starDirC0Mult": [
+          11,
+          11,
+          11,
+          11
+        ],
+        "nonStarC0MultRange": [
+          4,
+          7
+        ],
+        "pencilSharedRoot": true
+      },
+      {
+        "q": 13,
+        "quad": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "sacrifice": 11,
+        "allCoveredLinesDivisibleByQ": true,
+        "starDirC0Mult": [
+          13,
+          13,
+          13,
+          13
+        ],
+        "nonStarC0MultRange": [
+          6,
+          7
+        ],
+        "pencilSharedRoot": true
+      }
+    ],
+    "pass": true
+  },
+  "M2": {
+    "note": "k-star floor scaling; k=4 floor should equal (q-3)/2",
+    "k4Floor": [
+      {
+        "q": 5,
+        "exFloor": 2,
+        "expected": 1,
+        "match": false
+      },
+      {
+        "q": 7,
+        "exFloor": 2,
+        "expected": 2,
+        "match": true
+      },
+      {
+        "q": 11,
+        "exFloor": 4,
+        "expected": 4,
+        "match": true
+      },
+      {
+        "q": 13,
+        "exFloor": 5,
+        "expected": 5,
+        "match": true
+      }
+    ],
+    "kScaling": [
+      {
+        "k": 3,
+        "q": 5,
+        "depth": 3,
+        "exhausted": true,
+        "sacrifice": 2,
+        "ex": 0,
+        "pivotCost": 1,
+        "exMinusPivotEx": 0
+      },
+      {
+        "k": 3,
+        "q": 7,
+        "depth": 5,
+        "exhausted": true,
+        "sacrifice": 3,
+        "ex": 0,
+        "pivotCost": 1,
+        "exMinusPivotEx": 0
+      },
+      {
+        "k": 3,
+        "q": 11,
+        "depth": 9,
+        "exhausted": true,
+        "sacrifice": 5,
+        "ex": 0,
+        "pivotCost": 1,
+        "exMinusPivotEx": 0
+      },
+      {
+        "k": 3,
+        "q": 13,
+        "depth": 11,
+        "exhausted": true,
+        "sacrifice": 6,
+        "ex": 0,
+        "pivotCost": 1,
+        "exMinusPivotEx": 0
+      },
+      {
+        "k": 4,
+        "q": 5,
+        "depth": 2,
+        "exhausted": true,
+        "sacrifice": 4,
+        "ex": 2,
+        "pivotCost": 3,
+        "exMinusPivotEx": 2
+      },
+      {
+        "k": 4,
+        "q": 7,
+        "depth": 4,
+        "exhausted": true,
+        "sacrifice": 5,
+        "ex": 2,
+        "pivotCost": 3,
+        "exMinusPivotEx": 2
+      },
+      {
+        "k": 4,
+        "q": 11,
+        "depth": 8,
+        "exhausted": true,
+        "sacrifice": 9,
+        "ex": 4,
+        "pivotCost": 3,
+        "exMinusPivotEx": 4
+      },
+      {
+        "k": 4,
+        "q": 13,
+        "depth": 10,
+        "exhausted": true,
+        "sacrifice": 11,
+        "ex": 5,
+        "pivotCost": 3,
+        "exMinusPivotEx": 5
+      },
+      {
+        "k": 5,
+        "q": 7,
+        "depth": 3,
+        "exhausted": true,
+        "sacrifice": 7,
+        "ex": 4,
+        "pivotCost": 6,
+        "exMinusPivotEx": 4
+      },
+      {
+        "k": 5,
+        "q": 11,
+        "depth": 7,
+        "exhausted": true,
+        "sacrifice": 10,
+        "ex": 5,
+        "pivotCost": 6,
+        "exMinusPivotEx": 5
+      },
+      {
+        "k": 5,
+        "q": 13,
+        "depth": 9,
+        "exhausted": true,
+        "sacrifice": 14,
+        "ex": 8,
+        "pivotCost": 6,
+        "exMinusPivotEx": 8
+      }
+    ],
+    "k4FloorMatches": false
+  },
+  "falsifier": {
+    "name": "FLOOR_MECHANISM_MISMATCH",
+    "description": "Fires if covered lines are not (X-c)^q-divisible, the 4 star directions do not share the c=0 root at mult>=q, or the k=4 floor != (q-3)/2 on the exhaustive fields.",
+    "status": "fired"
+  }
+}

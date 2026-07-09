@@ -1,0 +1,87 @@
+{
+  "hypothesis": "H3-PL",
+  "prereg_commit": "815ea529",
+  "sigma_d": 9.0,
+  "gates": {
+    "C0_raw_mean_c_r2": 0.0,
+    "C1_single_unit_c_r2": 0.9987,
+    "pooled_d_acc": 0.8054,
+    "train_fit": 0.865
+  },
+  "access": {
+    "arms": {
+      "raw_perunit": {
+        "arm": "raw_perunit",
+        "ceiling": 0.0,
+        "members": {
+          "P1_ridge": {
+            "live": false,
+            "floor": null,
+            "cv_r2": 0.0
+          },
+          "P4_nystroem": {
+            "live": false,
+            "floor": null,
+            "cv_r2": 0.0
+          },
+          "P5_gbt": {
+            "live": false,
+            "floor": null,
+            "cv_r2": 0.0
+          }
+        },
+        "winner": null,
+        "all_blind": true
+      },
+      "trained_perunit": {
+        "arm": "trained_perunit",
+        "ceiling": 0.0,
+        "members": {
+          "P1_ridge": {
+            "live": false,
+            "floor": null,
+            "cv_r2": 0.0
+          },
+          "P4_nystroem": {
+            "live": false,
+            "floor": null,
+            "cv_r2": 0.0
+          },
+          "P5_gbt": {
+            "live": false,
+            "floor": null,
+            "cv_r2": 0.0
+          }
+        },
+        "winner": null,
+        "all_blind": true
+      },
+      "pooled": {
+        "arm": "pooled",
+        "ceiling": 0.0494,
+        "members": {
+          "P1_ridge": {
+            "live": true,
+            "floor": 0.1,
+            "cv_r2": 0.0498
+          },
+          "P4_nystroem": {
+            "live": true,
+            "floor": 0.2,
+            "cv_r2": 0.0
+          },
+          "P5_gbt": {
+            "live": true,
+            "floor": 0.1,
+            "cv_r2": 0.0
+          }
+        },
+        "winner": "P1_ridge",
+        "all_blind": false
+      }
+    },
+    "m_enc": 0.0,
+    "m_pool": -0.0494,
+    "verdict": "c_partial_mixed"
+  }
+}

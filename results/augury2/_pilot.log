@@ -1,0 +1,22 @@
+tpeak sha256: 963b39738784c2b39ab4be65a9c15a155e8305eb1cff1734bd5c33f1724948b2
+tpeak sha: 963b39738784
+KNYC×SHORT×2026H1 base rows: 1376
+with valid f_obs: 1376 (100%)
+{
+  "4rung_mkt": 0.7435,
+  "4rung_mkt_ci": [
+    0.6014,
+    0.9276
+  ],
+  "5rung_mkt": 0.6691,
+  "5rung_mkt_ci": [
+    0.5142,
+    0.8728
+  ],
+  "5rung_obs": 0.4322,
+  "5rung_obs_ci": [
+    0.2623,
+    0.6168
+  ]
+}
+pilot sha256 7ff458715b793efe6352ba98d0afbc0c95e01574709f7b4f19734c6ea36c3e96

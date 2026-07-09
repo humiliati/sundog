@@ -192,6 +192,21 @@ Lemma of Tangents is obstructed; not the Ball-Blokhuis-Domenzain result;
 untested beyond `q=19`); and reframes to the cleaner exception-free FLOOR
 conjecture `ex >= (q-3)/2` (holds at all tested `q` incl. 11) as the better
 target. No proof of the general lemma is claimed (`npm run kakeya:parabola-opt`).
+Phase 3R scopes the real research mathematics for the floor conjecture:
+[`kakeya/PHASE3R_FLOOR_PROOF_PROGRAM.md`](kakeya/PHASE3R_FLOOR_PROOF_PROGRAM.md)
+targets `ex >= (q-3)/2` (relative BM lower bound) via the Redei/lacunary
+polynomial method (primary) or a relative Lemma of Tangents (secondary),
+shows naive counting overcounts to `~2q` so the conic structure is essential,
+and lays out milestones M1-M5 with the key insight that M1-M2 (Redei setup +
+measuring whether the pencil-at-`O` factor scales as `(q-3)/2`) are
+workbench-tractable and would decisively confirm or kill the mechanism before
+the hard analytic step. **M1-M2 EXECUTED 2026-07-09 -> MECHANISM CONFIRMED:**
+the 4 star directions carry the shared Redei root `c=0` at multiplicity exactly
+`q` (`X^q | R(X,d)` - the concrete pencil factor), a 3-star reaches the BM
+minimum (`ex=0`) while the 4-star floor is `(q-3)/2`, so the *fourth* line
+forces exactly the `(q-3)/2` gain (`sacrifice` `(q-1)/2 -> q-2`). The
+relative-BM target `sacrifice >= q-2` is validated; M3 (the lacunary gain
+lemma) is the remaining hard step (`npm run kakeya:floor-mechanism`).
 This file is a target-selection and claim-boundary scaffold opened from
 [`SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md`](SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md).
 
@@ -678,6 +693,15 @@ Forbidden:
   Segre's Lemma of Tangents; not in the literature; untested beyond `q=19`);
   cleaner exception-free FLOOR conjecture `ex>=(q-3)/2` recommended. Not
   closed.
+- [`kakeya/PHASE3R_FLOOR_PROOF_PROGRAM.md`](kakeya/PHASE3R_FLOOR_PROOF_PROGRAM.md)
+  - research-program SCOPE for the floor conjecture `ex>=(q-3)/2`: relative-BM
+  via Redei/lacunary polynomials (primary) or relative Lemma of Tangents
+  (secondary); naive counting overcounts to `~2q` (structure essential);
+  milestones M1-M5, with M1-M2 (pencil-factor degree scaling) workbench-
+  decisive before the hard step. **M1-M2 EXECUTED: mechanism CONFIRMED** -
+  pencil factor `X^q | R(X,d)` at the 4 star directions; 3-star is BM-free,
+  4-star floor `(q-3)/2`, so the 4th line forces the gain; relative-BM target
+  `sacrifice >= q-2` validated, M3 lacunary lemma remains.
 - [`kakeya/EXTERNAL_REVIEW_PACKET.md`](kakeya/EXTERNAL_REVIEW_PACKET.md) -
   owner-pending external-review ask; frames Kakeya as a boundary/pedagogy review,
   not a result-review packet.

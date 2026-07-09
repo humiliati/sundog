@@ -64,8 +64,30 @@ bounded action with a named failure boundary) is now carried into:
   + Alibaba Qwen). Rudimentary, deliberately so. See
   [`docs/SUNDOG_V_CHAT.md`](docs/SUNDOG_V_CHAT.md).
 - **Discrete-geometry workbenches**: an [interactive cap-set primer](https://sundog.cc/capset)
-  staged as a hands-on lens for the 2026 OpenAI unit-distance disproof.
-  See [`docs/SUNDOG_V_CAPSET.md`](docs/SUNDOG_V_CAPSET.md).
+  staged as a hands-on lens for the 2026 OpenAI unit-distance disproof
+  ([`docs/SUNDOG_V_CAPSET.md`](docs/SUNDOG_V_CAPSET.md)), and an
+  [aperiodicity reader](https://sundog.cc/ghost) on the finite recognizability
+  radius of a Penrose tiling — reader/exhibit only, no new tiling theorem
+  claimed ([`docs/SUNDOG_V_GHOST.md`](docs/SUNDOG_V_GHOST.md)).
+- **A prediction-market forecasting study**:
+  [sundog.cc/augury](https://sundog.cc/augury) — do weather markets carry
+  temperature information the operational model stack does not? Real data
+  (Kalshi 1-min candles, NOAA GEFS/NBM, ECMWF, NWS climate-report ground
+  truth via IEM) scored at *matched information cutoffs* over seven cities,
+  Feb 2023 – Jun 2026. Result: the market has lower CRPS than NBM at matched
+  cutoffs and **survives an encompassing kill-test**, with a horizon
+  crossover — its edge grows ~4× from −12h to −2h before the daily high; a
+  determining-set read then finds the minimal non-redundant forecaster set is
+  {NBM, ECMWF-HRES, market} (the raw GEFS ensemble is screened out).
+  *Information claim only — not a trading strategy, not investment advice.*
+  See [`docs/SUNDOG_V_AUGURY.md`](docs/SUNDOG_V_AUGURY.md).
+- **A machine-checked alignment note**:
+  [sundog.cc/quantilizing](https://sundog.cc/quantilizing) — "When Quantilizing
+  Hurts": on rewards nonincreasing in proxy-pressure, the best quantilizer is
+  the untilted base, proved in Lean (axiom-audited) with a 10,500-instance
+  computed falsifier hunt. Deliberately in-vitro / toy-tier — no
+  foundation-model or deployed-agent claim, and the unconditional
+  un-targeting-beats-quantilizers claim is explicitly *not* made.
 - **Ledger documents** under `docs/SUNDOG_V_*.md` that stage every public
   claim with an explicit falsifier, evidence tier, and named failure
   surface.
@@ -140,6 +162,16 @@ Sorted by reviewer landing intent.
 - [sundog.cc/structural-failure](https://sundog.cc/structural-failure) —
   pre-registered five-locus boundary map; Cut 2 separability held, Cut 3
   still open.
+
+**If you came for the forecasting or alignment evidence pages:**
+
+- [sundog.cc/augury](https://sundog.cc/augury) — weather-market-vs-model-stack
+  forecasting study; the market survives an encompassing kill-test with a
+  horizon crossover, scored at matched information cutoffs over seven cities.
+  Ledger [`docs/SUNDOG_V_AUGURY.md`](docs/SUNDOG_V_AUGURY.md).
+- [sundog.cc/quantilizing](https://sundog.cc/quantilizing) — machine-checked
+  "when quantilizing hurts" note; in-vitro / toy-tier, Lean-audited, with the
+  unconditional claim explicitly withheld.
 
 **If you landed via the machine-checked Lean formalization work:**
 
@@ -279,6 +311,29 @@ pages or changing deployment behavior.
   Sundog's evaluator apparatus to AI-produced mathematics — the
   evaluator front is defensible now; the substrate-analogue horizon
   awaits external review.
+- [Ghost / aperiodicity reader](ghost.html): an interactive Penrose
+  tiling showing which supertiles are recoverable from inside a movable
+  circle — "ordered does not mean repeating; local does not mean closed."
+  The on-page point is that the missing context is a *finite*
+  recognizability radius (Mossé; Durand–Leroy), not an unbounded outside.
+  Reader/exhibit only: no new tiling theorem, no new invariant, no
+  Gödel/incompleteness claim ([`docs/SUNDOG_V_GHOST.md`](docs/SUNDOG_V_GHOST.md)).
+
+**Forecasting and alignment surfaces**
+
+- [Augury](augury.html): a weather-market-vs-model-stack forecasting study
+  on real data (Kalshi candles, NOAA GEFS/NBM, ECMWF, NWS ground truth via
+  IEM), scored at matched information cutoffs over seven cities. The market
+  has lower CRPS than NBM at matched cutoffs and survives an encompassing
+  kill-test, with a horizon crossover; the minimal non-redundant forecaster
+  set is {NBM, ECMWF-HRES, market}. Information claim only — not a trading
+  strategy ([`docs/SUNDOG_V_AUGURY.md`](docs/SUNDOG_V_AUGURY.md)).
+- [When Quantilizing Hurts](quantilizing.html): a machine-checked alignment
+  note — on rewards nonincreasing in proxy-pressure the best quantilizer is
+  the untilted base (Lean, axiom-audited, 10,500-instance falsifier hunt),
+  with an oversight-shape corollary (threshold oversight creates cliff-edge
+  temptation; graded oversight removes it). In-vitro / toy-tier only; the
+  unconditional un-targeting claim is explicitly not made.
 
 **Agent-traceability surface**
 
@@ -358,6 +413,20 @@ Present it carefully:
   [`docs/SUNDOG_V_CAPSET.md`](docs/SUNDOG_V_CAPSET.md) — Sundog's
   apparatus as an evaluator for AI-produced mathematics, with the
   cap-set workbench as the one current anchor.
+- **Prediction-market forecasting study** at
+  [sundog.cc/augury](https://sundog.cc/augury) — deployed 2026-07-09.
+  Over seven cities and matched information cutoffs, the weather market
+  has lower CRPS than NBM and survives an encompassing kill-test, with a
+  horizon-localized crossover; the minimal determining forecaster set is
+  {NBM, ECMWF-HRES, market}. Scoped as an *information* result (not a
+  trading claim); the comparator is a mean+spread Gaussian and ECMWF is
+  its deterministic HRES run — the encompassing survival is the robust
+  backbone. Ledger [`docs/SUNDOG_V_AUGURY.md`](docs/SUNDOG_V_AUGURY.md).
+- **Machine-checked alignment note** at
+  [sundog.cc/quantilizing](https://sundog.cc/quantilizing) — the
+  best q-quantilizer is the untilted base on a pointwise-misaligned proxy
+  (Lean, axiom-audited); in-vitro toy-tier, unconditional claim withheld,
+  structural deflation reported as a central finding.
 - **Machine-checked o-minimality + Tarski–Seidenberg (Lean)** wrap-up
   landed 2026-07-08 —
   [`docs/SUNDOG_V_OMIN.md`](docs/SUNDOG_V_OMIN.md) (lane roadmap) +

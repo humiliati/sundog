@@ -1,0 +1,3 @@
+tpeak sha256: 963b39738784c2b39ab4be65a9c15a155e8305eb1cff1734bd5c33f1724948b2
+  H2: 44 rows dropped (final-cycle scalar not cached)
+H2 retained LONG rows (T < final-cycle avail): 43070
