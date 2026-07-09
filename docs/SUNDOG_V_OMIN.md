@@ -32,6 +32,7 @@
 | R4-D5 | **CELL DECOMPOSITION FOR ℝ² (CDT₂)** — `cell_decomposition : ∃ cells, IsCellDecomp cells A` | ✅ 2026-07-06 |
 | R4-E | **PILLAY–STEINHORN NIP/VC BRIDGE** — `definable_family_nip` (shattering ≤ 2·cells+1 in any o-min structure) + `semialgebraic_family_nip`/`semilinear_family_nip`: the bridge back to the approximation lane | ✅ 2026-07-08 |
 | Sigmoid (dim-1) | **DIM-1 SIGMOID TAMENESS** — `sigmoid_dnf_tame`: every finite DNF of one-variable logistic-sigmoid thresholds is `Tame`, off R1 with no exponential structure (the exp/Wilkie witness stays a parked wall) | ✅ 2026-07-08 |
+| Tanh (dim-1) | **DIM-1 TANH TAMENESS** — `tanh_dnf_tame`: same, for `Real.tanh` (continuity from `sinh/cosh`, injectivity from mathlib's `Real.tanh_injective` — no strictMono needed; the general core is reused) | ✅ 2026-07-08 |
 
 Modules: `OMinimalOne` … `OMinimalCellDecomp` (34th–61st), 80 gated headline theorems, all
 axiom-clean; audits 8540 → 8605 GREEN. Classical anchors for what's landed:
@@ -394,6 +395,23 @@ affine-sigmoid bands is `Tame`, via R1's Boolean closure. Three pre-registered
 falsifiers (`SIGMOID_MONO_FRONTIER`, `BOOL_CLOSURE_LEAK`, `SIGMOID_INSTANCE_VACUOUS`)
 all cleared. *Parked wall:* composition and dimension ≥ 2 need
 `expStructure : OMinStructure` (Wilkie / Pfaffian–Khovanskii), a build not attempted.
+
+## Tanh (dim-1) — the second monotone-activation witness. [LANDED 2026-07-08]
+
+`TanhTame.lean` (81st module), axiom-clean, 3 gate entries (`tanh_continuous`,
+`tanh_lt_tame`, `tanh_dnf_tame`), green round 3 (import saga: `Real.tanh_injective`
+lives in `Mathlib…Artanh`, not pulled transitively — added the import; `.comp` needs
+dot-notation, not the explicit-application form, to pin `g := Real.tanh`); audit
+**8626 GREEN**. The monotone-activation route generalizes exactly as the sigmoid
+receipt predicted: tanh reuses `SigmoidTame`'s continuous-injective threshold core and
+needs only two facts — continuity (`tanh = sinh / cosh`, `cosh > 0`) and injectivity
+(mathlib's `Real.tanh_injective`) — with NO strict-monotonicity proof, since the core
+asks only for continuity + injectivity. `tanh_dnf_tame`: every finite DNF of
+one-variable affine-tanh bands is `Tame`. Live falsifier `TANH_INSTANCE_VACUOUS`
+cleared; `MONO_FRONTIER` / `BOOL_CLOSURE_LEAK` inherited-cleared (reused core). Same
+parked wall (exp structure / dim ≥ 2). The `tame_{sub,super}level_of_injective` core is
+now a reusable dim-1 monotone-activation factory (softplus, arctan, erf, … each need
+only their two API facts).
 
 *The arc, closed.* TS-QE opened 2026-07-06 and closed 2026-07-07: 17 modules
 (62nd–78th), route Cohen–Hörmander set-level over concrete ℝ, all axiom-clean. Lean
