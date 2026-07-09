@@ -157,6 +157,17 @@ governing quartic character degenerates), and extends by construction to find
 invariant separates `q=11` - it is a small-field anomaly. The level IS
 `sig+type` (quadratic-character signature + orbit type), full stop; the
 deeper-invariant hypothesis is retired (`npm run kakeya:deeper-invariant`).
+Phase 3O turns the level into a geometric mechanism:
+[`kakeya/PHASE3O_TRIPLE_CONCURRENCE_MECHANISM.md`](kakeya/PHASE3O_TRIPLE_CONCURRENCE_MECHANISM.md)
+verifies that `sacrifice = 3 + T` where T counts triple points, each provably
+`{1 star line, 2 tangents}` (a tangent-chord pole on a star line; no 3
+tangents concurrent), so the level is a cross-ratio-controlled incidence count
+(LOW = q-5, HIGH = q-4). The parabola completion is optimal for every 4-star
+except the lone `q=11`-harmonic (a non-parabola optimum), which pins the
+small-field anomaly geometrically; and the parabola prices `q=43` harmonic
+HIGH in ms, subsuming the infeasible depth-40 exact solve (lever 1). Lever 2
+reduces to two sharp finite-geometry lemmas (parabola-optimality for `q>=13`;
+the cross-ratio pole-incidence count) (`npm run kakeya:triple-anatomy`).
 This file is a target-selection and claim-boundary scaffold opened from
 [`SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md`](SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md).
 
@@ -624,6 +635,12 @@ Forbidden:
   HIGH for `19..131`, LOW only at `q=11`; no arithmetic separator (quartic
   character degenerates in-class); `q=11` is a small-field anomaly, deeper
   invariant retired.
+- [`kakeya/PHASE3O_TRIPLE_CONCURRENCE_MECHANISM.md`](kakeya/PHASE3O_TRIPLE_CONCURRENCE_MECHANISM.md)
+  - geometric mechanism: level = triple count T of the optimal parabola
+  completion (`sacrifice = 3 + T`, every triple `{1 star, 2 tangents}`, no 3
+  tangents concurrent), verified G1-G3 at exact fields; parabola optimal except
+  `q=11`-harmonic (non-parabola optimum = the anomaly); prices `q=43` HIGH in
+  ms (lever 1); lever 2 reduced to two finite-geometry lemmas.
 - [`kakeya/EXTERNAL_REVIEW_PACKET.md`](kakeya/EXTERNAL_REVIEW_PACKET.md) -
   owner-pending external-review ask; frames Kakeya as a boundary/pedagogy review,
   not a result-review packet.

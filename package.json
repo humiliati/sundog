@@ -252,6 +252,7 @@
     "kakeya:star-construction": "node scripts/kakeya-star-parabola-construction.mjs",
     "kakeya:invariant-hunt": "node scripts/kakeya-orbit-invariant-hunt.mjs",
     "kakeya:deeper-invariant": "node scripts/kakeya-deeper-invariant-probe.mjs",
+    "kakeya:triple-anatomy": "node scripts/kakeya-triple-concurrence-anatomy.mjs",
     "kakeya:adaptive-fibering": "node scripts/kakeya-adaptive-fibering-panel.mjs",
     "kakeya:sparse-excess": "node scripts/kakeya-sparse-excess-metric.mjs",
     "synthesis:collision-table": "node scripts/hodge-kakeya-collision-table.mjs",

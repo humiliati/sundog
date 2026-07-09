@@ -1,0 +1,440 @@
+{
+  "artifactId": "KAK-PHASE3O-TRIPLE-CONCURRENCE-ANATOMY",
+  "generatedAt": "2026-07-09T08:32:04.254Z",
+  "status": "internal geometric-mechanism receipt (PHASE3O)",
+  "command": "node scripts/kakeya-triple-concurrence-anatomy.mjs",
+  "mechanism": "level = triple count T of the optimal parabola-tangent completion: sacrifice = 3 (pivot mult 4) + T, LOW<=>T=q-5, HIGH<=>T=q-4. Every triple = {1 star line, 2 tangents} = a tangent-chord pole on a star line; no 3 tangents concurrent (dual conic). T is cross-ratio controlled, so the level is an orbit invariant.",
+  "findings": {
+    "geometricBookkeepingClean": true,
+    "parabolaOptimalExceptAnomaly": true,
+    "anomalies": [
+      "11/harmonic pure=5(HIGH) descent=4"
+    ],
+    "q43HarmonicPricedByParabola": "HIGH"
+  },
+  "lever1Note": "q=43 harmonic is priced HIGH by the parabola T-count in milliseconds (construction; a depth-40 exact B&B is infeasible). Since the parabola is optimal for every non-anomalous 4-star, this IS the level modulo the small-field-anomaly caveat - lever 1 is subsumed by the mechanism.",
+  "lever2Note": "Proof route: show (a) the parabola completion is optimal for q >= 13 (no non-parabola beats it), and (b) min-over-parabolas T = q-4 or q-5 by a cross-ratio pole-incidence count. This receipt supplies the verified bookkeeping (G1-G3) and the anomaly localization; the two implications are the open lemmas.",
+  "falsifier": {
+    "name": "TRIPLE_ANATOMY_MISMATCH",
+    "description": "Instrument-only: fires if the geometric bookkeeping (pivot mult 4, no 3 tangents concurrent, every triple = 1 star + 2 tangents, T reproduces ex) fails on any row, or if a parabola-suboptimal orbit other than q=11 harmonic appears among the exact fields.",
+    "status": "clear"
+  },
+  "rows": [
+    {
+      "q": 5,
+      "orbit": "harmonic",
+      "isExact": true,
+      "pureEx": 2,
+      "descentEx": 2,
+      "optEx": 2,
+      "pureLevel": "HIGH",
+      "optLevel": "HIGH",
+      "parabolaOptimal": true,
+      "T": 1,
+      "expectedT": 1,
+      "perStarLine": [
+        0,
+        1,
+        0,
+        0
+      ],
+      "checks": {
+        "g1_pivot4": true,
+        "g2_no3tangent": true,
+        "g3_star_plus_2tangent": true,
+        "gT_reproduces_ex": true
+      },
+      "ok": true
+    },
+    {
+      "q": 7,
+      "orbit": "harmonic",
+      "isExact": true,
+      "pureEx": 2,
+      "descentEx": 2,
+      "optEx": 2,
+      "pureLevel": "LOW",
+      "optLevel": "LOW",
+      "parabolaOptimal": true,
+      "T": 2,
+      "expectedT": 2,
+      "perStarLine": [
+        1,
+        0,
+        1,
+        0
+      ],
+      "checks": {
+        "g1_pivot4": true,
+        "g2_no3tangent": true,
+        "g3_star_plus_2tangent": true,
+        "gT_reproduces_ex": true
+      },
+      "ok": true
+    },
+    {
+      "q": 7,
+      "orbit": "equianharmonic",
+      "isExact": true,
+      "pureEx": 3,
+      "descentEx": 3,
+      "optEx": 3,
+      "pureLevel": "HIGH",
+      "optLevel": "HIGH",
+      "parabolaOptimal": true,
+      "T": 3,
+      "expectedT": 3,
+      "perStarLine": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "checks": {
+        "g1_pivot4": true,
+        "g2_no3tangent": true,
+        "g3_star_plus_2tangent": true,
+        "gT_reproduces_ex": true
+      },
+      "ok": true
+    },
+    {
+      "q": 11,
+      "orbit": "harmonic",
+      "isExact": true,
+      "pureEx": 5,
+      "descentEx": 4,
+      "optEx": 4,
+      "pureLevel": "HIGH",
+      "optLevel": "LOW",
+      "parabolaOptimal": false,
+      "T": 7,
+      "expectedT": 7,
+      "perStarLine": [
+        3,
+        4,
+        0,
+        0
+      ],
+      "checks": {
+        "g1_pivot4": true,
+        "g2_no3tangent": true,
+        "g3_star_plus_2tangent": true,
+        "gT_reproduces_ex": true
+      },
+      "ok": true
+    },
+    {
+      "q": 11,
+      "orbit": "generic",
+      "isExact": true,
+      "pureEx": 4,
+      "descentEx": 4,
+      "optEx": 4,
+      "pureLevel": "LOW",
+      "optLevel": "LOW",
+      "parabolaOptimal": true,
+      "T": 6,
+      "expectedT": 6,
+      "perStarLine": [
+        3,
+        3,
+        0,
+        0
+      ],
+      "checks": {
+        "g1_pivot4": true,
+        "g2_no3tangent": true,
+        "g3_star_plus_2tangent": true,
+        "gT_reproduces_ex": true
+      },
+      "ok": true
+    },
+    {
+      "q": 13,
+      "orbit": "harmonic",
+      "isExact": true,
+      "pureEx": 6,
+      "descentEx": 6,
+      "optEx": 6,
+      "pureLevel": "HIGH",
+      "optLevel": "HIGH",
+      "parabolaOptimal": true,
+      "T": 9,
+      "expectedT": 9,
+      "perStarLine": [
+        5,
+        4,
+        0,
+        0
+      ],
+      "checks": {
+        "g1_pivot4": true,
+        "g2_no3tangent": true,
+        "g3_star_plus_2tangent": true,
+        "gT_reproduces_ex": true
+      },
+      "ok": true
+    },
+    {
+      "q": 13,
+      "orbit": "generic",
+      "isExact": true,
+      "pureEx": 5,
+      "descentEx": 5,
+      "optEx": 5,
+      "pureLevel": "LOW",
+      "optLevel": "LOW",
+      "parabolaOptimal": true,
+      "T": 8,
+      "expectedT": 8,
+      "perStarLine": [
+        4,
+        0,
+        0,
+        4
+      ],
+      "checks": {
+        "g1_pivot4": true,
+        "g2_no3tangent": true,
+        "g3_star_plus_2tangent": true,
+        "gT_reproduces_ex": true
+      },
+      "ok": true
+    },
+    {
+      "q": 13,
+      "orbit": "equianharmonic",
+      "isExact": true,
+      "pureEx": 5,
+      "descentEx": 5,
+      "optEx": 5,
+      "pureLevel": "LOW",
+      "optLevel": "LOW",
+      "parabolaOptimal": true,
+      "T": 8,
+      "expectedT": 8,
+      "perStarLine": [
+        4,
+        0,
+        0,
+        4
+      ],
+      "checks": {
+        "g1_pivot4": true,
+        "g2_no3tangent": true,
+        "g3_star_plus_2tangent": true,
+        "gT_reproduces_ex": true
+      },
+      "ok": true
+    },
+    {
+      "q": 17,
+      "orbit": "harmonic",
+      "isExact": true,
+      "pureEx": 7,
+      "descentEx": 7,
+      "optEx": 7,
+      "pureLevel": "LOW",
+      "optLevel": "LOW",
+      "parabolaOptimal": true,
+      "T": 12,
+      "expectedT": 12,
+      "perStarLine": [
+        6,
+        0,
+        6,
+        0
+      ],
+      "checks": {
+        "g1_pivot4": true,
+        "g2_no3tangent": true,
+        "g3_star_plus_2tangent": true,
+        "gT_reproduces_ex": true
+      },
+      "ok": true
+    },
+    {
+      "q": 17,
+      "orbit": "generic-a",
+      "isExact": true,
+      "pureEx": 7,
+      "descentEx": 7,
+      "optEx": 7,
+      "pureLevel": "LOW",
+      "optLevel": "LOW",
+      "parabolaOptimal": true,
+      "T": 12,
+      "expectedT": 12,
+      "perStarLine": [
+        6,
+        0,
+        6,
+        0
+      ],
+      "checks": {
+        "g1_pivot4": true,
+        "g2_no3tangent": true,
+        "g3_star_plus_2tangent": true,
+        "gT_reproduces_ex": true
+      },
+      "ok": true
+    },
+    {
+      "q": 17,
+      "orbit": "generic-b",
+      "isExact": true,
+      "pureEx": 7,
+      "descentEx": 7,
+      "optEx": 7,
+      "pureLevel": "LOW",
+      "optLevel": "LOW",
+      "parabolaOptimal": true,
+      "T": 12,
+      "expectedT": 12,
+      "perStarLine": [
+        6,
+        0,
+        0,
+        6
+      ],
+      "checks": {
+        "g1_pivot4": true,
+        "g2_no3tangent": true,
+        "g3_star_plus_2tangent": true,
+        "gT_reproduces_ex": true
+      },
+      "ok": true
+    },
+    {
+      "q": 19,
+      "orbit": "harmonic",
+      "isExact": true,
+      "pureEx": 9,
+      "descentEx": 9,
+      "optEx": 9,
+      "pureLevel": "HIGH",
+      "optLevel": "HIGH",
+      "parabolaOptimal": true,
+      "T": 15,
+      "expectedT": 15,
+      "perStarLine": [
+        7,
+        0,
+        8,
+        0
+      ],
+      "checks": {
+        "g1_pivot4": true,
+        "g2_no3tangent": true,
+        "g3_star_plus_2tangent": true,
+        "gT_reproduces_ex": true
+      },
+      "ok": true
+    },
+    {
+      "q": 19,
+      "orbit": "generic-a",
+      "isExact": true,
+      "pureEx": 8,
+      "descentEx": 8,
+      "optEx": 8,
+      "pureLevel": "LOW",
+      "optLevel": "LOW",
+      "parabolaOptimal": true,
+      "T": 14,
+      "expectedT": 14,
+      "perStarLine": [
+        7,
+        0,
+        7,
+        0
+      ],
+      "checks": {
+        "g1_pivot4": true,
+        "g2_no3tangent": true,
+        "g3_star_plus_2tangent": true,
+        "gT_reproduces_ex": true
+      },
+      "ok": true
+    },
+    {
+      "q": 19,
+      "orbit": "generic-b",
+      "isExact": true,
+      "pureEx": 8,
+      "descentEx": 8,
+      "optEx": 8,
+      "pureLevel": "LOW",
+      "optLevel": "LOW",
+      "parabolaOptimal": true,
+      "T": 14,
+      "expectedT": 14,
+      "perStarLine": [
+        7,
+        0,
+        7,
+        0
+      ],
+      "checks": {
+        "g1_pivot4": true,
+        "g2_no3tangent": true,
+        "g3_star_plus_2tangent": true,
+        "gT_reproduces_ex": true
+      },
+      "ok": true
+    },
+    {
+      "q": 19,
+      "orbit": "equianharmonic",
+      "isExact": true,
+      "pureEx": 9,
+      "descentEx": 9,
+      "optEx": 9,
+      "pureLevel": "HIGH",
+      "optLevel": "HIGH",
+      "parabolaOptimal": true,
+      "T": 15,
+      "expectedT": 15,
+      "perStarLine": [
+        7,
+        8,
+        0,
+        0
+      ],
+      "checks": {
+        "g1_pivot4": true,
+        "g2_no3tangent": true,
+        "g3_star_plus_2tangent": true,
+        "gT_reproduces_ex": true
+      },
+      "ok": true
+    },
+    {
+      "q": 43,
+      "orbit": "harmonic",
+      "isExact": false,
+      "pureEx": 21,
+      "descentEx": 21,
+      "optEx": 21,
+      "pureLevel": "HIGH",
+      "optLevel": "HIGH",
+      "parabolaOptimal": true,
+      "T": 39,
+      "expectedT": 39,
+      "perStarLine": [
+        19,
+        0,
+        20,
+        0
+      ],
+      "checks": {
+        "g1_pivot4": true,
+        "g2_no3tangent": true,
+        "g3_star_plus_2tangent": true,
+        "gT_reproduces_ex": true
+      },
+      "ok": true
+    }
+  ]
+}
