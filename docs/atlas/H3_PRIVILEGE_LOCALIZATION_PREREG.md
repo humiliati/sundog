@@ -1,10 +1,10 @@
 # H3-PL Pre-registration — privilege located AT the pooling stage + seed-nulled back-action (HS1, amended)
 
-**Status: DRAFT v2 (2026-07-02) — post-adversarial-review, PRE-FREEZE.** v1's structured review found
-7 blocking/medium defects (§0); all applied below. NOT yet frozen: the only remaining pre-freeze step
-is the de-saturated-body tuning pass (§7), whose found `(η, a)` and re-verified C0/C1 get pinned INTO
-this file at freeze. Standing discipline header, verbatim: **clean null = success; forward-generate
-only; frozen test before first run.**
+**Status: FROZEN v2 (2026-07-02).** v1's structured review found 7 blocking/medium defects (§0); all
+applied. The de-saturated-body tuning pass (§7) landed and its values are pinned below. **No
+experiment code has run; no threshold in this file may change from here.** Next actions are
+mechanical: the frozen test, then the run. Standing discipline header, verbatim: **clean null =
+success; forward-generate only; frozen test before first run.**
 
 ## 0. Review disposition (v1 → v2)
 
@@ -71,15 +71,17 @@ null): pooled access is recoverable for free; the observer-effect intuition dies
 ## 3. Substrate (regenerated, deterministic; ONE de-saturated body)
 
 `scripts/shadow_pooled_synthetic_v2.py` conventions (K = 64 units, H = 32 rep dim, F feature dim,
-λ = 2.0). ONE `clf_d` encoder trained on the de-saturated d-channel of §7 (pooled d-acc pinned to
-0.75–0.85 — no second, saturated body exists in this experiment). Three feature representations read
-from that frozen encoder: **raw-per-unit** `u` `(n,K,F)`; **trained-per-unit** `φ_d(u)` `(n,K,H)`
-pre-pool; **pooled** `φ_d(u).mean(units)` `(n,H)`. n = 20,000 train, 10,000 once-touched verdict
-split (opened once per ceiling; §4).
+λ = 2.0), with the **PINNED de-saturation `SIGMA_D = 9.0`** (§7). ONE `clf_d` encoder trained on that
+de-saturated d-channel (pooled d-acc 0.80 at the tuning body — no second, saturated body exists in
+this experiment). Three feature representations read from that frozen encoder: **raw-per-unit** `u`
+`(n,K,F)`; **trained-per-unit** `φ_d(u)` `(n,K,H)` pre-pool; **pooled** `φ_d(u).mean(units)` `(n,H)`.
+n = 20,000 train, 10,000 once-touched verdict split (opened once per ceiling; §4).
 
-**Gates re-verified on THIS body (hard aborts, not verdicts):** C0 raw-mean-of-`u` c-R² low at λ = 2.0
-(raw averaging washes `c`); C1 single raw unit recovers `c` (`unit_c ≥ 0.5`) — C1 is now load-bearing
-as the ACCESS reference, so it is re-checked at freeze and pinned.
+**Gates re-verified on THIS body (hard aborts, not verdicts) — pinned at freeze from the tuning body,
+re-checked on the run body at run:** C0 raw-mean-of-`u` c-R² ≤ 0.10 at λ = 2.0 (raw averaging washes
+`c`; tuning value **0.0**); C1 single raw unit recovers `c`, `unit_c ≥ 0.5` (tuning value **0.999**) —
+C1 is load-bearing as the ACCESS reference. Run aborts (not a verdict) if either fails on the run
+body, or if the run body's pooled d-acc falls outside [0.75, 0.85] (substrate-regen failure).
 
 ## 4. Instrument — calibrated battery at MATCHED dimensionality (B1/B4/B7)
 
@@ -124,12 +126,16 @@ readout, NOT gated against the null** (it IS the recovery — B2).
 - **Battery liveness** per §4. **Determinism:** numpy-only, fixed seeds, byte-stable JSON; per-row
   checkpoint + detached-watchdog for the long arms.
 
-## 7. Pre-freeze tuning pass (control-only; the ONLY thing that runs before freeze)
+## 7. De-saturation tuning pass — DONE + PINNED (control-only; ran before freeze)
 
-Retune the substrate d-channel (raise η noise / shrink `a`) until pooled d-acc lands in 0.75–0.85 at
-λ = 2.0; **pin the found `(η, a)` and the re-verified C0/C1 values INTO this file at freeze
-(TO-PIN-AT-FREEZE)**. This produces the single body all arms use; it touches no `c`-probe and fixes no
-threshold.
+`scripts/hs1_desaturate_tuning.py` (receipt `results/atlas/hs1/desaturate_tuning.json`, committed
+`db1c52b2`) swept the per-unit d-noise `SIGMA_D` (the η knob; `a` = A_DISC left frozen). The trained
+`clf_d` encoder denoises via pooling far better than a linear model, so pooled d-acc is stubborn —
+0.996 (3.0) → 0.901 (6.0) → 0.800 (9.0). **PINNED: `SIGMA_D = 9.0`** → pooled d-acc = 0.8004 (centre of
+[0.75, 0.85]); all other substrate constants unchanged (K = 64, H = 32, A_DISC frozen unit vector,
+`OBS_NOISE = 0.05`). C-channel gates on that body: **C0 raw-mean c-R² = 0.0** (≤ 0.10 ✓),
+**C1 single-unit c-R² = 0.999** (≥ 0.50 ✓) — the d-noise knob is orthogonal to the continuous channel,
+so this pass touched no `c`-probe and fixed no threshold. Tuning seed 86235.
 
 ## 8. Seeds ledger (pinned)
 
