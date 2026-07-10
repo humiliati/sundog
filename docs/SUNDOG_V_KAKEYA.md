@@ -221,6 +221,17 @@ Hermite/Redei machinery applies. Adversarial hunt to `q=37`: no
 counterexample. Odd-q spectrum literature confirmed absent (BDBMS 2014 is
 even-q only; pinned). General floor still OPEN
 (`npm run kakeya:valueset`).
+Phase 3T exhausts the permutation slice:
+[`kakeya/PHASE3T_PERMUTATION_CENSUS.md`](kakeya/PHASE3T_PERMUTATION_CENSUS.md)
+all 5,040 / 39,916,800 permutations at `q in {7, 11}` (enumerator
+self-verified after a caught Heap's-convention bug): the floor is TIGHT in
+the permutation slice with **a unique extremal up to symmetry** (one free
+G-orbit at q=7; two at q=11 merging under transposition), a **universal
+anatomy** (one 4-fiber + `q-5` triples on distinct slopes, verified over all
+25,964 extremals), and a **generic-only law** (all q=11 extremal 4-fibers are
+generic-class - harmonic floor-achievers exist only in non-bijective
+regimes). Degree fingerprint = null. No new bounds; structure for the
+analytic route (`npm run kakeya:perm-census`, `npm run kakeya:extremal-orbits`).
 This file is a target-selection and claim-boundary scaffold opened from
 [`SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md`](SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md).
 
@@ -723,6 +734,12 @@ Forbidden:
   max-mult-3); hard case isolated as a permutation-form sub-conjecture
   (Hermite/Redei surface); hunt to `q=37` clean; odd-q spectrum literature
   absent (BDBMS 2014 = even q, pinned). General floor OPEN.
+- [`kakeya/PHASE3T_PERMUTATION_CENSUS.md`](kakeya/PHASE3T_PERMUTATION_CENSUS.md)
+  - permutation-slice census: floor TIGHT at q in {7,11,13-sampled}; extremal
+  UNIQUE up to symmetry (1 G-orbit at q=7, 2 merging under transposition at
+  q=11; exhaustive, zero escapes); universal anatomy (one 4-fiber + q-5
+  triples on distinct slopes); generic-only 4-fiber law at q=11; Heap's
+  enumerator gotcha caught + fixed. Structure only, no new bounds.
 - [`kakeya/EXTERNAL_REVIEW_PACKET.md`](kakeya/EXTERNAL_REVIEW_PACKET.md) -
   owner-pending external-review ask; frames Kakeya as a boundary/pedagogy review,
   not a result-review packet.

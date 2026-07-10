@@ -1,0 +1,159 @@
+{
+  "artifactId": "KAK-PHASE3T-EXTREMAL-ORBITS",
+  "generatedAt": "2026-07-10T06:47:01.707Z",
+  "status": "internal extremal-orbit decomposition (floor extremals mod symmetry)",
+  "command": "node scripts/kakeya-extremal-orbits.mjs",
+  "prediction": "recorded pre-run: 1 orbit at q=7 (1764 = |G|), 2 at q=11 (24200 = 2|G|)",
+  "results": [
+    {
+      "q": 7,
+      "extremals": 1764,
+      "groupOrder": 1764,
+      "orbits": [
+        {
+          "size": 1764,
+          "stabilizerOrder": 1
+        }
+      ],
+      "escapes": 0,
+      "representatives": [
+        {
+          "f": "2,0,1,3,4,5,6",
+          "sigmaSlopes": [
+            {
+              "s": 1,
+              "sigma": 3,
+              "maxFiber": 4
+            },
+            {
+              "s": 3,
+              "sigma": 1,
+              "maxFiber": 3
+            },
+            {
+              "s": 5,
+              "sigma": 1,
+              "maxFiber": 3
+            }
+          ],
+          "cycles": [
+            3
+          ],
+          "fixedPoints": 4
+        }
+      ]
+    },
+    {
+      "q": 11,
+      "extremals": 24200,
+      "groupOrder": 12100,
+      "orbits": [
+        {
+          "size": 12100,
+          "stabilizerOrder": 1
+        },
+        {
+          "size": 12100,
+          "stabilizerOrder": 1
+        }
+      ],
+      "escapes": 0,
+      "representatives": [
+        {
+          "f": "4,3,7,5,1,2,0,6,8,9,10",
+          "sigmaSlopes": [
+            {
+              "s": 1,
+              "sigma": 1,
+              "maxFiber": 3
+            },
+            {
+              "s": 2,
+              "sigma": 3,
+              "maxFiber": 4
+            },
+            {
+              "s": 3,
+              "sigma": 1,
+              "maxFiber": 3
+            },
+            {
+              "s": 4,
+              "sigma": 1,
+              "maxFiber": 3
+            },
+            {
+              "s": 5,
+              "sigma": 1,
+              "maxFiber": 3
+            },
+            {
+              "s": 6,
+              "sigma": 1,
+              "maxFiber": 3
+            },
+            {
+              "s": 7,
+              "sigma": 1,
+              "maxFiber": 3
+            }
+          ],
+          "cycles": [
+            8
+          ],
+          "fixedPoints": 3
+        },
+        {
+          "f": "7,2,0,3,5,1,4,6,8,9,10",
+          "sigmaSlopes": [
+            {
+              "s": 1,
+              "sigma": 3,
+              "maxFiber": 4
+            },
+            {
+              "s": 2,
+              "sigma": 1,
+              "maxFiber": 3
+            },
+            {
+              "s": 4,
+              "sigma": 1,
+              "maxFiber": 3
+            },
+            {
+              "s": 5,
+              "sigma": 1,
+              "maxFiber": 3
+            },
+            {
+              "s": 6,
+              "sigma": 1,
+              "maxFiber": 3
+            },
+            {
+              "s": 7,
+              "sigma": 1,
+              "maxFiber": 3
+            },
+            {
+              "s": 8,
+              "sigma": 1,
+              "maxFiber": 3
+            }
+          ],
+          "cycles": [
+            7
+          ],
+          "fixedPoints": 4
+        }
+      ]
+    }
+  ],
+  "falsifier": {
+    "name": "EXTREMAL_ORBIT_MISMATCH",
+    "description": "Instrument-only: fires if any group image of an extremal is non-extremal (G must preserve extremality) or the orbit sizes fail to partition the extremal set.",
+    "status": "clear"
+  },
+  "elapsedSeconds": 55.565
+}

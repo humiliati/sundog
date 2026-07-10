@@ -19,7 +19,7 @@ import pde_c1_kolmogorov_cell as c1
 from pde_c1_kolmogorov_cell import KolmogorovStepper, select_low_modes
 from nse_h3_global_gauge import control_read, _cfg, _f
 
-K_GRID = [2, 3, 4, 5, 6]
+K_GRID = [1, 2, 3, 4, 5, 6]  # K=1 added per spec section-7 addendum (forced mode only)
 FVE_MARGINAL = 0.99
 # Internal regression anchors (banked; spec section 3):
 BANKED_E_MAX = 0.6946284050907446     # fallback_v7_g675_kf3 manifest

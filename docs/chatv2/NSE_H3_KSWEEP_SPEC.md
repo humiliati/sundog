@@ -101,6 +101,25 @@ damp fidelity anchors).
 
 ---
 
+## 7. K=1 Addendum (2026-07-10; pre-registered BEFORE the K=1 read)
+
+The sweep never found the control floor (K=2 already powered). The banked
+capture contains `cols_k1`, and at this cell K=1 is a distinguished object: the
+force-insert rule makes the K=1 low set **exactly the forced mode (0,3)** — a
+**2-dimensional** shadow, the forcing coordinate alone. Registered extension:
+
+- `K_GRID → {1, 2, 3, 4, 5, 6}`; machinery, gates (G1/G2 re-verified on the
+  rerun), estimator, labels, and thresholds all unchanged. Self-test must first
+  pass the K=1 bookkeeping (per-mode bit-match, as for the other Ks).
+- **The K=1 question:** does the forcing coordinate alone decode the registered
+  action (`acc − maj ≥ 0.10`)? A yes puts the control floor at the forcing mode
+  itself; a no brackets the floor at K=2 — either way the floor closes.
+- State side at K=1 reported as usual (Q_1 = all 438 remaining dims).
+
+> **Addendum result — see `NSE_H3_KSWEEP_RECEIPT.md` (K=1 row).**
+
+---
+
 > **FINAL (2026-07-10): `NSE-H3-KSWEEP-WINDOW-MEASURED`**
 > (`NSE_H3_KSWEEP_RECEIPT.md`). Gates PASS (e_max to 1.2e-8; K=3 rung reproduces
 > the global-gauge receipt at |d| 0.011/0.004). **m_det bracket > 6; regime-2

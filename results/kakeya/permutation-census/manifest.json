@@ -1,0 +1,310 @@
+{
+  "artifactId": "KAK-PHASE3T-PERMUTATION-CENSUS",
+  "generatedAt": "2026-07-10T06:43:09.883Z",
+  "status": "internal extremal-structure census (permutation slice of the floor's hard regime)",
+  "command": "node scripts/kakeya-permutation-census.mjs",
+  "note": "For q <= 17 the permutation sub-conjecture is a corollary of the proved floor; this census maps tightness, extremal structure (polynomial degrees), and the N_d regime of floor-achievers. q=19 floor remains open for generic orbits (only harmonic/eq solved exactly there).",
+  "T1_q7": {
+    "q": 7,
+    "perms": 5040,
+    "factorial": 5040,
+    "enumeratorValid": true,
+    "with4": 3276,
+    "minSigma": 5,
+    "target": 5,
+    "tight": true,
+    "belowTarget": 0,
+    "extremalCount": 1764,
+    "extremals": [
+      [
+        2,
+        0,
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      [
+        1,
+        2,
+        0,
+        3,
+        4,
+        5,
+        6
+      ],
+      [
+        0,
+        3,
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      [
+        0,
+        2,
+        3,
+        1,
+        4,
+        5,
+        6
+      ],
+      [
+        2,
+        4,
+        3,
+        0,
+        1,
+        5,
+        6
+      ],
+      [
+        3,
+        2,
+        4,
+        0,
+        1,
+        5,
+        6
+      ],
+      [
+        2,
+        0,
+        4,
+        3,
+        1,
+        5,
+        6
+      ],
+      [
+        4,
+        0,
+        2,
+        3,
+        1,
+        5,
+        6
+      ],
+      [
+        4,
+        2,
+        0,
+        3,
+        1,
+        5,
+        6
+      ],
+      [
+        4,
+        3,
+        0,
+        2,
+        1,
+        5,
+        6
+      ]
+    ],
+    "sigmaHist": [
+      [
+        5,
+        1764
+      ],
+      [
+        6,
+        588
+      ],
+      [
+        7,
+        882
+      ],
+      [
+        15,
+        42
+      ]
+    ]
+  },
+  "T2_q7_degrees": [
+    [
+      5,
+      60
+    ]
+  ],
+  "T3_regime": {
+    "q": 7,
+    "achievers": 197568,
+    "NdHist": [
+      [
+        4,
+        37044
+      ],
+      [
+        5,
+        86436
+      ],
+      [
+        6,
+        61740
+      ],
+      [
+        7,
+        12348
+      ]
+    ]
+  },
+  "T1b_q11": {
+    "q": 11,
+    "perms": 39916800,
+    "factorial": 39916800,
+    "enumeratorValid": true,
+    "with4": 38769720,
+    "minSigma": 9,
+    "target": 9,
+    "tight": true,
+    "belowTarget": 0,
+    "extremalCount": 24200,
+    "extremals": [
+      [
+        4,
+        3,
+        7,
+        5,
+        1,
+        2,
+        0,
+        6,
+        8,
+        9,
+        10
+      ],
+      [
+        7,
+        2,
+        0,
+        3,
+        5,
+        1,
+        4,
+        6,
+        8,
+        9,
+        10
+      ],
+      [
+        5,
+        0,
+        4,
+        7,
+        6,
+        2,
+        3,
+        1,
+        8,
+        9,
+        10
+      ],
+      [
+        3,
+        4,
+        7,
+        0,
+        5,
+        6,
+        2,
+        1,
+        8,
+        9,
+        10
+      ],
+      [
+        3,
+        7,
+        6,
+        0,
+        1,
+        4,
+        5,
+        2,
+        8,
+        9,
+        10
+      ],
+      [
+        6,
+        4,
+        5,
+        1,
+        0,
+        3,
+        7,
+        2,
+        8,
+        9,
+        10
+      ]
+    ],
+    "sigmaHist": [
+      [
+        9,
+        24200
+      ],
+      [
+        10,
+        157300
+      ],
+      [
+        11,
+        1203950
+      ],
+      [
+        12,
+        3448500
+      ],
+      [
+        13,
+        6086300
+      ],
+      [
+        14,
+        8578900
+      ],
+      [
+        15,
+        7665350
+      ],
+      [
+        16,
+        5445000
+      ],
+      [
+        17,
+        3515050
+      ],
+      [
+        18,
+        1427800
+      ]
+    ]
+  },
+  "T2b_q11_degrees": [
+    [
+      9,
+      20
+    ]
+  ],
+  "T4_q13_sampled": {
+    "q": 13,
+    "samples": 2000000,
+    "with4": 1989778,
+    "minSigma": 11,
+    "target": 11
+  },
+  "falsifier": {
+    "name": "PERMUTATION_CENSUS_MISMATCH",
+    "description": "Instrument-only: fires if any 4-fiber permutation at q in {7,11,13-sampled} has sum-sigma below q-2 (contradicting the proved floor) - that would be a bug, not a discovery.",
+    "status": "clear"
+  },
+  "elapsedSeconds": 58.879
+}

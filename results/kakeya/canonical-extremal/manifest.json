@@ -1,0 +1,177 @@
+{
+  "artifactId": "KAK-PHASE3U-CANONICAL-EXTREMAL",
+  "generatedAt": "2026-07-10T12:13:06.781Z",
+  "status": "internal classification-route receipt: constructive extremal permutations from parabola completions",
+  "command": "node scripts/kakeya-canonical-extremal.mjs",
+  "rows": [
+    {
+      "q": 7,
+      "orbit": "harmonic",
+      "completionSacrifice": 5,
+      "bijectiveDirections": 1,
+      "totalDirections": 8,
+      "extremalPermutationExtracted": true,
+      "via": 4,
+      "fourFiberClass": "harmonic",
+      "cycles": [
+        5,
+        2
+      ],
+      "fixedPoints": 0,
+      "f": "3,5,6,2,0,1,4"
+    },
+    {
+      "q": 11,
+      "orbit": "generic",
+      "completionSacrifice": 9,
+      "bijectiveDirections": 0,
+      "totalDirections": 12,
+      "extremalPermutationExtracted": false,
+      "via": null,
+      "fourFiberClass": null,
+      "cycles": null,
+      "fixedPoints": null,
+      "f": null
+    },
+    {
+      "q": 13,
+      "orbit": "equianharmonic",
+      "completionSacrifice": 11,
+      "bijectiveDirections": 0,
+      "totalDirections": 14,
+      "extremalPermutationExtracted": false,
+      "via": null,
+      "fourFiberClass": null,
+      "cycles": null,
+      "fixedPoints": null,
+      "f": null
+    },
+    {
+      "q": 13,
+      "orbit": "generic",
+      "completionSacrifice": 11,
+      "bijectiveDirections": 1,
+      "totalDirections": 14,
+      "extremalPermutationExtracted": true,
+      "via": 6,
+      "fourFiberClass": "generic",
+      "cycles": [
+        7,
+        4
+      ],
+      "fixedPoints": 2,
+      "f": "5,6,10,2,3,12,4,1,8,0,7,11,9"
+    },
+    {
+      "q": 17,
+      "orbit": "harmonic",
+      "completionSacrifice": 15,
+      "bijectiveDirections": 0,
+      "totalDirections": 18,
+      "extremalPermutationExtracted": false,
+      "via": null,
+      "fourFiberClass": null,
+      "cycles": null,
+      "fixedPoints": null,
+      "f": null
+    },
+    {
+      "q": 17,
+      "orbit": "generic-a",
+      "completionSacrifice": 15,
+      "bijectiveDirections": 0,
+      "totalDirections": 18,
+      "extremalPermutationExtracted": false,
+      "via": null,
+      "fourFiberClass": null,
+      "cycles": null,
+      "fixedPoints": null,
+      "f": null
+    },
+    {
+      "q": 17,
+      "orbit": "generic-b",
+      "completionSacrifice": 15,
+      "bijectiveDirections": 0,
+      "totalDirections": 18,
+      "extremalPermutationExtracted": false,
+      "via": null,
+      "fourFiberClass": null,
+      "cycles": null,
+      "fixedPoints": null,
+      "f": null
+    },
+    {
+      "q": 19,
+      "orbit": "generic-a",
+      "completionSacrifice": 17,
+      "bijectiveDirections": 0,
+      "totalDirections": 20,
+      "extremalPermutationExtracted": false,
+      "via": null,
+      "fourFiberClass": null,
+      "cycles": null,
+      "fixedPoints": null,
+      "f": null
+    },
+    {
+      "q": 19,
+      "orbit": "generic-b",
+      "completionSacrifice": 17,
+      "bijectiveDirections": 0,
+      "totalDirections": 20,
+      "extremalPermutationExtracted": false,
+      "via": null,
+      "fourFiberClass": null,
+      "cycles": null,
+      "fixedPoints": null,
+      "f": null
+    },
+    {
+      "q": 23,
+      "orbit": "harmonic",
+      "completionSacrifice": 21,
+      "bijectiveDirections": 0,
+      "totalDirections": 24,
+      "extremalPermutationExtracted": false,
+      "via": null,
+      "fourFiberClass": null,
+      "cycles": null,
+      "fixedPoints": null,
+      "f": null
+    },
+    {
+      "q": 23,
+      "orbit": "generic-a",
+      "completionSacrifice": 21,
+      "bijectiveDirections": 0,
+      "totalDirections": 24,
+      "extremalPermutationExtracted": false,
+      "via": null,
+      "fourFiberClass": null,
+      "cycles": null,
+      "fixedPoints": null,
+      "f": null
+    },
+    {
+      "q": 23,
+      "orbit": "generic-b",
+      "completionSacrifice": 21,
+      "bijectiveDirections": 0,
+      "totalDirections": 24,
+      "extremalPermutationExtracted": false,
+      "via": null,
+      "fourFiberClass": null,
+      "cycles": null,
+      "fixedPoints": null,
+      "f": null
+    }
+  ],
+  "existenceAllFields": false,
+  "falsifier": {
+    "name": "CANONICAL_EXTREMAL_MISMATCH",
+    "description": "Instrument-only: fires if a parabola completion misses sacrifice q-2 on a LOW orbit, an extraction fails structurally (non-graph), or an extracted candidate fails verification (permutation + sum-sigma = q-2 + exactly one 4-fiber).",
+    "status": "clear"
+  },
+  "elapsedSeconds": 0.475
+}
