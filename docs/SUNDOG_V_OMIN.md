@@ -42,6 +42,7 @@
 | SiLU/swish (dim-1) | **NON-MONOTONE, CLOSED** — `siluFibersFinite`: the GELU derivative-clearing trick fails (sigmoid keeps derivatives transcendental), so use the equation transform `silu(x)=c ⟺ (x−c)eˣ=c`, one critical point ⇒ Rolle once; `silu_dnf_tame` unconditional | ✅ 2026-07-09 |
 | Mish (dim-1) | **NON-MONOTONE, CLOSED (two exp scales)** — `mishFibersFinite`: `tanh∘softplus` gives both `eˣ` and `e^{2x}`; rational form ⇒ `mish(x)=c ⟺ (x−c)e^{2x}+2(x−c)eˣ−2c=0`, Rolle engine applied down to `h₁''=(2x−2c+5)eˣ` (zeros `{c−5/2}`); `mish_dnf_tame` unconditional | ✅ 2026-07-09 |
 | ELU (dim-1) | **PIECEWISE MONOTONE** — `elu(x)=x` (`x≥0`) / `eˣ−1` (`x<0`) is strictly increasing, so the injective-core route (not Rolle); new element = if-then-else gluing (`Continuous.if_le`, sign-case strict mono); `elu_dnf_tame` | ✅ 2026-07-09 |
+| SELU (dim-1) | **SCALED ELU, MONOTONE** — `selu(x)=λ·(x / α(eˣ−1))`; parametrized by `λ,α>0` (SELU's constants a positive instance; covers ELU `λ=α=1`); positive scaling preserves strict monotonicity ⇒ injective core; `selu_dnf_tame` | ✅ 2026-07-09 |
 
 Modules: `OMinimalOne` … `OMinimalCellDecomp` (34th–61st), 80 gated headline theorems, all
 axiom-clean; audits 8540 → 8605 GREEN. Classical anchors for what's landed:
@@ -542,6 +543,20 @@ definition: `elu_continuous` glues the two pieces via `Continuous.if_le` (bounda
 `x < 0 ≤ y` from `eˣ − 1 < 0 ≤ y`). Then the injective core delivers `elu_dnf_tame`
 unmodified. Activation factory now: 7 monotone (adding ELU, the first PIECEWISE one) +
 3 non-monotone, ten activations total.
+
+## SELU (dim-1) — scaled ELU, still monotone. [LANDED 2026-07-09]
+
+`SeluTame.lean` (92nd module, 3 gates: `selu_strictMono`, `selu_lt_tame`,
+`selu_dnf_tame`), **green on the first build**; audit **8637 GREEN**.
+`selu(x) = λ·(x)` for `x ≥ 0`, `λ·α·(eˣ − 1)` for `x < 0`, with SELU's constants
+`λ ≈ 1.0507`, `α ≈ 1.6733` (both positive). Positive scaling preserves ELU's strict
+monotonicity, so SELU is again the MONOTONE injective-core route. Parametrized by
+`λ, α > 0` (a `section`/`include`-scoped family): the exact SELU constants are a specific
+positive-real instance (self-normalization fixed point, irrational), and the tameness
+holds for the whole positive-constant family — SELU, ELU (`λ=α=1`), leaky/scaled variants.
+Continuity needs no positivity (`Continuous.if_le`, boundary `0 = x ⇒ x = α(eˣ−1)` at 0);
+strict monotonicity uses `0 < λ` (outer) and `0 < α` (negative branch). `selu_dnf_tame`
+via the injective core. Activation factory: 8 monotone + 3 non-monotone, eleven activations.
 
 *The arc, closed.* TS-QE opened 2026-07-06 and closed 2026-07-07: 17 modules
 (62nd–78th), route Cohen–Hörmander set-level over concrete ℝ, all axiom-clean. Lean
