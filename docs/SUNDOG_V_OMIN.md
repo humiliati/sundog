@@ -46,6 +46,7 @@
 | GELU-tanh (dim-1) | **NON-MONOTONE, CLOSED (cubic critical eq)** — `geluTanhFibersFinite`: `0.5x(1+tanh(c(x+ax³)))` = `x·σ(w)`, `w=2c(x+ax³)`; transform `⟺ (x−C)eˣ⁽ʷ⁾=C`, `g'=eˣ⁽ʷ⁾·(1+(x−C)w')` with `1+(x−C)w'` a CUBIC POLYNOMIAL (finite roots via `finite_setOf_isRoot`) ⇒ Rolle once; `gelu_tanh_dnf_tame` | ✅ 2026-07-09 |
 | GELU-sigmoid (dim-1) | **NON-MONOTONE, CLOSED (linear critical eq)** — `geluSigmoidFibersFinite`: `x·σ(1.702x)`, scaled-argument SiLU; transform `⟺ (x−C)e^{kx}=C`, `g'=e^{kx}(1+k(x−C))` zero at the SINGLE point `C−1/k`; Rolle once; `gelu_sigmoid_dnf_tame` | ✅ 2026-07-09 |
 | Leaky ReLU (dim-1) | **PIECEWISE-LINEAR MONOTONE** — `lrelu(x)=x` (`x≥0`) / `α·x` (`x<0`), `α=0.01`; both slopes positive ⇒ strictly increasing ⇒ injective core (not Rolle); linear sibling of ELU (cross case `α·x<0≤y`, no exp); `lrelu_dnf_tame` | ✅ 2026-07-10 |
+| Softsign (dim-1) | **BOUNDED MONOTONE (abs denominator)** — `softsign(x)=x/(1+|x|)` into `(−1,1)`; strictly increasing (deriv `1/(1+|x|)²>0`), denom `≥1>0` so continuous everywhere ⇒ injective core; new element = `|x|` forces a sign-case split, each case a clean cross-multiplication (`div_lt_div_iff₀`); `softsign_dnf_tame` | ✅ 2026-07-10 |
 
 Modules: `OMinimalOne` … `OMinimalCellDecomp` (34th–61st), 80 gated headline theorems, all
 axiom-clean; audits 8540 → 8605 GREEN. Classical anchors for what's landed:
@@ -611,6 +612,22 @@ comparison (contrast ELU's `eˣ < 1`). Fills the ReLU-family gap with the member
 core actually captures: plain ReLU (`α = 0`) is flat on the negatives, hence non-strict, and
 fits *neither* the injective nor the finite-fiber core — the leaky variant is the one that
 does. Activation factory: 9 monotone + 5 non-monotone, fourteen activations, all axiom-clean.
+
+## Softsign (dim-1) — the bounded abs-denominator monotone. [LANDED 2026-07-10]
+
+`SoftsignTame.lean` (96th module, 3 gates: `softsign_strictMono`, `softsign_lt_tame`,
+`softsign_dnf_tame`), green (one fix: `div_lt_div_iff` → its current mathlib name
+`div_lt_div_iff₀`); audit **8641 GREEN**. `softsign(x) = x/(1 + |x|)`, the bounded
+`(−1, 1)` sigmoid-shaped activation. It is strictly increasing — its derivative is
+`1/(1+|x|)² > 0` everywhere — and continuous everywhere because the denominator `1 + |x| ≥ 1`
+never vanishes (no removable singularity, unlike a naive `x/|x|`), so it rides the MONOTONE
+injective-core route, not Rolle. The new element versus the smooth monotone activations
+(sigmoid/tanh/…) is the `|x|` in the denominator: strict monotonicity is proved by a
+sign-case split on `x, y`, and each case collapses to a clean cross-multiplication via
+`div_lt_div_iff₀` — both-nonneg `x(1+y) < y(1+x) ⟺ x < y`, both-negative
+`x(1−y) < y(1−x) ⟺ x < y`, and the cross case `x < 0 ≤ y` is `softsign x < 0 ≤ softsign y`
+directly. Then the continuous-injective threshold core applies unchanged. Activation factory:
+10 monotone + 5 non-monotone, fifteen activations, all axiom-clean.
 
 *The arc, closed.* TS-QE opened 2026-07-06 and closed 2026-07-07: 17 modules
 (62nd–78th), route Cohen–Hörmander set-level over concrete ℝ, all axiom-clean. Lean
