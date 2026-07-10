@@ -142,6 +142,7 @@ def parse_args() -> argparse.Namespace:
             "lock_disc_g300",
             "at2_growth_g200",
             "at2_growth_g300",
+            "recon_sweep_g675_kf3",
         ],
         default="smoke",
     )
@@ -495,6 +496,23 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         calibration_sample_count = 50_000
         calibration_gap_steps = 5_000
         lookahead_steps = 2_000
+    elif args.preset == "recon_sweep_g675_kf3":
+        # H3 K-sweep capture cell (NSE_H3_KSWEEP_SPEC.md): the fallback_v7_g675_kf3
+        # trajectory (same seed, burn-in, physics) with a WIDER EMITTED shadow
+        # (k_signature = 6) so the K=2..6 state-recon sweep is post-processable
+        # from ONE integration (samples.npz + --at2-export side artifacts). NOT
+        # verdict-bearing (not in VERDICT_BEARING_PRESETS); the in-run K=6-band
+        # labels are not read -- the post-sweep recomputes the registered
+        # K=3-band labels from the at2 e_low_k3 series.
+        burnin_steps = 200_000
+        sample_count = 50_000
+        kf = 3
+        grashof = 675.0
+        k_signature = 6
+        objective = "portable-quantile"
+        objective_quantile = 0.70
+        calibration_sample_count = 50_000
+        calibration_gap_steps = 5_000
     else:
         # Smoke is intentionally not the registered cell. It exists to validate
         # the integrator, binning, and receipt plumbing under the repo's

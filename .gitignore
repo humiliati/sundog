@@ -16,6 +16,8 @@ results/bayes/
 # Raw per-sample exports (twin-state-adaptive --adjudicator): large, regenerable,
 # local-only for future post-processing. The manifest + witness CSV carry the verdict.
 results/proof/**/samples.npz
+# K-sweep capture side artifact (--at2-export): same class -- regenerable, local-only.
+results/proof/**/at2_export.npz
 results/mines/
 results/mesa/
 results/isotrophy/

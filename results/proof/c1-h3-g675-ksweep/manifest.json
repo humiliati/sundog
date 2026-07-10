@@ -1,0 +1,253 @@
+{
+  "startedAt": "2026-07-10T07:36:41.493519+00:00",
+  "script": "scripts/pde_c1_kolmogorov_cell.py",
+  "spec": "docs/proof/PDE_C1_CELLSET_KOLMOGOROV.md",
+  "protocol": "docs/proof/PDE_C1_FIBER_PROTOCOL.md",
+  "config": {
+    "preset": "recon_sweep_g675_kf3",
+    "grid_size": 32,
+    "n_modes": 16,
+    "k_signature": 6,
+    "forcing_wavenumber": 3,
+    "grashof": 675.0,
+    "forcing_amplitude": 1.0,
+    "viscosity": 0.03849001794597505,
+    "dt": 0.01,
+    "burnin_steps": 200000,
+    "sample_count": 50000,
+    "sample_interval_steps": 50,
+    "lookahead_steps": 500,
+    "n_min": 30,
+    "delta_action": 0.1,
+    "s_pos": 0.5,
+    "delta_proxy_min": 0.01,
+    "e_max_burnin_fraction": 1.0,
+    "random_seed": 20260528,
+    "integrator": "pseudo_spectral_vorticity_semi_implicit_euler",
+    "signature_dimension": 72,
+    "action_tiebreak": "no_op",
+    "adjudicator": "twin-state-adaptive",
+    "k_neighbors": 30,
+    "delta_incompat": 0.01,
+    "twin_k_neighbors": 50,
+    "twin_delta_high_fraction": 0.05,
+    "twin_high_norm_floor": 1e-06,
+    "twin_min_witness_fraction": 0.01,
+    "twin_min_unique_pairs": 100,
+    "objective": "portable-quantile",
+    "objective_quantile": 0.7,
+    "calibration_sample_count": 50000,
+    "calibration_gap_steps": 5000,
+    "objective_observable": "energy"
+  },
+  "environment": {
+    "python": "3.14.4 (tags/v3.14.4:23116f9, Apr  7 2026, 14:10:54) [MSC v.1944 64 bit (AMD64)]",
+    "numpy": "2.4.4",
+    "platform": "win32",
+    "cwd": "C:\\Users\\hughe\\Dev\\sundog"
+  },
+  "result": {
+    "adjudicator_family": "twin-state-adaptive",
+    "n_samples": 50000,
+    "epsilon_k_radius_threshold": 0.06634125269845875,
+    "delta_h": 0.0027065660046943774,
+    "adaptive_k_min": 10,
+    "adaptive_covered_floor": 0.1,
+    "twin_min_witness_fraction": 0.01,
+    "twin_min_unique_pairs": 100,
+    "adaptive_delta_action": 0.1,
+    "no_op_count": 34594,
+    "damp_low_band_count": 15406,
+    "damp_fraction": 0.30812,
+    "high_norm_median": 0.05413132009388755,
+    "frozen_verdict": "SMOKE_ONLY",
+    "frozen_verdict_label": "",
+    "frozen_paired_fiber_verdict": "SMOKE_ONLY",
+    "frozen_candidate_sample_fraction": 0.40368,
+    "frozen_witness_pair_count_unique": 32044,
+    "frozen_witness_action_disagree_fraction_unique": 0.02524653601298215,
+    "verdict": "SMOKE_ONLY",
+    "verdict_label": "",
+    "interpretable": false,
+    "adaptive_paired_fiber_verdict": "PAIRED_FIBER_UNDEFINED",
+    "adaptive_covered_fraction": 0.008,
+    "adaptive_dense_count_p05": 0.0,
+    "adaptive_dense_count_p50": 0.0,
+    "adaptive_dense_count_p95": 6.0,
+    "adaptive_candidate_sample_count": 395,
+    "adaptive_candidate_pair_count_unique": 2121,
+    "adaptive_witness_sample_count": 392,
+    "adaptive_witness_sample_fraction": 0.00784,
+    "adaptive_witness_pair_count_unique": 1603,
+    "adaptive_witness_action_disagree_unique": 0,
+    "adaptive_witness_action_disagree_fraction_unique": 0.0,
+    "adaptive_witness_high_distance_p50": 0.006283326408703115,
+    "adaptive_witness_signature_distance_p50": 0.042240810108692566,
+    "adaptive_max_candidate_high_distance": 0.01630732804950894,
+    "adjudicator": "twin-state-adaptive",
+    "objective": "portable-quantile",
+    "objective_quantile": 0.7,
+    "calibration_sample_count": 50000,
+    "calibration_damp_fraction": 0.3,
+    "e_max": 0.8802323619201522,
+    "epsilon_k": 0.06634125269845875,
+    "h_k": 0.007818391609248422,
+    "burnin_energy_min": 0.5936992798354536,
+    "burnin_energy_max": 2.0832290083704734,
+    "burnin_energy_mean": 0.775986048809398,
+    "sample_energy_min": 0.5592129814338751,
+    "sample_energy_max": 1.5699082360927796,
+    "sample_energy_mean": 0.7796377158518821,
+    "low_modes": [
+      {
+        "kx": 0,
+        "ky": 1
+      },
+      {
+        "kx": 1,
+        "ky": 0
+      },
+      {
+        "kx": 1,
+        "ky": 1
+      },
+      {
+        "kx": -1,
+        "ky": 1
+      },
+      {
+        "kx": 0,
+        "ky": 2
+      },
+      {
+        "kx": 2,
+        "ky": 0
+      },
+      {
+        "kx": 1,
+        "ky": 2
+      },
+      {
+        "kx": 2,
+        "ky": 1
+      },
+      {
+        "kx": -2,
+        "ky": 1
+      },
+      {
+        "kx": -1,
+        "ky": 2
+      },
+      {
+        "kx": 2,
+        "ky": 2
+      },
+      {
+        "kx": -2,
+        "ky": 2
+      },
+      {
+        "kx": 0,
+        "ky": 3
+      },
+      {
+        "kx": 3,
+        "ky": 0
+      },
+      {
+        "kx": 1,
+        "ky": 3
+      },
+      {
+        "kx": 3,
+        "ky": 1
+      },
+      {
+        "kx": -3,
+        "ky": 1
+      },
+      {
+        "kx": -1,
+        "ky": 3
+      },
+      {
+        "kx": 2,
+        "ky": 3
+      },
+      {
+        "kx": 3,
+        "ky": 2
+      },
+      {
+        "kx": -3,
+        "ky": 2
+      },
+      {
+        "kx": -2,
+        "ky": 3
+      },
+      {
+        "kx": 3,
+        "ky": 3
+      },
+      {
+        "kx": -3,
+        "ky": 3
+      },
+      {
+        "kx": 0,
+        "ky": 4
+      },
+      {
+        "kx": 4,
+        "ky": 0
+      },
+      {
+        "kx": 1,
+        "ky": 4
+      },
+      {
+        "kx": 4,
+        "ky": 1
+      },
+      {
+        "kx": -4,
+        "ky": 1
+      },
+      {
+        "kx": -1,
+        "ky": 4
+      },
+      {
+        "kx": 2,
+        "ky": 4
+      },
+      {
+        "kx": 4,
+        "ky": 2
+      },
+      {
+        "kx": -4,
+        "ky": 2
+      },
+      {
+        "kx": -2,
+        "ky": 4
+      },
+      {
+        "kx": 3,
+        "ky": 4
+      },
+      {
+        "kx": 4,
+        "ky": 3
+      }
+    ],
+    "high_mode_count": 184,
+    "high_mode_dimension": 368,
+    "elapsed_seconds": 3152.4340170000214,
+    "total_steps": 5205900,
+    "steps_per_second": 1651.390630206638
+  }
+}
