@@ -41,6 +41,7 @@
 | GELU (dim-1) | **NON-MONOTONE, CLOSED UNCONDITIONALLY** — `geluFibersFinite` proved (`gelu'' = Ed·(2−x²)/2`, `Ed>0`, so `{gelu''=0}={±√2}` ⇒ Rolle twice); `gelu_dnf_tame'` is unconditional. First non-monotone activation, fully tame. | ✅ 2026-07-09 |
 | SiLU/swish (dim-1) | **NON-MONOTONE, CLOSED** — `siluFibersFinite`: the GELU derivative-clearing trick fails (sigmoid keeps derivatives transcendental), so use the equation transform `silu(x)=c ⟺ (x−c)eˣ=c`, one critical point ⇒ Rolle once; `silu_dnf_tame` unconditional | ✅ 2026-07-09 |
 | Mish (dim-1) | **NON-MONOTONE, CLOSED (two exp scales)** — `mishFibersFinite`: `tanh∘softplus` gives both `eˣ` and `e^{2x}`; rational form ⇒ `mish(x)=c ⟺ (x−c)e^{2x}+2(x−c)eˣ−2c=0`, Rolle engine applied down to `h₁''=(2x−2c+5)eˣ` (zeros `{c−5/2}`); `mish_dnf_tame` unconditional | ✅ 2026-07-09 |
+| ELU (dim-1) | **PIECEWISE MONOTONE** — `elu(x)=x` (`x≥0`) / `eˣ−1` (`x<0`) is strictly increasing, so the injective-core route (not Rolle); new element = if-then-else gluing (`Continuous.if_le`, sign-case strict mono); `elu_dnf_tame` | ✅ 2026-07-09 |
 
 Modules: `OMinimalOne` … `OMinimalCellDecomp` (34th–61st), 80 gated headline theorems, all
 axiom-clean; audits 8540 → 8605 GREEN. Classical anchors for what's landed:
@@ -528,6 +529,19 @@ unconditional. **The Rolle depth tracks the number of exponential scales**: GELU
 scale (one step), Mish two scales (deeper chain). The engine `finite_fiber_of_finite_deriv_zeros`
 absorbs all of it. Activation factory: 6 monotone + 3 non-monotone (GELU, SiLU, Mish), all
 axiom-clean.
+
+## ELU (dim-1) — piecewise, but monotone. [LANDED 2026-07-09]
+
+`EluTame.lean` (91st module, 3 gates: `elu_strictMono`, `elu_lt_tame`, `elu_dnf_tame`),
+**green on the first build**; audit **8636 GREEN**. Worth flagging that ELU is NOT a Rolle
+case: `elu(x) = x` (`x ≥ 0`) / `eˣ − 1` (`x < 0`) is strictly increasing (both pieces up,
+continuous at 0), so it belongs to the MONOTONE injective-core route — one step, no
+critical-point analysis. The genuinely new element is the PIECEWISE (if-then-else)
+definition: `elu_continuous` glues the two pieces via `Continuous.if_le` (boundary
+`0 = x ⇒ x = eˣ − 1`, true at 0); `elu_strictMono` is a sign-case argument (cross case
+`x < 0 ≤ y` from `eˣ − 1 < 0 ≤ y`). Then the injective core delivers `elu_dnf_tame`
+unmodified. Activation factory now: 7 monotone (adding ELU, the first PIECEWISE one) +
+3 non-monotone, ten activations total.
 
 *The arc, closed.* TS-QE opened 2026-07-06 and closed 2026-07-07: 17 modules
 (62nd–78th), route Cohen–Hörmander set-level over concrete ℝ, all axiom-clean. Lean
