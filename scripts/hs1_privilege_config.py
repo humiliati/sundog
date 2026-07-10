@@ -1,58 +1,61 @@
-"""H3-PL (HS1) FROZEN spec — single source of truth for the run script + frozen test.
+"""H3-PL FROZEN spec v3 — single source of truth for the run script + frozen test.
 
-Pure constants + verdict logic ONLY. No torch, no sklearn, no data, no compute: importing this
-module runs no experiment. Every number here is pinned by the FROZEN prereg
-docs/atlas/H3_PRIVILEGE_LOCALIZATION_PREREG.md (v2, commit 815ea529) and must not change; the frozen
-test test_shadow_introspect_privilege.py re-asserts each against the doc's literals. The run script
-shadow_introspect_privilege.py (to be written) imports the classifiers below so the verdict is
-computed by this frozen, tested code — the run cannot fudge it.
+Pure constants + verdict logic ONLY (no torch/sklearn/data; importing runs no experiment). Every
+number is pinned by the FROZEN v3 prereg docs/atlas/H3_PRIVILEGE_LOCALIZATION_V3_PREREG.md and must
+not change; the frozen test re-asserts each. v2 constants remain in git at 9bdfb255 (v2 spec
+815ea529, voided by run 2ace4df8). v3 deltas: back-action gate = the de-saturation BAND FLOOR (D8);
+P6 demodulating probe added to the counted battery (D9a); injection = fixed-R2 TARGET (D9b); all
+verdict seeds fresh (52235-family, contamination firewall).
 """
 
-# ---- substrate (§3, §7) ---- #
-SIGMA_D = 9.0            # PINNED de-saturation (tuning db1c52b2: pooled d-acc 0.8004)
+# ---- substrate (v3 §5; SIGMA_D from tuning db1c52b2, carried) ---- #
+SIGMA_D = 9.0
 K_UNITS = 64
 H_DIM = 32
 LAMBDA = 2.0
 N_TRAIN = 20000
-N_SPLIT = 10000         # once-touched verdict split, scored once per ceiling (§4)
+N_SPLIT = 10000         # once-touched verdict split, scored once per ceiling arm
 
-# ---- battery, matched dimensionality (§4; B1/B4/B7) ---- #
-K_COL = 128             # common PCA column budget for EVERY ceiling arm (no arm wins on dim)
-NYSTROEM_N = 100        # < K_COL (re-picked from the 2000 that interpolated 2048 per-unit dims)
-INJ_LEVELS = (0.10, 0.20)
-COUNTED_BATTERY = ("P1_ridge", "P4_nystroem", "P5_gbt")   # + KSG-MI confirmatory (no verdict weight)
+# ---- battery, matched dimensionality (v3 §4) ---- #
+K_COL = 128             # common PCA column budget for the linear/kernel members
+NYSTROEM_N = 100        # < K_COL
+INJ_TARGET_R2 = 0.10    # D9b: injection calibrated per arm to this ridge-CV target (bisection)
+INJ_OK_BAND = (0.05, 0.20)   # calibration counts as converged if achieved R2 lands here (x2 slack hi)
+DETECT_FLOOR = 0.05     # a member is live on an arm if it reads >= this on the calibrated injection
+P6_CONTROL_MIN = 0.30   # P6 liveness = native raw-arm positive control (dry-run: 0.5322)
+COUNTED_BATTERY = ("P1_ridge", "P4_nystroem", "P5_gbt", "P6_demod")  # + KSG-MI confirmatory
 
-# ---- ACCESS thresholds (§2; B1) — margins m_enc = trained-raw, m_pool = trained-pooled ---- #
+# ---- ACCESS thresholds (v3 §3; UNCHANGED from v2 — untainted by run-1, see prereg §1) ---- #
 M_ENC_LOCALIZED_MIN = -0.10     # (a): encoder preserved the per-unit c (trained ~ raw)
 M_POOL_LOCALIZED_MIN = 0.15     # (a): the pool is where c dies (trained >> pooled)
 M_ENC_ENCODER_DEEP_MAX = -0.25  # (b) KILL: encoder attenuated c per-unit before any pool
 
-# ---- BACK-ACTION thresholds (§5; B2/B5/B6) ---- #
-REC_MARGIN = 0.20               # rec_joint >= ceil_pooled + REC_MARGIN
-D_ACC_GATE = 0.90               # below -> OBJECTIVE-ABANDONED (named non-verdict)
-K_NULL = 20                     # seed-retrain null size (B5: raised from 10)
+# ---- BACK-ACTION thresholds (v3 §3; D8 gate = band floor) ---- #
+REC_MARGIN = 0.20               # rec_joint >= ceil_pooled + REC_MARGIN (unchanged, pre-run-1)
+DESAT_BAND = (0.75, 0.85)
+D_ACC_GATE = DESAT_BAND[0]      # 0.75 — "still a d-body by the substrate's own standard" (D8)
+K_NULL = 20
 NULL_PCTILE = 95
-BETAS = (0.3, 1.0, 3.0)         # verdict beta = smallest with d-acc >= gate (B6)
-# B2 LOCK: the null-gate disturbance metrics are exactly these two. Delta-pooled-c-decodability is
-# the recovery READOUT and is deliberately NOT here (including it made kill (e) unfireable).
+BETAS = (0.3, 1.0, 3.0)         # verdict beta = smallest with d-acc >= gate
+# B2 LOCK (carried from v2): disturbance metrics exactly these two; the recovery readout
+# (Delta pooled c-decodability) is deliberately NOT a gate metric.
 NULL_GATE_METRICS = ("linear_cka", "dacc_drift")
 
-# ---- gates (§3) ---- #
-C0_MAX = 0.10           # raw mean-of-u c-R2 <= C0_MAX (raw averaging washes c); tuning value 0.0
-C1_MIN = 0.50           # single raw unit c-R2 >= C1_MIN (c present per-unit); tuning value 0.999
-DESAT_BAND = (0.75, 0.85)   # run body pooled d-acc must land here (else substrate-regen abort)
+# ---- gates (v3 §5) ---- #
+C0_MAX = 0.10
+C1_MIN = 0.50
 
-# ---- seeds ledger (§8) ---- #
+# ---- seeds ledger (v3 §6 — ALL fresh vs v2's 51235-family) ---- #
 SEEDS = {
-    "body": 51235, "cv_split": 61235, "battery": 1789, "joint": 71235,
-    "null": tuple(81235 + i for i in range(K_NULL)),   # 81235..81254
-    "tuning": 86235, "reserve": 91235,
+    "body": 52235, "cv_split": 62235, "battery": 2789, "joint": 72235,
+    "null": tuple(82235 + i for i in range(K_NULL)),   # 82235..82254
+    "dryrun": 87235, "reserve": 92235,
 }
 
 
 def classify_access(ceil_raw: float, ceil_trained: float, ceil_pooled: float) -> str:
-    """§2 partition (exhaustive, disjoint). Contrast is trained-vs-RAW per-unit (encoder effect),
-    not per-unit-vs-pooled (which is ~ data-processing — the B1 defect)."""
+    """v3 §3 partition (exhaustive, disjoint). Contrast is trained-vs-RAW per-unit (encoder
+    effect), not per-unit-vs-pooled (the B1 data-processing defect)."""
     m_enc = ceil_trained - ceil_raw
     m_pool = ceil_trained - ceil_pooled
     if m_enc < M_ENC_ENCODER_DEEP_MAX:
@@ -64,10 +67,9 @@ def classify_access(ceil_raw: float, ceil_trained: float, ceil_pooled: float) ->
 
 def classify_backaction(rec_joint: float, d_acc_joint: float, ceil_pooled: float,
                         cka_outside_null: bool, dacc_drift_outside_null: bool) -> str:
-    """§2 back-action partition. Disturbance = {CKA, d-acc drift} only (B2); the recovery readout
-    (Delta pooled c-decodability) is NOT a gate metric."""
+    """v3 §3 back-action partition. Gate = band floor (D8); disturbance = {CKA, d-acc drift} only."""
     if d_acc_joint < D_ACC_GATE:
-        return "objective_abandoned"                # named non-verdict
+        return "objective_abandoned"                # named non-verdict (genuine collapse only)
     if rec_joint < ceil_pooled + REC_MARGIN:
         return "f_no_recovery"
     if cka_outside_null or dacc_drift_outside_null:
@@ -76,7 +78,7 @@ def classify_backaction(rec_joint: float, d_acc_joint: float, ceil_pooled: float
 
 
 def select_verdict_beta(dacc_by_beta: dict) -> float | None:
-    """§5 B6: verdict beta = the smallest beta in BETAS whose joint d-acc clears the gate."""
+    """v3 §3: verdict beta = the smallest beta in BETAS whose joint d-acc clears the gate."""
     for b in sorted(dacc_by_beta):
         if dacc_by_beta[b] >= D_ACC_GATE:
             return b

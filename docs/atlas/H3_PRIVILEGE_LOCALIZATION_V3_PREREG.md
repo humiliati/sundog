@@ -1,11 +1,12 @@
 # H3-PL v3 Pre-registration — privilege-at-pooling + seed-nulled back-action (re-registration)
 
-**Status: DRAFT v3 (2026-07-02) — PRE-DRY-RUN.** Re-registration after the v2 run voided both clauses
-on achievability grounds (receipt `H3_PRIVILEGE_LOCALIZATION_RESULT.md`, run commit `2ace4df8`; the
+**Status: FROZEN v3 (2026-07-02).** Re-registration after the v2 run voided both clauses on
+achievability grounds (receipt `H3_PRIVILEGE_LOCALIZATION_RESULT.md`, run commit `2ace4df8`; the
 frozen v2 spec `815ea529` stays immutable as the record — this file supersedes, it does not edit).
-Freeze happens only after the **achievability dry-run** (§7 — the new pre-freeze step this cycle
-exists to prove out) passes and its values are pinned here. Standing discipline header, verbatim:
-**clean null = success; forward-generate only; frozen test before first run.**
+The **achievability dry-run passed 5/5 (`FREEZE_CLEAR`)** and its values are pinned in §7. **No
+experiment code beyond the dry-run has run; no threshold in this file may change from here.**
+Standing discipline header, verbatim: **clean null = success; forward-generate only; frozen test
+before first run.**
 
 ## 0. Defect disposition (v2-run → v3) + one scoping catch
 
@@ -94,19 +95,19 @@ dry-run 87235 · reserve 92235.
 
 ## 7. Achievability dry-run (pre-freeze; the process fix, applied)
 
-`scripts/hs1_v3_dryrun.py`, n = 8000, minutes. **Asserts, all required to freeze:**
-1. fresh-seed body reproduces the de-sat band (pooled d-acc ∈ [0.75, 0.85]) + C0/C1 pass;
-2. **P6 positive control:** P6 trained on RAW per-unit features at λ = 2.0 reads c at CV-R² ≥ 0.30
-   (the reference arm is alive; `reg_c ≈ 0.51` banked says it should be);
-3. **injection calibration converges per arm:** for {raw-perunit, trained-perunit, pooled} the
-   bisection finds a strength with ridge-CV on injected ∈ [0.05, 0.20] (the linear members are
-   live-able everywhere);
-4. **β = 0 gate control:** continued pure-d training holds d-acc ≥ 0.75 (the gate has a reachable
-   region; β > 0 arms are NOT dry-run — the recovery question stays unharvested);
-5. gate arithmetic in code: `BACKACTION_GATE ≤ DESAT_BAND[1]`, `BACKACTION_GATE = DESAT_BAND[0]`.
-Values pinned into this file at freeze; the frozen test gains these as regression asserts.
-**Boundary:** the dry-run never trains P6 on trained-per-unit features and never runs β > 0 — the
-two open questions stay untouched.
+`scripts/hs1_v3_dryrun.py` (owner commit `f93ae736`; receipt `results/atlas/hs1/v3_dryrun.json`,
+commit `31d6feeb`), n = 8000. **RAN 2026-07-02 → `FREEZE_CLEAR`, 5/5. Pinned values:**
+1. fresh-seed body in band: pooled d-acc **0.7929** ∈ [0.75, 0.85]; **C0 = 0.0** (≤ 0.10 ✓),
+   **C1 = 0.9987** (≥ 0.50 ✓), train-fit 0.8952;
+2. **P6 positive control: CV-R² = 0.5322** ≥ 0.30 — at the banked `reg_c ≈ 0.51` scale; v2's
+   blindness confirmed as a readout-class artifact; the reference arm is alive;
+3. **injection calibration converged on all three arms** (achieved R² 0.1009 / 0.1010 / 0.1042;
+   strengths 0.3806 / 0.3748 per-unit vs 0.0354 pooled — the 11× D9b dimensionality effect,
+   measured and calibrated away);
+4. **β = 0 gate control: d-acc 0.7949** ≥ 0.75 (gate reachable; no β > 0 ran);
+5. gate arithmetic: 0.75 = band floor ≤ band ceiling ✓.
+**Boundary held:** P6 never trained on trained-per-unit features; no β > 0 ran — both open
+questions unharvested. The frozen test carries these as regression asserts.
 
 ## 8. Kill fireability (post-fix audit)
 
