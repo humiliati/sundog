@@ -45,6 +45,7 @@
 | SELU (dim-1) | **SCALED ELU, MONOTONE** — `selu(x)=λ·(x / α(eˣ−1))`; parametrized by `λ,α>0` (SELU's constants a positive instance; covers ELU `λ=α=1`); positive scaling preserves strict monotonicity ⇒ injective core; `selu_dnf_tame` | ✅ 2026-07-09 |
 | GELU-tanh (dim-1) | **NON-MONOTONE, CLOSED (cubic critical eq)** — `geluTanhFibersFinite`: `0.5x(1+tanh(c(x+ax³)))` = `x·σ(w)`, `w=2c(x+ax³)`; transform `⟺ (x−C)eˣ⁽ʷ⁾=C`, `g'=eˣ⁽ʷ⁾·(1+(x−C)w')` with `1+(x−C)w'` a CUBIC POLYNOMIAL (finite roots via `finite_setOf_isRoot`) ⇒ Rolle once; `gelu_tanh_dnf_tame` | ✅ 2026-07-09 |
 | GELU-sigmoid (dim-1) | **NON-MONOTONE, CLOSED (linear critical eq)** — `geluSigmoidFibersFinite`: `x·σ(1.702x)`, scaled-argument SiLU; transform `⟺ (x−C)e^{kx}=C`, `g'=e^{kx}(1+k(x−C))` zero at the SINGLE point `C−1/k`; Rolle once; `gelu_sigmoid_dnf_tame` | ✅ 2026-07-09 |
+| Leaky ReLU (dim-1) | **PIECEWISE-LINEAR MONOTONE** — `lrelu(x)=x` (`x≥0`) / `α·x` (`x<0`), `α=0.01`; both slopes positive ⇒ strictly increasing ⇒ injective core (not Rolle); linear sibling of ELU (cross case `α·x<0≤y`, no exp); `lrelu_dnf_tame` | ✅ 2026-07-10 |
 
 Modules: `OMinimalOne` … `OMinimalCellDecomp` (34th–61st), 80 gated headline theorems, all
 axiom-clean; audits 8540 → 8605 GREEN. Classical anchors for what's landed:
@@ -594,6 +595,22 @@ GELU-tanh cubic in the same "transform-to-a-polynomial-critical-equation" family
 one: the scaled inner argument `k x` (versus the cubic `c(x + a x³)`) keeps `w' = k` constant,
 so the critical equation never leaves degree one. Activation factory: 8 monotone + 5
 non-monotone, thirteen activations, all axiom-clean.
+
+## Leaky ReLU (dim-1) — the piecewise-linear monotone sibling. [LANDED 2026-07-10]
+
+`LeakyReluTame.lean` (95th module, 3 gates: `lrelu_strictMono`, `lrelu_lt_tame`,
+`lrelu_dnf_tame`), green first build; audit **8640 GREEN**. `lrelu(x) = x` for `x ≥ 0`,
+`α·x` for `x < 0` (canonical `α = 0.01`, any `α > 0`). This is the piecewise-*linear* analog
+of ELU — same slope-change-at-`0` shape, but both branches linear, so it is even simpler than
+ELU. Both slopes are positive, so `lrelu` is strictly increasing and rides the MONOTONE
+injective-core route (`SigmoidTame`'s continuous-injective threshold core), not the Rolle
+route. The gluing is the same `Continuous.if_le` used for ELU (boundary `0 = x ⇒ x = α·x`,
+true at `x = 0`); strict monotonicity is by sign-cases on `x, y`, and the cross case
+`x < 0 ≤ y` is now immediate — `α·x < 0 ≤ y` from `α > 0` and `x < 0`, with no exponential
+comparison (contrast ELU's `eˣ < 1`). Fills the ReLU-family gap with the member the monotone
+core actually captures: plain ReLU (`α = 0`) is flat on the negatives, hence non-strict, and
+fits *neither* the injective nor the finite-fiber core — the leaky variant is the one that
+does. Activation factory: 9 monotone + 5 non-monotone, fourteen activations, all axiom-clean.
 
 *The arc, closed.* TS-QE opened 2026-07-06 and closed 2026-07-07: 17 modules
 (62nd–78th), route Cohen–Hörmander set-level over concrete ℝ, all axiom-clean. Lean
