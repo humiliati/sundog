@@ -1,0 +1,322 @@
+{
+  "artifactId": "KAK-PHASE3S-VALUESET-REDUCTION",
+  "generatedAt": "2026-07-10T06:25:40.478Z",
+  "status": "internal M3 working receipt: value-set reduction + exhaustive small-q floor + adversarial hunt",
+  "command": "node scripts/kakeya-valueset-reduction.mjs",
+  "reduction": "sacrifice = sum_{s!=d} N_s - q(q-1)/2 = (q - N_d) + sum_s sigma_s, N_s = value-set size of f - s*id. Floor <=> a 4-point fiber forces the translate value-set sum up by (q-3)/2 over the BM minimum (q^2-1)/2.",
+  "identities": {
+    "rows": [
+      {
+        "q": 5,
+        "name": "quadratic",
+        "i1": true,
+        "i2": true,
+        "i3": true,
+        "geoMatch": true,
+        "ok": true
+      },
+      {
+        "q": 5,
+        "name": "linear",
+        "i1": true,
+        "i2": true,
+        "i3": true,
+        "geoMatch": true,
+        "ok": true
+      },
+      {
+        "q": 5,
+        "name": "random0",
+        "i1": true,
+        "i2": true,
+        "i3": true,
+        "geoMatch": true,
+        "ok": true
+      },
+      {
+        "q": 5,
+        "name": "random1",
+        "i1": true,
+        "i2": true,
+        "i3": true,
+        "geoMatch": true,
+        "ok": true
+      },
+      {
+        "q": 5,
+        "name": "random2",
+        "i1": true,
+        "i2": true,
+        "i3": true,
+        "geoMatch": true,
+        "ok": true
+      },
+      {
+        "q": 5,
+        "name": "random3",
+        "i1": true,
+        "i2": true,
+        "i3": true,
+        "geoMatch": true,
+        "ok": true
+      },
+      {
+        "q": 7,
+        "name": "quadratic",
+        "i1": true,
+        "i2": true,
+        "i3": true,
+        "geoMatch": true,
+        "ok": true
+      },
+      {
+        "q": 7,
+        "name": "linear",
+        "i1": true,
+        "i2": true,
+        "i3": true,
+        "geoMatch": true,
+        "ok": true
+      },
+      {
+        "q": 7,
+        "name": "random0",
+        "i1": true,
+        "i2": true,
+        "i3": true,
+        "geoMatch": true,
+        "ok": true
+      },
+      {
+        "q": 7,
+        "name": "random1",
+        "i1": true,
+        "i2": true,
+        "i3": true,
+        "geoMatch": true,
+        "ok": true
+      },
+      {
+        "q": 7,
+        "name": "random2",
+        "i1": true,
+        "i2": true,
+        "i3": true,
+        "geoMatch": true,
+        "ok": true
+      },
+      {
+        "q": 7,
+        "name": "random3",
+        "i1": true,
+        "i2": true,
+        "i3": true,
+        "geoMatch": true,
+        "ok": true
+      },
+      {
+        "q": 11,
+        "name": "quadratic",
+        "i1": true,
+        "i2": true,
+        "i3": true,
+        "geoMatch": true,
+        "ok": true
+      },
+      {
+        "q": 11,
+        "name": "linear",
+        "i1": true,
+        "i2": true,
+        "i3": true,
+        "geoMatch": true,
+        "ok": true
+      },
+      {
+        "q": 11,
+        "name": "random0",
+        "i1": true,
+        "i2": true,
+        "i3": true,
+        "geoMatch": true,
+        "ok": true
+      },
+      {
+        "q": 11,
+        "name": "random1",
+        "i1": true,
+        "i2": true,
+        "i3": true,
+        "geoMatch": true,
+        "ok": true
+      },
+      {
+        "q": 11,
+        "name": "random2",
+        "i1": true,
+        "i2": true,
+        "i3": true,
+        "geoMatch": true,
+        "ok": true
+      },
+      {
+        "q": 11,
+        "name": "random3",
+        "i1": true,
+        "i2": true,
+        "i3": true,
+        "geoMatch": true,
+        "ok": true
+      }
+    ],
+    "pass": true
+  },
+  "exhaustive": {
+    "rows": [
+      {
+        "q": 5,
+        "functionsEnumerated": 3125,
+        "total": 3125,
+        "globalMin": 2,
+        "expectedBM": 2,
+        "min4Secant": 4,
+        "floorTarget": 3,
+        "plusOnePremiseHolds": true
+      },
+      {
+        "q": 7,
+        "functionsEnumerated": 823543,
+        "total": 823543,
+        "globalMin": 3,
+        "expectedBM": 3,
+        "min4Secant": 5,
+        "floorTarget": 5,
+        "plusOnePremiseHolds": true
+      }
+    ],
+    "floorAt57": [
+      {
+        "q": 5,
+        "min4Secant": 4,
+        "floor": 3,
+        "holds": true
+      },
+      {
+        "q": 7,
+        "min4Secant": 5,
+        "floor": 5,
+        "holds": true
+      }
+    ],
+    "pass": true
+  },
+  "hunt": {
+    "rows": [
+      {
+        "q": 11,
+        "quadruple": "0,1,2,3",
+        "minFound": 9,
+        "floor": 9,
+        "belowFloor": false
+      },
+      {
+        "q": 11,
+        "quadruple": "0,1,2,4",
+        "minFound": 9,
+        "floor": 9,
+        "belowFloor": false
+      },
+      {
+        "q": 13,
+        "quadruple": "0,1,2,3",
+        "minFound": 12,
+        "floor": 11,
+        "belowFloor": false
+      },
+      {
+        "q": 13,
+        "quadruple": "0,1,2,4",
+        "minFound": 12,
+        "floor": 11,
+        "belowFloor": false
+      },
+      {
+        "q": 17,
+        "quadruple": "0,1,2,3",
+        "minFound": 20,
+        "floor": 15,
+        "belowFloor": false
+      },
+      {
+        "q": 17,
+        "quadruple": "0,1,2,4",
+        "minFound": 21,
+        "floor": 15,
+        "belowFloor": false
+      },
+      {
+        "q": 19,
+        "quadruple": "0,1,2,3",
+        "minFound": 25,
+        "floor": 17,
+        "belowFloor": false
+      },
+      {
+        "q": 19,
+        "quadruple": "0,1,2,4",
+        "minFound": 27,
+        "floor": 17,
+        "belowFloor": false
+      },
+      {
+        "q": 23,
+        "quadruple": "0,1,2,3",
+        "minFound": 41,
+        "floor": 21,
+        "belowFloor": false
+      },
+      {
+        "q": 23,
+        "quadruple": "0,1,2,4",
+        "minFound": 40,
+        "floor": 21,
+        "belowFloor": false
+      },
+      {
+        "q": 29,
+        "quadruple": "0,1,2,3",
+        "minFound": 66,
+        "floor": 27,
+        "belowFloor": false
+      },
+      {
+        "q": 29,
+        "quadruple": "0,1,2,4",
+        "minFound": 66,
+        "floor": 27,
+        "belowFloor": false
+      },
+      {
+        "q": 37,
+        "quadruple": "0,1,2,3",
+        "minFound": 112,
+        "floor": 35,
+        "belowFloor": false
+      },
+      {
+        "q": 37,
+        "quadruple": "0,1,2,4",
+        "minFound": 112,
+        "floor": 35,
+        "belowFloor": false
+      }
+    ],
+    "counterexampleFound": false
+  },
+  "falsifier": {
+    "name": "VALUESET_REDUCTION_MISMATCH",
+    "description": "Instrument-only: fires if any identity I1-I3 or the independent projective-geometry evaluation disagrees, or the exhaustive q in {5,7} global minimum differs from the BM value (q-1)/2, or a global minimizer contains a 4-secant (+1 premise). The hunt outcome is a measurement (a below-floor find would be a counterexample, reported separately).",
+    "status": "clear"
+  },
+  "elapsedSeconds": 53.947
+}

@@ -132,6 +132,35 @@ market (aggregate)}** + ECMWF-HRES if the bucket cools. This still tests the cor
 is the market non-redundant given the physics ensemble + the operational blend (+ deterministic
 ECMWF)?
 
+## Amendment G4-β — ECMWF-ENS sub-amendment (2026-07-09)
+
+Append-only; the pre-named ENS upgrade (owner-directed). Upgrades the ECMWF rung from the
+HRES-deterministic margin (the throttle-forced fallback of Amdt G4-α) to the **ensemble
+distribution the owner originally chose**: `F_ECMWF-ENS(θ) = Normal(μ, σ)` survival, μ/σ from
+the **21-member perturbed subsample** (pf 1..21; `mx2t3` carries no control record), per-member
+civil-day max over the four 3-h blocks ending 15/18/21/00 UTC — exactly the §1 construction.
+
+**Scope: a SENSITIVITY of the G4 ECMWF rung, not a fresh adjudication.** The G4 verdict
+(`AUGURY_G4_MARKET_MEMBER`) and the HARUSPEX verdicts stand on their own records; this
+sub-amendment asks only (i) does the ECMWF rung's membership strengthen (tighter CI) when it
+enters as a true distribution, and (ii) does any qualitative G4 conclusion change (expected: no —
+pre-registered expectation: ENS strengthens ECMWF's coefficient, market membership unchanged).
+
+**Pins (frozen with the runner):**
+- **Issue set = the cached HRES issue set** (`results/augury/g4-run/ecmwf_scalars.jsonl` keys,
+  ~1,250 day|cycle pairs) — the same cycles the availability join already selected. Named
+  approximation: enfo (ENS) availability is taken as the oper (HRES) availability for cycle
+  selection; the enfo `LastModified` is **recorded per issue** and the fraction where enfo
+  published materially later (> 30 min) is reported as an honesty diagnostic.
+- **Pacing discipline (the throttle lesson):** a **probe stage precedes the pull** — ~20 issues
+  at 1-way then 2-way concurrency, recording 503-rate and throughput; the pull launches at the
+  highest non-throttling pace. Sequential + 0.25 s gap + long 503 backoff is the floor
+  (≈ 30–36 h, resumable per-issue; every decoded issue flushes to the scalar cache).
+- **Rescore:** a new composing runner (`augury_ens.py`, read-only over the frozen `augury_g4`
+  primitives — same discipline as HARUSPEX) rebuilds the G4 score rows with
+  `f_ecmwf_ens` (logit rung, replacing the HRES margin) and re-runs the G4 adjudication;
+  results → `results/augury/g4-ens-run/` (gitignored). Verdict tokens unchanged (§4).
+
 ## §6 — Estimated cost (full pantheon)
 
 - **GEFS** ≈ NBM order (geavg+gespr × 2 daily-max blocks per issue, 0.25° fields;

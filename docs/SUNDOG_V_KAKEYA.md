@@ -207,6 +207,20 @@ minimum (`ex=0`) while the 4-star floor is `(q-3)/2`, so the *fourth* line
 forces exactly the `(q-3)/2` gain (`sacrifice` `(q-1)/2 -> q-2`). The
 relative-BM target `sacrifice >= q-2` is validated; M3 (the lacunary gain
 lemma) is the remaining hard step (`npm run kakeya:floor-mechanism`).
+Phase 3S does the M3 reduction work:
+[`kakeya/PHASE3S_VALUESET_REDUCTION.md`](kakeya/PHASE3S_VALUESET_REDUCTION.md)
+PROVES the exact value-set reduction (`sacrifice = sum_{s!=d} N_s - q(q-1)/2
+= (q - N_d) + sum sigma_s`, `N_s` = value-set size of `f - s*id`; verified
+incl. an independent projective-geometry evaluation), decides the floor
+EXHAUSTIVELY at `q=7` (all `7^7` functions: min-with-4-secant = 5 = `q-2`),
+proves the `+1` step rigorously (BM classification + elementary max-mult-3 of
+the conic construction), splits the remaining problem into regimes and
+isolates the hard case as a PERMUTATION-form sub-conjecture (`f` a
+permutation with a 4-fiber in a translate => `sum sigma >= q-2`), where
+Hermite/Redei machinery applies. Adversarial hunt to `q=37`: no
+counterexample. Odd-q spectrum literature confirmed absent (BDBMS 2014 is
+even-q only; pinned). General floor still OPEN
+(`npm run kakeya:valueset`).
 This file is a target-selection and claim-boundary scaffold opened from
 [`SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md`](SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md).
 
@@ -702,6 +716,13 @@ Forbidden:
   pencil factor `X^q | R(X,d)` at the 4 star directions; 3-star is BM-free,
   4-star floor `(q-3)/2`, so the 4th line forces the gain; relative-BM target
   `sacrifice >= q-2` validated, M3 lacunary lemma remains.
+- [`kakeya/PHASE3S_VALUESET_REDUCTION.md`](kakeya/PHASE3S_VALUESET_REDUCTION.md)
+  - M3 working receipt: exact value-set reduction PROVED (+independently
+  verified); floor decided EXHAUSTIVELY at `q=7` (all `7^7` functions,
+  min-with-4-secant = `q-2`); `+1` theorem rigorous (BM import + elementary
+  max-mult-3); hard case isolated as a permutation-form sub-conjecture
+  (Hermite/Redei surface); hunt to `q=37` clean; odd-q spectrum literature
+  absent (BDBMS 2014 = even q, pinned). General floor OPEN.
 - [`kakeya/EXTERNAL_REVIEW_PACKET.md`](kakeya/EXTERNAL_REVIEW_PACKET.md) -
   owner-pending external-review ask; frames Kakeya as a boundary/pedagogy review,
   not a result-review packet.

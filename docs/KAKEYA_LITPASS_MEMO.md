@@ -124,6 +124,15 @@ The `q=11`-harmonic exception (PHASE3O) shows any proof must use `q >= 13`;
 since Segre holds for all odd `q`, the difficulty is precisely the relative /
 pivot-constrained content, not the absolute arc classification.
 
+## Addendum 2026-07-09 - Kakeya spectrum classification (even q only)
+
+Checked by [`kakeya/PHASE3S_VALUESET_REDUCTION.md`](kakeya/PHASE3S_VALUESET_REDUCTION.md)
+while assessing imports for the floor conjecture.
+
+| Source | Public URL | Supports | Boundary action |
+| --- | --- | --- | --- |
+| A. Blokhuis, M. De Boeck, F. Mazzocca, L. Storme, "The Kakeya problem: a gap in the spectrum and classification of the smallest examples", *Designs, Codes and Cryptography* 72(1) (2014), 21-31 | https://link.springer.com/article/10.1007/s10623-012-9790-3 | Spectrum gap + classification of the smallest Kakeya sets in `AG(2,q)` for **q even** (hyperoval constructions; classification up to roughly `q(q+2)/2 + q/4`). | Import-and-cite only. **Does not apply to odd q**: for odd `q` only the minimum classification (BM 2008) is published, so the floor conjecture's `(q-5)/2` remainder beyond the `+1` step has no literature import. No reproving; no Euclidean transfer. |
+
 ## Track A - Euclidean Boundary
 
 Wang-Zahl is the current landscape anchor: the Euclidean Kakeya set conjecture

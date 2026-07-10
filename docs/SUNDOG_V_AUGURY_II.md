@@ -14,8 +14,11 @@ Status: **G3 ADJUDICATED 2026-07-09** ([`prereg/augury2/AUGURY_II_G3_RESULT.md`]
 (market 0.662 beats the final NBM cycle); **H3 = `HARUSPEX_H3_ACCESS_SUFFICIENT`** *(exploratory-strength,
 DoF-fenced)*. **Provenance bracket = AGGREGATE ∧ INDEPENDENT** — the market holds genuinely independent,
 aggregated information (not a thermometer-reader, not a model-anticipator). G0–G3 in
-[`AUGURY_II_G1_PREREG.md`](prereg/augury2/AUGURY_II_G1_PREREG.md) (Amdts G2-A, G3-A). **G4 (umbrella fold +
-optional augury.html section) is the remaining gate.**
+[`AUGURY_II_G1_PREREG.md`](prereg/augury2/AUGURY_II_G1_PREREG.md) (Amdts G2-A, G3-A). **G4 DONE 2026-07-09 —
+folded into [`SUNDOG_V_CAUSAL_ACCESS.md`](SUNDOG_V_CAUSAL_ACCESS.md)** as the first *external, real-functional*
+test of the sufficiency invariant ("access screens off identity"), honestly scoped: it grounds the invariant's
+transfer beyond the in-vitro tier, NOT the aggregate authority-cap (which stays NS-1-c). **Lane complete
+(G0→G4).** Optional remaining: a "where does the edge come from" section on the deployed augury.html.
 
 ---
 

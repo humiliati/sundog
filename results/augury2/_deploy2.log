@@ -1,0 +1,137 @@
+
+> sundog-site@0.1.0 deploy
+> npm run build && node scripts/deploy-pages.mjs
+
+
+> sundog-site@0.1.0 prebuild
+> node scripts/build-chat-index.mjs && node scripts/build-photometric-core-media.mjs && node scripts/build-balance-public-data.mjs && node scripts/build-mines-public-data.mjs && node scripts/build-mesa-public-data.mjs && node scripts/build-bayes-public-data.mjs && node scripts/build-mesa-public-media.mjs && node scripts/build-coarse-graining-public-media.mjs && node scripts/build-structural-boundary-data.mjs && node scripts/build-structural-boundary-svg.mjs && node scripts/build-generality-public-data.mjs && node scripts/build-generality-svg.mjs && node scripts/build-sitemap.mjs
+
+chat index built: 80 chunks
+photometric core media built: public/data/photometric-core-metrics.json
+photometric core media built: public/media/photometric-terminal-intensity.svg
+photometric core media built: public/media/photometric-convergence-time.svg
+balance public data built: public/data/balance-phase16-claim-lock.json
+mines public data built: public/data/mines-phase13-bayes-floor.json
+mesa public chart data built: public/data/mesa-public-charts.json
+bayes public data built: public/data/bayes-comparison.json
+mesa public media built: public/media/mesa-evidence-panel.svg
+mesa public media built: public/media/mesa-cliff-mini.svg
+mesa public media built: public/media/mesa-class-balance-strip.svg
+mesa public media built: public/media/mesa-ksweep-fingerprint.svg
+coarse-graining public media built: public/media/coarse-graining-proof-ladder.svg
+structural boundary public data built: public/data/structural-failure-boundary-map.json
+structural boundary SVG built: public/media/structural-boundary-five-locus-map.svg
+generality public data built: public/data/high-stakes-generality-gallery.json
+generality svg built: public\media\generality-status-matrix.svg
+generality svg built: public\media\generality-transfer-lanes.svg
+generality svg built: public\media\generality-riemann.svg
+generality svg built: public\media\generality-navier-stokes-c1.svg
+generality svg built: public\media\generality-p-vs-np.svg
+generality svg built: public\media\generality-yang-mills.svg
+generality svg built: public\media\generality-arc-agi.svg
+generality svg built: public\media\generality-three-body-15c.svg
+sitemap written: public/sitemap.xml (29 URLs)
+  excluded 7: repo-map.html [noindex], paper-theme-demo.html [noindex], atlas.html [noindex], sundog-workbench.html [non-self-canonical (duplicate surface)], boxsel.html [noindex], kakeya.html [noindex], receipts.html [noindex]
+
+> sundog-site@0.1.0 build
+> vite build
+
+[36mvite v8.0.10 [32mbuilding client environment for production...[36m[39m
+[2Ktransforming...✓ 77 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/atlas.html                                                 0.89 kB │ gzip:  0.43 kB
+dist/kakeya.html                                                7.70 kB │ gzip:  2.91 kB
+dist/receipts.html                                             13.08 kB │ gzip:  4.37 kB
+dist/ghost.html                                                14.13 kB │ gzip:  4.70 kB
+dist/paper-theme-demo.html                                     15.72 kB │ gzip:  4.20 kB
+dist/mirages.html                                              16.28 kB │ gzip:  5.05 kB
+dist/structural-failure.html                                   19.17 kB │ gzip:  4.92 kB
+dist/boxsel.html                                               20.85 kB │ gzip:  4.30 kB
+dist/quantilizing.html                                         23.46 kB │ gzip:  8.41 kB
+dist/augury.html                                               24.79 kB │ gzip:  8.03 kB
+dist/mines.html                                                27.98 kB │ gzip:  6.56 kB
+dist/balance.html                                              29.07 kB │ gzip:  6.31 kB
+dist/applications-gallery.html                                 29.42 kB │ gzip:  7.08 kB
+dist/repo-map.html                                             31.62 kB │ gzip:  7.77 kB
+dist/about.html                                                33.54 kB │ gzip:  7.73 kB
+dist/origin.html                                               33.91 kB │ gzip:  8.85 kB
+dist/h-of-x.html                                               34.15 kB │ gzip:  7.99 kB
+dist/generality.html                                           34.48 kB │ gzip:  8.90 kB
+dist/geometry.html                                             35.69 kB │ gzip:  8.00 kB
+dist/sundog-workbench.html                                     42.83 kB │ gzip:  9.30 kB
+dist/p-vs-np.html                                              43.52 kB │ gzip: 10.41 kB
+dist/unit-distance.html                                        44.16 kB │ gzip: 10.87 kB
+dist/capset.html                                               46.93 kB │ gzip: 11.54 kB
+dist/tauroctony.html                                           50.67 kB │ gzip: 13.50 kB
+dist/isotrophy.html                                            51.20 kB │ gzip: 12.02 kB
+dist/navierstokes.html                                         51.90 kB │ gzip: 13.09 kB
+dist/safety-method.html                                        52.20 kB │ gzip: 12.03 kB
+dist/legend.html                                               54.35 kB │ gzip: 12.27 kB
+dist/alignment.html                                            56.11 kB │ gzip: 12.25 kB
+dist/chat.html                                                 56.36 kB │ gzip: 14.63 kB
+dist/algorithmic-approximation.html                            61.36 kB │ gzip: 15.03 kB
+dist/faraday.html                                              69.81 kB │ gzip: 14.76 kB
+dist/mesa.html                                                 81.50 kB │ gzip: 19.52 kB
+dist/assets/1.Photometeor-jeff-mod_marked_red-BfljGSHv.jpg     95.06 kB
+dist/sundog.html                                              100.32 kB │ gzip: 19.67 kB
+dist/threebody.html                                           124.77 kB │ gzip: 26.05 kB
+dist/assets/x.Vädersoltavlan_cropped-m6J2eu9j.jpg             150.45 kB
+dist/index.html                                               173.25 kB │ gzip: 35.77 kB
+dist/assets/mithraeum-diablo-ii-DOM31r1B.jpg                  560.98 kB
+dist/assets/tauroctony-monet-BbrRyOJo.jpg                   1,989.50 kB
+dist/assets/modulepreload-polyfill-B7MX_D3K.js                  0.69 kB │ gzip:  0.39 kB
+dist/assets/alignment-CswD7w-t.js                               2.49 kB │ gzip:  1.16 kB
+dist/assets/ghost-BjEnYhwz.js                                   4.94 kB │ gzip:  2.22 kB
+dist/assets/boxsel-cM0VIP7L.js                                  8.22 kB │ gzip:  2.62 kB
+
+[32m✓ built in 1.17s[39m
+
+> sundog-site@0.1.0 postbuild
+> node scripts/copy-site-docs.mjs && node scripts/check-site-dist.mjs && node scripts/check-public-copy-integrity.mjs
+
+[copy-site-docs] withheld (no-publish): docs/501c3
+[copy-site-docs] withheld (no-publish): docs/atlas/MOILANEN_POL_DISCRIMINATOR_PREREG.md
+[copy-site-docs] withheld (no-publish): docs/atlas/MOILANEN_POL_DISCRIMINATOR_RESULT.md
+[copy-site-docs] withheld (no-publish): docs/chatv2
+[copy-site-docs] withheld (no-publish): docs/deconfound
+[copy-site-docs] withheld (no-publish): docs/DECONFOUND_REAL_DATA_MEMO.md
+[copy-site-docs] withheld (no-publish): docs/JEPA_LIT_PASS_MEMO.md
+[copy-site-docs] withheld (no-publish): docs/lattice/Soduko-Extreme
+[copy-site-docs] withheld (no-publish): docs/SUNDOG_V_ALLELOPATHY.md
+[copy-site-docs] withheld (no-publish): docs/SUNDOG_V_AUGURY.md
+[copy-site-docs] withheld (no-publish): docs/SUNDOG_V_DECONFOUND.md
+[copy-site-docs] withheld (no-publish): docs/SUNDOG_V_JEPA.md
+dist link check passed
+=== PUBLIC-COPY INTEGRITY ===
+
+[A] CLAIM-MAP ROUTING INTEGRITY  (v0.2.0, 34 routes, 9 tiers)
+    clean — every support doc resolves; every tier is defined.
+
+[B] OVERCLAIM SCAN — COUPLED SURFACES (negation-aware, via live claim-gate)
+    ⚠ WARN index.html [upgrade_language:proves, upgrade_language:proved]  "The public Lean repo now carries fifteen machine-checked deductive cores + one synthesis law + one constructive universal-approximation caps…"
+    sundog.html: clean
+
+[C] UNSUPPORTED-CLAIM SCAN — OTHER PUBLIC PAGES (should never appear unnegated)
+    clean across all other public pages.
+
+[D] NO-PUBLISH SOURCE CITATIONS — routes citing docs withheld from dist/
+    ⚠ WARN docs/chatv2/LANE_CHARTER.md   [route: chatv2_boundary]
+
+--- 0 FAIL, 3 WARN ---
+  ✓ public-copy integrity clean (warnings are informational).
+
+ ⛅️ wrangler 4.87.0
+───────────────────
+✨ Compiled Worker successfully
+Uploading... (1427/1441)
+Uploading... (1432/1441)
+Uploading... (1437/1441)
+Uploading... (1441/1441)
+✨ Success! Uploaded 14 files (1427 already uploaded) (1.44 sec)
+
+✨ Uploading _redirects
+✨ Uploading Functions bundle
+🌎 Deploying...
+✨ Deployment complete! Take a peek over at https://c88e18d8.sundog-9kv.pages.dev
+DEPLOY_EXIT=0

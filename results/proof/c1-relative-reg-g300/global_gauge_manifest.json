@@ -1,0 +1,52 @@
+{
+ "preset": "lock_v7_g300",
+ "n_used": 50000,
+ "stride": 1,
+ "state": {
+  "verdict": "STATE_RECON_MEASURED",
+  "interpretable": true,
+  "fve_Q_K_varweighted": 0.9916005634421599,
+  "r2_E_high_from_signature": 0.89120005916577,
+  "r2_E_high_perm_control": -0.0016647127741704626,
+  "fve_components_covered": 76,
+  "r2_median_uniform_components": 0.6058590809480295,
+  "fve_uniform_energy_norm": 0.9797630202407385,
+  "fve_uniform_enstrophy_norm": 0.9676163568758219,
+  "state_residual_varweighted": 0.008399436557840145,
+  "state_residual_enstrophy_norm": 0.032383643124178074
+ },
+ "control": {
+  "acc": 0.9954109589041096,
+  "majority": 0.7311643835616438,
+  "acc_minus_majority": 0.26424657534246576,
+  "acc_perm": 0.7367123287671233,
+  "majority_perm": 0.7367123287671233,
+  "powered": true,
+  "perm_ok": true,
+  "n_test": 14600
+ },
+ "terciles": [
+  {
+   "band": "lowE",
+   "n": 4869,
+   "r2_E_high": 0.7812,
+   "control_acc": 0.9996,
+   "control_majority": 0.9651
+  },
+  {
+   "band": "midE",
+   "n": 4866,
+   "r2_E_high": 0.6954,
+   "control_acc": 1.0,
+   "control_majority": 0.5115
+  },
+  {
+   "band": "highE",
+   "n": 4865,
+   "r2_E_high": 0.9421,
+   "control_acc": 0.9866,
+   "control_majority": 0.7398
+  }
+ ],
+ "elapsed_s": 58.9
+}

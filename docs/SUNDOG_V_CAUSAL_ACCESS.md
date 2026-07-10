@@ -70,6 +70,50 @@ The keeper underneath the act/aggregate rows: [`NON_SOVEREIGNTY_PAPER_SPINE.md`]
 
 ---
 
+## External validation of the sufficiency invariant (HARUSPEX / Augury II, 2026-07-09)
+
+Every row above is **in-vitro (NS) or toy (Percival A3)** — the standing weakness is that the
+"access screens off values/architecture" core had never met a functional that wasn't ours. The
+Augury lane ([`SUNDOG_V_AUGURY.md`](SUNDOG_V_AUGURY.md), deployed) and its provenance follow-on
+([`SUNDOG_V_AUGURY_II.md`](SUNDOG_V_AUGURY_II.md), HARUSPEX) supply the first **external,
+real-functional, hard-settled** test of the shared invariant. The functional is the daily-high
+temperature — not ours, de-confounded across independent forecasting systems, settled on NWS
+ground truth — and the "agents" are forecasters (physics ensemble, statistical blend, an
+independent model, a real-time-obs nowcast, and a prediction market).
+
+What the invariant predicts there, and what the tests returned
+([`prereg/augury2/AUGURY_II_G3_RESULT.md`](prereg/augury2/AUGURY_II_G3_RESULT.md)):
+
+- **Channel individuation on a real functional (`HARUSPEX_H1_AGGREGATE`).** Measure-access (a
+  real-time observation nowcast) and aggregate-access (the market) are **empirically distinct**,
+  not just distinct by definition: the market's information survives an encompassing regression
+  with the obs nowcast present (market 0.72, CI [0.66, 0.79]). The umbrella's claim that the
+  channels are individuated (`measure ≠ aggregate`) holds in the world here, not only in the
+  taxonomy.
+- **The discarded coordinate is really discarded (`HARUSPEX_H2_INDEPENDENT`).** The market's
+  aggregate information is independent of the model stack — it beats even the models' *final*
+  same-day word (market 0.66, CI [0.59, 0.73]). Model identity is screened off, not merely
+  down-weighted.
+- **Sufficiency, directional (`HARUSPEX_H3_ACCESS_SUFFICIENT`, DoF-fenced).** A forecaster's
+  **causal-access signature** (real-time-obs ingestion, agent-aggregation, update cadence)
+  predicts its determining-set membership (LR 126.6, p ≈ 0); identity is redundant given access.
+  The membership pattern is mechanistic — obs earns membership at short lead, the independent
+  model at long lead, the market always, the raw ensemble never. This is "access screens off
+  identity" **observed on a real functional**, for the first time.
+
+**Honest scope of the fold (no overclaim).** This is the **information / determine-resist**
+reading of the invariant (which forecaster's information is non-redundant), *not* the
+**control-authority** reading of the aggregate row's safety primitive: the authority cap
+(`Sov_opt ≤ κ`) stays grounded by NS-1-c, and HARUSPEX does **not** re-confirm it. What HARUSPEX
+grounds is the invariant's **transfer beyond the in-vitro tier** — evidence that "access is the
+sufficient statistic, X is the discarded coordinate" is a real phenomenon on a functional nobody
+built to make it true. H3 is **exploratory-strength** (5 rungs → the identity-adds-nothing leg is
+partly mechanical); it is reported as **directional external corroboration, not a law**. The
+umbrella opens no new experiment of its own; HARUSPEX is an independent lane whose result the
+frame inherits.
+
+---
+
 ## The genus (cite, don't reinvent)
 
 "Which causal channels an architecture lets optimization pressure enter" is the
@@ -137,7 +181,10 @@ banked.
 channel passed the A3 toy; the target channel banked a partial separation and Lean
 anchors, while B2 deflated the clean unconditional prize on trusted bases. The frame
 earns "hypothesis" rather than "slogan" only because it makes per-channel predictions
-that can each fail.
+that can each fail. **New (2026-07-09):** the shared *sufficiency invariant* has its first
+**external, real-functional** corroboration — HARUSPEX/Augury II found access screens off
+forecaster identity on hard-settled weather markets (directional, DoF-fenced; not a law, and
+not a re-confirmation of the aggregate authority-cap).
 
 ---
 
@@ -150,6 +197,9 @@ that can each fail.
   deflation, reopen slate on cleanliness.
 - **Invariant machinery:** [[project_sundog_suffstat_order_slate]] — sufficient-statistic
   order / determine-resist, the formal home of "screens off."
+- **External real-functional test (2026-07-09):** [`SUNDOG_V_AUGURY_II.md`](SUNDOG_V_AUGURY_II.md)
+  (HARUSPEX) — the first non-toy, hard-settled test of "access screens off identity"; grounds the
+  invariant's transfer, not the aggregate authority-cap. [[project_sundog_augury_lane]].
 - **Cleanliness law (the fence's second half):**
   [`percival/PERCIVAL_S1_CLEANLINESS_LAW.md`](percival/PERCIVAL_S1_CLEANLINESS_LAW.md) —
   the reachability duality and the three cleanliness tiers, synthesized from the reopen
