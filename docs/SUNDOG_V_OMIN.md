@@ -44,6 +44,7 @@
 | ELU (dim-1) | **PIECEWISE MONOTONE** — `elu(x)=x` (`x≥0`) / `eˣ−1` (`x<0`) is strictly increasing, so the injective-core route (not Rolle); new element = if-then-else gluing (`Continuous.if_le`, sign-case strict mono); `elu_dnf_tame` | ✅ 2026-07-09 |
 | SELU (dim-1) | **SCALED ELU, MONOTONE** — `selu(x)=λ·(x / α(eˣ−1))`; parametrized by `λ,α>0` (SELU's constants a positive instance; covers ELU `λ=α=1`); positive scaling preserves strict monotonicity ⇒ injective core; `selu_dnf_tame` | ✅ 2026-07-09 |
 | GELU-tanh (dim-1) | **NON-MONOTONE, CLOSED (cubic critical eq)** — `geluTanhFibersFinite`: `0.5x(1+tanh(c(x+ax³)))` = `x·σ(w)`, `w=2c(x+ax³)`; transform `⟺ (x−C)eˣ⁽ʷ⁾=C`, `g'=eˣ⁽ʷ⁾·(1+(x−C)w')` with `1+(x−C)w'` a CUBIC POLYNOMIAL (finite roots via `finite_setOf_isRoot`) ⇒ Rolle once; `gelu_tanh_dnf_tame` | ✅ 2026-07-09 |
+| GELU-sigmoid (dim-1) | **NON-MONOTONE, CLOSED (linear critical eq)** — `geluSigmoidFibersFinite`: `x·σ(1.702x)`, scaled-argument SiLU; transform `⟺ (x−C)e^{kx}=C`, `g'=e^{kx}(1+k(x−C))` zero at the SINGLE point `C−1/k`; Rolle once; `gelu_sigmoid_dnf_tame` | ✅ 2026-07-09 |
 
 Modules: `OMinimalOne` … `OMinimalCellDecomp` (34th–61st), 80 gated headline theorems, all
 axiom-clean; audits 8540 → 8605 GREEN. Classical anchors for what's landed:
@@ -575,6 +576,24 @@ THREE ways to feed the Rolle engine: differentiate to a polynomial (GELU), trans
 single-critical-point function (SiLU/Mish), and transform to a POLYNOMIAL critical equation
 (GELU-tanh, where the cubic-in-the-exponent does the clearing). Activation factory: 8
 monotone + 4 non-monotone, twelve activations, all axiom-clean.
+
+## GELU-sigmoid (dim-1) — the linear-critical variant. [LANDED 2026-07-10]
+
+`GeluSigmoidTame.lean` (94th module, 3 gates: `geluSigmoidFibersFinite`,
+`gelu_sigmoid_lt_tame`, `gelu_sigmoid_dnf_tame`), green round 2 (the only fix was a
+`Function.comp_apply` reduction so `ring` could see through the `exp ∘ (k·)` composition in
+the derivative); audit **8639 GREEN**. The sigmoid approximation of GELU,
+`gelu_sigmoid(x) = x·σ(k x)` with `k = 1.702`, is a scaled-argument SiLU — and the cleanest
+instance in the whole factory. The SiLU-style transform gives
+`gelu_sigmoid(x) = C ⟺ (x − C)·e^{k x} = C`, with `g_C(x) = (x − C)e^{k x}` and
+`g_C' = e^{k x}·(1 + k(x − C))`. The critical factor `1 + k(x − C)` is now **linear**, so
+`{g_C' = 0}` is the *single point* `{C − 1/k}` — no polynomial-root machinery needed, just
+`Set.finite_singleton`. One Rolle step (`finite_fiber_of_finite_deriv_zeros`) gives
+`{gelu_sigmoid = C}` finite, `gelu_sigmoid_dnf_tame` unconditional. This slots below the
+GELU-tanh cubic in the same "transform-to-a-polynomial-critical-equation" family, at degree
+one: the scaled inner argument `k x` (versus the cubic `c(x + a x³)`) keeps `w' = k` constant,
+so the critical equation never leaves degree one. Activation factory: 8 monotone + 5
+non-monotone, thirteen activations, all axiom-clean.
 
 *The arc, closed.* TS-QE opened 2026-07-06 and closed 2026-07-07: 17 modules
 (62nd–78th), route Cohen–Hörmander set-level over concrete ℝ, all axiom-clean. Lean
