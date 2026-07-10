@@ -43,6 +43,7 @@
 | Mish (dim-1) | **NON-MONOTONE, CLOSED (two exp scales)** — `mishFibersFinite`: `tanh∘softplus` gives both `eˣ` and `e^{2x}`; rational form ⇒ `mish(x)=c ⟺ (x−c)e^{2x}+2(x−c)eˣ−2c=0`, Rolle engine applied down to `h₁''=(2x−2c+5)eˣ` (zeros `{c−5/2}`); `mish_dnf_tame` unconditional | ✅ 2026-07-09 |
 | ELU (dim-1) | **PIECEWISE MONOTONE** — `elu(x)=x` (`x≥0`) / `eˣ−1` (`x<0`) is strictly increasing, so the injective-core route (not Rolle); new element = if-then-else gluing (`Continuous.if_le`, sign-case strict mono); `elu_dnf_tame` | ✅ 2026-07-09 |
 | SELU (dim-1) | **SCALED ELU, MONOTONE** — `selu(x)=λ·(x / α(eˣ−1))`; parametrized by `λ,α>0` (SELU's constants a positive instance; covers ELU `λ=α=1`); positive scaling preserves strict monotonicity ⇒ injective core; `selu_dnf_tame` | ✅ 2026-07-09 |
+| GELU-tanh (dim-1) | **NON-MONOTONE, CLOSED (cubic critical eq)** — `geluTanhFibersFinite`: `0.5x(1+tanh(c(x+ax³)))` = `x·σ(w)`, `w=2c(x+ax³)`; transform `⟺ (x−C)eˣ⁽ʷ⁾=C`, `g'=eˣ⁽ʷ⁾·(1+(x−C)w')` with `1+(x−C)w'` a CUBIC POLYNOMIAL (finite roots via `finite_setOf_isRoot`) ⇒ Rolle once; `gelu_tanh_dnf_tame` | ✅ 2026-07-09 |
 
 Modules: `OMinimalOne` … `OMinimalCellDecomp` (34th–61st), 80 gated headline theorems, all
 axiom-clean; audits 8540 → 8605 GREEN. Classical anchors for what's landed:
@@ -557,6 +558,23 @@ holds for the whole positive-constant family — SELU, ELU (`λ=α=1`), leaky/sc
 Continuity needs no positivity (`Continuous.if_le`, boundary `0 = x ⇒ x = α(eˣ−1)` at 0);
 strict monotonicity uses `0 < λ` (outer) and `0 < α` (negative branch). `selu_dnf_tame`
 via the injective core. Activation factory: 8 monotone + 3 non-monotone, eleven activations.
+
+## GELU-tanh (dim-1) — the cubic-critical variant. [LANDED 2026-07-09]
+
+`GeluTanhTame.lean` (93rd module, 3 gates: `geluTanhFibersFinite`, `gelu_tanh_lt_tame`,
+`gelu_tanh_dnf_tame`), green round 2; audit **8638 GREEN**. The widely-used tanh
+approximation `gelu_tanh(x) = ½·x·(1 + tanh(c(x + a x³)))` (`c = √(2/π)`, `a = 0.044715`)
+is non-monotone. The cubic inside `tanh` is the new structure — and it works *for* the
+Rolle route: via `1 + tanh(v) = 2/(1 + e^{−2v})`, this is `x·σ(w)` with `w = 2c(x + a x³)`,
+so the SiLU-style transform gives `gelu_tanh(x) = C ⟺ (x − C)·e^{w(x)} = C`, and
+`g_C' = e^{w}·(1 + (x − C)·w')` where `1 + (x − C)·w'` is a **cubic polynomial** in `x`
+(`w' = 2c(1 + 3a x²)`). A nonzero cubic has ≤ 3 roots, so `{g_C' = 0}` is finite
+(`Polynomial.finite_setOf_isRoot`, nonzero via the `X³`-coefficient `6ca > 0`) — ONE Rolle
+step gives `{gelu_tanh = C}` finite, `gelu_tanh_dnf_tame` unconditional. So there are now
+THREE ways to feed the Rolle engine: differentiate to a polynomial (GELU), transform to a
+single-critical-point function (SiLU/Mish), and transform to a POLYNOMIAL critical equation
+(GELU-tanh, where the cubic-in-the-exponent does the clearing). Activation factory: 8
+monotone + 4 non-monotone, twelve activations, all axiom-clean.
 
 *The arc, closed.* TS-QE opened 2026-07-06 and closed 2026-07-07: 17 modules
 (62nd–78th), route Cohen–Hörmander set-level over concrete ℝ, all axiom-clean. Lean
