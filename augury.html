@@ -178,6 +178,30 @@
         <h2>Market and model, at opposite ends of the day</h2>
         <p>Splitting the same test by lead time sharpens it. The market is non-redundant at <em>both</em> ends but strongest in the final hours &mdash; its advantage is real-time observation the stale model cycle cannot carry. The ECMWF is the mirror image: it earns its place at <em>long</em> lead, where genuine model skill separates the forecasters, and fades in the final hours where the market's live reading takes over. The two non-blend members of the set carry their information at opposite ends of the horizon. That is an information-access result, not a curiosity: each forecaster wins exactly where it has access the others lack.</p>
 
+        <h2>Where does the edge come from?</h2>
+        <p>Two deflating explanations come free with the result above, and both are testable. One: the traders are just reading the current thermometer &mdash; by early afternoon the day's high is nearly in, and a price that tracks the latest observation would "beat" a morning model without knowing anything. Two: the traders are just front-running the models &mdash; anticipating where the next run will land, so their "extra information" is model information arriving a few hours early. We ran both as kill tests against the same ladder.</p>
+
+        <section class="exhibit" aria-label="Two attempted deflations of the market's edge; the market survives both">
+            <h3>Two ways to explain the market away &mdash; neither works</h3>
+            <p class="sub">The market's marginal contribution (encompassing coefficient, 95% interval) with each would-be explanation added to the regression. Zero = fully explained away.</p>
+            <svg viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bar chart: the market's coefficient stays well above zero against a real-time observation nowcast and against the models' final same-day forecast.">
+                <!-- zero line -->
+                <line x1="146" y1="20" x2="146" y2="170" stroke="#8a949c" stroke-width="1.5"/>
+                <text x="146" y="190" class="svgtxt" font-size="12" fill="#6A7680" text-anchor="middle">0 (explained away)</text>
+                <!-- vs obs nowcast -->
+                <rect x="146" y="44" width="311" height="22" rx="3" fill="rgba(46,125,90,0.85)"/>
+                <line x1="429" y1="55" x2="484" y2="55" stroke="#1A3A52" stroke-width="1.5"/>
+                <text x="150" y="38" class="svgtxt" font-size="12.5" font-weight="700" fill="#1A3A52">vs a live-observation nowcast (final hours) &mdash; 0.72</text>
+                <!-- vs final model word -->
+                <rect x="146" y="118" width="285" height="22" rx="3" fill="rgba(46,125,90,0.85)"/>
+                <line x1="401" y1="129" x2="459" y2="129" stroke="#1A3A52" stroke-width="1.5"/>
+                <text x="150" y="112" class="svgtxt" font-size="12.5" font-weight="700" fill="#1A3A52">vs the models' final same-day forecast (dawn market) &mdash; 0.66</text>
+            </svg>
+            <p class="caption">Top: at short lead, a nowcast built from the latest official observation plus the climatological remaining rise joins the regression &mdash; if the market were a thermometer reader, its bar would collapse to zero. It stays at 0.72. Bottom: at long lead, the dawn market is scored against the blend's <em>final</em> same-day issuance, published hours later &mdash; if the market were front-running the models, the future model would absorb its edge. It stays at 0.66.</p>
+        </section>
+
+        <p>So the price is neither a thermometer reader nor a front-runner: it aggregates information that is genuinely independent of both the current observation and the model stack's best eventual answer. And the access pattern stays consistent when the nowcast joins the pantheon &mdash; the observation rung earns a seat only in the final hours, the independent model only at long lead, the market at both. Directionally, <em>where a forecaster's information can enter</em> is what decides whether it matters, more than which forecaster it is.</p>
+
         <div class="card fence">
             <h3>What this is and is not</h3>
             <ul>
@@ -186,6 +210,7 @@
                 <li>The comparators are the models' mean-and-spread rendered as a normal distribution, and the ECMWF rung is its deterministic run (its full ensemble was blocked by data-provider rate limits). The robust backbone is the encompassing survival, not any single model's calibrated score.</li>
                 <li>The "human forecaster" rung (station MOS) is <strong>absent</strong> &mdash; no reliable historical same-day source was available &mdash; so the pantheon here is physics-ensemble, statistical-blend, and second-model, plus the market.</li>
                 <li>The horizon crossover is the headline; the exact per-hour map is a supporting exploratory view, not a separately adjudicated claim.</li>
+                <li>The provenance tests are the same information-claim tier: the observation nowcast is a named approximation (latest official observation plus a persistence-and-climatology remaining rise, fit on 2015&ndash;2019 data), and "the models' final word" means the blend's freshest same-day issuance. The "access decides membership" reading is <strong>directional</strong> &mdash; a five-forecaster pantheon is too thin to prove it as a law.</li>
             </ul>
         </div>
 
@@ -195,7 +220,7 @@
         <h2>Sources &amp; further reading</h2>
         <ul>
             <li>R. Roll, <a href="https://www.anderson.ucla.edu/documents/areas/fac/finance/1984-6.pdf">"Orange Juice and Weather"</a>, <em>American Economic Review</em> (1984) &mdash; the founding observation.</li>
-            <li>Forecast encompassing / matched-cutoff scoring in the prediction-market setting: cf. the FluSight-vs-market comparison (arXiv:2605.11220), the method template adapted here to weather.</li>
+            <li>Forecast encompassing / matched-cutoff scoring in the prediction-market setting: cf. the FluSight-vs-market comparison (arXiv:2605.11220), the method template adapted here to weather; R. G&uuml;rkaynak &amp; J. Wolfers, <em>Macroeconomic Derivatives</em> (2005) &mdash; market-based forecasts encompassing surveys, the same test in macro.</li>
             <li>Model guidance: NOAA's <a href="https://vlab.noaa.gov/web/mdl/nbm">National Blend of Models</a> and <a href="https://registry.opendata.aws/noaa-gefs/">GEFS</a>; <a href="https://www.ecmwf.int/en/forecasts/datasets/open-data">ECMWF open data</a>. Ground truth: NWS Daily Climate Report via the Iowa Environmental Mesonet.</li>
             <li>Sundog write-up: the Augury ledger and its pre-registration (internal until this page).</li>
         </ul>
