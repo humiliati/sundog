@@ -9,13 +9,13 @@ gated plan; nothing pulled, nothing scored. The lit-pass memo (G0) gates everyth
 the knowing comes from. Rename trivially to `SUNDOG_V_AUGURY_PROVENANCE` if the codename reads
 too cute — it is a filename and a header, not a claim.*
 
-Status: **G2 TOOLING BUILT + FROZEN 2026-07-09** (`haruspex.py`; Amendment G2-A in
-[`prereg/augury2/AUGURY_II_G1_PREREG.md`](prereg/augury2/AUGURY_II_G1_PREREG.md)). G0/G1 passed 2026-07-09.
-Reuses the Augury rig read-only. Verified: selftest 9/9, ASOS 7/7, frozen 2015–2019 nowcast climo (132
-cells/station, diurnal-physical), **pilot reproduces Augury (mkt 0.74) + H1 leans AGGREGATE** (market survives
-obs-nowcast: 0.67 CI [0.51,0.87]; obs itself non-redundant 0.43), **H2 confirmed LONG-lead by construction**
-(retained ≈1.0 at −12…−9h, 0.0 at short). Nothing adjudicated; G3 stages compose the frozen primitives under
-a G3 freeze marker.
+Status: **G3 ADJUDICATED 2026-07-09** ([`prereg/augury2/AUGURY_II_G3_RESULT.md`](prereg/augury2/AUGURY_II_G3_RESULT.md)).
+**H1 = `HARUSPEX_H1_AGGREGATE`** (market 0.724 survives the obs nowcast); **H2 = `HARUSPEX_H2_INDEPENDENT`**
+(market 0.662 beats the final NBM cycle); **H3 = `HARUSPEX_H3_ACCESS_SUFFICIENT`** *(exploratory-strength,
+DoF-fenced)*. **Provenance bracket = AGGREGATE ∧ INDEPENDENT** — the market holds genuinely independent,
+aggregated information (not a thermometer-reader, not a model-anticipator). G0–G3 in
+[`AUGURY_II_G1_PREREG.md`](prereg/augury2/AUGURY_II_G1_PREREG.md) (Amdts G2-A, G3-A). **G4 (umbrella fold +
+optional augury.html section) is the remaining gate.**
 
 ---
 

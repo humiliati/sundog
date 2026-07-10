@@ -1,0 +1,65 @@
+tpeak sha256: 963b39738784c2b39ab4be65a9c15a155e8305eb1cff1734bd5c33f1724948b2
+H1 rows with valid obs: 82702
+H1 SHORT fit...
+H1 LONG fit...
+{
+  "verdict": "HARUSPEX_H1_AGGREGATE",
+  "short_full_mkt": 0.7243,
+  "short_full_mkt_ci": [
+    0.659,
+    0.787
+  ],
+  "short_full_obs": 0.1809,
+  "short_full_obs_ci": [
+    0.1149,
+    0.2594
+  ]
+}
+h1 sha256 2543d073c6c4168e90c632bb874c40637c945fb651155ce08940053876d74df8
+tpeak sha256: 963b39738784c2b39ab4be65a9c15a155e8305eb1cff1734bd5c33f1724948b2
+  H2: 44 rows dropped (final-cycle scalar not cached)
+H2 retained LONG rows (T < final-cycle avail): 43070
+{
+  "verdict": "HARUSPEX_H2_INDEPENDENT",
+  "minimal_mkt": 0.662,
+  "minimal_mkt_ci": [
+    0.5928,
+    0.7272
+  ],
+  "minimal_final": 0.4082,
+  "minimal_final_ci": [
+    0.3641,
+    0.4615
+  ]
+}
+h2 sha256 988a4477a82347c39f27afeccf0b8c5585cfb908b261ff8be9fd647c17e0f231
+tpeak sha256: 963b39738784c2b39ab4be65a9c15a155e8305eb1cff1734bd5c33f1724948b2
+  H3 panel: KNYC done (20 rows)
+  H3 panel: KMDW done (40 rows)
+  H3 panel: KAUS done (60 rows)
+  H3 panel: KMIA done (80 rows)
+  H3 panel: KDEN done (100 rows)
+  H3 panel: KLAX done (120 rows)
+  H3 panel: KPHL done (140 rows)
+{
+  "verdict": "HARUSPEX_H3_ACCESS_SUFFICIENT",
+  "panel_rows": 140,
+  "lr_access": {
+    "stat": 126.59,
+    "df": 10,
+    "p": 0.0
+  },
+  "lr_identity": {
+    "stat": 0.0,
+    "df": 8,
+    "p": 1.0
+  },
+  "in_set_rate_by_rung": {
+    "gefs": 0.0,
+    "nbm": 0.929,
+    "ecmwf": 0.321,
+    "obs": 0.25,
+    "mkt": 1.0
+  }
+}
+h3 sha256 354d6ca1b60c40db352a0c96645d0159920d8061cdea4fa529595705c83dab0b

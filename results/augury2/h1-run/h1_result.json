@@ -2,7 +2,7 @@
   "long": {
     "full": {
       "ci95": {
-        "ecmwmargin": [
+        "ecmwf": [
           0.1023,
           1.2167
         ],
@@ -24,7 +24,7 @@
         ]
       },
       "coef": {
-        "ecmwmargin": 0.6198,
+        "ecmwf": 0.6198,
         "gefs": -0.0686,
         "mkt": 0.6793,
         "nbm": 0.402,
@@ -56,7 +56,7 @@
   "short": {
     "full": {
       "ci95": {
-        "ecmwmargin": [
+        "ecmwf": [
           -0.0405,
           0.9294
         ],
@@ -78,7 +78,7 @@
         ]
       },
       "coef": {
-        "ecmwmargin": 0.4267,
+        "ecmwf": 0.4267,
         "gefs": -0.0601,
         "mkt": 0.7243,
         "nbm": 0.2939,

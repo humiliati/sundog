@@ -220,3 +220,36 @@ full-run over all stations × horizons + the access-panel meta-regression) compo
 primitives and will be added under a **G3 freeze marker** before the binding run — no primitive
 changes, only composition + the exact staged command. Reserved results:
 `results/augury2/{h1,h2,h3}-run/`.
+
+---
+
+## Amendment G3-A — Adjudication stages + run (2026-07-09 PT)
+
+Append-only. The `h1`/`h2`/`h3` stages were added (composition of the frozen G2 primitives + a
+chi-square tail for the H3 LR test; one bug fixed pre-verdict — a mid-string `f_` in
+`ecmwf_margin` mislabeled that column, caught by the H3 rung loop, corrected, all three re-run
+clean). **No §1–§4 constant, and no G2 primitive, changed.** Final runner sha256
+`080ea4f2629578e1985dad3438110db92bff7359280b890d1e8c7fa9709f7f9f`.
+
+### Verdicts (detail in [`AUGURY_II_G3_RESULT.md`](AUGURY_II_G3_RESULT.md))
+
+- **H1 = `HARUSPEX_H1_AGGREGATE`** — SHORT, 5-rung: market 0.724 CI [0.659, 0.787] survives the
+  obs nowcast (obs itself 0.181). `h1_result.json` `2543d073…`.
+- **H2 = `HARUSPEX_H2_INDEPENDENT`** — LONG, 43,070 retained rows: market 0.662 CI [0.593, 0.727]
+  beats the day's final NBM cycle (F_final 0.408). `h2_result.json` `988a4477…`.
+- **H3 = `HARUSPEX_H3_ACCESS_SUFFICIENT`** *(exploratory-strength)* — 28/56 cells × 5 = 140 panel
+  rows; access LR 126.6 (p≈0), identity LR 0.0 (p=1.0); pattern obs→SHORT, ECMWF→LONG,
+  market→always, GEFS→never. **DoF-fenced: directional, not a law** (5-rung collinearity inflates
+  the identity leg). `h3_result.json` `354d6ca1…`.
+
+**Provenance bracket = AGGREGATE ∧ INDEPENDENT** (the strong corner): genuinely independent,
+aggregated information.
+
+### Exact command (unchanged, admitted)
+
+```
+./.venv-augury/Scripts/python docs/prereg/augury2/haruspex.py all --admitted
+```
+
+(= `h1`, `h2`, `h3` in sequence; caches: ASOS per-station-year, NBM availability. G4 = umbrella
+fold + optional page section.)

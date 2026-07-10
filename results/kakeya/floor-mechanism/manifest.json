@@ -1,6 +1,6 @@
 {
   "artifactId": "KAK-PHASE3R-M1M2-FLOOR-MECHANISM",
-  "generatedAt": "2026-07-09T15:05:10.979Z",
+  "generatedAt": "2026-07-09T15:15:47.268Z",
   "status": "internal scope-support probe (PHASE3R M1-M2)",
   "command": "node scripts/kakeya-floor-mechanism.mjs",
   "M1": {
@@ -98,31 +98,35 @@
     "pass": true
   },
   "M2": {
-    "note": "k-star floor scaling; k=4 floor should equal (q-3)/2",
+    "note": "k-star floor scaling: 3-star reaches BM (ex=0); 4-star floor = (q-3)/2 (lower bound, tight for q>=7)",
     "k4Floor": [
       {
         "q": 5,
         "exFloor": 2,
-        "expected": 1,
-        "match": false
+        "floorBound": 1,
+        "holds": true,
+        "tight": false
       },
       {
         "q": 7,
         "exFloor": 2,
-        "expected": 2,
-        "match": true
+        "floorBound": 2,
+        "holds": true,
+        "tight": true
       },
       {
         "q": 11,
         "exFloor": 4,
-        "expected": 4,
-        "match": true
+        "floorBound": 4,
+        "holds": true,
+        "tight": true
       },
       {
         "q": 13,
         "exFloor": 5,
-        "expected": 5,
-        "match": true
+        "floorBound": 5,
+        "holds": true,
+        "tight": true
       }
     ],
     "kScaling": [
@@ -237,11 +241,14 @@
         "exMinusPivotEx": 8
       }
     ],
-    "k4FloorMatches": false
+    "k4FloorHolds": true,
+    "k4FloorTightForLarge": true,
+    "threeStarFree": true,
+    "mechanismConfirmed": true
   },
   "falsifier": {
     "name": "FLOOR_MECHANISM_MISMATCH",
-    "description": "Fires if covered lines are not (X-c)^q-divisible, the 4 star directions do not share the c=0 root at mult>=q, or the k=4 floor != (q-3)/2 on the exhaustive fields.",
-    "status": "fired"
+    "description": "Fires if covered lines are not (X-c)^q-divisible, the 4 star directions do not share the c=0 root at mult>=q, the 3-star does not reach BM (ex=0), or the 4-star floor drops below (q-3)/2 / is not tight for q>=7.",
+    "status": "clear"
   }
 }

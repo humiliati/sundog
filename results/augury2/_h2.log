@@ -1,3 +1,17 @@
 tpeak sha256: 963b39738784c2b39ab4be65a9c15a155e8305eb1cff1734bd5c33f1724948b2
   H2: 44 rows dropped (final-cycle scalar not cached)
 H2 retained LONG rows (T < final-cycle avail): 43070
+{
+  "verdict": "HARUSPEX_H2_INDEPENDENT",
+  "minimal_mkt": 0.662,
+  "minimal_mkt_ci": [
+    0.5928,
+    0.7272
+  ],
+  "minimal_final": 0.4082,
+  "minimal_final_ci": [
+    0.3641,
+    0.4615
+  ]
+}
+h2 sha256 988a4477a82347c39f27afeccf0b8c5585cfb908b261ff8be9fd647c17e0f231

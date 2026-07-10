@@ -1,0 +1,14 @@
+{
+ "cell": "fallback_v7_g675_kf3",
+ "n": 200000,
+ "epsilon_k": 0.058933369371296965,
+ "coverage_any": 0.469195,
+ "coverage_dense": 0.03644,
+ "dense_kmin": 10,
+ "disagree_all_near": 0.031435109059571684,
+ "disagree_dense_core": 0.02487674702609797,
+ "disagree_sparse_halo": 0.03327414547529964,
+ "dense_core_directed_pairs": 88436,
+ "dense_sample_count": 7288,
+ "nucleus_verdict": "NUCLEUS_CONTROL_SUFFICIENT"
+}

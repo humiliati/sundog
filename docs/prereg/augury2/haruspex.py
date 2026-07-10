@@ -267,7 +267,15 @@ def _designmat(rows, specs, sts):
     for name, kind in specs:
         arr = np.array([r[name] for r in rows], dtype=float)
         cols.append(g4._logit(arr) if kind == "logit" else arr / 10.0)
-        names.append(name.replace("f_", "").replace("_margin", ""))
+        # robust rung label: strip leading 'f_' OR trailing '_margin' (not both,
+        # and never a mid-string 'f_' as in 'ecmwf_margin')
+        if name.startswith("f_"):
+            rn = name[2:]
+        elif name.endswith("_margin"):
+            rn = name[:-len("_margin")]
+        else:
+            rn = name
+        names.append(rn)
     cols.append(np.ones(len(rows)))
     names.append("const")
     for s in sts[1:]:
