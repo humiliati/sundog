@@ -1,0 +1,52 @@
+{
+  "pass_name": "hs1_v3_dryrun",
+  "sigma_d": 9.0,
+  "n": 8000,
+  "seeds": {
+    "body": 52235,
+    "dry": 87235
+  },
+  "a1_body": {
+    "pooled_d_acc": 0.7929,
+    "in_band": true,
+    "C0": 0.0,
+    "C0_pass": true,
+    "C1": 0.9987,
+    "C1_pass": true,
+    "train_fit": 0.8952
+  },
+  "a2_p6_raw_control": {
+    "cv_r2": 0.5322,
+    "pass": true
+  },
+  "a3_injection": {
+    "raw_perunit": {
+      "strength": 0.3806,
+      "achieved_r2": 0.1009,
+      "converged": true
+    },
+    "trained_perunit": {
+      "strength": 0.3748,
+      "achieved_r2": 0.101,
+      "converged": true
+    },
+    "pooled": {
+      "strength": 0.0354,
+      "achieved_r2": 0.1042,
+      "converged": true
+    }
+  },
+  "a4_beta0_gate": {
+    "d_acc": 0.7949,
+    "pass": true
+  },
+  "a5_gate_arith": {
+    "gate": 0.75,
+    "band": [
+      0.75,
+      0.85
+    ],
+    "pass": true
+  },
+  "verdict": "FREEZE_CLEAR"
+}
