@@ -1,0 +1,201 @@
+{
+  "artifactId": "KAK-PHASE3U-PERM-EXISTENCE",
+  "generatedAt": "2026-07-10T12:15:26.545Z",
+  "status": "internal existence probe: extremal permutations at q >= 13",
+  "command": "node scripts/kakeya-perm-existence.mjs",
+  "E1": [
+    {
+      "q": 11,
+      "orbit": "generic",
+      "parabolaOptima": 8,
+      "permutationReps": 0,
+      "witness": null
+    },
+    {
+      "q": 13,
+      "orbit": "equianharmonic",
+      "parabolaOptima": 12,
+      "permutationReps": 0,
+      "witness": null
+    },
+    {
+      "q": 13,
+      "orbit": "generic",
+      "parabolaOptima": 4,
+      "permutationReps": 4,
+      "witness": {
+        "f": "5,6,10,2,3,12,4,1,8,0,7,11,9",
+        "crClass": "generic",
+        "axis": 0
+      }
+    },
+    {
+      "q": 17,
+      "orbit": "harmonic",
+      "parabolaOptima": 8,
+      "permutationReps": 0,
+      "witness": null
+    },
+    {
+      "q": 17,
+      "orbit": "generic-a",
+      "parabolaOptima": 4,
+      "permutationReps": 0,
+      "witness": null
+    },
+    {
+      "q": 17,
+      "orbit": "generic-b",
+      "parabolaOptima": 4,
+      "permutationReps": 0,
+      "witness": null
+    },
+    {
+      "q": 19,
+      "orbit": "generic-a",
+      "parabolaOptima": 8,
+      "permutationReps": 4,
+      "witness": {
+        "f": "3,1,4,10,11,9,13,12,18,2,0,5,14,16,7,15,6,8,17",
+        "crClass": "generic",
+        "axis": 0
+      }
+    },
+    {
+      "q": 19,
+      "orbit": "generic-b",
+      "parabolaOptima": 8,
+      "permutationReps": 0,
+      "witness": null
+    },
+    {
+      "q": 23,
+      "orbit": "harmonic",
+      "parabolaOptima": 8,
+      "permutationReps": 0,
+      "witness": null
+    },
+    {
+      "q": 23,
+      "orbit": "generic-a",
+      "parabolaOptima": 8,
+      "permutationReps": 0,
+      "witness": null
+    },
+    {
+      "q": 23,
+      "orbit": "generic-b",
+      "parabolaOptima": 8,
+      "permutationReps": 0,
+      "witness": null
+    }
+  ],
+  "E2": [
+    {
+      "q": 11,
+      "A": "0,1,2,3",
+      "crClass": "generic",
+      "minSigma": 10,
+      "target": 9,
+      "hit": false,
+      "verified": false,
+      "witness": null
+    },
+    {
+      "q": 11,
+      "A": "0,1,2,4",
+      "crClass": "generic",
+      "minSigma": 9,
+      "target": 9,
+      "hit": true,
+      "verified": true,
+      "witness": "0,1,2,7,4,3,10,9,5,6,8"
+    },
+    {
+      "q": 13,
+      "A": "0,1,2,3",
+      "crClass": "equianharmonic",
+      "minSigma": 12,
+      "target": 11,
+      "hit": false,
+      "verified": false,
+      "witness": null
+    },
+    {
+      "q": 13,
+      "A": "0,1,2,4",
+      "crClass": "generic",
+      "minSigma": 13,
+      "target": 11,
+      "hit": false,
+      "verified": false,
+      "witness": null
+    },
+    {
+      "q": 17,
+      "A": "0,1,2,3",
+      "crClass": "generic",
+      "minSigma": 23,
+      "target": 15,
+      "hit": false,
+      "verified": false,
+      "witness": null
+    },
+    {
+      "q": 17,
+      "A": "0,1,2,4",
+      "crClass": "generic",
+      "minSigma": 23,
+      "target": 15,
+      "hit": false,
+      "verified": false,
+      "witness": null
+    },
+    {
+      "q": 19,
+      "A": "0,1,2,3",
+      "crClass": "generic",
+      "minSigma": 27,
+      "target": 17,
+      "hit": false,
+      "verified": false,
+      "witness": null
+    },
+    {
+      "q": 19,
+      "A": "0,1,2,4",
+      "crClass": "generic",
+      "minSigma": 30,
+      "target": 17,
+      "hit": false,
+      "verified": false,
+      "witness": null
+    },
+    {
+      "q": 23,
+      "A": "0,1,2,3",
+      "crClass": "generic",
+      "minSigma": 45,
+      "target": 21,
+      "hit": false,
+      "verified": false,
+      "witness": null
+    },
+    {
+      "q": 23,
+      "A": "0,1,2,4",
+      "crClass": "generic",
+      "minSigma": 45,
+      "target": 21,
+      "hit": false,
+      "verified": false,
+      "witness": null
+    }
+  ],
+  "falsifier": {
+    "name": "PERM_EXISTENCE_MISMATCH",
+    "description": "Instrument-only: fires if an extracted/hillclimbed candidate fails verification or sum-sigma drops below q-2 (contradicting proved floors at q <= 17-known fields).",
+    "status": "clear"
+  },
+  "elapsedSeconds": 24.009
+}

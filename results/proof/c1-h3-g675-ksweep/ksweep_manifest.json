@@ -4,6 +4,23 @@
  "damp": 0.30856,
  "rows": [
   {
+   "K": 1,
+   "dim": 2,
+   "phi_dim": 2,
+   "q_dim": 438,
+   "fve_vw": -0.006394832759803126,
+   "fve_enstrophy": -0.00736457083971187,
+   "eqwt_median": -0.0034835321450422674,
+   "perm": -0.0021264794268973652,
+   "state_verdict": "STATE_RECON_MEASURED",
+   "acc": 0.8245205479452055,
+   "majority": 0.6896575342465754,
+   "margin": 0.13486301369863007,
+   "powered": true,
+   "ctrl_perm_ok": true,
+   "elapsed_s": 31.9
+  },
+  {
    "K": 2,
    "dim": 8,
    "phi_dim": 8,
@@ -18,7 +35,7 @@
    "margin": 0.17910958904109586,
    "powered": true,
    "ctrl_perm_ok": true,
-   "elapsed_s": 91.4
+   "elapsed_s": 93.2
   },
   {
    "K": 3,
@@ -35,7 +52,7 @@
    "margin": 0.19260273972602737,
    "powered": true,
    "ctrl_perm_ok": true,
-   "elapsed_s": 109.3
+   "elapsed_s": 111.3
   },
   {
    "K": 4,
@@ -52,7 +69,7 @@
    "margin": 0.19239726027397253,
    "powered": true,
    "ctrl_perm_ok": true,
-   "elapsed_s": 139.3
+   "elapsed_s": 138.7
   },
   {
    "K": 5,
@@ -69,7 +86,7 @@
    "margin": 0.19410958904109588,
    "powered": true,
    "ctrl_perm_ok": true,
-   "elapsed_s": 177.4
+   "elapsed_s": 187.7
   },
   {
    "K": 6,
@@ -86,12 +103,13 @@
    "margin": 0.1952054794520548,
    "powered": true,
    "ctrl_perm_ok": true,
-   "elapsed_s": 209.3
+   "elapsed_s": 249.6
   }
  ],
  "branch": "NSE-H3-KSWEEP-WINDOW-MEASURED",
  "m_det_bracket": ">6",
  "regime2_window": [
+  1,
   2,
   3,
   4,

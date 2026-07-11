@@ -16,7 +16,8 @@
 
 | K | shadow dim | FVE_vw(Q_K) | enstrophy | eq-wt median R² | control acc (maj 0.6897) | margin |
 | --- | --- | --- | --- | --- | --- | --- |
-| 2 | **8** | 0.4265 | 0.4212 | 0.0105 | **0.8688** | 0.179 ✓ |
+| **1** | **2** (the forced mode (0,3) alone) | **−0.0064** | −0.0074 | −0.0035 | **0.8245** | **0.135 ✓** |
+| 2 | 8 | 0.4265 | 0.4212 | 0.0105 | 0.8688 | 0.179 ✓ |
 | 3 | 18 | 0.6208 | 0.7074 | 0.0017 | 0.8823 | 0.193 ✓ |
 | 4 | 32 | 0.7351 | 0.6216 | 0.0169 | 0.8821 | 0.192 ✓ |
 | 5 | 50 | 0.5173 | 0.4303 | 0.0194 | 0.8838 | 0.194 ✓ |
@@ -25,16 +26,22 @@
 **m_det bracket: > 6** — no K reaches the frozen 0.99 line; even a 72-dim shadow
 leaves the remaining 368 dimensions ~55% unexplained (energy-weighted) with the
 typical component at R² ≈ 0.03.
-**Regime-2 window: K ∈ {2,3,4,5,6} — the entire tested range.**
+**Regime-2 window: K ∈ {1,2,3,4,5,6} — the entire tested range, floor to ceiling.**
 
-## Finding 1 — control is cheap: the decision floor sits at or below K=2
+## Finding 1 — the control floor IS the forcing coordinate (K=1 addendum, spec §7)
 
-An **8-dimensional** shadow — 4 modes, containing only 4 of the 9 modes of the
-band the label is *defined on* — decodes the registered action at 0.869 vs
-majority 0.690. Control then saturates immediately: acc is flat 0.869 → 0.885
-across the whole sweep; widening the shadow 9× buys +0.016. The AT-3 `K_dec=1`
-relay-precedent's static analogue at the deeper cell: **decoding the proxy needs
-almost nothing; the sweep never found the control floor.**
+The pre-registered K=1 rung closes the floor: at this cell the force-insert rule
+makes the K=1 shadow **exactly the forced mode (0,3) — 2 dimensions** — and it
+**decodes the registered action at 0.8245 vs majority 0.6897 (margin 0.135,
+powered, permutation-clean)** while determining *nothing* of the state
+(FVE −0.006 ≈ 0 on the 438 remaining dims). Control then saturates fast:
+0.824 → 0.869 → 0.882, flat thereafter; widening the shadow 36× beyond K=1 buys
++0.06. The static analogue of AT-3's dynamic `K_dec = 1`, at the non-marginal
+cell: **the decision is anchored to the forcing; the state is anchored to the
+attractor.** Fence: the label's own band contains (0,3), so partial
+self-correlation is mechanistically expected — the non-trivial content is that a
+*single coordinate* clears the powered margin on a lookahead-max functional of a
+9-mode band.
 
 ## Finding 2 — the state stays free at every tested width (with the honest subtlety)
 

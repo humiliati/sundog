@@ -232,6 +232,17 @@ anatomy** (one 4-fiber + `q-5` triples on distinct slopes, verified over all
 generic-class - harmonic floor-achievers exist only in non-bijective
 regimes). Degree fingerprint = null. No new bounds; structure for the
 analytic route (`npm run kakeya:perm-census`, `npm run kakeya:extremal-orbits`).
+Phase 3U maps the classification route's existence leg:
+[`kakeya/PHASE3U_CLASSIFICATION_ROUTE.md`](kakeya/PHASE3U_CLASSIFICATION_ROUTE.md)
+constructs verified extremal permutations at `q in {13, 19}` (dualize
+parabola optima, find a bijective direction, shear), proves the **parabola
+blind spot at q=11** (24,200 extremal permutations exist, ALL 8 parabola
+optima carry none - they dualize to non-parabola optima), kills cycle type
+as an orbit invariant, and isolates the new open sub-question: **do extremal
+permutations exist at q in {17, 23}?** The banked uniqueness conjecture
+reshapes to (existence pattern) + (uniqueness where they exist). Uniqueness
+theorem itself untouched (`npm run kakeya:canonical-extremal`,
+`npm run kakeya:perm-existence`).
 This file is a target-selection and claim-boundary scaffold opened from
 [`SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md`](SUNDOG_HIGH_STAKES_PROBLEM_MATRIX.md).
 
@@ -740,6 +751,11 @@ Forbidden:
   q=11; exhaustive, zero escapes); universal anatomy (one 4-fiber + q-5
   triples on distinct slopes); generic-only 4-fiber law at q=11; Heap's
   enumerator gotcha caught + fixed. Structure only, no new bounds.
+- [`kakeya/PHASE3U_CLASSIFICATION_ROUTE.md`](kakeya/PHASE3U_CLASSIFICATION_ROUTE.md)
+  - classification-route existence map: verified extremal permutations
+  constructed at `q in {13, 19}` (generic class); parabola blind spot PROVED
+  at `q=11`; cycle-type fingerprint dead; existence at `q in {17, 23}` OPEN;
+  conjecture reshaped to existence-pattern + uniqueness-where-exist.
 - [`kakeya/EXTERNAL_REVIEW_PACKET.md`](kakeya/EXTERNAL_REVIEW_PACKET.md) -
   owner-pending external-review ask; frames Kakeya as a boundary/pedagogy review,
   not a result-review packet.

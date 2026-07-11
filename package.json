@@ -259,6 +259,8 @@
     "kakeya:valueset": "node scripts/kakeya-valueset-reduction.mjs",
     "kakeya:perm-census": "node scripts/kakeya-permutation-census.mjs",
     "kakeya:extremal-orbits": "node scripts/kakeya-extremal-orbits.mjs",
+    "kakeya:canonical-extremal": "node scripts/kakeya-canonical-extremal.mjs",
+    "kakeya:perm-existence": "node scripts/kakeya-perm-existence.mjs",
     "kakeya:adaptive-fibering": "node scripts/kakeya-adaptive-fibering-panel.mjs",
     "kakeya:sparse-excess": "node scripts/kakeya-sparse-excess-metric.mjs",
     "synthesis:collision-table": "node scripts/hodge-kakeya-collision-table.mjs",
